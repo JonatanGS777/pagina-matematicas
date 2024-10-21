@@ -1,0 +1,118 @@
+/* Estilos básicos y reseteo */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo para el fondo de la página */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('imagenes/fondo.jpg'); /* Usa la nueva imagen de fondo que subiste */
+    background-size: cover; /* Ajusta la imagen para que cubra toda la pantalla */
+    background-attachment: fixed; /* Fija el fondo para que no se mueva con el scroll */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    color: #fff; /* Cambiado a blanco para contrastar con el fondo */
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Estilo para el encabezado con fondo oscuro y transparencia */
+header {
+    background: rgba(0, 0, 0, 0.7); /* Fondo negro semi-transparente */
+    color: #fff; /* Texto en blanco */
+    padding: 10px 0;
+    text-align: center;
+    border-radius: 10px; /* Bordes redondeados para que se vea más moderno */
+}
+
+/* Estilo para la navegación */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Añade espacio entre los enlaces */
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente para los botones */
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+nav ul li a:hover {
+    background: rgba(0, 0, 0, 0.8); /* Cambia el fondo al pasar el cursor */
+}
+
+/* Estilo para el contenido principal */
+main {
+    margin-top: 20px;
+}
+
+/* Estilo para las secciones */
+section {
+    margin-bottom: 30px;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro con transparencia para las secciones */
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Estilo para los títulos de las secciones */
+h2 {
+    margin-bottom: 15px;
+    color: #ffd700; /* Color dorado para hacer los títulos más visibles */
+}
+
+/* Estilo para la lista de materiales */
+ul {
+    list-style-type: none;
+}
+
+ul li a {
+    color: #ffd700; /* Cambiado a dorado para contrastar mejor con el fondo */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para la galería de fotos */
+.galeria {
+    display: flex;
+    gap: 20px;
+}
+
+.galeria img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Estilo para el pie de página */
+footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #ffd700; /* Texto en dorado */
+}
+
+/* Estilo para los formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+

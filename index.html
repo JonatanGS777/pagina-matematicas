@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Matemáticas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Página de Matemáticas</h1>
+        <nav>
+            <ul>
+                <li><a href="#materiales">Materiales</a></li>
+                <li><a href="#galeria">Galería</a></li>
+                <li><a href="#subir-archivos">Subir Archivos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sección de Materiales Didácticos -->
+        <section id="materiales">
+            <h2>Materiales Didácticos</h2>
+            <p>Aquí encontrarás todo el material que necesitas para estudiar.</p>
+            <ul>
+                <li><a href="materiales/guia1.pdf" download>Guía 1</a></li>
+                <li><a href="materiales/ejercicios.pdf" download>Ejercicios</a></li>
+            </ul>
+        </section>
+
+        <!-- Sección de Galería de Fotos -->
+        <section id="galeria">
+            <h2>Galería de Fotos</h2>
+            <div class="galeria">
+                <img src="imagenes/matematica1.jpg" alt="Matemáticas">
+                <img src="imagenes/matematica2.jpg" alt="Problemas Matemáticos">
+            </div>
+        </section>
+
+        <!-- Sección para Subir Archivos -->
+        <section id="subir-archivos">
+            <h2>Subir Archivos</h2>
+            <form id="uploadForm">
+                <input type="file" id="fileInput" name="archivo" multiple>
+                <button type="submit">Subir</button>
+            </form>
+            <div id="fileList"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Tu Nombre - Página de Matemáticas</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
