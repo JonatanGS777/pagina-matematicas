@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo de Reproducción de Conejos - Sucesión de Fibonacci</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-purple: #764ba2;
+            --primary-blue: #667eea;
+            --primary-mint: #4ecdc4;
+            --gradient-bg: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-blue) 50%, var(--primary-mint) 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --border-radius: 20px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-bg);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero .description {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            opacity: 0.85;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 30px 30px 0 0;
+            margin-top: 40px;
+            min-height: 100vh;
+            padding: 50px 0;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-container {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(to right, var(--primary-purple), var(--primary-mint));
+            outline: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: 3px solid var(--primary-blue);
+        }
+
+        .slider-value {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-blue);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: white;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--gradient-bg);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid #e1e8ed;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* Formula Section */
+        .formula-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .formula-section h3 {
+            color: var(--primary-purple);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        /* Visualization Container */
+        .visualization-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .viz-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .viz-section h3 {
+            color: var(--primary-purple);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Month Cards */
+        .month-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .month-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .month-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary-mint);
+        }
+
+        .month-card .month-number {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .month-card .fibonacci-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-purple);
+            margin-bottom: 5px;
+        }
+
+        .month-card .label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Rabbit Grid */
+        .rabbit-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .rabbit-pair {
+            font-size: 1.5rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: var(--transition);
+        }
+
+        .rabbit-pair.mature {
+            filter: hue-rotate(120deg);
+        }
+
+        /* Bubble Visualization */
+        .bubble-container {
+            position: relative;
+            height: 500px;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(118, 75, 162, 0.1) 0%, rgba(102, 126, 234, 0.1) 50%, rgba(78, 205, 196, 0.1) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(118, 75, 162, 0.2);
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            user-select: none;
+        }
+
+        .bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                0 12px 35px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .bubble::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Bubble Physics Controls */
+        .bubble-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .bubble-control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bubble-control-group label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .bubble-control-group input[type="range"] {
+            width: 100px;
+        }
+
+        /* Spiral Visualization */
+        .spiral-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+            position: relative;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .spiral-point {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .spiral-point:hover {
+            transform: scale(1.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .spiral-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.8), transparent);
+            height: 2px;
+            transform-origin: left center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .spiral-center {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+            50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
+
+        /* Spiral Controls */
+        .spiral-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .spiral-control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spiral-control-group label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        /* Visualization Mode Selector */
+        .viz-mode-selector {
+            display: flex;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .viz-mode-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .viz-mode-btn.active {
+            background: var(--gradient-bg);
+            color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .viz-mode-btn:hover:not(.active) {
+            color: var(--primary-blue);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .data-table th {
+            background: var(--gradient-bg);
+            color: white;
+            font-weight: 600;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* Toggle Sections */
+        .section-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .section-toggle i {
+            transition: var(--transition);
+        }
+
+        .section-toggle.collapsed i {
+            transform: rotate(180deg);
+        }
+
+        .collapsible-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            padding: 20px;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            animation: loading 1.4s infinite both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loading {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Floating Animation for Bubbles */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(1deg); }
+            66% { transform: translateY(5px) rotate(-1deg); }
+        }
+
+        .bubble.floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .month-cards {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+
+            .bubble-container {
+                height: 350px;
+            }
+
+            .bubble-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        /* Advanced Mode */
+        .advanced-mode {
+            border-top: 2px solid #e1e8ed;
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+
+        .advanced-mode h4 {
+            color: var(--primary-purple);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Export Section */
+        .export-section {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>🐇 Modelo de Reproducción de Conejos</h1>
+            <p class="subtitle">Sucesión de Fibonacci</p>
+            <p class="description">
+                En 1202, Leonardo de Pisa (conocido como Fibonacci) planteó un problema fascinante: 
+                ¿Cuántas parejas de conejos se producirían en un año si cada pareja madura da lugar 
+                a una nueva pareja cada mes, y las crías tardan un mes en madurar? Este modelo 
+                matemático revela uno de los patrones más hermosos de la naturaleza.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="control-grid">
+                    <div class="control-group">
+                        <label for="monthsSlider">
+                            <i class="fas fa-calendar-alt"></i>
+                            Número de Meses: <span id="monthsValue">12</span>
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="monthsSlider" class="slider" min="1" max="36" value="12">
+                            <div class="slider-value" id="sliderValue">12</div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="speedSlider">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Velocidad de Animación
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="speedSlider" class="slider" min="0.5" max="3" step="0.1" value="1">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-grid">
+                    <button id="startSimulation" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        Iniciar Simulación
+                    </button>
+                    <button id="resetSimulation" class="btn btn-secondary">
+                        <i class="fas fa-refresh"></i>
+                        Reiniciar
+                    </button>
+                    <button id="toggleAdvanced" class="btn btn-secondary">
+                        <i class="fas fa-cogs"></i>
+                        Modo Avanzado
+                    </button>
+                </div>
+
+                <!-- Advanced Mode -->
+                <div id="advancedMode" class="advanced-mode" style="display: none;">
+                    <h4><i class="fas fa-flask"></i> Parámetros Personalizados</h4>
+                    <div class="control-grid">
+                        <div class="control-group">
+                            <label for="maturityTime">
+                                <i class="fas fa-clock"></i>
+                                Tiempo de Madurez (meses)
+                            </label>
+                            <input type="number" id="maturityTime" min="1" max="6" value="2">
+                        </div>
+                        <div class="control-group">
+                            <label for="offspring">
+                                <i class="fas fa-baby"></i>
+                                Crías por Pareja
+                            </label>
+                            <input type="number" id="offspring" min="1" max="5" value="1">
+                        </div>
+                        <div class="control-group">
+                            <label for="reproductionRate">
+                                <i class="fas fa-heart"></i>
+                                Freq. Reproducción (meses)
+                            </label>
+                            <input type="number" id="reproductionRate" min="1" max="3" value="1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formula Section -->
+            <div class="formula-section">
+                <h3><i class="fas fa-calculator"></i> Fórmula Matemática</h3>
+                <div id="formula">
+                    $$F(n) = F(n-1) + F(n-2)$$
+                    <p style="margin-top: 15px; color: var(--text-light);">
+                        Donde F(0) = 0, F(1) = 1, y cada término es la suma de los dos anteriores
+                    </p>
+                </div>
+            </div>
+
+            <!-- Visualization Container -->
+            <div class="visualization-container">
+                <!-- Month Cards -->
+                <div class="viz-section">
+                    <div class="section-toggle" data-target="monthCardsContent">
+                        <h3><i class="fas fa-th-large"></i> Evolución por Meses</h3>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div id="monthCardsContent" class="collapsible-content">
+                        <div id="monthCards" class="month-cards"></div>
+                    </div>
+                </div>
+
+                <!-- Bubble Visualization -->
+                <div class="viz-section">
+                    <div class="section-toggle" data-target="bubbleContent">
+                        <h3><i class="fas fa-circle"></i> 💧 Visualización de Burbujas</h3>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div id="bubbleContent" class="collapsible-content">
+                        <div id="bubbleContainer" class="bubble-container"></div>
+                        <div class="bubble-controls">
+                            <div class="bubble-control-group">
+                                <label for="gravitySlider">Gravedad:</label>
+                                <input type="range" id="gravitySlider" min="0.1" max="2" step="0.1" value="0.5">
+                            </div>
+                            <div class="bubble-control-group">
+                                <label for="frictionSlider">Fricción:</label>
+                                <input type="range" id="frictionSlider" min="0.8" max="0.99" step="0.01" value="0.95">
+                            </div>
+                            <div class="bubble-control-group">
+                                <label for="bounceSlider">Rebote:</label>
+                                <input type="range" id="bounceSlider" min="0.3" max="0.9" step="0.1" value="0.7">
+                            </div>
+                            <button id="pauseBubbles" class="btn btn-secondary">
+                                <i class="fas fa-pause"></i> Pausar Física
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rabbit Visualization -->
+                <div class="viz-section">
+                    <div class="section-toggle" data-target="rabbitGridContent">
+                        <h3><i class="fas fa-th"></i> Visualización de Parejas</h3>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div id="rabbitGridContent" class="collapsible-content">
+                        <div id="rabbitGrid" class="rabbit-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Spiral Visualization -->
+                <div class="viz-section">
+                    <div class="section-toggle" data-target="spiralContent">
+                        <h3><i class="fas fa-dharmachakra"></i> 🌀 Espiral de Fibonacci</h3>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div id="spiralContent" class="collapsible-content">
+                        <div class="viz-mode-selector">
+                            <button class="viz-mode-btn active" data-mode="golden">Espiral Dorada</button>
+                            <button class="viz-mode-btn" data-mode="mandala">Mandala</button>
+                            <button class="viz-mode-btn" data-mode="polar">Gráfico Polar</button>
+                        </div>
+                        <div id="spiralContainer" class="spiral-container"></div>
+                        <div class="spiral-controls">
+                            <div class="spiral-control-group">
+                                <label for="spiralScale">Escala:</label>
+                                <input type="range" id="spiralScale" min="0.5" max="2" step="0.1" value="1">
+                            </div>
+                            <div class="spiral-control-group">
+                                <label for="spiralRotation">Rotación:</label>
+                                <input type="range" id="spiralRotation" min="0" max="360" value="0">
+                            </div>
+                            <div class="spiral-control-group">
+                                <label for="showConnections">Conectar:</label>
+                                <input type="checkbox" id="showConnections" checked>
+                            </div>
+                            <button id="animateSpiral" class="btn btn-secondary">
+                                <i class="fas fa-play"></i> Animar Espiral
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="viz-section">
+                    <div class="section-toggle" data-target="dataTableContent">
+                        <h3><i class="fas fa-table"></i> Tabla de Datos</h3>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div id="dataTableContent" class="collapsible-content">
+                        <div id="dataTableContainer"></div>
+                        <div class="export-section">
+                            <button id="exportCSV" class="btn btn-secondary">
+                                <i class="fas fa-download"></i>
+                                Descargar CSV
+                            </button>
+                            <button id="exportJSON" class="btn btn-secondary">
+                                <i class="fas fa-file-code"></i>
+                                Descargar JSON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            maxMonths: 36,
+            colors: {
+                primary: '#764ba2',
+                secondary: '#667eea',
+                accent: '#4ecdc4'
+            },
+            animations: {
+                duration: 800,
+                delay: 100
+            }
+        };
+
+        // Bubble Physics Engine
+        class BubblePhysics {
+            constructor(container) {
+                this.container = container;
+                this.bubbles = [];
+                this.isRunning = false;
+                this.animationId = null;
+                
+                // Physics parameters
+                this.gravity = 0.5;
+                this.friction = 0.95;
+                this.bounce = 0.7;
+                
+                this.containerRect = container.getBoundingClientRect();
+                this.updateContainerDimensions();
+                
+                // Handle resize
+                window.addEventListener('resize', () => this.updateContainerDimensions());
+            }
+            
+            updateContainerDimensions() {
+                this.containerRect = this.container.getBoundingClientRect();
+                this.width = this.containerRect.width;
+                this.height = this.containerRect.height;
+            }
+            
+            createBubble(value, index, total) {
+                const maxSize = Math.min(this.width, this.height) * 0.3;
+                const minSize = 30;
+                const size = minSize + (value / Math.max(...this.bubbles.map(b => b.value || 1))) * (maxSize - minSize);
+                
+                // Color gradient based on value
+                const hue = (index / total) * 300 + 240; // Blue to purple to red
+                const saturation = 70 + (value / Math.max(...this.bubbles.map(b => b.value || 1))) * 30;
+                const lightness = 50 + (value / Math.max(...this.bubbles.map(b => b.value || 1))) * 20;
+                
+                const bubble = {
+                    id: index,
+                    value: value,
+                    x: Math.random() * (this.width - size),
+                    y: this.height + size, // Start from bottom
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: -Math.random() * 8 - 5, // Initial upward velocity
+                    size: size,
+                    element: null,
+                    color: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
+                    month: index + 1
+                };
+                
+                this.createBubbleElement(bubble);
+                this.bubbles.push(bubble);
+                
+                return bubble;
+            }
+            
+            createBubbleElement(bubble) {
+                const element = document.createElement('div');
+                element.className = 'bubble floating';
+                element.style.width = `${bubble.size}px`;
+                element.style.height = `${bubble.size}px`;
+                element.style.background = `radial-gradient(circle at 30% 30%, ${bubble.color}, ${this.darkenColor(bubble.color, 20)})`;
+                element.style.left = `${bubble.x}px`;
+                element.style.top = `${bubble.y}px`;
+                element.textContent = bubble.value;
+                element.title = `Mes ${bubble.month}: ${bubble.value} parejas`;
+                
+                // Font size based on bubble size
+                const fontSize = Math.max(10, bubble.size * 0.2);
+                element.style.fontSize = `${fontSize}px`;
+                
+                bubble.element = element;
+                this.container.appendChild(element);
+                
+                // Add click interaction
+                element.addEventListener('click', () => this.bubbleClick(bubble));
+            }
+            
+            darkenColor(hslColor, amount) {
+                const match = hslColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+                if (match) {
+                    const h = match[1];
+                    const s = match[2];
+                    const l = Math.max(0, parseInt(match[3]) - amount);
+                    return `hsl(${h}, ${s}%, ${l}%)`;
+                }
+                return hslColor;
+            }
+            
+            bubbleClick(bubble) {
+                // Impulse effect on click
+                bubble.vx += (Math.random() - 0.5) * 10;
+                bubble.vy -= Math.random() * 10 + 5;
+                
+                // Visual feedback
+                anime({
+                    targets: bubble.element,
+                    scale: [1, 1.2, 1],
+                    duration: 300,
+                    easing: 'easeOutElastic(1, .6)'
+                });
+            }
+            
+            updatePhysics() {
+                if (!this.isRunning) return;
+                
+                this.updateContainerDimensions();
+                
+                this.bubbles.forEach(bubble => {
+                    // Apply gravity (negative = upward)
+                    bubble.vy += this.gravity;
+                    
+                    // Apply velocity
+                    bubble.x += bubble.vx;
+                    bubble.y += bubble.vy;
+                    
+                    // Apply friction
+                    bubble.vx *= this.friction;
+                    bubble.vy *= this.friction;
+                    
+                    // Boundary collisions
+                    const radius = bubble.size / 2;
+                    
+                    // Left and right walls
+                    if (bubble.x <= radius) {
+                        bubble.x = radius;
+                        bubble.vx *= -this.bounce;
+                    } else if (bubble.x >= this.width - radius) {
+                        bubble.x = this.width - radius;
+                        bubble.vx *= -this.bounce;
+                    }
+                    
+                    // Top and bottom walls
+                    if (bubble.y <= radius) {
+                        bubble.y = radius;
+                        bubble.vy *= -this.bounce;
+                    } else if (bubble.y >= this.height - radius) {
+                        bubble.y = this.height - radius;
+                        bubble.vy *= -this.bounce;
+                    }
+                    
+                    // Update element position
+                    if (bubble.element) {
+                        bubble.element.style.left = `${bubble.x - radius}px`;
+                        bubble.element.style.top = `${bubble.y - radius}px`;
+                    }
+                });
+                
+                // Check bubble collisions
+                this.checkCollisions();
+                
+                this.animationId = requestAnimationFrame(() => this.updatePhysics());
+            }
+            
+            checkCollisions() {
+                for (let i = 0; i < this.bubbles.length; i++) {
+                    for (let j = i + 1; j < this.bubbles.length; j++) {
+                        const b1 = this.bubbles[i];
+                        const b2 = this.bubbles[j];
+                        
+                        const dx = b2.x - b1.x;
+                        const dy = b2.y - b1.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const minDistance = (b1.size + b2.size) / 2;
+                        
+                        if (distance < minDistance) {
+                            // Collision detected
+                            const angle = Math.atan2(dy, dx);
+                            const sin = Math.sin(angle);
+                            const cos = Math.cos(angle);
+                            
+                            // Separate bubbles
+                            const overlap = minDistance - distance;
+                            const separationX = cos * overlap * 0.5;
+                            const separationY = sin * overlap * 0.5;
+                            
+                            b1.x -= separationX;
+                            b1.y -= separationY;
+                            b2.x += separationX;
+                            b2.y += separationY;
+                            
+                            // Exchange velocities (simplified)
+                            const tempVx = b1.vx;
+                            const tempVy = b1.vy;
+                            b1.vx = b2.vx * this.bounce;
+                            b1.vy = b2.vy * this.bounce;
+                            b2.vx = tempVx * this.bounce;
+                            b2.vy = tempVy * this.bounce;
+                        }
+                    }
+                }
+            }
+            
+            start() {
+                this.isRunning = true;
+                this.updatePhysics();
+            }
+            
+            stop() {
+                this.isRunning = false;
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                }
+            }
+            
+            clear() {
+                this.stop();
+                this.bubbles.forEach(bubble => {
+                    if (bubble.element) {
+                        bubble.element.remove();
+                    }
+                });
+                this.bubbles = [];
+            }
+            
+            setGravity(value) {
+                this.gravity = parseFloat(value);
+            }
+            
+        setFriction(value) {
+                this.friction = parseFloat(value);
+            }
+            
+            setBounce(value) {
+                this.bounce = parseFloat(value);
+            }
+        }  // End of BubblePhysics
+            
+        // Spiral Visualization Engine
+        class SpiralVisualization {
+            constructor(container) {
+                this.container = container;
+                this.mode = 'golden';
+                this.scale = 1;
+                this.rotation = 0;
+                this.showConnections = true;
+                this.points = [];
+                this.lines = [];
+                this.animationId = null;
+                
+                this.containerRect = container.getBoundingClientRect();
+                this.updateContainerDimensions();
+                
+                window.addEventListener('resize', () => this.updateContainerDimensions());
+            }
+            
+            updateContainerDimensions() {
+                this.containerRect = this.container.getBoundingClientRect();
+                this.centerX = this.containerRect.width / 2;
+                this.centerY = this.containerRect.height / 2;
+            }
+            
+            setMode(mode) {
+                this.mode = mode;
+            }
+            
+            setScale(scale) {
+                this.scale = parseFloat(scale);
+                this.updateVisualization();
+            }
+            
+            setRotation(rotation) {
+                this.rotation = parseFloat(rotation);
+                this.updateVisualization();
+            }
+            
+            setShowConnections(show) {
+                this.showConnections = show;
+                this.updateConnections();
+            }
+            
+            createGoldenSpiral(data) {
+                const phi = (1 + Math.sqrt(5)) / 2; // Golden ratio
+                const maxValue = Math.max(...data.map(d => d.pairs));
+                
+                data.forEach((monthData, index) => {
+                    const angle = index * (2 * Math.PI / phi) + (this.rotation * Math.PI / 180);
+                    const radius = (Math.sqrt(monthData.pairs) * 15 * this.scale) + 20;
+                    
+                    const x = this.centerX + Math.cos(angle) * radius;
+                    const y = this.centerY + Math.sin(angle) * radius;
+                    
+                    // Point size based on value
+                    const size = 20 + (monthData.pairs / maxValue) * 40;
+                    
+                    // Golden gradient color
+                    const hue = 45 + (index / data.length) * 30; // Gold to orange
+                    const saturation = 80 + (monthData.pairs / maxValue) * 20;
+                    const lightness = 50 + (monthData.pairs / maxValue) * 25;
+                    
+                    this.createPoint(x, y, size, monthData, `hsl(${hue}, ${saturation}%, ${lightness}%)`, index);
+                });
+                
+                if (this.showConnections) {
+                    this.createConnections();
+                }
+            }
+            
+            createMandala(data) {
+                const maxValue = Math.max(...data.map(d => d.pairs));
+                const angleStep = (2 * Math.PI) / data.length;
+                
+                data.forEach((monthData, index) => {
+                    const angle = index * angleStep + (this.rotation * Math.PI / 180);
+                    const radius = 80 + (monthData.pairs / maxValue) * 150 * this.scale;
+                    
+                    const x = this.centerX + Math.cos(angle) * radius;
+                    const y = this.centerY + Math.sin(angle) * radius;
+                    
+                    // Petal-like size
+                    const size = 25 + (monthData.pairs / maxValue) * 35;
+                    
+                    // Mandala colors (purple to pink)
+                    const hue = 280 + (index / data.length) * 60;
+                    const saturation = 70 + (monthData.pairs / maxValue) * 30;
+                    const lightness = 45 + (monthData.pairs / maxValue) * 30;
+                    
+                    this.createPoint(x, y, size, monthData, `hsl(${hue}, ${saturation}%, ${lightness}%)`, index);
+                    
+                    // Create petal lines
+                    if (this.showConnections) {
+                        this.createPetalLine(this.centerX, this.centerY, x, y, index);
+                    }
+                });
+            }
+            
+            createPolarChart(data) {
+                const maxValue = Math.max(...data.map(d => d.pairs));
+                const angleStep = (2 * Math.PI) / data.length;
+                
+                data.forEach((monthData, index) => {
+                    const angle = index * angleStep + (this.rotation * Math.PI / 180);
+                    const radius = 50 + (monthData.pairs / maxValue) * 180 * this.scale;
+                    
+                    const x = this.centerX + Math.cos(angle) * radius;
+                    const y = this.centerY + Math.sin(angle) * radius;
+                    
+                    const size = 20 + (monthData.pairs / maxValue) * 30;
+                    
+                    // Blue gradient for polar
+                    const hue = 200 + (index / data.length) * 60;
+                    const saturation = 70 + (monthData.pairs / maxValue) * 30;
+                    const lightness = 50 + (monthData.pairs / maxValue) * 25;
+                    
+                    this.createPoint(x, y, size, monthData, `hsl(${hue}, ${saturation}%, ${lightness}%)`, index);
+                    
+                    if (this.showConnections) {
+                        this.createRadialLine(this.centerX, this.centerY, x, y, monthData.pairs / maxValue);
+                    }
+                });
+            }
+            
+            createPoint(x, y, size, monthData, color, index) {
+                const point = document.createElement('div');
+                point.className = 'spiral-point';
+                point.style.width = `${size}px`;
+                point.style.height = `${size}px`;
+                point.style.left = `${x - size/2}px`;
+                point.style.top = `${y - size/2}px`;
+                point.style.background = `radial-gradient(circle at 30% 30%, ${color}, ${this.darkenColor(color, 30)})`;
+                
+                // Font size based on point size
+                const fontSize = Math.max(8, size * 0.25);
+                point.style.fontSize = `${fontSize}px`;
+                point.textContent = monthData.pairs;
+                point.title = `Mes ${monthData.month}: ${monthData.pairs} parejas`;
+                
+                // Add hover effect
+                point.addEventListener('mouseenter', () => {
+                    point.style.zIndex = '1000';
+                });
+                
+                this.container.appendChild(point);
+                this.points.push({ element: point, data: monthData, index });
+            }
+            
+            createConnections() {
+                for (let i = 0; i < this.points.length - 1; i++) {
+                    const p1 = this.points[i];
+                    const p2 = this.points[i + 1];
+                    
+                    this.createLine(p1, p2, i);
+                }
+            }
+            
+            createLine(p1, p2, index) {
+                const x1 = parseFloat(p1.element.style.left) + parseFloat(p1.element.style.width) / 2;
+                const y1 = parseFloat(p1.element.style.top) + parseFloat(p1.element.style.height) / 2;
+                const x2 = parseFloat(p2.element.style.left) + parseFloat(p2.element.style.width) / 2;
+                const y2 = parseFloat(p2.element.style.top) + parseFloat(p2.element.style.height) / 2;
+                
+                const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+                const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+                
+                const line = document.createElement('div');
+                line.className = 'spiral-line';
+                line.style.width = `${length}px`;
+                line.style.left = `${x1}px`;
+                line.style.top = `${y1}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.opacity = '0';
+                
+                this.container.appendChild(line);
+                this.lines.push(line);
+            }
+            
+            createPetalLine(centerX, centerY, x, y, index) {
+                const length = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                const angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
+                
+                const line = document.createElement('div');
+                line.className = 'spiral-line';
+                line.style.width = `${length}px`;
+                line.style.left = `${centerX}px`;
+                line.style.top = `${centerY}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.background = `linear-gradient(90deg, transparent, rgba(255, 105, 180, 0.6), transparent)`;
+                line.style.opacity = '0';
+                
+                this.container.appendChild(line);
+                this.lines.push(line);
+            }
+            
+            createRadialLine(centerX, centerY, x, y, intensity) {
+                const length = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                const angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
+                
+                const line = document.createElement('div');
+                line.className = 'spiral-line';
+                line.style.width = `${length}px`;
+                line.style.left = `${centerX}px`;
+                line.style.top = `${centerY}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.background = `linear-gradient(90deg, rgba(102, 126, 234, 0.8), rgba(102, 126, 234, ${intensity * 0.8}), transparent)`;
+                line.style.height = '3px';
+                line.style.opacity = '0';
+                
+                this.container.appendChild(line);
+                this.lines.push(line);
+            }
+            
+            darkenColor(hslColor, amount) {
+                const match = hslColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+                if (match) {
+                    const h = match[1];
+                    const s = match[2];
+                    const l = Math.max(0, parseInt(match[3]) - amount);
+                    return `hsl(${h}, ${s}%, ${l}%)`;
+                }
+                return hslColor;
+            }
+            
+            updateVisualization() {
+                if (this.points.length === 0) return;
+                
+                // Update point positions based on current parameters
+                this.clear();
+                const data = this.points.map(p => p.data);
+                this.visualize(data);
+            }
+            
+            updateConnections() {
+                this.lines.forEach(line => {
+                    line.style.display = this.showConnections ? 'block' : 'none';
+                });
+            }
+            
+            visualize(data) {
+                this.updateContainerDimensions();
+                
+                // Add center point for golden spiral
+                if (this.mode === 'golden') {
+                    const center = document.createElement('div');
+                    center.className = 'spiral-center';
+                    center.style.left = `${this.centerX - 20}px`;
+                    center.style.top = `${this.centerY - 20}px`;
+                    center.innerHTML = '∞';
+                    center.title = 'Centro de la Espiral Dorada';
+                    this.container.appendChild(center);
+                }
+                
+                switch (this.mode) {
+                    case 'golden':
+                        this.createGoldenSpiral(data);
+                        break;
+                    case 'mandala':
+                        this.createMandala(data);
+                        break;
+                    case 'polar':
+                        this.createPolarChart(data);
+                        break;
+                }
+            }
+            
+            async animate() {
+                // Animate points appearance
+                for (let i = 0; i < this.points.length; i++) {
+                    const point = this.points[i];
+                    
+                    await new Promise(resolve => {
+                        setTimeout(() => {
+                            anime({
+                                targets: point.element,
+                                opacity: [0, 1],
+                                scale: [0, 1],
+                                duration: 600,
+                                easing: 'easeOutElastic(1, .8)',
+                                complete: resolve
+                            });
+                        }, i * 150);
+                    });
+                }
+                
+                // Animate lines
+                if (this.showConnections) {
+                    for (let i = 0; i < this.lines.length; i++) {
+                        setTimeout(() => {
+                            anime({
+                                targets: this.lines[i],
+                                opacity: [0, 0.7],
+                                duration: 400,
+                                easing: 'easeOutQuad'
+                            });
+                        }, i * 100);
+                    }
+                }
+            }
+            
+            clear() {
+                this.points.forEach(point => {
+                    if (point.element) {
+                        point.element.remove();
+                    }
+                });
+                
+                this.lines.forEach(line => {
+                    line.remove();
+                });
+                
+                // Clear any remaining elements
+                this.container.innerHTML = '';
+                
+                this.points = [];
+                this.lines = [];
+            }
+        }
+
+        // State Management
+        class FibonacciSimulation {
+            constructor() {
+                this.isRunning = false;
+                this.data = [];
+                this.currentMonth = 0;
+                this.animationSpeed = 1;
+                this.parameters = {
+                    maturityTime: 2,
+                    offspring: 1,
+                    reproductionRate: 1
+                };
+                this.bubblePhysics = null;
+                this.spiralVisualization = null;
+                this.initializeElements();
+                this.attachEventListeners();
+                this.initializeBubblePhysics();
+                this.initializeSpiralVisualization();
+            }
+
+            initializeElements() {
+                this.elements = {
+                    monthsSlider: document.getElementById('monthsSlider'),
+                    monthsValue: document.getElementById('monthsValue'),
+                    sliderValue: document.getElementById('sliderValue'),
+                    speedSlider: document.getElementById('speedSlider'),
+                    startBtn: document.getElementById('startSimulation'),
+                    resetBtn: document.getElementById('resetSimulation'),
+                    advancedBtn: document.getElementById('toggleAdvanced'),
+                    advancedMode: document.getElementById('advancedMode'),
+                    monthCards: document.getElementById('monthCards'),
+                    rabbitGrid: document.getElementById('rabbitGrid'),
+                    spiralContainer: document.getElementById('spiralContainer'),
+                    dataTableContainer: document.getElementById('dataTableContainer'),
+                    exportCSV: document.getElementById('exportCSV'),
+                    exportJSON: document.getElementById('exportJSON'),
+                    maturityTime: document.getElementById('maturityTime'),
+                    offspring: document.getElementById('offspring'),
+                    reproductionRate: document.getElementById('reproductionRate'),
+                    bubbleContainer: document.getElementById('bubbleContainer'),
+                    gravitySlider: document.getElementById('gravitySlider'),
+                    frictionSlider: document.getElementById('frictionSlider'),
+                    bounceSlider: document.getElementById('bounceSlider'),
+                    pauseBubbles: document.getElementById('pauseBubbles'),
+                    spiralScale: document.getElementById('spiralScale'),
+                    spiralRotation: document.getElementById('spiralRotation'),
+                    showConnections: document.getElementById('showConnections'),
+                    animateSpiral: document.getElementById('animateSpiral')
+                };
+            }
+
+            initializeBubblePhysics() {
+                this.bubblePhysics = new BubblePhysics(this.elements.bubbleContainer);
+            }
+
+            initializeSpiralVisualization() {
+                this.spiralVisualization = new SpiralVisualization(this.elements.spiralContainer);
+            }
+
+            attachEventListeners() {
+                // Slider updates
+                this.elements.monthsSlider.addEventListener('input', (e) => {
+                    const value = e.target.value;
+                    this.elements.monthsValue.textContent = value;
+                    this.elements.sliderValue.textContent = value;
+                    this.updateSliderPosition();
+                });
+
+                this.elements.speedSlider.addEventListener('input', (e) => {
+                    this.animationSpeed = parseFloat(e.target.value);
+                });
+
+                // Button controls
+                this.elements.startBtn.addEventListener('click', () => this.startSimulation());
+                this.elements.resetBtn.addEventListener('click', () => this.resetSimulation());
+                this.elements.advancedBtn.addEventListener('click', () => this.toggleAdvancedMode());
+
+                // Export buttons
+                this.elements.exportCSV.addEventListener('click', () => this.exportData('csv'));
+                this.elements.exportJSON.addEventListener('click', () => this.exportData('json'));
+
+                // Advanced parameters
+                ['maturityTime', 'offspring', 'reproductionRate'].forEach(param => {
+                    this.elements[param].addEventListener('change', (e) => {
+                        this.parameters[param] = parseInt(e.target.value);
+                    });
+                });
+
+                // Bubble physics controls
+                this.elements.gravitySlider.addEventListener('input', (e) => {
+                    this.bubblePhysics.setGravity(e.target.value);
+                });
+
+                this.elements.frictionSlider.addEventListener('input', (e) => {
+                    this.bubblePhysics.setFriction(e.target.value);
+                });
+
+                this.elements.bounceSlider.addEventListener('input', (e) => {
+                    this.bubblePhysics.setBounce(e.target.value);
+                });
+
+                this.elements.pauseBubbles.addEventListener('click', () => {
+                    if (this.bubblePhysics.isRunning) {
+                        this.bubblePhysics.stop();
+                        this.elements.pauseBubbles.innerHTML = '<i class="fas fa-play"></i> Reanudar Física';
+                    } else {
+                        this.bubblePhysics.start();
+                        this.elements.pauseBubbles.innerHTML = '<i class="fas fa-pause"></i> Pausar Física';
+                    }
+                });
+
+                // Spiral visualization controls
+                this.elements.spiralScale.addEventListener('input', (e) => {
+                    this.spiralVisualization.setScale(e.target.value);
+                });
+
+                this.elements.spiralRotation.addEventListener('input', (e) => {
+                    this.spiralVisualization.setRotation(e.target.value);
+                });
+
+                this.elements.showConnections.addEventListener('change', (e) => {
+                    this.spiralVisualization.setShowConnections(e.target.checked);
+                });
+
+                this.elements.animateSpiral.addEventListener('click', () => {
+                    this.spiralVisualization.animate();
+                });
+
+                // Visualization mode buttons
+                document.querySelectorAll('.viz-mode-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.viz-mode-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.spiralVisualization.setMode(btn.dataset.mode);
+                        if (this.data.length > 0) {
+                            this.spiralVisualization.clear();
+                            this.spiralVisualization.visualize(this.data);
+                        }
+                    });
+                });
+
+                // Section toggles
+                document.querySelectorAll('.section-toggle').forEach(toggle => {
+                    toggle.addEventListener('click', () => this.toggleSection(toggle));
+                });
+
+                // Initialize slider position
+                this.updateSliderPosition();
+            }
+
+            updateSliderPosition() {
+                const slider = this.elements.monthsSlider;
+                const value = slider.value;
+                const max = slider.max;
+                const min = slider.min;
+                const percentage = (value - min) / (max - min) * 100;
+                
+                this.elements.sliderValue.style.left = `${percentage}%`;
+            }
+
+            toggleAdvancedMode() {
+                const mode = this.elements.advancedMode;
+                const isVisible = mode.style.display !== 'none';
+                
+                mode.style.display = isVisible ? 'none' : 'block';
+                this.elements.advancedBtn.innerHTML = isVisible 
+                    ? '<i class="fas fa-cogs"></i> Modo Avanzado'
+                    : '<i class="fas fa-times"></i> Cerrar Avanzado';
+            }
+
+            toggleSection(toggle) {
+                const targetId = toggle.dataset.target;
+                const content = document.getElementById(targetId);
+                const icon = toggle.querySelector('i:last-child');
+                
+                const isExpanded = !toggle.classList.contains('collapsed');
+                
+                if (isExpanded) {
+                    content.style.maxHeight = '0';
+                    toggle.classList.add('collapsed');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    toggle.classList.remove('collapsed');
+                }
+            }
+
+            generateFibonacciSequence(months) {
+                const sequence = [];
+                
+                // Traditional Fibonacci
+                if (this.parameters.maturityTime === 2 && 
+                    this.parameters.offspring === 1 && 
+                    this.parameters.reproductionRate === 1) {
+                    
+                    for (let i = 0; i < months; i++) {
+                        if (i === 0) sequence.push(1);
+                        else if (i === 1) sequence.push(1);
+                        else sequence.push(sequence[i-1] + sequence[i-2]);
+                    }
+                } else {
+                    // Custom parameters
+                    sequence[0] = 1;
+                    for (let i = 1; i < months; i++) {
+                        let newPairs = 0;
+                        
+                        // Calculate reproductive pairs
+                        for (let j = 0; j < i; j++) {
+                            if ((i - j) >= this.parameters.maturityTime && 
+                                (i - j) % this.parameters.reproductionRate === 0) {
+                                newPairs += sequence[j] * this.parameters.offspring;
+                            }
+                        }
+                        
+                        sequence[i] = sequence[i-1] + newPairs;
+                    }
+                }
+                
+                return sequence.map((value, index) => ({
+                    month: index + 1,
+                    pairs: value,
+                    newPairs: index === 0 ? 1 : value - (sequence[index-1] || 0),
+                    total: value
+                }));
+            }
+
+            async startSimulation() {
+                if (this.isRunning) return;
+                
+                this.isRunning = true;
+                this.elements.startBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Simulando...';
+                this.elements.startBtn.disabled = true;
+                
+                const months = parseInt(this.elements.monthsSlider.value);
+                this.data = this.generateFibonacciSequence(months);
+                
+                // Clear previous visualization
+                this.clearVisualization();
+                
+                // Start animations
+                await Promise.all([
+                    this.animateMonthCards(),
+                    this.animateBubbleVisualization(),
+                    this.animateRabbitGrid(),
+                    this.animateSpiralVisualization(),
+                    this.updateDataTable()
+                ]);
+                
+                this.isRunning = false;
+                this.elements.startBtn.innerHTML = '<i class="fas fa-play"></i> Iniciar Simulación';
+                this.elements.startBtn.disabled = false;
+            }
+
+            clearVisualization() {
+                this.elements.monthCards.innerHTML = '';
+                this.elements.rabbitGrid.innerHTML = '';
+                this.spiralVisualization.clear();
+                this.bubblePhysics.clear();
+            }
+
+            async animateBubbleVisualization() {
+                for (let i = 0; i < this.data.length; i++) {
+                    const monthData = this.data[i];
+                    
+                    // Create bubble with delay
+                    await new Promise(resolve => {
+                        setTimeout(() => {
+                            this.bubblePhysics.createBubble(monthData.pairs, i, this.data.length);
+                            resolve();
+                        }, i * (300 / this.animationSpeed));
+                    });
+                }
+                
+                // Start physics simulation
+                this.bubblePhysics.start();
+                this.elements.pauseBubbles.innerHTML = '<i class="fas fa-pause"></i> Pausar Física';
+            }
+
+            async animateMonthCards() {
+                const container = this.elements.monthCards;
+                
+                for (let i = 0; i < this.data.length; i++) {
+                    const monthData = this.data[i];
+                    
+                    const card = document.createElement('div');
+                    card.className = 'month-card';
+                    card.innerHTML = `
+                        <div class="month-number">Mes ${monthData.month}</div>
+                        <div class="fibonacci-value">${monthData.pairs}</div>
+                        <div class="label">parejas</div>
+                    `;
+                    
+                    container.appendChild(card);
+                    
+                    // Animate card appearance
+                    await new Promise(resolve => {
+                        setTimeout(() => {
+                            anime({
+                                targets: card,
+                                opacity: [0, 1],
+                                translateY: [20, 0],
+                                scale: [0.8, 1],
+                                duration: CONFIG.animations.duration / this.animationSpeed,
+                                easing: 'easeOutElastic(1, .8)',
+                                complete: resolve
+                            });
+                        }, i * (CONFIG.animations.delay / this.animationSpeed));
+                    });
+                }
+            }
+
+            async animateRabbitGrid() {
+                const container = this.elements.rabbitGrid;
+                let totalRabbits = 0;
+                
+                for (let i = 0; i < this.data.length; i++) {
+                    const monthData = this.data[i];
+                    const newRabbits = monthData.newPairs;
+                    
+                    for (let j = 0; j < newRabbits; j++) {
+                        const rabbit = document.createElement('div');
+                        rabbit.className = 'rabbit-pair';
+                        rabbit.innerHTML = '🐇🐇';
+                        rabbit.title = `Mes ${monthData.month} - Pareja ${j + 1}`;
+                        
+                        // Mature rabbits get different styling
+                        if (i >= this.parameters.maturityTime) {
+                            rabbit.classList.add('mature');
+                        }
+                        
+                        container.appendChild(rabbit);
+                        
+                        // Animate rabbit appearance
+                        setTimeout(() => {
+                            anime({
+                                targets: rabbit,
+                                opacity: [0, 1],
+                                scale: [0, 1],
+                                duration: 300 / this.animationSpeed,
+                                easing: 'easeOutBack'
+                            });
+                        }, (totalRabbits * 50) / this.animationSpeed);
+                        
+                        totalRabbits++;
+                    }
+                    
+                    await new Promise(resolve => 
+                        setTimeout(resolve, (200 / this.animationSpeed))
+                    );
+                }
+            }
+
+            async animateSpiralVisualization() {
+                this.spiralVisualization.visualize(this.data);
+                await this.spiralVisualization.animate();
+            }
+
+            updateDataTable() {
+                const container = this.elements.dataTableContainer;
+                
+                const table = document.createElement('table');
+                table.className = 'data-table';
+                
+                // Header
+                const thead = document.createElement('thead');
+                thead.innerHTML = `
+                    <tr>
+                        <th>Mes</th>
+                        <th>Parejas Totales</th>
+                        <th>Parejas Nuevas</th>
+                        <th>Crecimiento</th>
+                    </tr>
+                `;
+                
+                // Body
+                const tbody = document.createElement('tbody');
+                this.data.forEach(monthData => {
+                    const growth = monthData.month > 1 
+                        ? ((monthData.pairs / this.data[monthData.month - 2].pairs - 1) * 100).toFixed(1)
+                        : '0.0';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${monthData.month}</td>
+                        <td>${monthData.pairs}</td>
+                        <td>${monthData.newPairs}</td>
+                        <td>${growth}%</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+                table.appendChild(thead);
+                table.appendChild(tbody);
+                container.innerHTML = '';
+                container.appendChild(table);
+            }
+
+            resetSimulation() {
+                this.isRunning = false;
+                this.currentMonth = 0;
+                this.data = [];
+                
+                this.clearVisualization();
+                this.elements.dataTableContainer.innerHTML = '';
+                
+                // Reset controls
+                this.elements.startBtn.innerHTML = '<i class="fas fa-play"></i> Iniciar Simulación';
+                this.elements.startBtn.disabled = false;
+                this.elements.pauseBubbles.innerHTML = '<i class="fas fa-pause"></i> Pausar Física';
+                
+                // Reset to default values
+                this.elements.monthsSlider.value = 12;
+                this.elements.monthsValue.textContent = '12';
+                this.elements.sliderValue.textContent = '12';
+                this.elements.speedSlider.value = 1;
+                this.animationSpeed = 1;
+                
+                this.updateSliderPosition();
+            }
+
+            exportData(format) {
+                if (this.data.length === 0) {
+                    alert('No hay datos para exportar. Ejecuta primero la simulación.');
+                    return;
+                }
+                
+                let content, filename, mimeType;
+                
+                if (format === 'csv') {
+                    content = 'Mes,Parejas Totales,Parejas Nuevas\n';
+                    this.data.forEach(row => {
+                        content += `${row.month},${row.pairs},${row.newPairs}\n`;
+                    });
+                    filename = 'fibonacci_rabbits.csv';
+                    mimeType = 'text/csv';
+                } else if (format === 'json') {
+                    content = JSON.stringify(this.data, null, 2);
+                    filename = 'fibonacci_rabbits.json';
+                    mimeType = 'application/json';
+                }
+                
+                const blob = new Blob([content], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Initialize application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new FibonacciSimulation();
+            
+            // Initialize MathJax
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']],
+                    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+                }
+            };
+        });
+
+        // Add some entrance animations
+        anime({
+            targets: '.hero h1',
+            translateY: [-50, 0],
+            opacity: [0, 1],
+            duration: 1000,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.hero .subtitle, .hero .description',
+            translateY: [30, 0],
+            opacity: [0, 1],
+            duration: 1000,
+            delay: anime.stagger(200),
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.control-panel, .formula-section, .viz-section',
+            translateY: [50, 0],
+            opacity: [0, 1],
+            duration: 800,
+            delay: anime.stagger(100, {start: 500}),
+            easing: 'easeOutExpo'
+        });
+    </script>
+</body>
+</html>

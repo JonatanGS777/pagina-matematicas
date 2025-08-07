@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección de Pruebas Matemáticas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-1: linear-gradient(45deg, #FF6B6B, #FF8E53);
+            --gradient-2: linear-gradient(45deg, #4E65FF, #92EFFD);
+            --gradient-3: linear-gradient(45deg, #6B4EFF, #B892FD);
+            --gradient-4: linear-gradient(45deg, #4ECB71, #96FDB2);
+            --gradient-5: linear-gradient(45deg, #CB4E4E, #FD9292);
+            --gradient-6: linear-gradient(45deg, #4E9DCB, #92D5FD);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .quiz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-card:nth-child(1)::before { background: var(--gradient-1); }
+        .quiz-card:nth-child(2)::before { background: var(--gradient-2); }
+        .quiz-card:nth-child(3)::before { background: var(--gradient-3); }
+        .quiz-card:nth-child(4)::before { background: var(--gradient-4); }
+        .quiz-card:nth-child(5)::before { background: var(--gradient-5); }
+        .quiz-card:nth-child(6)::before { background: var(--gradient-6); }
+
+        .quiz-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-card:hover::before {
+            opacity: 1;
+        }
+
+        .quiz-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .quiz-description {
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .start-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quiz-card {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .quiz-card:nth-child(1) { animation-delay: 0.1s; }
+        .quiz-card:nth-child(2) { animation-delay: 0.2s; }
+        .quiz-card:nth-child(3) { animation-delay: 0.3s; }
+        .quiz-card:nth-child(4) { animation-delay: 0.4s; }
+        .quiz-card:nth-child(5) { animation-delay: 0.5s; }
+        .quiz-card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pruebas de Matemáticas</h1>
+        <p>Selecciona una categoría para comenzar tu prueba</p>
+    </header>
+
+    <div class="quiz-container">
+        <div class="quiz-card" onclick="iniciarPrueba('trigonometria')">
+            <i class="quiz-icon fas fa-calculator"></i>
+            <h2 class="quiz-title">Trigonometría Básica</h2>
+            <p class="quiz-description">Prueba tus conocimientos en seno, coseno, tangente y relaciones trigonométricas fundamentales.</p>
+            <button class="start-button">Comenzar Prueba</button>
+        </div>
+
+        <div class="quiz-card" onclick="iniciarPrueba('algebra')">
+            <i class="quiz-icon fas fa-square-root-alt"></i>
+            <h2 class="quiz-title">Álgebra</h2>
+            <p class="quiz-description">Ecuaciones, expresiones algebraicas y problemas de aplicación.</p>
+            <button class="start-button">Comenzar Prueba</button>
+        </div>
+
+        <div class="quiz-card" onclick="iniciarPrueba('geometria')">
+            <i class="quiz-icon fas fa-shapes"></i>
+            <h2 class="quiz-title">Geometría</h2>
+            <p class="quiz-description">Figuras geométricas, áreas, perímetros y teoremas fundamentales.</p>
+            <button class="start-button">Comenzar Prueba</button>
+        </div>
+
+        <div class="quiz-card" onclick="iniciarPrueba('calculo')">
+            <i class="quiz-icon fas fa-infinity"></i>
+            <h2 class="quiz-title">Cálculo</h2>
+            <p class="quiz-description">Límites, derivadas e integrales con ejercicios prácticos.</p>
+            <button class="start-button">Comenzar Prueba</button>
+        </div>
+
+        <div class="quiz-card" onclick="iniciarPrueba('estadistica')">
+            <i class="quiz-icon fas fa-chart-bar"></i>
+            <h2 class="quiz-title">Estadística</h2>
+            <p class="quiz-description">Probabilidad, estadística descriptiva y distribuciones.</p>
+            <button class="start-button">Comenzar Prueba</button>
+        </div>
+
+        <div class="quiz-card" onclick="iniciarPrueba('aritmetica')">
+            <i class="quiz-icon fas fa-plus-minus"></i>
+            <h2 class="quiz-title">Aritmética</h2>
+            <p class="quiz-description">Operaciones básicas, fracciones y problemas numéricos.</p>
+            <button class="start-button">Comenzar Prueba</button>
+        </div>
+    </div>
+
+    <script>
+		// Actualización de la función iniciarPrueba en el archivo principal
+		function iniciarPrueba(tipo) {
+		    switch(tipo) {
+		        case 'trigonometria':
+		            window.location.href = 'trigonometria-quiz.html';
+		            break;
+		        case 'algebra':
+		            window.location.href = 'algebra-quiz.html';
+		            break;
+		        case 'geometria':
+					window.location.href = 'geometria-quiz.html';
+					break;
+		        case 'calculo':
+					window.location.href = 'calculo-quiz.html';
+					break;
+		        case 'estadistica':
+					window.location.href = 'estadistica-quiz.html';
+					break;
+		        case 'aritmetica':
+					window.location.href = 'aritmetica-quiz.html';
+					break;
+		            // Para las pruebas aún no implementadas
+		            alert(`La prueba de ${tipo} estará disponible próximamente.`);
+		            break;
+		    }
+		}
+    </script>
+</body>
+</html>

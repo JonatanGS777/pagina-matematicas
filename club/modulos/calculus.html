@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Cálculo - Competencias Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                packages: {'[+]': ['base', 'ams', 'newcommand', 'mathtools']}
+            },
+            svg: {
+                fontCache: 'global',
+                scale: 1.1
+            },
+            options: {
+                renderActions: {
+                    addMenu: [0, '', ''],
+                    checkLoading: [1, '', '']
+                },
+                menuOptions: {
+                    settings: {
+                        zoom: 'Double-Click',
+                        zscale: '150%'
+                    }
+                }
+            },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    console.log('✅ MathJax is ready and configured');
+                    // Dispatch a custom event when MathJax is ready
+                    window.dispatchEvent(new CustomEvent('mathjaxReady'));
+                }
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --calculus: #6366f1;
+            --calculus-light: rgba(99, 102, 241, 0.1);
+            --calculus-dark: #4f46e5;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-calculus: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* MathJax Styling */
+        .problem-statement .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-statement mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        .problem-statement mjx-container[display="true"] {
+            margin: 0.8rem 0 !important;
+        }
+
+        .problem-solution .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-solution mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(-45deg, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8), rgba(124, 58, 237, 0.8), rgba(109, 40, 217, 0.8));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-calculus);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-calculus);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-back i {
+            margin-right: 0.5rem;
+        }
+
+        /* Timer Display */
+        .timer-display {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            border: 2px solid var(--calculus);
+            z-index: 100;
+        }
+
+        .timer-time {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--calculus);
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        /* MathJax Status Indicator */
+        .mathjax-status {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-soft);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mathjax-status.show {
+            opacity: 1;
+        }
+
+        .mathjax-status.ready {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .mathjax-status.error {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(99, 102, 241, 0.3);
+            border-top: 4px solid var(--calculus);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-calculus);
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            background: var(--gradient-calculus);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--calculus);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--calculus);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Problems Section */
+        .problems-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .difficulty-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-tab {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-tab.easy {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--calculus);
+        }
+
+        .difficulty-tab.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .difficulty-tab.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        .difficulty-tab.active {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .difficulty-tab.easy.active {
+            background: var(--calculus);
+            color: var(--white);
+        }
+
+        .difficulty-tab.medium.active {
+            background: #daa520;
+            color: var(--white);
+        }
+
+        .difficulty-tab.hard.active {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--calculus);
+        }
+
+        .problem-card.solved {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.05));
+            border-color: var(--success);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--calculus);
+            font-size: 1.2rem;
+        }
+
+        .problem-points {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .problem-points.easy {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--calculus);
+        }
+
+        .problem-points.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .problem-points.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        /* Function Graph Container */
+        .function-graph {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(99, 102, 241, 0.05));
+            border-radius: 15px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .function-graph svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .graph-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            fill: var(--text-primary);
+        }
+
+        .graph-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            fill: var(--calculus-dark);
+        }
+
+        .graph-curve {
+            fill: none;
+            stroke: var(--calculus);
+            stroke-width: 3;
+        }
+
+        .graph-line {
+            stroke: var(--calculus-dark);
+            stroke-width: 1.5;
+            stroke-dasharray: 5,5;
+        }
+
+        .graph-point {
+            fill: var(--calculus-dark);
+            r: 3;
+        }
+
+        .graph-area {
+            fill: rgba(99, 102, 241, 0.3);
+            stroke: var(--calculus);
+            stroke-width: 2;
+        }
+
+        .problem-statement {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            min-height: 60px;
+        }
+
+        .problem-input-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .problem-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-input:focus {
+            outline: none;
+            border-color: var(--calculus);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-calculus);
+            color: var(--white);
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .problem-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .problem-feedback.success {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .problem-feedback.error {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .problem-feedback.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .problem-solution {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 15px;
+            border-left: 4px solid var(--calculus);
+            display: none;
+        }
+
+        .problem-solution.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .solution-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-calculus);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: var(--shadow-soft);
+            margin: 2rem 0;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .error-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .problems-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-input-section {
+                flex-direction: column;
+            }
+
+            .timer-display {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 2rem;
+            }
+
+            .mathjax-status {
+                position: relative;
+                bottom: 0;
+                left: 0;
+                margin-top: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .nav-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+            }
+
+            .function-graph {
+                padding: 0.5rem;
+                margin: 1rem 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Score Animation */
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -150%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -250%) scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-infinity"></i>
+                Módulo de Cálculo
+            </a>
+            
+            <div class="nav-controls">
+                <a href="../leaderboard.html" class="nav-back" target="_blank" style="background: var(--success);">
+                    <i class="fas fa-trophy"></i>
+                    Ver Tabla de Posiciones
+                </a>
+                
+                <a href="../competencias.html" class="nav-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Competencias
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timerDisplay">
+        <div class="timer-time" id="timerTime">02:00:00</div>
+        <div class="timer-label">Tiempo Restante</div>
+    </div>
+
+    <!-- MathJax Status Indicator -->
+    <div class="mathjax-status" id="mathJaxStatus">
+        <i class="fas fa-circle"></i>
+        Cargando renderizador matemático...
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Loading State -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+                <h2>Cargando Módulo de Cálculo...</h2>
+                <p>Preparando problemas de derivadas, integrales y límites</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-container" id="errorContainer" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="error-title">Error al Cargar el Módulo</h2>
+                <p class="error-message" id="errorMessage">Ha ocurrido un problema al cargar el módulo de cálculo.</p>
+                <div class="error-actions">
+                    <a href="../competencias.html" class="nav-back">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver a Competencias
+                    </a>
+                    <button onclick="location.reload()" class="nav-back" style="border: none; background: var(--warning);">
+                        <i class="fas fa-redo"></i>
+                        Intentar de Nuevo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Container (Hidden initially) -->
+            <div id="mainContainer" style="display: none;">
+                <!-- Hero Section -->
+                <section class="hero fade-in">
+                    <div class="hero-icon">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <h1 class="hero-title">Cálculo</h1>
+                    <p class="hero-subtitle">Resuelve problemas de límites, derivadas, integrales y aplicaciones</p>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p style="text-align: center; color: var(--text-secondary); margin-top: 0.5rem;">
+                        Progreso: <span id="progressText">0/30 problemas resueltos</span>
+                    </p>
+                </section>
+
+                <!-- Stats Dashboard -->
+                <section class="stats-dashboard fade-in">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalScore">0</div>
+                        <div class="stat-label">Puntos Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="problemsSolved">0</div>
+                        <div class="stat-label">Problemas Resueltos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="currentStreak">0</div>
+                        <div class="stat-label">Racha Actual</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="averageTime">--:--</div>
+                        <div class="stat-label">Tiempo Promedio</div>
+                    </div>
+                </section>
+
+                <!-- Problems Section -->
+                <section class="problems-section fade-in">
+                    <h2 class="section-title">Problemas de Cálculo</h2>
+                    
+                    <!-- Difficulty Tabs -->
+                    <div class="difficulty-tabs">
+                        <button class="difficulty-tab easy active" onclick="showDifficulty('easy')">
+                            <i class="fas fa-function"></i>
+                            Fácil (5 pts)
+                        </button>
+                        <button class="difficulty-tab medium" onclick="showDifficulty('medium')">
+                            <i class="fas fa-chart-line"></i>
+                            Medio (10 pts)
+                        </button>
+                        <button class="difficulty-tab hard" onclick="showDifficulty('hard')">
+                            <i class="fas fa-infinity"></i>
+                            Difícil (15 pts)
+                        </button>
+                    </div>
+
+                    <!-- Problems Grid -->
+                    <div class="problems-grid" id="problemsGrid">
+                        <!-- Problems will be dynamically generated here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Calculus Module Management System
+        class CalculusModule {
+            constructor() {
+                this.currentParticipant = null;
+                this.currentDifficulty = 'easy';
+                this.solvedProblems = new Set();
+                this.currentScore = 0;
+                this.problemsSolved = 0;
+                this.currentStreak = 0;
+                this.startTime = Date.now();
+                this.solveTimes = [];
+                this.competitionData = null;
+                this.timeRemaining = 7200;
+                this.timerInterval = null;
+                this.mathJaxReady = false;
+                
+                // Problems with MathJax notation and graphs
+                this.problems = {
+                    easy: [
+                        {
+                            id: 'e1',
+                            statement: 'Encuentra la derivada de $f(x) = x^3 + 2x^2 - 5x + 1$.',
+                            answer: '3x^2+4x-5',
+                            solution: 'Usando la regla de la potencia: $f\'(x) = 3x^2 + 4x - 5$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid)"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 70 120 Q 120 80 150 100 Q 180 120 230 60" class="graph-curve"/>
+                                    <text x="200" y="70" class="graph-label">f(x) = x³ + 2x² - 5x + 1</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e2',
+                            statement: 'Calcula $\\lim_{x \\to 2} (3x + 4)$.',
+                            answer: '10',
+                            solution: 'Por continuidad: $\\lim_{x \\to 2} (3x + 4) = 3(2) + 4 = 10$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid2" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid2)"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="80" y1="120" x2="220" y2="80" class="graph-curve"/>
+                                    <circle cx="130" cy="100" r="4" class="graph-point"/>
+                                    <text x="135" y="95" class="graph-label">x = 2</text>
+                                    <text x="170" y="90" class="graph-label">y = 3x + 4</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e3',
+                            statement: 'Encuentra $\\int 4x^3 \\, dx$.',
+                            answer: 'x^4+C',
+                            solution: 'Usando la regla de la potencia: $\\int 4x^3 \\, dx = x^4 + C$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="100" text-anchor="middle" class="graph-text" style="font-size: 24px;">∫ 4x³ dx</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">Antiderivada</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e4',
+                            statement: 'Deriva $g(x) = \\sin(x) + \\cos(x)$.',
+                            answer: 'cos(x)-sin(x)',
+                            solution: 'Derivadas básicas: $g\'(x) = \\cos(x) - \\sin(x)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid3" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid3)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 50 100 Q 100 70 150 100 Q 200 130 250 100" class="graph-curve"/>
+                                    <text x="180" y="80" class="graph-label">sin(x) + cos(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e5',
+                            statement: 'Calcula $\\lim_{x \\to 0} \\frac{\\sin(x)}{x}$.',
+                            answer: '1',
+                            solution: 'Este es un límite fundamental conocido: $\\lim_{x \\to 0} \\frac{\\sin(x)}{x} = 1$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid4" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid4)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 70 120 Q 100 90 150 100 Q 200 110 230 80" class="graph-curve"/>
+                                    <circle cx="150" cy="100" r="4" fill="white" stroke="var(--calculus)" stroke-width="3"/>
+                                    <text x="170" y="85" class="graph-label">sin(x)/x</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e6',
+                            statement: 'Encuentra la derivada de $h(x) = e^x + \\ln(x)$.',
+                            answer: 'e^x+1/x',
+                            solution: 'Derivadas de funciones exponencial y logarítmica: $h\'(x) = e^x + \\frac{1}{x}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid5" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid5)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 80 110 Q 120 90 160 70 Q 200 60 240 50" class="graph-curve"/>
+                                    <text x="180" y="70" class="graph-label">eˣ + ln(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e7',
+                            statement: 'Calcula $\\int (2x + 3) \\, dx$.',
+                            answer: 'x^2+3x+C',
+                            solution: 'Integrando término a término: $\\int (2x + 3) \\, dx = x^2 + 3x + C$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="100" text-anchor="middle" class="graph-text" style="font-size: 24px;">∫ (2x + 3) dx</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">Función lineal</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e8',
+                            statement: 'Deriva $f(x) = x^2 \\cdot \\sin(x)$ usando la regla del producto.',
+                            answer: '2x*sin(x)+x^2*cos(x)',
+                            solution: 'Regla del producto: $(uv)\' = u\'v + uv\'$, entonces $f\'(x) = 2x\\sin(x) + x^2\\cos(x)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid6" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid6)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 60 100 Q 90 80 120 100 Q 150 120 180 100 Q 210 80 240 100" class="graph-curve"/>
+                                    <text x="170" y="75" class="graph-label">x² sin(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e9',
+                            statement: 'Evalúa $\\lim_{x \\to \\infty} \\frac{1}{x}$.',
+                            answer: '0',
+                            solution: 'Cuando $x$ tiende a infinito, $\\frac{1}{x}$ tiende a $0$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid7" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid7)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 160 60 Q 180 80 200 90 Q 220 95 240 98" class="graph-curve"/>
+                                    <text x="180" y="75" class="graph-label">1/x</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e10',
+                            statement: 'Encuentra $\\int x^2 \\, dx$.',
+                            answer: 'x^3/3+C',
+                            solution: 'Regla de la potencia para integrales: $\\int x^2 \\, dx = \\frac{x^3}{3} + C$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="100" text-anchor="middle" class="graph-text" style="font-size: 24px;">∫ x² dx</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">Función cuadrática</text>
+                                </svg>
+                            `
+                        }
+                    ],
+                    medium: [
+                        {
+                            id: 'm1',
+                            statement: 'Deriva $f(x) = \\sin(x^2 + 1)$ usando la regla de la cadena.',
+                            answer: '2x*cos(x^2+1)',
+                            solution: 'Regla de la cadena: $f\'(x) = \\cos(x^2 + 1) \\cdot 2x = 2x\\cos(x^2 + 1)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid8" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid8)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 60 100 Q 80 80 100 100 Q 120 120 140 100 Q 160 80 180 100 Q 200 120 220 100 Q 240 80 260 100" class="graph-curve"/>
+                                    <text x="170" y="75" class="graph-label">sin(x² + 1)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm2',
+                            statement: 'Calcula $\\int x e^x \\, dx$ usando integración por partes.',
+                            answer: 'xe^x-e^x+C',
+                            solution: 'Sea $u = x$, $dv = e^x dx$. Entonces $\\int x e^x \\, dx = xe^x - e^x + C$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="80" text-anchor="middle" class="graph-text" style="font-size: 20px;">∫ x eˣ dx</text>
+                                    <text x="150" y="110" text-anchor="middle" class="graph-label">Integración por partes:</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">u = x, dv = eˣ dx</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm3',
+                            statement: 'Evalúa $\\lim_{x \\to 0} \\frac{1 - \\cos(x)}{x^2}$.',
+                            answer: '1/2',
+                            solution: 'Usando la regla de L\'Hôpital o expansión de Taylor: $\\lim_{x \\to 0} \\frac{1 - \\cos(x)}{x^2} = \\frac{1}{2}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid9" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid9)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 120 Q 125 110 150 100 Q 175 110 200 120" class="graph-curve"/>
+                                    <circle cx="150" cy="100" r="4" fill="white" stroke="var(--calculus)" stroke-width="3"/>
+                                    <text x="160" y="90" class="graph-label">(1-cos(x))/x²</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm4',
+                            statement: 'Encuentra el área bajo la curva $y = x^2$ entre $x = 0$ y $x = 2$.',
+                            answer: '8/3',
+                            solution: 'Área $= \\int_0^2 x^2 \\, dx = [\\frac{x^3}{3}]_0^2 = \\frac{8}{3}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid10" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid10)"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="100" y1="50" x2="100" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 150 Q 125 130 150 100 Q 175 80 200 60" class="graph-curve"/>
+                                    <path d="M 100 150 Q 125 130 150 100 Q 175 80 200 60 L 200 150 Z" class="graph-area"/>
+                                    <text x="140" y="130" class="graph-label">y = x²</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm5',
+                            statement: 'Deriva $g(x) = \\ln(\\sin(x))$.',
+                            answer: 'cot(x)',
+                            solution: 'Regla de la cadena: $g\'(x) = \\frac{1}{\\sin(x)} \\cdot \\cos(x) = \\cot(x)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid11" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid11)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 70 130 Q 100 90 130 80 Q 160 90 190 120 Q 220 140 250 150" class="graph-curve"/>
+                                    <text x="170" y="85" class="graph-label">ln(sin(x))</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm6',
+                            statement: 'Evalúa $\\int_0^1 x^3 \\, dx$.',
+                            answer: '1/4',
+                            solution: 'Integral definida: $\\int_0^1 x^3 \\, dx = [\\frac{x^4}{4}]_0^1 = \\frac{1}{4} - 0 = \\frac{1}{4}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid12" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid12)"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="100" y1="50" x2="100" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 150 Q 120 140 140 120 Q 160 90 180 60" class="graph-curve"/>
+                                    <path d="M 100 150 Q 120 140 140 120 Q 160 90 180 60 L 180 150 Z" class="graph-area"/>
+                                    <text x="130" y="110" class="graph-label">y = x³</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm7',
+                            statement: 'Encuentra la pendiente de la tangente a $y = x^3 - 3x + 1$ en $x = 2$.',
+                            answer: '9',
+                            solution: 'Derivamos: $y\' = 3x^2 - 3$. En $x = 2$: $y\'(2) = 3(4) - 3 = 9$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid13" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid13)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 80 120 Q 120 130 150 100 Q 180 70 220 50" class="graph-curve"/>
+                                    <line x1="170" y1="80" x2="230" y2="40" stroke="red" stroke-width="2"/>
+                                    <circle cx="200" cy="60" r="3" class="graph-point"/>
+                                    <text x="170" y="35" class="graph-label">Tangente en x=2</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm8',
+                            statement: 'Calcula $\\int \\frac{1}{x} \\, dx$.',
+                            answer: 'ln|x|+C',
+                            solution: 'Integral del inverso: $\\int \\frac{1}{x} \\, dx = \\ln|x| + C$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="100" text-anchor="middle" class="graph-text" style="font-size: 24px;">∫ 1/x dx</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">= ln|x| + C</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm9',
+                            statement: 'Deriva implícitamente $x^2 + y^2 = 25$ para encontrar $\\frac{dy}{dx}$.',
+                            answer: '-x/y',
+                            solution: 'Derivando implícitamente: $2x + 2y\\frac{dy}{dx} = 0$, entonces $\\frac{dy}{dx} = -\\frac{x}{y}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid14" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid14)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <circle cx="150" cy="100" r="60" fill="none" stroke="var(--calculus)" stroke-width="3"/>
+                                    <text x="180" y="70" class="graph-label">x² + y² = 25</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm10',
+                            statement: 'Encuentra el máximo local de $f(x) = x^3 - 3x^2 + 2$.',
+                            answer: 'x=0',
+                            solution: '$f\'(x) = 3x^2 - 6x = 3x(x-2) = 0$ en $x = 0, 2$. $f\'\'(0) = -6 < 0$, máximo local en $x = 0$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid15" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid15)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 80 130 Q 120 70 150 110 Q 180 150 220 120" class="graph-curve"/>
+                                    <circle cx="120" cy="80" r="4" fill="red"/>
+                                    <circle cx="200" cy="140" r="4" fill="blue"/>
+                                    <text x="100" y="70" class="graph-label">Máximo</text>
+                                    <text x="180" y="155" class="graph-label">Mínimo</text>
+                                </svg>
+                            `
+                        }
+                    ],
+                    hard: [
+                        {
+                            id: 'h1',
+                            statement: 'Evalúa $\\lim_{x \\to 0} \\frac{e^x - 1 - x}{x^2}$ usando la regla de L\'Hôpital.',
+                            answer: '1/2',
+                            solution: 'Aplicando L\'Hôpital dos veces: $\\lim_{x \\to 0} \\frac{e^x - 1 - x}{x^2} = \\lim_{x \\to 0} \\frac{e^x - 1}{2x} = \\lim_{x \\to 0} \\frac{e^x}{2} = \\frac{1}{2}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid16" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid16)"/>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 110 Q 130 105 150 100 Q 170 95 200 90" class="graph-curve"/>
+                                    <circle cx="150" cy="100" r="4" fill="white" stroke="var(--calculus)" stroke-width="3"/>
+                                    <text x="160" y="85" class="graph-label">(eˣ-1-x)/x²</text>
+                                    <text x="160" y="110" class="graph-label">L = 1/2</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h2',
+                            statement: 'Calcula $\\int \\frac{x}{\\sqrt{1-x^2}} \\, dx$.',
+                            answer: '-sqrt(1-x^2)+C',
+                            solution: 'Sustitución $u = 1-x^2$, $du = -2x dx$: $\\int \\frac{x}{\\sqrt{1-x^2}} \\, dx = -\\sqrt{1-x^2} + C$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="80" text-anchor="middle" class="graph-text" style="font-size: 18px;">∫ x/√(1-x²) dx</text>
+                                    <text x="150" y="110" text-anchor="middle" class="graph-label">Sustitución trigonométrica</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">u = 1-x²</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h3',
+                            statement: 'Encuentra la serie de Taylor de $e^x$ centrada en $x = 0$ hasta el término $x^3$.',
+                            answer: '1+x+x^2/2+x^3/6',
+                            solution: 'Serie de Taylor: $e^x = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots = 1 + x + \\frac{x^2}{2} + \\frac{x^3}{6} + \\cdots$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid17" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid17)"/>
+                                    <line x1="50" y1="130" x2="250" y2="130" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 140 Q 125 125 150 110 Q 175 95 200 80" stroke="var(--calculus)" stroke-width="3" fill="none"/>
+                                    <path d="M 100 140 Q 125 128 150 115 Q 175 100 200 85" stroke="red" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+                                    <text x="160" y="75" class="graph-label">eˣ</text>
+                                    <text x="160" y="90" class="graph-label">P₃(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h4',
+                            statement: 'Deriva $F(x) = \\int_0^x \\sin(t^2) \\, dt$ usando el teorema fundamental del cálculo.',
+                            answer: 'sin(x^2)',
+                            solution: 'Por el teorema fundamental del cálculo: $F\'(x) = \\sin(x^2)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="80" text-anchor="middle" class="graph-text" style="font-size: 16px;">F(x) = ∫₀ˣ sin(t²) dt</text>
+                                    <text x="150" y="110" text-anchor="middle" class="graph-label">Teorema Fundamental</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">F'(x) = sin(x²)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h5',
+                            statement: 'Evalúa $\\int_0^{\\pi/2} \\sin^2(x) \\, dx$.',
+                            answer: 'π/4',
+                            solution: 'Usando $\\sin^2(x) = \\frac{1-\\cos(2x)}{2}$: $\\int_0^{\\pi/2} \\sin^2(x) \\, dx = \\frac{\\pi}{4}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid18" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid18)"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="100" y1="50" x2="100" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 150 Q 125 120 150 100 Q 175 120 200 150" class="graph-curve"/>
+                                    <path d="M 100 150 Q 125 120 150 100 Q 175 120 200 150 Z" class="graph-area"/>
+                                    <text x="140" y="110" class="graph-label">sin²(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h6',
+                            statement: 'Encuentra $\\frac{\\partial z}{\\partial x}$ si $z = x^2y + xy^3$.',
+                            answer: '2xy+y^3',
+                            solution: 'Derivada parcial respecto a $x$: $\\frac{\\partial z}{\\partial x} = 2xy + y^3$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="80" text-anchor="middle" class="graph-text" style="font-size: 18px;">z = x²y + xy³</text>
+                                    <text x="150" y="110" text-anchor="middle" class="graph-label">Derivada parcial</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">∂z/∂x = 2xy + y³</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h7',
+                            statement: 'Determina la convergencia de la serie $\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$.',
+                            answer: 'converge',
+                            solution: 'Por la prueba de la integral o comparación con serie p con $p = 2 > 1$, la serie converge',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="80" text-anchor="middle" class="graph-text" style="font-size: 18px;">∑ 1/n²</text>
+                                    <text x="150" y="110" text-anchor="middle" class="graph-label">Serie p con p = 2</text>
+                                    <text x="150" y="130" text-anchor="middle" class="graph-label">Converge (p > 1)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h8',
+                            statement: 'Calcula $\\iint_R xy \\, dA$ donde $R$ es el rectángulo $[0,2] \\times [0,3]$.',
+                            answer: '9',
+                            solution: '$\\iint_R xy \\, dA = \\int_0^2 \\int_0^3 xy \\, dy \\, dx = \\int_0^2 x \\cdot \\frac{9}{2} \\, dx = \\frac{9}{2} \\cdot 2 = 9$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid19" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid19)"/>
+                                    <rect x="100" y="80" width="80" height="60" class="graph-area"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="100" y1="50" x2="100" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <text x="130" y="110" class="graph-label">R: [0,2]×[0,3]</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h9',
+                            statement: 'Resuelve la ecuación diferencial $\\frac{dy}{dx} = 2xy$ con $y(0) = 1$.',
+                            answer: 'y=e^(x^2)',
+                            solution: 'Separando variables: $\\frac{dy}{y} = 2x dx$. Integrando: $\\ln|y| = x^2 + C$. Con $y(0) = 1$: $y = e^{x^2}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid20" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid20)"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 150 Q 125 130 150 100 Q 175 70 200 40" class="graph-curve"/>
+                                    <circle cx="150" cy="100" r="3" class="graph-point"/>
+                                    <text x="170" y="80" class="graph-label">y = e^(x²)</text>
+                                    <text x="155" y="115" class="graph-label">(0,1)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h10',
+                            statement: 'Encuentra el volumen del sólido generado al rotar $y = \\sqrt{x}$ alrededor del eje $x$ de $x = 0$ a $x = 4$.',
+                            answer: '8π',
+                            solution: 'Método del disco: $V = \\pi \\int_0^4 (\\sqrt{x})^2 \\, dx = \\pi \\int_0^4 x \\, dx = \\pi [\\frac{x^2}{2}]_0^4 = 8\\pi$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <defs>
+                                        <pattern id="grid21" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="300" height="200" fill="url(#grid21)"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <line x1="100" y1="50" x2="100" y2="180" stroke="var(--calculus-dark)" stroke-width="2"/>
+                                    <path d="M 100 150 Q 125 135 150 120 Q 175 105 200 90" class="graph-curve"/>
+                                    <ellipse cx="100" cy="150" rx="2" ry="10" class="graph-area"/>
+                                    <ellipse cx="200" cy="90" rx="2" ry="60" fill="rgba(99, 102, 241, 0.2)" stroke="var(--calculus)"/>
+                                    <text x="160" y="110" class="graph-label">y = √x</text>
+                                    <text x="130" y="180" class="graph-label">Rotación: x ∈ [0,4]</text>
+                                </svg>
+                            `
+                        }
+                    ]
+                };
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    await this.initializeModule();
+                } catch (error) {
+                    console.error('Error initializing module:', error);
+                    showError('Error al inicializar el módulo: ' + error.message);
+                }
+            }
+
+            async initializeModule() {
+                showLoading();
+                console.log('🔧 Starting calculus module initialization...');
+
+                // Wait for MathJax if it hasn't loaded yet
+                await this.waitForMathJax();
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                if (!this.loadParticipant()) {
+                    throw new Error('No hay participante registrado');
+                }
+
+                console.log('✅ Participant loaded:', this.currentParticipant.name);
+
+                this.loadProgress();
+                this.loadTimer();
+                this.startTimer();
+                
+                hideLoading();
+                showMainContent();
+                
+                this.showDifficulty('easy');
+                this.updateStats();
+                this.setupAnimations();
+
+                console.log('🎯 Calculus module initialization completed successfully');
+            }
+
+            async waitForMathJax() {
+                return new Promise((resolve) => {
+                    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                        console.log('✅ MathJax already ready');
+                        this.mathJaxReady = true;
+                        this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                        resolve();
+                    } else {
+                        console.log('⏳ Waiting for MathJax to be ready...');
+                        this.updateMathJaxStatus('loading', 'Cargando renderizador matemático...');
+                        
+                        const checkMathJax = () => {
+                            if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                                console.log('✅ MathJax is now ready');
+                                this.mathJaxReady = true;
+                                this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                                resolve();
+                            } else {
+                                setTimeout(checkMathJax, 100);
+                            }
+                        };
+                        
+                        // Also listen for the custom event
+                        window.addEventListener('mathjaxReady', () => {
+                            console.log('✅ MathJax ready event received');
+                            this.mathJaxReady = true;
+                            this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                            resolve();
+                        }, { once: true });
+                        
+                        checkMathJax();
+                        
+                        // Timeout fallback
+                        setTimeout(() => {
+                            if (!this.mathJaxReady) {
+                                console.warn('⚠️ MathJax timeout, proceeding without it');
+                                this.updateMathJaxStatus('error', 'Renderizador no disponible (modo texto)');
+                                resolve();
+                            }
+                        }, 10000);
+                    }
+                });
+            }
+
+            updateMathJaxStatus(status, message) {
+                const statusEl = document.getElementById('mathJaxStatus');
+                if (statusEl) {
+                    statusEl.className = `mathjax-status ${status} show`;
+                    statusEl.innerHTML = `
+                        <i class="fas fa-${status === 'loading' ? 'spinner fa-spin' : status === 'ready' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        ${message}
+                    `;
+                    
+                    // Hide after delay
+                    setTimeout(() => {
+                        statusEl.classList.remove('show');
+                    }, status === 'ready' ? 3000 : 5000);
+                }
+            }
+
+            async renderMathJax(element) {
+                if (this.mathJaxReady && window.MathJax && window.MathJax.typesetPromise) {
+                    try {
+                        await window.MathJax.typesetPromise([element]);
+                        console.log('✅ MathJax rendering completed');
+                        return true;
+                    } catch (error) {
+                        console.warn('❌ Error during MathJax rendering:', error);
+                        return false;
+                    }
+                } else {
+                    console.warn('⚠️ MathJax not ready, content displayed as plain text');
+                    return false;
+                }
+            }
+
+            loadParticipant() {
+                try {
+                    const savedParticipant = localStorage.getItem('currentParticipant');
+                    if (!savedParticipant) {
+                        return false;
+                    }
+                    
+                    this.currentParticipant = JSON.parse(savedParticipant);
+                    this.currentScore = this.currentParticipant.scores?.calculus || 0;
+                    this.problemsSolved = this.currentParticipant.problemsSolved?.calculus || 0;
+                    this.currentStreak = this.currentParticipant.streak || 0;
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error loading participant:', error);
+                    return false;
+                }
+            }
+
+            loadProgress() {
+                try {
+                    const progressKey = `calculus_progress_${this.currentParticipant.id}`;
+                    const savedProgress = localStorage.getItem(progressKey);
+                    if (savedProgress) {
+                        this.solvedProblems = new Set(JSON.parse(savedProgress));
+                    }
+
+                    const timesKey = `calculus_times_${this.currentParticipant.id}`;
+                    const savedTimes = localStorage.getItem(timesKey);
+                    if (savedTimes) {
+                        this.solveTimes = JSON.parse(savedTimes);
+                    }
+                } catch (error) {
+                    console.error('Error loading progress:', error);
+                }
+            }
+
+            saveProgress() {
+                try {
+                    const progressKey = `calculus_progress_${this.currentParticipant.id}`;
+                    localStorage.setItem(progressKey, JSON.stringify([...this.solvedProblems]));
+
+                    const timesKey = `calculus_times_${this.currentParticipant.id}`;
+                    localStorage.setItem(timesKey, JSON.stringify(this.solveTimes));
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+
+            loadTimer() {
+                try {
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"duration":7200}');
+                    this.competitionData = competitionData;
+                    
+                    if (competitionData.timerStarted && competitionData.startTime) {
+                        const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                        this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                    } else {
+                        this.timeRemaining = competitionData.duration || 7200;
+                    }
+                } catch (error) {
+                    console.error('Error loading timer:', error);
+                    this.timeRemaining = 7200;
+                }
+            }
+
+            startTimer() {
+                this.updateTimerDisplay();
+                
+                this.timerInterval = setInterval(() => {
+                    try {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (competitionData.timerStarted && competitionData.startTime) {
+                            const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                            this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                            
+                            this.updateTimerDisplay();
+                            
+                            if (this.timeRemaining <= 0) {
+                                clearInterval(this.timerInterval);
+                                alert('¡Tiempo terminado! La competencia ha finalizado.');
+                                window.location.href = '../competencias.html';
+                            }
+                        } else {
+                            this.timeRemaining = competitionData.duration || 7200;
+                            this.updateTimerDisplay();
+                        }
+                    } catch (error) {
+                        console.error('Timer error:', error);
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                try {
+                    const hours = Math.floor(this.timeRemaining / 3600);
+                    const minutes = Math.floor((this.timeRemaining % 3600) / 60);
+                    const seconds = this.timeRemaining % 60;
+                    
+                    const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    const timerElement = document.getElementById('timerTime');
+                    
+                    if (timerElement) {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (!competitionData.timerStarted) {
+                            timerElement.textContent = '⏳ ' + display;
+                            timerElement.style.color = '#ffa726';
+                        } else {
+                            timerElement.textContent = display;
+                            timerElement.style.color = this.timeRemaining <= 300 ? '#ff6b6b' : '#6366f1';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating timer display:', error);
+                }
+            }
+
+            showDifficulty(difficulty) {
+                this.currentDifficulty = difficulty;
+                
+                document.querySelectorAll('.difficulty-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                const activeTab = document.querySelector(`.difficulty-tab.${difficulty}`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+                
+                this.generateProblems();
+            }
+
+            async generateProblems() {
+                const problemsGrid = document.getElementById('problemsGrid');
+                if (!problemsGrid) return;
+                
+                console.log('🎯 Generating calculus problems for difficulty:', this.currentDifficulty);
+                
+                problemsGrid.innerHTML = '';
+                
+                const problems = this.problems[this.currentDifficulty];
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                
+                problems.forEach((problem, index) => {
+                    const problemCard = document.createElement('div');
+                    problemCard.className = `problem-card fade-in ${this.solvedProblems.has(problem.id) ? 'solved' : ''}`;
+                    
+                    const isCorrect = this.solvedProblems.has(problem.id);
+                    
+                    problemCard.innerHTML = `
+                        <div class="problem-header">
+                            <div class="problem-number">
+                                <i class="fas fa-infinity"></i>
+                                Problema ${index + 1}
+                                ${isCorrect ? '<i class="fas fa-check-circle" style="color: var(--success); margin-left: 0.5rem;"></i>' : ''}
+                            </div>
+                            <div class="problem-points ${this.currentDifficulty}">
+                                <i class="fas fa-star"></i>
+                                ${pointsMap[this.currentDifficulty]} pts
+                            </div>
+                        </div>
+                        
+                        ${problem.figure ? `<div class="function-graph">${problem.figure}</div>` : ''}
+                        
+                        <div class="problem-statement">${problem.statement}</div>
+                        
+                        <div class="problem-input-section">
+                            <input type="text" class="problem-input" placeholder="Ingresa tu respuesta..." 
+                                   id="input-${problem.id}" ${isCorrect ? 'disabled' : ''}
+                                   onkeypress="if(event.key==='Enter') submitAnswer('${problem.id}')">
+                            <button class="submit-btn" onclick="submitAnswer('${problem.id}')" 
+                                    ${isCorrect ? 'disabled' : ''}>
+                                <i class="fas fa-paper-plane"></i>
+                                ${isCorrect ? 'Resuelto' : 'Enviar'}
+                            </button>
+                        </div>
+                        
+                        <div class="problem-feedback" id="feedback-${problem.id}">
+                            <!-- Feedback will appear here -->
+                        </div>
+                        
+                        <div class="problem-solution" id="solution-${problem.id}" ${isCorrect ? 'style="display:block;"' : ''}>
+                            <div class="solution-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Solución:
+                            </div>
+                            <div>${problem.solution}</div>
+                        </div>
+                    `;
+                    
+                    problemsGrid.appendChild(problemCard);
+                });
+                
+                // Render MathJax for the new content
+                if (this.mathJaxReady) {
+                    console.log('🔄 Rendering MathJax for new problems...');
+                    await this.renderMathJax(problemsGrid);
+                }
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.fade-in').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }, 100);
+            }
+
+            submitAnswer(problemId) {
+                const input = document.getElementById(`input-${problemId}`);
+                const feedback = document.getElementById(`feedback-${problemId}`);
+                const solution = document.getElementById(`solution-${problemId}`);
+                
+                if (!input || !feedback || !solution) return;
+                
+                const userAnswer = input.value.trim().toLowerCase();
+                
+                if (!userAnswer) {
+                    this.showFeedback(feedback, 'Por favor, ingresa una respuesta.', 'error');
+                    return;
+                }
+                
+                const problem = this.findProblemById(problemId);
+                if (!problem) return;
+                
+                const correctAnswer = problem.answer.toLowerCase();
+                const isCorrect = this.checkAnswer(userAnswer, correctAnswer);
+                
+                if (isCorrect) {
+                    this.handleCorrectAnswer(problemId, input, feedback, solution);
+                } else {
+                    this.handleIncorrectAnswer(feedback);
+                }
+            }
+
+            checkAnswer(userAnswer, correctAnswer) {
+                const normalize = (str) => str.replace(/\s+/g, '').replace(/[()]/g, '');
+                
+                const normalizedUser = normalize(userAnswer);
+                const normalizedCorrect = normalize(correctAnswer);
+                
+                if (normalizedUser === normalizedCorrect) return true;
+                
+                // Check for common mathematical notation equivalences
+                if (normalizedCorrect.includes('π')) {
+                    const userWithPi = normalizedUser.replace(/pi/g, 'π');
+                    if (userWithPi === normalizedCorrect) return true;
+                }
+                
+                if (normalizedCorrect.includes('√')) {
+                    const userWithSqrt = normalizedUser.replace(/sqrt/g, '√');
+                    if (userWithSqrt === normalizedCorrect) return true;
+                }
+                
+                // Check for e^x notation
+                if (normalizedCorrect.includes('^')) {
+                    const userWithCaret = normalizedUser.replace(/\*\*/g, '^');
+                    if (userWithCaret === normalizedCorrect) return true;
+                }
+                
+                // Check for common calculus notation
+                if (normalizedCorrect.includes('/')) {
+                    const userWithSlash = normalizedUser.replace(/÷/g, '/');
+                    if (userWithSlash === normalizedCorrect) return true;
+                }
+                
+                // Check for ln notation
+                if (normalizedCorrect.includes('ln')) {
+                    const userWithLn = normalizedUser.replace(/log/g, 'ln');
+                    if (userWithLn === normalizedCorrect) return true;
+                }
+                
+                return false;
+            }
+
+            findProblemById(problemId) {
+                for (const difficulty in this.problems) {
+                    const problem = this.problems[difficulty].find(p => p.id === problemId);
+                    if (problem) return problem;
+                }
+                return null;
+            }
+
+            async handleCorrectAnswer(problemId, input, feedback, solution) {
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                const points = pointsMap[this.currentDifficulty];
+                
+                this.solvedProblems.add(problemId);
+                this.problemsSolved++;
+                this.currentScore += points;
+                this.currentStreak++;
+                
+                const solveTime = Date.now() - this.startTime;
+                this.solveTimes.push(solveTime);
+                
+                input.disabled = true;
+                const submitBtn = input.nextElementSibling;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Resuelto';
+                
+                this.showFeedback(feedback, `¡Correcto! +${points} puntos`, 'success');
+                solution.classList.add('show');
+                
+                // Render MathJax for the solution
+                if (this.mathJaxReady) {
+                    await this.renderMathJax(solution);
+                }
+                
+                this.showScoreAnimation(points);
+                this.updateParticipantData(points);
+                this.saveProgress();
+                this.updateStats();
+            }
+
+            handleIncorrectAnswer(feedback) {
+                this.showFeedback(feedback, 'Respuesta incorrecta. ¡Inténtalo de nuevo!', 'error');
+            }
+
+            showFeedback(feedbackElement, message, type) {
+                feedbackElement.className = `problem-feedback ${type} show`;
+                feedbackElement.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i>
+                    ${message}
+                `;
+                
+                if (type === 'error') {
+                    setTimeout(() => {
+                        feedbackElement.classList.remove('show');
+                    }, 3000);
+                }
+            }
+
+            showScoreAnimation(points) {
+                const floatingPoints = document.createElement('div');
+                floatingPoints.textContent = `+${points}`;
+                floatingPoints.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: var(--calculus);
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: floatUp 2s ease-out forwards;
+                `;
+
+                document.body.appendChild(floatingPoints);
+
+                setTimeout(() => {
+                    if (floatingPoints.parentNode) {
+                        floatingPoints.parentNode.removeChild(floatingPoints);
+                    }
+                }, 2000);
+            }
+
+            updateParticipantData(points) {
+                try {
+                    this.currentParticipant.scores = this.currentParticipant.scores || {};
+                    this.currentParticipant.problemsSolved = this.currentParticipant.problemsSolved || {};
+                    
+                    this.currentParticipant.scores.calculus = this.currentScore;
+                    this.currentParticipant.problemsSolved.calculus = this.problemsSolved;
+                    this.currentParticipant.totalScore = (this.currentParticipant.totalScore || 0) + points;
+                    this.currentParticipant.totalProblems = (this.currentParticipant.totalProblems || 0) + 1;
+                    this.currentParticipant.streak = this.currentStreak;
+                    this.currentParticipant.lastActivity = Date.now();
+
+                    localStorage.setItem('currentParticipant', JSON.stringify(this.currentParticipant));
+
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+                    const participantIndex = competitionData.participants.findIndex(p => p.id === this.currentParticipant.id);
+                    
+                    if (participantIndex !== -1) {
+                        competitionData.participants[participantIndex] = { ...this.currentParticipant };
+                        localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
+                    }
+
+                    const activity = {
+                        participant: this.currentParticipant.name,
+                        area: 'calculus',
+                        points: points,
+                        difficulty: this.currentDifficulty,
+                        time: Date.now()
+                    };
+
+                    let recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+                    recentActivities.unshift(activity);
+                    if (recentActivities.length > 50) {
+                        recentActivities = recentActivities.slice(0, 50);
+                    }
+                    localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
+
+                    window.dispatchEvent(new CustomEvent('competitionUpdate', {
+                        detail: competitionData
+                    }));
+                } catch (error) {
+                    console.error('Error updating participant data:', error);
+                }
+            }
+
+            updateStats() {
+                try {
+                    const totalScoreEl = document.getElementById('totalScore');
+                    const problemsSolvedEl = document.getElementById('problemsSolved');
+                    const currentStreakEl = document.getElementById('currentStreak');
+                    const averageTimeEl = document.getElementById('averageTime');
+
+                    if (totalScoreEl) totalScoreEl.textContent = this.currentScore;
+                    if (problemsSolvedEl) problemsSolvedEl.textContent = this.problemsSolved;
+                    if (currentStreakEl) currentStreakEl.textContent = this.currentStreak;
+                    
+                    if (averageTimeEl && this.solveTimes.length > 0) {
+                        const avgTime = this.solveTimes.reduce((sum, time) => sum + time, 0) / this.solveTimes.length;
+                        const minutes = Math.floor(avgTime / 60000);
+                        const seconds = Math.floor((avgTime % 60000) / 1000);
+                        averageTimeEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+
+                    const totalProblems = Object.values(this.problems).reduce((sum, arr) => sum + arr.length, 0);
+                    const progress = (this.problemsSolved / totalProblems) * 100;
+                    
+                    const progressFillEl = document.getElementById('progressFill');
+                    const progressTextEl = document.getElementById('progressText');
+                    
+                    if (progressFillEl) progressFillEl.style.width = `${progress}%`;
+                    if (progressTextEl) progressTextEl.textContent = `${this.problemsSolved}/${totalProblems} problemas resueltos`;
+                } catch (error) {
+                    console.error('Error updating stats:', error);
+                }
+            }
+
+            setupAnimations() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+        }
+
+        // UI Helper Functions
+        function showLoading() {
+            document.getElementById('loadingContainer').style.display = 'flex';
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingContainer').style.display = 'none';
+        }
+
+        function showMainContent() {
+            document.getElementById('mainContainer').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Global Variables
+        let calculusModule;
+
+        // Global Functions
+        function showDifficulty(difficulty) {
+            if (calculusModule) {
+                calculusModule.showDifficulty(difficulty);
+            }
+        }
+
+        function submitAnswer(problemId) {
+            if (calculusModule) {
+                calculusModule.submitAnswer(problemId);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM loaded, starting calculus initialization process...');
+            setTimeout(() => {
+                initializeCalculusModule();
+            }, 100);
+        });
+
+        async function initializeCalculusModule() {
+            try {
+                console.log('🎯 Creating CalculusModule...');
+                calculusModule = new CalculusModule();
+            } catch (error) {
+                console.error('❌ Failed to initialize calculus module:', error);
+                showError('Error al cargar el módulo de cálculo: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

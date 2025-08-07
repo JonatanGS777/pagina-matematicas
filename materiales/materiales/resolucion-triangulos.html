@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Resolución de Triángulos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --background-light: #f8f9fa;
+            --text-dark: #2b2d42;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .question {
+            background: var(--background-light);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #3651d4;
+        }
+
+        #resultado {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2b2d42;
+        }
+
+        .triangle-img {
+            max-width: 300px;
+            margin: 10px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-shapes"></i> Resolución de Triángulos</h1>
+        
+        <form id="examenForm">
+            <!-- Encontrar ángulos -->
+            <div class="question">
+                <p>1. En un triángulo rectángulo, si un cateto mide 5 unidades y la hipotenusa mide 13 unidades, ¿cuál es el ángulo agudo que forma ese cateto con la hipotenusa?</p>
+                <input type="text" name="q1" placeholder="Respuesta en grados..." data-respuesta="22.6">
+            </div>
+
+            <div class="question">
+                <p>2. En un triángulo rectángulo, si \(\sin \theta = 0.6\), ¿cuánto mide el ángulo \(\theta\)?</p>
+                <input type="text" name="q2" placeholder="Respuesta en grados..." data-respuesta="36.87">
+            </div>
+
+            <div class="question">
+                <p>3. En un triángulo rectángulo, si el cateto opuesto mide 8 unidades y el cateto adyacente mide 15 unidades, ¿cuál es el ángulo agudo que forman?</p>
+                <input type="text" name="q3" placeholder="Respuesta en grados..." data-respuesta="28.07">
+            </div>
+
+            <!-- Encontrar lados -->
+            <div class="question">
+                <p>4. En un triángulo rectángulo, si un ángulo mide 30° y la hipotenusa mide 10 unidades, ¿cuánto mide el cateto opuesto?</p>
+                <input type="text" name="q4" placeholder="Respuesta en unidades..." data-respuesta="5">
+            </div>
+
+            <div class="question">
+                <p>5. En un triángulo rectángulo, si un ángulo mide 45° y el cateto adyacente mide 12 unidades, ¿cuánto mide la hipotenusa?</p>
+                <input type="text" name="q5" placeholder="Respuesta en unidades..." data-respuesta="16.97">
+            </div>
+
+            <div class="question">
+                <p>6. Si la hipotenusa mide 20 unidades y uno de los ángulos agudos es 60°, ¿cuánto mide el cateto adyacente?</p>
+                <input type="text" name="q6" placeholder="Respuesta en unidades..." data-respuesta="10">
+            </div>
+
+            <!-- Relaciones trigonométricas -->
+            <div class="question">
+                <p>7. En un triángulo rectángulo, si \(\cos \theta = 0.8\), ¿cuál es el valor de \(\sin \theta\)?</p>
+                <input type="text" name="q7" placeholder="Respuesta decimal..." data-respuesta="0.6">
+            </div>
+
+            <div class="question">
+                <p>8. Si en un triángulo rectángulo \(\tan \theta = 0.75\), ¿cuál es el valor de \(\sec \theta\)?</p>
+                <input type="text" name="q8" placeholder="Respuesta decimal..." data-respuesta="1.25">
+            </div>
+
+            <!-- Problemas combinados -->
+            <div class="question">
+                <p>9. Una escalera de 10 metros está apoyada contra una pared formando un ángulo de 60° con el suelo. ¿A qué altura de la pared llega la escalera?</p>
+                <input type="text" name="q9" placeholder="Respuesta en metros..." data-respuesta="8.66">
+            </div>
+
+            <div class="question">
+                <p>10. Desde un punto en el suelo se observa la cima de un edificio con un ángulo de elevación de 32°. Si la distancia horizontal al edificio es de 45 metros, ¿cuál es la altura del edificio?</p>
+                <input type="text" name="q10" placeholder="Respuesta en metros..." data-respuesta="28.13">
+            </div>
+
+            <div class="question">
+                <p>11. En un triángulo rectángulo, el cateto opuesto mide 12 unidades y la hipotenusa 13 unidades. ¿Cuánto mide el cateto adyacente?</p>
+                <input type="text" name="q11" placeholder="Respuesta en unidades..." data-respuesta="5">
+            </div>
+
+            <div class="question">
+                <p>12. Si en un triángulo rectángulo \(\sin \theta = 0.6\) y el cateto opuesto mide 9 unidades, ¿cuánto mide la hipotenusa?</p>
+                <input type="text" name="q12" placeholder="Respuesta en unidades..." data-respuesta="15">
+            </div>
+
+            <div class="question">
+                <p>13. Un avión vuela a una altura de 2000 metros. El ángulo de depresión para observar un punto en el suelo es de 15°. ¿A qué distancia horizontal se encuentra el punto?</p>
+                <input type="text" name="q13" placeholder="Respuesta en metros..." data-respuesta="7463.03">
+            </div>
+
+            <div class="question">
+                <p>14. En un triángulo rectángulo, si el ángulo θ = 45° y el cateto opuesto mide 8 unidades, ¿cuánto mide el cateto adyacente?</p>
+                <input type="text" name="q14" placeholder="Respuesta en unidades..." data-respuesta="8">
+            </div>
+
+            <div class="question">
+                <p>15. Una persona de 1.8 metros de altura proyecta una sombra de 3.12 metros cuando el ángulo de elevación del sol es de 30°. ¿A qué distancia está la punta de la sombra de la persona?</p>
+                <input type="text" name="q15" placeholder="Respuesta en metros..." data-respuesta="3.6">
+            </div>
+
+            <button type="submit">Calificar Examen</button>
+        </form>
+
+        <div id="resultado">
+            <h2>Resultado del Examen</h2>
+            <p class="score">Tu calificación: <span id="calificacion"></span>/15</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('examenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let correctas = 0;
+            const inputs = document.querySelectorAll('input[type="text"]');
+            
+            inputs.forEach(input => {
+                const respuestaCorrecta = parseFloat(input.dataset.respuesta);
+                const respuestaUsuario = parseFloat(input.value);
+                
+                // Margen de error de ±0.1 para considerar respuestas correctas
+                if (Math.abs(respuestaUsuario - respuestaCorrecta) <= 0.1) {
+                    correctas++;
+                    input.style.borderColor = '#4caf50';
+                } else {
+                    input.style.borderColor = '#f44336';
+                }
+            });
+
+            document.getElementById('resultado').style.display = 'block';
+            document.getElementById('calificacion').textContent = correctas;
+            
+            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Inicializar MathJax
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelado de Datos Reales - Laboratorio de Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+    <style>
+        :root {
+            --primary: #4ecdc4;
+            --secondary: #44a08d;
+            --accent: #26d0ce;
+            --success: #20b2aa;
+            --warning: #f093fb;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(78, 205, 196, 0.37);
+            --shadow-hover: 0 15px 35px rgba(78, 205, 196, 0.25);
+            --gradient-main: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            --gradient-accent: linear-gradient(135deg, #26d0ce 0%, #20b2aa 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(78, 205, 196, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-accent);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .back-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 25px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gradient-main);
+            border-radius: 20px;
+            color: var(--white);
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Model Section */
+        .model-explanation {
+            background: rgba(78, 205, 196, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 2rem;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 3rem;
+        }
+
+        .model-explanation h3 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .model-explanation p {
+            line-height: 1.7;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        /* Function Selection */
+        .function-selector {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .selector-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .function-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .function-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .function-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .function-card.active {
+            border-color: var(--accent);
+            background: rgba(78, 205, 196, 0.05);
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.2);
+        }
+
+        .function-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .function-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .function-formula {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: rgba(78, 205, 196, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+        }
+
+        /* Controls and Visualization */
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls-panel {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .controls-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .controls-title i {
+            margin-right: 0.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 2rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group input[type="range"]:hover {
+            opacity: 1;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .control-value {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Visualization Panel */
+        .visualization-panel {
+            background: var(--white);
+            border: 2px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .chart-info {
+            background: rgba(78, 205, 196, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .chart-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 400px;
+        }
+
+        /* Dataset Controls */
+        .dataset-controls {
+            background: rgba(78, 205, 196, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .dataset-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .dataset-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .dataset-btn {
+            background: var(--white);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .dataset-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .dataset-btn.active {
+            background: var(--accent);
+            color: var(--white);
+            border-color: var(--accent);
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: rgba(78, 205, 196, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .results-title {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .results-title i {
+            margin-right: 0.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .equation-display {
+            grid-column: 1 / -1;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--accent);
+        }
+
+        .equation-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .equation-formula {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            background: rgba(78, 205, 196, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .main-interface {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .function-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="modelado.html" class="logo">
+                <i class="fas fa-chart-line"></i>
+                Modelado de Datos
+            </a>
+            <a href="modelado.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Menú
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container fade-in">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-chart-line"></i>
+                Modelado de Datos Reales
+            </h1>
+            <p class="page-subtitle">Ajusta funciones matemáticas a conjuntos de datos y analiza patrones</p>
+        </div>
+
+        <!-- Model Explanation -->
+        <div class="model-explanation">
+            <h3><i class="fas fa-lightbulb"></i> Regresión y Ajuste de Curvas</h3>
+            <p>
+                Explora cómo diferentes funciones matemáticas pueden modelar datos del mundo real. Ajusta parámetros 
+                para encontrar la mejor curva que se adapte a tus datos, calcula coeficientes de correlación y 
+                comprende la bondad de ajuste. Este modelo es fundamental en análisis estadístico y predicción de tendencias.
+            </p>
+        </div>
+
+        <!-- Function Selector -->
+        <div class="function-selector">
+            <h3 class="selector-title">Selecciona el Tipo de Función</h3>
+            <div class="function-cards">
+                <div class="function-card active" onclick="selectFunction('linear')" id="linear-card">
+                    <div class="function-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4 class="function-name">Función Lineal</h4>
+                    <div class="function-formula">y = ax + b</div>
+                </div>
+                
+                <div class="function-card" onclick="selectFunction('quadratic')" id="quadratic-card">
+                    <div class="function-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h4 class="function-name">Función Cuadrática</h4>
+                    <div class="function-formula">y = ax² + bx + c</div>
+                </div>
+                
+                <div class="function-card" onclick="selectFunction('exponential')" id="exponential-card">
+                    <div class="function-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4 class="function-name">Función Exponencial</h4>
+                    <div class="function-formula">y = ae^(bx)</div>
+                </div>
+                
+                <div class="function-card" onclick="selectFunction('logarithmic')" id="logarithmic-card">
+                    <div class="function-icon">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                    <h4 class="function-name">Función Logarítmica</h4>
+                    <div class="function-formula">y = a·ln(x) + b</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dataset Controls -->
+        <div class="dataset-controls">
+            <h4 class="dataset-title"><i class="fas fa-database"></i> Conjuntos de Datos</h4>
+            <div class="dataset-options">
+                <button class="dataset-btn active" onclick="loadDataset('temperature')" id="temp-btn">
+                    <i class="fas fa-thermometer-half"></i><br>Temperatura vs Tiempo
+                </button>
+                <button class="dataset-btn" onclick="loadDataset('population')" id="pop-btn">
+                    <i class="fas fa-users"></i><br>Crecimiento Poblacional
+                </button>
+                <button class="dataset-btn" onclick="loadDataset('sales')" id="sales-btn">
+                    <i class="fas fa-shopping-cart"></i><br>Ventas vs Publicidad
+                </button>
+                <button class="dataset-btn" onclick="loadDataset('custom')" id="custom-btn">
+                    <i class="fas fa-dice"></i><br>Datos Aleatorios
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Interface -->
+        <div class="main-interface">
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <h3 class="controls-title">
+                    <i class="fas fa-sliders-h"></i>
+                    Parámetros de la Función
+                </h3>
+                
+                <div class="control-group">
+                    <label for="paramA">Parámetro A:</label>
+                    <input type="range" id="paramA" min="-5" max="5" step="0.1" value="1">
+                    <span id="paramAValue" class="control-value">1.0</span>
+                </div>
+                
+                <div class="control-group">
+                    <label for="paramB">Parámetro B:</label>
+                    <input type="range" id="paramB" min="-5" max="5" step="0.1" value="0">
+                    <span id="paramBValue" class="control-value">0.0</span>
+                </div>
+                
+                <div class="control-group" id="paramCGroup">
+                    <label for="paramC">Parámetro C:</label>
+                    <input type="range" id="paramC" min="-5" max="5" step="0.1" value="0">
+                    <span id="paramCValue" class="control-value">0.0</span>
+                </div>
+                
+                <button class="btn" onclick="autoFitData()" id="autoFitBtn">
+                    <i class="fas fa-magic"></i> Ajustar Automáticamente
+                </button>
+                
+                <button class="btn" onclick="addNoise()" style="margin-top: 0.5rem;">
+                    <i class="fas fa-random"></i> Añadir Ruido a Datos
+                </button>
+            </div>
+            
+            <!-- Visualization Panel -->
+            <div class="visualization-panel">
+                <div class="chart-header">
+                    <div class="chart-title">
+                        <i class="fas fa-chart-area"></i>
+                        Visualización de Datos y Ajuste
+                    </div>
+                    <div class="chart-info" id="chartInfo">
+                        Función Lineal Activa
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="dataChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel">
+            <h3 class="results-title">
+                <i class="fas fa-calculator"></i>
+                Análisis Estadístico
+            </h3>
+            <div class="results-grid">
+                <div class="equation-display">
+                    <div class="equation-label">Ecuación Actual</div>
+                    <div class="equation-formula" id="currentEquation">y = 1.0x + 0.0</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Coeficiente R²</div>
+                    <div class="result-value" id="rSquared">0.850</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Error Cuadrático Medio</div>
+                    <div class="result-value" id="mse">2.34</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Correlación</div>
+                    <div class="result-value" id="correlation">0.922</div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-label">Número de Puntos</div>
+                    <div class="result-value" id="dataPoints">25</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentFunction = 'linear';
+        let currentDataset = 'temperature';
+        let dataChart;
+        let sampleData = [];
+        let originalData = [];
+
+        // Sample datasets
+        const datasets = {
+            temperature: [
+                {x: 1, y: 15}, {x: 2, y: 18}, {x: 3, y: 22}, {x: 4, y: 28}, {x: 5, y: 32},
+                {x: 6, y: 35}, {x: 7, y: 38}, {x: 8, y: 36}, {x: 9, y: 31}, {x: 10, y: 27},
+                {x: 11, y: 21}, {x: 12, y: 16}
+            ],
+            population: [
+                {x: 1950, y: 2.5}, {x: 1960, y: 3.0}, {x: 1970, y: 3.7}, {x: 1980, y: 4.4},
+                {x: 1990, y: 5.3}, {x: 2000, y: 6.1}, {x: 2010, y: 6.9}, {x: 2020, y: 7.8}
+            ],
+            sales: [
+                {x: 100, y: 2200}, {x: 200, y: 2800}, {x: 300, y: 3100}, {x: 400, y: 3600},
+                {x: 500, y: 4200}, {x: 600, y: 4500}, {x: 700, y: 5100}, {x: 800, y: 5400},
+                {x: 900, y: 5900}, {x: 1000, y: 6300}
+            ]
+        };
+
+        // Function selection
+        function selectFunction(functionType) {
+            // Update active card
+            document.querySelectorAll('.function-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(`${functionType}-card`).classList.add('active');
+            
+            currentFunction = functionType;
+            
+            // Show/hide parameter C based on function type
+            const paramCGroup = document.getElementById('paramCGroup');
+            paramCGroup.style.display = (functionType === 'quadratic') ? 'block' : 'none';
+            
+            // Reset parameters
+            resetParameters();
+            updateModel();
+            updateChartInfo();
+        }
+
+        // Dataset loading
+        function loadDataset(datasetName) {
+            // Update active dataset button
+            document.querySelectorAll('.dataset-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (datasetName === 'custom') {
+                generateCustomData();
+                document.getElementById('custom-btn').classList.add('active');
+            } else {
+                sampleData = [...datasets[datasetName]];
+                originalData = [...sampleData];
+                currentDataset = datasetName;
+                document.getElementById(`${getDatasetBtnId(datasetName)}`).classList.add('active');
+            }
+            
+            updateModel();
+        }
+
+        function getDatasetBtnId(datasetName) {
+            const mapping = {
+                'temperature': 'temp-btn',
+                'population': 'pop-btn',
+                'sales': 'sales-btn'
+            };
+            return mapping[datasetName] || 'temp-btn';
+        }
+
+        function generateCustomData() {
+            sampleData = [];
+            for (let x = 0; x <= 10; x += 0.5) {
+                const noise = (Math.random() - 0.5) * 8;
+                const y = 2 * x + 5 + noise;
+                sampleData.push({x, y: Math.max(0, y)});
+            }
+            originalData = [...sampleData];
+            currentDataset = 'custom';
+        }
+
+        // Parameter management
+        function resetParameters() {
+            document.getElementById('paramA').value = currentFunction === 'exponential' ? 1 : 1;
+            document.getElementById('paramB').value = currentFunction === 'exponential' ? 0.1 : 0;
+            document.getElementById('paramC').value = 0;
+            updateParameterValues();
+        }
+
+        function updateParameterValues() {
+            const a = parseFloat(document.getElementById('paramA').value);
+            const b = parseFloat(document.getElementById('paramB').value);
+            const c = parseFloat(document.getElementById('paramC').value);
+            
+            document.getElementById('paramAValue').textContent = a.toFixed(1);
+            document.getElementById('paramBValue').textContent = b.toFixed(1);
+            document.getElementById('paramCValue').textContent = c.toFixed(1);
+        }
+
+        // Model updates
+        function updateModel() {
+            updateParameterValues();
+            
+            const a = parseFloat(document.getElementById('paramA').value);
+            const b = parseFloat(document.getElementById('paramB').value);
+            const c = parseFloat(document.getElementById('paramC').value);
+            
+            // Generate function data
+            const functionData = generateFunctionData(currentFunction, a, b, c);
+            
+            // Update equation display
+            updateEquationDisplay(currentFunction, a, b, c);
+            
+            // Calculate statistics
+            const stats = calculateStatistics(sampleData, currentFunction, a, b, c);
+            updateStatistics(stats);
+            
+            // Update chart
+            updateChart(sampleData, functionData);
+        }
+
+        function generateFunctionData(funcType, a, b, c) {
+            const data = [];
+            const xMin = Math.min(...sampleData.map(p => p.x)) - 1;
+            const xMax = Math.max(...sampleData.map(p => p.x)) + 1;
+            const step = (xMax - xMin) / 100;
+            
+            for (let x = xMin; x <= xMax; x += step) {
+                let y;
+                switch (funcType) {
+                    case 'linear':
+                        y = a * x + b;
+                        break;
+                    case 'quadratic':
+                        y = a * x * x + b * x + c;
+                        break;
+                    case 'exponential':
+                        y = a * Math.exp(b * x);
+                        break;
+                    case 'logarithmic':
+                        if (x > 0) {
+                            y = a * Math.log(x) + b;
+                        } else {
+                            continue;
+                        }
+                        break;
+                    default:
+                        y = a * x + b;
+                }
+                
+                if (isFinite(y)) {
+                    data.push({x, y});
+                }
+            }
+            
+            return data;
+        }
+
+        function updateEquationDisplay(funcType, a, b, c) {
+            let equation;
+            switch (funcType) {
+                case 'linear':
+                    equation = `y = ${a.toFixed(2)}x + ${b.toFixed(2)}`;
+                    break;
+                case 'quadratic':
+                    equation = `y = ${a.toFixed(2)}x² + ${b.toFixed(2)}x + ${c.toFixed(2)}`;
+                    break;
+                case 'exponential':
+                    equation = `y = ${a.toFixed(2)}e^(${b.toFixed(2)}x)`;
+                    break;
+                case 'logarithmic':
+                    equation = `y = ${a.toFixed(2)}ln(x) + ${b.toFixed(2)}`;
+                    break;
+                default:
+                    equation = `y = ${a.toFixed(2)}x + ${b.toFixed(2)}`;
+            }
+            document.getElementById('currentEquation').textContent = equation;
+        }
+
+        function calculateStatistics(observed, funcType, a, b, c) {
+            if (observed.length === 0) return {rSquared: 0, mse: 0, correlation: 0};
+            
+            const yMean = observed.reduce((sum, point) => sum + point.y, 0) / observed.length;
+            
+            let ssRes = 0;
+            let ssTot = 0;
+            let sumXY = 0;
+            let sumX = 0;
+            let sumY = 0;
+            let sumX2 = 0;
+            let sumY2 = 0;
+            
+            observed.forEach(point => {
+                let predictedY;
+                switch (funcType) {
+                    case 'linear':
+                        predictedY = a * point.x + b;
+                        break;
+                    case 'quadratic':
+                        predictedY = a * point.x * point.x + b * point.x + c;
+                        break;
+                    case 'exponential':
+                        predictedY = a * Math.exp(b * point.x);
+                        break;
+                    case 'logarithmic':
+                        predictedY = point.x > 0 ? a * Math.log(point.x) + b : point.y;
+                        break;
+                    default:
+                        predictedY = a * point.x + b;
+                }
+                
+                if (isFinite(predictedY)) {
+                    ssRes += Math.pow(point.y - predictedY, 2);
+                    ssTot += Math.pow(point.y - yMean, 2);
+                    
+                    // For correlation calculation
+                    sumXY += point.x * point.y;
+                    sumX += point.x;
+                    sumY += point.y;
+                    sumX2 += point.x * point.x;
+                    sumY2 += point.y * point.y;
+                }
+            });
+            
+            const rSquared = ssTot > 0 ? Math.max(0, 1 - (ssRes / ssTot)) : 0;
+            const mse = ssRes / observed.length;
+            
+            // Pearson correlation coefficient
+            const n = observed.length;
+            const numerator = n * sumXY - sumX * sumY;
+            const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+            const correlation = denominator !== 0 ? numerator / denominator : 0;
+            
+            return { rSquared, mse, correlation: Math.abs(correlation) };
+        }
+
+        function updateStatistics(stats) {
+            document.getElementById('rSquared').textContent = stats.rSquared.toFixed(3);
+            document.getElementById('mse').textContent = stats.mse.toFixed(2);
+            document.getElementById('correlation').textContent = stats.correlation.toFixed(3);
+            document.getElementById('dataPoints').textContent = sampleData.length.toString();
+        }
+
+        function updateChart(observedData, functionData) {
+            const ctx = document.getElementById('dataChart').getContext('2d');
+            
+            if (dataChart) {
+                dataChart.destroy();
+            }
+            
+            dataChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Datos Observados',
+                        data: observedData,
+                        backgroundColor: 'rgba(78, 205, 196, 0.8)',
+                        borderColor: 'rgba(78, 205, 196, 1)',
+                        showLine: false,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }, {
+                        label: 'Función Ajustada',
+                        data: functionData,
+                        backgroundColor: 'rgba(68, 160, 141, 0.1)',
+                        borderColor: 'rgba(68, 160, 141, 1)',
+                        showLine: true,
+                        pointRadius: 0,
+                        borderWidth: 3,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'point',
+                            callbacks: {
+                                title: function(context) {
+                                    return `X: ${context[0].parsed.x.toFixed(2)}`;
+                                },
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: getXAxisLabel()
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: getYAxisLabel()
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getXAxisLabel() {
+            const labels = {
+                temperature: 'Mes del Año',
+                population: 'Año',
+                sales: 'Gasto en Publicidad ($)',
+                custom: 'Variable X'
+            };
+            return labels[currentDataset] || 'Variable X';
+        }
+
+        function getYAxisLabel() {
+            const labels = {
+                temperature: 'Temperatura (°C)',
+                population: 'Población (Miles de Millones)',
+                sales: 'Ventas ($)',
+                custom: 'Variable Y'
+            };
+            return labels[currentDataset] || 'Variable Y';
+        }
+
+        function updateChartInfo() {
+            const functionNames = {
+                linear: 'Función Lineal Activa',
+                quadratic: 'Función Cuadrática Activa',
+                exponential: 'Función Exponencial Activa',
+                logarithmic: 'Función Logarítmica Activa'
+            };
+            document.getElementById('chartInfo').textContent = functionNames[currentFunction];
+        }
+
+        // Auto-fit functionality
+        function autoFitData() {
+            const btn = document.getElementById('autoFitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ajustando...';
+            
+            setTimeout(() => {
+                performAutoFit();
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-magic"></i> Ajustar Automáticamente';
+            }, 1500);
+        }
+
+        function performAutoFit() {
+            // Simple optimization using least squares approach
+            switch (currentFunction) {
+                case 'linear':
+                    fitLinear();
+                    break;
+                case 'quadratic':
+                    fitQuadratic();
+                    break;
+                case 'exponential':
+                    fitExponential();
+                    break;
+                case 'logarithmic':
+                    fitLogarithmic();
+                    break;
+            }
+            updateModel();
+        }
+
+        function fitLinear() {
+            const n = sampleData.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            
+            sampleData.forEach(point => {
+                sumX += point.x;
+                sumY += point.y;
+                sumXY += point.x * point.y;
+                sumX2 += point.x * point.x;
+            });
+            
+            const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            const b = (sumY - a * sumX) / n;
+            
+            document.getElementById('paramA').value = Math.max(-5, Math.min(5, a));
+            document.getElementById('paramB').value = Math.max(-5, Math.min(5, b));
+        }
+
+        function fitQuadratic() {
+            // Simplified quadratic fitting
+            const xMean = sampleData.reduce((sum, p) => sum + p.x, 0) / sampleData.length;
+            const yMean = sampleData.reduce((sum, p) => sum + p.y, 0) / sampleData.length;
+            
+            // Basic quadratic estimation
+            const a = 0.1; // Simple approximation
+            const c = yMean - a * xMean * xMean;
+            const b = 0;
+            
+            document.getElementById('paramA').value = Math.max(-5, Math.min(5, a));
+            document.getElementById('paramB').value = Math.max(-5, Math.min(5, b));
+            document.getElementById('paramC').value = Math.max(-5, Math.min(5, c));
+        }
+
+        function fitExponential() {
+            // Simplified exponential fitting
+            if (sampleData.length > 1) {
+                const firstPoint = sampleData[0];
+                const lastPoint = sampleData[sampleData.length - 1];
+                
+                if (firstPoint.y > 0 && lastPoint.y > 0) {
+                    const b = Math.log(lastPoint.y / firstPoint.y) / (lastPoint.x - firstPoint.x);
+                    const a = firstPoint.y / Math.exp(b * firstPoint.x);
+                    
+                    document.getElementById('paramA').value = Math.max(-5, Math.min(5, a));
+                    document.getElementById('paramB').value = Math.max(-5, Math.min(5, b));
+                }
+            }
+        }
+
+        function fitLogarithmic() {
+            // Simplified logarithmic fitting
+            const validPoints = sampleData.filter(p => p.x > 0);
+            if (validPoints.length > 1) {
+                const logData = validPoints.map(p => ({x: Math.log(p.x), y: p.y}));
+                
+                // Apply linear regression to log-transformed data
+                const n = logData.length;
+                let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+                
+                logData.forEach(point => {
+                    sumX += point.x;
+                    sumY += point.y;
+                    sumXY += point.x * point.y;
+                    sumX2 += point.x * point.x;
+                });
+                
+                const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+                const b = (sumY - a * sumX) / n;
+                
+                document.getElementById('paramA').value = Math.max(-5, Math.min(5, a));
+                document.getElementById('paramB').value = Math.max(-5, Math.min(5, b));
+            }
+        }
+
+        // Add noise to data
+        function addNoise() {
+            sampleData = originalData.map(point => ({
+                x: point.x,
+                y: point.y + (Math.random() - 0.5) * Math.max(...originalData.map(p => p.y)) * 0.2
+            }));
+            updateModel();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Parameter controls
+            document.getElementById('paramA').addEventListener('input', updateModel);
+            document.getElementById('paramB').addEventListener('input', updateModel);
+            document.getElementById('paramC').addEventListener('input', updateModel);
+            
+            // Initialize with default data
+            loadDataset('temperature');
+            updateModel();
+            updateChartInfo();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Álgebra</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a8e6cf;
+            --background-color: #1a1a2e;
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-color);
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .correct {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .graph-container {
+            width: 100%;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin: 1rem 0;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Prueba de Álgebra</h1>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <p>Pregunta <span id="current-question">1</span> de 12</p>
+            </div>
+        </div>
+
+        <div id="questions"></div>
+
+        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                category: "Ecuaciones Lineales",
+                question: "Resuelve la ecuación: 3x + 7 = 22",
+                type: "input",
+                answer: "5",
+                hint: "Resta 7 de ambos lados y luego divide por 3"
+            },
+            {
+                category: "Ecuaciones Lineales",
+                question: "Si 2(x - 3) = 4x - 14, ¿cuál es el valor de x?",
+                type: "input",
+                answer: "4",
+                hint: "Primero distribuye el 2, luego agrupa términos similares"
+            },
+            {
+                category: "Funciones Cuadráticas",
+                question: "¿Cuál es el vértice de la parábola y = x² - 6x + 5?",
+                type: "input",
+                answer: "(3,-4)",
+                hint: "Usa x = -b/(2a) para encontrar la coordenada x del vértice"
+            },
+            {
+                category: "Fórmula Cuadrática",
+                question: "Resuelve x² + 5x + 6 = 0",
+                type: "multiple",
+                options: [
+                    "x = -2, x = -3",
+                    "x = 2, x = 3",
+                    "x = -1, x = -6",
+                    "x = 1, x = 6"
+                ],
+                correct: 0
+            },
+            {
+                category: "Sistema de Ecuaciones",
+                question: "Resuelve:\n2x + y = 5\nx - y = 1",
+                type: "input",
+                answer: "(2,1)",
+                hint: "Puedes usar el método de sustitución"
+            },
+            {
+                category: "Gráficas",
+                question: "¿Cuál es la pendiente de la recta que pasa por los puntos (2,3) y (4,7)?",
+                type: "input",
+                answer: "2",
+                hint: "Usa la fórmula (y₂-y₁)/(x₂-x₁)"
+            },
+            {
+                category: "Polinomios",
+                question: "Factoriza: x³ - x²",
+                type: "multiple",
+                options: [
+                    "x²(x - 1)",
+                    "x(x - 1)",
+                    "x²(x + 1)",
+                    "x(x + 1)"
+                ],
+                correct: 0
+            },
+            {
+                category: "Términos Semejantes",
+                question: "Simplifica: 3x² + 2xy - 5x² + 3xy",
+                type: "input",
+                answer: "-2x²+5xy",
+                hint: "Agrupa los términos que tienen las mismas variables y exponentes"
+            },
+            {
+                category: "Funciones Cuadráticas",
+                question: "¿Cuáles son las raíces de x² - x - 6?",
+                type: "input",
+                answer: "(-2,3)",
+                hint: "Usa la fórmula cuadrática o factorización"
+            },
+            {
+                category: "Sistema de Ecuaciones",
+                question: "En un sistema de ecuaciones, si las rectas son paralelas, ¿cuántas soluciones hay?",
+                type: "multiple",
+                options: [
+                    "Ninguna solución",
+                    "Una solución",
+                    "Dos soluciones",
+                    "Infinitas soluciones"
+                ],
+                correct: 0
+            },
+            {
+                category: "Polinomios",
+                question: "¿Cuál es el grado del polinomio: 3x⁴ - 2x³ + 5x - 1?",
+                type: "input",
+                answer: "4",
+                hint: "El grado es el mayor exponente presente en el polinomio"
+            },
+            {
+                category: "Términos Semejantes",
+                question: "Simplifica: (3x + 2)² - (x - 1)²",
+                type: "multiple",
+                options: [
+                    "8x + 3",
+                    "9x² + 4",
+                    "6x + 3",
+                    "5x² + 4x + 3"
+                ],
+                correct: 0
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionDiv = document.getElementById('questions');
+            const question = questions[currentQuestion];
+
+            let html = `
+                <div class="question-card">
+                    <div class="category-tag">${question.category}</div>
+                    <div class="question-title">
+                        <h2>${question.question}</h2>
+                    </div>
+            `;
+
+            if (question.type === 'multiple') {
+                html += `<div class="options">`;
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="checkAnswer(${index})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            } else {
+                html += `
+                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
+                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                `;
+            }
+
+            html += `<div class="feedback" id="feedback"></div>`;
+            questionDiv.innerHTML = html;
+
+            // Actualizar progreso
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Renderizar fórmulas matemáticas
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        function checkAnswer(selectedOption = null) {
+            const question = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (question.type === 'multiple') {
+                isCorrect = selectedOption === question.correct;
+            } else {
+                const userAnswer = document.getElementById('user-answer').value.trim().toLowerCase();
+                const correctAnswer = question.answer.toLowerCase();
+                isCorrect = userAnswer === correctAnswer;
+            }
+
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = isCorrect ? 
+                '¡Correcto! 🎉' : 
+                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+
+            if (isCorrect) score++;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const questionDiv = document.getElementById('questions');
+            const percentage = (score / questions.length) * 100;
+            
+            questionDiv.innerHTML = `
+                <div class="question-card">
+                    <h2>Resultados Finales</h2>
+                    <p>Has completado la prueba de álgebra.</p>
+                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
+                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
+                </div>
+            `;
+
+            document.getElementById('next-button').style.display = 'none';
+        }
+
+        // Iniciar prueba
+        loadQuestion();
+    </script>
+</body>
+</html>

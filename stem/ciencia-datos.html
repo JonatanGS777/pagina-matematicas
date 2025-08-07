@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de Ciencia de Datos - Prof. Yonatan Guerrero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #3b82f6;
+            --accent: #60a5fa;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: var(--text-primary);
+            padding-top: 80px;
+        }
+
+        /* Header/Navbar - Simplified */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-main);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--light);
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            min-width: 150px;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Interactive Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .control-input {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: white;
+            min-width: 150px;
+            cursor: pointer;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.1);
+        }
+
+        select.control-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 1rem 0;
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Exercise Cards */
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--success);
+        }
+
+        .exercise-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .exercise-steps {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .exercise-steps li {
+            counter-increment: step;
+            margin-bottom: 0.5rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .exercise-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Calculator Styles */
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .calculator {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+
+        .calc-result {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .tab-nav {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                min-width: auto;
+            }
+
+            .tools-grid, .project-gallery, .resources-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .learning-path {
+                grid-template-columns: 1fr;
+            }
+
+            .careers-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .tool-card {
+                padding: 1.5rem;
+            }
+
+            .step-card {
+                padding: 1rem;
+            }
+
+            .career-card {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+
+        .message.success {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .message.error {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        /* Tools Section Styles */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-main);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: scale(1.1);
+        }
+
+        .tool-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .tool-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tool-features {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .tool-features li {
+            padding: 0.3rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.9rem;
+        }
+
+        .tool-features li:before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 0.5rem;
+            margin-top: 0.1rem;
+        }
+
+        .demo-section {
+            background: rgba(59, 130, 246, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .demo-section strong {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        /* Learning Path Styles */
+        .learning-path {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.05), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(30, 64, 175, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Careers Grid */
+        .careers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .career-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .career-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .career-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .career-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .career-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .salary {
+            background: var(--success);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="../index.html" class="logo">
+                <i class="fas fa-chart-bar"></i> Laboratorio de Ciencia de Datos
+            </a>
+            <ul class="nav-links">
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="#" onclick="showTab('dashboard')">Dashboard</a></li>
+                <li><a href="#" onclick="showTab('tools')">Herramientas</a></li>
+                <li><a href="#" onclick="showTab('exercises')">Ejercicios</a></li>
+                <li><a href="#" onclick="showTab('calculators')">Calculadoras</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1><i class="fas fa-flask"></i> Laboratorio Interactivo de Ciencia de Datos</h1>
+        <p>Experimenta, analiza y visualiza datos en tiempo real. ¡Aprende haciendo!</p>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="showTab('dashboard')">
+                <i class="fas fa-tachometer-alt"></i> Dashboard Interactivo
+            </button>
+            <button class="tab-btn" onclick="showTab('visualizer')">
+                <i class="fas fa-chart-line"></i> Visualizador
+            </button>
+            <button class="tab-btn" onclick="showTab('tools')">
+                <i class="fas fa-tools"></i> Herramientas
+            </button>
+            <button class="tab-btn" onclick="showTab('exercises')">
+                <i class="fas fa-tasks"></i> Ejercicios
+            </button>
+            <button class="tab-btn" onclick="showTab('calculators')">
+                <i class="fas fa-calculator"></i> Calculadoras
+            </button>
+            <button class="tab-btn" onclick="showTab('simulator')">
+                <i class="fas fa-play-circle"></i> Simulador
+            </button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalStudents">28</div>
+                    <div class="stat-label">Estudiantes Activos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avgGrade">85.6</div>
+                    <div class="stat-label">Promedio General</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedExercises">156</div>
+                    <div class="stat-label">Ejercicios Completados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="dataPoints">1,247</div>
+                    <div class="stat-label">Datos Analizados</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-chart-bar"></i> Notas por Materia - Datos en Vivo</h3>
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="subject">Materia:</label>
+                        <select id="subject" class="control-input" onchange="updateChart()">
+                            <option value="math">Matemáticas</option>
+                            <option value="science">Ciencias</option>
+                            <option value="history">Historia</option>
+                            <option value="english">Inglés</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="chartType">Tipo de Gráfico:</label>
+                        <select id="chartType" class="control-input" onchange="updateChart()">
+                            <option value="bar">Barras</option>
+                            <option value="line">Líneas</option>
+                            <option value="pie">Circular</option>
+                            <option value="doughnut">Dona</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="generateRandomData()">
+                        <i class="fas fa-dice"></i> Generar Datos Aleatorios
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="gradesChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-table"></i> Datos de Estudiantes (Editable)</h3>
+                <div class="controls">
+                    <button class="btn btn-success" onclick="addStudent()">
+                        <i class="fas fa-plus"></i> Agregar Estudiante
+                    </button>
+                    <button class="btn btn-warning" onclick="calculateStats()">
+                        <i class="fas fa-calculator"></i> Calcular Estadísticas
+                    </button>
+                    <button class="btn btn-danger" onclick="clearData()">
+                        <i class="fas fa-trash"></i> Limpiar Datos
+                    </button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Matemáticas</th>
+                                <th>Ciencias</th>
+                                <th>Historia</th>
+                                <th>Inglés</th>
+                                <th>Promedio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsBody">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="statsResult" class="calc-result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Visualizer Tab -->
+        <div id="visualizer" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-paint-brush"></i> Creador de Gráficas Personalizadas</h3>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Título del Gráfico:</label>
+                        <input type="text" id="customTitle" class="control-input" placeholder="Mi Gráfico Personalizado">
+                    </div>
+                    <div class="control-group">
+                        <label>Datos (separados por comas):</label>
+                        <input type="text" id="customData" class="control-input" placeholder="10,20,30,40,50">
+                    </div>
+                    <div class="control-group">
+                        <label>Etiquetas (separadas por comas):</label>
+                        <input type="text" id="customLabels" class="control-input" placeholder="A,B,C,D,E">
+                    </div>
+                    <div class="control-group">
+                        <label>Color del Gráfico:</label>
+                        <input type="color" id="customColor" class="control-input" value="#1e40af">
+                    </div>
+                    <button class="btn" onclick="createCustomChart()">
+                        <i class="fas fa-magic"></i> Crear Gráfico
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="customChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-database"></i> Explorador de Datasets</h3>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Dataset:</label>
+                        <select id="datasetSelect" class="control-input" onchange="loadDataset()">
+                            <option value="weather">Datos del Clima (San Juan)</option>
+                            <option value="population">Población de PR por Municipios</option>
+                            <option value="sports">Deportes Favoritos</option>
+                            <option value="economy">Indicadores Económicos</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="analyzeDataset()">
+                        <i class="fas fa-search"></i> Analizar Dataset
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="datasetChart"></canvas>
+                </div>
+                <div id="datasetInfo" class="calc-result"></div>
+            </div>
+        </div>
+
+        <!-- Tools Tab -->
+        <div id="tools" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-info-circle"></i> ¿Qué herramientas usan los científicos de datos profesionales?</h3>
+                <p>Aunque estamos usando un simulador web, es importante que conozcas las herramientas reales que utilizan los profesionales en ciencia de datos. ¡Algún día podrías usarlas tú también!</p>
+            </div>
+
+            <div class="tools-grid">
+                <div class="tool-card fade-in" data-delay="0">
+                    <div class="tool-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3>Python</h3>
+                    <p><strong>¿Qué es?</strong> Un lenguaje de programación muy popular para analizar datos y crear gráficos.</p>
+                    <p><strong>¿Para qué sirve?</strong></p>
+                    <ul class="tool-features">
+                        <li><strong>Pandas:</strong> Para trabajar con tablas como la que usamos aquí</li>
+                        <li><strong>NumPy:</strong> Para hacer cálculos matemáticos rápidos</li>
+                        <li><strong>Matplotlib:</strong> Para crear gráficos como los nuestros</li>
+                        <li><strong>Scikit-learn:</strong> Para crear modelos inteligentes</li>
+                    </ul>
+                    <div class="demo-section">
+                        <strong>Ejemplo de código Python:</strong>
+                        <pre style="background: #f8f9fa; padding: 1rem; border-radius: 8px; font-size: 0.9rem; margin-top: 0.5rem;">
+        import pandas as pd
+        estudiantes = {'Nombre': ['Ana', 'Luis'], 
+                    'Nota': [85, 92]}
+        df = pd.DataFrame(estudiantes)
+        print(df.mean())</pre>
+                    </div>
+                </div>
+                
+                <div class="tool-card fade-in" data-delay="100">
+                    <div class="tool-icon">
+                        <i class="fab fa-r-project"></i>
+                    </div>
+                    <h3>R Studio</h3>
+                    <p><strong>¿Qué es?</strong> Un programa especializado en estadísticas y gráficos muy bonitos.</p>
+                    <p><strong>¿Para qué sirve?</strong></p>
+                    <ul class="tool-features">
+                        <li><strong>ggplot2:</strong> Crea gráficos súper elegantes</li>
+                        <li><strong>dplyr:</strong> Para filtrar y organizar datos</li>
+                        <li><strong>Estadísticas:</strong> Cálculos avanzados como los de nuestras calculadoras</li>
+                        <li><strong>Reportes:</strong> Crear informes automáticos</li>
+                    </ul>
+                    <div class="demo-section">
+                        <strong>¿Cuándo se usa?</strong>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Los científicos usan R cuando necesitan hacer análisis estadísticos muy precisos, como estudiar si un medicamento funciona o analizar encuestas.</p>
+                    </div>
+                </div>
+                
+                <div class="tool-card fade-in" data-delay="200">
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Tableau / Power BI</h3>
+                    <p><strong>¿Qué es?</strong> Programas para crear dashboards profesionales como el que estás usando ahora.</p>
+                    <p><strong>¿Para qué sirve?</strong></p>
+                    <ul class="tool-features">
+                        <li><strong>Dashboards:</strong> Paneles interactivos para empresas</li>
+                        <li><strong>Conexiones:</strong> Se conecta a muchas fuentes de datos</li>
+                        <li><strong>Visualizaciones:</strong> Gráficos profesionales y atractivos</li>
+                        <li><strong>Colaboración:</strong> Equipos trabajan juntos en tiempo real</li>
+                    </ul>
+                    <div class="demo-section">
+                        <strong>Ejemplo real:</strong>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Netflix usa estos programas para saber qué películas le gustan más a la gente y decidir qué series producir.</p>
+                    </div>
+                </div>
+                
+                <div class="tool-card fade-in" data-delay="300">
+                    <div class="tool-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Jupyter Notebooks</h3>
+                    <p><strong>¿Qué es?</strong> Como un cuaderno digital donde puedes escribir código, ver resultados y tomar notas.</p>
+                    <p><strong>¿Para qué sirve?</strong></p>
+                    <ul class="tool-features">
+                        <li><strong>Experimentar:</strong> Probar código paso a paso</li>
+                        <li><strong>Documentar:</strong> Explicar qué hace cada parte</li>
+                        <li><strong>Gráficos:</strong> Ver las visualizaciones inmediatamente</li>
+                        <li><strong>Compartir:</strong> Enviar análisis completos a otros</li>
+                    </ul>
+                    <div class="demo-section">
+                        <strong>¿Sabías que?</strong>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">¡Google Colab es una versión gratuita de Jupyter que puedes usar desde tu navegador sin instalar nada!</p>
+                    </div>
+                </div>
+                
+                <div class="tool-card fade-in" data-delay="400">
+                    <div class="tool-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Bases de Datos (SQL)</h3>
+                    <p><strong>¿Qué es?</strong> Sistemas para guardar y buscar información en grandes cantidades, como nuestras tablas pero gigantes.</p>
+                    <p><strong>¿Para qué sirve?</strong></p>
+                    <ul class="tool-features">
+                        <li><strong>MySQL:</strong> Base de datos muy popular</li>
+                        <li><strong>MongoDB:</strong> Para datos más flexibles</li>
+                        <li><strong>Consultas:</strong> Buscar información específica rápidamente</li>
+                        <li><strong>Almacenamiento:</strong> Guardar millones de registros</li>
+                    </ul>
+                    <div class="demo-section">
+                        <strong>Ejemplo de consulta SQL:</strong>
+                        <pre style="background: #f8f9fa; padding: 1rem; border-radius: 8px; font-size: 0.9rem; margin-top: 0.5rem;">
+SELECT nombre, nota 
+FROM estudiantes 
+WHERE nota > 90</pre>
+                        <p style="font-size: 0.8rem; margin-top: 0.3rem; color: #6b7280;">Esto busca todos los estudiantes con nota mayor a 90</p>
+                    </div>
+                </div>
+                
+                <div class="tool-card fade-in" data-delay="500">
+                    <div class="tool-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Inteligencia Artificial (Machine Learning)</h3>
+                    <p><strong>¿Qué es?</strong> Programas que "aprenden" de los datos para hacer predicciones, como nuestro simulador pero mucho más avanzado.</p>
+                    <p><strong>¿Para qué sirve?</strong></p>
+                    <ul class="tool-features">
+                        <li><strong>Predicciones:</strong> Adivinar notas futuras</li>
+                        <li><strong>Clasificación:</strong> Agrupar estudiantes por rendimiento</li>
+                        <li><strong>Recomendaciones:</strong> Como Netflix sugiere películas</li>
+                        <li><strong>Detección:</strong> Encontrar patrones ocultos</li>
+                    </ul>
+                    <div class="demo-section">
+                        <strong>Ejemplos que usas todos los días:</strong>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">📱 Siri y Alexa • 🎵 Spotify sugiere música • 📧 Gmail filtra spam • 🛒 Amazon recomienda productos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-graduation-cap"></i> ¿Cómo puedes empezar a aprender estas herramientas?</h3>
+                <div class="learning-path">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Domina las bases aquí</h4>
+                            <p>Usa este laboratorio para entender conceptos como gráficos, estadísticas y análisis de datos.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Aprende matemáticas</h4>
+                            <p>Estadística, álgebra y cálculo son la base de la ciencia de datos.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Prueba herramientas gratuitas</h4>
+                            <p>Google Colab, R Studio gratis, y muchos tutoriales en YouTube.</p>
+                        </div>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Practica con proyectos reales</h4>
+                            <p>Analiza datos de deportes, música, o temas que te interesen.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-briefcase"></i> ¿Qué trabajos puedes hacer con estas herramientas?</h3>
+                <div class="careers-grid">
+                    <div class="career-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>Analista de Datos</h4>
+                        <p>Ayuda a empresas a entender sus ventas, clientes y tendencias.</p>
+                        <span class="salary">$45,000 - $70,000/año</span>
+                    </div>
+                    <div class="career-card">
+                        <i class="fas fa-brain"></i>
+                        <h4>Científico de Datos</h4>
+                        <p>Crea modelos de inteligencia artificial para resolver problemas complejos.</p>
+                        <span class="salary">$80,000 - $150,000/año</span>
+                    </div>
+                    <div class="career-card">
+                        <i class="fas fa-hospital"></i>
+                        <h4>Analista en Salud</h4>
+                        <p>Usa datos para mejorar tratamientos médicos y salvar vidas.</p>
+                        <span class="salary">$60,000 - $90,000/año</span>
+                    </div>
+                    <div class="career-card">
+                        <i class="fas fa-gamepad"></i>
+                        <h4>Analista de Videojuegos</h4>
+                        <p>Estudia cómo juegan las personas para hacer juegos más divertidos.</p>
+                        <span class="salary">$55,000 - $85,000/año</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercises Tab -->
+        <div id="exercises" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-graduation-cap"></i> Ejercicios Prácticos de Ciencia de Datos</h3>
+                <p>Completa estos ejercicios para practicar conceptos fundamentales:</p>
+            </div>
+
+            <div class="exercise-grid">
+                <div class="exercise-card">
+                    <h4><i class="fas fa-chart-bar"></i> Ejercicio 1: Mi Primera Gráfica</h4>
+                    <p><strong>Objetivo:</strong> Crear una gráfica de barras con datos de tu clase.</p>
+                    <ol class="exercise-steps">
+                        <li>Ve a la pestaña "Visualizador"</li>
+                        <li>Introduce las notas de 5 estudiantes: 85,92,78,96,88</li>
+                        <li>Usa las etiquetas: Ana,Luis,María,Carlos,Sofia</li>
+                        <li>Cambia el color a verde (#059669)</li>
+                        <li>Título: "Notas del Examen de Matemáticas"</li>
+                    </ol>
+                    <button class="btn btn-success" onclick="completeExercise(1)">
+                        <i class="fas fa-check"></i> Marcar Completado
+                    </button>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><i class="fas fa-calculator"></i> Ejercicio 2: Estadísticas Básicas</h4>
+                    <p><strong>Objetivo:</strong> Calcular estadísticas de una muestra de datos.</p>
+                    <ol class="exercise-steps">
+                        <li>Ve a la pestaña "Calculadoras"</li>
+                        <li>Usa la calculadora de estadísticas</li>
+                        <li>Introduce estos datos: 12,15,18,20,22,25,28</li>
+                        <li>Calcula la media, mediana y desviación estándar</li>
+                        <li>Anota los resultados en tu cuaderno</li>
+                    </ol>
+                    <button class="btn btn-success" onclick="completeExercise(2)">
+                        <i class="fas fa-check"></i> Marcar Completado
+                    </button>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><i class="fas fa-table"></i> Ejercicio 3: Manipulación de Datos</h4>
+                    <p><strong>Objetivo:</strong> Agregar y modificar datos en una tabla.</p>
+                    <ol class="exercise-steps">
+                        <li>Ve a la pestaña "Dashboard Interactivo"</li>
+                        <li>Agrega 3 estudiantes nuevos a la tabla</li>
+                        <li>Asigna notas realistas (70-100)</li>
+                        <li>Calcula las estadísticas de la tabla</li>
+                        <li>Observa cómo cambia el gráfico automáticamente</li>
+                    </ol>
+                    <button class="btn btn-success" onclick="completeExercise(3)">
+                        <i class="fas fa-check"></i> Marcar Completado
+                    </button>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><i class="fas fa-eye"></i> Ejercicio 4: Análisis Visual</h4>
+                    <p><strong>Objetivo:</strong> Interpretar diferentes tipos de gráficos.</p>
+                    <ol class="exercise-steps">
+                        <li>Ve a la pestaña "Dashboard"</li>
+                        <li>Cambia entre diferentes tipos de gráficos</li>
+                        <li>Observa cómo cambia la interpretación</li>
+                        <li>¿Cuál es mejor para mostrar proporciones?</li>
+                        <li>¿Cuál es mejor para mostrar tendencias?</li>
+                    </ol>
+                    <button class="btn btn-success" onclick="completeExercise(4)">
+                        <i class="fas fa-check"></i> Marcar Completado
+                    </button>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><i class="fas fa-flask"></i> Ejercicio 5: Simulación de Experimento</h4>
+                    <p><strong>Objetivo:</strong> Simular el lanzamiento de monedas.</p>
+                    <ol class="exercise-steps">
+                        <li>Ve a la pestaña "Simulador"</li>
+                        <li>Configura 100 lanzamientos de moneda</li>
+                        <li>Ejecuta la simulación 5 veces</li>
+                        <li>Anota los resultados de cada simulación</li>
+                        <li>¿Se acerca al 50% teórico?</li>
+                    </ol>
+                    <button class="btn btn-success" onclick="completeExercise(5)">
+                        <i class="fas fa-check"></i> Marcar Completado
+                    </button>
+                </div>
+
+                <div class="exercise-card">
+                    <h4><i class="fas fa-puzzle-piece"></i> Ejercicio 6: Proyecto Final</h4>
+                    <p><strong>Objetivo:</strong> Crear un dashboard completo.</p>
+                    <ol class="exercise-steps">
+                        <li>Elige un tema (deportes, clima, etc.)</li>
+                        <li>Recopila 10 datos sobre tu tema</li>
+                        <li>Crea al menos 2 gráficos diferentes</li>
+                        <li>Calcula estadísticas básicas</li>
+                        <li>Presenta tus conclusiones</li>
+                    </ol>
+                    <button class="btn btn-success" onclick="completeExercise(6)">
+                        <i class="fas fa-check"></i> Marcar Completado
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-trophy"></i> Progreso de Ejercicios</h3>
+                <div id="exerciseProgress">
+                    <p>Ejercicios completados: <span id="completedCount">0</span> de 6</p>
+                    <div style="background: #e5e7eb; height: 20px; border-radius: 10px; margin: 1rem 0;">
+                        <div id="progressBar" style="background: var(--success); height: 100%; border-radius: 10px; width: 0%; transition: width 0.5s ease;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculators Tab -->
+        <div id="calculators" class="tab-content">
+            <div class="calculator-grid">
+                <div class="calculator">
+                    <h4><i class="fas fa-chart-line"></i> Estadísticas Básicas</h4>
+                    <label>Datos (separados por comas):</label>
+                    <input type="text" id="statsData" class="calc-input" placeholder="1,2,3,4,5">
+                    <button class="btn" onclick="calculateBasicStats()">Calcular</button>
+                    <div id="statsResults" class="calc-result"></div>
+                </div>
+
+                <div class="calculator">
+                    <h4><i class="fas fa-percentage"></i> Calculadora de Porcentajes</h4>
+                    <label>Valor:</label>
+                    <input type="number" id="percentValue" class="calc-input" placeholder="25">
+                    <label>Total:</label>
+                    <input type="number" id="percentTotal" class="calc-input" placeholder="100">
+                    <button class="btn" onclick="calculatePercentage()">Calcular %</button>
+                    <div id="percentResults" class="calc-result"></div>
+                </div>
+
+                <div class="calculator">
+                    <h4><i class="fas fa-square-root-alt"></i> Correlación de Pearson</h4>
+                    <label>Variable X (separados por comas):</label>
+                    <input type="text" id="correlationX" class="calc-input" placeholder="1,2,3,4,5">
+                    <label>Variable Y (separados por comas):</label>
+                    <input type="text" id="correlationY" class="calc-input" placeholder="2,4,1,3,5">
+                    <button class="btn" onclick="calculateCorrelation()">Calcular Correlación</button>
+                    <div id="correlationResults" class="calc-result"></div>
+                </div>
+
+                <div class="calculator">
+                    <h4><i class="fas fa-balance-scale"></i> Probabilidad Simple</h4>
+                    <label>Eventos Favorables:</label>
+                    <input type="number" id="favorableEvents" class="calc-input" placeholder="1">
+                    <label>Eventos Totales:</label>
+                    <input type="number" id="totalEvents" class="calc-input" placeholder="6">
+                    <button class="btn" onclick="calculateProbability()">Calcular Probabilidad</button>
+                    <div id="probabilityResults" class="calc-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulator Tab -->
+        <div id="simulator" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-coins"></i> Simulador de Lanzamiento de Monedas</h3>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Número de Lanzamientos:</label>
+                        <input type="number" id="coinFlips" class="control-input" value="100" min="1" max="10000">
+                    </div>
+                    <button class="btn" onclick="simulateCoinFlips()">
+                        <i class="fas fa-play"></i> Ejecutar Simulación
+                    </button>
+                    <button class="btn btn-warning" onclick="resetSimulation()">
+                        <i class="fas fa-redo"></i> Reiniciar
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="simulationChart"></canvas>
+                </div>
+                <div id="simulationResults" class="calc-result"></div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fas fa-dice"></i> Generador de Datos Aleatorios</h3>
+                <div class="controls">
+                    <div class="control-group">
+                        <label>Tipo de Distribución:</label>
+                        <select id="distributionType" class="control-input">
+                            <option value="normal">Normal (Campana)</option>
+                            <option value="uniform">Uniforme</option>
+                            <option value="exponential">Exponencial</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Cantidad de Datos:</label>
+                        <input type="number" id="dataCount" class="control-input" value="50" min="10" max="1000">
+                    </div>
+                    <button class="btn" onclick="generateRandomDistribution()">
+                        <i class="fas fa-random"></i> Generar
+                    </button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentChart = null;
+        let customChart = null;
+        let datasetChart = null;
+        let simulationChart = null;
+        let distributionChart = null;
+        let completedExercises = new Set();
+
+        // Sample student data
+        let studentsData = [
+            {name: "Ana García", math: 85, science: 92, history: 78, english: 88},
+            {name: "Luis Martínez", math: 92, science: 85, history: 90, english: 87},
+            {name: "María López", math: 78, science: 95, history: 82, english: 91},
+            {name: "Carlos Rivera", math: 96, science: 89, history: 94, english: 85},
+            {name: "Sofia Hernández", math: 88, science: 91, history: 86, english: 93}
+        ];
+
+        // Tab Navigation
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Initialize tab-specific content
+            if (tabName === 'dashboard') {
+                initializeDashboard();
+            } else if (tabName === 'tools') {
+                initializeToolsAnimations();
+            }
+        }
+
+        // Initialize Dashboard
+        function initializeDashboard() {
+            updateStudentsTable();
+            updateChart();
+            updateDashboardStats();
+        }
+
+        // Update Dashboard Stats
+        function updateDashboardStats() {
+            // Update total students
+            document.getElementById('totalStudents').textContent = studentsData.length;
+            
+            // Calculate overall average
+            if (studentsData.length > 0) {
+                const allGrades = [];
+                studentsData.forEach(student => {
+                    allGrades.push(student.math, student.science, student.history, student.english);
+                });
+                const average = allGrades.reduce((a, b) => a + b, 0) / allGrades.length;
+                document.getElementById('avgGrade').textContent = average.toFixed(1);
+                
+                // Update completed exercises (mock data that changes with student count)
+                document.getElementById('completedExercises').textContent = studentsData.length * 6 + Math.floor(Math.random() * 10);
+                
+                // Update data points analyzed
+                document.getElementById('dataPoints').textContent = (studentsData.length * 4).toLocaleString();
+            } else {
+                document.getElementById('avgGrade').textContent = '0.0';
+                document.getElementById('completedExercises').textContent = '0';
+                document.getElementById('dataPoints').textContent = '0';
+            }
+        }
+
+        // Initialize Tools Animations
+        function initializeToolsAnimations() {
+            // Add staggered animation to tool cards
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Add hover effect to career cards
+            const careerCards = document.querySelectorAll('.career-card');
+            careerCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        }
+
+        // Update Students Table
+        function updateStudentsTable() {
+            const tbody = document.getElementById('studentsBody');
+            tbody.innerHTML = '';
+            
+            studentsData.forEach((student, index) => {
+                const avg = ((student.math + student.science + student.history + student.english) / 4).toFixed(1);
+                const row = `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td><input type="number" value="${student.math}" onchange="updateStudent(${index}, 'math', this.value)" class="calc-input" style="width: 80px;"></td>
+                        <td><input type="number" value="${student.science}" onchange="updateStudent(${index}, 'science', this.value)" class="calc-input" style="width: 80px;"></td>
+                        <td><input type="number" value="${student.history}" onchange="updateStudent(${index}, 'history', this.value)" class="calc-input" style="width: 80px;"></td>
+                        <td><input type="number" value="${student.english}" onchange="updateStudent(${index}, 'english', this.value)" class="calc-input" style="width: 80px;"></td>
+                        <td><strong>${avg}</strong></td>
+                        <td><button class="btn btn-danger" onclick="removeStudent(${index})" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Update Student Data
+        function updateStudent(index, subject, value) {
+            studentsData[index][subject] = parseInt(value) || 0;
+            updateStudentsTable();
+            updateChart();
+            updateDashboardStats();
+        }
+
+        // Add Student
+        function addStudent() {
+            const name = prompt("Nombre del estudiante:");
+            if (name && name.trim()) {
+                studentsData.push({
+                    name: name.trim(),
+                    math: Math.floor(Math.random() * 31) + 70, // 70-100
+                    science: Math.floor(Math.random() * 31) + 70,
+                    history: Math.floor(Math.random() * 31) + 70,
+                    english: Math.floor(Math.random() * 31) + 70
+                });
+                updateStudentsTable();
+                updateChart();
+                updateDashboardStats();
+                
+                // Show success message
+                showMessage('¡Estudiante agregado exitosamente!', 'success');
+            }
+        }
+
+        // Remove Student
+        function removeStudent(index) {
+            if (confirm("¿Estás seguro de eliminar este estudiante?")) {
+                studentsData.splice(index, 1);
+                updateStudentsTable();
+                updateChart();
+                updateDashboardStats();
+                
+                showMessage('Estudiante eliminado', 'success');
+            }
+        }
+
+        // Clear All Data
+        function clearData() {
+            if (confirm("¿Estás seguro de limpiar todos los datos?")) {
+                studentsData = [];
+                updateStudentsTable();
+                updateChart();
+                updateDashboardStats();
+                
+                showMessage('Todos los datos han sido eliminados', 'success');
+            }
+        }
+
+        // Update Chart
+        function updateChart() {
+            const subject = document.getElementById('subject').value;
+            const chartType = document.getElementById('chartType').value;
+            
+            if (studentsData.length === 0) {
+                // If no data, clear the chart
+                if (currentChart) {
+                    currentChart.destroy();
+                    currentChart = null;
+                }
+                return;
+            }
+            
+            const ctx = document.getElementById('gradesChart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            
+            const labels = studentsData.map(s => s.name);
+            const data = studentsData.map(s => s[subject]);
+            
+            // Get subject name in Spanish
+            const subjectNames = {
+                'math': 'Matemáticas',
+                'science': 'Ciencias', 
+                'history': 'Historia',
+                'english': 'Inglés'
+            };
+            
+            const colors = [
+                'rgba(30, 64, 175, 0.8)',
+                'rgba(59, 130, 246, 0.8)',
+                'rgba(96, 165, 250, 0.8)',
+                'rgba(5, 150, 105, 0.8)',
+                'rgba(217, 119, 6, 0.8)',
+                'rgba(220, 38, 38, 0.8)',
+                'rgba(168, 85, 247, 0.8)',
+                'rgba(236, 72, 153, 0.8)'
+            ];
+            
+            // Generate colors for all students
+            const backgroundColors = [];
+            const borderColors = [];
+            for (let i = 0; i < data.length; i++) {
+                backgroundColors.push(colors[i % colors.length]);
+                borderColors.push(colors[i % colors.length].replace('0.8', '1'));
+            }
+            
+            const chartConfig = {
+                type: chartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Notas de ${subjectNames[subject]}`,
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Notas de ${subjectNames[subject]} - Gráfico de ${chartType === 'bar' ? 'Barras' : chartType === 'line' ? 'Líneas' : chartType === 'pie' ? 'Torta' : 'Dona'}`,
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            display: chartType === 'pie' || chartType === 'doughnut',
+                            position: 'bottom'
+                        }
+                    }
+                }
+            };
+            
+            // Add scales only for bar and line charts
+            if (chartType !== 'pie' && chartType !== 'doughnut') {
+                chartConfig.options.scales = {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Notas'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Estudiantes'
+                        }
+                    }
+                };
+            }
+            
+            currentChart = new Chart(ctx, chartConfig);
+            
+            // Update dashboard stats
+            updateDashboardStats();
+        }
+
+        // Generate Random Data
+        function generateRandomData() {
+            studentsData.forEach(student => {
+                student.math = Math.floor(Math.random() * 31) + 70;
+                student.science = Math.floor(Math.random() * 31) + 70;
+                student.history = Math.floor(Math.random() * 31) + 70;
+                student.english = Math.floor(Math.random() * 31) + 70;
+            });
+            updateStudentsTable();
+            updateChart();
+            updateDashboardStats();
+            
+            showMessage('¡Datos aleatorios generados!', 'success');
+        }
+
+        // Show Message
+        function showMessage(text, type = 'success') {
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}`;
+            
+            // Find a good place to show the message (after the controls)
+            const controls = document.querySelector('.controls');
+            if (controls && controls.parentNode) {
+                controls.parentNode.insertBefore(message, controls.nextSibling);
+                
+                // Remove message after 3 seconds
+                setTimeout(() => {
+                    if (message.parentNode) {
+                        message.parentNode.removeChild(message);
+                    }
+                }, 3000);
+            }
+        }
+
+        // Calculate Statistics
+        function calculateStats() {
+            if (studentsData.length === 0) {
+                showMessage('No hay datos para calcular estadísticas', 'error');
+                return;
+            }
+            
+            const subjects = ['math', 'science', 'history', 'english'];
+            const subjectNames = {
+                'math': 'Matemáticas',
+                'science': 'Ciencias', 
+                'history': 'Historia',
+                'english': 'Inglés'
+            };
+            
+            let results = '<h4><i class="fas fa-chart-bar"></i> Estadísticas por Materia:</h4><br>';
+            
+            subjects.forEach(subject => {
+                const values = studentsData.map(s => s[subject]);
+                const mean = values.reduce((a, b) => a + b, 0) / values.length;
+                const sorted = [...values].sort((a, b) => a - b);
+                const median = sorted.length % 2 === 0 
+                    ? (sorted[sorted.length/2 - 1] + sorted[sorted.length/2]) / 2
+                    : sorted[Math.floor(sorted.length/2)];
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+                
+                // Calculate standard deviation
+                const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / values.length;
+                const stdDev = Math.sqrt(variance);
+                
+                results += `
+                    <div style="background: rgba(30, 64, 175, 0.05); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
+                        <strong style="color: var(--primary); font-size: 1.1rem;">${subjectNames[subject]}:</strong><br>
+                        📊 Media: <strong>${mean.toFixed(1)}</strong> | 
+                        📈 Mediana: <strong>${median}</strong> | 
+                        📉 Min: <strong>${min}</strong> | 
+                        📈 Max: <strong>${max}</strong><br>
+                        📏 Desviación Estándar: <strong>${stdDev.toFixed(2)}</strong>
+                    </div>
+                `;
+            });
+            
+            // Overall statistics
+            const allGrades = [];
+            studentsData.forEach(student => {
+                allGrades.push(student.math, student.science, student.history, student.english);
+            });
+            const overallMean = allGrades.reduce((a, b) => a + b, 0) / allGrades.length;
+            
+            results += `
+                <div style="background: rgba(5, 150, 105, 0.05); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--success);">
+                    <strong style="color: var(--success); font-size: 1.1rem;">🎯 Estadísticas Generales:</strong><br>
+                    📊 Promedio General: <strong>${overallMean.toFixed(1)}</strong><br>
+                    👥 Total de Estudiantes: <strong>${studentsData.length}</strong><br>
+                    📝 Total de Notas: <strong>${allGrades.length}</strong>
+                </div>
+            `;
+            
+            document.getElementById('statsResult').innerHTML = results;
+            document.getElementById('statsResult').style.display = 'block';
+            
+            showMessage('¡Estadísticas calculadas exitosamente!', 'success');
+        }
+
+        // Create Custom Chart
+        function createCustomChart() {
+            const title = document.getElementById('customTitle').value || 'Mi Gráfico';
+            const dataStr = document.getElementById('customData').value;
+            const labelsStr = document.getElementById('customLabels').value;
+            const color = document.getElementById('customColor').value;
+            
+            if (!dataStr || !labelsStr) {
+                alert('Por favor, introduce datos y etiquetas');
+                return;
+            }
+            
+            const data = dataStr.split(',').map(d => parseFloat(d.trim())).filter(d => !isNaN(d));
+            const labels = labelsStr.split(',').map(l => l.trim());
+            
+            if (data.length !== labels.length) {
+                alert('El número de datos debe coincidir con el número de etiquetas');
+                return;
+            }
+            
+            const ctx = document.getElementById('customChart').getContext('2d');
+            
+            if (customChart) {
+                customChart.destroy();
+            }
+            
+            customChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: title,
+                        data: data,
+                        backgroundColor: color + '80',
+                        borderColor: color,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: title
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load Dataset
+        function loadDataset() {
+            const dataset = document.getElementById('datasetSelect').value;
+            const datasets = {
+                weather: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                    data: [78, 79, 81, 83, 85, 87],
+                    title: 'Temperatura Promedio en San Juan (°F)'
+                },
+                population: {
+                    labels: ['San Juan', 'Bayamón', 'Carolina', 'Ponce', 'Caguas'],
+                    data: [342259, 185187, 154815, 152634, 127244],
+                    title: 'Población por Municipio (2020)'
+                },
+                sports: {
+                    labels: ['Baloncesto', 'Béisbol', 'Fútbol', 'Voleibol', 'Natación'],
+                    data: [35, 28, 20, 12, 5],
+                    title: 'Deportes Favoritos (%)'
+                },
+                economy: {
+                    labels: ['2018', '2019', '2020', '2021', '2022'],
+                    data: [103.1, 101.9, 87.2, 95.6, 98.4],
+                    title: 'PIB de Puerto Rico (Miles de Millones)'
+                }
+            };
+            
+            const selectedData = datasets[dataset];
+            
+            const ctx = document.getElementById('datasetChart').getContext('2d');
+            
+            if (datasetChart) {
+                datasetChart.destroy();
+            }
+            
+            datasetChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: selectedData.labels,
+                    datasets: [{
+                        label: selectedData.title,
+                        data: selectedData.data,
+                        backgroundColor: 'rgba(30, 64, 175, 0.8)',
+                        borderColor: 'rgba(30, 64, 175, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: selectedData.title
+                        }
+                    }
+                }
+            });
+        }
+
+        // Analyze Dataset
+        function analyzeDataset() {
+            const dataset = document.getElementById('datasetSelect').value;
+            const datasets = {
+                weather: { data: [78, 79, 81, 83, 85, 87] },
+                population: { data: [342259, 185187, 154815, 152634, 127244] },
+                sports: { data: [35, 28, 20, 12, 5] },
+                economy: { data: [103.1, 101.9, 87.2, 95.6, 98.4] }
+            };
+            
+            const data = datasets[dataset].data;
+            const mean = data.reduce((a, b) => a + b, 0) / data.length;
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            const range = max - min;
+            
+            document.getElementById('datasetInfo').innerHTML = `
+                <strong>Análisis del Dataset:</strong><br>
+                Media: ${mean.toFixed(2)}<br>
+                Mínimo: ${min}<br>
+                Máximo: ${max}<br>
+                Rango: ${range.toFixed(2)}
+            `;
+        }
+
+        // Calculate Basic Statistics
+        function calculateBasicStats() {
+            const dataStr = document.getElementById('statsData').value;
+            if (!dataStr) {
+                alert('Por favor, introduce datos');
+                return;
+            }
+            
+            const data = dataStr.split(',').map(d => parseFloat(d.trim())).filter(d => !isNaN(d));
+            
+            if (data.length === 0) {
+                alert('No se encontraron datos válidos');
+                return;
+            }
+            
+            const mean = data.reduce((a, b) => a + b, 0) / data.length;
+            const sorted = data.sort((a, b) => a - b);
+            const median = sorted.length % 2 === 0 
+                ? (sorted[sorted.length/2 - 1] + sorted[sorted.length/2]) / 2
+                : sorted[Math.floor(sorted.length/2)];
+            
+            const variance = data.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / data.length;
+            const stdDev = Math.sqrt(variance);
+            
+            document.getElementById('statsResults').innerHTML = `
+                <strong>Resultados:</strong><br>
+                Media: ${mean.toFixed(2)}<br>
+                Mediana: ${median}<br>
+                Desviación Estándar: ${stdDev.toFixed(2)}<br>
+                Varianza: ${variance.toFixed(2)}
+            `;
+        }
+
+        // Calculate Percentage
+        function calculatePercentage() {
+            const value = parseFloat(document.getElementById('percentValue').value);
+            const total = parseFloat(document.getElementById('percentTotal').value);
+            
+            if (isNaN(value) || isNaN(total) || total === 0) {
+                alert('Por favor, introduce valores válidos');
+                return;
+            }
+            
+            const percentage = (value / total) * 100;
+            
+            document.getElementById('percentResults').innerHTML = `
+                <strong>Resultado:</strong><br>
+                ${value} de ${total} = ${percentage.toFixed(2)}%
+            `;
+        }
+
+        // Calculate Correlation
+        function calculateCorrelation() {
+            const xStr = document.getElementById('correlationX').value;
+            const yStr = document.getElementById('correlationY').value;
+            
+            if (!xStr || !yStr) {
+                alert('Por favor, introduce ambas variables');
+                return;
+            }
+            
+            const x = xStr.split(',').map(d => parseFloat(d.trim())).filter(d => !isNaN(d));
+            const y = yStr.split(',').map(d => parseFloat(d.trim())).filter(d => !isNaN(d));
+            
+            if (x.length !== y.length || x.length === 0) {
+                alert('Las variables deben tener el mismo número de elementos válidos');
+                return;
+            }
+            
+            const n = x.length;
+            const meanX = x.reduce((a, b) => a + b, 0) / n;
+            const meanY = y.reduce((a, b) => a + b, 0) / n;
+            
+            let numerator = 0;
+            let denomX = 0;
+            let denomY = 0;
+            
+            for (let i = 0; i < n; i++) {
+                const diffX = x[i] - meanX;
+                const diffY = y[i] - meanY;
+                numerator += diffX * diffY;
+                denomX += diffX * diffX;
+                denomY += diffY * diffY;
+            }
+            
+            const correlation = numerator / Math.sqrt(denomX * denomY);
+            
+            let interpretation = '';
+            if (Math.abs(correlation) > 0.8) interpretation = 'Correlación muy fuerte';
+            else if (Math.abs(correlation) > 0.6) interpretation = 'Correlación fuerte';
+            else if (Math.abs(correlation) > 0.4) interpretation = 'Correlación moderada';
+            else if (Math.abs(correlation) > 0.2) interpretation = 'Correlación débil';
+            else interpretation = 'Correlación muy débil o nula';
+            
+            document.getElementById('correlationResults').innerHTML = `
+                <strong>Resultado:</strong><br>
+                Correlación de Pearson: ${correlation.toFixed(4)}<br>
+                Interpretación: ${interpretation}
+            `;
+        }
+
+        // Calculate Probability
+        function calculateProbability() {
+            const favorable = parseInt(document.getElementById('favorableEvents').value);
+            const total = parseInt(document.getElementById('totalEvents').value);
+            
+            if (isNaN(favorable) || isNaN(total) || total === 0 || favorable > total) {
+                alert('Por favor, introduce valores válidos');
+                return;
+            }
+            
+            const probability = favorable / total;
+            const percentage = probability * 100;
+            
+            document.getElementById('probabilityResults').innerHTML = `
+                <strong>Resultado:</strong><br>
+                Probabilidad: ${probability.toFixed(4)}<br>
+                Porcentaje: ${percentage.toFixed(2)}%<br>
+                Fracción: ${favorable}/${total}
+            `;
+        }
+
+        // Simulate Coin Flips
+        function simulateCoinFlips() {
+            const flips = parseInt(document.getElementById('coinFlips').value);
+            if (isNaN(flips) || flips < 1) {
+                alert('Por favor, introduce un número válido');
+                return;
+            }
+            
+            let heads = 0;
+            for (let i = 0; i < flips; i++) {
+                if (Math.random() < 0.5) heads++;
+            }
+            
+            const tails = flips - heads;
+            const headsPercent = (heads / flips * 100).toFixed(1);
+            const tailsPercent = (tails / flips * 100).toFixed(1);
+            
+            const ctx = document.getElementById('simulationChart').getContext('2d');
+            
+            if (simulationChart) {
+                simulationChart.destroy();
+            }
+            
+            simulationChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Cara', 'Cruz'],
+                    datasets: [{
+                        data: [heads, tails],
+                        backgroundColor: ['rgba(30, 64, 175, 0.8)', 'rgba(217, 119, 6, 0.8)'],
+                        borderColor: ['rgba(30, 64, 175, 1)', 'rgba(217, 119, 6, 1)'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Resultado de ${flips} lanzamientos`
+                        }
+                    }
+                }
+            });
+            
+            document.getElementById('simulationResults').innerHTML = `
+                <strong>Resultados:</strong><br>
+                Caras: ${heads} (${headsPercent}%)<br>
+                Cruces: ${tails} (${tailsPercent}%)<br>
+                Diferencia del teórico: ${Math.abs(50 - parseFloat(headsPercent)).toFixed(1)}%
+            `;
+        }
+
+        // Reset Simulation
+        function resetSimulation() {
+            if (simulationChart) {
+                simulationChart.destroy();
+                simulationChart = null;
+            }
+            document.getElementById('simulationResults').innerHTML = '';
+        }
+
+        // Generate Random Distribution
+        function generateRandomDistribution() {
+            const type = document.getElementById('distributionType').value;
+            const count = parseInt(document.getElementById('dataCount').value);
+            
+            if (isNaN(count) || count < 10) {
+                alert('Por favor, introduce un número válido (mínimo 10)');
+                return;
+            }
+            
+            let data = [];
+            
+            // Generate data based on distribution type
+            for (let i = 0; i < count; i++) {
+                let value;
+                switch (type) {
+                    case 'normal':
+                        // Box-Muller transform for normal distribution
+                        const u1 = Math.random();
+                        const u2 = Math.random();
+                        value = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) * 10 + 50;
+                        break;
+                    case 'uniform':
+                        value = Math.random() * 100;
+                        break;
+                    case 'exponential':
+                        value = -Math.log(Math.random()) * 20;
+                        break;
+                }
+                data.push(Math.max(0, Math.min(100, value))); // Clamp between 0-100
+            }
+            
+            // Create histogram
+            const bins = 10;
+            const binSize = 100 / bins;
+            const histogram = new Array(bins).fill(0);
+            
+            data.forEach(value => {
+                const binIndex = Math.min(Math.floor(value / binSize), bins - 1);
+                histogram[binIndex]++;
+            });
+            
+            const labels = [];
+            for (let i = 0; i < bins; i++) {
+                labels.push(`${(i * binSize).toFixed(0)}-${((i + 1) * binSize).toFixed(0)}`);
+            }
+            
+            const ctx = document.getElementById('distributionChart').getContext('2d');
+            
+            if (distributionChart) {
+                distributionChart.destroy();
+            }
+            
+            distributionChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `Distribución ${type} (${count} puntos)`,
+                        data: histogram,
+                        backgroundColor: 'rgba(5, 150, 105, 0.8)',
+                        borderColor: 'rgba(5, 150, 105, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Histograma - Distribución ${type.charAt(0).toUpperCase() + type.slice(1)}`
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Frecuencia'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Valores'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Complete Exercise
+        function completeExercise(exerciseNumber) {
+            completedExercises.add(exerciseNumber);
+            updateExerciseProgress();
+            
+            // Show success message
+            const message = document.createElement('div');
+            message.className = 'message success';
+            message.innerHTML = `<i class="fas fa-check-circle"></i> ¡Ejercicio ${exerciseNumber} completado!`;
+            
+            const button = event.target;
+            button.parentNode.insertBefore(message, button);
+            button.style.display = 'none';
+            
+            setTimeout(() => {
+                message.remove();
+            }, 3000);
+        }
+
+        // Update Exercise Progress
+        function updateExerciseProgress() {
+            const completed = completedExercises.size;
+            const total = 6;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            
+            if (completed === total) {
+                const celebration = document.createElement('div');
+                celebration.className = 'message success';
+                celebration.innerHTML = '<i class="fas fa-trophy"></i> ¡Felicitaciones! Has completado todos los ejercicios.';
+                document.getElementById('exerciseProgress').appendChild(celebration);
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dashboard first
+            initializeDashboard();
+            
+            // Load default dataset for visualizer
+            loadDataset();
+            
+            // Add event listeners for real-time updates
+            const subjectSelect = document.getElementById('subject');
+            const chartTypeSelect = document.getElementById('chartType');
+            
+            if (subjectSelect) {
+                subjectSelect.addEventListener('change', updateChart);
+            }
+            
+            if (chartTypeSelect) {
+                chartTypeSelect.addEventListener('change', updateChart);
+            }
+            
+            // Show welcome message
+            setTimeout(() => {
+                showMessage('¡Bienvenido al Laboratorio de Ciencia de Datos! Comienza explorando el Dashboard.', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

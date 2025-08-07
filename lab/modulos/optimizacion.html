@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimización Matemática - Laboratorio de Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #ffa726;
+            --secondary: #ff7043;
+            --accent: #ff8a65;
+            --success: #ffb74d;
+            --warning: #ffcc02;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(255, 167, 38, 0.37);
+            --shadow-hover: 0 15px 35px rgba(255, 167, 38, 0.25);
+            --gradient-main: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+            --gradient-accent: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 167, 38, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-accent);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .back-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 25px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gradient-main);
+            border-radius: 20px;
+            color: var(--white);
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Model Section */
+        .model-explanation {
+            background: rgba(255, 167, 38, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 2rem;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 3rem;
+        }
+
+        .model-explanation h3 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .model-explanation p {
+            line-height: 1.7;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        /* Optimization Problems Selection */
+        .problems-selector {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .selector-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .problems-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .problem-card.active {
+            border-color: var(--accent);
+            background: rgba(255, 167, 38, 0.05);
+            box-shadow: 0 8px 25px rgba(255, 167, 38, 0.2);
+        }
+
+        .problem-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .problem-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .problem-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Problem Details */
+        .problem-details {
+            background: rgba(255, 167, 38, 0.05);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .problem-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .problem-statement {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .objective-function {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .objective-label {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .objective-equation {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Controls and Visualization */
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls-panel {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .controls-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .controls-title i {
+            margin-right: 0.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group input[type="range"]:hover {
+            opacity: 1;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .control-value {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 167, 38, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--gradient-accent);
+            margin-top: 0.5rem;
+        }
+
+        /* Visualization Panel */
+        .visualization-panel {
+            background: var(--white);
+            border: 2px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .viz-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .viz-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--light);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .viz-tab.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--accent);
+        }
+
+        .viz-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+        }
+
+        canvas {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 100%;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        /* Optimal Point Indicator */
+        .optimal-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 167, 38, 0.9);
+            color: var(--white);
+            padding: 0.75rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: rgba(255, 167, 38, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .results-title {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .results-title i {
+            margin-right: 0.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-item.optimal {
+            border: 2px solid var(--accent);
+            background: linear-gradient(135deg, rgba(255, 167, 38, 0.1), rgba(255, 138, 101, 0.1));
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.4rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .result-value.optimal {
+            color: var(--primary);
+            font-size: 1.6rem;
+        }
+
+        .result-unit {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .optimization-summary {
+            grid-column: 1 / -1;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            text-align: center;
+        }
+
+        .summary-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .summary-text {
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* Constraints Display */
+        .constraints-panel {
+            background: rgba(255, 167, 38, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .constraints-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .constraint-item {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            font-family: 'Space Grotesk', monospace;
+            color: var(--text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .main-interface {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .problems-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .viz-tabs {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .viz-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse-optimal {
+            animation: pulseOptimal 2s infinite;
+        }
+
+        @keyframes pulseOptimal {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            50% { 
+                transform: scale(1.05); 
+                box-shadow: 0 8px 25px rgba(255, 167, 38, 0.3);
+            }
+        }
+
+        .highlight-optimal {
+            animation: highlightOptimal 3s infinite;
+        }
+
+        @keyframes highlightOptimal {
+            0%, 100% { background-color: var(--white); }
+            50% { background-color: rgba(255, 167, 38, 0.1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="modelado.html" class="logo">
+                <i class="fas fa-bullseye"></i>
+                Optimización Matemática
+            </a>
+            <a href="modelado.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Menú
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container fade-in">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-bullseye"></i>
+                Optimización Matemática
+            </h1>
+            <p class="page-subtitle">Encuentra máximos y mínimos en problemas del mundo real</p>
+        </div>
+
+        <!-- Model Explanation -->
+        <div class="model-explanation">
+            <h3><i class="fas fa-lightbulb"></i> Optimización y Cálculo Aplicado</h3>
+            <p>
+                La optimización matemática es el proceso de encontrar la mejor solución posible dentro de un conjunto de 
+                alternativas. Utilizando cálculo diferencial, podemos encontrar máximos y mínimos de funciones que 
+                representan problemas reales como maximizar ganancias, minimizar costos, o encontrar dimensiones óptimas. 
+                Explora diferentes problemas de optimización y observa cómo las matemáticas nos ayudan a tomar decisiones inteligentes.
+            </p>
+        </div>
+
+        <!-- Problems Selector -->
+        <div class="problems-selector">
+            <h3 class="selector-title">Selecciona el Problema de Optimización</h3>
+            <div class="problems-cards">
+                <div class="problem-card active" onclick="selectProblem('box')" id="box-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h4 class="problem-name">Volumen Máximo de Caja</h4>
+                    <p class="problem-description">Maximizar volumen cortando esquinas</p>
+                </div>
+                
+                <div class="problem-card" onclick="selectProblem('fence')" id="fence-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-border-style"></i>
+                    </div>
+                    <h4 class="problem-name">Área Máxima Cercada</h4>
+                    <p class="problem-description">Maximizar área con perímetro fijo</p>
+                </div>
+                
+                <div class="problem-card" onclick="selectProblem('cost')" id="cost-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h4 class="problem-name">Costo Mínimo</h4>
+                    <p class="problem-description">Minimizar costo de producción</p>
+                </div>
+                
+                <div class="problem-card" onclick="selectProblem('distance')" id="distance-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h4 class="problem-name">Distancia Mínima</h4>
+                    <p class="problem-description">Encontrar el camino más corto</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem Details -->
+        <div class="problem-details" id="problemDetails">
+            <h4 class="problem-title">Problema del Volumen Máximo de una Caja</h4>
+            <p class="problem-statement" id="problemStatement">
+                Se tiene una hoja rectangular de cartón de dimensiones L × W. Se cortan cuadrados iguales de lado x 
+                en cada esquina y se doblan los lados hacia arriba para formar una caja sin tapa. ¿Cuál debe ser 
+                el valor de x para que el volumen de la caja sea máximo?
+            </p>
+            <div class="objective-function">
+                <div class="objective-label">Función a optimizar:</div>
+                <div class="objective-equation" id="objectiveEquation">V(x) = x(L-2x)(W-2x)</div>
+            </div>
+        </div>
+
+        <!-- Constraints -->
+        <div class="constraints-panel" id="constraintsPanel">
+            <h4 class="constraints-title">Restricciones del problema:</h4>
+            <div class="constraint-item" id="constraint1">0 < x < L/2</div>
+            <div class="constraint-item" id="constraint2">0 < x < W/2</div>
+            <div class="constraint-item" id="constraint3">L, W > 0</div>
+        </div>
+
+        <!-- Main Interface -->
+        <div class="main-interface">
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <h3 class="controls-title">
+                    <i class="fas fa-sliders-h"></i>
+                    Parámetros del Problema
+                </h3>
+                
+                <!-- Box Problem Controls -->
+                <div id="box-controls" class="problem-controls">
+                    <div class="control-group">
+                        <label for="sheetLength">Largo de la hoja (cm):</label>
+                        <input type="range" id="sheetLength" min="20" max="60" value="40" step="2">
+                        <span id="sheetLengthValue" class="control-value">40 cm</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="sheetWidth">Ancho de la hoja (cm):</label>
+                        <input type="range" id="sheetWidth" min="15" max="50" value="30" step="2">
+                        <span id="sheetWidthValue" class="control-value">30 cm</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="cutSize">Tamaño del corte x (cm):</label>
+                        <input type="range" id="cutSize" min="0.5" max="15" value="5" step="0.1">
+                        <span id="cutSizeValue" class="control-value">5.0 cm</span>
+                    </div>
+                </div>
+
+                <!-- Fence Problem Controls -->
+                <div id="fence-controls" class="problem-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="perimeter">Perímetro disponible (m):</label>
+                        <input type="range" id="perimeter" min="50" max="200" value="100" step="5">
+                        <span id="perimeterValue" class="control-value">100 m</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="rectangleLength">Largo del rectángulo (m):</label>
+                        <input type="range" id="rectangleLength" min="5" max="95" value="25" step="1">
+                        <span id="rectangleLengthValue" class="control-value">25 m</span>
+                    </div>
+                </div>
+
+                <!-- Cost Problem Controls -->
+                <div id="cost-controls" class="problem-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="production">Unidades a producir:</label>
+                        <input type="range" id="production" min="50" max="500" value="200" step="10">
+                        <span id="productionValue" class="control-value">200</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="fixedCost">Costo fijo ($):</label>
+                        <input type="range" id="fixedCost" min="1000" max="10000" value="5000" step="100">
+                        <span id="fixedCostValue" class="control-value">$5000</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="unitCost">Costo unitario ($):</label>
+                        <input type="range" id="unitCost" min="5" max="50" value="20" step="1">
+                        <span id="unitCostValue" class="control-value">$20</span>
+                    </div>
+                </div>
+
+                <!-- Distance Problem Controls -->
+                <div id="distance-controls" class="problem-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="pointA">Coordenada A (x):</label>
+                        <input type="range" id="pointA" min="-10" max="10" value="-3" step="0.5">
+                        <span id="pointAValue" class="control-value">-3.0</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="pointB">Coordenada B (x):</label>
+                        <input type="range" id="pointB" min="-10" max="10" value="4" step="0.5">
+                        <span id="pointBValue" class="control-value">4.0</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="testPoint">Punto de prueba (x):</label>
+                        <input type="range" id="testPoint" min="-10" max="10" value="0" step="0.1">
+                        <span id="testPointValue" class="control-value">0.0</span>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="findOptimum()" id="optimizeBtn">
+                    <i class="fas fa-search"></i> Encontrar Óptimo
+                </button>
+                
+                <button class="btn btn-secondary" onclick="animateToOptimum()" id="animateBtn">
+                    <i class="fas fa-play"></i> Animar hacia Óptimo
+                </button>
+            </div>
+            
+            <!-- Visualization Panel -->
+            <div class="visualization-panel">
+                <div class="viz-tabs">
+                    <button class="viz-tab active" onclick="switchTab('visual')" id="visual-tab">
+                        <i class="fas fa-eye"></i> Visualización
+                    </button>
+                    <button class="viz-tab" onclick="switchTab('graph')" id="graph-tab">
+                        <i class="fas fa-chart-line"></i> Gráfica de Función
+                    </button>
+                </div>
+                
+                <div class="viz-content">
+                    <div class="optimal-indicator" id="optimalIndicator">
+                        Solución actual
+                    </div>
+                    
+                    <div id="visual-content" class="canvas-container">
+                        <canvas id="optimizationCanvas" width="500" height="400"></canvas>
+                    </div>
+                    
+                    <div id="graph-content" class="chart-container" style="display: none;">
+                        <canvas id="optimizationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel">
+            <h3 class="results-title">
+                <i class="fas fa-trophy"></i>
+                Resultados de Optimización
+            </h3>
+            <div class="results-grid" id="resultsGrid">
+                <div class="result-item">
+                    <div class="result-label">Valor actual</div>
+                    <div class="result-value">2000 <span class="result-unit">cm³</span></div>
+                </div>
+                <div class="result-item optimal pulse-optimal">
+                    <div class="result-label">Valor óptimo</div>
+                    <div class="result-value optimal">2370 <span class="result-unit">cm³</span></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Variable x actual</div>
+                    <div class="result-value">5.0 <span class="result-unit">cm</span></div>
+                </div>
+                <div class="result-item optimal pulse-optimal">
+                    <div class="result-label">x óptimo</div>
+                    <div class="result-value optimal">5.83 <span class="result-unit">cm</span></div>
+                </div>
+                
+                <div class="optimization-summary">
+                    <div class="summary-title">Análisis de Optimización</div>
+                    <div class="summary-text" id="optimizationSummary">
+                        El valor máximo del volumen es 2370 cm³, que se alcanza cuando x = 5.83 cm. 
+                        Esto representa un aumento del 18.5% respecto al valor actual. La función tiene 
+                        un máximo absoluto en este punto dentro del dominio permitido.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentProblem = 'box';
+        let optimizationChart;
+        let canvas, ctx;
+        let animationId = null;
+        let currentTab = 'visual';
+
+        // Problem definitions
+        const problems = {
+            box: {
+                title: 'Problema del Volumen Máximo de una Caja',
+                statement: 'Se tiene una hoja rectangular de cartón de dimensiones L × W. Se cortan cuadrados iguales de lado x en cada esquina y se doblan los lados hacia arriba para formar una caja sin tapa. ¿Cuál debe ser el valor de x para que el volumen de la caja sea máximo?',
+                objective: 'V(x) = x(L-2x)(W-2x)',
+                constraints: ['0 < x < L/2', '0 < x < W/2', 'L, W > 0'],
+                unit: 'cm³',
+                variable: 'x (cm)'
+            },
+            fence: {
+                title: 'Problema del Área Máxima Cercada',
+                statement: 'Se tiene un alambre de longitud P metros para cercar un área rectangular. ¿Cuáles deben ser las dimensiones del rectángulo para que el área sea máxima?',
+                objective: 'A(l) = l(P-2l)/2',
+                constraints: ['0 < l < P/2', 'P > 0'],
+                unit: 'm²',
+                variable: 'l (m)'
+            },
+            cost: {
+                title: 'Problema del Costo Mínimo de Producción',
+                statement: 'Una empresa tiene costos fijos y costos variables por unidad. El costo por unidad disminuye con la escala de producción. ¿Cuántas unidades debe producir para minimizar el costo promedio por unidad?',
+                objective: 'C(n) = F + n·c + k/n',
+                constraints: ['n > 0', 'F, c, k > 0'],
+                unit: '$/unidad',
+                variable: 'n (unidades)'
+            },
+            distance: {
+                title: 'Problema de la Distancia Mínima',
+                statement: 'Dados dos puntos fijos A y B, encuentra el punto P sobre el eje x que minimice la suma de distancias PA + PB.',
+                objective: 'D(x) = √[(x-a)² + h₁²] + √[(x-b)² + h₂²]',
+                constraints: ['x ∈ ℝ', 'a, b, h₁, h₂ dados'],
+                unit: 'unidades',
+                variable: 'x'
+            }
+        };
+
+        // Problem selection
+        function selectProblem(problemType) {
+            // Update active card
+            document.querySelectorAll('.problem-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(`${problemType}-card`).classList.add('active');
+            
+            // Show/hide controls
+            document.querySelectorAll('.problem-controls').forEach(control => {
+                control.style.display = 'none';
+            });
+            document.getElementById(`${problemType}-controls`).style.display = 'block';
+            
+            currentProblem = problemType;
+            updateProblemDetails();
+            updateVisualization();
+            updateResults();
+        }
+
+        function updateProblemDetails() {
+            const problem = problems[currentProblem];
+            document.querySelector('.problem-title').textContent = problem.title;
+            document.getElementById('problemStatement').textContent = problem.statement;
+            document.getElementById('objectiveEquation').textContent = problem.objective;
+            
+            const constraintsPanel = document.getElementById('constraintsPanel');
+            constraintsPanel.innerHTML = `
+                <h4 class="constraints-title">Restricciones del problema:</h4>
+                ${problem.constraints.map((constraint, i) => 
+                    `<div class="constraint-item">${constraint}</div>`
+                ).join('')}
+            `;
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.viz-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            document.getElementById('visual-content').style.display = tabName === 'visual' ? 'flex' : 'none';
+            document.getElementById('graph-content').style.display = tabName === 'graph' ? 'block' : 'none';
+            
+            currentTab = tabName;
+            
+            if (tabName === 'graph') {
+                updateChart();
+            } else {
+                updateVisualization();
+            }
+        }
+
+        // Optimization calculations
+        function calculateOptimum() {
+            switch (currentProblem) {
+                case 'box':
+                    return calculateBoxOptimum();
+                case 'fence':
+                    return calculateFenceOptimum();
+                case 'cost':
+                    return calculateCostOptimum();
+                case 'distance':
+                    return calculateDistanceOptimum();
+            }
+        }
+
+        function calculateBoxOptimum() {
+            const L = parseFloat(document.getElementById('sheetLength').value);
+            const W = parseFloat(document.getElementById('sheetWidth').value);
+            
+            // For V(x) = x(L-2x)(W-2x), the optimal x is found by solving dV/dx = 0
+            // This gives us a quadratic equation: 12x² - 4x(L+W) + LW = 0
+            const a = 12;
+            const b = -4 * (L + W);
+            const c = L * W;
+            
+            const discriminant = b * b - 4 * a * c;
+            const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+            const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+            
+            // Choose the valid solution (within constraints)
+            const maxX = Math.min(L/2, W/2);
+            let optimalX = x1 > 0 && x1 < maxX ? x1 : x2;
+            
+            if (optimalX <= 0 || optimalX >= maxX) {
+                optimalX = maxX * 0.8; // Fallback
+            }
+            
+            const optimalVolume = optimalX * (L - 2 * optimalX) * (W - 2 * optimalX);
+            
+            return { x: optimalX, value: optimalVolume };
+        }
+
+        function calculateFenceOptimum() {
+            const P = parseFloat(document.getElementById('perimeter').value);
+            
+            // For A(l) = l(P-2l)/2, maximum occurs at l = P/4
+            const optimalL = P / 4;
+            const optimalArea = optimalL * (P - 2 * optimalL) / 2;
+            
+            return { x: optimalL, value: optimalArea };
+        }
+
+        function calculateCostOptimum() {
+            const fixedCost = parseFloat(document.getElementById('fixedCost').value);
+            const unitCost = parseFloat(document.getElementById('unitCost').value);
+            
+            // Simplified model: C(n) = F/n + c + k/n²
+            // For this example, we'll use k = F/10 to create a realistic curve
+            const k = fixedCost / 10;
+            
+            // Minimum occurs at n = √(F/k) * √(1 + k/Fc) ≈ √(F*2) for our model
+            const optimalN = Math.sqrt(2 * fixedCost / unitCost * 10);
+            const optimalCost = fixedCost / optimalN + unitCost + k / (optimalN * optimalN);
+            
+            return { x: optimalN, value: optimalCost };
+        }
+
+        function calculateDistanceOptimum() {
+            const a = parseFloat(document.getElementById('pointA').value);
+            const b = parseFloat(document.getElementById('pointB').value);
+            
+            // For equal heights, minimum distance occurs at x = (a+b)/2
+            const optimalX = (a + b) / 2;
+            
+            // Assuming equal heights h = 3 for visualization
+            const h = 3;
+            const distance1 = Math.sqrt((optimalX - a) * (optimalX - a) + h * h);
+            const distance2 = Math.sqrt((optimalX - b) * (optimalX - b) + h * h);
+            const optimalDistance = distance1 + distance2;
+            
+            return { x: optimalX, value: optimalDistance };
+        }
+
+        // Current value calculations
+        function calculateCurrentValue() {
+            switch (currentProblem) {
+                case 'box':
+                    const x = parseFloat(document.getElementById('cutSize').value);
+                    const L = parseFloat(document.getElementById('sheetLength').value);
+                    const W = parseFloat(document.getElementById('sheetWidth').value);
+                    return Math.max(0, x * (L - 2 * x) * (W - 2 * x));
+                    
+                case 'fence':
+                    const l = parseFloat(document.getElementById('rectangleLength').value);
+                    const P = parseFloat(document.getElementById('perimeter').value);
+                    const w = (P - 2 * l) / 2;
+                    return Math.max(0, l * w);
+                    
+                case 'cost':
+                    const n = parseFloat(document.getElementById('production').value);
+                    const F = parseFloat(document.getElementById('fixedCost').value);
+                    const c = parseFloat(document.getElementById('unitCost').value);
+                    const k = F / 10; // Simplified model
+                    return F / n + c + k / (n * n);
+                    
+                case 'distance':
+                    const testX = parseFloat(document.getElementById('testPoint').value);
+                    const pointA = parseFloat(document.getElementById('pointA').value);
+                    const pointB = parseFloat(document.getElementById('pointB').value);
+                    const h = 3; // Fixed height
+                    const d1 = Math.sqrt((testX - pointA) * (testX - pointA) + h * h);
+                    const d2 = Math.sqrt((testX - pointB) * (testX - pointB) + h * h);
+                    return d1 + d2;
+            }
+        }
+
+        // Visualization functions
+        function updateVisualization() {
+            canvas = document.getElementById('optimizationCanvas');
+            ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            switch (currentProblem) {
+                case 'box':
+                    drawBoxVisualization();
+                    break;
+                case 'fence':
+                    drawFenceVisualization();
+                    break;
+                case 'cost':
+                    drawCostVisualization();
+                    break;
+                case 'distance':
+                    drawDistanceVisualization();
+                    break;
+            }
+        }
+
+        function drawBoxVisualization() {
+            const L = parseFloat(document.getElementById('sheetLength').value);
+            const W = parseFloat(document.getElementById('sheetWidth').value);
+            const x = parseFloat(document.getElementById('cutSize').value);
+            
+            const scale = Math.min(400 / Math.max(L, W), 6);
+            const scaledL = L * scale;
+            const scaledW = W * scale;
+            const scaledX = x * scale;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Draw original sheet
+            ctx.fillStyle = 'rgba(255, 167, 38, 0.3)';
+            ctx.fillRect(centerX - scaledL/2, centerY - scaledW/2, scaledL, scaledW);
+            ctx.strokeStyle = 'rgba(255, 167, 38, 1)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(centerX - scaledL/2, centerY - scaledW/2, scaledL, scaledW);
+            
+            // Draw cut squares
+            ctx.fillStyle = 'rgba(255, 112, 67, 0.8)';
+            const corners = [
+                [centerX - scaledL/2, centerY - scaledW/2],
+                [centerX + scaledL/2 - scaledX, centerY - scaledW/2],
+                [centerX - scaledL/2, centerY + scaledW/2 - scaledX],
+                [centerX + scaledL/2 - scaledX, centerY + scaledW/2 - scaledX]
+            ];
+            
+            corners.forEach(corner => {
+                ctx.fillRect(corner[0], corner[1], scaledX, scaledX);
+                ctx.strokeStyle = 'rgba(255, 112, 67, 1)';
+                ctx.strokeRect(corner[0], corner[1], scaledX, scaledX);
+            });
+            
+            // Draw fold lines
+            ctx.strokeStyle = 'rgba(255, 167, 38, 0.8)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            
+            // Vertical fold lines
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaledL/2 + scaledX, centerY - scaledW/2);
+            ctx.lineTo(centerX - scaledL/2 + scaledX, centerY + scaledW/2);
+            ctx.moveTo(centerX + scaledL/2 - scaledX, centerY - scaledW/2);
+            ctx.lineTo(centerX + scaledL/2 - scaledX, centerY + scaledW/2);
+            ctx.stroke();
+            
+            // Horizontal fold lines
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaledL/2, centerY - scaledW/2 + scaledX);
+            ctx.lineTo(centerX + scaledL/2, centerY - scaledW/2 + scaledX);
+            ctx.moveTo(centerX - scaledL/2, centerY + scaledW/2 - scaledX);
+            ctx.lineTo(centerX + scaledL/2, centerY + scaledW/2 - scaledX);
+            ctx.stroke();
+            
+            ctx.setLineDash([]);
+            
+            // Highlight base area
+            ctx.fillStyle = 'rgba(255, 138, 101, 0.4)';
+            ctx.fillRect(centerX - scaledL/2 + scaledX, centerY - scaledW/2 + scaledX, 
+                        scaledL - 2*scaledX, scaledW - 2*scaledX);
+            
+            // Add dimensions
+            ctx.fillStyle = '#2d3748';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${L} cm`, centerX, centerY - scaledW/2 - 10);
+            ctx.fillText(`x = ${x.toFixed(1)} cm`, centerX - scaledL/2 + scaledX/2, centerY - scaledW/2 + scaledX/2);
+            
+            // Volume calculation
+            const volume = x * (L - 2*x) * (W - 2*x);
+            ctx.font = 'bold 14px Space Grotesk';
+            ctx.fillText(`Volumen: ${volume.toFixed(1)} cm³`, centerX, centerY + scaledW/2 + 30);
+        }
+
+        function drawFenceVisualization() {
+            const P = parseFloat(document.getElementById('perimeter').value);
+            const l = parseFloat(document.getElementById('rectangleLength').value);
+            const w = (P - 2 * l) / 2;
+            
+            if (w <= 0) return;
+            
+            const scale = Math.min(350 / Math.max(l, w), 8);
+            const scaledL = l * scale;
+            const scaledW = w * scale;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Draw fenced area
+            ctx.fillStyle = 'rgba(255, 167, 38, 0.2)';
+            ctx.fillRect(centerX - scaledL/2, centerY - scaledW/2, scaledL, scaledW);
+            
+            // Draw fence
+            ctx.strokeStyle = 'rgba(139, 69, 19, 1)';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(centerX - scaledL/2, centerY - scaledW/2, scaledL, scaledW);
+            
+            // Add fence posts
+            const posts = 8;
+            ctx.fillStyle = 'rgba(139, 69, 19, 1)';
+            for (let i = 0; i <= posts; i++) {
+                const postX = centerX - scaledL/2 + (i * scaledL / posts);
+                ctx.fillRect(postX - 2, centerY - scaledW/2 - 8, 4, 16);
+                ctx.fillRect(postX - 2, centerY + scaledW/2 - 8, 4, 16);
+            }
+            
+            for (let i = 1; i < posts; i++) {
+                const postY = centerY - scaledW/2 + (i * scaledW / posts);
+                ctx.fillRect(centerX - scaledL/2 - 8, postY - 2, 16, 4);
+                ctx.fillRect(centerX + scaledL/2 - 8, postY - 2, 16, 4);
+            }
+            
+            // Add dimensions
+            ctx.fillStyle = '#2d3748';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${l.toFixed(1)} m`, centerX, centerY - scaledW/2 - 20);
+            ctx.save();
+            ctx.translate(centerX - scaledL/2 - 20, centerY);
+            ctx.rotate(-Math.PI/2);
+            ctx.fillText(`${w.toFixed(1)} m`, 0, 0);
+            ctx.restore();
+            
+            // Area calculation
+            const area = l * w;
+            ctx.font = 'bold 14px Space Grotesk';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Área: ${area.toFixed(1)} m²`, centerX, centerY + scaledW/2 + 40);
+        }
+
+        function drawCostVisualization() {
+            const n = parseFloat(document.getElementById('production').value);
+            const F = parseFloat(document.getElementById('fixedCost').value);
+            const c = parseFloat(document.getElementById('unitCost').value);
+            
+            // Draw factory visualization
+            const factoryWidth = 200;
+            const factoryHeight = 120;
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Factory building
+            ctx.fillStyle = 'rgba(255, 167, 38, 0.3)';
+            ctx.fillRect(centerX - factoryWidth/2, centerY - factoryHeight/2, factoryWidth, factoryHeight);
+            ctx.strokeStyle = 'rgba(255, 167, 38, 1)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(centerX - factoryWidth/2, centerY - factoryHeight/2, factoryWidth, factoryHeight);
+            
+            // Factory roof
+            ctx.fillStyle = 'rgba(255, 112, 67, 0.6)';
+            ctx.beginPath();
+            ctx.moveTo(centerX - factoryWidth/2 - 10, centerY - factoryHeight/2);
+            ctx.lineTo(centerX, centerY - factoryHeight/2 - 30);
+            ctx.lineTo(centerX + factoryWidth/2 + 10, centerY - factoryHeight/2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // Production units visualization
+            const unitsPerRow = 10;
+            const rows = Math.ceil(n / unitsPerRow);
+            const unitSize = 8;
+            const startX = centerX - (Math.min(n, unitsPerRow) * unitSize) / 2;
+            const startY = centerY - (rows * unitSize) / 2;
+            
+            ctx.fillStyle = 'rgba(255, 138, 101, 0.8)';
+            for (let i = 0; i < n; i++) {
+                const row = Math.floor(i / unitsPerRow);
+                const col = i % unitsPerRow;
+                const x = startX + col * unitSize;
+                const y = startY + row * unitSize;
+                ctx.fillRect(x, y, unitSize - 1, unitSize - 1);
+            }
+            
+            // Cost information
+            const totalCost = F + n * c;
+            const avgCost = totalCost / n;
+            
+            ctx.fillStyle = '#2d3748';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Unidades: ${n}`, centerX, centerY + factoryHeight/2 + 20);
+            ctx.fillText(`Costo Total: $${totalCost.toFixed(0)}`, centerX, centerY + factoryHeight/2 + 35);
+            ctx.font = 'bold 14px Space Grotesk';
+            ctx.fillText(`Costo Promedio: $${avgCost.toFixed(2)}/unidad`, centerX, centerY + factoryHeight/2 + 55);
+        }
+
+        function drawDistanceVisualization() {
+            const a = parseFloat(document.getElementById('pointA').value);
+            const b = parseFloat(document.getElementById('pointB').value);
+            const testX = parseFloat(document.getElementById('testPoint').value);
+            
+            const scale = 25;
+            const h = 3; // Fixed height
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Draw coordinate system
+            ctx.strokeStyle = 'rgba(45, 55, 72, 0.3)';
+            ctx.lineWidth = 1;
+            
+            // X-axis
+            ctx.beginPath();
+            ctx.moveTo(50, centerY + h * scale);
+            ctx.lineTo(canvas.width - 50, centerY + h * scale);
+            ctx.stroke();
+            
+            // Y-axis
+            ctx.beginPath();
+            ctx.moveTo(centerX, 50);
+            ctx.lineTo(centerX, canvas.height - 50);
+            ctx.stroke();
+            
+            // Points A and B
+            const pointAx = centerX + a * scale;
+            const pointAy = centerY;
+            const pointBx = centerX + b * scale;
+            const pointBy = centerY;
+            
+            ctx.fillStyle = 'rgba(255, 112, 67, 1)';
+            ctx.beginPath();
+            ctx.arc(pointAx, pointAy, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = '#2d3748';
+            ctx.font = '12px Inter';
+            ctx.fillText('A', pointAx - 5, pointAy - 12);
+            
+            ctx.fillStyle = 'rgba(255, 112, 67, 1)';
+            ctx.beginPath();
+            ctx.arc(pointBx, pointBy, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = '#2d3748';
+            ctx.fillText('B', pointBx - 5, pointBy - 12);
+            
+            // Test point P
+            const testXpos = centerX + testX * scale;
+            const testYpos = centerY + h * scale;
+            
+            ctx.fillStyle = 'rgba(255, 167, 38, 1)';
+            ctx.beginPath();
+            ctx.arc(testXpos, testYpos, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = '#2d3748';
+            ctx.fillText('P', testXpos - 5, testYpos + 18);
+            
+            // Distance lines
+            ctx.strokeStyle = 'rgba(255, 167, 38, 0.8)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 3]);
+            
+            ctx.beginPath();
+            ctx.moveTo(pointAx, pointAy);
+            ctx.lineTo(testXpos, testYpos);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(pointBx, pointBy);
+            ctx.lineTo(testXpos, testYpos);
+            ctx.stroke();
+            
+            ctx.setLineDash([]);
+            
+            // Calculate and display distances
+            const d1 = Math.sqrt((testX - a) * (testX - a) + h * h);
+            const d2 = Math.sqrt((testX - b) * (testX - b) + h * h);
+            const totalDistance = d1 + d2;
+            
+            ctx.fillStyle = '#2d3748';
+            ctx.font = 'bold 14px Space Grotesk';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Distancia Total: ${totalDistance.toFixed(2)} unidades`, centerX, canvas.height - 30);
+        }
+
+        function updateChart() {
+            const chartCtx = document.getElementById('optimizationChart').getContext('2d');
+            
+            if (optimizationChart) {
+                optimizationChart.destroy();
+            }
+            
+            const data = generateFunctionData();
+            const optimal = calculateOptimum();
+            const current = getCurrentVariableValue();
+            
+            optimizationChart = new Chart(chartCtx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Función objetivo',
+                        data: data,
+                        borderColor: 'rgba(255, 167, 38, 1)',
+                        backgroundColor: 'rgba(255, 167, 38, 0.1)',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        fill: true
+                    }, {
+                        label: 'Punto óptimo',
+                        data: [{x: optimal.x, y: optimal.value}],
+                        backgroundColor: 'rgba(255, 112, 67, 1)',
+                        borderColor: 'rgba(255, 112, 67, 1)',
+                        pointRadius: 12,
+                        pointHoverRadius: 15,
+                        showLine: false
+                    }, {
+                        label: 'Punto actual',
+                        data: [{x: current, y: calculateCurrentValue()}],
+                        backgroundColor: 'rgba(255, 138, 101, 1)',
+                        borderColor: 'rgba(255, 138, 101, 1)',
+                        pointRadius: 8,
+                        pointHoverRadius: 12,
+                        showLine: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'point',
+                            intersect: false,
+                            callbacks: {
+                                title: function(context) {
+                                    return `${problems[currentProblem].variable}: ${context[0].parsed.x.toFixed(2)}`;
+                                },
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y.toFixed(2)} ${problems[currentProblem].unit}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: problems[currentProblem].variable
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: `Valor (${problems[currentProblem].unit})`
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateFunctionData() {
+            const data = [];
+            let min, max, step;
+            
+            switch (currentProblem) {
+                case 'box':
+                    const L = parseFloat(document.getElementById('sheetLength').value);
+                    const W = parseFloat(document.getElementById('sheetWidth').value);
+                    max = Math.min(L/2, W/2) * 0.95;
+                    min = 0.5;
+                    step = (max - min) / 100;
+                    
+                    for (let x = min; x <= max; x += step) {
+                        const value = x * (L - 2*x) * (W - 2*x);
+                        data.push({x, y: Math.max(0, value)});
+                    }
+                    break;
+                    
+                case 'fence':
+                    const P = parseFloat(document.getElementById('perimeter').value);
+                    max = P/2 * 0.95;
+                    min = P * 0.05;
+                    step = (max - min) / 100;
+                    
+                    for (let l = min; l <= max; l += step) {
+                        const w = (P - 2*l) / 2;
+                        const value = l * w;
+                        data.push({x: l, y: Math.max(0, value)});
+                    }
+                    break;
+                    
+                case 'cost':
+                    min = 10;
+                    max = 500;
+                    step = (max - min) / 100;
+                    const F = parseFloat(document.getElementById('fixedCost').value);
+                    const c = parseFloat(document.getElementById('unitCost').value);
+                    const k = F / 10;
+                    
+                    for (let n = min; n <= max; n += step) {
+                        const value = F/n + c + k/(n*n);
+                        data.push({x: n, y: value});
+                    }
+                    break;
+                    
+                case 'distance':
+                    const a = parseFloat(document.getElementById('pointA').value);
+                    const b = parseFloat(document.getElementById('pointB').value);
+                    min = Math.min(a, b) - 5;
+                    max = Math.max(a, b) + 5;
+                    step = (max - min) / 100;
+                    const h = 3;
+                    
+                    for (let x = min; x <= max; x += step) {
+                        const d1 = Math.sqrt((x - a) * (x - a) + h * h);
+                        const d2 = Math.sqrt((x - b) * (x - b) + h * h);
+                        const value = d1 + d2;
+                        data.push({x, y: value});
+                    }
+                    break;
+            }
+            
+            return data;
+        }
+
+        function getCurrentVariableValue() {
+            switch (currentProblem) {
+                case 'box':
+                    return parseFloat(document.getElementById('cutSize').value);
+                case 'fence':
+                    return parseFloat(document.getElementById('rectangleLength').value);
+                case 'cost':
+                    return parseFloat(document.getElementById('production').value);
+                case 'distance':
+                    return parseFloat(document.getElementById('testPoint').value);
+            }
+        }
+
+        // Optimization functions
+        function findOptimum() {
+            const btn = document.getElementById('optimizeBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Optimizando...';
+            
+            setTimeout(() => {
+                const optimal = calculateOptimum();
+                
+                // Update the controls to optimal values
+                switch (currentProblem) {
+                    case 'box':
+                        document.getElementById('cutSize').value = optimal.x;
+                        break;
+                    case 'fence':
+                        document.getElementById('rectangleLength').value = optimal.x;
+                        break;
+                    case 'cost':
+                        document.getElementById('production').value = optimal.x;
+                        break;
+                    case 'distance':
+                        document.getElementById('testPoint').value = optimal.x;
+                        break;
+                }
+                
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                
+                if (currentTab === 'graph') {
+                    updateChart();
+                }
+                
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-search"></i> Encontrar Óptimo';
+            }, 1500);
+        }
+
+        function animateToOptimum() {
+            const btn = document.getElementById('animateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Animando...';
+            
+            const optimal = calculateOptimum();
+            const current = getCurrentVariableValue();
+            const steps = 60;
+            let step = 0;
+            
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            
+            const animate = () => {
+                if (step < steps) {
+                    const progress = step / steps;
+                    const easedProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+                    const newValue = current + (optimal.x - current) * easedProgress;
+                    
+                    switch (currentProblem) {
+                        case 'box':
+                            document.getElementById('cutSize').value = newValue;
+                            break;
+                        case 'fence':
+                            document.getElementById('rectangleLength').value = newValue;
+                            break;
+                        case 'cost':
+                            document.getElementById('production').value = newValue;
+                            break;
+                        case 'distance':
+                            document.getElementById('testPoint').value = newValue;
+                            break;
+                    }
+                    
+                    updateParameterValues();
+                    updateVisualization();
+                    updateResults();
+                    
+                    if (currentTab === 'graph') {
+                        updateChart();
+                    }
+                    
+                    step++;
+                    animationId = requestAnimationFrame(animate);
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-play"></i> Animar hacia Óptimo';
+                    animationId = null;
+                }
+            };
+            
+            animate();
+        }
+
+        // Update parameter displays
+        function updateParameterValues() {
+            // Box parameters
+            if (document.getElementById('sheetLength')) {
+                document.getElementById('sheetLengthValue').textContent = document.getElementById('sheetLength').value + ' cm';
+            }
+            if (document.getElementById('sheetWidth')) {
+                document.getElementById('sheetWidthValue').textContent = document.getElementById('sheetWidth').value + ' cm';
+            }
+            if (document.getElementById('cutSize')) {
+                document.getElementById('cutSizeValue').textContent = parseFloat(document.getElementById('cutSize').value).toFixed(1) + ' cm';
+            }
+            
+            // Fence parameters
+            if (document.getElementById('perimeter')) {
+                document.getElementById('perimeterValue').textContent = document.getElementById('perimeter').value + ' m';
+            }
+            if (document.getElementById('rectangleLength')) {
+                document.getElementById('rectangleLengthValue').textContent = document.getElementById('rectangleLength').value + ' m';
+            }
+            
+            // Cost parameters
+            if (document.getElementById('production')) {
+                document.getElementById('productionValue').textContent = document.getElementById('production').value;
+            }
+            if (document.getElementById('fixedCost')) {
+                document.getElementById('fixedCostValue').textContent = '$' + document.getElementById('fixedCost').value;
+            }
+            if (document.getElementById('unitCost')) {
+                document.getElementById('unitCostValue').textContent = '$' + document.getElementById('unitCost').value;
+            }
+            
+            // Distance parameters
+            if (document.getElementById('pointA')) {
+                document.getElementById('pointAValue').textContent = parseFloat(document.getElementById('pointA').value).toFixed(1);
+            }
+            if (document.getElementById('pointB')) {
+                document.getElementById('pointBValue').textContent = parseFloat(document.getElementById('pointB').value).toFixed(1);
+            }
+            if (document.getElementById('testPoint')) {
+                document.getElementById('testPointValue').textContent = parseFloat(document.getElementById('testPoint').value).toFixed(1);
+            }
+        }
+
+        // Update results display
+        function updateResults() {
+            const optimal = calculateOptimum();
+            const current = calculateCurrentValue();
+            const currentVar = getCurrentVariableValue();
+            const problem = problems[currentProblem];
+            
+            const improvementPercent = ((optimal.value - current) / current * 100);
+            const isOptimal = Math.abs(currentVar - optimal.x) < 0.1;
+            
+            let resultsHTML = `
+                <div class="result-item">
+                    <div class="result-label">Valor actual</div>
+                    <div class="result-value">${current.toFixed(1)} <span class="result-unit">${problem.unit}</span></div>
+                </div>
+                <div class="result-item optimal ${isOptimal ? 'pulse-optimal' : ''}">
+                    <div class="result-label">Valor óptimo</div>
+                    <div class="result-value optimal">${optimal.value.toFixed(1)} <span class="result-unit">${problem.unit}</span></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Variable actual</div>
+                    <div class="result-value">${currentVar.toFixed(1)} <span class="result-unit">${problem.variable.split(' ')[1]}</span></div>
+                </div>
+                <div class="result-item optimal ${isOptimal ? 'pulse-optimal' : ''}">
+                    <div class="result-label">Variable óptima</div>
+                    <div class="result-value optimal">${optimal.x.toFixed(2)} <span class="result-unit">${problem.variable.split(' ')[1]}</span></div>
+                </div>
+                
+                <div class="optimization-summary ${isOptimal ? 'highlight-optimal' : ''}">
+                    <div class="summary-title">Análisis de Optimización</div>
+                    <div class="summary-text">
+                        ${isOptimal 
+                            ? `¡Felicidades! Has encontrado el valor óptimo. El ${currentProblem === 'cost' || currentProblem === 'distance' ? 'mínimo' : 'máximo'} es ${optimal.value.toFixed(1)} ${problem.unit}, que se alcanza cuando ${problem.variable.split(' ')[0]} = ${optimal.x.toFixed(2)} ${problem.variable.split(' ')[1]}.`
+                            : `El valor ${currentProblem === 'cost' || currentProblem === 'distance' ? 'mínimo' : 'máximo'} es ${optimal.value.toFixed(1)} ${problem.unit}, que se alcanza cuando ${problem.variable.split(' ')[0]} = ${optimal.x.toFixed(2)} ${problem.variable.split(' ')[1]}. Esto representa un ${improvementPercent > 0 ? 'aumento' : 'ahorro'} del ${Math.abs(improvementPercent).toFixed(1)}% respecto al valor actual.`
+                        }
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('resultsGrid').innerHTML = resultsHTML;
+            
+            // Update optimal indicator
+            document.getElementById('optimalIndicator').textContent = 
+                isOptimal ? '¡ÓPTIMO ENCONTRADO!' : 'Solución actual';
+            document.getElementById('optimalIndicator').style.background = 
+                isOptimal ? 'rgba(78, 205, 196, 0.9)' : 'rgba(255, 167, 38, 0.9)';
+        }
+
+        // Event listeners setup
+        function setupEventListeners() {
+            // Box controls
+            document.getElementById('sheetLength')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            document.getElementById('sheetWidth')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            document.getElementById('cutSize')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            // Fence controls
+            document.getElementById('perimeter')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            document.getElementById('rectangleLength')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            // Cost controls
+            document.getElementById('production')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            document.getElementById('fixedCost')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            document.getElementById('unitCost')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            // Distance controls
+            document.getElementById('pointA')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            document.getElementById('pointB')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+            
+            document.getElementById('testPoint')?.addEventListener('input', function() {
+                updateParameterValues();
+                updateVisualization();
+                updateResults();
+                if (currentTab === 'graph') updateChart();
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateProblemDetails();
+            updateParameterValues();
+            updateVisualization();
+            updateResults();
+        });
+    </script>
+</body>
+</html>

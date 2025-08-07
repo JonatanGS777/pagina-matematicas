@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Estadística</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        :root {
+            --primary-color: #2980b9;
+            --secondary-color: #27ae60;
+            --background-color: #1a1a2e;
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .data-table {
+            width: 100%;
+            margin: 1rem 0;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .data-table th, .data-table td {
+            padding: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-color);
+            margin-top: 1rem;
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .correct {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Prueba de Estadística</h1>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p>Pregunta <span id="current-question">1</span> de 15</p>
+        </div>
+
+        <div id="questions"></div>
+
+        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <script>
+        const questions = [
+            // Estadística Descriptiva
+            {
+                category: "Estadística Descriptiva",
+                question: "Dados los valores: 2, 4, 4, 4, 5, 5, 6, 7, 7, 8. ¿Cuál es la moda?",
+                type: "input",
+                answer: "4",
+                hint: "Busca el valor que más se repite"
+            },
+            {
+                category: "Estadística Descriptiva",
+                question: "Calcula la media de los siguientes datos: 10, 15, 20, 25, 30",
+                type: "input",
+                answer: "20",
+                hint: "Suma todos los valores y divide entre la cantidad de datos"
+            },
+            {
+                category: "Estadística Descriptiva",
+                question: "En un conjunto de datos, ¿qué medida de tendencia central es más sensible a valores extremos?",
+                type: "multiple",
+                options: [
+                    "Media",
+                    "Mediana",
+                    "Moda",
+                    "Rango"
+                ],
+                correct: 0
+            },
+            // Probabilidad
+            {
+                category: "Probabilidad",
+                question: "Al lanzar dos dados, ¿cuál es la probabilidad de obtener una suma de 7?",
+                type: "input",
+                answer: "1/6",
+                hint: "Hay 36 resultados posibles. Cuenta los casos favorables"
+            },
+            {
+                category: "Probabilidad",
+                question: "Si P(A) = 0.3 y P(B) = 0.4, y los eventos son independientes, ¿cuál es P(A ∩ B)?",
+                type: "input",
+                answer: "0.12",
+                hint: "Para eventos independientes, multiplica las probabilidades"
+            },
+            {
+                category: "Probabilidad",
+                question: "¿Qué teorema se usa para calcular la probabilidad de A dado B?",
+                type: "multiple",
+                options: [
+                    "Teorema de Bayes",
+                    "Teorema del Límite Central",
+                    "Regla de la Suma",
+                    "Regla del Producto"
+                ],
+                correct: 0
+            },
+            // Estadística Inferencial
+            {
+                category: "Estadística Inferencial",
+                question: "¿Qué nivel de confianza corresponde a un valor z de 1.96?",
+                type: "input",
+                answer: "95",
+                hint: "Es uno de los niveles de confianza más utilizados"
+            },
+            {
+                category: "Estadística Inferencial",
+                question: "En una prueba de hipótesis, ¿qué representa el valor p?",
+                type: "multiple",
+                options: [
+                    "La probabilidad de obtener resultados tan extremos como los observados si H₀ es verdadera",
+                    "La probabilidad de que H₀ sea verdadera",
+                    "La probabilidad de que H₁ sea verdadera",
+                    "El nivel de confianza"
+                ],
+                correct: 0
+            },
+            {
+                category: "Estadística Inferencial",
+                question: "¿Qué tipo de error ocurre cuando rechazamos H₀ siendo verdadera?",
+                type: "multiple",
+                options: [
+                    "Error Tipo I",
+                    "Error Tipo II",
+                    "Error estándar",
+                    "Error muestral"
+                ],
+                correct: 0
+            },
+            // Análisis de Datos
+            {
+                category: "Análisis de Datos",
+                question: "¿Qué gráfico es más apropiado para mostrar la relación entre dos variables continuas?",
+                type: "multiple",
+                options: [
+                    "Diagrama de dispersión",
+                    "Gráfico de barras",
+                    "Gráfico circular",
+                    "Histograma"
+                ],
+                correct: 0
+            },
+            {
+                category: "Análisis de Datos",
+                question: "Si el coeficiente de correlación es -0.9, esto indica:",
+                type: "multiple",
+                options: [
+                    "Una fuerte correlación negativa",
+                    "Una débil correlación negativa",
+                    "Una fuerte correlación positiva",
+                    "No hay correlación"
+                ],
+                correct: 0
+            },
+            {
+                category: "Estadística Inferencial",
+                question: "Para una muestra de 100 observaciones, ¿cuántos grados de libertad tiene la distribución t?",
+                type: "input",
+                answer: "99",
+                hint: "Es n-1, donde n es el tamaño de la muestra"
+            },
+            {
+                category: "Probabilidad",
+                question: "En una distribución normal estándar, ¿qué porcentaje de datos cae dentro de dos desviaciones estándar?",
+                type: "input",
+                answer: "95",
+                hint: "Es la regla 68-95-99.7"
+            },
+            {
+                category: "Análisis de Datos",
+                question: "¿Qué medida se usa para cuantificar la dispersión de los datos respecto a la media?",
+                type: "multiple",
+                options: [
+                    "Desviación estándar",
+                    "Mediana",
+                    "Moda",
+                    "Media"
+                ],
+                correct: 0
+            },
+            {
+                category: "Estadística Descriptiva",
+                question: "En un conjunto de datos, el primer cuartil (Q1) es 10 y el tercer cuartil (Q3) es 30. ¿Cuál es el rango intercuartílico?",
+                type: "input",
+                answer: "20",
+                hint: "RIC = Q3 - Q1"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionDiv = document.getElementById('questions');
+            const question = questions[currentQuestion];
+
+            let html = `
+                <div class="question-card">
+                    <div class="category-tag">${question.category}</div>
+                    <p>${question.question}</p>
+            `;
+
+            if (question.type === 'multiple') {
+                html += `<div class="options">`;
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="checkAnswer(${index})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            } else {
+                html += `
+                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
+                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                `;
+            }
+
+            html += `<div class="feedback" id="feedback"></div>`;
+            questionDiv.innerHTML = html;
+
+            // Actualizar progreso
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Renderizar fórmulas matemáticas
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        function checkAnswer(selectedOption = null) {
+            const question = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (question.type === 'multiple') {
+                isCorrect = selectedOption === question.correct;
+            } else {
+                const userAnswer = document.getElementById('user-answer').value.trim();
+                isCorrect = userAnswer === question.answer;
+            }
+
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = isCorrect ? 
+                '¡Correcto!' : 
+                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+
+            if (isCorrect) score++;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const questionDiv = document.getElementById('questions');
+            const percentage = (score / questions.length) * 100;
+            
+            questionDiv.innerHTML = `
+                <div class="question-card">
+                    <h2>Resultados Finales</h2>
+                    <p>Has completado la prueba de estadística.</p>
+                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
+                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
+                </div>
+            `;
+
+            document.getElementById('next-button').style.display = 'none';
+        }
+
+        // Iniciar prueba
+        loadQuestion();
+    </script>
+</body>
+</html>

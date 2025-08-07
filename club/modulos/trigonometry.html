@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Trigonometría - Competencias Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                packages: {'[+]': ['base', 'ams', 'newcommand', 'mathtools']}
+            },
+            svg: {
+                fontCache: 'global',
+                scale: 1.1
+            },
+            options: {
+                renderActions: {
+                    addMenu: [0, '', ''],
+                    checkLoading: [1, '', '']
+                },
+                menuOptions: {
+                    settings: {
+                        zoom: 'Double-Click',
+                        zscale: '150%'
+                    }
+                }
+            },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    console.log('✅ MathJax is ready and configured');
+                    // Dispatch a custom event when MathJax is ready
+                    window.dispatchEvent(new CustomEvent('mathjaxReady'));
+                }
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --trigonometry: #f97316;
+            --trigonometry-light: rgba(249, 115, 22, 0.1);
+            --trigonometry-dark: #ea580c;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-trigonometry: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* MathJax Styling */
+        .problem-statement .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-statement mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        .problem-statement mjx-container[display="true"] {
+            margin: 0.8rem 0 !important;
+        }
+
+        .problem-solution .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-solution mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(-45deg, rgba(249, 115, 22, 0.8), rgba(220, 38, 38, 0.8), rgba(239, 68, 68, 0.8), rgba(185, 28, 28, 0.8));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-trigonometry);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-trigonometry);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+        }
+
+        .nav-back i {
+            margin-right: 0.5rem;
+        }
+
+        /* Timer Display */
+        .timer-display {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            border: 2px solid var(--trigonometry);
+            z-index: 100;
+        }
+
+        .timer-time {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--trigonometry);
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        /* MathJax Status Indicator */
+        .mathjax-status {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-soft);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mathjax-status.show {
+            opacity: 1;
+        }
+
+        .mathjax-status.ready {
+            background: rgba(249, 115, 22, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .mathjax-status.error {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(249, 115, 22, 0.3);
+            border-top: 4px solid var(--trigonometry);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-trigonometry);
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            background: var(--gradient-trigonometry);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--trigonometry);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--trigonometry);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Problems Section */
+        .problems-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .difficulty-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-tab {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-tab.easy {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--trigonometry);
+        }
+
+        .difficulty-tab.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .difficulty-tab.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        .difficulty-tab.active {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .difficulty-tab.easy.active {
+            background: var(--trigonometry);
+            color: var(--white);
+        }
+
+        .difficulty-tab.medium.active {
+            background: #daa520;
+            color: var(--white);
+        }
+
+        .difficulty-tab.hard.active {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--trigonometry);
+        }
+
+        .problem-card.solved {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.05));
+            border-color: var(--success);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--trigonometry);
+            font-size: 1.2rem;
+        }
+
+        .problem-points {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .problem-points.easy {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--trigonometry);
+        }
+
+        .problem-points.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .problem-points.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        /* Trigonometric Figure Container */
+        .trig-figure {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(249, 115, 22, 0.05));
+            border-radius: 15px;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .trig-figure svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .trig-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            fill: var(--text-primary);
+        }
+
+        .trig-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            fill: var(--trigonometry-dark);
+        }
+
+        .trig-circle {
+            fill: none;
+            stroke: var(--trigonometry);
+            stroke-width: 2;
+        }
+
+        .trig-triangle {
+            fill: rgba(249, 115, 22, 0.3);
+            stroke: var(--trigonometry);
+            stroke-width: 2;
+        }
+
+        .trig-line {
+            stroke: var(--trigonometry-dark);
+            stroke-width: 1.5;
+            stroke-dasharray: 5,5;
+        }
+
+        .trig-point {
+            fill: var(--trigonometry-dark);
+            r: 3;
+        }
+
+        .trig-angle {
+            fill: rgba(249, 115, 22, 0.2);
+            stroke: var(--trigonometry);
+            stroke-width: 1;
+        }
+
+        .trig-wave {
+            fill: none;
+            stroke: var(--trigonometry);
+            stroke-width: 3;
+        }
+
+        .problem-statement {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            min-height: 60px;
+        }
+
+        .problem-input-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .problem-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-input:focus {
+            outline: none;
+            border-color: var(--trigonometry);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-trigonometry);
+            color: var(--white);
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .problem-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .problem-feedback.success {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .problem-feedback.error {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .problem-feedback.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .problem-solution {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 15px;
+            border-left: 4px solid var(--trigonometry);
+            display: none;
+        }
+
+        .problem-solution.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .solution-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-trigonometry);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: var(--shadow-soft);
+            margin: 2rem 0;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .error-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .problems-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-input-section {
+                flex-direction: column;
+            }
+
+            .timer-display {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 2rem;
+            }
+
+            .mathjax-status {
+                position: relative;
+                bottom: 0;
+                left: 0;
+                margin-top: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .nav-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+            }
+
+            .trig-figure {
+                padding: 0.5rem;
+                margin: 1rem 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Score Animation */
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -150%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -250%) scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-wave-square"></i>
+                Módulo de Trigonometría
+            </a>
+            
+            <div class="nav-controls">
+                <a href="../leaderboard.html" class="nav-back" target="_blank" style="background: var(--success);">
+                    <i class="fas fa-trophy"></i>
+                    Ver Tabla de Posiciones
+                </a>
+                
+                <a href="../competencias.html" class="nav-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Competencias
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timerDisplay">
+        <div class="timer-time" id="timerTime">02:00:00</div>
+        <div class="timer-label">Tiempo Restante</div>
+    </div>
+
+    <!-- MathJax Status Indicator -->
+    <div class="mathjax-status" id="mathJaxStatus">
+        <i class="fas fa-circle"></i>
+        Cargando renderizador matemático...
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Loading State -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+                <h2>Cargando Módulo de Trigonometría...</h2>
+                <p>Preparando problemas de funciones trigonométricas e identidades</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-container" id="errorContainer" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="error-title">Error al Cargar el Módulo</h2>
+                <p class="error-message" id="errorMessage">Ha ocurrido un problema al cargar el módulo de trigonometría.</p>
+                <div class="error-actions">
+                    <a href="../competencias.html" class="nav-back">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver a Competencias
+                    </a>
+                    <button onclick="location.reload()" class="nav-back" style="border: none; background: var(--warning);">
+                        <i class="fas fa-redo"></i>
+                        Intentar de Nuevo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Container (Hidden initially) -->
+            <div id="mainContainer" style="display: none;">
+                <!-- Hero Section -->
+                <section class="hero fade-in">
+                    <div class="hero-icon">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <h1 class="hero-title">Trigonometría</h1>
+                    <p class="hero-subtitle">Resuelve problemas de funciones trigonométricas, identidades y aplicaciones</p>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p style="text-align: center; color: var(--text-secondary); margin-top: 0.5rem;">
+                        Progreso: <span id="progressText">0/30 problemas resueltos</span>
+                    </p>
+                </section>
+
+                <!-- Stats Dashboard -->
+                <section class="stats-dashboard fade-in">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalScore">0</div>
+                        <div class="stat-label">Puntos Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="problemsSolved">0</div>
+                        <div class="stat-label">Problemas Resueltos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="currentStreak">0</div>
+                        <div class="stat-label">Racha Actual</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="averageTime">--:--</div>
+                        <div class="stat-label">Tiempo Promedio</div>
+                    </div>
+                </section>
+
+                <!-- Problems Section -->
+                <section class="problems-section fade-in">
+                    <h2 class="section-title">Problemas de Trigonometría</h2>
+                    
+                    <!-- Difficulty Tabs -->
+                    <div class="difficulty-tabs">
+                        <button class="difficulty-tab easy active" onclick="showDifficulty('easy')">
+                            <i class="fas fa-circle"></i>
+                            Fácil (5 pts)
+                        </button>
+                        <button class="difficulty-tab medium" onclick="showDifficulty('medium')">
+                            <i class="fas fa-wave-square"></i>
+                            Medio (10 pts)
+                        </button>
+                        <button class="difficulty-tab hard" onclick="showDifficulty('hard')">
+                            <i class="fas fa-chart-line"></i>
+                            Difícil (15 pts)
+                        </button>
+                    </div>
+
+                    <!-- Problems Grid -->
+                    <div class="problems-grid" id="problemsGrid">
+                        <!-- Problems will be dynamically generated here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Trigonometry Module Management System
+        class TrigonometryModule {
+            constructor() {
+                this.currentParticipant = null;
+                this.currentDifficulty = 'easy';
+                this.solvedProblems = new Set();
+                this.currentScore = 0;
+                this.problemsSolved = 0;
+                this.currentStreak = 0;
+                this.startTime = Date.now();
+                this.solveTimes = [];
+                this.competitionData = null;
+                this.timeRemaining = 7200;
+                this.timerInterval = null;
+                this.mathJaxReady = false;
+                
+                // Problems with MathJax notation and trigonometric figures
+                this.problems = {
+                    easy: [
+                        {
+                            id: 'e1',
+                            statement: 'Encuentra el valor de $\\sin(30°)$.',
+                            answer: '1/2',
+                            solution: 'En el triángulo 30-60-90, $\\sin(30°) = \\frac{1}{2}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 200,150 140,90" class="trig-triangle"/>
+                                    <path d="M 90 150 A 10 10 0 0 0 100 145" class="trig-angle"/>
+                                    <text x="85" y="140" class="trig-text">30°</text>
+                                    <text x="195" y="140" class="trig-text">60°</text>
+                                    <text x="135" y="85" class="trig-text">90°</text>
+                                    <text x="135" y="170" class="trig-label">√3</text>
+                                    <text x="205" y="125" class="trig-label">1</text>
+                                    <text x="110" y="115" class="trig-label">2</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e2',
+                            statement: 'Calcula $\\cos(45°)$.',
+                            answer: 'sqrt(2)/2',
+                            solution: 'En el triángulo 45-45-90, $\\cos(45°) = \\frac{\\sqrt{2}}{2}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 200,150 200,90" class="trig-triangle"/>
+                                    <path d="M 90 150 A 10 10 0 0 0 95 140" class="trig-angle"/>
+                                    <path d="M 190 150 A 10 10 0 0 0 200 140" class="trig-angle"/>
+                                    <text x="85" y="140" class="trig-text">45°</text>
+                                    <text x="185" y="140" class="trig-text">45°</text>
+                                    <text x="195" y="105" class="trig-text">90°</text>
+                                    <text x="135" y="170" class="trig-label">1</text>
+                                    <text x="205" y="125" class="trig-label">1</text>
+                                    <text x="130" y="115" class="trig-label">√2</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e3',
+                            statement: 'Convierte $60°$ a radianes.',
+                            answer: 'π/3',
+                            solution: 'Para convertir grados a radianes: $60° \\times \\frac{\\pi}{180°} = \\frac{\\pi}{3}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="80" y1="100" x2="220" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="30" x2="150" y2="170" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="100" x2="185" y2="60" stroke="var(--trigonometry)" stroke-width="3"/>
+                                    <path d="M 170 100 A 20 20 0 0 0 175 90" class="trig-angle"/>
+                                    <text x="175" y="95" class="trig-text">60°</text>
+                                    <text x="180" y="45" class="trig-label">π/3 rad</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e4',
+                            statement: 'Encuentra $\\tan(45°)$.',
+                            answer: '1',
+                            solution: 'En el triángulo 45-45-90, $\\tan(45°) = \\frac{\\sin(45°)}{\\cos(45°)} = \\frac{\\sqrt{2}/2}{\\sqrt{2}/2} = 1$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 200,150 200,90" class="trig-triangle"/>
+                                    <text x="85" y="140" class="trig-text">45°</text>
+                                    <text x="135" y="170" class="trig-label">opuesto = 1</text>
+                                    <text x="205" y="125" class="trig-label">adyacente = 1</text>
+                                    <text x="120" y="120" class="trig-label">tan(45°) = 1/1 = 1</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e5',
+                            statement: 'Calcula $\\sin(60°)$.',
+                            answer: 'sqrt(3)/2',
+                            solution: 'En el triángulo 30-60-90, $\\sin(60°) = \\frac{\\sqrt{3}}{2}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 200,150 140,90" class="trig-triangle"/>
+                                    <text x="195" y="140" class="trig-text">60°</text>
+                                    <text x="135" y="170" class="trig-label">√3</text>
+                                    <text x="205" y="125" class="trig-label">1</text>
+                                    <text x="110" y="115" class="trig-label">2</text>
+                                    <text x="100" y="180" class="trig-label">sin(60°) = √3/2</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e6',
+                            statement: 'Convierte $\\frac{\\pi}{4}$ radianes a grados.',
+                            answer: '45',
+                            solution: 'Para convertir radianes a grados: $\\frac{\\pi}{4} \\times \\frac{180°}{\\pi} = 45°$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="80" y1="100" x2="220" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="30" x2="150" y2="170" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="100" x2="200" y2="50" stroke="var(--trigonometry)" stroke-width="3"/>
+                                    <path d="M 170 100 A 20 20 0 0 0 180 80" class="trig-angle"/>
+                                    <text x="175" y="85" class="trig-text">π/4</text>
+                                    <text x="190" y="40" class="trig-label">45°</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e7',
+                            statement: 'Si $\\cos(\\theta) = \\frac{3}{5}$ y $\\theta$ está en el primer cuadrante, encuentra $\\sin(\\theta)$.',
+                            answer: '4/5',
+                            solution: 'Usando la identidad pitagórica: $\\sin^2(\\theta) + \\cos^2(\\theta) = 1$, entonces $\\sin(\\theta) = \\sqrt{1 - (3/5)^2} = \\frac{4}{5}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 140,150 140,102" class="trig-triangle"/>
+                                    <text x="135" y="170" class="trig-label">3</text>
+                                    <text x="145" y="125" class="trig-label">4</text>
+                                    <text x="105" y="120" class="trig-label">5</text>
+                                    <text x="85" y="140" class="trig-text">θ</text>
+                                    <text x="150" y="180" class="trig-label">cos(θ) = 3/5, sin(θ) = 4/5</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e8',
+                            statement: 'Encuentra el valor de $\\cos(0°)$.',
+                            answer: '1',
+                            solution: 'En el círculo unitario, cuando el ángulo es $0°$, el punto es $(1, 0)$, entonces $\\cos(0°) = 1$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="80" y1="100" x2="220" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="30" x2="150" y2="170" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="100" x2="220" y2="100" stroke="var(--trigonometry)" stroke-width="3"/>
+                                    <circle cx="220" cy="100" r="4" class="trig-point"/>
+                                    <text x="225" y="105" class="trig-label">(1, 0)</text>
+                                    <text x="180" y="95" class="trig-text">0°</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e9',
+                            statement: 'Calcula $\\sin(90°)$.',
+                            answer: '1',
+                            solution: 'En el círculo unitario, cuando el ángulo es $90°$, el punto es $(0, 1)$, entonces $\\sin(90°) = 1$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="80" y1="100" x2="220" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="30" x2="150" y2="170" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="100" x2="150" y2="30" stroke="var(--trigonometry)" stroke-width="3"/>
+                                    <circle cx="150" cy="30" r="4" class="trig-point"/>
+                                    <text x="155" y="25" class="trig-label">(0, 1)</text>
+                                    <text x="125" y="60" class="trig-text">90°</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e10',
+                            statement: 'En un triángulo rectángulo, si el cateto opuesto mide 7 y la hipotenusa mide 25, encuentra $\\sin(\\theta)$.',
+                            answer: '7/25',
+                            solution: 'Por definición, $\\sin(\\theta) = \\frac{\\text{cateto opuesto}}{\\text{hipotenusa}} = \\frac{7}{25}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 200,150 200,94" class="trig-triangle"/>
+                                    <text x="135" y="170" class="trig-label">adyacente</text>
+                                    <text x="205" y="125" class="trig-label">7</text>
+                                    <text x="125" y="115" class="trig-label">25</text>
+                                    <text x="85" y="140" class="trig-text">θ</text>
+                                    <text x="110" y="180" class="trig-label">sin(θ) = 7/25</text>
+                                </svg>
+                            `
+                        }
+                    ],
+                    medium: [
+                        {
+                            id: 'm1',
+                            statement: 'Demuestra que $\\sin^2(x) + \\cos^2(x) = 1$ usando la identidad pitagórica.',
+                            answer: '1',
+                            solution: 'Esta es la identidad fundamental de la trigonometría. En el círculo unitario, cualquier punto $(\\cos(x), \\sin(x))$ satisface $x^2 + y^2 = 1$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="80" y1="100" x2="220" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="30" x2="150" y2="170" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="100" x2="190" y2="65" stroke="var(--trigonometry)" stroke-width="3"/>
+                                    <line x1="190" y1="65" x2="190" y2="100" stroke="var(--trigonometry-dark)" stroke-width="2" stroke-dasharray="3,3"/>
+                                    <line x1="150" y1="100" x2="190" y2="100" stroke="var(--trigonometry-dark)" stroke-width="2" stroke-dasharray="3,3"/>
+                                    <circle cx="190" cy="65" r="3" class="trig-point"/>
+                                    <text x="195" y="60" class="trig-label">(cos x, sin x)</text>
+                                    <text x="165" y="95" class="trig-label">cos x</text>
+                                    <text x="195" y="85" class="trig-label">sin x</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm2',
+                            statement: 'Resuelve la ecuación $2\\sin(x) - 1 = 0$ para $0 \\leq x \\leq 2\\pi$.',
+                            answer: 'π/6,5π/6',
+                            solution: '$\\sin(x) = \\frac{1}{2}$. Las soluciones son $x = \\frac{\\pi}{6}$ y $x = \\frac{5\\pi}{6}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 50 100 Q 100 50 150 100 Q 200 150 250 100" class="trig-wave"/>
+                                    <line x1="50" y1="75" x2="250" y2="75" stroke="red" stroke-width="2" stroke-dasharray="5,5"/>
+                                    <circle cx="100" cy="75" r="3" fill="red"/>
+                                    <circle cx="200" cy="75" r="3" fill="red"/>
+                                    <text x="95" y="65" class="trig-label">π/6</text>
+                                    <text x="195" y="65" class="trig-label">5π/6</text>
+                                    <text x="260" y="75" class="trig-label">y = 1/2</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm3',
+                            statement: 'Encuentra el valor de $\\tan(\\frac{\\pi}{3})$.',
+                            answer: 'sqrt(3)',
+                            solution: '$\\tan(\\frac{\\pi}{3}) = \\tan(60°) = \\frac{\\sin(60°)}{\\cos(60°)} = \\frac{\\sqrt{3}/2}{1/2} = \\sqrt{3}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 140,150 140,90" class="trig-triangle"/>
+                                    <text x="135" y="140" class="trig-text">60°</text>
+                                    <text x="105" y="170" class="trig-label">1</text>
+                                    <text x="145" y="125" class="trig-label">√3</text>
+                                    <text x="105" y="115" class="trig-label">2</text>
+                                    <text x="90" y="180" class="trig-label">tan(π/3) = √3/1 = √3</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm4',
+                            statement: 'Simplifica $\\frac{\\sin(x)}{\\cos(x)}$.',
+                            answer: 'tan(x)',
+                            solution: 'Por definición, $\\frac{\\sin(x)}{\\cos(x)} = \\tan(x)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="80" text-anchor="middle" class="trig-text" style="font-size: 24px;">sin(x)/cos(x)</text>
+                                    <text x="150" y="110" text-anchor="middle" class="trig-label">Definición básica</text>
+                                    <text x="150" y="130" text-anchor="middle" class="trig-text" style="font-size: 20px;">= tan(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm5',
+                            statement: 'Usando la ley de cosenos, encuentra $c$ si $a = 5$, $b = 7$, y $C = 60°$.',
+                            answer: 'sqrt(39)',
+                            solution: 'Ley de cosenos: $c^2 = a^2 + b^2 - 2ab\\cos(C) = 25 + 49 - 70\\cos(60°) = 74 - 35 = 39$, entonces $c = \\sqrt{39}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 200,150 140,90" class="trig-triangle"/>
+                                    <text x="135" y="85" class="trig-text">C = 60°</text>
+                                    <text x="105" y="170" class="trig-label">b = 7</text>
+                                    <text x="205" y="125" class="trig-label">a = 5</text>
+                                    <text x="110" y="115" class="trig-label">c = ?</text>
+                                    <text x="90" y="180" class="trig-label">Ley de cosenos</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm6',
+                            statement: 'Encuentra la amplitud de $y = 3\\sin(2x)$.',
+                            answer: '3',
+                            solution: 'En la función $y = A\\sin(Bx)$, la amplitud es $|A|$. Por lo tanto, la amplitud es $|3| = 3$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 50 100 Q 87.5 50 125 100 Q 162.5 150 200 100 Q 237.5 50 275 100" class="trig-wave"/>
+                                    <line x1="50" y1="50" x2="250" y2="50" stroke="red" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="red" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <text x="260" y="50" class="trig-label">3</text>
+                                    <text x="260" y="150" class="trig-label">-3</text>
+                                    <text x="260" y="105" class="trig-label">Amplitud = 3</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm7',
+                            statement: 'Calcula $\\sin(\\arccos(\\frac{3}{5}))$.',
+                            answer: '4/5',
+                            solution: 'Si $\\cos(\\theta) = \\frac{3}{5}$, entonces $\\sin(\\theta) = \\sqrt{1 - \\cos^2(\\theta)} = \\sqrt{1 - \\frac{9}{25}} = \\frac{4}{5}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 140,150 140,102" class="trig-triangle"/>
+                                    <text x="105" y="170" class="trig-label">3</text>
+                                    <text x="145" y="125" class="trig-label">4</text>
+                                    <text x="105" y="120" class="trig-label">5</text>
+                                    <text x="85" y="140" class="trig-text">θ</text>
+                                    <text x="150" y="180" class="trig-label">Si cos(θ) = 3/5, entonces sin(θ) = 4/5</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm8',
+                            statement: 'Encuentra el periodo de $y = \\sin(3x)$.',
+                            answer: '2π/3',
+                            solution: 'Para $y = \\sin(Bx)$, el periodo es $\\frac{2\\pi}{|B|}$. Entonces el periodo es $\\frac{2\\pi}{3}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 50 100 Q 75 50 100 100 Q 125 150 150 100 Q 175 50 200 100 Q 225 150 250 100" class="trig-wave"/>
+                                    <line x1="100" y1="50" x2="100" y2="150" stroke="red" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <line x1="200" y1="50" x2="200" y2="150" stroke="red" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <text x="140" y="40" class="trig-label">Periodo = 2π/3</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm9',
+                            statement: 'Verifica la identidad $\\tan^2(x) + 1 = \\sec^2(x)$.',
+                            answer: 'sec^2(x)',
+                            solution: 'Dividiendo $\\sin^2(x) + \\cos^2(x) = 1$ por $\\cos^2(x)$: $\\frac{\\sin^2(x)}{\\cos^2(x)} + 1 = \\frac{1}{\\cos^2(x)}$, es decir, $\\tan^2(x) + 1 = \\sec^2(x)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="70" text-anchor="middle" class="trig-text" style="font-size: 18px;">tan²(x) + 1 = sec²(x)</text>
+                                    <text x="150" y="100" text-anchor="middle" class="trig-label">Identidad pitagórica</text>
+                                    <text x="150" y="120" text-anchor="middle" class="trig-label">derivada</text>
+                                    <text x="150" y="140" text-anchor="middle" class="trig-text" style="font-size: 16px;">sin²(x)/cos²(x) + 1 = 1/cos²(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm10',
+                            statement: 'Usando la ley de senos, encuentra $\\sin(B)$ si $a = 8$, $A = 30°$, y $b = 12$.',
+                            answer: '3/4',
+                            solution: 'Ley de senos: $\\frac{a}{\\sin(A)} = \\frac{b}{\\sin(B)}$, entonces $\\sin(B) = \\frac{b\\sin(A)}{a} = \\frac{12 \\cdot \\frac{1}{2}}{8} = \\frac{3}{4}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <polygon points="80,150 200,150 140,90" class="trig-triangle"/>
+                                    <text x="85" y="140" class="trig-text">A = 30°</text>
+                                    <text x="195" y="140" class="trig-text">B = ?</text>
+                                    <text x="205" y="125" class="trig-label">a = 8</text>
+                                    <text x="110" y="115" class="trig-label">b = 12</text>
+                                    <text x="90" y="180" class="trig-label">Ley de senos</text>
+                                </svg>
+                            `
+                        }
+                    ],
+                    hard: [
+                        {
+                            id: 'h1',
+                            statement: 'Demuestra que $\\sin(A + B) = \\sin(A)\\cos(B) + \\cos(A)\\sin(B)$.',
+                            answer: 'sin(A)cos(B)+cos(A)sin(B)',
+                            solution: 'Esta es la fórmula de suma para el seno. Se demuestra usando la rotación de vectores en el círculo unitario.',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="80" y1="100" x2="220" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="30" x2="150" y2="170" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="100" x2="190" y2="70" stroke="var(--trigonometry)" stroke-width="2"/>
+                                    <line x1="150" y1="100" x2="180" y2="50" stroke="red" stroke-width="2"/>
+                                    <text x="165" y="85" class="trig-text">A</text>
+                                    <text x="175" y="65" class="trig-text">B</text>
+                                    <text x="190" y="45" class="trig-label">A + B</text>
+                                    <text x="100" y="180" class="trig-label">Fórmula de suma</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h2',
+                            statement: 'Resuelve $\\sin(2x) = \\cos(x)$ para $0 \\leq x \\leq 2\\pi$.',
+                            answer: 'π/6,π/2,5π/6',
+                            solution: 'Usando $\\sin(2x) = 2\\sin(x)\\cos(x)$: $2\\sin(x)\\cos(x) = \\cos(x)$. Las soluciones son $x = \\frac{\\pi}{6}, \\frac{\\pi}{2}, \\frac{5\\pi}{6}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 50 100 Q 75 50 100 100 Q 125 150 150 100 Q 175 50 200 100 Q 225 150 250 100" stroke="var(--trigonometry)" stroke-width="2" fill="none"/>
+                                    <path d="M 50 150 Q 100 50 150 100 Q 200 150 250 50" stroke="red" stroke-width="2" fill="none"/>
+                                    <circle cx="100" cy="125" r="3" fill="blue"/>
+                                    <circle cx="150" cy="50" r="3" fill="blue"/>
+                                    <circle cx="200" cy="125" r="3" fill="blue"/>
+                                    <text x="95" y="140" class="trig-label">π/6</text>
+                                    <text x="145" y="40" class="trig-label">π/2</text>
+                                    <text x="195" y="140" class="trig-label">5π/6</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h3',
+                            statement: 'Encuentra el valor exacto de $\\cos(15°)$ usando fórmulas de ángulo medio.',
+                            answer: '(sqrt(6)+sqrt(2))/4',
+                            solution: '$15° = \\frac{30°}{2}$. Usando $\\cos(\\frac{\\theta}{2}) = \\sqrt{\\frac{1+\\cos(\\theta)}{2}}$: $\\cos(15°) = \\sqrt{\\frac{1+\\cos(30°)}{2}} = \\frac{\\sqrt{6}+\\sqrt{2}}{4}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="150" y1="100" x2="205" y2="85" stroke="var(--trigonometry)" stroke-width="3"/>
+                                    <path d="M 170 100 A 20 20 0 0 0 175 95" class="trig-angle"/>
+                                    <text x="175" y="95" class="trig-text">15°</text>
+                                    <text x="210" y="80" class="trig-label">cos(15°)</text>
+                                    <text x="80" y="180" class="trig-label">Fórmula de ángulo medio</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h4',
+                            statement: 'Calcula $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$.',
+                            answer: '3',
+                            solution: 'Usando $\\lim_{u \\to 0} \\frac{\\sin(u)}{u} = 1$: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = \\lim_{x \\to 0} \\frac{\\sin(3x)}{3x} \\cdot 3 = 1 \\cdot 3 = 3$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 80 100 Q 110 70 140 100 Q 160 130 180 100 Q 200 70 220 100" stroke="var(--trigonometry)" stroke-width="2" fill="none"/>
+                                    <line x1="50" y1="50" x2="250" y2="50" stroke="red" stroke-width="2"/>
+                                    <text x="170" y="45" class="trig-label">y = 3</text>
+                                    <text x="180" y="80" class="trig-label">sin(3x)/x</text>
+                                    <text x="100" y="180" class="trig-label">Límite fundamental</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h5',
+                            statement: 'Demuestra que $\\cot^2(x) + 1 = \\csc^2(x)$.',
+                            answer: 'csc^2(x)',
+                            solution: 'Dividiendo $\\sin^2(x) + \\cos^2(x) = 1$ por $\\sin^2(x)$: $1 + \\frac{\\cos^2(x)}{\\sin^2(x)} = \\frac{1}{\\sin^2(x)}$, es decir, $1 + \\cot^2(x) = \\csc^2(x)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="70" text-anchor="middle" class="trig-text" style="font-size: 18px;">cot²(x) + 1 = csc²(x)</text>
+                                    <text x="150" y="100" text-anchor="middle" class="trig-label">Identidad pitagórica</text>
+                                    <text x="150" y="120" text-anchor="middle" class="trig-label">derivada</text>
+                                    <text x="150" y="140" text-anchor="middle" class="trig-text" style="font-size: 16px;">cos²(x)/sin²(x) + 1 = 1/sin²(x)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h6',
+                            statement: 'Encuentra todas las soluciones de $\\cos(2x) + \\cos(x) = 0$ en $[0, 2\\pi]$.',
+                            answer: 'π/3,π,5π/3',
+                            solution: 'Usando $\\cos(2x) = 2\\cos^2(x) - 1$: $2\\cos^2(x) - 1 + \\cos(x) = 0$. Factorizando: $(2\\cos(x) - 1)(\\cos(x) + 1) = 0$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 50 100 Q 100 125 150 50 Q 200 125 250 100" stroke="var(--trigonometry)" stroke-width="2" fill="none"/>
+                                    <circle cx="100" cy="125" r="3" fill="red"/>
+                                    <circle cx="150" cy="150" r="3" fill="red"/>
+                                    <circle cx="200" cy="125" r="3" fill="red"/>
+                                    <text x="95" y="140" class="trig-label">π/3</text>
+                                    <text x="145" y="165" class="trig-label">π</text>
+                                    <text x="195" y="140" class="trig-label">5π/3</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h7',
+                            statement: 'Calcula $\\int_0^{\\pi/2} \\sin^2(x) \\, dx$ usando identidades trigonométricas.',
+                            answer: 'π/4',
+                            solution: 'Usando $\\sin^2(x) = \\frac{1 - \\cos(2x)}{2}$: $\\int_0^{\\pi/2} \\sin^2(x) \\, dx = \\int_0^{\\pi/2} \\frac{1 - \\cos(2x)}{2} \\, dx = \\frac{\\pi}{4}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="150" x2="250" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="100" y1="50" x2="100" y2="180" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 100 150 Q 125 100 150 125 Q 175 150 200 100" stroke="var(--trigonometry)" stroke-width="2" fill="none"/>
+                                    <path d="M 100 150 Q 125 100 150 125 Q 175 150 200 100 L 200 150 Z" class="trig-triangle" fill="rgba(249, 115, 22, 0.3)"/>
+                                    <text x="140" y="110" class="trig-label">sin²(x)</text>
+                                    <text x="120" y="180" class="trig-label">Área = π/4</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h8',
+                            statement: 'Encuentra el valor de $\\sin(\\frac{5\\pi}{12})$ usando fórmulas de suma.',
+                            answer: '(sqrt(6)+sqrt(2))/4',
+                            solution: '$\\frac{5\\pi}{12} = \\frac{\\pi}{4} + \\frac{\\pi}{6}$. Usando la fórmula de suma: $\\sin(\\frac{5\\pi}{12}) = \\sin(\\frac{\\pi}{4})\\cos(\\frac{\\pi}{6}) + \\cos(\\frac{\\pi}{4})\\sin(\\frac{\\pi}{6}) = \\frac{\\sqrt{6}+\\sqrt{2}}{4}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="150" y1="100" x2="185" y2="55" stroke="var(--trigonometry)" stroke-width="3"/>
+                                    <line x1="150" y1="100" x2="200" y2="50" stroke="red" stroke-width="2" stroke-dasharray="3,3"/>
+                                    <line x1="150" y1="100" x2="190" y2="70" stroke="blue" stroke-width="2" stroke-dasharray="3,3"/>
+                                    <text x="175" y="65" class="trig-text">π/4</text>
+                                    <text x="165" y="85" class="trig-text">π/6</text>
+                                    <text x="190" y="50" class="trig-label">5π/12</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h9',
+                            statement: 'Resuelve $\\tan(x) + \\sec(x) = 1$ para $x \\in [0, 2\\pi)$.',
+                            answer: '0,π/2',
+                            solution: 'Multiplicando por $\\cos(x)$: $\\sin(x) + 1 = \\cos(x)$. Elevando al cuadrado y simplificando: $x = 0$ o $x = \\frac{\\pi}{2}$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="var(--trigonometry-dark)" stroke-width="1"/>
+                                    <path d="M 50 150 Q 100 100 150 50 Q 200 100 250 150" stroke="var(--trigonometry)" stroke-width="2" fill="none"/>
+                                    <circle cx="150" cy="50" r="3" fill="red"/>
+                                    <circle cx="220" cy="100" r="3" fill="red"/>
+                                    <text x="145" y="40" class="trig-label">x = 0</text>
+                                    <text x="215" y="90" class="trig-label">x = π/2</text>
+                                    <text x="100" y="180" class="trig-label">tan(x) + sec(x) = 1</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h10',
+                            statement: 'Demuestra que $\\cos(3\\theta) = 4\\cos^3(\\theta) - 3\\cos(\\theta)$.',
+                            answer: '4cos^3(θ)-3cos(θ)',
+                            solution: 'Usando $\\cos(3\\theta) = \\cos(2\\theta + \\theta)$ y las fórmulas de suma y ángulo doble se llega a $\\cos(3\\theta) = 4\\cos^3(\\theta) - 3\\cos(\\theta)$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" class="trig-circle"/>
+                                    <line x1="150" y1="100" x2="190" y2="70" stroke="var(--trigonometry)" stroke-width="2"/>
+                                    <line x1="150" y1="100" x2="180" y2="50" stroke="red" stroke-width="2"/>
+                                    <line x1="150" y1="100" x2="160" y2="40" stroke="blue" stroke-width="3"/>
+                                    <text x="165" y="85" class="trig-text">θ</text>
+                                    <text x="175" y="65" class="trig-text">2θ</text>
+                                    <text x="155" y="45" class="trig-text">3θ</text>
+                                    <text x="80" y="180" class="trig-label">Fórmula del triple ángulo</text>
+                                </svg>
+                            `
+                        }
+                    ]
+                };
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    await this.initializeModule();
+                } catch (error) {
+                    console.error('Error initializing module:', error);
+                    showError('Error al inicializar el módulo: ' + error.message);
+                }
+            }
+
+            async initializeModule() {
+                showLoading();
+                console.log('🔧 Starting trigonometry module initialization...');
+
+                // Wait for MathJax if it hasn't loaded yet
+                await this.waitForMathJax();
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                if (!this.loadParticipant()) {
+                    throw new Error('No hay participante registrado');
+                }
+
+                console.log('✅ Participant loaded:', this.currentParticipant.name);
+
+                this.loadProgress();
+                this.loadTimer();
+                this.startTimer();
+                
+                hideLoading();
+                showMainContent();
+                
+                this.showDifficulty('easy');
+                this.updateStats();
+                this.setupAnimations();
+
+                console.log('🎯 Trigonometry module initialization completed successfully');
+            }
+
+            async waitForMathJax() {
+                return new Promise((resolve) => {
+                    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                        console.log('✅ MathJax already ready');
+                        this.mathJaxReady = true;
+                        this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                        resolve();
+                    } else {
+                        console.log('⏳ Waiting for MathJax to be ready...');
+                        this.updateMathJaxStatus('loading', 'Cargando renderizador matemático...');
+                        
+                        const checkMathJax = () => {
+                            if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                                console.log('✅ MathJax is now ready');
+                                this.mathJaxReady = true;
+                                this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                                resolve();
+                            } else {
+                                setTimeout(checkMathJax, 100);
+                            }
+                        };
+                        
+                        // Also listen for the custom event
+                        window.addEventListener('mathjaxReady', () => {
+                            console.log('✅ MathJax ready event received');
+                            this.mathJaxReady = true;
+                            this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                            resolve();
+                        }, { once: true });
+                        
+                        checkMathJax();
+                        
+                        // Timeout fallback
+                        setTimeout(() => {
+                            if (!this.mathJaxReady) {
+                                console.warn('⚠️ MathJax timeout, proceeding without it');
+                                this.updateMathJaxStatus('error', 'Renderizador no disponible (modo texto)');
+                                resolve();
+                            }
+                        }, 10000);
+                    }
+                });
+            }
+
+            updateMathJaxStatus(status, message) {
+                const statusEl = document.getElementById('mathJaxStatus');
+                if (statusEl) {
+                    statusEl.className = `mathjax-status ${status} show`;
+                    statusEl.innerHTML = `
+                        <i class="fas fa-${status === 'loading' ? 'spinner fa-spin' : status === 'ready' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        ${message}
+                    `;
+                    
+                    // Hide after delay
+                    setTimeout(() => {
+                        statusEl.classList.remove('show');
+                    }, status === 'ready' ? 3000 : 5000);
+                }
+            }
+
+            async renderMathJax(element) {
+                if (this.mathJaxReady && window.MathJax && window.MathJax.typesetPromise) {
+                    try {
+                        await window.MathJax.typesetPromise([element]);
+                        console.log('✅ MathJax rendering completed');
+                        return true;
+                    } catch (error) {
+                        console.warn('❌ Error during MathJax rendering:', error);
+                        return false;
+                    }
+                } else {
+                    console.warn('⚠️ MathJax not ready, content displayed as plain text');
+                    return false;
+                }
+            }
+
+            loadParticipant() {
+                try {
+                    const savedParticipant = localStorage.getItem('currentParticipant');
+                    if (!savedParticipant) {
+                        return false;
+                    }
+                    
+                    this.currentParticipant = JSON.parse(savedParticipant);
+                    this.currentScore = this.currentParticipant.scores?.trigonometry || 0;
+                    this.problemsSolved = this.currentParticipant.problemsSolved?.trigonometry || 0;
+                    this.currentStreak = this.currentParticipant.streak || 0;
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error loading participant:', error);
+                    return false;
+                }
+            }
+
+            loadProgress() {
+                try {
+                    const progressKey = `trigonometry_progress_${this.currentParticipant.id}`;
+                    const savedProgress = localStorage.getItem(progressKey);
+                    if (savedProgress) {
+                        this.solvedProblems = new Set(JSON.parse(savedProgress));
+                    }
+
+                    const timesKey = `trigonometry_times_${this.currentParticipant.id}`;
+                    const savedTimes = localStorage.getItem(timesKey);
+                    if (savedTimes) {
+                        this.solveTimes = JSON.parse(savedTimes);
+                    }
+                } catch (error) {
+                    console.error('Error loading progress:', error);
+                }
+            }
+
+            saveProgress() {
+                try {
+                    const progressKey = `trigonometry_progress_${this.currentParticipant.id}`;
+                    localStorage.setItem(progressKey, JSON.stringify([...this.solvedProblems]));
+
+                    const timesKey = `trigonometry_times_${this.currentParticipant.id}`;
+                    localStorage.setItem(timesKey, JSON.stringify(this.solveTimes));
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+
+            loadTimer() {
+                try {
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"duration":7200}');
+                    this.competitionData = competitionData;
+                    
+                    if (competitionData.timerStarted && competitionData.startTime) {
+                        const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                        this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                    } else {
+                        this.timeRemaining = competitionData.duration || 7200;
+                    }
+                } catch (error) {
+                    console.error('Error loading timer:', error);
+                    this.timeRemaining = 7200;
+                }
+            }
+
+            startTimer() {
+                this.updateTimerDisplay();
+                
+                this.timerInterval = setInterval(() => {
+                    try {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (competitionData.timerStarted && competitionData.startTime) {
+                            const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                            this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                            
+                            this.updateTimerDisplay();
+                            
+                            if (this.timeRemaining <= 0) {
+                                clearInterval(this.timerInterval);
+                                alert('¡Tiempo terminado! La competencia ha finalizado.');
+                                window.location.href = '../competencias.html';
+                            }
+                        } else {
+                            this.timeRemaining = competitionData.duration || 7200;
+                            this.updateTimerDisplay();
+                        }
+                    } catch (error) {
+                        console.error('Timer error:', error);
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                try {
+                    const hours = Math.floor(this.timeRemaining / 3600);
+                    const minutes = Math.floor((this.timeRemaining % 3600) / 60);
+                    const seconds = this.timeRemaining % 60;
+                    
+                    const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    const timerElement = document.getElementById('timerTime');
+                    
+                    if (timerElement) {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (!competitionData.timerStarted) {
+                            timerElement.textContent = '⏳ ' + display;
+                            timerElement.style.color = '#ffa726';
+                        } else {
+                            timerElement.textContent = display;
+                            timerElement.style.color = this.timeRemaining <= 300 ? '#ff6b6b' : '#f97316';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating timer display:', error);
+                }
+            }
+
+            showDifficulty(difficulty) {
+                this.currentDifficulty = difficulty;
+                
+                document.querySelectorAll('.difficulty-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                const activeTab = document.querySelector(`.difficulty-tab.${difficulty}`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+                
+                this.generateProblems();
+            }
+
+            async generateProblems() {
+                const problemsGrid = document.getElementById('problemsGrid');
+                if (!problemsGrid) return;
+                
+                console.log('🎯 Generating trigonometry problems for difficulty:', this.currentDifficulty);
+                
+                problemsGrid.innerHTML = '';
+                
+                const problems = this.problems[this.currentDifficulty];
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                
+                problems.forEach((problem, index) => {
+                    const problemCard = document.createElement('div');
+                    problemCard.className = `problem-card fade-in ${this.solvedProblems.has(problem.id) ? 'solved' : ''}`;
+                    
+                    const isCorrect = this.solvedProblems.has(problem.id);
+                    
+                    problemCard.innerHTML = `
+                        <div class="problem-header">
+                            <div class="problem-number">
+                                <i class="fas fa-wave-square"></i>
+                                Problema ${index + 1}
+                                ${isCorrect ? '<i class="fas fa-check-circle" style="color: var(--success); margin-left: 0.5rem;"></i>' : ''}
+                            </div>
+                            <div class="problem-points ${this.currentDifficulty}">
+                                <i class="fas fa-star"></i>
+                                ${pointsMap[this.currentDifficulty]} pts
+                            </div>
+                        </div>
+                        
+                        ${problem.figure ? `<div class="trig-figure">${problem.figure}</div>` : ''}
+                        
+                        <div class="problem-statement">${problem.statement}</div>
+                        
+                        <div class="problem-input-section">
+                            <input type="text" class="problem-input" placeholder="Ingresa tu respuesta..." 
+                                   id="input-${problem.id}" ${isCorrect ? 'disabled' : ''}
+                                   onkeypress="if(event.key==='Enter') submitAnswer('${problem.id}')">
+                            <button class="submit-btn" onclick="submitAnswer('${problem.id}')" 
+                                    ${isCorrect ? 'disabled' : ''}>
+                                <i class="fas fa-paper-plane"></i>
+                                ${isCorrect ? 'Resuelto' : 'Enviar'}
+                            </button>
+                        </div>
+                        
+                        <div class="problem-feedback" id="feedback-${problem.id}">
+                            <!-- Feedback will appear here -->
+                        </div>
+                        
+                        <div class="problem-solution" id="solution-${problem.id}" ${isCorrect ? 'style="display:block;"' : ''}>
+                            <div class="solution-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Solución:
+                            </div>
+                            <div>${problem.solution}</div>
+                        </div>
+                    `;
+                    
+                    problemsGrid.appendChild(problemCard);
+                });
+                
+                // Render MathJax for the new content
+                if (this.mathJaxReady) {
+                    console.log('🔄 Rendering MathJax for new problems...');
+                    await this.renderMathJax(problemsGrid);
+                }
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.fade-in').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }, 100);
+            }
+
+            submitAnswer(problemId) {
+                const input = document.getElementById(`input-${problemId}`);
+                const feedback = document.getElementById(`feedback-${problemId}`);
+                const solution = document.getElementById(`solution-${problemId}`);
+                
+                if (!input || !feedback || !solution) return;
+                
+                const userAnswer = input.value.trim().toLowerCase();
+                
+                if (!userAnswer) {
+                    this.showFeedback(feedback, 'Por favor, ingresa una respuesta.', 'error');
+                    return;
+                }
+                
+                const problem = this.findProblemById(problemId);
+                if (!problem) return;
+                
+                const correctAnswer = problem.answer.toLowerCase();
+                const isCorrect = this.checkAnswer(userAnswer, correctAnswer);
+                
+                if (isCorrect) {
+                    this.handleCorrectAnswer(problemId, input, feedback, solution);
+                } else {
+                    this.handleIncorrectAnswer(feedback);
+                }
+            }
+
+            checkAnswer(userAnswer, correctAnswer) {
+                const normalize = (str) => str.replace(/\s+/g, '').replace(/[()]/g, '');
+                
+                const normalizedUser = normalize(userAnswer);
+                const normalizedCorrect = normalize(correctAnswer);
+                
+                if (normalizedUser === normalizedCorrect) return true;
+                
+                // Check for common mathematical notation equivalences
+                if (normalizedCorrect.includes('π')) {
+                    const userWithPi = normalizedUser.replace(/pi/g, 'π');
+                    if (userWithPi === normalizedCorrect) return true;
+                }
+                
+                if (normalizedCorrect.includes('√') || normalizedCorrect.includes('sqrt')) {
+                    let userWithSqrt = normalizedUser.replace(/sqrt/g, '√');
+                    let correctWithSqrt = normalizedCorrect.replace(/sqrt/g, '√');
+                    if (userWithSqrt === correctWithSqrt) return true;
+                }
+                
+                // Check for fraction notation
+                if (normalizedCorrect.includes('/')) {
+                    const userWithSlash = normalizedUser.replace(/÷/g, '/');
+                    if (userWithSlash === normalizedCorrect) return true;
+                }
+                
+                // Check for trigonometric function abbreviations
+                const trigSubs = [
+                    ['sine', 'sin'], ['cosine', 'cos'], ['tangent', 'tan'],
+                    ['secant', 'sec'], ['cosecant', 'csc'], ['cotangent', 'cot']
+                ];
+                
+                let userConverted = normalizedUser;
+                let correctConverted = normalizedCorrect;
+                
+                trigSubs.forEach(([full, abbr]) => {
+                    userConverted = userConverted.replace(new RegExp(full, 'g'), abbr);
+                    correctConverted = correctConverted.replace(new RegExp(full, 'g'), abbr);
+                });
+                
+                if (userConverted === correctConverted) return true;
+                
+                // Check for multiple answers separated by comma
+                if (normalizedCorrect.includes(',') && normalizedUser.includes(',')) {
+                    const userParts = normalizedUser.split(',').map(s => s.trim()).sort();
+                    const correctParts = normalizedCorrect.split(',').map(s => s.trim()).sort();
+                    return JSON.stringify(userParts) === JSON.stringify(correctParts);
+                }
+                
+                return false;
+            }
+
+            findProblemById(problemId) {
+                for (const difficulty in this.problems) {
+                    const problem = this.problems[difficulty].find(p => p.id === problemId);
+                    if (problem) return problem;
+                }
+                return null;
+            }
+
+            async handleCorrectAnswer(problemId, input, feedback, solution) {
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                const points = pointsMap[this.currentDifficulty];
+                
+                this.solvedProblems.add(problemId);
+                this.problemsSolved++;
+                this.currentScore += points;
+                this.currentStreak++;
+                
+                const solveTime = Date.now() - this.startTime;
+                this.solveTimes.push(solveTime);
+                
+                input.disabled = true;
+                const submitBtn = input.nextElementSibling;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Resuelto';
+                
+                this.showFeedback(feedback, `¡Correcto! +${points} puntos`, 'success');
+                solution.classList.add('show');
+                
+                // Render MathJax for the solution
+                if (this.mathJaxReady) {
+                    await this.renderMathJax(solution);
+                }
+                
+                this.showScoreAnimation(points);
+                this.updateParticipantData(points);
+                this.saveProgress();
+                this.updateStats();
+            }
+
+            handleIncorrectAnswer(feedback) {
+                this.showFeedback(feedback, 'Respuesta incorrecta. ¡Inténtalo de nuevo!', 'error');
+            }
+
+            showFeedback(feedbackElement, message, type) {
+                feedbackElement.className = `problem-feedback ${type} show`;
+                feedbackElement.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i>
+                    ${message}
+                `;
+                
+                if (type === 'error') {
+                    setTimeout(() => {
+                        feedbackElement.classList.remove('show');
+                    }, 3000);
+                }
+            }
+
+            showScoreAnimation(points) {
+                const floatingPoints = document.createElement('div');
+                floatingPoints.textContent = `+${points}`;
+                floatingPoints.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: var(--trigonometry);
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: floatUp 2s ease-out forwards;
+                `;
+
+                document.body.appendChild(floatingPoints);
+
+                setTimeout(() => {
+                    if (floatingPoints.parentNode) {
+                        floatingPoints.parentNode.removeChild(floatingPoints);
+                    }
+                }, 2000);
+            }
+
+            updateParticipantData(points) {
+                try {
+                    this.currentParticipant.scores = this.currentParticipant.scores || {};
+                    this.currentParticipant.problemsSolved = this.currentParticipant.problemsSolved || {};
+                    
+                    this.currentParticipant.scores.trigonometry = this.currentScore;
+                    this.currentParticipant.problemsSolved.trigonometry = this.problemsSolved;
+                    this.currentParticipant.totalScore = (this.currentParticipant.totalScore || 0) + points;
+                    this.currentParticipant.totalProblems = (this.currentParticipant.totalProblems || 0) + 1;
+                    this.currentParticipant.streak = this.currentStreak;
+                    this.currentParticipant.lastActivity = Date.now();
+
+                    localStorage.setItem('currentParticipant', JSON.stringify(this.currentParticipant));
+
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+                    const participantIndex = competitionData.participants.findIndex(p => p.id === this.currentParticipant.id);
+                    
+                    if (participantIndex !== -1) {
+                        competitionData.participants[participantIndex] = { ...this.currentParticipant };
+                        localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
+                    }
+
+                    const activity = {
+                        participant: this.currentParticipant.name,
+                        area: 'trigonometry',
+                        points: points,
+                        difficulty: this.currentDifficulty,
+                        time: Date.now()
+                    };
+
+                    let recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+                    recentActivities.unshift(activity);
+                    if (recentActivities.length > 50) {
+                        recentActivities = recentActivities.slice(0, 50);
+                    }
+                    localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
+
+                    window.dispatchEvent(new CustomEvent('competitionUpdate', {
+                        detail: competitionData
+                    }));
+                } catch (error) {
+                    console.error('Error updating participant data:', error);
+                }
+            }
+
+            updateStats() {
+                try {
+                    const totalScoreEl = document.getElementById('totalScore');
+                    const problemsSolvedEl = document.getElementById('problemsSolved');
+                    const currentStreakEl = document.getElementById('currentStreak');
+                    const averageTimeEl = document.getElementById('averageTime');
+
+                    if (totalScoreEl) totalScoreEl.textContent = this.currentScore;
+                    if (problemsSolvedEl) problemsSolvedEl.textContent = this.problemsSolved;
+                    if (currentStreakEl) currentStreakEl.textContent = this.currentStreak;
+                    
+                    if (averageTimeEl && this.solveTimes.length > 0) {
+                        const avgTime = this.solveTimes.reduce((sum, time) => sum + time, 0) / this.solveTimes.length;
+                        const minutes = Math.floor(avgTime / 60000);
+                        const seconds = Math.floor((avgTime % 60000) / 1000);
+                        averageTimeEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+
+                    const totalProblems = Object.values(this.problems).reduce((sum, arr) => sum + arr.length, 0);
+                    const progress = (this.problemsSolved / totalProblems) * 100;
+                    
+                    const progressFillEl = document.getElementById('progressFill');
+                    const progressTextEl = document.getElementById('progressText');
+                    
+                    if (progressFillEl) progressFillEl.style.width = `${progress}%`;
+                    if (progressTextEl) progressTextEl.textContent = `${this.problemsSolved}/${totalProblems} problemas resueltos`;
+                } catch (error) {
+                    console.error('Error updating stats:', error);
+                }
+            }
+
+            setupAnimations() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+        }
+
+        // UI Helper Functions
+        function showLoading() {
+            document.getElementById('loadingContainer').style.display = 'flex';
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingContainer').style.display = 'none';
+        }
+
+        function showMainContent() {
+            document.getElementById('mainContainer').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Global Variables
+        let trigonometryModule;
+
+        // Global Functions
+        function showDifficulty(difficulty) {
+            if (trigonometryModule) {
+                trigonometryModule.showDifficulty(difficulty);
+            }
+        }
+
+        function submitAnswer(problemId) {
+            if (trigonometryModule) {
+                trigonometryModule.submitAnswer(problemId);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM loaded, starting trigonometry initialization process...');
+            setTimeout(() => {
+                initializeTrigonometryModule();
+            }, 100);
+        });
+
+        async function initializeTrigonometryModule() {
+            try {
+                console.log('🎯 Creating TrigonometryModule...');
+                trigonometryModule = new TrigonometryModule();
+            } catch (error) {
+                console.error('❌ Failed to initialize trigonometry module:', error);
+                showError('Error al cargar el módulo de trigonometría: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

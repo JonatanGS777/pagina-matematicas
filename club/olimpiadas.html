@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olimpiadas Matemáticas - Prof. Yonatan Guerrero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            --gradient-olympic: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6347 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Mathematical Patterns Background */
+        .math-patterns {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px);
+        }
+
+        /* Floating Olympic Symbols */
+        .olympic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .olympic-symbol {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.6;
+            animation: floatUp 20s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header/Navbar */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            z-index: 1000;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: var(--gradient-main);
+            color: var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: -50px;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 900px;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title::after {
+            content: '∞';
+            position: absolute;
+            right: -60px;
+            top: 0;
+            font-size: 3rem;
+            color: var(--gold);
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .trophy-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .trophy {
+            font-size: 3rem;
+            animation: bounce 2s ease-in-out infinite;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .trophy.gold { color: var(--gold); animation-delay: 0s; }
+        .trophy.silver { color: var(--silver); animation-delay: 0.2s; }
+        .trophy.bronze { color: var(--bronze); animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            position: relative;
+            z-index: 10;
+            padding-top: 80px;
+            margin-top: -50px;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-main);
+            border-radius: 2px;
+        }
+
+        /* Competition Levels */
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .level-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .level-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-main);
+        }
+
+        .level-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .level-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .level-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .level-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .level-features {
+            list-style: none;
+        }
+
+        .level-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .level-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Practice Problems */
+        .problems-section {
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 30px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .problem-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .category-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: var(--white);
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--gradient-main);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .problems-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .problem-difficulty {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .difficulty-easy {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .difficulty-medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #f39c12;
+        }
+
+        .difficulty-hard {
+            background: rgba(240, 147, 251, 0.2);
+            color: var(--accent);
+        }
+
+        .problem-content {
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .problem-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .problem-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .solve-btn {
+            background: var(--gradient-main);
+            color: var(--white);
+        }
+
+        .hint-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        .problem-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: var(--gradient-main);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 2rem;
+            width: calc(50% - 30px);
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: auto;
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(even) {
+            text-align: right;
+        }
+
+        .timeline-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-main);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            left: -40px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            right: -40px;
+        }
+
+        .timeline-date {
+            background: var(--gradient-olympic);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Achievement Gallery */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .achievement-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+
+        .medal-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .achievement-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resource-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .resource-header {
+            background: var(--gradient-main);
+            padding: 1.5rem;
+            color: var(--white);
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .resource-body {
+            padding: 1.5rem;
+        }
+
+        .resource-links {
+            list-style: none;
+        }
+
+        .resource-links li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .resource-links li:last-child {
+            border-bottom: none;
+        }
+
+        .resource-links a {
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .resource-links a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        /* Testimonials */
+        .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .quote-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .author-achievement {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient-main);
+            border-radius: 30px;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--white);
+            color: var(--primary);
+            padding: 1rem 3rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 2rem;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-olympic);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+                text-align: left;
+            }
+
+            .timeline-item:nth-child(even) {
+                text-align: left;
+            }
+
+            .timeline-dot {
+                left: -45px !important;
+                right: auto !important;
+            }
+
+            .hero-title::after {
+                display: none;
+            }
+
+            .levels-grid,
+            .resources-grid,
+            .testimonials-container {
+                grid-template-columns: 1fr;
+            }
+
+            .trophy-container {
+                gap: 1rem;
+            }
+
+            .trophy {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations on scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Botón hamburguesa - solo visible en móvil */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1001;
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--text-primary);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Animación del botón hamburguesa cuando está activo */
+.mobile-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay para cerrar menú móvil */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Responsive breakpoints - ACTUALIZADO para OLIMPIADAS */
+@media (max-width: 768px) {
+    
+    /* Mostrar botón hamburguesa */
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    /* Ocultar menú por defecto en móvil */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border-left: 2px solid rgba(102, 126, 234, 0.2);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 80px 0 20px 0;
+        margin: 0;
+        list-style: none;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Mostrar menú cuando está activo */
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    /* Mostrar overlay cuando menú está activo */
+    .nav-menu.active ~ .mobile-menu-overlay {
+        display: block;
+    }
+    
+    /* Estilos de los enlaces en móvil */
+    .nav-menu li {
+        margin: 0;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+    }
+    
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+    
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 1rem 2rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        font-size: 1.1rem;
+        gap: 0.75rem;
+    }
+    
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--gradient-main);
+        transition: left 0.3s ease;
+        z-index: -1;
+    }
+    
+    .nav-link:hover::before,
+    .nav-link:focus::before {
+        left: 0;
+    }
+    
+    .nav-link:hover,
+    .nav-link:focus {
+        color: var(--white);
+        transform: translateX(5px);
+    }
+    
+    .nav-link.active {
+        background: var(--gradient-main);
+        color: var(--white);
+    }
+    
+    .nav-link.active::before {
+        display: none;
+    }
+    
+    .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    /* Ajustar navbar en móvil */
+    .navbar {
+        padding: 1rem;
+    }
+    
+    /* Logo más pequeño en móvil */
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    /* Ajustar hero para móvil */
+    .hero {
+        min-height: 50vh;
+        margin-bottom: -30px;
+    }
+    
+    .hero-content {
+        padding: 1rem;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+    
+    .nav-menu {
+        gap: 1rem;
+    }
+    
+    .nav-link {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+        gap: 0.4rem;
+    }
+    
+    .logo {
+        font-size: 1.3rem;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.75rem;
+    }
+    
+    .logo {
+        font-size: 1rem;
+    }
+    
+    .nav-menu {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    .mobile-menu-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+    }
+    
+    /* Ajustes específicos para pantallas muy pequeñas */
+    .hero-title {
+        font-size: clamp(2rem, 8vw, 3rem) !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .trophy {
+        font-size: 2rem !important;
+    }
+    
+    .trophy-container {
+        gap: 1rem !important;
+    }
+}
+
+/* Animaciones suaves */
+@media (prefers-reduced-motion: no-preference) {
+    .nav-menu {
+        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .nav-link {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+}
+
+/* Para usuarios que prefieren menos animación */
+@media (prefers-reduced-motion: reduce) {
+    .nav-menu,
+    .nav-link,
+    .hamburger-line,
+    .mobile-menu-btn {
+        transition: none;
+    }
+}
+
+/* Focus visible para accesibilidad */
+.mobile-menu-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Mejoras adicionales para la página de olimpiadas */
+@media (max-width: 768px) {
+    /* Ajustar sección de niveles */
+    .levels-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    /* Ajustar timeline */
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-item {
+        width: calc(100% - 60px);
+        margin-left: 60px;
+        text-align: left;
+    }
+    
+    .timeline-item:nth-child(even) {
+        text-align: left;
+    }
+    
+    .timeline-dot {
+        left: -45px !important;
+        right: auto !important;
+    }
+    
+    /* Ajustar grids responsivos */
+    .resources-grid,
+    .testimonials-container,
+    .achievements-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Ajustar padding de secciones en móvil */
+    .section {
+        padding: 3rem 1rem;
+    }
+    
+    /* CTA responsive */
+    .cta-section {
+        margin: 2rem 1rem;
+        padding: 3rem 1.5rem;
+    }
+    
+    .cta-title {
+        font-size: 2rem;
+    }
+    
+    .cta-text {
+        font-size: 1.1rem;
+    }
+}
+
+/* Pantallas extra pequeñas */
+@media (max-width: 360px) {
+    .level-card,
+    .problem-card,
+    .resource-card,
+    .testimonial-card,
+    .achievement-card {
+        padding: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .navbar {
+        padding: 0.5rem;
+    }
+    
+    .logo {
+        font-size: 0.9rem;
+    }
+}
+</style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="math-patterns"></div>
+    
+    <!-- Olympic Particles -->
+    <div class="olympic-particles" id="olympicParticles"></div>
+
+   <header class="header">
+    <nav class="navbar">
+        <a href="../index.html" class="logo">
+            <i class="fas fa-calculator"></i>
+            Matemáticas Digitales
+        </a>
+        
+        <!-- Botón hamburguesa para móvil -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                Inicio
+            </a></li>
+            <li><a href="#" class="nav-link active">
+                <i class="fas fa-trophy"></i>
+                Olimpiadas
+            </a></li>
+            <li><a href="../club/competencias.html" class="nav-link">
+                <i class="fas fa-medal"></i>
+                Competencias
+            </a></li>
+            <li><a href="../materiales/materiales.html" class="nav-link">
+                <i class="fas fa-book"></i>
+                Recursos
+            </a></li>
+        </ul>
+        
+        <!-- Overlay para cerrar menú móvil -->
+        <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+    </nav>
+</header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Olimpiadas Matemáticas</h1>
+            <p class="hero-subtitle">Escuela Superior María Teresa Piñeiro - Club de Matemáticas</p>
+            <div class="trophy-container">
+                <i class="fas fa-trophy trophy gold"></i>
+                <i class="fas fa-trophy trophy silver"></i>
+                <i class="fas fa-trophy trophy bronze"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- About Olympics Section -->
+        <section class="section">
+            <h2 class="section-title fade-in">Nuestras Olimpiadas Locales</h2>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-primary); margin-bottom: 2rem;">
+                    Nuestras Olimpiadas Matemáticas locales son competencias emocionantes donde los estudiantes 
+                    del Club de Matemáticas demuestran sus habilidades resolviendo problemas creativos. Es una 
+                    oportunidad perfecta para brillar, aprender de los compañeros y desarrollar el amor por las 
+                    matemáticas en un ambiente divertido y retador.
+                </p>
+                <div style="background: rgba(102, 126, 234, 0.1); border-radius: 20px; padding: 1.5rem; margin-top: 2rem;">
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">¿Quién puede participar?</h3>
+                    <p style="color: var(--text-secondary);">
+                        Todos los estudiantes de nuestra escuela están invitados a participar. 
+                        No necesitas experiencia previa, solo entusiasmo y ganas de aprender. 
+                        ¡Los miembros del club te ayudarán a prepararte!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Competition Levels -->
+        <section class="section">
+            <h2 class="section-title fade-in">Niveles de Competencia</h2>
+            <div class="levels-grid">
+                <div class="level-card fade-in">
+                    <div class="level-icon">🌟</div>
+                    <h3 class="level-title">Categoría Novato</h3>
+                    <p class="level-description">
+                        Para estudiantes nuevos en el Club de Matemáticas que están descubriendo su pasión por los números.
+                    </p>
+                    <ul class="level-features">
+                        <li>Problemas de lógica divertidos</li>
+                        <li>Acertijos matemáticos</li>
+                        <li>Geometría básica</li>
+                        <li>Retos numéricos creativos</li>
+                    </ul>
+                </div>
+
+                <div class="level-card fade-in">
+                    <div class="level-icon">🚀</div>
+                    <h3 class="level-title">Categoría Intermedia</h3>
+                    <p class="level-description">
+                        Para miembros activos del club con experiencia en resolución de problemas matemáticos.
+                    </p>
+                    <ul class="level-features">
+                        <li>Álgebra y ecuaciones</li>
+                        <li>Problemas de razonamiento</li>
+                        <li>Geometría aplicada</li>
+                        <li>Desafíos de probabilidad</li>
+                    </ul>
+                </div>
+
+                <div class="level-card fade-in">
+                    <div class="level-icon">💎</div>
+                    <h3 class="level-title">Categoría Avanzada</h3>
+                    <p class="level-description">
+                        Para nuestros veteranos del club que buscan los retos matemáticos más desafiantes.
+                    </p>
+                    <ul class="level-features">
+                        <li>Problemas de olimpiadas</li>
+                        <li>Demostraciones matemáticas</li>
+                        <li>Trigonometría avanzada</li>
+                        <li>Pensamiento abstracto</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practice Problems -->
+        <section class="section">
+            <h2 class="section-title fade-in">¡Practica para la Olimpiada!</h2>
+            <div class="problems-section">
+                <div class="problem-categories">
+                    <button class="category-btn active">Todos</button>
+                    <button class="category-btn">Lógica</button>
+                    <button class="category-btn">Geometría</button>
+                    <button class="category-btn">Álgebra</button>
+                    <button class="category-btn">Números</button>
+                </div>
+
+                <p style="text-align: center; color: var(--text-secondary); margin: 1.5rem 0; font-style: italic;">
+                    💡 Estos son ejemplos del tipo de problemas que encontrarás en nuestras olimpiadas. 
+                    ¡Intenta resolverlos y trae tus respuestas al club!
+                </p>
+
+                <div class="problems-grid">
+                    <div class="problem-card fade-in">
+                        <div class="problem-header">
+                            <h4>Reto del Día</h4>
+                            <span class="problem-difficulty difficulty-medium">Intermedio</span>
+                        </div>
+                        <div class="problem-content">
+                            En una fiesta hay 10 personas. Si cada persona saluda a todas las demás 
+                            exactamente una vez, ¿cuántos saludos hay en total?
+                        </div>
+                        <div class="problem-actions">
+                            <button class="problem-btn solve-btn">
+                                <i class="fas fa-pencil-alt"></i>
+                                Resolver
+                            </button>
+                            <button class="problem-btn hint-btn">
+                                <i class="fas fa-lightbulb"></i>
+                                Pista
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="problem-card fade-in">
+                        <div class="problem-header">
+                            <h4>Desafío Visual</h4>
+                            <span class="problem-difficulty difficulty-hard">Avanzado</span>
+                        </div>
+                        <div class="problem-content">
+                            Un cuadrado tiene área 64 cm². Si aumentamos cada lado en 2 cm, 
+                            ¿cuál será el área del nuevo cuadrado?
+                        </div>
+                        <div class="problem-actions">
+                            <button class="problem-btn solve-btn">
+                                <i class="fas fa-pencil-alt"></i>
+                                Resolver
+                            </button>
+                            <button class="problem-btn hint-btn">
+                                <i class="fas fa-lightbulb"></i>
+                                Pista
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="problem-card fade-in">
+                        <div class="problem-header">
+                            <h4>Acertijo Numérico</h4>
+                            <span class="problem-difficulty difficulty-easy">Básico</span>
+                        </div>
+                        <div class="problem-content">
+                            La suma de tres números consecutivos es 72. ¿Cuáles son estos números?
+                        </div>
+                        <div class="problem-actions">
+                            <button class="problem-btn solve-btn">
+                                <i class="fas fa-pencil-alt"></i>
+                                Resolver
+                            </button>
+                            <button class="problem-btn hint-btn">
+                                <i class="fas fa-lightbulb"></i>
+                                Pista
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section class="section">
+            <h2 class="section-title fade-in">Calendario Escolar 2025</h2>
+            <div class="timeline">
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <span class="timeline-date">Agosto</span>
+                        <h4>Inicio del Club</h4>
+                        <p>Bienvenida a nuevos miembros y primeras sesiones de práctica</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <span class="timeline-date">Octubre</span>
+                        <h4>Mini-Olimpiada de Otoño</h4>
+                        <p>Primera competencia amistosa del año escolar</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <span class="timeline-date">Febrero</span>
+                        <h4>Semana de las Matemáticas</h4>
+                        <p>Competencias diarias y actividades especiales</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-content">
+                        <span class="timeline-date">Mayo</span>
+                        <h4>Gran Olimpiada Anual</h4>
+                        <p>¡El evento más esperado del año con premios especiales!</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+         <section class="section">
+            <h2 class="section-title fade-in">Logros del Club</h2>
+            <div class="achievements-grid">
+                <div class="achievement-card fade-in">
+                    <div class="medal-icon">🏆</div>
+                    <h4 class="achievement-title">45 Estudiantes</h4>
+                    <p class="achievement-desc">Participantes este año</p>
+                </div>
+
+                <div class="achievement-card fade-in">
+                    <div class="medal-icon">⭐</div>
+                    <h4 class="achievement-title">12 Ganadores</h4>
+                    <p class="achievement-desc">En diferentes categorías</p>
+                </div>
+
+                <div class="achievement-card fade-in">
+                    <div class="medal-icon">📚</div>
+                    <h4 class="achievement-title">200+ Problemas</h4>
+                    <p class="achievement-desc">Resueltos en grupo</p>
+                </div>
+
+                <div class="achievement-card fade-in">
+                    <div class="medal-icon">🎯</div>
+                    <h4 class="achievement-title">4 Eventos</h4>
+                    <p class="achievement-desc">Olimpiadas al año</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prizes Section -->
+        <section class="section">
+            <h2 class="section-title fade-in">Premios y Reconocimientos</h2>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-primary);">
+                    Todos los participantes reciben certificados y los ganadores obtienen premios especiales 
+                    donados por el departamento de matemáticas y patrocinadores locales.
+                </p>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card fade-in">
+                    <div class="resource-header" style="background: var(--gradient-olympic);">
+                        <div class="resource-icon">🥇</div>
+                        <h3 class="resource-title">Primer Lugar</h3>
+                    </div>
+                    <div class="resource-body">
+                        <ul class="resource-links" style="list-style: none;">
+                            <li style="padding: 0.5rem 0;">• Trofeo personalizado</li>
+                            <li style="padding: 0.5rem 0;">• Calculadora científica</li>
+                            <li style="padding: 0.5rem 0;">• Kit de geometría profesional</li>
+                            <li style="padding: 0.5rem 0;">• Certificado de honor</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resource-card fade-in">
+                    <div class="resource-header" style="background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);">
+                        <div class="resource-icon">🥈</div>
+                        <h3 class="resource-title">Segundo Lugar</h3>
+                    </div>
+                    <div class="resource-body">
+                        <ul class="resource-links" style="list-style: none;">
+                            <li style="padding: 0.5rem 0;">• Medalla de plata</li>
+                            <li style="padding: 0.5rem 0;">• Libros de matemáticas</li>
+                            <li style="padding: 0.5rem 0;">• Material escolar</li>
+                            <li style="padding: 0.5rem 0;">• Certificado especial</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resource-card fade-in">
+                    <div class="resource-header" style="background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);">
+                        <div class="resource-icon">🥉</div>
+                        <h3 class="resource-title">Tercer Lugar</h3>
+                    </div>
+                    <div class="resource-body">
+                        <ul class="resource-links" style="list-style: none;">
+                            <li style="padding: 0.5rem 0;">• Medalla de bronce</li>
+                            <li style="padding: 0.5rem 0;">• Juegos matemáticos</li>
+                            <li style="padding: 0.5rem 0;">• Cupones de cafetería</li>
+                            <li style="padding: 0.5rem 0;">• Certificado de logro</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="section">
+            <h2 class="section-title fade-in">Recursos de Preparación</h2>
+            <div class="resources-grid">
+                <div class="resource-card fade-in">
+                    <div class="resource-header">
+                        <div class="resource-icon">📚</div>
+                        <h3 class="resource-title">Material del Club</h3>
+                    </div>
+                    <div class="resource-body">
+                        <ul class="resource-links">
+                            <li><a href="#"><i class="fas fa-file-pdf"></i> Problemas de Práctica</a></li>
+                            <li><a href="#"><i class="fas fa-file-pdf"></i> Guía para Principiantes</a></li>
+                            <li><a href="#"><i class="fas fa-file-pdf"></i> Trucos Matemáticos</a></li>
+                            <li><a href="#"><i class="fas fa-file-pdf"></i> Olimpiadas Pasadas</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resource-card fade-in">
+                    <div class="resource-header">
+                        <div class="resource-icon">🎥</div>
+                        <h3 class="resource-title">Recursos Digitales</h3>
+                    </div>
+                    <div class="resource-body">
+                        <ul class="resource-links">
+                            <li><a href="#"><i class="fas fa-play-circle"></i> Videos del Prof. Guerrero</a></li>
+                            <li><a href="#"><i class="fas fa-play-circle"></i> Soluciones Explicadas</a></li>
+                            <li><a href="#"><i class="fas fa-play-circle"></i> Tips de Campeones</a></li>
+                            <li><a href="#"><i class="fas fa-play-circle"></i> Sesiones Grabadas</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resource-card fade-in">
+                    <div class="resource-header">
+                        <div class="resource-icon">🏋️</div>
+                        <h3 class="resource-title">Horario del Club</h3>
+                    </div>
+                    <div class="resource-body">
+                        <ul class="resource-links">
+                            <li><a href="#"><i class="fas fa-calendar"></i> Lunes: Práctica General</a></li>
+                            <li><a href="#"><i class="fas fa-calendar"></i> Miércoles: Resolución de Problemas</a></li>
+                            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Viernes: Preparación Olimpiadas</a></li>
+                            <li><a href="#"><i class="fas fa-users"></i> Sábados: Sesiones Especiales en Ocasiones</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="section">
+            <h2 class="section-title fade-in">Lo que dicen nuestros estudiantes</h2>
+            <div class="testimonials-container">
+                <div class="testimonial-card fade-in">
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p class="testimonial-text">
+                        "Participar en las olimpiadas del club me ayudó a perder el miedo a los problemas difíciles. 
+                        Ahora disfruto cada reto matemático y he mejorado mucho mis calificaciones."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">JM</div>
+                        <div class="author-info">
+                            <div class="author-name">José Martínez</div>
+                            <div class="author-achievement">Ganador Categoría Intermedia</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-in">
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p class="testimonial-text">
+                        "El profesor Guerrero hace que las matemáticas sean divertidas. Las olimpiadas escolares 
+                        son mi evento favorito del año. ¡Me encanta competir con mis amigos!"
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">VR</div>
+                        <div class="author-info">
+                            <div class="author-name">Valeria Rivera</div>
+                            <div class="author-achievement">Miembro destacado del Club</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card fade-in">
+                    <i class="fas fa-quote-right quote-icon"></i>
+                    <p class="testimonial-text">
+                        "Nunca pensé que sería bueno en matemáticas hasta que entré al club. Las olimpiadas 
+                        me demostraron que puedo resolver problemas que antes creía imposibles."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">LS</div>
+                        <div class="author-info">
+                            <div class="author-name">Luis Soto</div>
+                            <div class="author-achievement">Premio al Progreso 2024</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section">
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h2 class="cta-title">¿Quieres ser parte del Club?</h2>
+                    <p class="cta-text">
+                        Únete a nuestro Club de Matemáticas y participa en las próximas olimpiadas escolares. 
+                        No necesitas ser un genio, ¡solo tener ganas de aprender y divertirte con las matemáticas!
+                    </p>
+                    <a href="#" class="cta-button">
+                        <i class="fas fa-plus-circle"></i>
+                        Únete al Club
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Prof. Yonatan Guerrero - Club de Matemáticas</p>
+        <p>Inspirando el amor por las matemáticas en nuestra escuela</p>
+    </footer>
+
+    <script>
+        // Create Olympic Particles
+        function createOlympicParticles() {
+            const container = document.getElementById('olympicParticles');
+            const symbols = ['∑', 'π', '∞', '√', 'θ', 'Δ', 'α', 'β', 'γ', '∫'];
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'olympic-symbol';
+                particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particle.style.fontSize = (15 + Math.random() * 15) + 'px';
+                particle.style.color = `hsl(${Math.random() * 60 + 200}, 70%, 60%)`;
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 25000);
+            }, 1000);
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Category filter functionality
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // Here you would filter problems based on category
+            });
+        });
+
+        // Problem interaction
+        document.querySelectorAll('.solve-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('¡Resuelve este problema en tu cuaderno y tráelo a la próxima reunión del club!');
+            });
+        });
+
+        document.querySelectorAll('.hint-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Pista: Recuerda las técnicas que practicamos en el club. ¡Tú puedes!');
+            });
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createOlympicParticles();
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        // Variables globales para el menú móvil
+let mobileMenuOpen = false;
+
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    
+    if (!mobileMenuOpen) {
+        openMobileMenu();
+    } else {
+        closeMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navMenu.classList.add('active');
+    menuBtn.classList.add('active');
+    overlay.style.display = 'block';
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+    
+    mobileMenuOpen = true;
+    
+    // Añadir evento para cerrar con Escape
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+function closeMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navMenu.classList.remove('active');
+    menuBtn.classList.remove('active');
+    overlay.style.display = 'none';
+    
+    // Restaurar scroll del body
+    document.body.style.overflow = 'auto';
+    
+    mobileMenuOpen = false;
+    
+    // Remover evento de Escape
+    document.removeEventListener('keydown', handleEscapeKey);
+}
+
+// Cerrar menú con tecla Escape
+function handleEscapeKey(event) {
+    if (event.key === 'Escape' && mobileMenuOpen) {
+        closeMobileMenu();
+    }
+}
+
+// Inicializar eventos del menú responsivo
+function initMobileMenu() {
+    // Cerrar menú al hacer click en un enlace
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Cerrar menú móvil si está abierto
+            if (mobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+    });
+    
+    // Cerrar menú al cambiar tamaño de ventana
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && mobileMenuOpen) {
+            closeMobileMenu();
+        }
+    });
+    
+    // Mejorar accesibilidad del menú
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (menuBtn && navMenu) {
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-controls', 'navMenu');
+        
+        // Actualizar aria-expanded cuando cambie el estado
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const isActive = navMenu.classList.contains('active');
+                    menuBtn.setAttribute('aria-expanded', isActive.toString());
+                }
+            });
+        });
+        
+        observer.observe(navMenu, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+}
+
+// Añadir al event listener de load existente
+window.addEventListener('load', () => {
+    // Tu código existente...
+    createOlympicParticles();
+    
+    // Inicializar menú móvil
+    initMobileMenu();
+});
+
+// Si ya tienes un DOMContentLoaded, añade esto, si no, crea uno nuevo:
+document.addEventListener('DOMContentLoaded', function() {
+    initMobileMenu();
+});
+</script>
+</body>
+</html>

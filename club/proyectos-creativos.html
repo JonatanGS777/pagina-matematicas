@@ -1,0 +1,2940 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos Creativos - Club Matemáticas | Prof. Yonatan Guerrero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            --gradient-creativity: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            --gradient-project: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%);
+            --gradient-guide: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+        }
+
+    .animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background:
+        url('../imagenes/PROYECTOMATH.png'),
+        linear-gradient(-45deg, rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7), rgba(240, 147, 251, 0.7), rgba(78, 205, 196, 0.7));
+    background-repeat: no-repeat, repeat;
+    background-position: center center, 0% 50%;
+    background-attachment: fixed, fixed;
+    background-size: cover, 400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+
+        /* Floating Shapes */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            left: 20%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 80%;
+            animation-delay: 4s;
+        }
+
+        .shape:nth-child(4) {
+            width: 40px;
+            height: 40px;
+            left: 70%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mathematical Particles */
+        .math-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .math-particle {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 500;
+            pointer-events: none;
+            animation: mathFloat linear infinite;
+        }
+
+        .math-particle.creativity {
+            font-size: clamp(16px, 2.5vw, 22px);
+            color: rgba(255, 107, 157, 0.4);
+        }
+
+        .math-particle.project {
+            font-size: clamp(14px, 2vw, 18px);
+            color: rgba(253, 187, 45, 0.5);
+        }
+
+        .math-particle.innovation {
+            font-size: clamp(18px, 2.8vw, 24px);
+            color: rgba(34, 193, 195, 0.4);
+        }
+
+        @keyframes mathFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) translateX(var(--drift, 0px)) rotate(180deg) scale(1);
+            }
+            95% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(calc(var(--drift, 0px) * 2)) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            z-index: 1000;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+        }
+
+        .back-btn {
+            background: var(--gradient-creativity);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            backdrop-filter: blur(20px);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-soft);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--gradient-creativity);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-creativity);
+            border-radius: 2px;
+        }
+
+        /* Guide Steps */
+        .guide-container {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .guide-step {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-soft);
+            border-left: 5px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-creativity);
+        }
+
+        .guide-step.step1 { border-left-color: #ff6b9d; }
+        .guide-step.step2 { border-left-color: #fdbb2d; }
+        .guide-step.step3 { border-left-color: #22c1c3; }
+        .guide-step.step4 { border-left-color: #667eea; }
+        .guide-step.step5 { border-left-color: #4ecdc4; }
+
+        .guide-step:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-creativity);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .step-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .step-tips {
+            background: rgba(102, 126, 234, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+            margin-top: 1.5rem;
+        }
+
+        .step-tips h4 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-tips ul {
+            margin-left: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .step-tips li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Project Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .category-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid;
+        }
+
+        .category-card.art { border-top-color: #ff6b9d; }
+        .category-card.tech { border-top-color: #22c1c3; }
+        .category-card.social { border-top-color: #fdbb2d; }
+        .category-card.science { border-top-color: #667eea; }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-creativity);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: var(--white);
+        }
+
+        .category-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-examples {
+            background: rgba(102, 126, 234, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+        }
+
+        .project-examples h4 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .example-list {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .example-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .example-item i {
+            color: var(--success);
+            font-size: 0.8rem;
+        }
+
+        /* Math Applications */
+        .math-applications {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .math-applications h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .math-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .math-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .math-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
+        }
+
+        .math-card h4 {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .math-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Timeline */
+        .timeline-container {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--gradient-creativity);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 0.5rem;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-creativity);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px var(--white);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-duration {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-style: italic;
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resource-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            border-top: 4px solid var(--success);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .resource-icon {
+            font-size: 2.5rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .resource-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resource-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .resource-list li i {
+            color: var(--success);
+            font-size: 0.8rem;
+        }
+
+        /* Evaluation Criteria */
+        .evaluation-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .rubric-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
+            border-radius: 15px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .rubric-intro p {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .evaluation-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .evaluation-table thead {
+            background: var(--gradient-creativity);
+            color: var(--white);
+        }
+
+        .evaluation-table th {
+            padding: 1rem 0.75rem;
+            text-align: center;
+            font-weight: 600;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+
+        .evaluation-table th:last-child {
+            border-right: none;
+        }
+
+        .criteria-col { width: 18%; }
+        .points-col { width: 8%; }
+        .excellent-col, .good-col, .satisfactory-col, .needs-improvement-col { width: 18.5%; }
+
+        .criterion-row {
+            border-bottom: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .criterion-row:hover {
+            background: rgba(102, 126, 234, 0.02);
+        }
+
+        .criterion-row.math-application { border-left: 5px solid #667eea; }
+        .criterion-row.creativity { border-left: 5px solid #ff6b9d; }
+        .criterion-row.methodology { border-left: 5px solid #22c1c3; }
+        .criterion-row.presentation { border-left: 5px solid #fdbb2d; }
+        .criterion-row.impact { border-left: 5px solid #4ecdc4; }
+
+        .evaluation-table td {
+            padding: 1.25rem 0.75rem;
+            vertical-align: top;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .evaluation-table td:last-child {
+            border-right: none;
+        }
+
+        .criteria-cell {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(240, 147, 251, 0.03));
+        }
+
+        .criterion-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .criterion-header i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .criteria-cell small {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+
+        .points-cell {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.05), rgba(102, 126, 234, 0.05));
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .performance-cell {
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .performance-cell.excellent { background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(76, 175, 80, 0.02)); }
+        .performance-cell.good { background: linear-gradient(135deg, rgba(33, 150, 243, 0.05), rgba(33, 150, 243, 0.02)); }
+        .performance-cell.satisfactory { background: linear-gradient(135deg, rgba(255, 193, 7, 0.05), rgba(255, 193, 7, 0.02)); }
+        .performance-cell.needs-improvement { background: linear-gradient(135deg, rgba(244, 67, 54, 0.05), rgba(244, 67, 54, 0.02)); }
+
+        .points-range {
+            background: var(--gradient-creativity);
+            color: var(--white);
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.7rem;
+            font-size: 0.75rem;
+        }
+
+        .performance-cell.excellent .points-range { background: linear-gradient(135deg, #4CAF50, #388E3C); }
+        .performance-cell.good .points-range { background: linear-gradient(135deg, #2196F3, #1565C0); }
+        .performance-cell.satisfactory .points-range { background: linear-gradient(135deg, #FFC107, #F57C00); }
+        .performance-cell.needs-improvement .points-range { background: linear-gradient(135deg, #F44336, #C62828); }
+
+        .performance-cell ul {
+            margin: 0;
+            padding-left: 1rem;
+        }
+
+        .performance-cell li {
+            margin-bottom: 0.3rem;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .total-row {
+            background: var(--gradient-main);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .total-row td {
+            padding: 1rem 0.75rem;
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .total-row td:last-child {
+            border-right: none;
+        }
+
+        .total-label {
+            background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+            font-size: 1.1rem;
+        }
+
+        .total-excellent { background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(76, 175, 80, 0.9)); }
+        .total-good { background: linear-gradient(135deg, rgba(33, 150, 243, 0.8), rgba(33, 150, 243, 0.9)); }
+        .total-satisfactory { background: linear-gradient(135deg, rgba(255, 193, 7, 0.8), rgba(255, 193, 7, 0.9)); }
+        .total-needs-improvement { background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(244, 67, 54, 0.9)); }
+
+        /* Grading Scale */
+        .grading-scale {
+            margin-top: 3rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .grading-scale h4 {
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .grading-scale h4 i {
+            color: var(--primary);
+        }
+
+        .scale-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .scale-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .scale-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .scale-letter {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .excellent-scale .scale-letter { background: linear-gradient(135deg, #4CAF50, #388E3C); }
+        .good-scale .scale-letter { background: linear-gradient(135deg, #2196F3, #1565C0); }
+        .satisfactory-scale .scale-letter { background: linear-gradient(135deg, #FFC107, #F57C00); }
+        .needs-improvement-scale .scale-letter { background: linear-gradient(135deg, #F44336, #C62828); }
+
+        .scale-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .scale-points {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .scale-percentage {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive for Table */
+        @media (max-width: 1024px) {
+            .table-container {
+                font-size: 0.8rem;
+            }
+            
+            .evaluation-table th,
+            .evaluation-table td {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .performance-cell li {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .evaluation-section {
+                padding: 2rem 1rem;
+            }
+            
+            .table-container {
+                margin: 1rem -1rem;
+                border-radius: 0;
+            }
+            
+            .evaluation-table {
+                font-size: 0.7rem;
+            }
+            
+            .evaluation-table th,
+            .evaluation-table td {
+                padding: 0.5rem 0.3rem;
+            }
+            
+            .criterion-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.3rem;
+            }
+            
+            .performance-cell li {
+                font-size: 0.65rem;
+                margin-bottom: 0.2rem;
+            }
+            
+            .scale-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .hero-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+
+            .guide-step, .math-applications, .timeline-container, .evaluation-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .step-number {
+                margin-right: 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.6s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s ease;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @keyframes gradientShift {
+    0% {
+        background-position: center center, 0% 50%;
+    }
+    50% {
+        background-position: center center, 100% 50%;
+    }
+    100% {
+        background-position: center center, 0% 50%;
+    }
+}
+/* Botón hamburguesa - solo visible en móvil */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1001;
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--text-primary);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Animación del botón hamburguesa cuando está activo */
+.mobile-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay para cerrar menú móvil */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Actualizar estilos de nav-menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* Responsive para imagen de fondo */
+@media (max-width: 1200px) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center top, 0% 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mostrar botón hamburguesa */
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    /* Menú móvil para proyectos creativos */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border-left: 2px solid rgba(102, 126, 234, 0.2);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    .nav-menu.active ~ .mobile-menu-overlay {
+        display: block;
+    }
+    
+    /* Estilo del botón en móvil */
+    .back-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 1.5rem 2rem;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .back-btn .btn-text {
+        display: inline;
+        margin-left: 0.75rem;
+    }
+    
+    .back-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.3s ease;
+        z-index: -1;
+    }
+    
+    .back-btn:hover::before {
+        left: 100%;
+    }
+    
+    .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+    }
+    
+    /* Imagen de fondo responsiva para móvil */
+    .animated-bg {
+        background-attachment: scroll, scroll;
+        background-size: cover, 400% 400%;
+        background-position: center center, 0% 50%;
+    }
+    
+    .navbar {
+        padding: 1rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.75rem;
+    }
+    
+    .logo {
+        font-size: 1rem;
+    }
+    
+    .mobile-menu-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+    }
+    
+    .nav-menu {
+        width: 100%;
+    }
+    
+    .back-btn {
+        padding: 1.2rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Optimizaciones para imagen de fondo en diferentes ratios */
+@media (min-aspect-ratio: 16/9) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center center, 0% 50%;
+    }
+}
+
+@media (max-aspect-ratio: 4/3) {
+    .animated-bg {
+        background-size: contain, 400% 400%;
+        background-position: center top, 0% 50%;
+        background-repeat: no-repeat, repeat;
+    }
+}
+
+/* Para pantallas muy pequeñas o con orientación portrait estrecha */
+@media (max-width: 480px) and (max-aspect-ratio: 9/16) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center 20%, 0% 50%;
+    }
+}
+
+/* Mejoras para pantallas de alta densidad */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+    }
+}
+
+/* Animaciones específicas para proyectos creativos */
+@media (prefers-reduced-motion: no-preference) {
+    .nav-menu {
+        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .back-btn {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .hamburger-line {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+}
+
+/* Para usuarios que prefieren menos animación */
+@media (prefers-reduced-motion: reduce) {
+    .nav-menu,
+    .back-btn,
+    .hamburger-line,
+    .mobile-menu-btn,
+    .animated-bg {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Focus visible para accesibilidad */
+.mobile-menu-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.back-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Ajustes específicos para contenido de proyectos creativos */
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 2.5rem 1.5rem;
+        margin: 1rem;
+    }
+    
+    .section {
+        padding: 3rem 1rem;
+    }
+    
+    .guide-step,
+    .math-applications,
+    .timeline-container,
+    .evaluation-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .step-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .step-number {
+        margin-right: 0;
+    }
+    
+    /* Tabla responsiva específica */
+    .table-container {
+        margin: 1rem -1rem;
+        border-radius: 0;
+    }
+    
+    .evaluation-table {
+        font-size: 0.7rem;
+    }
+    
+    .evaluation-table th,
+    .evaluation-table td {
+        padding: 0.5rem 0.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+    }
+    
+    .hero p {
+        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    }
+    
+    .section-title {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+    
+    .step-title,
+    .category-title {
+        font-size: 1.2rem;
+    }
+    
+    .category-card,
+    .resource-card {
+        padding: 1.5rem;
+    }
+    
+    .timeline-container,
+    .math-applications {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Ajustes para orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        min-height: 80vh;
+    }
+    
+    .hero-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .animated-bg {
+        background-position: center top, 0% 50%;
+    }
+}
+
+/* Optimización para carga de imagen en conexiones lentas */
+@media (max-width: 768px) {
+    .animated-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(-45deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9), rgba(240, 147, 251, 0.9), rgba(78, 205, 196, 0.9));
+        z-index: -1;
+    }
+}
+
+/* Fallback para navegadores que no soportan backdrop-filter */
+@supports not (backdrop-filter: blur(20px)) {
+    .nav-menu {
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .hero-content {
+        background: rgba(255, 255, 255, 0.9);
+    }
+}
+/* Botón hamburguesa - solo visible en móvil */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1001;
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--text-primary);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Animación del botón hamburguesa cuando está activo */
+.mobile-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay para cerrar menú móvil */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Actualizar estilos de nav-menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/* Responsive para imagen de fondo */
+@media (max-width: 1200px) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center top, 0% 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mostrar botón hamburguesa */
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    /* Menú móvil para proyectos creativos */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border-left: 2px solid rgba(102, 126, 234, 0.2);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    .nav-menu.active ~ .mobile-menu-overlay {
+        display: block;
+    }
+    
+    /* Estilo del botón en móvil */
+    .back-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 1.5rem 2rem;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .back-btn .btn-text {
+        display: inline;
+        margin-left: 0.75rem;
+    }
+    
+    .back-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.3s ease;
+        z-index: -1;
+    }
+    
+    .back-btn:hover::before {
+        left: 100%;
+    }
+    
+    .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+    }
+    
+    /* Imagen de fondo responsiva para móvil */
+    .animated-bg {
+        background-attachment: scroll, scroll;
+        background-size: cover, 400% 400%;
+        background-position: center center, 0% 50%;
+    }
+    
+    .navbar {
+        padding: 1rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.75rem;
+    }
+    
+    .logo {
+        font-size: 1rem;
+    }
+    
+    .mobile-menu-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+    }
+    
+    .nav-menu {
+        width: 100%;
+    }
+    
+    .back-btn {
+        padding: 1.2rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Optimizaciones para imagen de fondo en diferentes ratios */
+@media (min-aspect-ratio: 16/9) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center center, 0% 50%;
+    }
+}
+
+@media (max-aspect-ratio: 4/3) {
+    .animated-bg {
+        background-size: contain, 400% 400%;
+        background-position: center top, 0% 50%;
+        background-repeat: no-repeat, repeat;
+    }
+}
+
+/* Para pantallas muy pequeñas o con orientación portrait estrecha */
+@media (max-width: 480px) and (max-aspect-ratio: 9/16) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center 20%, 0% 50%;
+    }
+}
+
+/* Mejoras para pantallas de alta densidad */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+    }
+}
+
+/* Animaciones específicas para proyectos creativos */
+@media (prefers-reduced-motion: no-preference) {
+    .nav-menu {
+        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .back-btn {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .hamburger-line {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+}
+
+/* Para usuarios que prefieren menos animación */
+@media (prefers-reduced-motion: reduce) {
+    .nav-menu,
+    .back-btn,
+    .hamburger-line,
+    .mobile-menu-btn,
+    .animated-bg {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Focus visible para accesibilidad */
+.mobile-menu-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.back-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Ajustes específicos para contenido de proyectos creativos */
+@media (max-width: 768px) {
+    .hero-content {
+        padding: 2.5rem 1.5rem;
+        margin: 1rem;
+    }
+    
+    .section {
+        padding: 3rem 1rem;
+    }
+    
+    .guide-step,
+    .math-applications,
+    .timeline-container,
+    .evaluation-section {
+        padding: 2rem 1.5rem;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .step-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .step-number {
+        margin-right: 0;
+    }
+    
+    /* Tabla responsiva específica */
+    .table-container {
+        margin: 1rem -1rem;
+        border-radius: 0;
+    }
+    
+    .evaluation-table {
+        font-size: 0.7rem;
+    }
+    
+    .evaluation-table th,
+    .evaluation-table td {
+        padding: 0.5rem 0.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+    }
+    
+    .hero p {
+        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    }
+    
+    .section-title {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+    
+    .step-title,
+    .category-title {
+        font-size: 1.2rem;
+    }
+    
+    .category-card,
+    .resource-card {
+        padding: 1.5rem;
+    }
+    
+    .timeline-container,
+    .math-applications {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Ajustes para orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        min-height: 80vh;
+    }
+    
+    .hero-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .animated-bg {
+        background-position: center top, 0% 50%;
+    }
+}
+
+/* Optimización para carga de imagen en conexiones lentas */
+@media (max-width: 768px) {
+    .animated-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(-45deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9), rgba(240, 147, 251, 0.9), rgba(78, 205, 196, 0.9));
+        z-index: -1;
+    }
+}
+
+/* Fallback para navegadores que no soportan backdrop-filter */
+@supports not (backdrop-filter: blur(20px)) {
+    .nav-menu {
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .hero-content {
+        background: rgba(255, 255, 255, 0.9);
+    }
+}
+</style>
+    </style>
+</head>
+<body>
+    <header class="header">
+    <nav class="navbar">
+        <a href="../index.html" class="logo">
+            <i class="fas fa-calculator"></i>
+            Matemáticas Digitales
+        </a>
+        
+        <!-- Botón hamburguesa para móvil -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <div class="nav-menu" id="navMenu">
+            <a href="../index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span class="btn-text">Volver al Inicio</span>
+            </a>
+        </div>
+        
+        <!-- Overlay para cerrar menú móvil -->
+        <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+    </nav>
+</header>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    
+    <!-- Floating Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Mathematical Particles -->
+    <div class="math-particles" id="mathParticles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1><i class="fas fa-lightbulb"></i> Proyectos Creativos</h1>
+            <p>Guía completa para desarrollar proyectos innovadores donde las matemáticas sean las protagonistas. Transforma ideas en realidad aplicando conceptos matemáticos de forma creativa y práctica.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Guide Section -->
+        <section class="section">
+            <h2 class="section-title fade-in">Guía Paso a Paso</h2>
+            
+            <div class="guide-container">
+                <div class="guide-step step1 fade-in">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Identificación del Problema</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>El primer paso es identificar un problema real o una pregunta interesante que pueda ser abordada usando matemáticas. Busca situaciones en tu vida diaria, en tu comunidad o en temas que te apasionen.</p>
+                        
+                        <div class="step-tips">
+                            <h4><i class="fas fa-search"></i> Consejos para encontrar problemas:</h4>
+                            <ul>
+                                <li>Observa patrones en la naturaleza, arquitectura o arte</li>
+                                <li>Analiza datos de redes sociales, deportes o música</li>
+                                <li>Investiga problemas ambientales o sociales</li>
+                                <li>Examina fenómenos físicos cotidianos</li>
+                                <li>Estudia tendencias económicas o demográficas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step step2 fade-in">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Investigación y Planificación</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Una vez identificado el problema, es hora de investigar qué matemáticas necesitarás y planificar tu enfoque. Esta fase es crucial para el éxito de tu proyecto.</p>
+                        
+                        <div class="step-tips">
+                            <h4><i class="fas fa-book"></i> Elementos clave de la investigación:</h4>
+                            <ul>
+                                <li>Revisa fuentes académicas y artículos especializados</li>
+                                <li>Identifica las herramientas matemáticas necesarias</li>
+                                <li>Crea un cronograma realista del proyecto</li>
+                                <li>Define objetivos específicos y medibles</li>
+                                <li>Establece metodología y recursos necesarios</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step step3 fade-in">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Desarrollo y Aplicación</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Aplica las matemáticas para resolver tu problema. Utiliza herramientas tecnológicas, recolecta datos, crea modelos y desarrolla soluciones innovadoras.</p>
+                        
+                        <div class="step-tips">
+                            <h4><i class="fas fa-cogs"></i> Herramientas recomendadas:</h4>
+                            <ul>
+                                <li>Software de matemáticas: GeoGebra, Desmos, Wolfram Alpha</li>
+                                <li>Programación: Python, Scratch, JavaScript</li>
+                                <li>Análisis de datos: Excel, Google Sheets, Tableau</li>
+                                <li>Diseño: Canva, Adobe Creative Suite</li>
+                                <li>Presentaciones: PowerPoint, Google Slides, Prezi</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step step4 fade-in">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Documentación y Análisis</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Documenta todo tu proceso, analiza los resultados obtenidos y reflexiona sobre las implicaciones de tus hallazgos. La documentación es tan importante como el resultado final.</p>
+                        
+                        <div class="step-tips">
+                            <h4><i class="fas fa-file-alt"></i> Elementos de la documentación:</h4>
+                            <ul>
+                                <li>Registro detallado del proceso de investigación</li>
+                                <li>Explicación clara de las matemáticas utilizadas</li>
+                                <li>Interpretación de resultados y conclusiones</li>
+                                <li>Reflexión sobre limitaciones y mejoras</li>
+                                <li>Referencias y fuentes consultadas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-step step5 fade-in">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <h3 class="step-title">Presentación y Comunicación</h3>
+                    </div>
+                    <div class="step-content">
+                        <p>Prepara una presentación impactante que comunique efectivamente tu trabajo. Adapta tu mensaje a diferentes audiencias y utiliza elementos visuales atractivos.</p>
+                        
+                        <div class="step-tips">
+                            <h4><i class="fas fa-presentation"></i> Consejos para presentar:</h4>
+                            <ul>
+                                <li>Cuenta una historia con tu proyecto</li>
+                                <li>Usa visualizaciones claras y atractivas</li>
+                                <li>Practica tu presentación múltiples veces</li>
+                                <li>Prepárate para preguntas y debates</li>
+                                <li>Considera diferentes formatos: póster, video, app</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Categories Section -->
+        <section class="section">
+            <h2 class="section-title fade-in">Categorías de Proyectos</h2>
+            
+            <div class="categories-grid">
+                <div class="category-card art fade-in">
+                    <div class="category-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="category-title">Arte y Diseño Matemático</h3>
+                    <p class="category-description">
+                        Explora la belleza de las matemáticas a través del arte, creando obras que revelan patrones, simetrías y estructuras matemáticas fascinantes.
+                    </p>
+                    <div class="project-examples">
+                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <div class="example-list">
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Fractales en la naturaleza y el arte
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Mosaicos y teselaciones matemáticas
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Espirales áureas en arquitectura
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Arte generativo con algoritmos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card tech fade-in">
+                    <div class="category-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="category-title">Tecnología e Innovación</h3>
+                    <p class="category-description">
+                        Desarrolla aplicaciones, simulaciones y herramientas tecnológicas que utilicen matemáticas para resolver problemas modernos.
+                    </p>
+                    <div class="project-examples">
+                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <div class="example-list">
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                App para optimizar rutas urbanas
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Simulador de fenómenos físicos
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Juego educativo de álgebra
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Calculadora de huella de carbono
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card social fade-in">
+                    <div class="category-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="category-title">Impacto Social</h3>
+                    <p class="category-description">
+                        Utiliza las matemáticas para abordar problemas sociales, económicos o ambientales que afecten a tu comunidad o al mundo.
+                    </p>
+                    <div class="project-examples">
+                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <div class="example-list">
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Análisis de desigualdad económica
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Modelo de propagación de epidemias
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Optimización del transporte público
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Predicción de patrones climáticos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card science fade-in">
+                    <div class="category-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h3 class="category-title">Ciencia y Experimentación</h3>
+                    <p class="category-description">
+                        Diseña experimentos y estudios que utilicen métodos matemáticos para explorar fenómenos científicos y naturales.
+                    </p>
+                    <div class="project-examples">
+                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <div class="example-list">
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Estado de péndulos acoplados
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Crecimiento poblacional de bacterias
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Análisis de frecuencias musicales
+                            </div>
+                            <div class="example-item">
+                                <i class="fas fa-check"></i>
+                                Modelos de sistemas dinámicos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Math Applications -->
+        <section class="section">
+            <div class="math-applications fade-in">
+                <h3>Aplicaciones Matemáticas Clave</h3>
+                <div class="math-grid">
+                    <div class="math-card">
+                        <h4><i class="fas fa-chart-line"></i> Álgebra y Funciones</h4>
+                        <p>Modelado de relaciones, optimización de recursos, análisis de tendencias y predicciones.</p>
+                    </div>
+                    <div class="math-card">
+                        <h4><i class="fas fa-shapes"></i> Geometría</h4>
+                        <p>Diseño espacial, análisis de formas, cálculo de áreas y volúmenes, perspectiva y simetría.</p>
+                    </div>
+                    <div class="math-card">
+                        <h4><i class="fas fa-wave-square"></i> Trigonometría</h4>
+                        <p>Análisis de ondas, navegación, astronomía, música y fenómenos periódicos.</p>
+                    </div>
+                    <div class="math-card">
+                        <h4><i class="fas fa-chart-pie"></i> Estadística</h4>
+                        <p>Análisis de datos, investigación de mercados, estudios sociales y toma de decisiones.</p>
+                    </div>
+                    <div class="math-card">
+                        <h4><i class="fas fa-percentage"></i> Probabilidad</h4>
+                        <p>Análisis de riesgos, juegos, predicciones y modelado de incertidumbre.</p>
+                    </div>
+                    <div class="math-card">
+                        <h4><i class="fas fa-infinity"></i> Cálculo</h4>
+                        <p>Tasas de cambio, optimización, área bajo curvas y modelado de fenómenos continuos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section class="section">
+            <div class="timeline-container fade-in">
+                <h3 class="section-title">Cronograma Sugerido</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4 class="timeline-title">Semana 1-2: Exploración e Identificación</h4>
+                        <p class="timeline-duration">14 días</p>
+                        <p class="timeline-description">Identificar el problema, realizar investigación preliminar y definir objetivos específicos del proyecto.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="timeline-title">Semana 3-4: Planificación Detallada</h4>
+                        <p class="timeline-duration">14 días</p>
+                        <p class="timeline-description">Desarrollar metodología, crear cronograma detallado y adquirir recursos necesarios.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="timeline-title">Semana 5-8: Desarrollo y Implementación</h4>
+                        <p class="timeline-duration">28 días</p>
+                        <p class="timeline-description">Aplicar matemáticas, recolectar datos, crear modelos y desarrollar soluciones.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="timeline-title">Semana 9-10: Análisis y Documentación</h4>
+                        <p class="timeline-duration">14 días</p>
+                        <p class="timeline-description">Analizar resultados, documentar proceso y elaborar conclusiones.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4 class="timeline-title">Semana 11-12: Presentación Final</h4>
+                        <p class="timeline-duration">14 días</p>
+                        <p class="timeline-description">Preparar presentación, crear materiales visuales y practicar exposición.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section class="section">
+            <h2 class="section-title fade-in">Recursos y Herramientas</h2>
+            
+            <div class="resources-grid">
+                <div class="resource-card fade-in">
+                    <div class="resource-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3 class="resource-title">Software Matemático</h3>
+                    <ul class="resource-list">
+                        <li><i class="fas fa-check"></i> GeoGebra (geometría y álgebra)</li>
+                        <li><i class="fas fa-check"></i> Desmos (graficación)</li>
+                        <li><i class="fas fa-check"></i> Wolfram Alpha (cálculos)</li>
+                        <li><i class="fas fa-check"></i> MATLAB/Octave (análisis)</li>
+                        <li><i class="fas fa-check"></i> R/Python (estadística)</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card fade-in">
+                    <div class="resource-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="resource-title">Programación</h3>
+                    <ul class="resource-list">
+                        <li><i class="fas fa-check"></i> Scratch (principiantes)</li>
+                        <li><i class="fas fa-check"></i> Python (análisis de datos)</li>
+                        <li><i class="fas fa-check"></i> JavaScript (web apps)</li>
+                        <li><i class="fas fa-check"></i> Processing (arte generativo)</li>
+                        <li><i class="fas fa-check"></i> MIT App Inventor (móvil)</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card fade-in">
+                    <div class="resource-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="resource-title">Análisis de Datos</h3>
+                    <ul class="resource-list">
+                        <li><i class="fas fa-check"></i> Excel/Google Sheets</li>
+                        <li><i class="fas fa-check"></i> Tableau Public</li>
+                        <li><i class="fas fa-check"></i> SPSS/IBM Watson</li>
+                        <li><i class="fas fa-check"></i> Orange (machine learning)</li>
+                        <li><i class="fas fa-check"></i> Knime (análisis visual)</li>
+                    </ul>
+                </div>
+
+                <div class="resource-card fade-in">
+                    <div class="resource-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="resource-title">Diseño y Presentación</h3>
+                    <ul class="resource-list">
+                        <li><i class="fas fa-check"></i> Canva (diseño gráfico)</li>
+                        <li><i class="fas fa-check"></i> Adobe Creative Suite</li>
+                        <li><i class="fas fa-check"></i> PowerPoint/Google Slides</li>
+                        <li><i class="fas fa-check"></i> Prezi (presentaciones)</li>
+                        <li><i class="fas fa-check"></i> Figma (prototipado)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evaluation Criteria -->
+        <section class="section">
+            <div class="evaluation-section fade-in">
+                <h3 class="section-title">Rúbrica de Evaluación</h3>
+                <div class="rubric-intro">
+                    <p><strong>Puntuación Total: 300 puntos</strong> - Esta rúbrica evalúa integralmente el desarrollo y presentación de proyectos creativos matemáticos.</p>
+                </div>
+                
+                <div class="table-container">
+                    <table class="evaluation-table">
+                        <thead>
+                            <tr>
+                                <th class="criteria-col">Criterio de Evaluación</th>
+                                <th class="points-col">Puntos</th>
+                                <th class="excellent-col">Excelente<br>(90-100%)</th>
+                                <th class="good-col">Bueno<br>(80-89%)</th>
+                                <th class="satisfactory-col">Satisfactorio<br>(70-79%)</th>
+                                <th class="needs-improvement-col">Necesita Mejorar<br>(60-69%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="criterion-row math-application">
+                                <td class="criteria-cell">
+                                    <div class="criterion-header">
+                                        <i class="fas fa-calculator"></i>
+                                        <strong>Aplicación Matemática</strong>
+                                    </div>
+                                    <small>Uso correcto y profundo de conceptos matemáticos</small>
+                                </td>
+                                <td class="points-cell"><strong>90 pts</strong></td>
+                                <td class="performance-cell excellent">
+                                    <div class="points-range">81-90 pts</div>
+                                    <ul>
+                                        <li>Uso excepcional de conceptos matemáticos avanzados</li>
+                                        <li>Cálculos precisos y verificados</li>
+                                        <li>Conexiones profundas entre teoría y aplicación</li>
+                                        <li>Demuestra comprensión superior</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell good">
+                                    <div class="points-range">72-80 pts</div>
+                                    <ul>
+                                        <li>Uso correcto de conceptos matemáticos</li>
+                                        <li>Cálculos mayormente precisos</li>
+                                        <li>Buenas conexiones teórico-prácticas</li>
+                                        <li>Comprensión sólida evidente</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell satisfactory">
+                                    <div class="points-range">63-71 pts</div>
+                                    <ul>
+                                        <li>Uso básico de conceptos matemáticos</li>
+                                        <li>Algunos errores en cálculos</li>
+                                        <li>Conexiones limitadas</li>
+                                        <li>Comprensión adecuada</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell needs-improvement">
+                                    <div class="points-range">54-62 pts</div>
+                                    <ul>
+                                        <li>Uso incorrecto o superficial</li>
+                                        <li>Múltiples errores de cálculo</li>
+                                        <li>Conexiones débiles o inexistentes</li>
+                                        <li>Comprensión limitada</li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                            <tr class="criterion-row creativity">
+                                <td class="criteria-cell">
+                                    <div class="criterion-header">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <strong>Creatividad e Innovación</strong>
+                                    </div>
+                                    <small>Originalidad y pensamiento crítico en el enfoque</small>
+                                </td>
+                                <td class="points-cell"><strong>75 pts</strong></td>
+                                <td class="performance-cell excellent">
+                                    <div class="points-range">68-75 pts</div>
+                                    <ul>
+                                        <li>Enfoque altamente original e innovador</li>
+                                        <li>Soluciones creativas y únicas</li>
+                                        <li>Pensamiento crítico excepcional</li>
+                                        <li>Perspectiva fresca del problema</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell good">
+                                    <div class="points-range">60-67 pts</div>
+                                    <ul>
+                                        <li>Enfoque creativo y bien pensado</li>
+                                        <li>Soluciones interesantes</li>
+                                        <li>Buen pensamiento crítico</li>
+                                        <li>Algunas ideas originales</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell satisfactory">
+                                    <div class="points-range">53-59 pts</div>
+                                    <ul>
+                                        <li>Enfoque convencional pero válido</li>
+                                        <li>Soluciones estándar</li>
+                                        <li>Pensamiento crítico básico</li>
+                                        <li>Poca originalidad</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell needs-improvement">
+                                    <div class="points-range">45-52 pts</div>
+                                    <ul>
+                                        <li>Enfoque poco creativo</li>
+                                        <li>Soluciones obvias o copiadas</li>
+                                        <li>Falta de pensamiento crítico</li>
+                                        <li>Sin originalidad aparente</li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                            <tr class="criterion-row methodology">
+                                <td class="criteria-cell">
+                                    <div class="criterion-header">
+                                        <i class="fas fa-cogs"></i>
+                                        <strong>Metodología y Proceso</strong>
+                                    </div>
+                                    <small>Organización, planificación y documentación del trabajo</small>
+                                </td>
+                                <td class="points-cell"><strong>60 pts</strong></td>
+                                <td class="performance-cell excellent">
+                                    <div class="points-range">54-60 pts</div>
+                                    <ul>
+                                        <li>Metodología científica rigurosa</li>
+                                        <li>Documentación completa y detallada</li>
+                                        <li>Proceso bien organizado</li>
+                                        <li>Seguimiento sistemático</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell good">
+                                    <div class="points-range">48-53 pts</div>
+                                    <ul>
+                                        <li>Metodología apropiada</li>
+                                        <li>Buena documentación</li>
+                                        <li>Proceso organizado</li>
+                                        <li>Seguimiento adecuado</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell satisfactory">
+                                    <div class="points-range">42-47 pts</div>
+                                    <ul>
+                                        <li>Metodología básica</li>
+                                        <li>Documentación incompleta</li>
+                                        <li>Organización limitada</li>
+                                        <li>Seguimiento irregular</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell needs-improvement">
+                                    <div class="points-range">36-41 pts</div>
+                                    <ul>
+                                        <li>Falta de metodología clara</li>
+                                        <li>Documentación deficiente</li>
+                                        <li>Proceso desorganizado</li>
+                                        <li>Sin seguimiento sistemático</li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                            <tr class="criterion-row presentation">
+                                <td class="criteria-cell">
+                                    <div class="criterion-header">
+                                        <i class="fas fa-presentation"></i>
+                                        <strong>Presentación y Comunicación</strong>
+                                    </div>
+                                    <small>Claridad, recursos visuales y capacidad explicativa</small>
+                                </td>
+                                <td class="points-cell"><strong>45 pts</strong></td>
+                                <td class="performance-cell excellent">
+                                    <div class="points-range">41-45 pts</div>
+                                    <ul>
+                                        <li>Presentación excepcional y atractiva</li>
+                                        <li>Comunicación clara y efectiva</li>
+                                        <li>Recursos visuales excelentes</li>
+                                        <li>Dominio completo del tema</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell good">
+                                    <div class="points-range">36-40 pts</div>
+                                    <ul>
+                                        <li>Buena presentación</li>
+                                        <li>Comunicación clara</li>
+                                        <li>Buenos recursos visuales</li>
+                                        <li>Buen dominio del tema</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell satisfactory">
+                                    <div class="points-range">32-35 pts</div>
+                                    <ul>
+                                        <li>Presentación adecuada</li>
+                                        <li>Comunicación básica</li>
+                                        <li>Recursos visuales limitados</li>
+                                        <li>Dominio suficiente</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell needs-improvement">
+                                    <div class="points-range">27-31 pts</div>
+                                    <ul>
+                                        <li>Presentación deficiente</li>
+                                        <li>Comunicación confusa</li>
+                                        <li>Recursos visuales pobres</li>
+                                        <li>Dominio limitado</li>
+                                    </ul>
+                                </td>
+                            </tr>
+
+                            <tr class="criterion-row impact">
+                                <td class="criteria-cell">
+                                    <div class="criterion-header">
+                                        <i class="fas fa-heart"></i>
+                                        <strong>Impacto y Relevancia</strong>
+                                    </div>
+                                    <small>Relevancia del problema y potencial impacto de la solución</small>
+                                </td>
+                                <td class="points-cell"><strong>30 pts</strong></td>
+                                <td class="performance-cell excellent">
+                                    <div class="points-range">27-30 pts</div>
+                                    <ul>
+                                        <li>Problema altamente relevante</li>
+                                        <li>Solución con gran impacto potencial</li>
+                                        <li>Aplicabilidad real evidente</li>
+                                        <li>Beneficio social o educativo claro</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell good">
+                                    <div class="points-range">24-26 pts</div>
+                                    <ul>
+                                        <li>Problema relevante</li>
+                                        <li>Solución con buen impacto</li>
+                                        <li>Aplicabilidad probable</li>
+                                        <li>Algún beneficio identificable</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell satisfactory">
+                                    <div class="points-range">21-23 pts</div>
+                                    <ul>
+                                        <li>Problema moderadamente relevante</li>
+                                        <li>Solución con impacto limitado</li>
+                                        <li>Aplicabilidad incierta</li>
+                                        <li>Beneficio mínimo</li>
+                                    </ul>
+                                </td>
+                                <td class="performance-cell needs-improvement">
+                                    <div class="points-range">18-20 pts</div>
+                                    <ul>
+                                        <li>Problema poco relevante</li>
+                                        <li>Solución sin impacto claro</li>
+                                        <li>Aplicabilidad dudosa</li>
+                                        <li>Sin beneficio aparente</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td class="total-label" colspan="2"><strong>PUNTUACIÓN TOTAL</strong></td>
+                                <td class="total-excellent"><strong>270-300 pts</strong><br>Excelente</td>
+                                <td class="total-good"><strong>240-269 pts</strong><br>Bueno</td>
+                                <td class="total-satisfactory"><strong>210-239 pts</strong><br>Satisfactorio</td>
+                                <td class="total-needs-improvement"><strong>180-209 pts</strong><br>Necesita Mejorar</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="grading-scale">
+                    <h4><i class="fas fa-chart-line"></i> Escala de Calificación</h4>
+                    <div class="scale-grid">
+                        <div class="scale-item excellent-scale">
+                            <div class="scale-letter">A</div>
+                            <div class="scale-info">
+                                <span class="scale-points">270-300 pts</span>
+                                <span class="scale-percentage">90-100%</span>
+                            </div>
+                        </div>
+                        <div class="scale-item good-scale">
+                            <div class="scale-letter">B</div>
+                            <div class="scale-info">
+                                <span class="scale-points">240-269 pts</span>
+                                <span class="scale-percentage">80-89%</span>
+                            </div>
+                        </div>
+                        <div class="scale-item satisfactory-scale">
+                            <div class="scale-letter">C</div>
+                            <div class="scale-info">
+                                <span class="scale-points">210-239 pts</span>
+                                <span class="scale-percentage">70-79%</span>
+                            </div>
+                        </div>
+                        <div class="scale-item needs-improvement-scale">
+                            <div class="scale-letter">D</div>
+                            <div class="scale-info">
+                                <span class="scale-points">180-209 pts</span>
+                                <span class="scale-percentage">60-69%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Mathematical Particles System
+        function createMathParticles() {
+            const particles = document.getElementById('mathParticles');
+            const creativitySymbols = ['∇', '∞', '∑', '∫', 'π', '√', '∆', 'Φ', 'λ', 'σ'];
+            const projectSymbols = ['f(x)=', 'y=mx+b', 'a²+b²=c²', 'E=mc²', 'P(A∩B)', '∂f/∂x'];
+            const innovationSymbols = ['⌘', '⚡', '✦', '◊', '⬢', '▲', '●', '✕', '+', '×'];
+            
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.classList.add('math-particle');
+                
+                const rand = Math.random();
+                let symbol, className;
+                
+                if (rand < 0.4) {
+                    symbol = creativitySymbols[Math.floor(Math.random() * creativitySymbols.length)];
+                    className = 'creativity';
+                } else if (rand < 0.8) {
+                    symbol = projectSymbols[Math.floor(Math.random() * projectSymbols.length)];
+                    className = 'project';
+                } else {
+                    symbol = innovationSymbols[Math.floor(Math.random() * innovationSymbols.length)];
+                    className = 'innovation';
+                }
+                
+                particle.classList.add(className);
+                particle.textContent = symbol;
+                
+                const startX = Math.random() * window.innerWidth;
+                const drift = (Math.random() - 0.5) * 200;
+                const duration = 15 + Math.random() * 20;
+                
+                particle.style.left = startX + 'px';
+                particle.style.setProperty('--drift', drift + 'px');
+                particle.style.animationDuration = duration + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                
+                particles.appendChild(particle);
+                
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, (duration + 5) * 1000);
+            }
+            
+            // Create initial particles
+            for (let i = 0; i < 8; i++) {
+                setTimeout(createParticle, i * 2000);
+            }
+            
+            // Continue creating particles
+            setInterval(createParticle, 3000);
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, delay);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            createMathParticles();
+        });
+
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.guide-step, .category-card, .resource-card, .criteria-item, .math-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Interactive step numbers
+        document.querySelectorAll('.step-number').forEach(stepNum => {
+            stepNum.addEventListener('click', function() {
+                this.style.transform = 'scale(1.2) rotate(360deg)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                }, 500);
+            });
+        });
+        // Variables globales para el menú móvil
+let mobileMenuOpen = false;
+
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    
+    if (!mobileMenuOpen) {
+        openMobileMenu();
+    } else {
+        closeMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navMenu.classList.add('active');
+    menuBtn.classList.add('active');
+    overlay.style.display = 'block';
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+    
+    mobileMenuOpen = true;
+    
+    // Añadir evento para cerrar con Escape
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+function closeMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navMenu.classList.remove('active');
+    menuBtn.classList.remove('active');
+    overlay.style.display = 'none';
+    
+    // Restaurar scroll del body
+    document.body.style.overflow = 'auto';
+    
+    mobileMenuOpen = false;
+    
+    // Remover evento de Escape
+    document.removeEventListener('keydown', handleEscapeKey);
+}
+
+// Cerrar menú con tecla Escape
+function handleEscapeKey(event) {
+    if (event.key === 'Escape' && mobileMenuOpen) {
+        closeMobileMenu();
+    }
+}
+
+// Inicializar eventos del menú responsivo para proyectos creativos
+function initCreativeProjectsMobileMenu() {
+    // Cerrar menú al hacer click en el botón de navegación
+    const backBtn = document.querySelector('.back-btn');
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', function() {
+            if (mobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+    }
+    
+    // Cerrar menú al cambiar tamaño de ventana
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && mobileMenuOpen) {
+            closeMobileMenu();
+        }
+        
+        // Ajustar imagen de fondo dinámicamente
+        adjustBackgroundForViewport();
+    });
+    
+    // Mejorar accesibilidad del menú
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (menuBtn && navMenu) {
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-controls', 'navMenu');
+        
+        // Actualizar aria-expanded cuando cambie el estado
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const isActive = navMenu.classList.contains('active');
+                    menuBtn.setAttribute('aria-expanded', isActive.toString());
+                }
+            });
+        });
+        
+        observer.observe(navMenu, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+}
+
+// Ajustar imagen de fondo dinámicamente según viewport
+function adjustBackgroundForViewport() {
+    const animatedBg = document.querySelector('.animated-bg');
+    if (!animatedBg) return;
+    
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    const isSmallScreen = window.innerWidth <= 768;
+    const isVerySmallScreen = window.innerWidth <= 480;
+    
+    if (isVerySmallScreen) {
+        // Móviles muy pequeños: priorizar cobertura total
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center 20%, 0% 50%';
+    } else if (isSmallScreen) {
+        // Móviles normales: balance entre cobertura y visibilidad
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center center, 0% 50%';
+    } else if (aspectRatio > 1.7) {
+        // Pantallas muy anchas: usar cover
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center center, 0% 50%';
+    } else if (aspectRatio < 1.2) {
+        // Pantallas muy altas: usar contain para mostrar imagen completa
+        animatedBg.style.backgroundSize = 'contain, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center top, 0% 50%';
+    } else {
+        // Pantallas normales: usar cover
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center center, 0% 50%';
+    }
+}
+
+// Lazy loading optimizado para imagen de fondo
+function optimizeBackgroundLoading() {
+    const animatedBg = document.querySelector('.animated-bg');
+    if (!animatedBg) return;
+    
+    // Crear una imagen temporal para precargar
+    const img = new Image();
+    const imagePath = '../imagenes/PROYECTOMATH.png';
+    
+    img.onload = function() {
+        // Imagen cargada, aplicar con transición suave
+        animatedBg.style.transition = 'opacity 0.5s ease-in-out';
+        animatedBg.style.opacity = '1';
+        
+        // Ajustar posición según el tamaño real de la imagen
+        adjustBackgroundForViewport();
+    };
+    
+    img.onerror = function() {
+        // Error cargando imagen, usar solo gradiente
+        console.warn('No se pudo cargar la imagen de fondo, usando gradiente de respaldo');
+        animatedBg.style.backgroundImage = 'linear-gradient(-45deg, rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7), rgba(240, 147, 251, 0.7), rgba(78, 205, 196, 0.7))';
+    };
+    
+    // Iniciar precarga
+    img.src = imagePath;
+    
+    // Mientras tanto, mostrar solo gradiente
+    animatedBg.style.opacity = '0.8';
+}
+
+// Gestión de rendimiento para dispositivos lentos
+function handlePerformanceOptimizations() {
+    // Detectar dispositivos de bajo rendimiento
+    const isLowPerformance = 
+        /Android.*Chrome|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+        window.devicePixelRatio > 2 ||
+        window.innerWidth <= 480;
+    
+    if (isLowPerformance) {
+        // Reducir animaciones en dispositivos lentos
+        const animatedBg = document.querySelector('.animated-bg');
+        if (animatedBg) {
+            animatedBg.style.animationDuration = '30s'; // Animación más lenta
+        }
+        
+        // Reducir partículas matemáticas
+        const particleIntervals = window.mathParticleIntervals || [];
+        particleIntervals.forEach(interval => {
+            if (interval) clearInterval(interval);
+        });
+    }
+}
+
+// Inicializar todo cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initCreativeProjectsMobileMenu();
+    optimizeBackgroundLoading();
+    handlePerformanceOptimizations();
+    
+    // Ajustar fondo al cargar
+    setTimeout(adjustBackgroundForViewport, 100);
+});
+
+// También inicializar cuando la ventana se carga completamente
+window.addEventListener('load', function() {
+    initCreativeProjectsMobileMenu();
+    adjustBackgroundForViewport();
+});
+
+// Reajustar en cambio de orientación
+window.addEventListener('orientationchange', function() {
+    setTimeout(adjustBackgroundForViewport, 500);
+});
+</script>
+
+</body>
+</html>

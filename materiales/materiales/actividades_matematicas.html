@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades Interactivas de Matemáticas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --accent-color: #FF4081;
+            --dark-color: #333;
+            --light-color: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--light-color);
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+            animation: slideIn 1s ease-out;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .activity-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .activity-card i {
+            font-size: 2.5em;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .activity-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .activity-card p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .btn-play {
+            background: var(--primary-color);
+            color: var(--light-color);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-play:hover {
+            background: #388e3c;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .activity-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--light-color);
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-calculator"></i> Actividades Interactivas de Matemáticas</h1>
+        <p>¡Aprende matemáticas de forma divertida!</p>
+    </header>
+
+    <div class="container">
+        <div class="activities-grid">
+            <!-- Actividad 1 (Reemplazo) -->
+            <div class="activity-card" onclick="window.open('https://www.brainzilla.com/math-games/')">
+                <i class="fas fa-brain"></i>
+                <h3>Brainzilla Math</h3>
+                <p>Juegos y acertijos matemáticos para entrenar tu mente</p>
+                <button class="btn-play">Entrenar</button>
+            </div>
+
+            <!-- Actividad 2 -->
+            <div class="activity-card" onclick="window.open('https://www.ixl.com/math/')">
+                <i class="fas fa-brain"></i>
+                <h3>IXL Math</h3>
+                <p>Práctica adaptativa para todos los niveles</p>
+                <button class="btn-play">Comenzar</button>
+            </div>
+
+            <!-- Actividad 3 -->
+            <div class="activity-card" onclick="window.open('https://www.mathgames.com/')">
+                <i class="fas fa-gamepad"></i>
+                <h3>Math Games</h3>
+                <p>Juegos matemáticos divertidos y educativos</p>
+                <button class="btn-play">Explorar</button>
+            </div>
+
+            <!-- Actividad 4 (Reemplazo) -->
+            <div class="activity-card" onclick="window.open('https://www.puzzle-riddles.com/')">
+                <i class="fas fa-puzzle-piece"></i>
+                <h3>Puzzle Riddles</h3>
+                <p>Acertijos y rompecabezas matemáticos desafiantes</p>
+                <button class="btn-play">Resolver</button>
+            </div>
+
+            <!-- Actividad 5 -->
+            <div class="activity-card" onclick="window.open('https://www.prodigygame.com/')">
+                <i class="fas fa-dragon"></i>
+                <h3>Prodigy Math</h3>
+                <p>Aventura matemática en un mundo mágico</p>
+                <button class="btn-play">Aventura</button>
+            </div>
+
+            <!-- Actividad 6 -->
+            <div class="activity-card" onclick="window.open('https://www.mathplayground.com/')">
+                <i class="fas fa-puzzle-piece"></i>
+                <h3>Math Playground</h3>
+                <p>Juegos y rompecabezas matemáticos</p>
+                <button class="btn-play">Jugar</button>
+            </div>
+
+            <!-- Actividad 7 -->
+            <div class="activity-card" onclick="window.open('https://www.coolmathgames.com/')">
+                <i class="fas fa-dice"></i>
+                <h3>Cool Math Games</h3>
+                <p>Juegos de lógica y matemáticas</p>
+                <button class="btn-play">Divertirse</button>
+            </div>
+
+            <!-- Actividad 8 -->
+            <div class="activity-card" onclick="window.open('https://www.multiplication.com/')">
+                <i class="fas fa-times"></i>
+                <h3>Multiplication.com</h3>
+                <p>Práctica de multiplicación interactiva</p>
+                <button class="btn-play">Practicar</button>
+            </div>
+
+            <!-- Actividad 9 -->
+            <div class="activity-card" onclick="window.open('https://www.splashlearn.com/')">
+                <i class="fas fa-water"></i>
+                <h3>SplashLearn</h3>
+                <p>Aprendizaje adaptativo para niños</p>
+                <button class="btn-play">Sumergirse</button>
+            </div>
+
+            <!-- Actividad 10 -->
+            <div class="activity-card" onclick="window.open('https://www.mathsisfun.com/')">
+                <i class="fas fa-smile-beam"></i>
+                <h3>Maths is Fun</h3>
+                <p>Explicaciones y juegos matemáticos</p>
+                <button class="btn-play">Descubrir</button>
+            </div>
+
+            <!-- Actividad 11 (Reemplazo) -->
+            <div class="activity-card" onclick="window.open('https://www.mathsisfun.com/puzzles/')">
+                <i class="fas fa-cogs"></i>
+                <h3>Math Puzzles</h3>
+                <p>Colección de acertijos y problemas matemáticos divertidos</p>
+                <button class="btn-play">Descubrir</button>
+            </div>
+
+            <!-- Actividad 12 -->
+            <div class="activity-card" onclick="window.open('https://www.education.com/games/math/')">
+                <i class="fas fa-school"></i>
+                <h3>Education.com</h3>
+                <p>Juegos educativos de matemáticas</p>
+                <button class="btn-play">Educar</button>
+            </div>
+
+            <!-- Actividad 13 (Reemplazo) -->
+            <div class="activity-card" onclick="window.open('https://www.puzzles-to-puzzle.com/')">
+                <i class="fas fa-lightbulb"></i>
+                <h3>Puzzles to Puzzle</h3>
+                <p>Enigmas matemáticos y acertijos lógicos</p>
+                <button class="btn-play">Explorar</button>
+            </div>
+
+            <!-- Actividad 14 -->
+            <div class="activity-card" onclick="window.open('https://www.adaptedmind.com/Math.html')">
+                <i class="fas fa-lightbulb"></i>
+                <h3>AdaptedMind</h3>
+                <p>Matemáticas personalizadas</p>
+                <button class="btn-play">Personalizar</button>
+            </div>
+
+            <!-- Actividad 15 -->
+            <div class="activity-card" onclick="window.open('https://www.abcya.com/grades/k/numbers')">
+                <i class="fas fa-star"></i>
+                <h3>ABCya Math</h3>
+                <p>Juegos matemáticos por grado</p>
+                <button class="btn-play">Empezar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+    </footer>
+
+    <script>
+        // Animación de aparición gradual de las tarjetas
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.activity-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

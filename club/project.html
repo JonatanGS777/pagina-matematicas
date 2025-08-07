@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creador de Proyectos - Prof. Yonatan Guerrero (Versión Mejorada)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --research: #ff6b6b;
+            --discovery: #ffa726;
+            --innovation: #26a69a;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-research: linear-gradient(135deg, var(--research) 0%, var(--discovery) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--innovation) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow-soft);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-main);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: var(--white);
+        }
+
+        .btn-warning {
+            background: var(--gradient-research);
+            color: var(--white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            height: fit-content;
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .step-nav {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .step-nav button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .step-nav button:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .step-nav button.active {
+            background: var(--gradient-main);
+            color: var(--white);
+        }
+
+        .step-nav button.completed {
+            background: var(--gradient-success);
+            color: var(--white);
+        }
+
+        .step-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .step-nav button.active .step-icon,
+        .step-nav button.completed .step-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-main);
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-header {
+            margin-bottom: 2rem;
+        }
+
+        .step-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .rich-editor {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            min-height: 200px;
+            padding: 1rem;
+        }
+
+        .rich-editor:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Editor Toolbar */
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--light);
+            border-radius: 10px 10px 0 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .toolbar-btn {
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toolbar-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .toolbar-btn.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Navigation */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Cards */
+        .info-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Reference Manager */
+        .reference-item {
+            background: var(--light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .reference-item .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--research);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* Charts Container */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-card {
+            background: var(--white);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .chart-card h4 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .chart-result {
+            min-height: 300px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* PDF Preview */
+        .pdf-preview {
+            background: var(--light);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .pdf-preview h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .pdf-section {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .pdf-section:last-child {
+            border-bottom: none;
+        }
+
+        .pdf-section h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Messages */
+        .success-message {
+            background: var(--gradient-success);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message {
+            background: var(--gradient-research);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .warning-message {
+            background: var(--warning);
+            color: var(--dark);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-message {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Debug Panel */
+        .debug-panel {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+
+        .debug-panel .debug-line {
+            margin: 0.2rem 0;
+        }
+
+        .debug-panel .debug-success {
+            color: #00ff00;
+        }
+
+        .debug-panel .debug-error {
+            color: #ff0000;
+        }
+
+        .debug-panel .debug-warning {
+            color: #ffaa00;
+        }
+
+        .debug-panel .debug-info {
+            color: #00aaff;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .sidebar {
+                position: static;
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .step-title {
+                font-size: 1.5rem;
+            }
+
+            .step-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <i class="fas fa-microscope"></i>
+                Creador de Proyectos (Mejorado)
+            </a>
+            
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="saveProject()">
+                    <i class="fas fa-save"></i>
+                    Guardar
+                </button>
+                <button class="btn btn-warning" onclick="loadProject()">
+                    <i class="fas fa-folder-open"></i>
+                    Cargar
+                </button>
+                <button class="btn btn-success" onclick="exportToPDF()">
+                    <i class="fas fa-file-pdf"></i>
+                    Exportar PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>🚀 Pasos del Proyecto</h3>
+            <ul class="step-nav">
+                <li>
+                    <button onclick="showStep(0)" class="active" id="nav-0">
+                        <span class="step-icon">1</span>
+                        Información General
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showStep(1)" id="nav-1">
+                        <span class="step-icon">2</span>
+                        Introducción
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showStep(2)" id="nav-2">
+                        <span class="step-icon">3</span>
+                        Revisión Literatura
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showStep(3)" id="nav-3">
+                        <span class="step-icon">4</span>
+                        Problema Investigación
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showStep(4)" id="nav-4">
+                        <span class="step-icon">5</span>
+                        Metodología
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showStep(5)" id="nav-5">
+                        <span class="step-icon">6</span>
+                        Análisis de Datos
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showStep(6)" id="nav-6">
+                        <span class="step-icon">7</span>
+                        Conclusiones
+                    </button>
+                </li>
+                <li>
+                    <button onclick="showStep(7)" id="nav-7">
+                        <span class="step-icon">8</span>
+                        Vista Previa
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 12.5%"></div>
+                </div>
+                <div class="progress-text" id="progressText">Paso 1 de 8</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Step 1: General Information -->
+            <div class="step active" id="step-0">
+                <div class="step-header">
+                    <h2 class="step-title">📋 Información General</h2>
+                    <p class="step-description">Comencemos con los datos básicos de tu proyecto de investigación matemática.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>💡 Consejo</h4>
+                    <p>Elige un título descriptivo y específico que refleje claramente el enfoque de tu investigación.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Título del Proyecto</label>
+                    <input type="text" class="form-input" id="projectTitle" placeholder="Ej: Análisis de Patrones Fractales en Sistemas Dinámicos">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Autor(es)</label>
+                    <input type="text" class="form-input" id="projectAuthor" placeholder="Tu nombre completo">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Institución</label>
+                    <input type="text" class="form-input" id="projectInstitution" placeholder="Nombre de tu escuela o institución">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Área de Investigación</label>
+                    <select class="form-select" id="researchArea">
+                        <option value="">Selecciona un área</option>
+                        <option value="algebra">Álgebra</option>
+                        <option value="calculus">Cálculo</option>
+                        <option value="statistics">Estadística</option>
+                        <option value="geometry">Geometría</option>
+                        <option value="number-theory">Teoría de Números</option>
+                        <option value="applied-math">Matemáticas Aplicadas</option>
+                        <option value="data-science">Ciencia de Datos</option>
+                        <option value="mathematical-modeling">Modelado Matemático</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" class="form-input" id="projectDate">
+                </div>
+
+                <div class="step-navigation">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Introduction -->
+            <div class="step" id="step-1">
+                <div class="step-header">
+                    <h2 class="step-title">📖 Introducción</h2>
+                    <p class="step-description">Presenta tu tema de investigación y su importancia en el contexto matemático.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>📝 Guía para la Introducción</h4>
+                    <p>• Presenta el tema general<br>• Explica por qué es importante<br>• Menciona aplicaciones relevantes<br>• Establece el contexto histórico</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Introducción</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                    </div>
+                    <div class="rich-editor" contenteditable="true" id="introductionContent" 
+                         placeholder="Escribe aquí la introducción de tu proyecto...">
+                    </div>
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Literature Review -->
+            <div class="step" id="step-2">
+                <div class="step-header">
+                    <h2 class="step-title">📚 Revisión de Literatura</h2>
+                    <p class="step-description">Analiza trabajos previos relacionados con tu tema de investigación.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>🔍 Gestión de Referencias</h4>
+                    <p>Agrega las fuentes que has consultado. Incluye libros, artículos, papers y recursos web relevantes.</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Análisis de Literatura</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                    </div>
+                    <div class="rich-editor" contenteditable="true" id="literatureContent" 
+                         placeholder="Analiza y sintetiza los trabajos previos relacionados con tu investigación...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h4>📖 Referencias</h4>
+                    <button class="btn btn-success" onclick="addReference()">
+                        <i class="fas fa-plus"></i> Agregar Referencia
+                    </button>
+                    <div id="referencesContainer" style="margin-top: 1rem;">
+                        <!-- Referencias se cargarán aquí dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Research Problem -->
+            <div class="step" id="step-3">
+                <div class="step-header">
+                    <h2 class="step-title">❓ Problema de Investigación</h2>
+                    <p class="step-description">Define claramente el problema que investigarás y tus objetivos.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>🎯 Formulación del Problema</h4>
+                    <p>• Define el problema específico<br>• Establece objetivos claros<br>• Formula hipótesis si aplica<br>• Justifica la relevancia</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Planteamiento del Problema</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                    </div>
+                    <div class="rich-editor" contenteditable="true" id="problemContent" 
+                         placeholder="Describe claramente el problema que vas a investigar...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Objetivo General</label>
+                    <textarea class="form-textarea" id="generalObjective" 
+                              placeholder="Ej: Analizar los patrones fractales en sistemas dinámicos caóticos..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Objetivos Específicos</label>
+                    <textarea class="form-textarea" id="specificObjectives" 
+                              placeholder="Lista los objetivos específicos de tu investigación..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Hipótesis (si aplica)</label>
+                    <textarea class="form-textarea" id="hypothesis" 
+                              placeholder="Plantea tu hipótesis de investigación..."></textarea>
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 5: Methodology -->
+            <div class="step" id="step-4">
+                <div class="step-header">
+                    <h2 class="step-title">🔬 Metodología</h2>
+                    <p class="step-description">Describe los métodos y procedimientos que utilizarás en tu investigación.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>⚙️ Diseño Metodológico</h4>
+                    <p>• Tipo de investigación<br>• Métodos de recolección<br>• Herramientas a utilizar<br>• Procedimientos paso a paso</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tipo de Investigación</label>
+                    <select class="form-select" id="researchType">
+                        <option value="">Selecciona el tipo</option>
+                        <option value="theoretical">Teórica</option>
+                        <option value="experimental">Experimental</option>
+                        <option value="computational">Computacional</option>
+                        <option value="mixed">Mixta</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Metodología Detallada</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                    </div>
+                    <div class="rich-editor" contenteditable="true" id="methodologyContent" 
+                         placeholder="Describe detalladamente la metodología de tu investigación...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Herramientas y Recursos</label>
+                    <textarea class="form-textarea" id="tools" 
+                              placeholder="Lista las herramientas, software, equipos o recursos que utilizarás..."></textarea>
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 6: Data Analysis -->
+            <div class="step" id="step-5">
+                <div class="step-header">
+                    <h2 class="step-title">📊 Análisis de Datos</h2>
+                    <p class="step-description">Presenta y analiza los datos obtenidos en tu investigación con visualizaciones profesionales.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>📈 Análisis de Resultados</h4>
+                    <p>• Presenta los datos obtenidos<br>• Crea visualizaciones profesionales<br>• Interpreta los resultados<br>• Relaciona con los objetivos</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Presentación de Datos</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                    </div>
+                    <div class="rich-editor" contenteditable="true" id="dataAnalysisContent" 
+                         placeholder="Describe y presenta los datos obtenidos en tu investigación...">
+                    </div>
+                </div>
+
+                <!-- Visualización de Datos MEJORADA -->
+                <div class="form-group">
+                    <h4>📊 Generador de Visualizaciones Profesionales (MEJORADO)</h4>
+                    
+                    <div class="info-card">
+                        <h4>🎯 Sistema de Visualización Mejorado v2.1</h4>
+                        <p><strong>MEJORAS IMPLEMENTADAS:</strong><br>
+                        ✅ Preview visual RESTAURADO - Ver gráficas en tiempo real<br>
+                        ✅ Captura de imágenes corregida para PDF<br>
+                        ✅ Eliminación de plt.show() antes de captura<br>
+                        ✅ Validación mejorada de base64<br>
+                        ✅ Panel de depuración en tiempo real<br>
+                        ✅ Fallback con preview básico cuando Pyodide no está listo<br>
+                        ✅ Manejo optimizado de memoria</p>
+                    </div>
+
+                    <!-- Configuración de Gráfica -->
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Gráfica</label>
+                        <select class="form-select" id="chartType">
+                            <option value="">Selecciona el tipo de gráfica</option>
+                            <option value="line">Gráfica de Líneas</option>
+                            <option value="bar">Gráfica de Barras</option>
+                            <option value="histogram">Histograma</option>
+                            <option value="scatter">Gráfica de Dispersión</option>
+                            <option value="pie">Gráfica Circular</option>
+                            <option value="box">Diagrama de Caja</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Título de la Gráfica</label>
+                        <input type="text" class="form-input" id="chartTitle" 
+                               placeholder="Título de tu gráfica">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Datos</label>
+                        <textarea class="form-textarea" id="chartData" 
+                                  placeholder="Para datos 1D: 1,2,3,4,5&#10;Para datos 2D (x,y): 1,5;2,7;3,4;4,8;5,6"></textarea>
+                        <small style="color: var(--text-secondary);">
+                            • Datos unidimensionales: separados por comas<br>
+                            • Datos bidimensionales: pares x,y separados por punto y coma
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Etiquetas (opcional)</label>
+                        <input type="text" class="form-input" id="chartLabels" 
+                               placeholder="Etiqueta 1, Etiqueta 2, Etiqueta 3...">
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div style="margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-success" onclick="generateChart()">
+                            <i class="fas fa-chart-bar"></i> Generar Gráfica
+                        </button>
+                        <button class="btn btn-warning" onclick="clearCharts()">
+                            <i class="fas fa-trash"></i> Limpiar Gráficas
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportChartData()">
+                            <i class="fas fa-download"></i> Exportar Datos
+                        </button>
+                        <button class="btn btn-primary" onclick="toggleDebugPanel()">
+                            <i class="fas fa-bug"></i> Panel Debug
+                        </button>
+                        <button class="btn btn-warning" onclick="testPreview()">
+                            <i class="fas fa-eye"></i> Test Preview
+                        </button>
+                    </div>
+
+                    <!-- Panel de Depuración -->
+                    <div class="debug-panel" id="debugPanel" style="display: none;">
+                        <div style="margin-bottom: 0.5rem; font-weight: bold; color: #ffffff;">
+                            🔧 Panel de Depuración - Sistema de Visualización
+                        </div>
+                        <div id="debugMessages">
+                            <div class="debug-line debug-info">Sistema inicializado. Esperando comandos...</div>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor de Gráficas Generadas -->
+                    <div class="charts-container" id="chartsContainer">
+                        <!-- Las gráficas generadas aparecerán aquí -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Interpretación de Resultados</label>
+                    <textarea class="form-textarea" id="dataInterpretation" 
+                              placeholder="Interpreta los resultados obtenidos y su significado..."></textarea>
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 7: Conclusions -->
+            <div class="step" id="step-6">
+                <div class="step-header">
+                    <h2 class="step-title">🎯 Conclusiones</h2>
+                    <p class="step-description">Sintetiza los hallazgos y reflexiona sobre los resultados obtenidos.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>📝 Redacción de Conclusiones</h4>
+                    <p>• Responde a los objetivos<br>• Sintetiza hallazgos principales<br>• Menciona limitaciones<br>• Sugiere investigaciones futuras</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Conclusiones Principales</label>
+                    <div class="editor-toolbar">
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                    </div>
+                    <div class="rich-editor" contenteditable="true" id="conclusionsContent" 
+                         placeholder="Escribe las conclusiones principales de tu investigación...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Limitaciones del Estudio</label>
+                    <textarea class="form-textarea" id="limitations" 
+                              placeholder="Menciona las limitaciones o restricciones de tu investigación..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Investigaciones Futuras</label>
+                    <textarea class="form-textarea" id="futureResearch" 
+                              placeholder="Sugiere posibles líneas de investigación futuras..."></textarea>
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 8: Preview -->
+            <div class="step" id="step-7">
+                <div class="step-header">
+                    <h2 class="step-title">👁️ Vista Previa</h2>
+                    <p class="step-description">Revisa tu proyecto completo antes de exportar a PDF.</p>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <button class="btn btn-success" onclick="exportToPDF()" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                        <i class="fas fa-file-pdf"></i> Exportar a PDF (Con Imágenes Mejoradas)
+                    </button>
+                </div>
+
+                <div class="pdf-preview" id="previewContainer">
+                    <!-- La vista previa se generará aquí -->
+                </div>
+
+                <div class="step-navigation">
+                    <button class="btn btn-secondary" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-primary" onclick="showStep(0)">
+                        <i class="fas fa-refresh"></i> Nuevo Proyecto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===========================================
+        // VARIABLES GLOBALES
+        // ===========================================
+        let currentStep = 0;
+        const totalSteps = 8;
+        let pyodide = null;
+        let generatedCharts = [];
+        let debugVisible = false;
+
+        // ===========================================
+        // SISTEMA DE DEPURACIÓN MEJORADO
+        // ===========================================
+        function debugLog(message, type = 'info') {
+            const debugMessages = document.getElementById('debugMessages');
+            if (!debugMessages) return;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const debugLine = document.createElement('div');
+            debugLine.className = `debug-line debug-${type}`;
+            
+            const icons = {
+                'info': 'ℹ️',
+                'success': '✅', 
+                'error': '❌',
+                'warning': '⚠️'
+            };
+            
+            debugLine.textContent = `[${timestamp}] ${icons[type]} ${message}`;
+            debugMessages.appendChild(debugLine);
+            
+            // Mantener solo las últimas 20 líneas
+            while (debugMessages.children.length > 20) {
+                debugMessages.removeChild(debugMessages.firstChild);
+            }
+            
+            // Auto-scroll al final
+            debugMessages.scrollTop = debugMessages.scrollHeight;
+            
+            console.log(`[DEBUG ${type.toUpperCase()}] ${message}`);
+        }
+
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debugPanel');
+            debugVisible = !debugVisible;
+            panel.style.display = debugVisible ? 'block' : 'none';
+            
+            const button = document.querySelector('button[onclick="toggleDebugPanel()"]');
+            button.innerHTML = debugVisible ? 
+                '<i class="fas fa-bug"></i> Ocultar Debug' : 
+                '<i class="fas fa-bug"></i> Panel Debug';
+                
+            if (debugVisible) {
+                debugLog('Panel de depuración activado', 'info');
+            }
+        }
+
+        // ===========================================
+        // INICIALIZACIÓN MEJORADA
+        // ===========================================
+        async function initPyodide() {
+            try {
+                debugLog('Iniciando carga de Pyodide...', 'info');
+                showMessage("🔧 Inicializando sistema de visualización profesional mejorado...", 'info');
+                
+                pyodide = await loadPyodide();
+                debugLog('Pyodide cargado exitosamente', 'success');
+                
+                debugLog('Cargando paquetes: matplotlib, numpy, pandas, scipy...', 'info');
+                await pyodide.loadPackage(["matplotlib", "numpy", "pandas", "scipy"]);
+                debugLog('Todos los paquetes cargados', 'success');
+                
+                // Configuración inicial de matplotlib
+                await pyodide.runPython(`
+import matplotlib
+matplotlib.use('Agg')  # Backend sin ventana para captura de imágenes
+import matplotlib.pyplot as plt
+plt.ioff()  # Desactivar modo interactivo
+print("Matplotlib configurado para captura de imágenes")
+                `);
+                
+                debugLog('Matplotlib configurado para captura de imágenes', 'success');
+                console.log("Pyodide inicializado exitosamente con captura de imágenes mejorada");
+                showMessage("✅ Sistema de visualización MEJORADO listo - Preview visual + Captura optimizada para PDF", 'success');
+                
+            } catch (error) {
+                debugLog(`Error cargando Pyodide: ${error.message}`, 'error');
+                console.error("Error cargando Pyodide:", error);
+                showMessage("⚠️ Error inicializando visualización avanzada. Funcionalidad básica disponible.", 'warning');
+            }
+        }
+
+        window.addEventListener('load', function() {
+            initPyodide();
+            updatePreview();
+            document.getElementById('projectDate').value = new Date().toISOString().split('T')[0];
+            debugLog('Aplicación inicializada', 'success');
+        });
+
+        // ===========================================
+        // NAVEGACIÓN ENTRE PASOS
+        // ===========================================
+        function showStep(step) {
+            if (step >= 0 && step < totalSteps) {
+                // Ocultar paso actual
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                document.querySelectorAll('.step-nav button').forEach(b => b.classList.remove('active'));
+                
+                // Mostrar nuevo paso
+                document.getElementById(`step-${step}`).classList.add('active');
+                document.getElementById(`nav-${step}`).classList.add('active');
+                
+                currentStep = step;
+                updateProgress();
+                
+                if (step === 7) {
+                    updatePreview();
+                }
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                markStepCompleted(currentStep);
+                showStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        function markStepCompleted(step) {
+            const navButton = document.getElementById(`nav-${step}`);
+            if (navButton && !navButton.classList.contains('completed')) {
+                navButton.classList.add('completed');
+                navButton.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentStep + 1) / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Paso ${currentStep + 1} de ${totalSteps}`;
+        }
+
+        // ===========================================
+        // EDITOR DE TEXTO ENRIQUECIDO
+        // ===========================================
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        // ===========================================
+        // GESTIÓN DE REFERENCIAS
+        // ===========================================
+        function addReference() {
+            const container = document.getElementById('referencesContainer');
+            const referenceId = `ref-${Date.now()}`;
+            
+            const referenceHTML = `
+                <div class="reference-item" id="${referenceId}">
+                    <button class="delete-btn" onclick="removeReference('${referenceId}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="form-group">
+                        <label class="form-label">Autor(es)</label>
+                        <input type="text" class="form-input" placeholder="Apellido, N.">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Título</label>
+                        <input type="text" class="form-input" placeholder="Título del trabajo">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fuente</label>
+                        <input type="text" class="form-input" placeholder="Revista, libro, URL, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Año</label>
+                        <input type="number" class="form-input" placeholder="2024">
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', referenceHTML);
+        }
+
+        function removeReference(referenceId) {
+            const element = document.getElementById(referenceId);
+            if (element) {
+                element.remove();
+            }
+        }
+
+        function getAllReferences() {
+            const references = [];
+            const referenceItems = document.querySelectorAll('.reference-item');
+            
+            referenceItems.forEach(item => {
+                const inputs = item.querySelectorAll('.form-input');
+                if (inputs.length >= 4) {
+                    references.push({
+                        author: inputs[0].value,
+                        title: inputs[1].value,
+                        source: inputs[2].value,
+                        year: inputs[3].value
+                    });
+                }
+            });
+            
+            return references;
+        }
+
+        // ===========================================
+        // SISTEMA DE VISUALIZACIÓN PROFESIONAL MEJORADO
+        // ===========================================
+        
+        async function generateChart() {
+            const chartType = document.getElementById('chartType').value;
+            const chartData = document.getElementById('chartData').value;
+            const chartLabels = document.getElementById('chartLabels').value;
+            const chartTitle = document.getElementById('chartTitle').value;
+
+            if (!chartType || !chartData) {
+                showMessage("⚠️ Por favor selecciona el tipo de gráfica e ingresa los datos", 'warning');
+                debugLog('Generación cancelada: faltan datos requeridos', 'warning');
+                return;
+            }
+
+            // Mostrar indicador de carga
+            const generateBtn = document.querySelector('button[onclick="generateChart()"]');
+            const originalText = generateBtn.innerHTML;
+            generateBtn.innerHTML = '<div class="spinner"></div> Generando...';
+            generateBtn.disabled = true;
+
+            debugLog(`Iniciando generación de gráfica tipo: ${chartType}`, 'info');
+
+            try {
+                let chartResult;
+                
+                if (pyodide) {
+                    debugLog('Usando sistema profesional con Pyodide', 'info');
+                    chartResult = await generateProfessionalChartImproved(chartType, chartData, chartLabels, chartTitle);
+                } else {
+                    debugLog('Pyodide no disponible, usando fallback', 'warning');
+                    chartResult = generateFallbackChart(chartType, chartData, chartLabels, chartTitle);
+                }
+                
+                // Agregar gráfica al contenedor
+                addChartToContainer(chartResult);
+                
+                // Mensaje de éxito específico
+                if (chartResult.imageBase64 && chartResult.imageBase64.length > 100) {
+                    debugLog(`Imagen capturada exitosamente: ${chartResult.imageBase64.length} caracteres`, 'success');
+                    showMessage("✅ Gráfica generada con preview visual e imagen capturada para PDF", 'success');
+                } else if (chartResult.type === 'professional') {
+                    debugLog('Gráfica generada pero imagen no capturada', 'warning');
+                    showMessage("✅ Gráfica profesional generada con preview visual (imagen no capturada - solo datos en PDF)", 'info');
+                } else {
+                    debugLog('Gráfica fallback generada con preview básico', 'info');
+                    showMessage("✅ Gráfica generada con preview básico (Sistema profesional inicializándose)", 'success');
+                }
+                
+            } catch (error) {
+                debugLog(`Error generando gráfica: ${error.message}`, 'error');
+                console.error('Error generando gráfica:', error);
+                showMessage(`❌ Error al generar la gráfica: ${error.message}`, 'error');
+            } finally {
+                // Restaurar botón
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+                debugLog('Proceso de generación completado', 'info');
+            }
+        }
+
+        async function generateProfessionalChartImproved(chartType, chartData, chartLabels, chartTitle) {
+            debugLog('Generando código Python profesional...', 'info');
+            
+            // Código profesional MEJORADO sin plt.show()
+            const professionalCode = getProfessionalVisualizationCodeImproved(chartType, chartData, chartLabels, chartTitle);
+            
+            debugLog('Ejecutando código de visualización...', 'info');
+            
+            // Ejecutar el código profesional
+            try {
+                await pyodide.runPython(professionalCode);
+                debugLog('Código de visualización ejecutado exitosamente', 'success');
+            } catch (plotError) {
+                debugLog(`Error en código de visualización: ${plotError.message}`, 'error');
+                throw plotError;
+            }
+            
+            // CAPTURA DE IMAGEN MEJORADA - UNA SOLA EVALUACIÓN
+            debugLog('Iniciando captura de imagen mejorada...', 'info');
+            let chartImageBase64 = null;
+            
+            try {
+                const captureCode = `
+import matplotlib.pyplot as plt
+import io
+import base64
+
+# Obtener la figura actual
+fig = plt.gcf()
+result = "NO_FIGURE"
+
+if fig.get_axes():
+    try:
+        # Crear buffer para la imagen
+        buf = io.BytesIO()
+        
+        # Guardar con configuración optimizada
+        fig.savefig(buf, format='png', dpi=300, bbox_inches='tight', 
+                   facecolor='white', edgecolor='none', 
+                   pad_inches=0.1, transparent=False)
+        buf.seek(0)
+        
+        # Convertir a base64
+        result = base64.b64encode(buf.getvalue()).decode()
+        buf.close()
+        
+    except Exception as e:
+        result = f"CAPTURE_ERROR: {str(e)}"
+else:
+    result = "NO_FIGURE_FOUND"
+
+# Limpiar figura después de capturar
+try:
+    plt.close(fig)
+except:
+    pass
+
+result
+`;
+                
+                debugLog('Ejecutando captura de imagen...', 'info');
+                const base64Result = await pyodide.runPython(captureCode);
+                
+                debugLog(`Resultado de captura: ${typeof base64Result}`, 'info');
+                
+                if (base64Result && typeof base64Result === 'string' && !base64Result.startsWith('NO_FIGURE') && !base64Result.startsWith('CAPTURE_ERROR')) {
+                    chartImageBase64 = base64Result;
+                    debugLog(`Imagen capturada exitosamente: ${chartImageBase64.length} caracteres`, 'success');
+                } else {
+                    debugLog(`Captura falló: ${base64Result}`, 'warning');
+                }
+                
+            } catch (captureError) {
+                debugLog(`Error en captura de imagen: ${captureError.message}`, 'error');
+                console.log("Error capturando imagen:", captureError);
+            }
+            
+            return {
+                type: 'professional',
+                title: chartTitle || `Gráfica ${chartType}`,
+                description: `Visualización profesional con análisis estadístico completo`,
+                data: chartData,
+                chartType: chartType,
+                imageBase64: chartImageBase64,
+                timestamp: new Date().toISOString(),
+                version: '2.1-improved'
+            };
+        }
+
+        function getProfessionalVisualizationCodeImproved(chartType, chartData, chartLabels, chartTitle) {
+            // Código Python profesional MEJORADO - SIN plt.show()
+            const baseCode = `
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
+import warnings
+warnings.filterwarnings('ignore')
+
+# Limpiar figuras previas
+plt.close('all')
+
+# Configuración profesional
+plt.style.use('default')
+plt.rcParams.update({
+    'figure.figsize': (12, 8),
+    'font.size': 12,
+    'axes.labelsize': 14,
+    'axes.titlesize': 16,
+    'grid.alpha': 0.3,
+    'lines.linewidth': 2.5,
+    'figure.facecolor': 'white',
+    'axes.facecolor': 'white'
+})
+
+# Procesar datos
+def process_data(chart_data):
+    try:
+        if ';' in chart_data:
+            pairs = [pair.split(',') for pair in chart_data.split(';')]
+            x_data = np.array([float(pair[0].strip()) for pair in pairs if len(pair) >= 2])
+            y_data = np.array([float(pair[1].strip()) for pair in pairs if len(pair) >= 2])
+            return x_data, y_data
+        else:
+            data = np.array([float(x.strip()) for x in chart_data.split(',') if x.strip()])
+            return (data,)
+    except Exception as e:
+        print(f"Error procesando datos: {e}")
+        return None
+
+data_result = process_data("${chartData}")
+labels = [label.strip() for label in "${chartLabels}".split(',') if label.strip()] if "${chartLabels}" else None
+title = "${chartTitle}" if "${chartTitle}" else "Gráfica Profesional"
+
+if data_result:
+`;
+
+            // Código específico por tipo de gráfica (MEJORADO)
+            const chartSpecificCode = {
+                'line': `
+    fig, ax = plt.subplots(figsize=(12, 8))
+    if len(data_result) == 2:
+        x_data, y_data = data_result
+        ax.plot(x_data, y_data, marker='o', linewidth=3, markersize=8, 
+               markerfacecolor='white', markeredgewidth=2, color='#2E86AB', alpha=0.8)
+        if len(x_data) > 1:
+            z = np.polyfit(x_data, y_data, 1)
+            p = np.poly1d(z)
+            ax.plot(x_data, p(x_data), "--", alpha=0.7, color='#A23B72', linewidth=2, 
+                   label=f'Tendencia: y = {z[0]:.3f}x + {z[1]:.3f}')
+            correlation = np.corrcoef(x_data, y_data)[0, 1]
+            ax.text(0.05, 0.95, f'Correlación: {correlation:.3f}', transform=ax.transAxes, 
+                   bbox=dict(boxstyle="round,pad=0.3", facecolor='lightblue', alpha=0.8))
+        ax.set_xlabel('X', fontweight='bold')
+        ax.set_ylabel('Y', fontweight='bold')
+    else:
+        data = data_result[0]
+        x_indices = np.arange(len(data))
+        ax.plot(x_indices, data, marker='o', linewidth=3, markersize=8, 
+               markerfacecolor='white', markeredgewidth=2, color='#2E86AB', alpha=0.8)
+        mean_val = np.mean(data)
+        ax.axhline(y=mean_val, color='#A23B72', linestyle='--', alpha=0.7, 
+                  linewidth=2, label=f'Promedio: {mean_val:.2f}')
+        ax.set_xlabel('Índice', fontweight='bold')
+        ax.set_ylabel('Valor', fontweight='bold')
+        if labels and len(labels) >= len(data):
+            ax.set_xticks(x_indices)
+            ax.set_xticklabels(labels[:len(data)], rotation=45, ha='right')
+    
+    # Título único para gráficas de línea
+    ax.set_title(title, fontweight='bold', fontsize=16, pad=20)
+    ax.legend(frameon=True, shadow=True)
+`,
+                'bar': `
+    fig, ax = plt.subplots(figsize=(12, 8))
+    if len(data_result) == 2:
+        x_data, y_data = data_result
+        colors = plt.cm.viridis(np.linspace(0, 1, len(y_data)))
+        bars = ax.bar(range(len(x_data)), y_data, alpha=0.8, color=colors, 
+                     edgecolor='black', linewidth=0.8)
+        if labels and len(labels) >= len(x_data):
+            ax.set_xticks(range(len(x_data)))
+            ax.set_xticklabels(labels[:len(x_data)], rotation=45, ha='right')
+        data_for_stats = y_data
+    else:
+        data = data_result[0]
+        colors = plt.cm.viridis(np.linspace(0, 1, len(data)))
+        bars = ax.bar(range(len(data)), data, alpha=0.8, color=colors, 
+                     edgecolor='black', linewidth=0.8)
+        if labels and len(labels) >= len(data):
+            ax.set_xticks(range(len(data)))
+            ax.set_xticklabels(labels[:len(data)], rotation=45, ha='right')
+        data_for_stats = data
+    
+    for i, bar in enumerate(bars):
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2., height + abs(height)*0.01,
+               f'{height:.1f}', ha='center', va='bottom', fontweight='bold')
+    
+    mean_val = np.mean(data_for_stats)
+    ax.axhline(y=mean_val, color='#A23B72', linestyle='--', alpha=0.7, 
+              linewidth=2, label=f'Promedio: {mean_val:.2f}')
+    
+    # Título único para gráficas de barras
+    ax.set_title(title, fontweight='bold', fontsize=16, pad=20)
+    ax.set_xlabel('Categorías', fontweight='bold')
+    ax.set_ylabel('Valores', fontweight='bold')
+    ax.legend(frameon=True, shadow=True)
+`,
+                'histogram': `
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
+    data_to_plot = data_result[1] if len(data_result) == 2 else data_result[0]
+    
+    n_bins = max(5, min(20, int(np.ceil(np.log2(len(data_to_plot)) + 1))))
+    n, bins, patches = ax1.hist(data_to_plot, bins=n_bins, alpha=0.7, 
+                               edgecolor='black', density=True, color='#2E86AB')
+    
+    try:
+        kde = stats.gaussian_kde(data_to_plot)
+        x_range = np.linspace(data_to_plot.min(), data_to_plot.max(), 100)
+        ax1.plot(x_range, kde(x_range), '#A23B72', linewidth=3, 
+                label='Densidad estimada')
+    except: pass
+    
+    mean_val = np.mean(data_to_plot)
+    std_val = np.std(data_to_plot)
+    median_val = np.median(data_to_plot)
+    
+    ax1.axvline(mean_val, color='red', linestyle='--', linewidth=2, 
+               label=f'Media: {mean_val:.2f}')
+    ax1.axvline(median_val, color='green', linestyle='--', linewidth=2, 
+               label=f'Mediana: {median_val:.2f}')
+    ax1.set_title('Histograma con Análisis Estadístico', fontweight='bold')
+    ax1.set_xlabel('Valores', fontweight='bold')
+    ax1.set_ylabel('Densidad', fontweight='bold')
+    ax1.legend(frameon=True, shadow=True)
+    ax1.grid(True, alpha=0.3)
+    
+    stats.probplot(data_to_plot, dist="norm", plot=ax2)
+    ax2.set_title('Gráfica Q-Q (Prueba de Normalidad)', fontweight='bold')
+    ax2.grid(True, alpha=0.3)
+`,
+                'scatter': `
+    fig, ax = plt.subplots(figsize=(12, 8))
+    if len(data_result) == 2:
+        x_data, y_data = data_result
+        scatter = ax.scatter(x_data, y_data, alpha=0.7, s=100, c=range(len(x_data)), 
+                           cmap='viridis', edgecolors='black', linewidth=0.5)
+        plt.colorbar(scatter, ax=ax, label='Índice de datos')
+        
+        if len(x_data) > 1:
+            z = np.polyfit(x_data, y_data, 1)
+            p = np.poly1d(z)
+            ax.plot(x_data, p(x_data), "#A23B72", linestyle="--", alpha=0.8, linewidth=3, 
+                   label=f'Regresión: y = {z[0]:.3f}x + {z[1]:.3f}')
+            
+            correlation = np.corrcoef(x_data, y_data)[0, 1]
+            y_pred = p(x_data)
+            ss_res = np.sum((y_data - y_pred) ** 2)
+            ss_tot = np.sum((y_data - np.mean(y_data)) ** 2)
+            r_squared = 1 - (ss_res / ss_tot) if ss_tot != 0 else 0
+            
+            stats_text = f'Correlación: {correlation:.3f}\\nR²: {r_squared:.3f}'
+            ax.text(0.05, 0.95, stats_text, transform=ax.transAxes, 
+                   bbox=dict(boxstyle="round,pad=0.3", facecolor='lightblue', alpha=0.8))
+        
+        ax.set_xlabel('X', fontweight='bold')
+        ax.set_ylabel('Y', fontweight='bold')
+    else:
+        data = data_result[0]
+        scatter = ax.scatter(range(len(data)), data, alpha=0.7, s=100, c=range(len(data)), 
+                           cmap='viridis', edgecolors='black', linewidth=0.5)
+        plt.colorbar(scatter, ax=ax, label='Índice')
+        ax.set_xlabel('Índice', fontweight='bold')
+        ax.set_ylabel('Valor', fontweight='bold')
+    
+    # Título único para gráficas de dispersión
+    ax.set_title(title, fontweight='bold', fontsize=16, pad=20)
+    ax.legend(frameon=True, shadow=True)
+`,
+                'pie': `
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
+    values = np.abs(data_result[1] if len(data_result) == 2 else data_result[0])
+    
+    threshold = np.sum(values) * 0.01
+    significant_indices = values >= threshold
+    values_filtered = values[significant_indices]
+    
+    if labels:
+        labels_filtered = [labels[i] for i in range(len(labels)) if i < len(significant_indices) and significant_indices[i]]
+    else:
+        labels_filtered = [f'Cat. {i+1}' for i in range(len(values_filtered))]
+    
+    colors = plt.cm.Set3(np.linspace(0, 1, len(values_filtered)))
+    wedges, texts, autotexts = ax1.pie(values_filtered, labels=labels_filtered, autopct='%1.1f%%', 
+                                      colors=colors, startangle=90, explode=[0.05] * len(values_filtered),
+                                      shadow=True, textprops={'fontsize': 10, 'fontweight': 'bold'})
+    
+    for autotext in autotexts:
+        autotext.set_color('white')
+        autotext.set_fontweight('bold')
+    
+    ax1.set_title('Distribución Porcentual', fontweight='bold')
+    
+    bars = ax2.bar(range(len(values_filtered)), values_filtered, color=colors, alpha=0.8, 
+                  edgecolor='black', linewidth=0.5)
+    ax2.set_xticks(range(len(values_filtered)))
+    ax2.set_xticklabels(labels_filtered, rotation=45, ha='right')
+    ax2.set_title('Valores Absolutos', fontweight='bold')
+    ax2.set_ylabel('Valores', fontweight='bold')
+    ax2.grid(True, alpha=0.3)
+    
+    for bar in bars:
+        height = bar.get_height()
+        ax2.text(bar.get_x() + bar.get_width()/2., height + height*0.01,
+                f'{height:.1f}', ha='center', va='bottom', fontweight='bold')
+`,
+                'box': `
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
+    data_to_plot = [data_result[1] if len(data_result) == 2 else data_result[0]]
+    
+    box_plot = ax1.boxplot(data_to_plot, patch_artist=True,
+                          boxprops=dict(facecolor='lightblue', alpha=0.7, linewidth=2),
+                          medianprops=dict(color='red', linewidth=3),
+                          whiskerprops=dict(linewidth=2),
+                          capprops=dict(linewidth=2))
+    
+    data_flat = data_to_plot[0]
+    mean_val = np.mean(data_flat)
+    median_val = np.median(data_flat)
+    q1 = np.percentile(data_flat, 25)
+    q3 = np.percentile(data_flat, 75)
+    iqr = q3 - q1
+    
+    stats_text = f'Media: {mean_val:.2f}\\nMediana: {median_val:.2f}\\nQ1: {q1:.2f}\\nQ3: {q3:.2f}\\nIQR: {iqr:.2f}'
+    ax1.text(0.02, 0.98, stats_text, transform=ax1.transAxes, 
+            bbox=dict(boxstyle="round,pad=0.3", facecolor='wheat', alpha=0.8), 
+            verticalalignment='top', fontsize=10)
+    
+    ax1.set_title('Diagrama de Caja', fontweight='bold')
+    ax1.set_ylabel('Valores', fontweight='bold')
+    ax1.grid(True, alpha=0.3)
+    
+    ax2.hist(data_flat, bins=max(5, len(data_flat)//3), alpha=0.7, 
+            edgecolor='black', color='#2E86AB')
+    ax2.axvline(mean_val, color='red', linestyle='--', linewidth=2,
+               label=f'Media: {mean_val:.2f}')
+    ax2.axvline(median_val, color='blue', linestyle='--', linewidth=2,
+               label=f'Mediana: {median_val:.2f}')
+    ax2.set_title('Distribución', fontweight='bold')
+    ax2.set_xlabel('Valores', fontweight='bold')
+    ax2.set_ylabel('Frecuencia', fontweight='bold')
+    ax2.legend(frameon=True, shadow=True)
+    ax2.grid(True, alpha=0.3)
+`
+            };
+
+            return baseCode + (chartSpecificCode[chartType] || chartSpecificCode['line']) + `
+    # Configuración final MEJORADA - TÍTULO SOLO UNA VEZ
+    if 'ax' in locals():
+        # NO establecer título aquí - ya se puso en el código específico
+        ax.grid(True, alpha=0.3)
+    
+    if 'fig' in locals():
+        # NO usar títulos adicionales para evitar duplicación
+        plt.tight_layout()
+        # NO USAR plt.show() - MEJORA CRÍTICA
+        
+else:
+    print("Error: No se pudieron procesar los datos")
+`;
+        }
+
+        function generateFallbackChart(chartType, chartData, chartLabels, chartTitle) {
+            // Fallback cuando Pyodide no está disponible
+            debugLog('Generando gráfica fallback con preview básico', 'warning');
+            
+            // Intentar generar un preview básico usando Canvas
+            let fallbackImage = null;
+            try {
+                fallbackImage = generateBasicPreview(chartType, chartData, chartLabels, chartTitle);
+            } catch (error) {
+                debugLog(`Error generando preview básico: ${error.message}`, 'warning');
+            }
+            
+            return {
+                type: 'fallback',
+                title: chartTitle || `Gráfica ${chartType}`,
+                description: `Vista previa básica - Sistema profesional inicializándose...`,
+                data: chartData,
+                chartType: chartType,
+                labels: chartLabels,
+                imageBase64: fallbackImage,
+                timestamp: new Date().toISOString(),
+                version: '2.1-fallback'
+            };
+        }
+
+        function generateBasicPreview(chartType, chartData, chartLabels, chartTitle) {
+            // Generar un preview básico usando HTML5 Canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = 800;
+            canvas.height = 500;
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo blanco
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Procesar datos
+            let data = [];
+            try {
+                if (chartData.includes(';')) {
+                    // Datos 2D
+                    const pairs = chartData.split(';');
+                    data = pairs.map(pair => {
+                        const [x, y] = pair.split(',').map(v => parseFloat(v.trim()));
+                        return { x, y };
+                    });
+                } else {
+                    // Datos 1D
+                    data = chartData.split(',').map((v, i) => ({
+                        x: i,
+                        y: parseFloat(v.trim())
+                    }));
+                }
+            } catch (error) {
+                debugLog(`Error procesando datos para preview: ${error.message}`, 'warning');
+                return null;
+            }
+            
+            if (data.length === 0) return null;
+            
+            // Configuración del gráfico
+            const padding = 80;
+            const graphWidth = canvas.width - 2 * padding;
+            const graphHeight = canvas.height - 2 * padding - 20; // Ajustar por título más pequeño
+            
+            // Título - Solo uno, sin duplicación
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = '#2d3748';
+            ctx.textAlign = 'center';
+            ctx.fillText(chartTitle || `Gráfica ${chartType}`, canvas.width / 2, 35);
+            
+            // Subtitle informativo, no el mismo título
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#718096';
+            ctx.fillText('Preview básico - Sistema profesional cargando...', canvas.width / 2, 55);
+            
+            // Encontrar rangos de datos
+            const yValues = data.map(d => d.y);
+            const minY = Math.min(...yValues);
+            const maxY = Math.max(...yValues);
+            const rangeY = maxY - minY || 1;
+            
+            // Dibujar ejes
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            // Eje Y
+            ctx.moveTo(padding, 75);
+            ctx.lineTo(padding, 75 + graphHeight);
+            // Eje X
+            ctx.lineTo(padding + graphWidth, 75 + graphHeight);
+            ctx.stroke();
+            
+            // Dibujar datos según el tipo
+            const yOffset = 75; // Nuevo offset por el título más pequeño
+            switch (chartType) {
+                case 'line':
+                    drawBasicLine(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset);
+                    break;
+                case 'bar':
+                    drawBasicBars(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset);
+                    break;
+                case 'scatter':
+                    drawBasicScatter(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset);
+                    break;
+                default:
+                    drawBasicLine(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset);
+            }
+            
+            // Etiquetas de ejes
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#2d3748';
+            ctx.textAlign = 'center';
+            ctx.fillText('X', canvas.width - 30, canvas.height - 15);
+            
+            ctx.save();
+            ctx.translate(15, canvas.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Y', 0, 0);
+            ctx.restore();
+            
+            // Convertir a base64
+            return canvas.toDataURL('image/png').split(',')[1];
+        }
+
+        function drawBasicLine(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset) {
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            data.forEach((point, i) => {
+                const x = padding + (i / (data.length - 1)) * graphWidth;
+                const y = yOffset + graphHeight - ((point.y - minY) / rangeY) * graphHeight;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            ctx.stroke();
+            
+            // Puntos
+            ctx.fillStyle = '#667eea';
+            data.forEach((point, i) => {
+                const x = padding + (i / (data.length - 1)) * graphWidth;
+                const y = yOffset + graphHeight - ((point.y - minY) / rangeY) * graphHeight;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+        }
+
+        function drawBasicBars(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset) {
+            const barWidth = graphWidth / data.length * 0.8;
+            const barSpacing = graphWidth / data.length * 0.2;
+            
+            ctx.fillStyle = '#667eea';
+            
+            data.forEach((point, i) => {
+                const x = padding + i * (barWidth + barSpacing) + barSpacing / 2;
+                const barHeight = ((point.y - minY) / rangeY) * graphHeight;
+                const y = yOffset + graphHeight - barHeight;
+                
+                ctx.fillRect(x, y, barWidth, barHeight);
+                
+                // Valor en la barra
+                ctx.fillStyle = '#2d3748';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(point.y.toFixed(1), x + barWidth / 2, y - 5);
+                ctx.fillStyle = '#667eea';
+            });
+        }
+
+        function drawBasicScatter(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset) {
+            ctx.fillStyle = '#667eea';
+            
+            data.forEach((point, i) => {
+                const x = padding + (i / (data.length - 1)) * graphWidth;
+                const y = yOffset + graphHeight - ((point.y - minY) / rangeY) * graphHeight;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+        }
+
+        function addChartToContainer(chartResult) {
+            const container = document.getElementById('chartsContainer');
+            const chartCard = document.createElement('div');
+            chartCard.className = 'chart-card';
+            
+            const hasValidImage = chartResult.imageBase64 && chartResult.imageBase64.length > 100;
+            const imageStatus = hasValidImage ? 
+                `✅ Imagen capturada (${Math.round(chartResult.imageBase64.length/1024)}KB)` : 
+                '⚠️ Solo metadatos';
+            const imageIcon = hasValidImage ? 'fas fa-image' : `fas fa-chart-${getChartIcon(chartResult.chartType)}`;
+            
+            // Contenido del preview - SIN TÍTULO DUPLICADO
+            let previewContent = '';
+            if (hasValidImage) {
+                // Mostrar la imagen capturada como preview (el título ya está en la imagen)
+                previewContent = `
+                    <div style="text-align: center;">
+                        <img src="data:image/png;base64,${chartResult.imageBase64}" 
+                             style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);" 
+                             alt="${chartResult.title}">
+                        <p style="color: var(--text-secondary); margin: 0.5rem 0;">${chartResult.description}</p>
+                    </div>
+                `;
+            } else {
+                // Fallback sin imagen - mostrar título solo aquí
+                previewContent = `
+                    <div style="text-align: center;">
+                        <i class="fas fa-chart-${getChartIcon(chartResult.chartType)}" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <h5>${chartResult.title}</h5>
+                        <p style="color: var(--text-secondary); margin: 0.5rem 0;">${chartResult.description}</p>
+                        <div style="background: #ffe0e0; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                            <i class="fas fa-exclamation-triangle" style="color: #d32f2f;"></i>
+                            <strong>Preview no disponible</strong><br>
+                            <small>La gráfica se generó pero no se capturó la imagen para preview</small>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chartCard.innerHTML = `
+                <h4><i class="${imageIcon}"></i> ${hasValidImage ? `Gráfica ${chartResult.chartType.charAt(0).toUpperCase() + chartResult.chartType.slice(1)}` : chartResult.title}</h4>
+                <div class="chart-result">
+                    ${previewContent}
+                    <div style="background: var(--light); padding: 0.5rem; border-radius: 5px; margin-top: 1rem;">
+                        <small><strong>Tipo:</strong> ${chartResult.chartType}</small><br>
+                        <small><strong>Datos:</strong> ${chartResult.data.substring(0, 50)}${chartResult.data.length > 50 ? '...' : ''}</small><br>
+                        <small><strong>Estado:</strong> ${imageStatus}</small><br>
+                        <small><strong>Versión:</strong> ${chartResult.version || 'N/A'}</small><br>
+                        <small><strong>Generado:</strong> ${new Date(chartResult.timestamp).toLocaleString()}</small>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button class="btn btn-secondary" onclick="removeChart(this)" style="font-size: 0.8rem;">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(chartCard);
+            generatedCharts.push(chartResult);
+            
+            debugLog(`Gráfica agregada al contenedor con preview ${hasValidImage ? 'visual' : 'básico'}. Total: ${generatedCharts.length}`, 'success');
+        }
+
+        function getChartIcon(chartType) {
+            const icons = {
+                'line': 'line',
+                'bar': 'bar',
+                'histogram': 'chart-area',
+                'scatter': 'circle',
+                'pie': 'chart-pie',
+                'box': 'square'
+            };
+            return icons[chartType] || 'chart-bar';
+        }
+
+        function removeChart(button) {
+            const chartCard = button.closest('.chart-card');
+            const index = Array.from(chartCard.parentNode.children).indexOf(chartCard);
+            
+            chartCard.remove();
+            generatedCharts.splice(index, 1);
+            
+            debugLog(`Gráfica eliminada. Total restante: ${generatedCharts.length}`, 'info');
+        }
+
+        function clearCharts() {
+            document.getElementById('chartsContainer').innerHTML = '';
+            generatedCharts = [];
+            debugLog('Todas las gráficas eliminadas', 'info');
+            showMessage("🗑️ Todas las gráficas han sido eliminadas", 'info');
+        }
+
+        function exportChartData() {
+            const chartType = document.getElementById('chartType').value;
+            const chartData = document.getElementById('chartData').value;
+            const chartLabels = document.getElementById('chartLabels').value;
+            const chartTitle = document.getElementById('chartTitle').value;
+
+            if (!chartData) {
+                showMessage("No hay datos para exportar", 'warning');
+                debugLog('Exportación cancelada: no hay datos', 'warning');
+                return;
+            }
+
+            const exportData = {
+                title: chartTitle || 'Datos de Gráfica',
+                type: chartType,
+                data: chartData,
+                labels: chartLabels,
+                timestamp: new Date().toISOString(),
+                generatedCharts: generatedCharts,
+                systemInfo: {
+                    version: '2.1-improved',
+                    features: 'Visualizaciones profesionales con captura de imágenes mejorada'
+                }
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `datos_graficas_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+
+            debugLog('Proyectos exportados exitosamente', 'success');
+            showMessage("📊 Datos exportados exitosamente", 'success');
+        }
+
+        // ===========================================
+        // FUNCIÓN DE PRUEBA DE PREVIEW
+        // ===========================================
+        function testPreview() {
+            debugLog('Iniciando test de preview...', 'info');
+            
+            // Datos de prueba
+            document.getElementById('chartType').value = 'line';
+            document.getElementById('chartTitle').value = 'Test de Preview - Función Seno';
+            document.getElementById('chartData').value = '0,0;1,0.84;2,0.91;3,0.14;4,-0.76;5,-0.96;6,-0.28';
+            document.getElementById('chartLabels').value = '0°,30°,60°,90°,120°,150°,180°';
+            
+            showMessage('🧪 Datos de prueba cargados. Generando gráfica de prueba...', 'info');
+            debugLog('Datos de prueba configurados para función seno', 'info');
+            
+            // Generar automáticamente
+            setTimeout(() => {
+                generateChart();
+            }, 500);
+        }
+
+        // ===========================================
+        // SISTEMA DE MENSAJES MEJORADO
+        // ===========================================
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.createElement('div');
+            const icons = {
+                'success': 'check-circle',
+                'error': 'exclamation-triangle',
+                'warning': 'exclamation-circle',
+                'info': 'info-circle'
+            };
+            
+            messageDiv.className = `${type}-message`;
+            messageDiv.innerHTML = `<i class="fas fa-${icons[type] || 'info-circle'}"></i> ${message}`;
+            
+            const container = document.querySelector('.main-content');
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            debugLog(`Mensaje mostrado: ${message}`, type);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+
+        // ===========================================
+        // GESTIÓN DE PROYECTOS (GUARDAR/CARGAR)
+        // ===========================================
+        function saveProject() {
+            const projectData = {
+                title: document.getElementById('projectTitle').value,
+                author: document.getElementById('projectAuthor').value,
+                institution: document.getElementById('projectInstitution').value,
+                researchArea: document.getElementById('researchArea').value,
+                date: document.getElementById('projectDate').value,
+                introduction: document.getElementById('introductionContent').innerHTML,
+                literature: document.getElementById('literatureContent').innerHTML,
+                problem: document.getElementById('problemContent').innerHTML,
+                generalObjective: document.getElementById('generalObjective').value,
+                specificObjectives: document.getElementById('specificObjectives').value,
+                hypothesis: document.getElementById('hypothesis').value,
+                researchType: document.getElementById('researchType').value,
+                methodology: document.getElementById('methodologyContent').innerHTML,
+                tools: document.getElementById('tools').value,
+                dataAnalysis: document.getElementById('dataAnalysisContent').innerHTML,
+                dataInterpretation: document.getElementById('dataInterpretation').value,
+                chartType: document.getElementById('chartType').value,
+                chartData: document.getElementById('chartData').value,
+                chartLabels: document.getElementById('chartLabels').value,
+                chartTitle: document.getElementById('chartTitle').value,
+                conclusions: document.getElementById('conclusionsContent').innerHTML,
+                limitations: document.getElementById('limitations').value,
+                futureResearch: document.getElementById('futureResearch').value,
+                references: getAllReferences(),
+                generatedCharts: generatedCharts,
+                timestamp: new Date().toISOString(),
+                version: '2.1-improved'
+            };
+
+            const dataStr = JSON.stringify(projectData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `proyecto_${(projectData.title || 'sin_titulo').replace(/\s+/g, '_').toLowerCase()}.json`;
+            link.click();
+
+            debugLog('Proyecto guardado exitosamente', 'success');
+            showMessage('💾 Proyecto guardado exitosamente', 'success');
+        }
+
+        function loadProject() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const projectData = JSON.parse(e.target.result);
+                            loadProjectData(projectData);
+                            debugLog('Proyecto cargado exitosamente', 'success');
+                            showMessage('📂 Proyecto cargado exitosamente', 'success');
+                        } catch (error) {
+                            debugLog(`Error cargando proyecto: ${error.message}`, 'error');
+                            showMessage('❌ Error al cargar el proyecto', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        function loadProjectData(data) {
+            // Cargar información básica
+            document.getElementById('projectTitle').value = data.title || '';
+            document.getElementById('projectAuthor').value = data.author || '';
+            document.getElementById('projectInstitution').value = data.institution || '';
+            document.getElementById('researchArea').value = data.researchArea || '';
+            document.getElementById('projectDate').value = data.date || '';
+            
+            // Cargar contenido
+            document.getElementById('introductionContent').innerHTML = data.introduction || '';
+            document.getElementById('literatureContent').innerHTML = data.literature || '';
+            document.getElementById('problemContent').innerHTML = data.problem || '';
+            document.getElementById('generalObjective').value = data.generalObjective || '';
+            document.getElementById('specificObjectives').value = data.specificObjectives || '';
+            document.getElementById('hypothesis').value = data.hypothesis || '';
+            document.getElementById('researchType').value = data.researchType || '';
+            document.getElementById('methodologyContent').innerHTML = data.methodology || '';
+            document.getElementById('tools').value = data.tools || '';
+            document.getElementById('dataAnalysisContent').innerHTML = data.dataAnalysis || '';
+            document.getElementById('dataInterpretation').value = data.dataInterpretation || '';
+            
+            // Cargar datos de gráficas
+            document.getElementById('chartType').value = data.chartType || '';
+            document.getElementById('chartData').value = data.chartData || '';
+            document.getElementById('chartLabels').value = data.chartLabels || '';
+            document.getElementById('chartTitle').value = data.chartTitle || '';
+            
+            document.getElementById('conclusionsContent').innerHTML = data.conclusions || '';
+            document.getElementById('limitations').value = data.limitations || '';
+            document.getElementById('futureResearch').value = data.futureResearch || '';
+            
+            // Cargar gráficas generadas
+            if (data.generatedCharts) {
+                generatedCharts = data.generatedCharts;
+                // Recargar gráficas en el contenedor
+                data.generatedCharts.forEach(chart => {
+                    addChartToContainer(chart);
+                });
+                debugLog(`${data.generatedCharts.length} gráficas cargadas`, 'success');
+            }
+            
+            // Cargar referencias
+            if (data.references) {
+                loadReferences(data.references);
+            }
+        }
+
+        function loadReferences(references) {
+            const container = document.getElementById('referencesContainer');
+            container.innerHTML = '';
+            
+            references.forEach(ref => {
+                addReference();
+                const lastItem = container.querySelector('.reference-item:last-child');
+                const inputs = lastItem.querySelectorAll('.form-input');
+                inputs[0].value = ref.author || '';
+                inputs[1].value = ref.title || '';
+                inputs[2].value = ref.source || '';
+                inputs[3].value = ref.year || '';
+            });
+        }
+
+        // ===========================================
+        // VISTA PREVIA Y EXPORTACIÓN PDF MEJORADA
+        // ===========================================
+        function updatePreview() {
+            const preview = document.getElementById('previewContainer');
+            const title = document.getElementById('projectTitle').value || 'Título del Proyecto';
+            const author = document.getElementById('projectAuthor').value || 'Autor';
+            const institution = document.getElementById('projectInstitution').value || 'Institución';
+            const date = document.getElementById('projectDate').value || 'Fecha';
+            
+            preview.innerHTML = `
+                <div class="pdf-section">
+                    <h3 style="text-align: center; margin-bottom: 2rem;">${title}</h3>
+                    <p style="text-align: center; margin-bottom: 0.5rem;"><strong>Autor:</strong> ${author}</p>
+                    <p style="text-align: center; margin-bottom: 0.5rem;"><strong>Institución:</strong> ${institution}</p>
+                    <p style="text-align: center; margin-bottom: 2rem;"><strong>Fecha:</strong> ${date}</p>
+                </div>
+                
+                <div class="pdf-section">
+                    <h4>1. Introducción</h4>
+                    <div>${document.getElementById('introductionContent').innerHTML || '<em>No completado</em>'}</div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h4>2. Revisión de Literatura</h4>
+                    <div>${document.getElementById('literatureContent').innerHTML || '<em>No completado</em>'}</div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h4>3. Problema de Investigación</h4>
+                    <div>${document.getElementById('problemContent').innerHTML || '<em>No completado</em>'}</div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h4>4. Metodología</h4>
+                    <div>${document.getElementById('methodologyContent').innerHTML || '<em>No completado</em>'}</div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h4>5. Análisis de Datos</h4>
+                    <div>${document.getElementById('dataAnalysisContent').innerHTML || '<em>No completado</em>'}</div>
+                    ${generateChartsPreviewImproved()}
+                </div>
+                
+                <div class="pdf-section">
+                    <h4>6. Conclusiones</h4>
+                    <div>${document.getElementById('conclusionsContent').innerHTML || '<em>No completado</em>'}</div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h4>7. Referencias</h4>
+                    <div>${generateReferencesPreview()}</div>
+                </div>
+            `;
+        }
+
+        function generateChartsPreviewImproved() {
+            if (generatedCharts.length === 0) {
+                const chartType = document.getElementById('chartType').value;
+                const chartTitle = document.getElementById('chartTitle').value;
+                const chartData = document.getElementById('chartData').value;
+                
+                if (chartType && chartData) {
+                    return `
+                        <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                            <h5>📊 Datos de Visualización Preparados</h5>
+                            <p><strong>Tipo:</strong> ${chartType}</p>
+                            <p><strong>Título:</strong> ${chartTitle || 'Sin título'}</p>
+                            <p><strong>Datos:</strong> ${chartData.substring(0, 100)}${chartData.length > 100 ? '...' : ''}</p>
+                        </div>
+                    `;
+                }
+                return '<p><em>No se han configurado visualizaciones</em></p>';
+            }
+            
+            const chartsWithImages = generatedCharts.filter(chart => chart.imageBase64 && chart.imageBase64.length > 100).length;
+            const chartsWithoutImages = generatedCharts.length - chartsWithImages;
+            
+            return `
+                <div style="margin-top: 1rem;">
+                    <h5>📊 Gráficas Generadas (${generatedCharts.length}) - SISTEMA MEJORADO</h5>
+                    ${chartsWithImages > 0 ? `<p style="color: #28a745;"><strong>✅ ${chartsWithImages} gráficas con imágenes HD para PDF (Captura mejorada)</strong></p>` : ''}
+                    ${chartsWithoutImages > 0 ? `<p style="color: #ffc107;">⚠️ ${chartsWithoutImages} gráficas solo incluirán información textual</p>` : ''}
+                    <div style="background: #e3f2fd; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                        <strong>🔧 MEJORAS IMPLEMENTADAS:</strong><br>
+                        • Preview visual RESTAURADO - Ver gráficas en tiempo real<br>
+                        • Eliminación de plt.show() antes de captura<br>
+                        • Validación mejorada de imágenes base64<br>
+                        • Manejo optimizado de memoria<br>
+                        • Panel de depuración en tiempo real<br>
+                        • Configuración de matplotlib para captura HD<br>
+                        • Fallback con preview básico usando Canvas
+                    </div>
+                    ${generatedCharts.map((chart, index) => {
+                        const hasValidImage = chart.imageBase64 && chart.imageBase64.length > 100;
+                        const imageSize = hasValidImage ? Math.round(chart.imageBase64.length/1024) : 0;
+                        const imageStatus = hasValidImage ? 
+                            `<span style="color: #28a745;">📸 Imagen HD capturada (${imageSize}KB)</span>` : 
+                            '<span style="color: #ffc107;">📊 Solo metadatos</span>';
+                        return `
+                            <div style="padding: 0.5rem; background: #f8f9fa; border-radius: 5px; margin: 0.5rem 0; border-left: 5px solid ${hasValidImage ? '#28a745' : '#ffc107'};">
+                                <strong>${index + 1}. ${chart.title}</strong><br>
+                                <small>Tipo: ${chart.chartType} | ${chart.description}</small><br>
+                                <small>Estado: ${imageStatus} | Versión: ${chart.version || 'N/A'}</small>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function generateReferencesPreview() {
+            const references = getAllReferences();
+            if (references.length === 0) {
+                return '<em>No se han agregado referencias</em>';
+            }
+            
+            return references.map((ref, index) => 
+                `<p>${index + 1}. ${ref.author} (${ref.year}). ${ref.title}. ${ref.source}</p>`
+            ).join('');
+        }
+
+        function exportToPDF() {
+            debugLog('Iniciando exportación a PDF mejorada', 'info');
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const title = document.getElementById('projectTitle').value || 'Proyecto de Investigación';
+            const author = document.getElementById('projectAuthor').value || 'Autor';
+            const institution = document.getElementById('projectInstitution').value || 'Institución';
+            const date = document.getElementById('projectDate').value || 'Fecha';
+            
+            // Configurar fuente
+            doc.setFont('helvetica');
+            
+            let yPosition = 20;
+            const margin = 20;
+            const pageWidth = doc.internal.pageSize.width;
+            const maxWidth = pageWidth - 2 * margin;
+            
+            debugLog(`Configuración PDF: páginas ${pageWidth}mm, margen ${margin}mm`, 'info');
+            
+            // Página de título
+            doc.setFontSize(20);
+            doc.text(title, pageWidth / 2, yPosition, { align: 'center' });
+            yPosition += 30;
+            
+            doc.setFontSize(14);
+            doc.text(`Autor: ${author}`, pageWidth / 2, yPosition, { align: 'center' });
+            yPosition += 15;
+            doc.text(`Institución: ${institution}`, pageWidth / 2, yPosition, { align: 'center' });
+            yPosition += 15;
+            doc.text(`Fecha: ${date}`, pageWidth / 2, yPosition, { align: 'center' });
+            yPosition += 15;
+            
+            // Nota sobre mejoras
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'italic');
+            doc.text('Generado con Sistema de Visualización Mejorado v2.1', pageWidth / 2, yPosition, { align: 'center' });
+            
+            // Nueva página para contenido
+            doc.addPage();
+            yPosition = 20;
+            
+            debugLog('Agregando secciones al PDF...', 'info');
+            
+            // Función auxiliar para agregar secciones
+            function addSection(title, content, isHtml = false) {
+                // Verificar si necesitamos nueva página
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                // Agregar título
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text(title, margin, yPosition);
+                yPosition += 15;
+                
+                // Procesar contenido
+                let textContent = content;
+                if (isHtml) {
+                    textContent = content.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+                }
+                
+                if (textContent && textContent !== '<em>No completado</em>') {
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    
+                    const lines = doc.splitTextToSize(textContent, maxWidth);
+                    
+                    lines.forEach(line => {
+                        if (yPosition > 270) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+                        doc.text(line, margin, yPosition);
+                        yPosition += 7;
+                    });
+                } else {
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'italic');
+                    doc.text('No completado', margin, yPosition);
+                    yPosition += 7;
+                }
+                
+                yPosition += 10;
+            }
+            
+            // Agregar secciones
+            addSection('1. Introducción', document.getElementById('introductionContent').innerHTML, true);
+            addSection('2. Revisión de Literatura', document.getElementById('literatureContent').innerHTML, true);
+            addSection('3. Problema de Investigación', document.getElementById('problemContent').innerHTML, true);
+            addSection('4. Metodología', document.getElementById('methodologyContent').innerHTML, true);
+            addSection('5. Análisis de Datos', document.getElementById('dataAnalysisContent').innerHTML, true);
+            
+            // Agregar información de gráficas MEJORADA
+            if (generatedCharts.length > 0) {
+                debugLog(`Procesando ${generatedCharts.length} gráficas para PDF...`, 'info');
+                
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                doc.setFontSize(16);
+                doc.setFont('helvetica', 'bold');
+                doc.text('5.1 Visualizaciones Generadas (Sistema Mejorado)', margin, yPosition);
+                yPosition += 20;
+                
+                // Estadísticas de gráficas
+                const chartsWithImages = generatedCharts.filter(chart => chart.imageBase64 && chart.imageBase64.length > 100).length;
+                const chartsWithoutImages = generatedCharts.length - chartsWithImages;
+                
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Total de gráficas: ${generatedCharts.length}`, margin, yPosition);
+                yPosition += 10;
+                doc.text(`Con imágenes HD: ${chartsWithImages}`, margin, yPosition);
+                yPosition += 10;
+                doc.text(`Solo metadatos: ${chartsWithoutImages}`, margin, yPosition);
+                yPosition += 15;
+                
+                // Incluir cada gráfica
+                generatedCharts.forEach((chart, index) => {
+                    debugLog(`Procesando gráfica ${index + 1}: ${chart.title}`, 'info');
+                    
+                    // Verificar si necesitamos nueva página
+                    if (yPosition > 200) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    // Título de la gráfica
+                    doc.setFontSize(14);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`Gráfica ${index + 1}: ${chart.title}`, margin, yPosition);
+                    yPosition += 15;
+                    
+                    // Información de la gráfica
+                    doc.setFontSize(12);
+                    doc.setFont('helvetica', 'normal');
+                    doc.text(`Tipo: ${chart.chartType}`, margin, yPosition);
+                    yPosition += 10;
+                    doc.text(`Descripción: ${chart.description}`, margin, yPosition);
+                    yPosition += 10;
+                    doc.text(`Versión: ${chart.version || 'N/A'}`, margin, yPosition);
+                    yPosition += 15;
+                    
+                    // VALIDACIÓN MEJORADA DE IMÁGENES
+                    const hasValidImage = chart.imageBase64 && chart.imageBase64.length > 100;
+                    
+                    if (hasValidImage) {
+                        debugLog(`Agregando imagen de gráfica ${index + 1}: ${chart.imageBase64.length} caracteres`, 'success');
+                        
+                        try {
+                            // Configuración optimizada para imágenes
+                            const imgWidth = 160; // Ancho en mm
+                            const imgHeight = 100; // Alto en mm
+                            
+                            // Verificar si cabe en la página actual
+                            if (yPosition + imgHeight > 270) {
+                                doc.addPage();
+                                yPosition = 20;
+                            }
+                            
+                            // Agregar imagen con validación
+                            doc.addImage(`data:image/png;base64,${chart.imageBase64}`, 'PNG', 
+                                        margin, yPosition, imgWidth, imgHeight);
+                            yPosition += imgHeight + 15;
+                            
+                            // Agregar nota sobre la gráfica
+                            doc.setFontSize(10);
+                            doc.setFont('helvetica', 'italic');
+                            const imageSize = Math.round(chart.imageBase64.length/1024);
+                            doc.text(`Gráfica HD generada con análisis estadístico profesional (${imageSize}KB)`, margin, yPosition);
+                            yPosition += 15;
+                            
+                            debugLog(`Imagen agregada exitosamente: ${imageSize}KB`, 'success');
+                            
+                        } catch (error) {
+                            debugLog(`Error agregando imagen: ${error.message}`, 'error');
+                            console.error('Error agregando imagen al PDF:', error);
+                            
+                            // Fallback mejorado
+                            doc.setFontSize(10);
+                            doc.setFont('helvetica', 'italic');
+                            doc.text('(Gráfica generada - error al incluir imagen en PDF)', margin, yPosition);
+                            yPosition += 10;
+                            
+                            // Mostrar datos de la gráfica como fallback
+                            const dataPreview = chart.data.length > 100 ? 
+                                chart.data.substring(0, 100) + '...' : chart.data;
+                            const lines = doc.splitTextToSize(`Datos: ${dataPreview}`, maxWidth);
+                            lines.forEach(line => {
+                                if (yPosition > 270) {
+                                    doc.addPage();
+                                    yPosition = 20;
+                                }
+                                doc.text(line, margin, yPosition);
+                                yPosition += 7;
+                            });
+                            yPosition += 10;
+                        }
+                    } else {
+                        debugLog(`Gráfica ${index + 1} sin imagen válida (${chart.imageBase64 ? chart.imageBase64.length : 0} caracteres)`, 'warning');
+                        
+                        // Sin imagen disponible - información mejorada
+                        doc.setFontSize(10);
+                        doc.setFont('helvetica', 'italic');
+                        doc.text('Datos de gráfica preparados (imagen no capturada por el sistema)', margin, yPosition);
+                        yPosition += 10;
+                        
+                        // Mostrar datos de la gráfica
+                        const dataPreview = chart.data.length > 100 ? 
+                            chart.data.substring(0, 100) + '...' : chart.data;
+                        const lines = doc.splitTextToSize(`Datos: ${dataPreview}`, maxWidth);
+                        lines.forEach(line => {
+                            if (yPosition > 270) {
+                                doc.addPage();
+                                yPosition = 20;
+                            }
+                            doc.text(line, margin, yPosition);
+                            yPosition += 7;
+                        });
+                        yPosition += 15;
+                    }
+                    
+                    yPosition += 10; // Espacio entre gráficas
+                });
+                
+                debugLog(`Procesamiento de gráficas completado: ${chartsWithImages} con imágenes, ${chartsWithoutImages} sin imágenes`, 'success');
+            }
+            
+            addSection('6. Conclusiones', document.getElementById('conclusionsContent').innerHTML, true);
+            
+            // Agregar referencias
+            const references = getAllReferences();
+            if (references.length > 0) {
+                addSection('7. Referencias', '');
+                references.forEach((ref, index) => {
+                    const refText = `${index + 1}. ${ref.author} (${ref.year}). ${ref.title}. ${ref.source}`;
+                    const lines = doc.splitTextToSize(refText, maxWidth);
+                    lines.forEach(line => {
+                        if (yPosition > 270) {
+                            doc.addPage();
+                            yPosition = 20;
+                        }
+                        doc.text(line, margin, yPosition);
+                        yPosition += 7;
+                    });
+                    yPosition += 5;
+                });
+            }
+            
+            // Guardar PDF
+            const fileName = `proyecto_mejorado_${title.replace(/\s+/g, '_').toLowerCase()}.pdf`;
+            doc.save(fileName);
+            
+            debugLog('PDF exportado exitosamente', 'success');
+            showMessage('📄 PDF exportado exitosamente con mejoras implementadas', 'success');
+        }
+    </script>
+</body>
+</html>

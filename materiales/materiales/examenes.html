@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de Matemáticas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --background-light: #f8f9fa;
+            --text-dark: #2b2d42;
+            --success-color: #4cc9f0;
+            --card-shadow: 0 10px 20px rgba(67, 97, 238, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .exam-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .exam-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .exam-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.25);
+        }
+
+        .exam-title {
+            color: var(--text-dark);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .exam-title i {
+            color: var(--primary-color);
+        }
+
+        .exam-list {
+            list-style: none;
+        }
+
+        .exam-item {
+            background: var(--background-light);
+            margin: 1rem 0;
+            padding: 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .exam-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .exam-item:hover {
+            background: white;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.15);
+            transform: translateX(10px);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip:hover::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background: var(--text-dark);
+            color: white;
+            border-radius: 5px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            z-index: 1;
+        }
+
+        .quote-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .quote-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .quote-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .quote-text {
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .quote-author {
+            font-size: 1.2rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-graduation-cap"></i> Exámenes de Matemáticas</h1>
+            <p>Selecciona una sección para comenzar tu práctica</p>
+        </header>
+
+        <div class="exam-sections">
+            <div class="exam-card">
+                <h2 class="exam-title">
+                    <i class="fas fa-calculator"></i>
+                    Trigonometría
+                </h2>
+                <ul class="exam-list">
+                    <a href="trigonometria-basica.html" class="exam-item tooltip" data-tooltip="Duración: 30 min">
+                        <i class="fas fa-wave-square"></i>
+                        Funciones Trigonométricas Básicas
+                    </a>
+                    <a href="identidades-trigonometricas.html" class="exam-item tooltip" data-tooltip="Duración: 45 min">
+                        <i class="fas fa-square-root-alt"></i>
+                        Identidades Trigonométricas
+                    </a>
+                    <a href="resolucion-triangulos.html" class="exam-item tooltip" data-tooltip="Duración: 40 min">
+                        <i class="fas fa-shapes"></i>
+                        Resolución de Triángulos
+                    </a>
+                </ul>
+            </div>
+
+            <div class="exam-card">
+                <h2 class="exam-title">
+                    <i class="fas fa-superscript"></i>
+                    Álgebra
+                </h2>
+                <ul class="exam-list">
+                    <a href="ecuaciones-lineales.html" class="exam-item tooltip" data-tooltip="Duración: 25 min">
+                        <i class="fas fa-equals"></i>
+                        Ecuaciones Lineales
+                    </a>
+                    <a href="ecuaciones-cuadraticas.html" class="exam-item tooltip" data-tooltip="Duración: 35 min">
+                        <i class="fas fa-function"></i>
+                        Ecuaciones Cuadráticas
+                    </a>
+                    <a href="sistemas-ecuaciones.html" class="exam-item tooltip" data-tooltip="Duración: 45 min">
+                        <i class="fas fa-infinity"></i>
+                        Sistemas de Ecuaciones
+                    </a>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quote-section animate-fade-in">
+            <i class="fas fa-quote-right quote-icon"></i>
+            <p class="quote-text">
+                "La matemática es el alfabeto con el cual Dios ha escrito el universo"
+            </p>
+            <p class="quote-author">
+                - Galileo Galilei <i class="fas fa-telescope" style="margin-left: 0.5rem;"></i>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

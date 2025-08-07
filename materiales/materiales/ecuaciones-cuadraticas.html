@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Ecuaciones Cuadráticas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --background-light: #f8f9fa;
+            --text-dark: #2b2d42;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .question {
+            background: var(--background-light);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #3651d4;
+        }
+
+        #resultado {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2b2d42;
+        }
+
+        .hint {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-square-root-alt"></i> Ecuaciones Cuadráticas</h1>
+        
+        <form id="examenForm">
+            <!-- Factorización -->
+            <div class="question">
+                <p>1. Factoriza \(x^2 + 5x + 6\)</p>
+                <p class="hint">Escribe los dos factores separados por coma. Ejemplo: (x+2),(x+3)</p>
+                <input type="text" name="q1" placeholder="(x+?),(x+?)" data-respuesta="(x+n),(x+m)">
+            </div>
+
+            <div class="question">
+                <p>2. Encuentra los ceros de \(x^2 - 16\)</p>
+                <p class="hint">Escribe los valores de x separados por coma. Ejemplo: -4,4</p>
+                <input type="text" name="q2" placeholder="x = ?" data-respuesta="-2,2">
+            </div>
+
+            <div class="question">
+                <p>3. Factoriza \(x^2 - 7x + 12\)</p>
+                <input type="text" name="q3" placeholder="(x+?),(x+?)" data-respuesta="(x-3),(x-4)">
+            </div>
+
+            <!-- Fórmula Cuadrática -->
+            <div class="question">
+                <p>4. Resuelve usando la fórmula cuadrática: \(2x^2 + 5x - 3 = 0\)</p>
+                <p class="hint">Escribe las soluciones separadas por coma, redondeadas a 2 decimales</p>
+                <input type="text" name="q4" placeholder="x = ?" data-respuesta="-3,-0.5">
+            </div>
+
+            <div class="question">
+                <p>5. Resuelve: \(x^2 + 6x + 9 = 0\)</p>
+                <input type="text" name="q5" placeholder="x = ?" data-respuesta="-3">
+            </div>
+
+            <!-- Discriminante -->
+            <div class="question">
+                <p>6. Calcula el discriminante de \(x^2 + 4x + 4\)</p>
+                <input type="text" name="q6" placeholder="Discriminante = ?" data-respuesta="0">
+            </div>
+
+            <div class="question">
+                <p>7. ¿Cuántas soluciones reales tiene \(2x^2 - 3x + 5 = 0\)? (Usa el discriminante)</p>
+                <input type="text" name="q7" placeholder="Número de soluciones" data-respuesta="0">
+            </div>
+
+            <!-- Cortes con los ejes -->
+            <div class="question">
+                <p>8. Para la parábola \(y = x^2 - 4x + 3\), encuentra el corte con el eje y</p>
+                <input type="text" name="q8" placeholder="y = ?" data-respuesta="3">
+            </div>
+
+            <div class="question">
+                <p>9. Para la parábola \(y = x^2 - x - 6\), encuentra los cortes con el eje x</p>
+                <input type="text" name="q9" placeholder="x = ?" data-respuesta="-2,3">
+            </div>
+
+            <!-- Vértice -->
+            <div class="question">
+                <p>10. Encuentra el vértice de \(y = x^2 + 4x + 1\)</p>
+                <p class="hint">Escribe las coordenadas (x,y) separadas por coma</p>
+                <input type="text" name="q10" placeholder="(x,y)" data-respuesta="-2,-3">
+            </div>
+
+            <!-- Aplicaciones -->
+            <div class="question">
+                <p>11. Un objeto se lanza hacia arriba con una velocidad inicial de 16 m/s. La altura h en metros después de t segundos está dada por \(h = -4.9t^2 + 16t\). ¿Cuánto tiempo tarda en llegar al suelo?</p>
+                <input type="text" name="q11" placeholder="t = ?" data-respuesta="3.27">
+            </div>
+
+            <div class="question">
+                <p>12. ¿Cuál es la altura máxima que alcanza el objeto en el problema anterior?</p>
+                <input type="text" name="q12" placeholder="h = ?" data-respuesta="13.06">
+            </div>
+
+            <!-- Forma Completa -->
+            <div class="question">
+                <p>13. Convierte \(y = x^2 + 6x + 5\) a la forma \(y = a(x - h)^2 + k\). ¿Cuál es el valor de k?</p>
+                <input type="text" name="q13" placeholder="k = ?" data-respuesta="-4">
+            </div>
+
+            <div class="question">
+                <p>14. La ecuación de una parábola es \(y = 2(x - 3)^2 + 1\). ¿Cuál es su vértice?</p>
+                <input type="text" name="q14" placeholder="(x,y)" data-respuesta="3,1">
+            </div>
+
+            <!-- Problemas de Área -->
+            <div class="question">
+                <p>15. Un rectángulo tiene un perímetro de 24 unidades. Expresa su área A en términos de su ancho x.</p>
+                <p class="hint">Escribe el coeficiente de x², luego el coeficiente de x, luego el término independiente, separados por coma</p>
+                <input type="text" name="q15" placeholder="Coeficientes: ?" data-respuesta="1,-12,0">
+            </div>
+
+            <!-- Más Problemas -->
+            <div class="question">
+                <p>16. ¿Para qué valor de x el producto de (x+2) y (x-5) es 0?</p>
+                <input type="text" name="q16" placeholder="x = ?" data-respuesta="-2,5">
+            </div>
+
+            <div class="question">
+                <p>17. La suma de un número y su cuadrado es 12. ¿Cuál es el número positivo?</p>
+                <input type="text" name="q17" placeholder="x = ?" data-respuesta="3">
+            </div>
+
+            <div class="question">
+                <p>18. Para la ecuación \(x^2 + bx + 25 = 0\), si una raíz es -5, ¿cuál es el valor de b?</p>
+                <input type="text" name="q18" placeholder="b = ?" data-respuesta="10">
+            </div>
+
+            <div class="question">
+                <p>19. ¿Cuál es el valor de m para que \(x^2 + mx + 4\) tenga raíces iguales?</p>
+                <input type="text" name="q19" placeholder="m = ?" data-respuesta="4,-4">
+            </div>
+
+            <div class="question">
+                <p>20. Un jardín rectangular debe tener un área de 200 metros cuadrados. Si su largo debe ser 5 metros más que su ancho, ¿cuál debe ser el ancho?</p>
+                <input type="text" name="q20" placeholder="ancho = ?" data-respuesta="10">
+            </div>
+
+            <button type="submit">Calificar Examen</button>
+        </form>
+
+        <div id="resultado">
+            <h2>Resultado del Examen</h2>
+            <p class="score">Tu calificación: <span id="calificacion"></span>/20</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('examenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let correctas = 0;
+            const inputs = document.querySelectorAll('input[type="text"]');
+            
+            inputs.forEach(input => {
+                let respuestaCorrecta = input.dataset.respuesta.toString().toLowerCase();
+                let respuestaUsuario = input.value.toString().toLowerCase().trim();
+                
+                // Normalizar respuestas
+                respuestaUsuario = respuestaUsuario.replace(/\s+/g, '');
+                
+                if (respuestaCorrecta.includes(',')) {
+                    // Para respuestas múltiples, verificar cada valor posible
+                    const valoresCorrectos = respuestaCorrecta.split(',');
+                    const valoresUsuario = respuestaUsuario.split(',');
+                    
+                    // Verificar si tienen la misma cantidad de valores
+                    if (valoresCorrectos.length === valoresUsuario.length) {
+                        // Para respuestas numéricas con decimales
+                        if (!isNaN(valoresCorrectos[0])) {
+                            let todosCorrectos = true;
+                            valoresUsuario.forEach((val, index) => {
+                                if (Math.abs(parseFloat(val) - parseFloat(valoresCorrectos[index])) > 0.1) {
+                                    todosCorrectos = false;
+                                }
+                            });
+                            if (todosCorrectos) correctas++;
+                        } else {
+                            // Para respuestas de texto
+                            if (respuestaUsuario === respuestaCorrecta) correctas++;
+                        }
+                    }
+                } else {
+                    // Para respuestas únicas
+                    if (!isNaN(respuestaCorrecta)) {
+                        if (Math.abs(parseFloat(respuestaUsuario) - parseFloat(respuestaCorrecta)) <= 0.1) {
+                            correctas++;
+                        }
+                    } else {
+                        if (respuestaUsuario === respuestaCorrecta) correctas++;
+                    }
+                }
+                
+                // Marcar visualmente la respuesta
+                if (correctas > 0) {
+                    input.style.borderColor = '#4caf50';
+                } else {
+                    input.style.borderColor = '#f44336';
+                }
+            });
+
+            document.getElementById('resultado').style.display = 'block';
+            document.getElementById('calificacion').textContent = correctas;
+            
+            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Inicializar MathJax
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    </script>
+</body>
+</html>

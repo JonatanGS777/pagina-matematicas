@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentaciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #ffffff;
+            background: url('fondo7.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.7) 100%
+            );
+            z-index: -1;
+            backdrop-filter: blur(8px);
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.2em;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        main {
+            padding: 3rem;
+            max-width: 800px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            margin: 2rem auto;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        main p {
+            font-size: 1.2em;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-presentaciones {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-presentaciones:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(45deg, #2980b9, #3498db);
+        }
+
+        .btn-presentaciones:active {
+            transform: translateY(1px);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            width: 100%;
+            text-align: center;
+            font-size: 0.9em;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            animation: fadeIn 1s ease-out;
+        }
+
+        main {
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        footer {
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            main {
+                padding: 2rem;
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Presentaciones</h1>
+        <p>Explora presentaciones visuales que complementan los temas de clase y facilitan la comprensión de conceptos clave.</p>
+    </header>
+    <main>
+        <p>Revisa cada presentación para reforzar los temas tratados y resolver cualquier duda sobre los conceptos.</p>
+        <button onclick="explorarPresentaciones()" class="btn-presentaciones">Explorar Presentaciones</button>
+    </main>
+    <footer>
+        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+    </footer>
+
+    <script>
+        function explorarPresentaciones() {
+            window.location.href = 'presentaciones-biblioteca.html';
+        }
+    </script>
+</body>
+</html>

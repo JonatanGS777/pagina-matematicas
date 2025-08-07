@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programación y Gráficas - Matemáticas Digitales</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --danger-bg: #fff5f5;
+            --danger-text: #c53030;
+            --success-bg: #f0fff4;
+            --success-text: #276749;
+            --warning-bg: #fffaf0;
+            --warning-text: #c05621;
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--text-primary); padding-top: 80px; }
+
+        /* --- ESTILOS DE NAVEGACIÓN --- */
+        .header { position: fixed; top: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(102, 126, 234, 0.1); z-index: 1000; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .nav-menu { display: flex; align-items: center; gap: 2rem; list-style: none; }
+        .nav-item { position: relative; }
+        .nav-link { display: flex; align-items: center; padding: 0.75rem 1rem; color: var(--text-primary); text-decoration: none; font-weight: 500; border-radius: 25px; transition: all 0.3s ease; }
+        .nav-link:hover { background: rgba(102, 126, 234, 0.1); color: var(--primary); }
+        .nav-link i { margin-right: 0.5rem; }
+        .nav-link.has-dropdown::after { content: '\f107'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-left: 0.5rem; transition: transform 0.3s ease; }
+        .nav-item:hover .nav-link.has-dropdown::after { transform: rotate(180deg); }
+        .dropdown { position: absolute; top: 100%; left: 0; background: var(--white); border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; min-width: 220px; border-top: 3px solid var(--primary); }
+        .nav-item:hover .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item { display: block; padding: 0.75rem 1.5rem; color: var(--text-primary); text-decoration: none; transition: all 0.3s ease; }
+        .dropdown-item:hover { background: rgba(102, 126, 234, 0.05); color: var(--primary); padding-left: 2rem; }
+        .mobile-toggle { display: none; cursor: pointer; }
+
+        /* --- ESTILOS DEL CONTENIDO PRINCIPAL --- */
+        .main-content { padding: 4rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 4vw, 3.5rem); text-align: center; margin-bottom: 3rem; margin-top: 3rem; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: var(--gradient-main); border-radius: 2px; }
+        .programming-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: stretch; }
+        .code-viewer { display: flex; flex-direction: column; background: #2d3748; border-radius: 20px; padding: 1.5rem; box-shadow: var(--shadow-soft); }
+        .code-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+        .code-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 600; color: var(--white); }
+        .language-selector { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .language-selector button { background: var(--primary); color: var(--white); border: none; padding: 0.5rem 1rem; border-radius: 15px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; }
+        .language-selector button:hover, .language-selector button.active { background: var(--secondary); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        pre[class*="language-"] { margin: 0; padding: 1.5rem !important; border-radius: 10px; font-size: 0.95rem; line-height: 1.7; flex-grow: 1; overflow: auto; background: #2d3748 !important; }
+        .graph-viewer { display: flex; flex-direction: column; background: var(--white); border-radius: 20px; padding: 2rem; box-shadow: var(--shadow-soft); border: 1px solid rgba(102, 126, 234, 0.1); }
+        .graph-header { text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-primary); }
+        .chart-container { position: relative; height: 450px; width: 100%; flex-grow: 1; }
+        
+        /* --- ESTILOS PARA EL GENERADOR INTERACTIVO --- */
+        .interactive-form { background: var(--white); padding: 2rem; border-radius: 20px; box-shadow: var(--shadow-soft); }
+        .interactive-form .form-group { margin-bottom: 1.5rem; }
+        .interactive-form label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .interactive-form textarea, .interactive-form select { width: 100%; padding: 0.75rem; border-radius: 10px; border: 1px solid #ccc; font-family: 'Inter', sans-serif; font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+        .interactive-form textarea { resize: vertical; min-height: 80px; }
+        .interactive-form textarea:focus, .interactive-form select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); outline: none; }
+        .btn-generate { width: 100%; padding: 1rem; background: var(--gradient-main); color: var(--white); border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .btn-generate:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); }
+
+        /* --- ESTILOS PARA EL EJECUTOR DE CÓDIGO --- */
+        #studentCodeEditor {
+            width: 100%;
+            height: 300px;
+            font-family: 'Space Mono', monospace, sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            background-color: #2d3748;
+            color: #f7fafc;
+            border: none;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        #codeErrorOutput {
+            background-color: var(--danger-bg);
+            color: var(--danger-text);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            display: none;
+        }
+        
+        /* --- ESTILOS PARA SECCIÓN DE RETOS --- */
+        .challenges-section {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+        }
+        .challenge-levels {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .level-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .level-btn.active, .level-btn:hover {
+            background: var(--gradient-main);
+            color: var(--white);
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+        .challenge-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .challenge-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        .challenge-card.completed {
+            border-color: #48bb78;
+            background: var(--success-bg);
+        }
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .challenge-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .challenge-difficulty {
+            display: flex;
+            gap: 0.25rem;
+        }
+        .difficulty-star {
+            color: #fbbf24;
+            font-size: 1rem;
+        }
+        .challenge-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .challenge-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .challenge-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-try {
+            background: var(--primary);
+            color: var(--white);
+        }
+        .btn-try:hover {
+            background: var(--secondary);
+            transform: translateY(-1px);
+        }
+        .btn-hint {
+            background: var(--warning-bg);
+            color: var(--warning-text);
+        }
+        .btn-hint:hover {
+            background: #fed7aa;
+        }
+        .hint-box {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--warning-bg);
+            border-left: 4px solid var(--warning-text);
+            border-radius: 8px;
+            color: var(--warning-text);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        /* --- MODAL PARA RETOS --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        /* --- TOOLTIP --- */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* --- ESTILOS RESPONSIVOS --- */
+        @media (max-width: 992px) {
+            .nav-menu { position: fixed; top: 80px; left: -100%; width: 100%; height: calc(100vh - 80px); background: var(--white); flex-direction: column; align-items: stretch; transition: left 0.3s ease; gap: 0; padding: 2rem 0; }
+            .nav-menu.active { left: 0; }
+            .nav-item { width: 100%; border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+            .nav-link { justify-content: space-between; padding: 1rem 2rem; border-radius: 0; }
+            .dropdown { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; border: none; background: rgba(102, 126, 234, 0.05); max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+            .nav-item.active .dropdown { max-height: 500px; }
+            .mobile-toggle { display: flex; flex-direction: column; padding: 0.5rem; }
+            .mobile-toggle span { width: 25px; height: 3px; background: var(--primary); margin: 3px 0; transition: 0.3s; border-radius: 2px; }
+            .mobile-toggle.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+            .mobile-toggle.active span:nth-child(2) { opacity: 0; }
+            .mobile-toggle.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
+        }
+        @media (max-width: 768px) {
+            .programming-container { grid-template-columns: 1fr; }
+            .main-content { padding: 3rem 1rem; }
+            .chart-container { height: 350px; }
+            .modal-content { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="../index.html" class="logo"><i class="fas fa-calculator"></i> Matemáticas Digitales</a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-chalkboard-teacher"></i> Sala de Clases</a>
+                    <div class="dropdown">
+                        <a href="../contexto/contexto.html" class="dropdown-item">ContextoMath</a>
+                        <a href="../links/links.html" class="dropdown-item">Enlaces</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-atom"></i> STEM</a>
+                    <div class="dropdown">
+                        <a href="programacion.html" class="dropdown-item" style="color:var(--primary); font-weight: 600;">Programación</a>
+                        <a href="../stem/robotica.html" class="dropdown-item">Robótica</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="../club/olimpiadas.html" class="nav-link"><i class="fas fa-trophy"></i> Club Matemáticas</a>
+                </li>
+            </ul>
+            <div class="mobile-toggle"><span></span><span></span><span></span></div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1 class="section-title">Programación y Visualización</h1>
+        <div class="programming-container">
+            <div class="code-viewer">
+                <div class="code-header">
+                    <h2 class="code-title">Ejemplos de Código</h2>
+                    <div class="language-selector">
+                        <button data-lang="python-line">Python (Líneas)</button>
+                        <button data-lang="js-bar">JS (Barras)</button>
+                        <button data-lang="python-math">Python (Parábola)</button>
+                        <button data-lang="python-sine">Python (Seno)</button>
+                        <button data-lang="js-pie">JS (Pastel)</button>
+                        <button data-lang="js-scatter">JS (Dispersión)</button>
+                    </div>
+                </div>
+                <pre><code id="code-display" class="language-js"></code></pre>
+            </div>
+            <div class="graph-viewer">
+                <h2 class="graph-header" id="graph-title">Gráfica de Resultados</h2>
+                <div class="chart-container">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="section-title">Generador de Gráficas Interactivo</h1>
+        <div class="programming-container">
+            <div class="interactive-form">
+                <h2 class="graph-header">Crea tu Propia Gráfica</h2>
+                <form id="interactive-generator">
+                    <div class="form-group">
+                        <label for="userLabels">Etiquetas (Eje X), separadas por comas:</label>
+                        <textarea id="userLabels" placeholder="Para dispersión usa valores numéricos: 1, 2, 3, 4&#10;Para otros tipos: Enero, Febrero, Marzo, Abril"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="userData">Datos (Eje Y), separados por comas:</label>
+                        <textarea id="userData" placeholder="10, 25, 15, 30"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="userChartType">Tipo de Gráfica:</label>
+                        <select id="userChartType">
+                            <option value="bar">Barras</option>
+                            <option value="line">Líneas</option>
+                            <option value="pie">Pastel</option>
+                            <option value="doughnut">Dona</option>
+                            <option value="scatter">Dispersión (usa números en ambos campos)</option>
+                        </select>
+                    </div>
+                    <button type="button" id="generateChartBtn" class="btn-generate"><i class="fas fa-cogs"></i> Generar Gráfica y Código</button>
+                </form>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="graph-viewer"><h2 class="graph-header">Tu Gráfica Generada</h2><div class="chart-container" style="height: 250px;"><canvas id="userChart"></canvas></div></div>
+                <div class="code-viewer"><div class="code-header"><h2 class="code-title">Código JavaScript Generado</h2></div><pre><code id="generatedCodeDisplay" class="language-javascript">// El código aparecerá aquí...</code></pre></div>
+            </div>
+        </div>
+
+        <h1 class="section-title">Ejecutor de Código de Gráficas</h1>
+        <div class="programming-container">
+            <div class="interactive-form">
+                <h2 class="graph-header">Escribe tu Código JavaScript</h2>
+                <div class="tooltip" style="margin-bottom: 1rem;">
+                    <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                    <span class="tooltip-text">¡Tip! Usa ctx para el contexto y Chart para crear gráficas. Recuerda usar 'return' al final.</span>
+                </div>
+                <textarea id="studentCodeEditor"></textarea>
+                <button type="button" id="runCodeBtn" class="btn-generate" style="margin-top: 1rem;">
+                    <i class="fas fa-play"></i> Ejecutar Código
+                </button>
+                <div id="codeErrorOutput"></div>
+            </div>
+
+            <div class="graph-viewer">
+                <h2 class="graph-header">Resultado del Código</h2>
+                <div class="chart-container" style="height: 400px;">
+                    <canvas id="studentChartCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nueva sección de retos -->
+        <h1 class="section-title">Retos de Programación</h1>
+        <div class="challenges-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%;">0% Completado</div>
+            </div>
+            
+            <div class="challenge-levels">
+                <button class="level-btn active" data-level="basico">Básico</button>
+                <button class="level-btn" data-level="intermedio">Intermedio</button>
+                <button class="level-btn" data-level="avanzado">Avanzado</button>
+            </div>
+
+            <div id="challengesContainer">
+                <!-- Los retos se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para intentar retos -->
+    <div id="challengeModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle" style="margin-bottom: 1rem;"></h2>
+            <p id="modalDescription" style="margin-bottom: 1.5rem;"></p>
+            <textarea id="challengeCodeEditor" style="width: 100%; height: 300px; font-family: monospace; background: #2d3748; color: #f7fafc; padding: 1rem; border-radius: 10px;"></textarea>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button class="btn-generate" style="flex: 1;" onclick="runChallengeCode()">
+                    <i class="fas fa-play"></i> Probar Solución
+                </button>
+                <button class="btn-generate" style="flex: 1; background: #48bb78;" onclick="checkSolution()">
+                    <i class="fas fa-check"></i> Verificar Respuesta
+                </button>
+            </div>
+            <div id="challengeOutput" style="margin-top: 1rem;"></div>
+            <canvas id="challengeCanvas" style="max-width: 100%; margin-top: 1rem; display: none;"></canvas>
+        </div>
+    </div>
+    
+    <footer class="footer" style="text-align: center; padding: 2rem; margin-top: 2rem; background: var(--dark); color: var(--light);">
+        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Código existente de las secciones anteriores
+        const codeExamples = {
+            'python-line':{lang:'python',title:'Crecimiento Exponencial',code:'# Crecimiento de una población de bacterias\nhoras = [0, 1, 2, 3, 4, 5, 6]\npoblacion = [10, 20, 40, 80, 160, 320, 640]\n\nprint("Generando gráfica de crecimiento...")',chartType:'line',data:{labels:['0h','1h','2h','3h','4h','5h','6h'],datasets:[{label:'Población de Bacterias',data:[10,20,40,80,160,320,640],backgroundColor:'rgba(75, 192, 192, 0.2)',borderColor:'rgba(75, 192, 192, 1)',fill:true,tension:0.1}]}},
+            'js-bar':{lang:'javascript',title:'Calificaciones de Estudiantes',code:"// Calificaciones promedio por materia\nconst materias = ['Álgebra', 'Geometría', 'Cálculo', 'Estadística'];\nconst promedios = [85, 92, 78, 88];\n\nconsole.log('Mostrando gráfica de barras...');",chartType:'bar',data:{labels:['Álgebra','Geometría','Cálculo','Estadística'],datasets:[{label:'Calificación Promedio',data:[85,92,78,88],backgroundColor:['rgba(255, 99, 132, 0.5)','rgba(54, 162, 235, 0.5)','rgba(255, 206, 86, 0.5)','rgba(75, 192, 192, 0.5)'],borderColor:['rgba(255, 99, 132, 1)','rgba(54, 162, 235, 1)','rgba(255, 206, 86, 1)','rgba(75, 192, 192, 1)'],borderWidth:1}]}},
+            'python-math':{lang:'python',title:'Gráfica de una Parábola',code:"# Graficando la función y = x^2 - 2x - 3\nimport numpy as np\n\n# Generar valores para x\nx = np.arange(-5, 7, 0.5)\n# Calcular y\ny = x**2 - 2*x - 3\n\nprint(f\"Vértice en x=1, y={1**2 - 2*1 - 3}\")",chartType:'line',data:{labels:Array.from({length:25},(_,i)=>(i*0.5-5).toFixed(1)),datasets:[{label:'y = x² - 2x - 3',data:Array.from({length:25},(_,i)=>{const x=i*0.5-5;return x*x-2*x-3;}),backgroundColor:'rgba(153, 102, 255, 0.2)',borderColor:'rgba(153, 102, 255, 1)',pointRadius:3,tension:0.3}]}},
+            'python-sine':{lang:'python',title:'Función Trigonométrica Seno',code:'# Graficando la función y = sin(x)\nimport numpy as np\n\nx = np.linspace(0, 2 * np.pi, 50)\ny = np.sin(x)\n\nprint("Generando gráfica de la función seno...")',chartType:'line',data:{labels:Array.from({length:50},(_,i)=>((i/49)*2*Math.PI).toFixed(2)),datasets:[{label:'y = sin(x)',data:Array.from({length:50},(_,i)=>Math.sin((i/49)*2*Math.PI)),backgroundColor:'rgba(255, 99, 132, 0.2)',borderColor:'rgba(255, 99, 132, 1)',fill:false,tension:0.4}]}},
+            'js-pie':{lang:'javascript',title:'Distribución de Temas del Curso',code:"// Porcentaje de tiempo dedicado a cada tema\nconst temas = {\n  'Álgebra': 30,\n  'Geometría': 25,\n  'Cálculo': 35,\n  'Proyecto Final': 10\n};\n\nconsole.log('Generando gráfico de pastel...');",chartType:'pie',data:{labels:['Álgebra','Geometría','Cálculo','Proyecto Final'],datasets:[{label:'Distribución %',data:[30,25,35,10],backgroundColor:['#ff6384','#36a2eb','#ffce56','#4bc0c0'],hoverOffset:4}]}},
+            'js-scatter':{lang:'javascript',title:'Correlación Horas de Estudio vs. Calificación',code:"// Datos de estudiantes (horas de estudio, calificación)\nconst datos = [\n  { x: 2, y: 65 }, { x: 3, y: 70 }, { x: 5, y: 85 }, \n  { x: 1, y: 55 }, { x: 6, y: 90 }, { x: 4, y: 82 },\n  { x: 7, y: 95 }, { x: 2.5, y: 72 }\n];\n\nconsole.log(\"Creando gráfico de dispersión...\");",chartType:'scatter',data:{datasets:[{label:'Calificación vs. Horas de Estudio',data:[{x:2,y:65},{x:3,y:70},{x:5,y:85},{x:1,y:55},{x:6,y:90},{x:4,y:82},{x:7,y:95},{x:2.5,y:72},{x:5.5,y:88}],backgroundColor:'rgba(255, 99, 132, 0.8)'}]},options:{scales:{x:{type:'linear',position:'bottom',title:{display:true,text:'Horas de Estudio'}},y:{title:{display:true,text:'Calificación Obtenida'}}}}}};
+        const codeDisplay=document.getElementById('code-display');const graphTitle=document.getElementById('graph-title');const selectorButtons=document.querySelectorAll('.language-selector button');const ctx1=document.getElementById('myChart').getContext('2d');let myChart;function updateDisplay(key){const example=codeExamples[key];if(!example)return;codeDisplay.className=`language-${example.lang}`;codeDisplay.textContent=example.code;Prism.highlightElement(codeDisplay);graphTitle.textContent=example.title;selectorButtons.forEach(btn=>btn.classList.toggle('active',btn.dataset.lang===key));renderChart(example);}
+        function renderChart(example){if(myChart)myChart.destroy();const baseOptions={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:example.chartType!=='bar'&&example.chartType!=='pie',position:'top',}},scales:{y:{beginAtZero:example.chartType!=='line'||example.data.datasets[0].data.every(d=>d>=0)}}};const finalOptions={...baseOptions,...example.options};myChart=new Chart(ctx1,{type:example.chartType,data:example.data,options:finalOptions});}
+        selectorButtons.forEach(btn=>btn.addEventListener('click',()=>updateDisplay(btn.dataset.lang)));updateDisplay('python-line');
+        const mobileToggle=document.querySelector('.mobile-toggle');const navMenu=document.querySelector('.nav-menu');mobileToggle.addEventListener('click',()=>{mobileToggle.classList.toggle('active');navMenu.classList.toggle('active');});document.querySelectorAll('.nav-link.has-dropdown').forEach(link=>{link.addEventListener('click',e=>{if(window.innerWidth<=992){e.preventDefault();link.parentElement.classList.toggle('active');}});});
+        const userLabelsEl=document.getElementById('userLabels');const userDataEl=document.getElementById('userData');const userChartTypeEl=document.getElementById('userChartType');const generateChartBtn=document.getElementById('generateChartBtn');const userChartCtx=document.getElementById('userChart').getContext('2d');const generatedCodeDisplay=document.getElementById('generatedCodeDisplay');let userChart;
+        
+        // Agregar listener para cambiar placeholder cuando se selecciona dispersión
+        userChartTypeEl.addEventListener('change', () => {
+            if(userChartTypeEl.value === 'scatter') {
+                userLabelsEl.placeholder = 'Valores de X (números): 1, 2, 3, 4, 5';
+                userDataEl.placeholder = 'Valores de Y (números): 10, 25, 15, 30, 45';
+            } else {
+                userLabelsEl.placeholder = 'Enero, Febrero, Marzo, Abril';
+                userDataEl.placeholder = '10, 25, 15, 30';
+            }
+        });
+        
+        generateChartBtn.addEventListener('click',()=>{const labelsStr=userLabelsEl.value.split(',').map(s=>s.trim());const dataStr=userDataEl.value.split(',').map(s=>s.trim());const chartType=userChartTypeEl.value;if(labelsStr.length===0||dataStr.length===0||labelsStr[0]===''||dataStr[0]===''){alert('Por favor, introduce etiquetas y datos.');return;}
+        if(chartType!=='scatter'&&labelsStr.length!==dataStr.length){alert('El número de etiquetas debe coincidir con el número de datos.');return;}
+        const dataNum=dataStr.map(s=>parseFloat(s)).filter(n=>!isNaN(n));
+        
+        if(chartType==='scatter'){
+            // Validación especial para scatter
+            const xValues = labelsStr.map(s=>parseFloat(s));
+            const invalidX = xValues.some(x=>isNaN(x));
+            if(invalidX) {
+                alert('Para gráficos de dispersión, debes usar números en ambos campos. Por ejemplo:\nEje X: 1, 2, 3, 4\nEje Y: 10, 20, 15, 25');
+                return;
+            }
+        }
+        
+        let chartData;let datasetLabel='Mis Datos';if(chartType==='scatter'){const scatterData=labelsStr.map((label,index)=>({x:parseFloat(label),y:dataNum[index]})).filter(p=>!isNaN(p.x)&&!isNaN(p.y));chartData={datasets:[{label:datasetLabel,data:scatterData,backgroundColor:'rgba(75, 192, 192, 0.8)',borderColor:'rgba(75, 192, 192, 1)',borderWidth:2,pointRadius:8,pointHoverRadius:10}]};}else{chartData={labels:labelsStr,datasets:[{label:datasetLabel,data:dataNum,backgroundColor:chartType==='pie'||chartType==='doughnut'?['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF','#FF9F40']:'rgba(102, 126, 234, 0.5)',borderColor:'rgba(102, 126, 234, 1)',borderWidth:1,tension:0.1}]};}
+        if(userChart)userChart.destroy();
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    display: chartType !== 'pie' && chartType !== 'doughnut',
+                    type: chartType === 'scatter' ? 'linear' : 'category',
+                    position: 'bottom',
+                    title: {
+                        display: chartType === 'scatter',
+                        text: 'Eje X'
+                    }
+                },
+                y: {
+                    display: chartType !== 'pie' && chartType !== 'doughnut',
+                    type: 'linear',
+                    title: {
+                        display: chartType === 'scatter',
+                        text: 'Eje Y'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                },
+                tooltip: {
+                    callbacks: chartType === 'scatter' ? {
+                        label: function(context) {
+                            return `(${context.parsed.x}, ${context.parsed.y})`;
+                        }
+                    } : {}
+                }
+            }
+        };
+        userChart = new Chart(userChartCtx, {
+            type: chartType,
+            data: chartData,
+            options: chartOptions
+        });        const stringifiedLabels=JSON.stringify(labelsStr);
+        const stringifiedData=JSON.stringify(dataNum);
+        let codeTemplate;
+        
+        if(chartType === 'scatter') {
+            const scatterData = labelsStr.map((label, index) => ({
+                x: parseFloat(label),
+                y: dataNum[index]
+            })).filter(p => !isNaN(p.x) && !isNaN(p.y));
+            
+            codeTemplate = `// Obtener el contexto del canvas
+const ctx = document.getElementById('myChart').getContext('2d');
+
+// Crear la instancia de la gráfica de dispersión
+const myChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: '${datasetLabel}',
+            data: ${JSON.stringify(scatterData, null, 8)},
+            backgroundColor: 'rgba(102, 126, 234, 0.5)',
+            borderColor: 'rgba(102, 126, 234, 1)',
+            borderWidth: 2,
+            pointRadius: 8,
+            pointHoverRadius: 10
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: 'Eje X'
+                }
+            },
+            y: {
+                type: 'linear',
+                title: {
+                    display: true,
+                    text: 'Eje Y'
+                }
+            }
+        }
+    }
+});`;
+        } else {
+            codeTemplate = `// Obtener el contexto del canvas
+const ctx = document.getElementById('myChart').getContext('2d');
+
+// Crear la instancia de la gráfica
+const myChart = new Chart(ctx, {
+    type: '${chartType}',
+    data: {
+        labels: ${stringifiedLabels},
+        datasets: [{
+            label: '${datasetLabel}',
+            data: ${stringifiedData},
+            backgroundColor: 'rgba(102, 126, 234, 0.5)',
+            borderColor: 'rgba(102, 126, 234, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});`;
+        }
+        generatedCodeDisplay.textContent=codeTemplate;Prism.highlightElement(generatedCodeDisplay);});
+
+        // --- LÓGICA DEL EJECUTOR DE CÓDIGO ---
+        const studentCodeEditor = document.getElementById('studentCodeEditor');
+        const runCodeBtn = document.getElementById('runCodeBtn');
+        const studentChartCanvas = document.getElementById('studentChartCanvas');
+        const codeErrorOutput = document.getElementById('codeErrorOutput');
+        let studentWrittenChart;
+
+        // Plantilla de código mejorada con más comentarios
+        const codeTemplate = `// ¡Bienvenido! Usa este espacio para crear tu gráfica.
+// La variable 'ctx' (el contexto del canvas) ya está disponible.
+// La librería 'Chart' también está cargada.
+// Asegúrate de que tu código retorne la instancia del gráfico.
+
+// Ejemplo básico:
+return new Chart(ctx, {
+    type: 'bar', // Puedes cambiarlo a: 'line', 'pie', 'radar', 'doughnut', etc.
+    data: {
+        labels: ['Rojo', 'Azul', 'Amarillo', 'Verde'],
+        datasets: [{
+            label: 'Votos de Colores',
+            data: [12, 19, 3, 5],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Mi Primera Gráfica'
+            }
+        }
+    }
+});`;
+        studentCodeEditor.value = codeTemplate;
+
+        runCodeBtn.addEventListener('click', () => {
+            const studentCode = studentCodeEditor.value;
+            const ctx = studentChartCanvas.getContext('2d');
+            
+            // Limpiar errores y gráfico anterior
+            codeErrorOutput.style.display = 'none';
+            codeErrorOutput.textContent = '';
+            if (studentWrittenChart) {
+                studentWrittenChart.destroy();
+            }
+            ctx.clearRect(0, 0, studentChartCanvas.width, studentChartCanvas.height);
+            
+            try {
+                // Crear una función a partir del código del estudiante
+                const userFunction = new Function('ctx', 'Chart', studentCode);
+                
+                // Ejecutar la función y guardar la instancia del gráfico retornada
+                const result = userFunction(ctx, Chart);
+
+                if (result instanceof Chart) {
+                    studentWrittenChart = result;
+                    // Mostrar mensaje de éxito
+                    codeErrorOutput.textContent = '¡Éxito! Tu gráfica se ha generado correctamente.';
+                    codeErrorOutput.style.display = 'block';
+                    codeErrorOutput.style.backgroundColor = 'var(--success-bg)';
+                    codeErrorOutput.style.color = 'var(--success-text)';
+                } else {
+                    throw new Error("El código no retornó una instancia válida de Chart. Asegúrate de incluir 'return new Chart(...)'.");
+                }
+
+            } catch (error) {
+                // Si hay un error, mostrarlo
+                codeErrorOutput.textContent = `Error: ${error.message}`;
+                codeErrorOutput.style.display = 'block';
+                codeErrorOutput.style.backgroundColor = 'var(--danger-bg)';
+                codeErrorOutput.style.color = 'var(--danger-text)';
+            }
+        });
+
+        // --- SISTEMA DE RETOS ---
+        const challenges = {
+            basico: [
+                {
+                    id: 'challenge1',
+                    title: 'Mi Primera Gráfica de Barras',
+                    difficulty: 1,
+                    description: 'Crea una gráfica de barras que muestre las ventas de helados por sabor: Chocolate (45), Vainilla (38), Fresa (25), Limón (15).',
+                    hint: 'Usa type: "bar" y recuerda que los labels van en un array y los datos en otro.',
+                    startCode: `// Crea una gráfica de barras con los datos de helados
+return new Chart(ctx, {
+    type: '___', // Completa el tipo
+    data: {
+        labels: [/* Agrega los sabores aquí */],
+        datasets: [{
+            label: 'Ventas de Helados',
+            data: [/* Agrega las cantidades aquí */],
+            backgroundColor: 'rgba(54, 162, 235, 0.5)'
+        }]
+    }
+});`,
+                    validate: (chart) => {
+                        const data = chart.data.datasets[0].data;
+                        return chart.config.type === 'bar' && 
+                               data.length === 4 && 
+                               data[0] === 45 && data[1] === 38;
+                    }
+                },
+                {
+                    id: 'challenge2',
+                    title: 'Gráfica de Líneas - Temperatura',
+                    difficulty: 2,
+                    description: 'Crea una gráfica de líneas que muestre la temperatura durante una semana: Lun(22°), Mar(24°), Mié(23°), Jue(26°), Vie(25°), Sáb(27°), Dom(28°).',
+                    hint: 'Usa type: "line" y puedes añadir tension: 0.3 para hacer la línea curva.',
+                    startCode: `// Gráfica de temperatura semanal
+return new Chart(ctx, {
+    type: 'line',
+    data: {
+        // Completa los datos aquí
+    },
+    options: {
+        plugins: {
+            title: {
+                display: true,
+                text: 'Temperatura Semanal'
+            }
+        }
+    }
+});`,
+                    validate: (chart) => {
+                        return chart.config.type === 'line' && 
+                               chart.data.labels.length === 7 &&
+                               chart.data.datasets[0].data.includes(28);
+                    }
+                },
+                {
+                    id: 'challenge3',
+                    title: 'Gráfico de Pastel - Presupuesto',
+                    difficulty: 2,
+                    description: 'Crea un gráfico de pastel que muestre cómo gastas tu mesada: Comida (40%), Transporte (25%), Entretenimiento (20%), Ahorros (15%).',
+                    hint: 'Usa type: "pie" y recuerda que los porcentajes deben sumar 100.',
+                    startCode: `// Distribución del presupuesto
+return new Chart(ctx, {
+    // Completa el código aquí
+});`,
+                    validate: (chart) => {
+                        const data = chart.data.datasets[0].data;
+                        const sum = data.reduce((a, b) => a + b, 0);
+                        return chart.config.type === 'pie' && sum === 100;
+                    }
+                }
+            ],
+            intermedio: [
+                {
+                    id: 'challenge4',
+                    title: 'Comparación de Datos - Múltiples Datasets',
+                    difficulty: 3,
+                    description: 'Crea una gráfica de barras que compare las calificaciones de dos estudiantes (Ana y Luis) en 4 materias. Ana: [90, 85, 88, 92], Luis: [85, 90, 82, 88].',
+                    hint: 'Necesitas dos objetos en el array datasets, uno para cada estudiante.',
+                    startCode: `// Comparación de calificaciones
+return new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Matemáticas', 'Ciencias', 'Historia', 'Inglés'],
+        datasets: [
+            // Dataset para Ana
+            // Dataset para Luis
+        ]
+    }
+});`,
+                    validate: (chart) => {
+                        return chart.data.datasets.length === 2 &&
+                               chart.data.datasets[0].data[0] === 90;
+                    }
+                },
+                {
+                    id: 'challenge5',
+                    title: 'Gráfica Mixta - Líneas y Barras',
+                    difficulty: 4,
+                    description: 'Crea una gráfica que muestre las ventas (barras) y las ganancias (línea) de 6 meses. Ventas: [100, 120, 140, 110, 160, 180], Ganancias: [20, 25, 30, 22, 35, 40].',
+                    hint: 'Cada dataset puede tener su propio tipo. Usa type: "bar" para uno y type: "line" para otro.',
+                    startCode: `// Gráfica mixta
+return new Chart(ctx, {
+    data: {
+        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+        datasets: [{
+            type: 'bar',
+            label: 'Ventas',
+            // Completa aquí
+        }, {
+            type: 'line',
+            label: 'Ganancias',
+            // Completa aquí
+        }]
+    }
+});`,
+                    validate: (chart) => {
+                        return chart.data.datasets.length === 2 &&
+                               chart.data.datasets[0].type === 'bar' &&
+                               chart.data.datasets[1].type === 'line';
+                    }
+                }
+            ],
+            avanzado: [
+                {
+                    id: 'challenge6',
+                    title: 'Gráfica de Radar - Habilidades',
+                    difficulty: 5,
+                    description: 'Crea una gráfica de radar que muestre las habilidades de un jugador: Velocidad (85), Fuerza (70), Resistencia (90), Técnica (80), Estrategia (75).',
+                    hint: 'Usa type: "radar" y asegúrate de que las escalas empiecen en 0 y lleguen a 100.',
+                    startCode: `// Gráfica de habilidades
+return new Chart(ctx, {
+    type: 'radar',
+    data: {
+        // Completa los datos
+    },
+    options: {
+        scales: {
+            r: {
+                beginAtZero: true,
+                max: 100
+            }
+        }
+    }
+});`,
+                    validate: (chart) => {
+                        return chart.config.type === 'radar' &&
+                               chart.data.labels.length === 5;
+                    }
+                },
+                {
+                    id: 'challenge7',
+                    title: 'Dashboard Completo',
+                    difficulty: 5,
+                    description: 'Crea una gráfica de área (type: "line" con fill: true) que muestre el crecimiento de usuarios de una app durante 12 meses, empezando con 100 usuarios y llegando a 1200.',
+                    hint: 'Genera los datos de forma programática. Puedes usar un bucle for o Array.from().',
+                    startCode: `// Dashboard de crecimiento
+// Genera los datos de forma dinámica
+const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+const usuarios = []; // Genera el crecimiento aquí
+
+return new Chart(ctx, {
+    // Completa la configuración
+});`,
+                    validate: (chart) => {
+                        const data = chart.data.datasets[0].data;
+                        return chart.config.type === 'line' &&
+                               data.length === 12 &&
+                               data[0] < data[11] &&
+                               chart.data.datasets[0].fill === true;
+                    }
+                }
+            ]
+        };
+
+        let completedChallenges = JSON.parse(localStorage.getItem('completedChallenges') || '[]');
+        let currentLevel = 'basico';
+        let currentChallenge = null;
+
+        function updateProgress() {
+            const totalChallenges = Object.values(challenges).flat().length;
+            const completed = completedChallenges.length;
+            const percentage = Math.round((completed / totalChallenges) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = percentage + '% Completado';
+        }
+
+        function renderChallenges(level) {
+            const container = document.getElementById('challengesContainer');
+            container.innerHTML = '';
+            
+            challenges[level].forEach(challenge => {
+                const isCompleted = completedChallenges.includes(challenge.id);
+                const card = document.createElement('div');
+                card.className = `challenge-card ${isCompleted ? 'completed' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="challenge-header">
+                        <h3 class="challenge-title">
+                            ${isCompleted ? '<i class="fas fa-check-circle" style="color: #48bb78;"></i>' : ''}
+                            ${challenge.title}
+                        </h3>
+                        <div class="challenge-difficulty">
+                            ${Array(challenge.difficulty).fill('<i class="fas fa-star difficulty-star"></i>').join('')}
+                        </div>
+                    </div>
+                    <p class="challenge-description">${challenge.description}</p>
+                    <div class="challenge-actions">
+                        <button class="challenge-btn btn-try" onclick="tryChallenge('${challenge.id}')">
+                            <i class="fas fa-code"></i> Intentar
+                        </button>
+                        <button class="challenge-btn btn-hint" onclick="toggleHint('${challenge.id}')">
+                            <i class="fas fa-lightbulb"></i> Pista
+                        </button>
+                    </div>
+                    <div id="hint-${challenge.id}" class="hint-box">
+                        <i class="fas fa-info-circle"></i> ${challenge.hint}
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Event listeners para los niveles
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLevel = btn.dataset.level;
+                renderChallenges(currentLevel);
+            });
+        });
+
+        // Funciones globales para los retos
+        window.tryChallenge = function(challengeId) {
+            const allChallenges = Object.values(challenges).flat();
+            currentChallenge = allChallenges.find(c => c.id === challengeId);
+            
+            document.getElementById('modalTitle').textContent = currentChallenge.title;
+            document.getElementById('modalDescription').textContent = currentChallenge.description;
+            document.getElementById('challengeCodeEditor').value = currentChallenge.startCode;
+            document.getElementById('challengeModal').style.display = 'flex';
+            document.getElementById('challengeOutput').innerHTML = '';
+            document.getElementById('challengeCanvas').style.display = 'none';
+        };
+
+        window.toggleHint = function(challengeId) {
+            const hintBox = document.getElementById(`hint-${challengeId}`);
+            hintBox.style.display = hintBox.style.display === 'none' || !hintBox.style.display ? 'block' : 'none';
+        };
+
+        window.closeModal = function() {
+            document.getElementById('challengeModal').style.display = 'none';
+        };
+
+        let challengeChart = null;
+
+        window.runChallengeCode = function() {
+            const code = document.getElementById('challengeCodeEditor').value;
+            const canvas = document.getElementById('challengeCanvas');
+            const ctx = canvas.getContext('2d');
+            const output = document.getElementById('challengeOutput');
+            
+            if (challengeChart) {
+                challengeChart.destroy();
+            }
+            
+            output.innerHTML = '';
+            canvas.style.display = 'none';
+            
+            try {
+                const userFunction = new Function('ctx', 'Chart', code);
+                const result = userFunction(ctx, Chart);
+                
+                if (result instanceof Chart) {
+                    challengeChart = result;
+                    canvas.style.display = 'block';
+                    output.innerHTML = '<div style="color: var(--success-text); background: var(--success-bg); padding: 1rem; border-radius: 8px;"><i class="fas fa-check"></i> ¡Gráfica generada correctamente!</div>';
+                } else {
+                    throw new Error("Recuerda usar 'return new Chart(...)' al final de tu código.");
+                }
+            } catch (error) {
+                output.innerHTML = `<div style="color: var(--danger-text); background: var(--danger-bg); padding: 1rem; border-radius: 8px;"><i class="fas fa-times"></i> Error: ${error.message}</div>`;
+            }
+        };
+
+        window.checkSolution = function() {
+            if (!challengeChart || !currentChallenge) {
+                alert('Primero debes ejecutar tu código.');
+                return;
+            }
+            
+            const output = document.getElementById('challengeOutput');
+            
+            try {
+                if (currentChallenge.validate(challengeChart)) {
+                    output.innerHTML = '<div style="color: var(--success-text); background: var(--success-bg); padding: 1rem; border-radius: 8px;"><i class="fas fa-trophy"></i> ¡Felicidades! Has completado el reto correctamente.</div>';
+                    
+                    if (!completedChallenges.includes(currentChallenge.id)) {
+                        completedChallenges.push(currentChallenge.id);
+                        localStorage.setItem('completedChallenges', JSON.stringify(completedChallenges));
+                        updateProgress();
+                        renderChallenges(currentLevel);
+                        
+                        // Confeti para celebrar
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 }
+                        });
+                    }
+                } else {
+                    output.innerHTML = '<div style="color: var(--warning-text); background: var(--warning-bg); padding: 1rem; border-radius: 8px;"><i class="fas fa-exclamation-triangle"></i> Casi lo logras. Revisa los requisitos del reto e inténtalo de nuevo.</div>';
+                }
+            } catch (error) {
+                output.innerHTML = '<div style="color: var(--danger-text); background: var(--danger-bg); padding: 1rem; border-radius: 8px;"><i class="fas fa-times"></i> Error al validar: ' + error.message + '</div>';
+            }
+        };
+
+        // Inicializar
+        updateProgress();
+        renderChallenges('basico');
+    });
+    </script>
+     <!-- Módulos JavaScript -->
+   
+    <script src="../js/dark-mode.js"></script>
+    <script>
+        
+        if (window.DarkMode) {
+            window.DarkMode.initDarkMode();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Identidades Trigonométricas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --background-light: #f8f9fa;
+            --text-dark: #2b2d42;
+            --basic-color: #4caf50;
+            --intermediate-color: #ff9800;
+            --advanced-color: #f44336;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .difficulty-label {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .basic { background-color: var(--basic-color); }
+        .intermediate { background-color: var(--intermediate-color); }
+        .advanced { background-color: var(--advanced-color); }
+
+        .question {
+            background: var(--background-light);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #3651d4;
+        }
+
+        #resultado {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2b2d42;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-square-root-alt"></i> Examen de Identidades Trigonométricas</h1>
+        
+        <form id="examenForm">
+            <!-- Nivel Básico -->
+            <div class="question">
+                <span class="difficulty-label basic">Básico</span>
+                <p>1. Simplificar \(\sin^2 \theta + \cos^2 \theta\)</p>
+                <input type="text" name="q1" placeholder="Escribe tu respuesta..." data-respuesta="1">
+            </div>
+
+            <div class="question">
+                <span class="difficulty-label basic">Básico</span>
+                <p>2. Si \(\sin \theta = 0.6\), ¿cuánto vale \(\cos^2 \theta\)?</p>
+                <input type="text" name="q2" placeholder="Escribe tu respuesta..." data-respuesta="0.64">
+            </div>
+
+            <div class="question">
+                <span class="difficulty-label basic">Básico</span>
+                <p>3. Simplificar \(\tan \theta = \frac{\sin \theta}{\cos \theta}\). ¿Verdadero o falso?</p>
+                <input type="text" name="q3" placeholder="Escribe verdadero o falso..." data-respuesta="verdadero">
+            </div>
+
+            <!-- Nivel Intermedio -->
+            <div class="question">
+                <span class="difficulty-label intermediate">Intermedio</span>
+                <p>4. Simplificar \(\frac{\sin^2 \theta}{\cos^2 \theta}\)</p>
+                <input type="text" name="q4" placeholder="Escribe tu respuesta en términos de tan..." data-respuesta="tan^2">
+            </div>
+
+            <div class="question">
+                <span class="difficulty-label intermediate">Intermedio</span>
+                <p>5. Si \(\sin \theta = 0.8\) y \(\cos \theta = 0.6\), calcular \(\tan \theta\)</p>
+                <input type="text" name="q5" placeholder="Escribe tu respuesta..." data-respuesta="1.333">
+            </div>
+
+            <div class="question">
+                <span class="difficulty-label intermediate">Intermedio</span>
+                <p>6. Simplificar \(\sec^2 \theta - \tan^2 \theta\)</p>
+                <input type="text" name="q6" placeholder="Escribe tu respuesta..." data-respuesta="1">
+            </div>
+
+            <!-- Nivel Avanzado -->
+            <div class="question">
+                <span class="difficulty-label advanced">Avanzado</span>
+                <p>7. Si \(\sin \theta + \cos \theta = 1\), calcular \(\sin^2 \theta + \cos^2 \theta\)</p>
+                <input type="text" name="q7" placeholder="Escribe tu respuesta..." data-respuesta="1">
+            </div>
+
+            <div class="question">
+                <span class="difficulty-label advanced">Avanzado</span>
+                <p>8. Simplificar \(\frac{1 + \tan^2 \theta}{\sec^2 \theta}\)</p>
+                <input type="text" name="q8" placeholder="Escribe tu respuesta..." data-respuesta="1">
+            </div>
+
+            <div class="question">
+                <span class="difficulty-label advanced">Avanzado</span>
+                <p>9. Si \(\sin \theta = \frac{3}{5}\), calcular \(\sec^2 \theta\)</p>
+                <input type="text" name="q9" placeholder="Escribe tu respuesta..." data-respuesta="2.778">
+            </div>
+
+            <div class="question">
+                <span class="difficulty-label advanced">Avanzado</span>
+                <p>10. Simplificar \(\frac{\sin \theta}{1 + \cos \theta} + \frac{1 + \cos \theta}{\sin \theta}\)</p>
+                <input type="text" name="q10" placeholder="Escribe tu respuesta..." data-respuesta="2">
+            </div>
+
+            <button type="submit">Calificar Examen</button>
+        </form>
+
+        <div id="resultado">
+            <h2>Resultado del Examen</h2>
+            <p class="score">Tu calificación: <span id="calificacion"></span>/10</p>
+            <div id="desglose">
+                <p>Básico: <span id="basico"></span>/3</p>
+                <p>Intermedio: <span id="intermedio"></span>/3</p>
+                <p>Avanzado: <span id="avanzado"></span>/4</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('examenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let correctas = 0;
+            let basicasCorrectas = 0;
+            let intermediasCorrectas = 0;
+            let avanzadasCorrectas = 0;
+            
+            const inputs = document.querySelectorAll('input[type="text"]');
+            
+            inputs.forEach((input, index) => {
+                let respuestaCorrecta = input.dataset.respuesta;
+                let respuestaUsuario = input.value.toLowerCase().trim();
+                
+                // Para respuestas numéricas
+                if (!isNaN(respuestaCorrecta)) {
+                    if (Math.abs(parseFloat(respuestaUsuario) - parseFloat(respuestaCorrecta)) <= 0.01) {
+                        correctas++;
+                        input.style.borderColor = '#4caf50';
+                        
+                        if (index < 3) basicasCorrectas++;
+                        else if (index < 6) intermediasCorrectas++;
+                        else avanzadasCorrectas++;
+                    } else {
+                        input.style.borderColor = '#f44336';
+                    }
+                } 
+                // Para respuestas de texto
+                else {
+                    if (respuestaUsuario === respuestaCorrecta.toLowerCase()) {
+                        correctas++;
+                        input.style.borderColor = '#4caf50';
+                        
+                        if (index < 3) basicasCorrectas++;
+                        else if (index < 6) intermediasCorrectas++;
+                        else avanzadasCorrectas++;
+                    } else {
+                        input.style.borderColor = '#f44336';
+                    }
+                }
+            });
+
+            document.getElementById('resultado').style.display = 'block';
+            document.getElementById('calificacion').textContent = correctas;
+            document.getElementById('basico').textContent = basicasCorrectas;
+            document.getElementById('intermedio').textContent = intermediasCorrectas;
+            document.getElementById('avanzado').textContent = avanzadasCorrectas;
+
+            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Inicializar MathJax
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    </script>
+</body>
+</html>

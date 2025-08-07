@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eBook STEAM: Modelando Poblaciones de Bacterias</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <script src="nuevas-funciones.js" defer></script>
+    <!-- Añadir el nuevo script de corrección -->
+    <script src="casos-reales-fix.js" defer></script>
+    <script src="laboratorio-virtual-fix.js" defer></script>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <button class="mobile-nav-toggle" id="mobileNavToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <div class="accessibility-panel">
+        <button class="accessibility-toggle" id="accessibilityToggle">
+            <i class="fas fa-universal-access"></i>
+        </button>
+        <div class="accessibility-options">
+            <div class="option-group">
+                <label>Modo de visualización:</label>
+                <div class="theme-switcher">
+                    <button id="lightTheme" class="active"><i class="fas fa-sun"></i> Claro</button>
+                    <button id="darkTheme"><i class="fas fa-moon"></i> Oscuro</button>
+                </div>
+            </div>
+            <div class="option-group">
+                <label>Tamaño de texto:</label>
+                <div class="font-size-controls">
+                    <button id="decreaseFontSize"><i class="fas fa-minus"></i></button>
+                    <span id="currentFontSize">100%</span>
+                    <button id="increaseFontSize"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+            <div class="option-group">
+                <label>Contraste:</label>
+                <div class="contrast-controls">
+                    <button id="normalContrast" class="active">Normal</button>
+                    <button id="highContrast">Alto contraste</button>
+                </div>
+            </div>
+            <div class="option-group">
+                <label>Animaciones:</label>
+                <div class="animation-toggle">
+                    <input type="checkbox" id="animationToggle" checked>
+                    <label for="animationToggle">Activar animaciones</label>
+                </div>
+            </div>
+            <div class="option-group">
+                <button class="btn" id="printVersion"><i class="fas fa-print"></i> Versión para imprimir</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo-ebook.png" alt="Logo del eBook STEAM" style="width: 100px; height: 100px; margin: 0 auto 1rem; display: block;" loading="lazy">
+                <h1>📚 eBook STEAM</h1>
+                <p>Modelando Poblaciones de Bacterias</p>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem;">Por Yonatan Guerrero Soriano</p>
+                <p style="font-size: 0.8rem;">25 de abril de 2025</p>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#introduccion" class="active"><i class="fas fa-book-open"></i> Introducción</a></li>
+                <li><a href="#relevancia"><i class="fas fa-award"></i> Relevancia STEAM</a></li>
+                <li><a href="#nivel-educativo"><i class="fas fa-graduation-cap"></i> Nivel Educativo</a></li>
+                <li><a href="#objetivos"><i class="fas fa-bullseye"></i> Objetivos</a></li>
+                <li><a href="#contenido"><i class="fas fa-clipboard-list"></i> Contenido</a></li>
+                <li><a href="#integracion"><i class="fas fa-puzzle-piece"></i> Integración STEAM</a></li>
+                <li><a href="#metodologia"><i class="fas fa-tasks"></i> Metodología</a></li>
+                <li><a href="#simulacion"><i class="fas fa-laptop-code"></i> Simulación</a></li>
+                <li><a href="#casos-reales"><i class="fas fa-microscope"></i> Casos Reales</a></li>
+                <li><a href="#visualizacion-avanzada"><i class="fas fa-chart-line"></i> Visualización Avanzada</a></li>
+                <li><a href="#laboratorio-virtual"><i class="fas fa-vial"></i> Laboratorio Virtual</a></li>
+                <li><a href="#quiz"><i class="fas fa-question-circle"></i> Quiz Interactivo</a></li>
+                <li><a href="#adaptaciones"><i class="fas fa-sliders-h"></i> Adaptaciones</a></li>
+                <li><a href="#evaluacion"><i class="fas fa-clipboard-check"></i> Evaluación</a></li>
+                <li><a href="#reflexion"><i class="fas fa-lightbulb"></i> Reflexión</a></li>
+                <li><a href="#glosario"><i class="fas fa-book"></i> Glosario</a></li>
+                <li><a href="#referencias"><i class="fas fa-external-link-alt"></i> Referencias</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="content-overview">
+                <div class="progress-overview">
+                    <div class="progress-section active" data-section="intro">
+                        <div class="progress-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="progress-label">Introducción</div>
+                    </div>
+                    <div class="progress-divider"></div>
+                    <div class="progress-section" data-section="content">
+                        <div class="progress-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="progress-label">Contenido</div>
+                    </div>
+                    <div class="progress-divider"></div>
+                    <div class="progress-section" data-section="simulation">
+                        <div class="progress-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="progress-label">Simulación</div>
+                    </div>
+                    <div class="progress-divider"></div>
+                    <div class="progress-section" data-section="activities">
+                        <div class="progress-icon">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div class="progress-label">Actividades</div>
+                    </div>
+                    <div class="progress-divider"></div>
+                    <div class="progress-section" data-section="evaluation">
+                        <div class="progress-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="progress-label">Evaluación</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. INTRODUCCIÓN -->
+            <div class="hero" id="introduccion">
+                <div class="hero-content">
+                    <h1>Modelando Poblaciones de Bacterias con el Modelo Logístico</h1>
+                    <p>Una exploración STEAM para estudiantes de noveno grado sobre el crecimiento poblacional de organismos microscópicos utilizando modelos matemáticos y programación.</p>
+                    <p style="margin-top: 1rem;"><strong>Autor:</strong> Yonatan Guerrero Soriano</p>
+                    <p><strong>Fecha:</strong> 25 de abril de 2025</p>
+                    <div class="hero-features">
+                        <div class="feature-badge"><i class="fas fa-microscope"></i> Laboratorio Virtual</div>
+                        <div class="feature-badge"><i class="fas fa-chart-line"></i> Visualización Avanzada</div>
+                        <div class="feature-badge"><i class="fas fa-question-circle"></i> Quiz Interactivo</div>
+                    </div>
+                    <a href="#simulacion" class="btn">Ir a la Simulación <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <!-- 2. RELEVANCIA -->
+            <div class="section" id="relevancia">
+                <div class="section-header">
+                    <h2>Relevancia STEAM</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <p>El modelado matemático es fundamental en múltiples campos científicos:</p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Investigación biológica para comprender patrones de crecimiento</li>
+                            <li>Desarrollo farmacéutico para predecir efectos de antibióticos</li>
+                            <li>Control ambiental para gestionar ecosistemas</li>
+                            <li>Programación de simulaciones como habilidad crítica para futuros científicos e ingenieros</li>
+                        </ul>
+                        <div style="margin-top: 1.5rem;">
+                            <img src="images/modelo-matematico.png" alt="Científicos trabajando con modelos matemáticos" style="width: 100%; border-radius: 8px; margin-top: 1rem;" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. NIVEL EDUCATIVO -->
+            <div class="section" id="nivel-educativo">
+                <div class="section-header">
+                    <h2>Descripción del Nivel Educativo</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3 class="card-title">Nivel y Perfil</h3>
+                        </div>
+                        <div class="grid">
+                            <div>
+                                <p><strong>Nivel:</strong> Noveno grado de escuela secundaria</p>
+                                <p><strong>Edad:</strong> 14-15 años</p>
+                            </div>
+                            <div>
+                                <p><strong>Características del grupo:</strong></p>
+                                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                    <li>Curiosidad natural por el mundo biológico</li>
+                                    <li>Iniciación en funciones matemáticas</li>
+                                    <li>Conocimientos básicos de programación</li>
+                                    <li>Necesidad de experiencias prácticas que conecten teoría y aplicaciones reales</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. OBJETIVOS -->
+            <div class="section" id="objetivos">
+                <div class="section-header">
+                    <h2>Objetivos de la Lección</h2>
+                </div>
+                <div class="section-content">
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-bullseye"></i>
+                                </div>
+                                <h3 class="card-title">Principales Objetivos</h3>
+                            </div>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Modelar el crecimiento de una población bacteriana usando el modelo logístico</li>
+                                <li>Interpretar gráficas de crecimiento poblacional</li>
+                                <li>Aplicar principios básicos de programación en JavaScript para simular modelos matemáticos</li>
+                                <li>Fomentar el pensamiento crítico al analizar factores que limitan el crecimiento poblacional</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-align-left"></i>
+                                </div>
+                                <h3 class="card-title">Alineación a Estándares</h3>
+                            </div>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li><strong>CCSS.Math.Content.HSF-LE.A.1</strong> - Reconocer situaciones de crecimiento y decrecimiento</li>
+                                <li><strong>NGSS HS-LS2-1</strong> - Utilizar modelos matemáticos para explicar dinámicas de poblaciones</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. CONTENIDO -->
+            <div class="section" id="contenido">
+                <div class="section-header">
+                    <h2>Contenido de la Lección</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <h3 class="card-title">Conceptos a Enseñar</h3>
+                        </div>
+                        <p><strong>Crecimiento exponencial vs. crecimiento logístico</strong></p>
+                        <div class="grid" style="margin-top: 1rem;">
+                            <div>
+                                <img src="images/crecimiento-exponencial.png" alt="Gráfica de crecimiento exponencial" style="width: 100%; border-radius: 8px;" loading="lazy">
+                                <p style="text-align: center; margin-top: 0.5rem;"><strong>Crecimiento Exponencial</strong></p>
+                                <p style="text-align: center; font-size: 0.9rem;">Sin límites de recursos</p>
+                            </div>
+                            <div>
+                                <img src="images/crecimiento-logistico.png" alt="Gráfica de crecimiento logístico" style="width: 100%; border-radius: 8px;" loading="lazy">
+                                <p style="text-align: center; margin-top: 0.5rem;"><strong>Crecimiento Logístico</strong></p>
+                                <p style="text-align: center; font-size: 0.9rem;">Con capacidad de carga (K)</p>
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 1.5rem;"><strong>Ecuación del modelo logístico:</strong></p>
+                        <div class="formula">
+                            \[ P(t) = \frac{K}{1 + \left( \frac{K - P_0}{P_0} \right) e^{-rt}} \]
+                        </div>
+                        
+                        <p style="margin-top: 1rem;"><strong>Donde:</strong></p>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>\(P(t)\) = población en el tiempo \(t\)</li>
+                            <li>\(K\) = capacidad de carga del ambiente</li>
+                            <li>\(P_0\) = población inicial</li>
+                            <li>\(r\) = tasa de crecimiento</li>
+                            <li>\(t\) = tiempo transcurrido</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. INTEGRACIÓN STEAM -->
+            <div class="section" id="integracion">
+                <div class="section-header">
+                    <h2>Integración STEAM</h2>
+                </div>
+                <div class="section-content">
+                    <div class="steam-grid">
+                        <div class="steam-card">
+                            <div class="steam-icon">
+                                <i class="fas fa-flask science"></i>
+                            </div>
+                            <h3>Ciencia</h3>
+                            <p>Comprender la reproducción bacteriana y factores limitantes en ecosistemas microbianos</p>
+                        </div>
+                        <div class="steam-card">
+                            <div class="steam-icon">
+                                <i class="fas fa-laptop-code technology"></i>
+                            </div>
+                            <h3>Tecnología</h3>
+                            <p>Programar simulaciones interactivas utilizando JavaScript y bibliotecas de visualización</p>
+                        </div>
+                        <div class="steam-card">
+                            <div class="steam-icon">
+                                <i class="fas fa-cogs engineering"></i>
+                            </div>
+                            <h3>Ingeniería</h3>
+                            <p>Analizar limitaciones de sistemas naturales y diseñar soluciones para problemas complejos</p>
+                        </div>
+                        <div class="steam-card">
+                            <div class="steam-icon">
+                                <i class="fas fa-paint-brush arts"></i>
+                            </div>
+                            <h3>Artes</h3>
+                            <p>Diseñar gráficos y visualizaciones atractivas que comuniquen resultados científicos</p>
+                        </div>
+                        <div class="steam-card">
+                            <div class="steam-icon">
+                                <i class="fas fa-square-root-alt math"></i>
+                            </div>
+                            <h3>Matemáticas</h3>
+                            <p>Usar funciones logísticas para modelar datos y comprender el comportamiento de ecuaciones</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. METODOLOGÍA -->
+            <div class="section" id="metodologia">
+                <div class="section-header">
+                    <h2>Metodología y Actividades</h2>
+                </div>
+                <div class="section-content">
+                    <div class="timeline">
+                        <div class="timeline-item left">
+                            <div class="timeline-content">
+                                <h3>Introducción Conceptual</h3>
+                                <p><strong>Duración:</strong> 20 minutos</p>
+                                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                    <li>Explicación breve del crecimiento bacteriano</li>
+                                    <li>Presentación del modelo logístico</li>
+                                    <li>Comparación visual entre crecimiento exponencial y logístico</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="timeline-content">
+                                <h3>Programación de la Simulación</h3>
+                                <p><strong>Duración:</strong> 45 minutos</p>
+                                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                    <li>Código base en JavaScript provisto (plantilla)</li>
+                                    <li>Los estudiantes modificarán parámetros K, r, P₀</li>
+                                    <li>Visualización de los cambios en la gráfica</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="timeline-content">
+                                <h3>Análisis de Resultados</h3>
+                                <p><strong>Duración:</strong> 30 minutos</p>
+                                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                    <li>Discusión de cómo cambios en los parámetros afectan la población</li>
+                                    <li>Conexión a situaciones reales (por ejemplo, infecciones bacterianas, crecimiento de algas, etc.)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 2rem;">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-toolbox"></i>
+                            </div>
+                            <h3 class="card-title">Materiales y Recursos</h3>
+                        </div>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Computadoras con acceso a Internet</li>
+                            <li>Editor de código online (ejemplo: repl.it, JSFiddle o Visual Studio Code)</li>
+                            <li>Plantilla inicial de código JavaScript</li>
+                            <li>Acceso a gráficos en línea (por ejemplo, Chart.js)</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-list-ol"></i>
+                            </div>
+                            <h3 class="card-title">Instrucciones paso a paso</h3>
+                        </div>
+                        <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li><strong>Presentación teórica:</strong> Explicar el modelo logístico</li>
+                            <li><strong>Demostración:</strong> Mostrar un ejemplo de simulación</li>
+                            <li><strong>Actividad individual:</strong>
+                                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                    <li>Ajustar la tasa de crecimiento r</li>
+                                    <li>Cambiar la capacidad de carga K</li>
+                                    <li>Modificar la población inicial P₀</li>
+                                </ul>
+                            </li>
+                            <li><strong>Discusión grupal:</strong> ¿Qué pasó con la población? ¿Cómo afecta cada parámetro?</li>
+                        </ol>
+                        <div style="display: flex; margin-top: 1.5rem; gap: 1rem;">
+                            <div style="flex: 1;">
+                                <img src="images/factores-limitantes.png" alt="Factores que limitan el crecimiento bacteriano" style="width: 100%; border-radius: 8px;" loading="lazy">
+                                <p style="text-align: center; font-size: 0.9rem; margin-top: 0.5rem;">Factores que limitan el crecimiento</p>
+                            </div>
+                            <div style="flex: 1;">
+                                <img src="images/colonia-bacterias.png" alt="Colonia de bacterias en crecimiento" style="width: 100%; border-radius: 8px;" loading="lazy">
+                                <p style="text-align: center; font-size: 0.9rem; margin-top: 0.5rem;">Colonia bacteriana real</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. SIMULACIÓN -->
+            <div class="section" id="simulacion">
+                <div class="section-header">
+                    <h2>Simulación Interactiva</h2>
+                </div>
+                <div class="section-content">
+                    <div class="simulation-container" id="simulation-container">
+                        <div class="simulation-controls">
+                            <div class="control-group">
+                                <label for="initial-population">Población Inicial (P₀):</label>
+                                <input type="number" id="initial-population" min="1" max="100" value="10" data-section="simulacion">
+                                <input type="range" id="initial-population-slider" min="1" max="100" value="10" data-section="simulacion">
+                            </div>
+                            <div class="control-group">
+                                <label for="growth-rate">Tasa de Crecimiento (r):</label>
+                                <input type="number" id="growth-rate" min="0.1" max="2" step="0.1" value="0.5" data-section="simulacion">
+                                <input type="range" id="growth-rate-slider" min="0.1" max="2" step="0.1" value="0.5" data-section="simulacion">
+                            </div>
+                            <div class="control-group">
+                                <label for="carrying-capacity">Capacidad de Carga (K):</label>
+                                <input type="number" id="carrying-capacity" min="100" max="1000" step="10" value="500" data-section="simulacion">
+                                <input type="range" id="carrying-capacity-slider" min="100" max="1000" step="10" value="500" data-section="simulacion">
+                            </div>
+                        </div>
+                        <div class="tabs">
+                            <div class="tab active" data-tab="exponential">Crecimiento Exponencial</div>
+                            <div class="tab" data-tab="logistic">Crecimiento Logístico</div>
+                            <div class="tab" data-tab="comparison">Comparación</div>
+                        </div>
+                        <div class="tab-content active" data-tab="exponential">
+                            <div class="chart-container">
+                                <canvas id="exponentialChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="tab-content" data-tab="logistic">
+                            <div class="chart-container">
+                                <canvas id="logisticChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="tab-content" data-tab="comparison">
+                            <div class="chart-container">
+                                <canvas id="comparisonChart"></canvas>
+                            </div>
+                        </div>
+                        <button class="btn" id="runSimulation">Ejecutar Simulación</button>
+                        <div class="simulation-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" id="saveSimulation" disabled><i class="fas fa-save"></i> Guardar</button>
+                            <button class="btn btn-secondary" id="exportResults" disabled><i class="fas fa-file-export"></i> Exportar</button>
+                            <button class="btn btn-secondary" id="resetSimulation"><i class="fas fa-undo"></i> Reiniciar</button>
+                        </div>
+                        <div id="simulationResults" style="margin-top: 1.5rem;"></div>
+                        <div id="savedSimulations" style="margin-top: 1.5rem; display: none;">
+                            <h3>Simulaciones guardadas</h3>
+                            <div class="saved-simulations-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. CASOS REALES -->
+            <div class="section" id="casos-reales">
+                <div class="section-header">
+                    <h2>Casos de Estudio Reales</h2>
+                </div>
+                <div class="section-content">
+                    <div class="case-studies-container">
+                        <div class="case-study-card">
+                            <div class="case-study-header">
+                                <i class="fas fa-microscope"></i>
+                                <h3>E. coli en Laboratorio</h3>
+                            </div>
+                            <div class="case-study-content">
+                                <p>Investigadores de la Universidad de Stanford estudiaron el crecimiento de E. coli en diferentes medios de cultivo. Observaron que la capacidad de carga (K) variaba significativamente dependiendo de la concentración de glucosa en el medio.</p>
+                                <div class="case-study-data">
+                                    <p><strong>Parámetros observados:</strong></p>
+                                    <ul>
+                                        <li>r = 0.72 h⁻¹</li>
+                                        <li>K = 3.2 × 10⁹ células/ml (medio rico)</li>
+                                        <li>K = 8.5 × 10⁸ células/ml (medio limitado)</li>
+                                    </ul>
+                                </div>
+                                <button class="btn case-study-btn" data-p0="10" data-r="0.72" data-k="3200">Simular este caso</button>
+                            </div>
+                        </div>
+                        
+                        <div class="case-study-card">
+                            <div class="case-study-header">
+                                <i class="fas fa-procedures"></i>
+                                <h3>Infección Bacteriana Clínica</h3>
+                            </div>
+                            <div class="case-study-content">
+                                <p>En un estudio clínico sobre infecciones del tracto urinario, se modeló el crecimiento de bacterias en pacientes con y sin tratamiento antibiótico. El modelo logístico permitió predecir la eficacia de diferentes dosis de antibióticos.</p>
+                                <div class="case-study-data">
+                                    <p><strong>Parámetros observados:</strong></p>
+                                    <ul>
+                                        <li>r = 0.35 h⁻¹ (sin antibiótico)</li>
+                                        <li>r = 0.12 h⁻¹ (con antibiótico)</li>
+                                        <li>K = 2.5 × 10⁸ UFC/ml</li>
+                                    </ul>
+                                </div>
+                                <button class="btn case-study-btn" data-p0="25" data-r="0.35" data-k="2500">Simular este caso</button>
+                            </div>
+                        </div>
+                        
+                        <div class="case-study-card">
+                            <div class="case-study-header">
+                                <i class="fas fa-fish"></i>
+                                <h3>Biorremedación Ambiental</h3>
+                            </div>
+                            <div class="case-study-content">
+                                <p>Investigadores utilizaron bacterias Pseudomonas para degradar contaminantes en un lago. El modelo logístico ayudó a predecir cuánto tiempo tomaría alcanzar niveles seguros de limpieza y la cantidad óptima de bacterias a introducir.</p>
+                                <div class="case-study-data">
+                                    <p><strong>Parámetros observados:</strong></p>
+                                    <ul>
+                                        <li>r = 0.18 h⁻¹</li>
+                                        <li>K = 1.2 × 10⁷ células/ml</li>
+                                        <li>P₀ = 5 × 10⁵ células/ml (inoculación inicial)</li>
+                                    </ul>
+                                </div>
+                                <button class="btn case-study-btn" data-p0="50" data-r="0.18" data-k="1200">Simular este caso</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. VISUALIZACIÓN AVANZADA -->
+            <div class="section" id="visualizacion-avanzada">
+                <div class="section-header">
+                    <h2>Visualización Avanzada</h2>
+                </div>
+                <div class="section-content">
+                    <div class="advanced-viz-container">
+                        <div class="advanced-viz-intro">
+                            <p>Esta herramienta te permite comparar múltiples escenarios de crecimiento bacteriano simultáneamente. Configura hasta tres modelos diferentes y observa cómo los cambios en los parámetros afectan el crecimiento poblacional.</p>
+                        </div>
+                        
+                        <div class="advanced-viz-controls">
+                            <div class="model-tabs">
+                                <div class="model-tab active" data-model="1">Modelo 1</div>
+                                <div class="model-tab" data-model="2">Modelo 2</div>
+                                <div class="model-tab" data-model="3">Modelo 3</div>
+                            </div>
+                            
+                            <div class="model-settings">
+                                <div class="model-settings-container active" id="model-settings-1">
+                                    <h3>Configuración Modelo 1</h3>
+                                    <div class="model-param-group">
+                                        <label>Población Inicial (P₀):</label>
+                                        <input type="number" class="model-p0" value="10" min="1" max="100">
+                                        <input type="range" class="model-p0-slider" value="10" min="1" max="100">
+                                    </div>
+                                    <div class="model-param-group">
+                                        <label>Tasa de Crecimiento (r):</label>
+                                        <input type="number" class="model-r" value="0.5" min="0.1" max="2" step="0.1">
+                                        <input type="range" class="model-r-slider" value="0.5" min="0.1" max="2" step="0.1">
+                                    </div>
+                                    <div class="model-param-group">
+                                        <label>Capacidad de Carga (K):</label>
+                                        <input type="number" class="model-k" value="500" min="100" max="1000" step="10">
+                                        <input type="range" class="model-k-slider" value="500" min="100" max="1000" step="10">
+                                    </div>
+                                    <div class="model-color-picker">
+                                        <label>Color del modelo:</label>
+                                        <div class="color-options">
+                                            <div class="color-option active" style="background-color: #FF6384;" data-color="#FF6384"></div>
+                                            <div class="color-option" style="background-color: #36A2EB;" data-color="#36A2EB"></div>
+                                            <div class="color-option" style="background-color: #FFCE56;" data-color="#FFCE56"></div>
+                                            <div class="color-option" style="background-color: #4BC0C0;" data-color="#4BC0C0"></div>
+                                        </div>
+                                    </div>
+                                    <div class="model-active-toggle">
+                                        <label>Activar modelo:</label>
+                                        <div class="toggle-switch">
+                                            <input type="checkbox" id="model1-active" checked>
+                                            <label for="model1-active"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Configuraciones para Modelo 2 y 3 (inicialmente ocultas) -->
+                                <div class="model-settings-container" id="model-settings-2">
+                                    <!-- Similar al modelo 1 pero con valores iniciales diferentes -->
+                                </div>
+                                <div class="model-settings-container" id="model-settings-3">
+                                    <!-- Similar al modelo 1 pero con valores iniciales diferentes -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="advanced-viz-chart-container">
+                            <canvas id="advancedComparisonChart"></canvas>
+                        </div>
+                        
+                        <div class="advanced-viz-actions">
+                            <button class="btn" id="runAdvancedVisualization">Ejecutar Visualización</button>
+                            <button class="btn btn-secondary" id="saveAdvancedVisualization">Guardar Configuración</button>
+                            <button class="btn btn-secondary" id="resetAdvancedVisualization">Reiniciar</button>
+                        </div>
+                        
+                        <div class="advanced-viz-analysis" id="advancedVisualizationResults">
+                            <!-- Resultados del análisis comparativo se mostrarán aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. LABORATORIO VIRTUAL -->
+            <div class="section" id="laboratorio-virtual">
+                <div class="section-header">
+                    <h2>Laboratorio Virtual de Microscopía</h2>
+                </div>
+                <div class="section-content">
+                    <div class="lab-container">
+                        <div class="lab-intro">
+                            <p>Experimenta con un microscopio virtual para observar colonias bacterianas en diferentes etapas de crecimiento. Esta herramienta te permite conectar los modelos matemáticos con observaciones reales.</p>
+                        </div>
+                        
+                        <div class="microscope-container">
+                            <div class="microscope-viewer">
+                                <div class="microscope-stage">
+                                    <img id="microscopeImage" src="images/fase-exponencial.png" alt="Visualización de microscopio" loading="lazy">
+                                    <div class="microscope-overlay">
+                                        <div class="microscope-magnifier"></div>
+                                        <div class="microscope-crosshair"></div>
+                                    </div>
+                                </div>
+                                <div class="microscope-controls">
+                                    <div class="zoom-controls">
+                                        <button id="zoomOut"><i class="fas fa-search-minus"></i></button>
+                                        <input type="range" id="zoomSlider" min="1" max="5" step="0.5" value="1">
+                                        <button id="zoomIn"><i class="fas fa-search-plus"></i></button>
+                                    </div>
+                                    <div class="brightness-controls">
+                                        <button id="darken"><i class="fas fa-moon"></i></button>
+                                        <input type="range" id="brightnessSlider" min="0.5" max="1.5" step="0.1" value="1">
+                                        <button id="brighten"><i class="fas fa-sun"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="microscope-samples">
+                                <h3>Muestras disponibles</h3>
+                                <div class="sample-selector">
+                                    <div class="sample-option active" data-sample="fase-lag">
+                                        <div class="sample-thumbnail">
+                                            <img src="images/fase-lag-thumb.png" alt="Fase de latencia" loading="lazy">
+                                        </div>
+                                        <div class="sample-info">
+                                            <h4>Fase de Latencia</h4>
+                                            <p>0-2h de crecimiento</p>
+                                        </div>
+                                    </div>
+                                    <div class="sample-option" data-sample="fase-exponencial">
+                                        <div class="sample-thumbnail">
+                                            <img src="images/fase-exponencial-thumb.png" alt="Fase exponencial" loading="lazy">
+                                        </div>
+                                        <div class="sample-info">
+                                            <h4>Fase Exponencial</h4>
+                                            <p>2-6h de crecimiento</p>
+                                        </div>
+                                    </div>
+                                    <div class="sample-option" data-sample="fase-estacionaria">
+                                        <div class="sample-thumbnail">
+                                            <img src="images/fase-estacionaria-thumb.png" alt="Fase estacionaria" loading="lazy">
+                                        </div>
+                                        <div class="sample-info">
+                                            <h4>Fase Estacionaria</h4>
+                                            <p>8-12h de crecimiento</p>
+                                        </div>
+                                    </div>
+                                    <div class="sample-option" data-sample="fase-muerte">
+                                        <div class="sample-thumbnail">
+                                            <img src="images/fase-muerte-thumb.png" alt="Fase de muerte" loading="lazy">
+                                        </div>
+                                        <div class="sample-info">
+                                            <h4>Fase de Muerte</h4>
+                                            <p>24h+ de crecimiento</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lab-data">
+                            <div class="lab-data-tabs">
+                                <div class="lab-tab active" data-tab="observations">Observaciones</div>
+                                <div class="lab-tab" data-tab="analysis">Análisis</div>
+                                <div class="lab-tab" data-tab="model">Modelo Correspondiente</div>
+                            </div>
+                            
+                            <div class="lab-data-content">
+                                <div class="lab-data-panel active" id="observations-panel">
+                                    <h3>Observaciones Microscópicas</h3>
+                                    <div id="sample-observations">
+                                        <!-- Contenido dinámico basado en la muestra seleccionada -->
+                                        <p>Selecciona una muestra para ver las observaciones detalladas.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="lab-data-panel" id="analysis-panel">
+                                    <h3>Análisis Cuantitativo</h3>
+                                    <div id="sample-analysis">
+                                        <!-- Datos de análisis dinámicos -->
+                                    </div>
+                                </div>
+                                
+                                <div class="lab-data-panel" id="model-panel">
+                                    <h3>Modelo Matemático</h3>
+                                    <div class="mini-chart-container">
+                                        <canvas id="microModelChart"></canvas>
+                                    </div>
+                                    <div id="sample-model-params">
+                                        <!-- Parámetros del modelo correspondiente -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. QUIZ INTERACTIVO -->
+            <div class="section" id="quiz">
+                <div class="section-header">
+                    <h2>Quiz Interactivo</h2>
+                </div>
+                <div class="section-content">
+                    <div class="quiz-intro">
+                        <p>Pon a prueba tu comprensión del modelo logístico de crecimiento bacteriano con este quiz interactivo. Responde correctamente para avanzar a las siguientes preguntas.</p>
+                        <button class="btn" id="startQuiz">Comenzar Quiz</button>
+                    </div>
+                    
+                    <div class="quiz-container" style="display: none;">
+                        <div class="quiz-progress">
+                            <div class="quiz-progress-bar"></div>
+                            <div class="quiz-progress-text">Pregunta <span id="currentQuestion">1</span> de <span id="totalQuestions">5</span></div>
+                        </div>
+                        
+                        <div class="quiz-questions">
+                            <!-- Las preguntas se cargarán dinámicamente aquí -->
+                        </div>
+                        
+                        <div class="quiz-navigation">
+                            <button class="btn" id="submitAnswer">Verificar Respuesta</button>
+                            <button class="btn" id="nextQuestion" style="display: none;">Siguiente Pregunta</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-results" style="display: none;">
+                        <h3>Resultados del Quiz</h3>
+                        <div class="results-score">
+                            <div class="score-circle">
+                                <span id="scorePercentage">0%</span>
+                            </div>
+                            <p>Has respondido correctamente <span id="correctAnswers">0</span> de <span id="totalQuestionsResult">5</span> preguntas.</p>
+                        </div>
+                        <div class="results-feedback" id="quizFeedback"></div>
+                        <button class="btn" id="restartQuiz">Intentar Nuevamente</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13. ADAPTACIONES -->
+            <div class="section" id="adaptaciones">
+                <div class="section-header">
+                    <h2>Adaptaciones</h2>
+                </div>
+                <div class="section-content">
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <h3 class="card-title">Aumentar Dificultad</h3>
+                            </div>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Introducir la variación de r en el tiempo (modelo logístico con tasas variables)</li>
+                                <li>Hacer que los estudiantes programen desde cero el modelo en JavaScript</li>
+                                <li>Incluir factores adicionales como depredación o competencia</li>
+                                <li>Analizar datos reales de crecimiento bacteriano</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <h3 class="card-title">Reducir Dificultad</h3>
+                            </div>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Dar plantillas completas donde solo cambien valores de parámetros</li>
+                                <li>Usar simuladores en línea donde no sea necesario programar, solo observar resultados</li>
+                                <li>Trabajar solo con el modelo exponencial primero, y luego introducir el logístico</li>
+                                <li>Realizar la actividad en grupos para apoyo mutuo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14. EVALUACIÓN -->
+            <div class="section" id="evaluacion">
+                <div class="section-header">
+                    <h2>Evaluación y Retroalimentación</h2>
+                </div>
+                <div class="section-content">
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
+                                <h3 class="card-title">Evaluación</h3>
+                            </div>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li><strong>Producto final:</strong> Código funcional que modele poblaciones</li>
+                                <li><strong>Análisis escrito:</strong> Reflexión breve sobre cómo cambió la población al modificar K, r y P₀</li>
+                                <li><strong>Presentación:</strong> Explicación de resultados obtenidos con diferentes parámetros</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">
+                                    <i class="fas fa-comments"></i>
+                                </div>
+                                <h3 class="card-title">Retroalimentación</h3>
+                            </div>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Comentarios individualizados sobre claridad en el código y comprensión del modelo</li>
+                                <li><strong>Preguntas orientadoras:</strong>
+                                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                        <li>¿Qué representa la capacidad de carga en la vida real?</li>
+                                        <li>¿Por qué el crecimiento no puede ser infinito?</li>
+                                        <li>¿Cómo se podrían aplicar estos modelos en la industria o medicina?</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 15. REFLEXIÓN -->
+            <div class="section" id="reflexion">
+                <div class="section-header">
+                    <h2>Reflexión y Conclusión</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <p>La lección no solo enseña sobre biología o matemáticas, sino que integra la programación como una herramienta para investigar la vida. Ayuda a los estudiantes a visualizar fenómenos invisibles de manera práctica y artística, desarrollando habilidades clave para un mundo dominado por la tecnología y los datos.</p>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <img src="images/aplicaciones-reales.png" alt="Aplicaciones del modelado poblacional" style="width: 100%; border-radius: 8px; margin-bottom: 1.5rem;" loading="lazy">
+                            <p style="text-align: center; font-size: 0.9rem; margin-bottom: 1.5rem;">Aplicaciones prácticas del modelado poblacional en ciencia e industria</p>
+                            
+                            <h3 style="margin-bottom: 1rem;">Posibles mejoras futuras:</h3>
+                            <div class="grid">
+                                <div class="card">
+                                    <i class="fas fa-project-diagram" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                                    <h4>Modelos de competencia</h4>
+                                    <p>Ampliar a modelos de competencia entre dos especies que comparten recursos</p>
+                                </div>
+                                <div class="card">
+                                    <i class="fas fa-temperature-high" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                                    <h4>Variables ambientales</h4>
+                                    <p>Añadir variables como temperatura o pH que afecten la tasa de crecimiento r</p>
+                                </div>
+                                <div class="card">
+                                    <i class="fas fa-vr-cardboard" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                                    <h4>Visualización 3D</h4>
+                                    <p>Crear simulaciones en 3D que muestren la dispersión espacial de las bacterias</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 16. GLOSARIO -->
+            <div class="section" id="glosario">
+                <div class="section-header">
+                    <h2>Glosario de Términos</h2>
+                </div>
+                <div class="section-content">
+                    <div class="glossary-search">
+                        <input type="text" id="glossarySearch" placeholder="Buscar término..." class="glossary-search-input">
+                    </div>
+                    <div class="glossary-container">
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Capacidad de carga (K)</h3>
+                            <div class="glossary-definition">
+                                <p>Número máximo de individuos que un ambiente puede sostener indefinidamente. Representa el límite superior que la población no puede exceder debido a restricciones de recursos como alimento, espacio o nutrientes.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Crecimiento exponencial</h3>
+                            <div class="glossary-definition">
+                                <p>Patrón de crecimiento donde la tasa de reproducción es proporcional al tamaño actual de la población, resultando en un incremento acelerado sin límites. Se representa mediante la ecuación N(t) = N₀eʳᵗ.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Crecimiento logístico</h3>
+                            <div class="glossary-definition">
+                                <p>Modelo de crecimiento poblacional que incorpora la capacidad de carga del ambiente, resultando en una curva S donde el crecimiento disminuye a medida que la población se acerca a su límite máximo sostenible.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Tasa de crecimiento (r)</h3>
+                            <div class="glossary-definition">
+                                <p>Parámetro que indica la velocidad a la que una población crece por individuo. Representa la diferencia entre la tasa de natalidad y la tasa de mortalidad en condiciones ideales.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Población inicial (P₀)</h3>
+                            <div class="glossary-definition">
+                                <p>Número de individuos presentes al comienzo de un periodo de observación o modelado. Punto de partida para las ecuaciones de crecimiento poblacional.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Fase de latencia</h3>
+                            <div class="glossary-definition">
+                                <p>Periodo inicial de crecimiento bacteriano en el que las células se adaptan a su nuevo entorno y comienzan a prepararse para dividirse, pero no hay aumento significativo en el número de células.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Fase exponencial</h3>
+                            <div class="glossary-definition">
+                                <p>Etapa del crecimiento bacteriano donde las células se dividen a una tasa constante y máxima, resultando en un incremento exponencial de la población.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Fase estacionaria</h3>
+                            <div class="glossary-definition">
+                                <p>Etapa del crecimiento microbiano donde la tasa de reproducción iguala a la tasa de muerte, manteniendo un tamaño poblacional constante, generalmente cerca de la capacidad de carga.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Fase de muerte</h3>
+                            <div class="glossary-definition">
+                                <p>Etapa final del crecimiento bacteriano donde la tasa de muerte supera a la tasa de reproducción, resultando en una disminución de la población debido al agotamiento de recursos o acumulación de sustancias tóxicas.</p>
+                            </div>
+                        </div>
+                        <div class="glossary-item">
+                            <h3 class="glossary-term">Tiempo de duplicación</h3>
+                            <div class="glossary-definition">
+                                <p>Tiempo necesario para que una población duplique su tamaño. En crecimiento exponencial, se calcula como ln(2)/r, donde r es la tasa de crecimiento.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 17. REFERENCIAS -->
+            <div class="section" id="referencias">
+                <div class="section-header">
+                    <h2>Referencias y Recursos Adicionales</h2>
+                </div>
+                <div class="section-content">
+                    <div class="resource-card">
+                        <div class="resource-image">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Verhulst, P.-F. (1838)</h3>
+                            <p>Notice sur la loi que la population suit dans son accroissement.</p>
+                            <span class="badge">Publicación histórica</span>
+                            <span class="badge">Modelo logístico</span>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-image">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>National Geographic Education</h3>
+                            <p>Bacterial Growth - Recursos educativos sobre crecimiento bacteriano</p>
+                            <a href="https://www.nationalgeographic.org/education" target="_blank" class="btn" style="font-size: 0.9rem;">Visitar sitio</a>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-image">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Khan Academy</h3>
+                            <p>Growth and Decay Word Problems - Tutoriales sobre problemas de crecimiento y decrecimiento</p>
+                            <a href="https://www.khanacademy.org" target="_blank" class="btn" style="font-size: 0.9rem;">Ver tutoriales</a>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-image">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Chart.js</h3>
+                            <p>Biblioteca JavaScript para crear gráficos interactivos</p>
+                            <a href="https://www.chartjs.org/" target="_blank" class="btn" style="font-size: 0.9rem;">Documentación</a>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <div class="resource-image">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="resource-content">
+                            <h3>Mozilla Developer Network (MDN)</h3>
+                            <p>Recursos para aprender JavaScript</p>
+                            <a href="https://developer.mozilla.org/" target="_blank" class="btn" style="font-size: 0.9rem;">Visitar MDN</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>eBook STEAM: Modelando Poblaciones de Bacterias</h3>
+                        <p>Desarrollado como recurso educativo para estudiantes de noveno grado</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Características Principales</h3>
+                        <ul class="footer-features">
+                            <li><a href="#simulacion">Simulación Interactiva</a></li>
+                            <li><a href="#casos-reales">Casos de Estudio Reales</a></li>
+                            <li><a href="#laboratorio-virtual">Laboratorio Virtual</a></li>
+                            <li><a href="#quiz">Quiz Interactivo</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Recursos Adicionales</h3>
+                        <ul class="footer-resources">
+                            <li><a href="docs/guia-docente.md" target="_blank"><i class="fas fa-file-pdf"></i> Guía del Docente</a></li>
+                            <li><a href="docs/actividades-complementarias.md" target="_blank"><i class="fas fa-tasks"></i> Actividades Complementarias</a></li>
+                            <li><a href="https://prsciencetrust.org/stem-es/"><i class="fas fa-file-code"></i> Puerto Rico Science, Technology
+                                & Research Trust</a></li>
+                            <li><a href="https://crea-portaldemedios.siemens-stiftung.org/home"><i class="fas fa-graduation-cap"></i> Formación Docente</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-middle">
+                    <div class="footer-links">
+                        <a href="#introduccion">Inicio</a>
+                        <a href="#simulacion">Simulación</a>
+                        <a href="#quiz">Quiz</a>
+                        <a href="#referencias">Recursos</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>© 2025 Yonatan Guerrero Soriano</p>
+                    <p>Licencia: Creative Commons Attribution-NonCommercial 4.0 International</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+
+    <!-- Script de respaldo para los casos reales -->
+    <script>
+    // Script inline de respaldo en caso de que el archivo externo no se cargue
+    window.addEventListener('load', function() {
+        // Solo ejecutar si no se detecta que los botones ya tengan el evento correcto
+        setTimeout(function() {
+            // Verificar si los botones de casos de estudio ya tienen el comportamiento correcto
+            const caseStudyButtons = document.querySelectorAll('.case-study-btn');
+            if (caseStudyButtons.length > 0) {
+                console.log("Verificando botones de casos de estudio");
+                
+                caseStudyButtons.forEach(button => {
+                    // Evitar añadir listeners duplicados
+                    if (!button._hasCaseStudyListener) {
+                        button.addEventListener('click', function() {
+                            const p0 = this.getAttribute('data-p0');
+                            const r = this.getAttribute('data-r');
+                            const k = this.getAttribute('data-k');
+                            
+                            console.log("Caso seleccionado:", p0, r, k);
+                            
+                            const initialPopulationInput = document.getElementById('initial-population');
+                            const initialPopulationSlider = document.getElementById('initial-population-slider');
+                            const growthRateInput = document.getElementById('growth-rate');
+                            const growthRateSlider = document.getElementById('growth-rate-slider');
+                            const carryingCapacityInput = document.getElementById('carrying-capacity');
+                            const carryingCapacitySlider = document.getElementById('carrying-capacity-slider');
+                            const runSimulationBtn = document.getElementById('runSimulation');
+                            
+                            if (initialPopulationInput && growthRateInput && carryingCapacityInput) {
+                                console.log("Estableciendo valores para la simulación");
+                                initialPopulationInput.value = p0;
+                                initialPopulationSlider.value = p0;
+                                growthRateInput.value = r;
+                                growthRateSlider.value = r;
+                                carryingCapacityInput.value = k;
+                                carryingCapacitySlider.value = k;
+                                
+                                const simulacionSection = document.getElementById('simulacion');
+                                window.scrollTo({
+                                    top: simulacionSection.offsetTop - 20,
+                                    behavior: 'smooth'
+                                });
+                                
+                                setTimeout(() => {
+                                    if (runSimulationBtn) {
+                                        console.log("Ejecutando simulación");
+                                        runSimulationBtn.click();
+                                    } else {
+                                        console.error("No se encontró el botón de simulación");
+                                    }
+                                }, 1000);
+                            } else {
+                                console.error("No se pudieron encontrar los controles de simulación");
+                            }
+                        });
+                        
+                        // Marcar el botón para evitar duplicados
+                        button._hasCaseStudyListener = true;
+                    }
+                });
+            }
+        }, 2000); // Esperar 2 segundos para asegurarse de que todo esté cargado
+    });
+    </script>
+</body>
+</html>

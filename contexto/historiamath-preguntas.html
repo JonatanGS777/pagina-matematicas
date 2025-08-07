@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas de Análisis - Historia de las Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #D32F2F;
+            --secondary: #F57C00;
+            --accent: #1976D2;
+            --success: #388E3C;
+            --warning: #F9A825;
+            --dark: #1B1B1B;
+            --light: #FAFAFA;
+            --white: #FFFFFF;
+            --text-primary: #2C2C2C;
+            --text-secondary: #5A5A5A;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(211, 47, 47, 0.15);
+            --shadow-hover: 0 15px 35px rgba(211, 47, 47, 0.25);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--warning) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #D32F2F 0%, #F57C00 50%, #1976D2 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(211, 47, 47, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(245, 124, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(25, 118, 210, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, #D32F2F 0%, #F57C00 50%, #1976D2 100%);
+            animation: backgroundMove 20s ease infinite;
+        }
+
+        @keyframes backgroundMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-20px, 10px) scale(1.05); }
+            50% { transform: translate(10px, -15px) scale(0.95); }
+            75% { transform: translate(-10px, 5px) scale(1.02); }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(211, 47, 47, 0.1);
+            z-index: 1000;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .back-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            min-height: calc(100vh - 100px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(211, 47, 47, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-container::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-main);
+            border-radius: 25px 25px 0 0;
+            margin: -3rem -3rem 2rem -3rem;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+        }
+
+        /* Questions Section */
+        .questions-section {
+            margin-top: 3rem;
+        }
+
+        .question-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: var(--gradient-main);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .question-help {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: rgba(211, 47, 47, 0.05);
+            padding: 0.75rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .answer-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .answer-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+        }
+
+        .answer-textarea::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .character-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(211, 47, 47, 0.1);
+            margin-top: 3rem;
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 1.25rem 3rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn i {
+            margin-right: 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        /* Loading and Success States */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            display: none;
+            background: var(--success);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .success-message.active {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            z-index: 999;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-main);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 3rem 1rem;
+            }
+
+            .form-container {
+                padding: 2rem 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .question-card {
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="historiamath.html" class="logo">
+                <i class="fas fa-question-circle"></i>
+                Preguntas de Análisis
+            </a>
+            
+            <a href="historiamath.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Volver
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">Preguntas de Análisis Histórico</h1>
+            <p class="page-subtitle">
+                Reflexiona sobre los grandes momentos de la historia matemática y demuestra tu comprensión
+            </p>
+
+            <form id="questionsForm" class="form-container">
+                <div class="form-header">
+                    <h2>Información del Estudiante</h2>
+                    <p>Completa tus datos antes de responder las preguntas</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="studentName">
+                            <i class="fas fa-user"></i>
+                            Nombre Completo
+                        </label>
+                        <input type="text" id="studentName" name="studentName" required 
+                               placeholder="Escribe tu nombre completo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentGroup">
+                            <i class="fas fa-users"></i>
+                            Grupo
+                        </label>
+                        <select id="studentGroup" name="studentGroup" required>
+                            <option value="">Selecciona tu grupo</option>
+                            <option value="11-1">11-1</option>
+                            <option value="11-2">11-2</option>
+                            <option value="11-3">11-3</option>
+                            <option value="12-1">12-1</option>
+                            <option value="12-2">12-2</option>
+                            <option value="12-3">12-3</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currentDate">
+                            <i class="fas fa-calendar"></i>
+                            Fecha
+                        </label>
+                        <input type="date" id="currentDate" name="currentDate" required>
+                    </div>
+                </div>
+            </form>
+
+            <div class="questions-section">
+                <!-- Question 1 -->
+                <div class="question-card">
+                    <div class="question-number">1</div>
+                    <div class="question-text">
+                        ¿Qué impacto tuvo la invención del cero en la historia del cálculo y las matemáticas en general?
+                    </div>
+                    <div class="question-help">
+                        <strong>Sugerencia:</strong> Considera cómo el concepto de "nada" como número revolucionó 
+                        los sistemas de numeración y permitió desarrollos matemáticos posteriores.
+                    </div>
+                    <textarea class="answer-textarea" name="answer1" id="answer1" 
+                              placeholder="Escribe tu respuesta aquí... Explica con ejemplos específicos y conecta el concepto del cero con desarrollos matemáticos posteriores."></textarea>
+                    <div class="character-counter">
+                        <span id="counter1">0</span>/500 caracteres mínimos
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-card">
+                    <div class="question-number">2</div>
+                    <div class="question-text">
+                        Compara las contribuciones de los matemáticos griegos con las del mundo islámico. 
+                        ¿Cómo se complementaron estos dos períodos históricos?
+                    </div>
+                    <div class="question-help">
+                        <strong>Sugerencia:</strong> Piensa en las diferencias de enfoque: los griegos se 
+                        centraron en la geometría y demostraciones, mientras que los matemáticos islámicos 
+                        desarrollaron el álgebra y preservaron conocimientos.
+                    </div>
+                    <textarea class="answer-textarea" name="answer2" id="answer2" 
+                              placeholder="Compara y contrasta las contribuciones de ambas culturas, mencionando matemáticos específicos y sus aportes."></textarea>
+                    <div class="character-counter">
+                        <span id="counter2">0</span>/500 caracteres mínimos
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-card">
+                    <div class="question-number">3</div>
+                    <div class="question-text">
+                        Explica por qué los "Elementos" de Euclides han sido tan influyentes durante más de 2000 años. 
+                        ¿Qué los hace únicos en la historia de las matemáticas?
+                    </div>
+                    <div class="question-help">
+                        <strong>Sugerencia:</strong> Considera el método axiomático, la organización sistemática 
+                        del conocimiento geométrico y cómo estableció estándares para el razonamiento matemático.
+                    </div>
+                    <textarea class="answer-textarea" name="answer3" id="answer3" 
+                              placeholder="Analiza la importancia histórica y metodológica de los Elementos de Euclides."></textarea>
+                    <div class="character-counter">
+                        <span id="counter3">0</span>/500 caracteres mínimos
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-card">
+                    <div class="question-number">4</div>
+                    <div class="question-text">
+                        ¿Cómo cambió la revolución científica del siglo XVII (Newton, Leibniz, Descartes) 
+                        la naturaleza de las matemáticas? Analiza el desarrollo del cálculo.
+                    </div>
+                    <div class="question-help">
+                        <strong>Sugerencia:</strong> Reflexiona sobre cómo el cálculo permitió modelar cambio y movimiento, 
+                        y conectó las matemáticas con la física de manera sin precedentes.
+                    </div>
+                    <textarea class="answer-textarea" name="answer4" id="answer4" 
+                              placeholder="Describe el impacto del cálculo en las matemáticas y las ciencias."></textarea>
+                    <div class="character-counter">
+                        <span id="counter4">0</span>/500 caracteres mínimos
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question-card">
+                    <div class="question-number">5</div>
+                    <div class="question-text">
+                        Las matemáticas han evolucionado de ser una herramienta práctica a una ciencia abstracta. 
+                        Analiza esta transformación y reflexiona sobre el futuro de las matemáticas en la era digital.
+                    </div>
+                    <div class="question-help">
+                        <strong>Sugerencia:</strong> Considera la transición desde las matemáticas aplicadas de las 
+                        civilizaciones antiguas hasta las matemáticas puras modernas, y cómo la computación está 
+                        creando nuevas ramas matemáticas.
+                    </div>
+                    <textarea class="answer-textarea" name="answer5" id="answer5" 
+                              placeholder="Reflexiona sobre la evolución de las matemáticas y su futuro en el siglo XXI."></textarea>
+                    <div class="character-counter">
+                        <span id="counter5">0</span>/500 caracteres mínimos
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="button" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-file-pdf"></i>
+                    Generar PDF y Enviar
+                </button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Generando PDF y guardando respuestas...</p>
+                </div>
+                
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    ¡Respuestas enviadas exitosamente! El PDF se ha generado y guardado.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class HistoryQuestionsApp {
+            constructor() {
+                this.form = document.getElementById('questionsForm');
+                this.submitBtn = document.getElementById('submitBtn');
+                this.loading = document.getElementById('loading');
+                this.successMessage = document.getElementById('successMessage');
+                this.progressBar = document.getElementById('progressBar');
+                
+                this.init();
+            }
+            
+            init() {
+                this.setCurrentDate();
+                this.setupEventListeners();
+                this.setupCharacterCounters();
+                this.updateProgress();
+            }
+            
+            setCurrentDate() {
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('currentDate').value = today;
+            }
+            
+            setupEventListeners() {
+                this.submitBtn.addEventListener('click', () => this.handleSubmit());
+                
+                // Form validation listeners
+                const inputs = this.form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => this.updateProgress());
+                    input.addEventListener('change', () => this.updateProgress());
+                });
+            }
+            
+            setupCharacterCounters() {
+                for (let i = 1; i <= 5; i++) {
+                    const textarea = document.getElementById(`answer${i}`);
+                    const counter = document.getElementById(`counter${i}`);
+                    
+                    textarea.addEventListener('input', () => {
+                        const count = textarea.value.length;
+                        counter.textContent = count;
+                        
+                        if (count >= 500) {
+                            counter.style.color = '#388E3C';
+                        } else if (count >= 200) {
+                            counter.style.color = '#F9A825';
+                        } else {
+                            counter.style.color = '#D32F2F';
+                        }
+                    });
+                }
+            }
+            
+            updateProgress() {
+                const formData = new FormData(this.form);
+                const answers = [];
+                
+                // Check student info
+                const name = formData.get('studentName');
+                const group = formData.get('studentGroup');
+                const date = formData.get('currentDate');
+                
+                let infoComplete = name && group && date;
+                
+                // Check answers
+                for (let i = 1; i <= 5; i++) {
+                    const answer = document.getElementById(`answer${i}`).value;
+                    answers.push(answer.length >= 500);
+                }
+                
+                const completedAnswers = answers.filter(Boolean).length;
+                const totalProgress = (completedAnswers + (infoComplete ? 1 : 0)) / 6 * 100;
+                
+                this.progressBar.style.width = `${totalProgress}%`;
+                
+                // Enable submit button if all requirements are met
+                const allComplete = infoComplete && completedAnswers === 5;
+                this.submitBtn.disabled = !allComplete;
+                
+                if (allComplete) {
+                    this.submitBtn.style.background = 'var(--gradient-main)';
+                    this.submitBtn.style.cursor = 'pointer';
+                } else {
+                    this.submitBtn.style.background = '#ccc';
+                    this.submitBtn.style.cursor = 'not-allowed';
+                }
+            }
+            
+            async handleSubmit() {
+                if (this.submitBtn.disabled) return;
+                
+                this.showLoading();
+                
+                try {
+                    const studentData = this.collectStudentData();
+                    await this.generatePDF(studentData);
+                    await this.saveToServer(studentData);
+                    this.showSuccess();
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                    alert('Error al enviar las respuestas. Por favor, intenta de nuevo.');
+                    this.hideLoading();
+                }
+            }
+            
+            collectStudentData() {
+                const formData = new FormData(this.form);
+                const answers = {};
+                
+                for (let i = 1; i <= 5; i++) {
+                    answers[`answer${i}`] = document.getElementById(`answer${i}`).value;
+                }
+                
+                return {
+                    studentName: formData.get('studentName'),
+                    studentGroup: formData.get('studentGroup'),
+                    currentDate: formData.get('currentDate'),
+                    submissionTime: new Date().toISOString(),
+                    answers: answers
+                };
+            }
+            
+            async generatePDF(data) {
+                const pdfContent = this.createPDFContent(data);
+                
+                const element = document.createElement('div');
+                element.innerHTML = pdfContent;
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                
+                const opt = {
+                    margin: 1,
+                    filename: `Historia_Matematicas_Preguntas_${data.studentName.replace(/\s+/g, '_')}_${data.currentDate}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                
+                await html2pdf().set(opt).from(element).save();
+                document.body.removeChild(element);
+            }
+            
+            createPDFContent(data) {
+                const questions = [
+                    "¿Qué impacto tuvo la invención del cero en la historia del cálculo y las matemáticas en general?",
+                    "Compara las contribuciones de los matemáticos griegos con las del mundo islámico. ¿Cómo se complementaron estos dos períodos históricos?",
+                    "Explica por qué los 'Elementos' de Euclides han sido tan influyentes durante más de 2000 años. ¿Qué los hace únicos en la historia de las matemáticas?",
+                    "¿Cómo cambió la revolución científica del siglo XVII (Newton, Leibniz, Descartes) la naturaleza de las matemáticas? Analiza el desarrollo del cálculo.",
+                    "Las matemáticas han evolucionado de ser una herramienta práctica a una ciencia abstracta. Analiza esta transformación y reflexiona sobre el futuro de las matemáticas en la era digital."
+                ];
+                
+                return `
+                    <div style="font-family: 'Poppins', Arial, sans-serif; padding: 40px; line-height: 1.6; color: #2C2C2C;">
+                        <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px solid #D32F2F; padding-bottom: 20px;">
+                            <h1 style="color: #D32F2F; font-size: 28px; margin: 0; font-weight: 700;">
+                                Historia de las Matemáticas
+                            </h1>
+                            <h2 style="color: #F57C00; font-size: 20px; margin: 10px 0 0 0; font-weight: 600;">
+                                Preguntas de Análisis Histórico
+                            </h2>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                            <h3 style="color: #D32F2F; margin: 0 0 15px 0;">Información del Estudiante</h3>
+                            <p style="margin: 5px 0;"><strong>Nombre:</strong> ${data.studentName}</p>
+                            <p style="margin: 5px 0;"><strong>Grupo:</strong> ${data.studentGroup}</p>
+                            <p style="margin: 5px 0;"><strong>Fecha:</strong> ${data.currentDate}</p>
+                            <p style="margin: 5px 0;"><strong>Hora de envío:</strong> ${new Date(data.submissionTime).toLocaleString('es-ES')}</p>
+                        </div>
+                        
+                        ${questions.map((question, index) => `
+                            <div style="margin-bottom: 30px; border-left: 4px solid #D32F2F; padding-left: 20px;">
+                                <h3 style="color: #D32F2F; font-size: 16px; margin: 0 0 10px 0;">
+                                    Pregunta ${index + 1}
+                                </h3>
+                                <p style="font-weight: 600; margin: 0 0 15px 0; color: #2C2C2C;">
+                                    ${question}
+                                </p>
+                                <div style="background: #fafafa; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                                    <p style="margin: 0; text-align: justify; line-height: 1.8;">
+                                        ${data.answers[`answer${index + 1}`] || 'No respondida'}
+                                    </p>
+                                </div>
+                            </div>
+                        `).join('')}
+                        
+                        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                            <p style="color: #5A5A5A; font-size: 14px; margin: 0;">
+                                Prof. Yonatan Guerrero Soriano - Departamento de Educación de Puerto Rico
+                            </p>
+                            <p style="color: #5A5A5A; font-size: 12px; margin: 5px 0 0 0;">
+                                Documento generado automáticamente - ${new Date().toLocaleDateString('es-ES')}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            async saveToServer(data) {
+                // Simulate server save
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // In a real implementation, this would send to your Vercel backend
+                        console.log('Data saved to server:', data);
+                        
+                        // Save to localStorage for now (in real app, this would be server-side)
+                        const existingData = JSON.parse(localStorage.getItem('historyQuestions') || '[]');
+                        existingData.push({
+                            ...data,
+                            id: Date.now()
+                        });
+                        localStorage.setItem('historyQuestions', JSON.stringify(existingData));
+                        
+                        resolve();
+                    }, 2000);
+                });
+            }
+            
+            showLoading() {
+                this.loading.classList.add('active');
+                this.submitBtn.style.display = 'none';
+            }
+            
+            hideLoading() {
+                this.loading.classList.remove('active');
+                this.submitBtn.style.display = 'inline-flex';
+            }
+            
+            showSuccess() {
+                this.hideLoading();
+                this.successMessage.classList.add('active');
+                
+                // Disable form
+                const inputs = this.form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => input.disabled = true);
+                
+                // Scroll to success message
+                this.successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                // Auto redirect after 5 seconds
+                setTimeout(() => {
+                    window.location.href = 'historiamath.html';
+                }, 5000);
+            }
+        }
+        
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new HistoryQuestionsApp();
+        });
+    </script>
+</body>
+</html>

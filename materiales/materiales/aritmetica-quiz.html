@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Aritmética</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #f1c40f;
+            --background-color: #1a1a2e;
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-color);
+            margin-top: 1rem;
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .correct {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Prueba de Aritmética</h1>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p>Pregunta <span id="current-question">1</span> de 15</p>
+        </div>
+
+        <div id="questions"></div>
+
+        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <script>
+        const questions = [
+            // Secuencias
+            {
+                category: "Secuencias",
+                question: "Encuentra el siguiente número en la secuencia: 2, 6, 12, 20, 30, __",
+                type: "input",
+                answer: "42",
+                hint: "Observa cuánto aumenta la diferencia entre números consecutivos"
+            },
+            // Acertijos Matemáticos
+            {
+                category: "Acertijos Matemáticos",
+                question: "Si un ladrillo pesa 1 kg más medio ladrillo, ¿cuánto pesa un ladrillo?",
+                type: "input",
+                answer: "2",
+                hint: "Plantea una ecuación. Si x es el peso del ladrillo: x = 1 + x/2"
+            },
+            // Reglas de Divisibilidad
+            {
+                category: "Reglas de Divisibilidad",
+                question: "¿Cuál es el menor número que es divisible por 2, 3 y 4?",
+                type: "input",
+                answer: "12",
+                hint: "Busca el mínimo común múltiplo"
+            },
+            // Orden de Operaciones
+            {
+                category: "Orden de Operaciones",
+                question: "Resuelve: 24 ÷ (3 + 5) × 2 - 4",
+                type: "input",
+                answer: "2",
+                hint: "Recuerda PEMDAS: Paréntesis, Exponentes, Multiplicación/División, Suma/Resta"
+            },
+            // Fracciones
+            {
+                category: "Fracciones",
+                question: "Simplifica la fracción: 48/64",
+                type: "input",
+                answer: "3/4",
+                hint: "Divide tanto el numerador como el denominador por su máximo común divisor"
+            },
+            // Decimales
+            {
+                category: "Decimales",
+                question: "Convierte 0.375 a fracción",
+                type: "input",
+                answer: "3/8",
+                hint: "Multiplica por potencias de 10 hasta obtener un número entero"
+            },
+            // Porcentajes
+            {
+                category: "Porcentajes",
+                question: "¿Qué número es el 25% de 80?",
+                type: "input",
+                answer: "20",
+                hint: "Multiplica 80 por 0.25"
+            },
+            // Problemas Verbales
+            {
+                category: "Problemas Verbales",
+                question: "Un vendedor gana $50 por día más 5% de sus ventas. Si en un día vendió $1000, ¿cuánto ganó en total?",
+                type: "input",
+                answer: "100",
+                hint: "Calcula el 5% de 1000 y suma 50"
+            },
+            // Proporciones
+            {
+                category: "Proporciones",
+                question: "Si 3 litros de pintura cubren 9 metros cuadrados, ¿cuántos litros se necesitan para 15 metros cuadrados?",
+                type: "input",
+                answer: "5",
+                hint: "Usa regla de tres: 3/9 = x/15"
+            },
+            // Secuencias Avanzadas
+            {
+                category: "Secuencias",
+                question: "En una secuencia Fibonacci, si los dos primeros números son 3 y 5, ¿cuál es el quinto número?",
+                type: "input",
+                answer: "21",
+                hint: "Cada número es la suma de los dos anteriores"
+            },
+            // Fracciones Complejas
+            {
+                category: "Fracciones",
+                question: "Resuelve: 2/3 + 3/4",
+                type: "input",
+                answer: "17/12",
+                hint: "Busca un denominador común multiplicando 3 × 4"
+            },
+            // Problemas de Porcentajes
+            {
+                category: "Porcentajes",
+                question: "Una camisa costaba $80 y se rebajó un 20%. Luego se volvió a rebajar un 25%. ¿Cuál es el precio final?",
+                type: "input",
+                answer: "48",
+                hint: "Aplica los descuentos uno después del otro"
+            },
+            // Acertijos Lógicos
+            {
+                category: "Acertijos Matemáticos",
+                question: "En una carrera, Juan adelantó al segundo. ¿En qué posición quedó Juan?",
+                type: "input",
+                answer: "2",
+                hint: "Piensa: si adelantas al segundo, tomas su lugar"
+            },
+            // Proporciones Compuestas
+            {
+                category: "Proporciones",
+                question: "Si 4 personas pintan una casa en 6 días, ¿cuántos días tardarán 6 personas?",
+                type: "input",
+                answer: "4",
+                hint: "A más personas, menos días. Usa proporción inversa"
+            },
+            // Decimales y Porcentajes
+            {
+                category: "Decimales",
+                question: "Expresa 0.85 como porcentaje",
+                type: "input",
+                answer: "85",
+                hint: "Multiplica por 100 para convertir a porcentaje"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionDiv = document.getElementById('questions');
+            const question = questions[currentQuestion];
+
+            let html = `
+                <div class="question-card">
+                    <div class="category-tag">${question.category}</div>
+                    <p>${question.question}</p>
+            `;
+
+            if (question.type === 'multiple') {
+                html += `<div class="options">`;
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="checkAnswer(${index})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            } else {
+                html += `
+                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
+                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                `;
+            }
+
+            html += `<div class="feedback" id="feedback"></div>`;
+            questionDiv.innerHTML = html;
+
+            // Actualizar progreso
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Renderizar fórmulas matemáticas
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        function checkAnswer(selectedOption = null) {
+            const question = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (question.type === 'multiple') {
+                isCorrect = selectedOption === question.correct;
+            } else {
+                const userAnswer = document.getElementById('user-answer').value.trim();
+                isCorrect = userAnswer === question.answer;
+            }
+
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = isCorrect ? 
+                '¡Correcto! 🎉' : 
+                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+
+            if (isCorrect) score++;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const questionDiv = document.getElementById('questions');
+            const percentage = (score / questions.length) * 100;
+            
+            questionDiv.innerHTML = `
+                <div class="question-card">
+                    <h2>Resultados Finales</h2>
+                    <p>Has completado la prueba de aritmética.</p>
+                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
+                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
+                </div>
+            `;
+
+            document.getElementById('next-button').style.display = 'none';
+        }
+
+        // Iniciar prueba
+        loadQuestion();
+    </script>
+</body>
+</html>

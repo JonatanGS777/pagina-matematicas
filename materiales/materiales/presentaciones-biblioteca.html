@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentaciones de Matemáticas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1c20 0%, #2a2d35 100%);
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            animation: fadeIn 1s ease;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4CAF50;
+        }
+
+        .presentations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .presentation-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .presentation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .preview-container {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .preview-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .preview-icon {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-text {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .presentation-card:hover .preview-container {
+            transform: scale(1.05);
+        }
+
+        .presentation-card:nth-child(1) .preview-container { background: linear-gradient(45deg, #4CAF50, #2196F3); }
+        .presentation-card:nth-child(2) .preview-container { background: linear-gradient(45deg, #9C27B0, #E91E63); }
+        .presentation-card:nth-child(3) .preview-container { background: linear-gradient(45deg, #FF9800, #F44336); }
+        .presentation-card:nth-child(4) .preview-container { background: linear-gradient(45deg, #2196F3, #00BCD4); }
+        .presentation-card:nth-child(5) .preview-container { background: linear-gradient(45deg, #673AB7, #3F51B5); }
+        .presentation-card:nth-child(6) .preview-container { background: linear-gradient(45deg, #009688, #4CAF50); }
+        .presentation-card:nth-child(7) .preview-container { background: linear-gradient(45deg, #FFC107, #FF9800); }
+        .presentation-card:nth-child(8) .preview-container { background: linear-gradient(45deg, #795548, #FF5722); }
+        .presentation-card:nth-child(9) .preview-container { background: linear-gradient(45deg, #607D8B, #9E9E9E); }
+        .presentation-card:nth-child(10) .preview-container { background: linear-gradient(45deg, #3F51B5, #2196F3); }
+
+        .presentation-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            color: #ffffff;
+        }
+
+        .presentation-description {
+            font-size: 0.9rem;
+            color: #cccccc;
+            margin-bottom: 1rem;
+        }
+
+        .view-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .view-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .presentation-card {
+            animation: fadeIn 0.5s ease forwards;
+            animation-delay: calc(var(--order) * 0.1s);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chalkboard-teacher"></i> Presentaciones de Matemáticas</h1>
+            <p>Recursos educativos seleccionados para mejorar tu aprendizaje</p>
+        </div>
+
+        <div class="presentations-grid">
+            <div class="presentation-card" style="--order: 1">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-square-root-alt preview-icon"></i>
+                        <div class="preview-text">Álgebra Básica</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Álgebra Básica</h3>
+                <p class="presentation-description">Conceptos fundamentales de álgebra explicados paso a paso</p>
+                <a href="https://www.slideshare.net/slideshow/introduccion-al-algebra-con-25-diapositivas/9409475?_gl=1*1cldn53*_gcl_au*MTg0NzIzMTYxNS4xNzM0NDk3NDg5#1" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 2">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-calculator preview-icon"></i>
+                        <div class="preview-text">Trigonometría</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Trigonometría</h3>
+                <p class="presentation-description">Funciones trigonométricas y sus aplicaciones</p>
+                <a href="https://drive.google.com/drive/folders/1Ib1j3eUUXsN4DksFOXY4rGQocLkx35uU" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 3">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-chart-line preview-icon"></i>
+                        <div class="preview-text">Funciones</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Funciones y Gráficas</h3>
+                <p class="presentation-description">Análisis y representación de funciones matemáticas</p>
+                <a href="https://www.slideshare.net/slideshow/funciones-matemticas-44314963/44314963" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 4">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-shapes preview-icon"></i>
+                        <div class="preview-text">Geometría</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Geometría</h3>
+                <p class="presentation-description">Formas, ángulos y teoremas geométricos</p>
+                <a href="https://www.slideshare.net/slideshow/geometria-basica-79054705/79054705" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 5">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-percentage preview-icon"></i>
+                        <div class="preview-text">Probabilidad</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Probabilidad y Estadística</h3>
+                <p class="presentation-description">Conceptos básicos de probabilidad y análisis estadístico</p>
+                <a href="https://www.ine.es/explica/docs/pasos_conceptos_parte1.pdf" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 6">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-infinity preview-icon"></i>
+                        <div class="preview-text">Cálculo</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Cálculo Diferencial</h3>
+                <p class="presentation-description">Límites, derivadas y sus aplicaciones</p>
+                <a href="https://www.tamps.cinvestav.mx/descargables/Cursos_propedeuticos/Matematicas/Calculo_diferencial_e_integral/Calculo_Diferencial_e_Integral.pdf" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 7">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-sort-numeric-up preview-icon"></i>
+                        <div class="preview-text">Secuencias</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Secuencias y Series</h3>
+                <p class="presentation-description">Patrones numéricos y progresiones</p>
+                <a href="https://www.udocz.com/apuntes/919489/ppt-de-teoria-semana-07" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 8">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-vector-square preview-icon"></i>
+                        <div class="preview-text">Vectores</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Vectores y Matrices</h3>
+                <p class="presentation-description">Álgebra lineal y operaciones matriciales</p>
+                <a href="https://pavisva.wordpress.com/wp-content/uploads/2016/07/clase-nc2b06-vectores-cartesiano-2d.pdf" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 9">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-project-diagram preview-icon"></i>
+                        <div class="preview-text">Lógica</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Lógica Matemática</h3>
+                <p class="presentation-description">Fundamentos de la lógica y el razonamiento matemático</p>
+                <a href="https://prezi.com/p/gb0tziqduwad/presentacion-logica-matematicas/" class="view-button">Ver Presentación</a>
+            </div>
+
+            <div class="presentation-card" style="--order: 10">
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <i class="fas fa-dice preview-icon"></i>
+                        <div class="preview-text">Problemas</div>
+                    </div>
+                </div>
+                <h3 class="presentation-title">Resolución de Problemas</h3>
+                <p class="presentation-description">Estrategias y métodos para resolver problemas matemáticos</p>
+                <a href="https://www.slideshare.net/slideshow/resolucin-de-problemas-matemticos-251038012/251038012" 
+				class="view-button">Ver Presentación</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

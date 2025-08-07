@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos Didácticos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #ffffff;
+            background: url('fondo9.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(22, 160, 133, 0.8) 0%, rgba(20, 83, 45, 0.9) 100%);
+            z-index: -1;
+            animation: gradientShift 15s infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #10b981);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+            animation: titleFloat 1s ease-out;
+        }
+
+        header h1::before {
+            content: '\f518'; /* Ícono de graduación */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 0.8em;
+            margin-right: 15px;
+            vertical-align: middle;
+            opacity: 0.9;
+        }
+
+        header p {
+            font-size: 1.2em;
+            font-weight: 300;
+            color: #e0e0e0;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+
+        main {
+            padding: 3rem 2rem;
+            max-width: 800px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            margin: 2rem auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: floatUp 1s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-recursos {
+            display: inline-flex;
+            align-items: center;
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(45deg, #16a085, #059669);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(22, 160, 133, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-recursos:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(22, 160, 133, 0.4);
+            background: linear-gradient(45deg, #059669, #047857);
+        }
+
+        .btn-recursos::before {
+            content: '\f07c'; /* Ícono de carpeta */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 12px;
+            font-size: 1.1em;
+        }
+
+        @keyframes titleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+            
+            main {
+                width: 95%;
+                padding: 2rem 1.5rem;
+            }
+            
+            .btn-recursos {
+                padding: 1rem 2rem;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Recursos Didácticos en Inglés</h1>
+        <p>Descubre material adicional que complementa tus conocimientos y ayuda a reforzar tus habilidades en matemáticas.</p>
+    </header>
+    <main>
+        <button class="btn-recursos" onclick="window.location.href='enlaces_recursos.html'">Explorar Recursos</button>
+    </main>
+</body>
+</html>

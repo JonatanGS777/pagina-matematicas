@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Cálculo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #2ecc71;
+            --background-color: #1a1a2e;
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-color);
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .correct {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .math {
+            font-size: 1.1em;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Prueba de Cálculo</h1>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p>Pregunta <span id="current-question">1</span> de 15</p>
+        </div>
+
+        <div id="questions"></div>
+
+        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <script>
+        const questions = [
+            // Conceptos Básicos
+            {
+                category: "Límites Básicos",
+                question: "Calcula el límite: $$\\lim_{x \\to 2} (x^2 + 3x)$$",
+                type: "input",
+                answer: "10",
+                hint: "Sustituye directamente x por 2"
+            },
+            {
+                category: "Continuidad",
+                question: "¿En qué punto la función $$f(x) = \\frac{x^2-4}{x-2}$$ tiene una discontinuidad?",
+                type: "input",
+                answer: "2",
+                hint: "Busca donde el denominador es cero"
+            },
+            {
+                category: "Derivadas Básicas",
+                question: "Encuentra la derivada de $$f(x) = 3x^2 + 2x$$",
+                type: "input",
+                answer: "6x+2",
+                hint: "Aplica las reglas básicas de derivación"
+            },
+            // Derivadas Intermedias
+            {
+                category: "Regla del Producto",
+                question: "Deriva $$f(x) = x^2\\sin(x)$$",
+                type: "multiple",
+                options: [
+                    "2x sin(x) + x²cos(x)",
+                    "2x sin(x)",
+                    "x² cos(x)",
+                    "2x sin(x) - x²cos(x)"
+                ],
+                correct: 0
+            },
+            {
+                category: "Regla de la Cadena",
+                question: "Deriva $$f(x) = \\sin(x^2)$$",
+                type: "input",
+                answer: "2xcos(x^2)",
+                hint: "Aplica la regla de la cadena"
+            },
+            // Aplicaciones de Derivadas
+            {
+                category: "Optimización",
+                question: "Encuentra el punto máximo de $$f(x) = -x^2 + 4x - 1$$",
+                type: "input",
+                answer: "2",
+                hint: "Deriva e iguala a cero"
+            },
+            {
+                category: "Razón de Cambio",
+                question: "Si $$s(t) = t^3 - 3t^2$$" + " representa la posición de un objeto, ¿cuál es su velocidad cuando t = 2?",
+                type: "input",
+                answer: "6",
+                hint: "La velocidad es la primera derivada"
+            },
+            // Integrales Básicas
+            {
+                category: "Integrales Básicas",
+                question: "Calcula $$\\int x^2 dx$$",
+                type: "input",
+                answer: "x^3/3+C",
+                hint: "Aumenta el exponente en uno y divide"
+            },
+            {
+                category: "Integración por Partes",
+                question: "Calcula $$\\int x\\sin(x) dx$$",
+                type: "multiple",
+                options: [
+                    "-x cos(x) + sin(x) + C",
+                    "x sin(x) - cos(x) + C",
+                    "x cos(x) + sin(x) + C",
+                    "-x sin(x) + cos(x) + C"
+                ],
+                correct: 0
+            },
+            // Aplicaciones de Integrales
+            {
+                category: "Área Bajo la Curva",
+                question: "Calcula el área bajo la curva $$f(x) = x$$ desde x = 0 hasta x = 2",
+                type: "input",
+                answer: "2",
+                hint: "Usa la integral definida"
+            },
+            {
+                category: "Volumen de Revolución",
+                question: "Al rotar $$y = \\sqrt{x}$$ alrededor del eje x desde 0 a 1, ¿qué método usarías?",
+                type: "multiple",
+                options: [
+                    "Discos",
+                    "Arandelas",
+                    "Capas cilíndricas",
+                    "Cualquiera de los anteriores"
+                ],
+                correct: 0
+            },
+            // Temas Avanzados
+            {
+                category: "Series",
+                question: "¿Converge la serie $$\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$$?",
+                type: "multiple",
+                options: [
+                    "Sí, a π²/6",
+                    "No converge",
+                    "Sí, a 1",
+                    "Sí, a 2"
+                ],
+                correct: 0
+            },
+            {
+                category: "Teorema Fundamental",
+                question: "Si $$F(x) = \\int_0^x t^2 dt$$, ¿cuál es F'(x)?",
+                type: "input",
+                answer: "x^2",
+                hint: "Usa el Teorema Fundamental del Cálculo"
+            },
+            {
+                category: "Límites Avanzados",
+                question: "Calcula $$\\lim_{x \\to 0} \\frac{\\sin(x)}{x}$$",
+                type: "input",
+                answer: "1",
+                hint: "Este es un límite fundamental"
+            },
+            {
+                category: "Derivadas Parciales",
+                question: "Para $$f(x,y) = x^2y + xy^2$$, calcula $$\\frac{\\partial f}{\\partial x}$$",
+                type: "input",
+                answer: "2xy+y^2",
+                hint: "Deriva respecto a x tratando y como constante"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionDiv = document.getElementById('questions');
+            const question = questions[currentQuestion];
+
+            let html = `
+                <div class="question-card">
+                    <div class="category-tag">${question.category}</div>
+                    <div class="math">${question.question}</div>
+            `;
+
+            if (question.type === 'multiple') {
+                html += `<div class="options">`;
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="checkAnswer(${index})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            } else {
+                html += `
+                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
+                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                `;
+            }
+
+            html += `<div class="feedback" id="feedback"></div>`;
+            questionDiv.innerHTML = html;
+
+            // Actualizar progreso
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Renderizar fórmulas matemáticas
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        function checkAnswer(selectedOption = null) {
+            const question = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (question.type === 'multiple') {
+                isCorrect = selectedOption === question.correct;
+            } else {
+                const userAnswer = document.getElementById('user-answer').value.trim().toLowerCase()
+                    .replace(/\s+/g, '')
+                    .replace(/[*]/g, '')
+                    .replace(/[()]/g, '');
+                const correctAnswer = question.answer.toLowerCase()
+                    .replace(/\s+/g, '')
+                    .replace(/[*]/g, '')
+                    .replace(/[()]/g, '');
+                isCorrect = userAnswer === correctAnswer;
+            }
+
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = isCorrect ? 
+                '¡Correcto!' : 
+                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+
+            if (isCorrect) score++;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const questionDiv = document.getElementById('questions');
+            const percentage = (score / questions.length) * 100;
+            
+            questionDiv.innerHTML = `
+                <div class="question-card">
+                    <h2>Resultados Finales</h2>
+                    <p>Has completado la prueba de cálculo.</p>
+                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
+                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
+                </div>
+            `;
+
+            document.getElementById('next-button').style.display = 'none';
+        }
+
+        // Iniciar prueba
+        loadQuestion();
+    </script>
+</body>
+</html>

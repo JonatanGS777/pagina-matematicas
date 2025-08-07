@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Posiciones en Vivo - Competencias Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            --gradient-silver: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+            --gradient-bronze: linear-gradient(135deg, #cd7f32 0%, #daa520 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .refresh-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--success);
+            color: var(--white);
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.3);
+        }
+
+        /* Live Status */
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--danger);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--white);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 0;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding-top: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Hero Stats */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Leaderboard Container */
+        .leaderboard-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Main Leaderboard */
+        .leaderboard-main {
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .leaderboard-header {
+            background: var(--gradient-main);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .leaderboard-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .leaderboard-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            padding: 2rem;
+            gap: 1rem;
+        }
+
+        .podium-place {
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .podium-place:hover {
+            transform: translateY(-10px);
+        }
+
+        .podium-place.first {
+            order: 2;
+        }
+
+        .podium-place.second {
+            order: 1;
+        }
+
+        .podium-place.third {
+            order: 3;
+        }
+
+        .podium-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--white);
+            font-weight: 700;
+            position: relative;
+        }
+
+        .podium-place.first .podium-avatar {
+            background: var(--gradient-gold);
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
+        }
+
+        .podium-place.second .podium-avatar {
+            background: var(--gradient-silver);
+            color: var(--dark);
+        }
+
+        .podium-place.third .podium-avatar {
+            background: var(--gradient-bronze);
+        }
+
+        .podium-crown {
+            position: absolute;
+            top: -10px;
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+
+        .podium-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .podium-school {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .podium-score {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        /* Detailed Rankings */
+        .rankings-table {
+            padding: 0;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .ranking-item:hover {
+            background: var(--light);
+            transform: translateX(10px);
+        }
+
+        .ranking-item.highlight {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
+            border-left: 4px solid var(--primary);
+        }
+
+        .rank-position {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .rank-change {
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .rank-change.up {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .rank-change.down {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        .rank-change.same {
+            background: rgba(113, 128, 150, 0.2);
+            color: var(--text-secondary);
+        }
+
+        .participant-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-main);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .participant-details {
+            flex: 1;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            font-size: 1.1rem;
+        }
+
+        .participant-info {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .participant-score-section {
+            text-align: right;
+            min-width: 120px;
+        }
+
+        .participant-total-score {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .score-breakdown {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .area-score {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .area-score.algebra { background: rgba(255, 107, 107, 0.2); color: #e53e3e; }
+        .area-score.geometry { background: rgba(78, 205, 196, 0.2); color: #319795; }
+        .area-score.calculus { background: rgba(102, 126, 234, 0.2); color: #5a67d8; }
+        .area-score.trigonometry { background: rgba(240, 147, 251, 0.2); color: #d53f8c; }
+        .area-score.mental-calc { background: rgba(168, 85, 247, 0.2); color: #805ad5; }
+        .area-score.puzzles { background: rgba(245, 158, 11, 0.2); color: #d69e2e; }
+
+        /* Sidebar */
+        .leaderboard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .sidebar-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Area Performance */
+        .area-performance {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .area-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .area-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .area-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .area-icon-small {
+            font-size: 1.5rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .area-stats-right {
+            text-align: right;
+        }
+
+        .area-average {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .area-participants {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            transform: translateX(5px);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--success);
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        /* Records */
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .record-label {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .record-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .leaderboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .podium {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .podium-place {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            .ranking-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1.5rem 1rem;
+            }
+            
+            .participant-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .nav-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .navbar {
+                padding: 1rem;
+            }
+        }
+
+        /* Animation for position changes */
+        .position-change {
+            animation: positionHighlight 2s ease-in-out;
+        }
+
+        @keyframes positionHighlight {
+            0%, 100% { background: transparent; }
+            50% { background: linear-gradient(135deg, rgba(78, 205, 196, 0.3), rgba(102, 126, 234, 0.3)); }
+        }
+
+        /* New record alert */
+        .new-record {
+            animation: recordGlow 3s ease-in-out;
+        }
+
+        @keyframes recordGlow {
+            0%, 100% { box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); }
+            50% { box-shadow: 0 8px 32px 0 rgba(255, 215, 0, 0.6); }
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Waiting timer animation */
+        @keyframes waitingPulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-trophy"></i>
+                Tabla de Posiciones en Vivo
+            </a>
+            
+            <div class="nav-controls">
+                <div class="live-status">
+                    <div class="live-dot"></div>
+                    EN VIVO
+                </div>
+                
+                <button class="refresh-btn" onclick="refreshLeaderboard()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span class="loading" id="refreshLoading" style="display: none;"></span>
+                    <span id="refreshText">Actualizar</span>
+                </button>
+
+                <button class="refresh-btn" onclick="startCompetitionTimer()" style="background: var(--primary); margin-left: 0.5rem;">
+                    <i class="fas fa-play"></i>
+                    Iniciar Timer
+                </button>
+
+                <button class="refresh-btn" onclick="resetCompetition()" style="background: var(--text-secondary); margin-left: 0.5rem; font-size: 0.8rem; opacity: 0.7;">
+                    <i class="fas fa-cog"></i>
+                    Admin
+                </button>
+                
+                <a href="competencias.html" class="nav-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Competencias
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Stats -->
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="totalParticipants">0</div>
+                    <div class="stat-label">Participantes Activos</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-number" id="timeRemaining">01:45:23</div>
+                    <div class="stat-label">Tiempo Restante</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number" id="averageScore">0</div>
+                    <div class="stat-label">Puntuación Promedio</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <div class="stat-number" id="topScore">0</div>
+                    <div class="stat-label">Puntuación Máxima</div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Container -->
+            <div class="leaderboard-container">
+                <!-- Main Leaderboard -->
+                <div class="leaderboard-main">
+                    <div class="leaderboard-header">
+                        <h2 class="leaderboard-title">
+                            <i class="fas fa-crown"></i>
+                            Tabla de Posiciones
+                        </h2>
+                        <p class="leaderboard-subtitle">Actualización automática cada 10 segundos</p>
+                    </div>
+
+                    <!-- Podium -->
+                    <div class="podium">
+                        <div class="podium-place second">
+                            <div class="podium-avatar" id="podium2Avatar">2</div>
+                            <div class="podium-name" id="podium2Name">-</div>
+                            <div class="podium-school" id="podium2School">-</div>
+                            <div class="podium-score" id="podium2Score">0 pts</div>
+                        </div>
+
+                        <div class="podium-place first">
+                            <div class="podium-avatar" id="podium1Avatar">
+                                <div class="podium-crown">👑</div>
+                                1
+                            </div>
+                            <div class="podium-name" id="podium1Name">-</div>
+                            <div class="podium-school" id="podium1School">-</div>
+                            <div class="podium-score" id="podium1Score">0 pts</div>
+                        </div>
+
+                        <div class="podium-place third">
+                            <div class="podium-avatar" id="podium3Avatar">3</div>
+                            <div class="podium-name" id="podium3Name">-</div>
+                            <div class="podium-school" id="podium3School">-</div>
+                            <div class="podium-score" id="podium3Score">0 pts</div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Rankings -->
+                    <div class="rankings-table" id="rankingsTable">
+                        <!-- Rankings will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="leaderboard-sidebar">
+                    <!-- Area Performance -->
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Rendimiento por Área
+                        </h3>
+                        <div class="area-performance" id="areaPerformance">
+                            <!-- Area stats will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-bolt"></i>
+                            Actividad Reciente
+                        </h3>
+                        <div class="activity-list" id="activityList">
+                            <!-- Recent activity will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Records -->
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-medal"></i>
+                            Récords de Hoy
+                        </h3>
+                        <div class="record-item">
+                            <span class="record-label">Mejor Tiempo</span>
+                            <span class="record-value" id="bestTime">--:--</span>
+                        </div>
+                        <div class="record-item">
+                            <span class="record-label">Racha Máxima</span>
+                            <span class="record-value" id="bestStreak">0</span>
+                        </div>
+                        <div class="record-item">
+                            <span class="record-label">Más Activo</span>
+                            <span class="record-value" id="mostActive">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Live Leaderboard Management System
+        class LiveLeaderboard {
+            constructor() {
+                this.participants = [];
+                this.areas = ['algebra', 'geometry', 'calculus', 'trigonometry', 'mental-calc', 'puzzles'];
+                this.areaNames = {
+                    'algebra': 'Álgebra',
+                    'geometry': 'Geometría',
+                    'calculus': 'Cálculo',
+                    'trigonometry': 'Trigonometría',
+                    'mental-calc': 'Cálculo Mental',
+                    'puzzles': 'Acertijos'
+                };
+                this.areaIcons = {
+                    'algebra': 'fas fa-square-root-alt',
+                    'geometry': 'fas fa-shapes',
+                    'calculus': 'fas fa-infinity',
+                    'trigonometry': 'fas fa-wave-square',
+                    'mental-calc': 'fas fa-brain',
+                    'puzzles': 'fas fa-puzzle-piece'
+                };
+                this.recentActivity = [];
+                this.competitionData = null;
+                this.timeRemaining = 7200; // Default 2 hours
+                this.timerActive = false; // Timer starts in standby mode
+                this.updateInterval = null;
+                this.activityInterval = null;
+                
+                this.init();
+            }
+
+            init() {
+                this.loadRealParticipants();
+                this.loadRealActivity();
+                this.loadCompetitionTimer();
+                this.updateLeaderboard();
+                this.updateRecentActivity();
+                this.startTimer();
+                this.startAutoUpdate();
+                this.updateAreaPerformance();
+                this.updateRecords();
+                this.setupStorageListener();
+            }
+
+            loadCompetitionTimer() {
+                // Load real competition timer data
+                const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"duration":7200}');
+                this.competitionData = competitionData;
+                
+                if (competitionData.timerStarted && competitionData.startTime) {
+                    // Competition timer has been started by professor
+                    const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                    this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                    this.timerActive = true;
+                } else {
+                    // Competition hasn't started yet - timer in standby
+                    this.timeRemaining = competitionData.duration || 7200;
+                    this.timerActive = false;
+                }
+                
+                // Update timer button state
+                this.updateTimerButtonState();
+            }
+
+            updateTimerButtonState() {
+                // Update start timer button based on competition state
+                const startButton = document.querySelector('[onclick="startCompetitionTimer()"]');
+                if (startButton) {
+                    if (this.competitionData.timerStarted) {
+                        startButton.innerHTML = '<i class="fas fa-check"></i> Timer Iniciado';
+                        startButton.style.background = 'var(--success)';
+                        startButton.disabled = true;
+                    } else {
+                        startButton.innerHTML = '<i class="fas fa-play"></i> Iniciar Timer';
+                        startButton.style.background = 'var(--primary)';
+                        startButton.disabled = false;
+                    }
+                }
+            }
+
+            loadRealParticipants() {
+                // Load real competition data from localStorage
+                const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+                this.competitionData = competitionData;
+                
+                if (competitionData.participants && competitionData.participants.length > 0) {
+                    // Use real participants
+                    this.participants = competitionData.participants
+                        .filter(p => p.isActive && p.totalScore >= 0)
+                        .map((participant, index) => ({
+                            ...participant,
+                            previousRank: participant.currentRank || index + 1,
+                            currentRank: index + 1,
+                            streak: participant.streak || 0
+                        }));
+                    
+                    // Sort by total score
+                    this.participants.sort((a, b) => b.totalScore - a.totalScore);
+                    
+                    // Update current ranks
+                    this.participants.forEach((participant, index) => {
+                        participant.currentRank = index + 1;
+                    });
+                } else {
+                    // No real participants yet, show message
+                    this.participants = [];
+                    this.showNoParticipantsMessage();
+                }
+            }
+
+            loadRealActivity() {
+                // Load real recent activity from localStorage
+                const recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+                this.recentActivity = recentActivities.slice(0, 10); // Get last 10 activities
+            }
+
+            showNoParticipantsMessage() {
+                const tableContainer = document.getElementById('rankingsTable');
+                tableContainer.innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; color: var(--primary);"></i>
+                        <h3>Esperando Participantes</h3>
+                        <p>Los participantes aparecerán aquí cuando ingresen con el código de acceso</p>
+                        <p style="margin-top: 1rem; font-size: 0.9rem;">La tabla se actualiza automáticamente cada 5 segundos</p>
+                    </div>
+                `;
+            }
+
+            setupStorageListener() {
+                // Listen for changes in localStorage (from other tabs/windows)
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'mathCompetitionData' || e.key === 'recentActivities') {
+                        this.loadRealParticipants();
+                        this.loadRealActivity();
+                        this.loadCompetitionTimer();
+                        this.updateLeaderboard();
+                        this.updateAreaPerformance();
+                        this.updateRecords();
+                    }
+                });
+
+                // Listen for competition update events from other pages
+                window.addEventListener('competitionUpdate', () => {
+                    this.loadRealParticipants();
+                    this.loadRealActivity();
+                    this.loadCompetitionTimer();
+                    this.updateLeaderboard();
+                    this.updateAreaPerformance();
+                    this.updateRecords();
+                });
+
+                // Listen for competition reset events
+                window.addEventListener('competitionReset', () => {
+                    // Another page has reset the competition, reload this page
+                    location.reload();
+                });
+            }
+
+            updateLeaderboard() {
+                this.updateHeroStats();
+                this.updatePodium();
+                this.updateRankingsTable();
+            }
+
+            updatePodium() {
+                for (let i = 0; i < 3; i++) {
+                    const participant = this.participants[i];
+                    if (participant) {
+                        const avatarText = participant.name.split(' ').map(n => n[0]).join('');
+                        
+                        document.getElementById(`podium${i + 1}Avatar`).innerHTML = 
+                            i === 0 ? '<div class="podium-crown">👑</div>' + avatarText : avatarText;
+                        document.getElementById(`podium${i + 1}Name`).textContent = participant.name;
+                        document.getElementById(`podium${i + 1}School`).textContent = participant.school;
+                        document.getElementById(`podium${i + 1}Score`).textContent = `${participant.totalScore} pts`;
+                    } else {
+                        // No participant for this position
+                        document.getElementById(`podium${i + 1}Avatar`).innerHTML = i === 0 ? 
+                            '<div class="podium-crown">👑</div>?' : '?';
+                        document.getElementById(`podium${i + 1}Name`).textContent = 'Esperando...';
+                        document.getElementById(`podium${i + 1}School`).textContent = 'Participante';
+                        document.getElementById(`podium${i + 1}Score`).textContent = '0 pts';
+                    }
+                }
+            }
+
+            updateHeroStats() {
+                const totalParticipants = this.participants.length;
+                
+                if (totalParticipants === 0) {
+                    document.getElementById('totalParticipants').textContent = '0';
+                    document.getElementById('averageScore').textContent = '0';
+                    document.getElementById('topScore').textContent = '0';
+                    return;
+                }
+
+                const averageScore = Math.round(
+                    this.participants.reduce((sum, p) => sum + p.totalScore, 0) / totalParticipants
+                );
+                const topScore = Math.max(...this.participants.map(p => p.totalScore));
+
+                document.getElementById('totalParticipants').textContent = totalParticipants;
+                document.getElementById('averageScore').textContent = averageScore;
+                document.getElementById('topScore').textContent = topScore;
+            }
+
+            updateRankingsTable() {
+                const tableContainer = document.getElementById('rankingsTable');
+                
+                if (this.participants.length === 0) {
+                    this.showNoParticipantsMessage();
+                    return;
+                }
+
+                tableContainer.innerHTML = '';
+
+                this.participants.forEach((participant, index) => {
+                    const rankItem = document.createElement('div');
+                    rankItem.className = 'ranking-item';
+                    if (index < 3) rankItem.classList.add('highlight');
+
+                    const rankChange = this.getRankChange(participant);
+                    const avatarText = participant.name.split(' ').map(n => n[0]).join('');
+
+                    // Calculate total problems solved
+                    const totalProblems = participant.problemsSolved ? 
+                        Object.values(participant.problemsSolved).reduce((sum, count) => sum + count, 0) : 
+                        participant.totalProblems || 0;
+
+                    // Format last activity time
+                    const lastActivityTime = participant.lastActivity ? 
+                        this.formatTimeAgo(participant.lastActivity) : 'Hace tiempo';
+
+                    rankItem.innerHTML = `
+                        <div class="rank-position">
+                            ${participant.currentRank}
+                            <span class="rank-change ${rankChange.type}">
+                                ${rankChange.icon} ${Math.abs(rankChange.value)}
+                            </span>
+                        </div>
+                        <div class="participant-avatar">${avatarText}</div>
+                        <div class="participant-details">
+                            <div class="participant-name">${participant.name}</div>
+                            <div class="participant-info">
+                                <span><i class="fas fa-school"></i> ${participant.school}</span>
+                                <span><i class="fas fa-fire"></i> Racha: ${participant.streak || 0}</span>
+                                <span><i class="fas fa-tasks"></i> Problemas: ${totalProblems}</span>
+                                <span><i class="fas fa-clock"></i> ${lastActivityTime}</span>
+                            </div>
+                        </div>
+                        <div class="participant-score-section">
+                            <div class="participant-total-score">${participant.totalScore}</div>
+                            <div class="score-breakdown">
+                                ${this.areas.map(area => 
+                                    `<span class="area-score ${area}">${participant.scores[area] || 0}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    `;
+
+                    tableContainer.appendChild(rankItem);
+                });
+            }
+
+            formatTimeAgo(timestamp) {
+                const now = Date.now();
+                const diff = Math.floor((now - timestamp) / 1000);
+                
+                if (diff < 60) return 'Hace unos segundos';
+                if (diff < 3600) return `Hace ${Math.floor(diff / 60)} min`;
+                if (diff < 86400) return `Hace ${Math.floor(diff / 3600)} h`;
+                return `Hace ${Math.floor(diff / 86400)} días`;
+            }
+
+            getRankChange(participant) {
+                const change = participant.previousRank - participant.currentRank;
+                if (change > 0) {
+                    return { type: 'up', icon: '↑', value: change };
+                } else if (change < 0) {
+                    return { type: 'down', icon: '↓', value: change };
+                } else {
+                    return { type: 'same', icon: '−', value: 0 };
+                }
+            }
+
+            updateRecentActivity() {
+                const activityContainer = document.getElementById('activityList');
+                activityContainer.innerHTML = '';
+
+                if (this.recentActivity.length === 0) {
+                    activityContainer.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <p>No hay actividad reciente</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">La actividad aparecerá cuando los participantes resuelvan problemas</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                this.recentActivity.slice(0, 6).forEach(activity => {
+                    const activityItem = document.createElement('div');
+                    activityItem.className = 'activity-item';
+
+                    const timeAgo = this.formatTimeAgo(activity.time);
+                    const areaName = this.areaNames[activity.area] || activity.area;
+                    const difficultyColor = activity.difficulty === 'hard' ? '#ff6b6b' : 
+                                          activity.difficulty === 'medium' ? '#ffe066' : '#4ecdc4';
+
+                    activityItem.innerHTML = `
+                        <div class="activity-icon" style="background: ${difficultyColor};">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-text">
+                                <strong>${activity.participant}</strong> ganó ${activity.points} pts en ${areaName}
+                                ${activity.difficulty ? `<span style="font-size: 0.8em; color: ${difficultyColor};">(${activity.difficulty})</span>` : ''}
+                            </div>
+                            <div class="activity-time">${timeAgo}</div>
+                        </div>
+                    `;
+
+                    activityContainer.appendChild(activityItem);
+                });
+            }
+
+            updateAreaPerformance() {
+                const areaContainer = document.getElementById('areaPerformance');
+                areaContainer.innerHTML = '';
+
+                if (this.participants.length === 0) {
+                    areaContainer.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            <i class="fas fa-chart-bar" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <p>Sin datos de rendimiento</p>
+                            <p style="font-size: 0.8rem;">Los datos aparecerán cuando haya participantes activos</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                this.areas.forEach(area => {
+                    const areaScores = this.participants
+                        .map(p => p.scores[area] || 0)
+                        .filter(score => score > 0);
+                    
+                    const average = areaScores.length > 0 ? 
+                        Math.round(areaScores.reduce((sum, score) => sum + score, 0) / areaScores.length) : 0;
+                    
+                    const participantsCount = areaScores.length;
+
+                    const areaItem = document.createElement('div');
+                    areaItem.className = 'area-item';
+
+                    areaItem.innerHTML = `
+                        <div class="area-info">
+                            <i class="${this.areaIcons[area]} area-icon-small"></i>
+                            <span>${this.areaNames[area]}</span>
+                        </div>
+                        <div class="area-stats-right">
+                            <div class="area-average">${average} pts</div>
+                            <div class="area-participants">${participantsCount} participantes</div>
+                        </div>
+                    `;
+
+                    areaContainer.appendChild(areaItem);
+                });
+            }
+
+            updateRecords() {
+                if (this.participants.length === 0) {
+                    document.getElementById('bestTime').textContent = '--:--';
+                    document.getElementById('bestStreak').textContent = '0';
+                    document.getElementById('mostActive').textContent = '-';
+                    return;
+                }
+
+                // Calculate real records
+                const bestTime = '02:34'; // This would need real timing data
+                const bestStreak = Math.max(...this.participants.map(p => p.streak || 0));
+                
+                const mostActiveParticipant = this.participants.reduce((prev, current) => {
+                    const prevProblems = prev.problemsSolved ? 
+                        Object.values(prev.problemsSolved).reduce((sum, count) => sum + count, 0) : prev.totalProblems || 0;
+                    const currentProblems = current.problemsSolved ? 
+                        Object.values(current.problemsSolved).reduce((sum, count) => sum + count, 0) : current.totalProblems || 0;
+                    
+                    return currentProblems > prevProblems ? current : prev;
+                }, this.participants[0]);
+
+                document.getElementById('bestTime').textContent = bestTime;
+                document.getElementById('bestStreak').textContent = bestStreak;
+                document.getElementById('mostActive').textContent = mostActiveParticipant ? 
+                    mostActiveParticipant.name.split(' ')[0] : '-';
+            }
+
+            startTimer() {
+                // Update timer display immediately
+                this.updateTimerDisplay();
+                
+                setInterval(() => {
+                    // Recalculate time based on competition data
+                    if (this.competitionData && this.competitionData.timerStarted && this.competitionData.startTime) {
+                        const elapsed = Math.floor((Date.now() - this.competitionData.startTime) / 1000);
+                        this.timeRemaining = Math.max(0, this.competitionData.duration - elapsed);
+                        this.timerActive = true;
+                    } else {
+                        // Timer not started yet by professor
+                        this.timerActive = false;
+                        // Keep showing full time
+                        this.timeRemaining = this.competitionData ? this.competitionData.duration : 7200;
+                    }
+                    
+                    this.updateTimerDisplay();
+                    
+                    if (this.timerActive && this.timeRemaining <= 0) {
+                        alert('¡Competencia finalizada!');
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                const hours = Math.floor(this.timeRemaining / 3600);
+                const minutes = Math.floor((this.timeRemaining % 3600) / 60);
+                const seconds = this.timeRemaining % 60;
+                
+                const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                const timerElement = document.getElementById('timeRemaining');
+                
+                if (timerElement) {
+                    if (!this.timerActive && !this.competitionData.timerStarted) {
+                        // Timer not started yet - show waiting state
+                        timerElement.textContent = '⏳ ' + display;
+                        timerElement.style.color = '#ffa726';
+                        timerElement.style.animation = 'waitingPulse 2s infinite';
+                    } else {
+                        // Timer is active
+                        timerElement.textContent = display;
+                        timerElement.style.animation = 'none';
+                        timerElement.style.color = '#4ecdc4';
+                    }
+                }
+            }
+
+            startAutoUpdate() {
+                // Update every 5 seconds with real data
+                this.updateInterval = setInterval(() => {
+                    this.loadRealParticipants();
+                    this.loadRealActivity();
+                    this.loadCompetitionTimer();
+                    this.updateLeaderboard();
+                    this.updateAreaPerformance();
+                    this.updateRecords();
+                    this.updateRecentActivity();
+                }, 5000);
+            }
+
+            refreshLeaderboard() {
+                const refreshBtn = document.getElementById('refreshText');
+                const loadingIcon = document.getElementById('refreshLoading');
+                
+                refreshBtn.style.display = 'none';
+                loadingIcon.style.display = 'inline-block';
+                
+                setTimeout(() => {
+                    // Reload real data
+                    this.loadRealParticipants();
+                    this.loadRealActivity();
+                    this.loadCompetitionTimer();
+                    this.updateLeaderboard();
+                    this.updateAreaPerformance();
+                    this.updateRecords();
+                    this.updateRecentActivity();
+                    
+                    refreshBtn.style.display = 'inline';
+                    loadingIcon.style.display = 'none';
+                }, 800);
+            }
+        }
+
+        // Initialize the live leaderboard
+        const liveLeaderboard = new LiveLeaderboard();
+
+        // Global functions
+        function refreshLeaderboard() {
+            liveLeaderboard.refreshLeaderboard();
+        }
+
+        // Start competition timer (Professor only)
+        function startCompetitionTimer() {
+            // Professor access code verification
+            const accessCode = prompt(
+                '🎯 INICIAR CRONÓMETRO - SOLO PROFESOR 🎯\n\n' +
+                'Ingresa el código de acceso del profesor para iniciar el timer:'
+            );
+            
+            // Professor codes
+            const validProfessorCodes = ['PROF2024', 'RESET123', 'TEACHER01'];
+            
+            if (!accessCode || !validProfessorCodes.includes(accessCode.toUpperCase())) {
+                alert('❌ Código incorrecto.\n\nSolo el profesor puede iniciar el cronómetro.');
+                return;
+            }
+            
+            // Check if there are participants
+            const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+            const activeParticipants = competitionData.participants.filter(p => p.isActive).length;
+            
+            if (activeParticipants === 0) {
+                alert('⚠️ No hay participantes registrados.\n\nEspera a que al menos un estudiante ingrese antes de iniciar el timer.');
+                return;
+            }
+            
+            const confirmStart = confirm(
+                `🚀 INICIAR COMPETENCIA 🚀\n\n` +
+                `Participantes listos: ${activeParticipants}\n` +
+                `Duración: 2 horas\n\n` +
+                `¿Iniciar el cronómetro ahora?\n\n` +
+                `⚠️ Una vez iniciado, el tiempo no se puede pausar.`
+            );
+            
+            if (confirmStart) {
+                // Start the competition timer
+                competitionData.timerStarted = true;
+                competitionData.startTime = Date.now();
+                competitionData.endTime = Date.now() + (competitionData.duration * 1000);
+                competitionData.isActive = true;
+                competitionData.lastUpdate = Date.now();
+                
+                localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
+                
+                // Update leaderboard instance
+                liveLeaderboard.competitionData = competitionData;
+                liveLeaderboard.timerActive = true;
+                liveLeaderboard.updateTimerButtonState();
+                
+                // Trigger update event for all pages
+                window.dispatchEvent(new CustomEvent('competitionUpdate', {
+                    detail: competitionData
+                }));
+                
+                alert('✅ ¡Cronómetro iniciado!\n\nLa competencia ha comenzado oficialmente.\nTodos los participantes han sido notificados.');
+            }
+        }
+
+        // Reset entire competition
+        function resetCompetition() {
+            // Professor access code verification
+            const accessCode = prompt(
+                '🔒 ACCESO RESTRINGIDO - SOLO PROFESOR 🔒\n\n' +
+                'Ingresa el código de acceso del profesor para reiniciar:'
+            );
+            
+            // Professor codes (you can change these)
+            const validProfessorCodes = ['PROF2024', 'RESET123', 'TEACHER01'];
+            
+            if (!accessCode || !validProfessorCodes.includes(accessCode.toUpperCase())) {
+                alert('❌ Código incorrecto.\n\nSolo el profesor puede reiniciar la competencia.');
+                return;
+            }
+            
+            const confirmReset = confirm(
+                '⚠️ ADVERTENCIA ⚠️\n\n' +
+                'Esto eliminará TODOS los datos de la competencia:\n' +
+                '• Todos los participantes\n' +
+                '• Todas las puntuaciones\n' +
+                '• Toda la actividad reciente\n\n' +
+                '¿Estás seguro de que quieres REINICIAR la competencia?'
+            );
+            
+            if (confirmReset) {
+                const doubleConfirm = confirm(
+                    '🔥 ÚLTIMA CONFIRMACIÓN 🔥\n\n' +
+                    'Esta acción NO se puede deshacer.\n' +
+                    'Se perderán todos los datos permanentemente.\n\n' +
+                    '¿Continuar con el REINICIO COMPLETO?'
+                );
+                
+                if (doubleConfirm) {
+                    // Clear all competition data
+                    localStorage.removeItem('mathCompetitionData');
+                    localStorage.removeItem('recentActivities');
+                    localStorage.removeItem('currentParticipant');
+                    
+                    // Trigger update event for other pages before reload
+                    window.dispatchEvent(new CustomEvent('competitionReset', {
+                        detail: { action: 'reset', timestamp: Date.now() }
+                    }));
+                    
+                    // Show success message
+                    alert('✅ Competencia reiniciada exitosamente.\n\nTodos los datos han sido eliminados.\nLa página se recargará automáticamente.');
+                    
+                    // Reload page
+                    location.reload();
+                }
+            }
+        }
+
+        // Auto-refresh page every 5 minutes to prevent memory issues
+        setTimeout(() => {
+            location.reload();
+        }, 300000);
+    </script>
+</body>
+</html>

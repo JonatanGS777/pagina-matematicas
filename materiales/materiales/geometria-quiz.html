@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Geometría</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #1a1a2e;
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .figure-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 1rem auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .figure-container svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-color);
+            margin-top: 1rem;
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .correct {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Prueba de Geometría</h1>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p>Pregunta <span id="current-question">1</span> de 10</p>
+        </div>
+
+        <div id="questions"></div>
+
+        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                category: "Figuras Básicas",
+                question: "¿Qué figura geométrica es esta?",
+                type: "multiple",
+                svg: `<svg viewBox="0 0 100 100">
+                    <polygon points="50,10 90,90 10,90" fill="#3498db"/>
+                </svg>`,
+                options: ["Triángulo", "Cuadrado", "Pentágono", "Rectángulo"],
+                correct: 0
+            },
+            {
+                category: "Perímetro",
+                question: "Calcula el perímetro del rectángulo",
+                type: "input",
+                svg: `<svg viewBox="0 0 120 80">
+                    <rect x="10" y="10" width="100" height="60" fill="#3498db"/>
+                    <text x="60" y="45" font-size="12" fill="white" text-anchor="middle">Base: 10</text>
+                    <text x="30" y="80" font-size="12" fill="white">Altura: 6</text>
+                </svg>`,
+                answer: "32",
+                hint: "Perímetro = 2(base + altura)"
+            },
+            {
+                category: "Círculo",
+                question: "¿Cuál es el radio del círculo si el diámetro es 8 unidades?",
+                type: "input",
+                svg: `<svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="#3498db"/>
+                    <line x1="10" y1="50" x2="90" y2="50" stroke="white" stroke-width="1"/>
+                    <text x="50" y="45" font-size="10" fill="white" text-anchor="middle">D = 8</text>
+                </svg>`,
+                answer: "4",
+                hint: "Radio = Diámetro/2"
+            },
+			{
+			    category: "Figuras Tridimensionales",
+			    question: "¿Cuántas caras tiene este cubo?",
+			    type: "input",
+			    svg: `<svg viewBox="0 0 100 100">
+			        <!-- Cara frontal -->
+			        <path d="M20,20 L20,80 L80,80 L80,20 Z" fill="#3498db" stroke="white"/>
+        
+			        <!-- Cara superior -->
+			        <path d="M20,20 L35,5 L95,5 L80,20 Z" fill="#2980b9" stroke="white"/>
+        
+			        <!-- Cara lateral -->
+			        <path d="M80,20 L95,5 L95,65 L80,80 Z" fill="#1f618d" stroke="white"/>
+        
+			        <!-- Líneas ocultas (punteadas) -->
+			        <path d="M35,5 L35,65 L95,65" stroke="white" stroke-dasharray="2,2" fill="none"/>
+        
+			        <!-- Aristas principales -->
+			        <path d="M20,20 L80,20 L80,80 L20,80 Z" stroke="white" fill="none"/>
+        
+			        <!-- Etiquetas -->
+			        <text x="50" y="50" fill="white" text-anchor="middle" font-size="8">CUBO</text>
+			    </svg>`,
+			    answer: "6",
+			    hint: "Cuenta todas las caras, incluyendo las no visibles"
+			},
+            {
+                category: "Teorema de Pitágoras",
+                question: "En un triángulo rectángulo, si los catetos miden 3 y 4 unidades, ¿cuánto mide la hipotenusa?",
+                type: "input",
+                svg: `<svg viewBox="0 0 100 100">
+                    <path d="M10,90 L10,40 L60,90 Z" fill="#3498db"/>
+                    <text x="5" y="65" font-size="10" fill="white">3</text>
+                    <text x="35" y="95" font-size="10" fill="white">4</text>
+                    <text x="40" y="60" font-size="10" fill="white">?</text>
+                </svg>`,
+                answer: "5",
+                hint: "a² + b² = c²"
+            },
+            {
+                category: "Ángulos",
+                question: "¿Cuál es el ángulo complementario de 35°?",
+                type: "input",
+                svg: `<svg viewBox="0 0 100 100">
+                    <path d="M10,90 L10,10 L90,90" fill="none" stroke="#3498db" stroke-width="2"/>
+                    <path d="M10,90 A 80 80 0 0 1 10 35" fill="#3498db" fill-opacity="0.3"/>
+                    <text x="30" y="70" font-size="12" fill="white">35°</text>
+                </svg>`,
+                answer: "55",
+                hint: "Los ángulos complementarios suman 90°"
+            },
+            {
+                category: "Figuras Básicas",
+                question: "¿Cuántos lados tiene este polígono?",
+                type: "input",
+                svg: `<svg viewBox="0 0 100 100">
+                    <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill="#3498db"/>
+                </svg>`,
+                answer: "6",
+                hint: "Cuenta los vértices o lados"
+            },
+            {
+                category: "Círculo",
+                question: "Identifica la parte sombreada del círculo",
+                type: "multiple",
+                svg: `<svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#3498db" stroke-width="2"/>
+                    <path d="M50,50 L90,50 A 40 40 0 0 1 50,90 Z" fill="#3498db"/>
+                </svg>`,
+                options: ["Sector circular", "Segmento circular", "Arco", "Radio"],
+                correct: 0
+            },
+            {
+                category: "Ángulos",
+                question: "¿Cuál es el ángulo suplementario de 120°?",
+                type: "input",
+                svg: `<svg viewBox="0 0 100 100">
+                    <path d="M10,90 L90,90 L90,10" fill="none" stroke="#3498db" stroke-width="2"/>
+                    <path d="M90,90 A 80 80 0 0 0 30 90" fill="#3498db" fill-opacity="0.3"/>
+                    <text x="60" y="70" font-size="12" fill="white">120°</text>
+                </svg>`,
+                answer: "60",
+                hint: "Los ángulos suplementarios suman 180°"
+            },
+			{
+			    category: "Figuras Tridimensionales",
+			    question: "¿Cuántas aristas tiene una pirámide cuadrangular?",
+			    type: "input",
+			    svg: `<svg viewBox="0 0 100 100">
+			        <!-- Base -->
+			        <path d="M20,80 L80,80 L80,20 L20,20 Z" fill="#3498db" stroke="white"/>
+        
+			        <!-- Caras laterales -->
+			        <path d="M20,20 L50,5 L80,20" fill="#2980b9" stroke="white"/>
+			        <path d="M50,5 L80,20 L80,80" fill="#1f618d" stroke="white"/>
+			        <path d="M50,5 L20,20 L20,80" fill="#2980b9" stroke="white" stroke-dasharray="2,2"/>
+        
+			        <!-- Aristas -->
+			        <path d="M50,5 L50,80" stroke="white" stroke-dasharray="2,2" fill="none"/>
+        
+			        <!-- Etiquetas -->
+			        <text x="50" y="50" fill="white" text-anchor="middle" font-size="8">PIRÁMIDE</text>
+			    </svg>`,
+			    answer: "8",
+			    hint: "Suma las aristas de la base (4) y las que van al vértice superior (4)"
+			}
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionDiv = document.getElementById('questions');
+            const question = questions[currentQuestion];
+
+            let html = `
+                <div class="question-card">
+                    <h2>${question.category}</h2>
+                    <p>${question.question}</p>
+                    ${question.svg ? `<div class="figure-container">${question.svg}</div>` : ''}
+            `;
+
+            if (question.type === 'multiple') {
+                html += `<div class="options">`;
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="checkAnswer(${index})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            } else {
+                html += `
+                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
+                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                `;
+            }
+
+            html += `<div class="feedback" id="feedback"></div>`;
+            questionDiv.innerHTML = html;
+
+            // Actualizar progreso
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+        }
+
+        function checkAnswer(selectedOption = null) {
+            const question = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (question.type === 'multiple') {
+                isCorrect = selectedOption === question.correct;
+            } else {
+                const userAnswer = document.getElementById('user-answer').value.trim();
+                isCorrect = userAnswer === question.answer;
+            }
+
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = isCorrect ? 
+                '¡Correcto!' : 
+                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+
+            if (isCorrect) score++;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const questionDiv = document.getElementById('questions');
+            const percentage = (score / questions.length) * 100;
+            
+            questionDiv.innerHTML = `
+                <div class="question-card">
+                    <h2>Resultados Finales</h2>
+                    <p>Has completado la prueba de geometría.</p>
+                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
+                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
+                </div>
+            `;
+
+            document.getElementById('next-button').style.display = 'none';
+        }
+
+        // Iniciar prueba
+        loadQuestion();
+    </script>
+</body>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Ecuaciones Lineales</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --background-light: #f8f9fa;
+            --text-dark: #2b2d42;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .question {
+            background: var(--background-light);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #3651d4;
+        }
+
+        #resultado {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2b2d42;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-equals"></i> Ecuaciones Lineales</h1>
+        
+        <form id="examenForm">
+            <!-- Ecuaciones de un paso -->
+            <div class="question">
+                <p>1. Resuelve: \(x + 5 = 12\)</p>
+                <input type="text" name="q1" placeholder="x = ?" data-respuesta="7">
+            </div>
+
+            <div class="question">
+                <p>2. Resuelve: \(3x = 15\)</p>
+                <input type="text" name="q2" placeholder="x = ?" data-respuesta="5">
+            </div>
+
+            <div class="question">
+                <p>3. Resuelve: \(x - 8 = -3\)</p>
+                <input type="text" name="q3" placeholder="x = ?" data-respuesta="5">
+            </div>
+
+            <!-- Ecuaciones de dos pasos -->
+            <div class="question">
+                <p>4. Resuelve: \(2x + 3 = 11\)</p>
+                <input type="text" name="q4" placeholder="x = ?" data-respuesta="4">
+            </div>
+
+            <div class="question">
+                <p>5. Resuelve: \(4x - 7 = 13\)</p>
+                <input type="text" name="q5" placeholder="x = ?" data-respuesta="5">
+            </div>
+
+            <div class="question">
+                <p>6. Resuelve: \(\frac{x}{3} + 4 = 10\)</p>
+                <input type="text" name="q6" placeholder="x = ?" data-respuesta="18">
+            </div>
+
+            <!-- Ecuaciones con variables en ambos lados -->
+            <div class="question">
+                <p>7. Resuelve: \(3x + 2 = x + 10\)</p>
+                <input type="text" name="q7" placeholder="x = ?" data-respuesta="4">
+            </div>
+
+            <div class="question">
+                <p>8. Resuelve: \(5x - 3 = 2x + 9\)</p>
+                <input type="text" name="q8" placeholder="x = ?" data-respuesta="4">
+            </div>
+
+            <div class="question">
+                <p>9. Resuelve: \(\frac{x}{2} + 3 = \frac{x}{4} + 8\)</p>
+                <input type="text" name="q9" placeholder="x = ?" data-respuesta="20">
+            </div>
+
+            <!-- Problemas verbales -->
+            <div class="question">
+                <p>10. La suma de un número y 7 es igual a 23. ¿Cuál es el número?</p>
+                <input type="text" name="q10" placeholder="x = ?" data-respuesta="16">
+            </div>
+
+            <div class="question">
+                <p>11. El triple de un número menos 4 es igual a 20. ¿Cuál es el número?</p>
+                <input type="text" name="q11" placeholder="x = ?" data-respuesta="8">
+            </div>
+
+            <div class="question">
+                <p>12. Un número aumentado en su mitad es igual a 30. ¿Cuál es el número?</p>
+                <input type="text" name="q12" placeholder="x = ?" data-respuesta="20">
+            </div>
+
+            <div class="question">
+                <p>13. Juan tiene el doble de la edad de María. Si la suma de sus edades es 30, ¿cuál es la edad de María?</p>
+                <input type="text" name="q13" placeholder="Edad de María = ?" data-respuesta="10">
+            </div>
+
+            <div class="question">
+                <p>14. El perímetro de un rectángulo es 24 cm. Si el largo es el doble del ancho, ¿cuánto mide el ancho?</p>
+                <input type="text" name="q14" placeholder="Ancho = ?" data-respuesta="4">
+            </div>
+
+            <div class="question">
+                <p>15. En una granja hay gallinas y conejos. Si en total hay 20 cabezas y 56 patas, ¿cuántas gallinas hay?</p>
+                <input type="text" name="q15" placeholder="Número de gallinas = ?" data-respuesta="12">
+            </div>
+
+            <button type="submit">Calificar Examen</button>
+        </form>
+
+        <div id="resultado">
+            <h2>Resultado del Examen</h2>
+            <p class="score">Tu calificación: <span id="calificacion"></span>/15</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('examenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let correctas = 0;
+            const inputs = document.querySelectorAll('input[type="text"]');
+            
+            inputs.forEach(input => {
+                const respuestaCorrecta = parseFloat(input.dataset.respuesta);
+                const respuestaUsuario = parseFloat(input.value);
+                
+                if (respuestaUsuario === respuestaCorrecta) {
+                    correctas++;
+                    input.style.borderColor = '#4caf50';
+                } else {
+                    input.style.borderColor = '#f44336';
+                }
+            });
+
+            document.getElementById('resultado').style.display = 'block';
+            document.getElementById('calificacion').textContent = correctas;
+            
+            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Inicializar MathJax
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    </script>
+</body>
+</html>

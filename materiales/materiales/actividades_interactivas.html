@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividades Interactivas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --accent-color: #FF4081;
+            --dark-color: #333;
+            --light-color: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--light-color);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(66, 133, 244, 0.3),
+                rgba(219, 68, 55, 0.3),
+                rgba(244, 180, 0, 0.3),
+                rgba(15, 157, 88, 0.3));
+            z-index: 1;
+            filter: blur(4px);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        header p {
+            font-size: 1.2em;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            margin: 2rem auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-box p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .btn-actividades {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.2em;
+            text-decoration: none;
+            color: var(--light-color);
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-actividades:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            background: #388e3c;
+        }
+
+        .btn-actividades i {
+            margin-right: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--light-color);
+            margin-top: auto;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-box {
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Efecto hover en botón */
+        .btn-actividades::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .btn-actividades:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-graduation-cap"></i> Actividades Interactivas</h1>
+        <p>Explora y aprende matemáticas de forma divertida e interactiva</p>
+    </header>
+
+    <main>
+        <div class="content-box">
+            <p>¡Bienvenido al mundo de las matemáticas! Aquí encontrarás una colección de actividades interactivas diseñadas para hacer tu aprendizaje más dinámico y entretenido. Desde ejercicios básicos hasta desafiantes problemas, hay algo para todos los niveles.</p>
+            <a href="actividades_matematicas.html" class="btn-actividades">
+                <i class="fas fa-play-circle"></i>
+                Comenzar Aventura Matemática
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+    </footer>
+
+    <script>
+        document.querySelector('.btn-actividades').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'actividades_matematicas.html';
+        });
+    </script>
+</body>
+</html>

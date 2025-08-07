@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pruebas Cortas</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            background: url('fondo.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Efecto de fondo oscuro */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Oscurece el fondo */
+            z-index: -1;
+        }
+
+        /* Encabezado */
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            width: 100%;
+            border-bottom: 1px solid #555;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+
+        /* Main */
+        main {
+            padding: 40px;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+            color: #ddd;
+        }
+
+        main p {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        /* Mejora en el botón para iniciar prueba */
+        .btn-iniciar-prueba {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-iniciar-prueba:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-iniciar-prueba:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9em;
+            border-top: 1px solid #555;
+        }
+
+        /* Animación de entrada mejorada */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header {
+            animation: fadeIn 1s ease-out;
+        }
+
+        main {
+            animation: fadeIn 1.5s ease-out 0.2s backwards;
+        }
+
+        footer {
+            animation: fadeIn 1.5s ease-out 0.4s backwards;
+        }
+
+        /* Añadido: Efecto de loading */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #e74c3c;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Pruebas Cortas</h1>
+        <p>Utiliza estas pruebas cortas para autoevaluarte y medir tu comprensión de los temas estudiados.</p>
+    </header>
+    
+    <main>
+        <p>Resuelve estas pruebas para identificar tus fortalezas y áreas de mejora en matemáticas.</p>
+        <button onclick="iniciarPrueba()" class="btn-iniciar-prueba">Iniciar Prueba</button>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+    </footer>
+
+    <!-- Añadido: Div para el efecto de loading -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- JavaScript mejorado -->
+    <script>
+        function iniciarPrueba() {
+            // Mostrar efecto de loading
+            const loading = document.querySelector('.loading');
+            loading.style.display = 'flex';
+
+            // Simular un pequeño retraso para la transición
+            setTimeout(() => {
+                // Redirigir a la página de pruebas
+                window.location.href = 'quiz.html';
+            }, 500);
+        }
+
+        // Asegurarse de que todas las imágenes y recursos estén cargados
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>

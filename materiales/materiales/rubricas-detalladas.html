@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rúbricas Detalladas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --accent-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .rubrics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            animation: slideUp 1s ease-out;
+        }
+
+        .rubric-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .rubric-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .rubric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .rubric-header i {
+            font-size: 2rem;
+            margin-right: 1rem;
+            color: var(--primary-color);
+        }
+
+        .rubric-content {
+            color: var(--dark-color);
+        }
+
+        .criteria-list {
+            list-style: none;
+        }
+
+        .criteria-item {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .criteria-item::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+
+        .score {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-star"></i> Rúbricas de Evaluación</h1>
+            <p>Criterios detallados para la evaluación de presentaciones y ejercicios</p>
+        </header>
+
+        <div class="rubrics-container">
+            <!-- Rúbrica para Presentación Oral -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-microphone-alt"></i>
+                    <h2>Presentación Oral</h2>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <strong>Claridad en la Exposición</strong> <span class="score">(25 puntos)</span>
+                            <p>Exposición clara y estructurada de conceptos matemáticos</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Dominio del Tema</strong> <span class="score">(25 puntos)</span>
+                            <p>Comprensión profunda de los conceptos trigonométricos y algebraicos</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Uso de Ejemplos</strong> <span class="score">(25 puntos)</span>
+                            <p>Ejemplificación práctica y relevante</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Manejo del Tiempo</strong> <span class="score">(25 puntos)</span>
+                            <p>Gestión eficiente del tiempo asignado</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Rúbrica para Explicación de Ejercicios -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-square-root-alt"></i>
+                    <h2>Explicación de Ejercicios</h2>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <strong>Procedimiento</strong> <span class="score">(30 puntos)</span>
+                            <p>Desarrollo paso a paso claro y ordenado</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Precisión Matemática</strong> <span class="score">(25 puntos)</span>
+                            <p>Exactitud en cálculos y uso de fórmulas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Notación Matemática</strong> <span class="score">(25 puntos)</span>
+                            <p>Uso correcto de símbolos y notación</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Conclusión</strong> <span class="score">(20 puntos)</span>
+                            <p>Interpretación clara de resultados</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Rúbrica para Ejercicios de Àlgebra (25 pto) -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-superscript"></i>
+                    <h2>Examen de Álgebra</h2>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <strong>Proceso</strong> <span class="score">(20 puntos)</span>
+                            <p>Desarrollo detallado y ordenado de los pasos de solución</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Resultados</strong> <span class="score">(3 puntos)</span>
+                            <p>Precisión en los resultados finales</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Unidades</strong> <span class="score">(2 puntos)</span>
+                            <p>Uso correcto de unidades de medida</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Rúbrica para Ejercicios de Trigonometría (25 pto) -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-calculator"></i>
+                    <h2>Examen de Trigonometría</h2>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <strong>Proceso</strong> <span class="score">(20 puntos)</span>
+                            <p>Procedimiento completo en la resolución de problemas trigonométricos</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Resultados</strong> <span class="score">(3 puntos)</span>
+                            <p>Exactitud en los cálculos y respuestas finales</p>
+                        </li>
+                        <li class="criteria-item">
+                            <strong>Unidades</strong> <span class="score">(2 puntos)</span>
+                            <p>Uso apropiado de unidades angulares y métricas</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="rubricas.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</body>
+</html>

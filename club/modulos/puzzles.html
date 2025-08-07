@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Acertijos - Competencias Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                packages: {'[+]': ['base', 'ams', 'newcommand', 'mathtools']}
+            },
+            svg: {
+                fontCache: 'global',
+                scale: 1.1
+            },
+            options: {
+                renderActions: {
+                    addMenu: [0, '', ''],
+                    checkLoading: [1, '', '']
+                },
+                menuOptions: {
+                    settings: {
+                        zoom: 'Double-Click',
+                        zscale: '150%'
+                    }
+                }
+            },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    console.log('✅ MathJax is ready and configured');
+                    // Dispatch a custom event when MathJax is ready
+                    window.dispatchEvent(new CustomEvent('mathjaxReady'));
+                }
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --puzzles: #8b5cf6;
+            --puzzles-light: rgba(139, 92, 246, 0.1);
+            --puzzles-dark: #7c3aed;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-puzzles: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* MathJax Styling */
+        .problem-statement .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-statement mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        .problem-statement mjx-container[display="true"] {
+            margin: 0.8rem 0 !important;
+        }
+
+        .problem-solution .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-solution mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(-45deg, rgba(139, 92, 246, 0.8), rgba(168, 85, 247, 0.8), rgba(124, 58, 237, 0.8), rgba(147, 51, 234, 0.8));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-puzzles);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-puzzles);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .nav-back i {
+            margin-right: 0.5rem;
+        }
+
+        /* Timer Display */
+        .timer-display {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            border: 2px solid var(--puzzles);
+            z-index: 100;
+        }
+
+        .timer-time {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--puzzles);
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        /* MathJax Status Indicator */
+        .mathjax-status {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-soft);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mathjax-status.show {
+            opacity: 1;
+        }
+
+        .mathjax-status.ready {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .mathjax-status.error {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(139, 92, 246, 0.3);
+            border-top: 4px solid var(--puzzles);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-puzzles);
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            background: var(--gradient-puzzles);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--puzzles);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--puzzles);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Problems Section */
+        .problems-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .difficulty-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-tab {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-tab.easy {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--puzzles);
+        }
+
+        .difficulty-tab.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .difficulty-tab.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        .difficulty-tab.active {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .difficulty-tab.easy.active {
+            background: var(--puzzles);
+            color: var(--white);
+        }
+
+        .difficulty-tab.medium.active {
+            background: #daa520;
+            color: var(--white);
+        }
+
+        .difficulty-tab.hard.active {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--puzzles);
+        }
+
+        .problem-card.solved {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+            border-color: var(--success);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--puzzles);
+            font-size: 1.2rem;
+        }
+
+        .problem-points {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .problem-points.easy {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--puzzles);
+        }
+
+        .problem-points.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .problem-points.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        /* Puzzle Visual Container */
+        .puzzle-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+            border-radius: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .puzzle-visual svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .puzzle-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            fill: var(--text-primary);
+        }
+
+        .puzzle-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            fill: var(--puzzles-dark);
+        }
+
+        .puzzle-box {
+            fill: rgba(139, 92, 246, 0.3);
+            stroke: var(--puzzles);
+            stroke-width: 2;
+        }
+
+        .puzzle-line {
+            stroke: var(--puzzles-dark);
+            stroke-width: 2;
+        }
+
+        .puzzle-point {
+            fill: var(--puzzles-dark);
+            r: 4;
+        }
+
+        .puzzle-path {
+            fill: none;
+            stroke: var(--puzzles);
+            stroke-width: 3;
+        }
+
+        .puzzle-grid {
+            stroke: var(--puzzles-dark);
+            stroke-width: 1;
+            fill: none;
+        }
+
+        .puzzle-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            fill: var(--puzzles-dark);
+            text-anchor: middle;
+        }
+
+        .problem-statement {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            min-height: 60px;
+        }
+
+        .problem-input-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .problem-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-input:focus {
+            outline: none;
+            border-color: var(--puzzles);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-puzzles);
+            color: var(--white);
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .problem-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .problem-feedback.success {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .problem-feedback.error {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .problem-feedback.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .problem-solution {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 15px;
+            border-left: 4px solid var(--puzzles);
+            display: none;
+        }
+
+        .problem-solution.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .solution-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-puzzles);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: var(--shadow-soft);
+            margin: 2rem 0;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .error-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .problems-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-input-section {
+                flex-direction: column;
+            }
+
+            .timer-display {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 2rem;
+            }
+
+            .mathjax-status {
+                position: relative;
+                bottom: 0;
+                left: 0;
+                margin-top: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .nav-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+            }
+
+            .puzzle-visual {
+                padding: 0.5rem;
+                margin: 1rem 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Score Animation */
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -150%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -250%) scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-puzzle-piece"></i>
+                Módulo de Acertijos
+            </a>
+            
+            <div class="nav-controls">
+                <a href="../leaderboard.html" class="nav-back" target="_blank" style="background: var(--success);">
+                    <i class="fas fa-trophy"></i>
+                    Ver Tabla de Posiciones
+                </a>
+                
+                <a href="../competencias.html" class="nav-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Competencias
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timerDisplay">
+        <div class="timer-time" id="timerTime">02:00:00</div>
+        <div class="timer-label">Tiempo Restante</div>
+    </div>
+
+    <!-- MathJax Status Indicator -->
+    <div class="mathjax-status" id="mathJaxStatus">
+        <i class="fas fa-circle"></i>
+        Cargando renderizador matemático...
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Loading State -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+                <h2>Cargando Módulo de Acertijos...</h2>
+                <p>Preparando desafíos de lógica matemática y patrones</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-container" id="errorContainer" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="error-title">Error al Cargar el Módulo</h2>
+                <p class="error-message" id="errorMessage">Ha ocurrido un problema al cargar el módulo de acertijos.</p>
+                <div class="error-actions">
+                    <a href="../competencias.html" class="nav-back">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver a Competencias
+                    </a>
+                    <button onclick="location.reload()" class="nav-back" style="border: none; background: var(--warning);">
+                        <i class="fas fa-redo"></i>
+                        Intentar de Nuevo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Container (Hidden initially) -->
+            <div id="mainContainer" style="display: none;">
+                <!-- Hero Section -->
+                <section class="hero fade-in">
+                    <div class="hero-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h1 class="hero-title">Acertijos</h1>
+                    <p class="hero-subtitle">Resuelve desafíos de lógica matemática, patrones y pensamiento crítico</p>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p style="text-align: center; color: var(--text-secondary); margin-top: 0.5rem;">
+                        Progreso: <span id="progressText">0/30 problemas resueltos</span>
+                    </p>
+                </section>
+
+                <!-- Stats Dashboard -->
+                <section class="stats-dashboard fade-in">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalScore">0</div>
+                        <div class="stat-label">Puntos Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="problemsSolved">0</div>
+                        <div class="stat-label">Problemas Resueltos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="currentStreak">0</div>
+                        <div class="stat-label">Racha Actual</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="averageTime">--:--</div>
+                        <div class="stat-label">Tiempo Promedio</div>
+                    </div>
+                </section>
+
+                <!-- Problems Section -->
+                <section class="problems-section fade-in">
+                    <h2 class="section-title">Acertijos Matemáticos</h2>
+                    
+                    <!-- Difficulty Tabs -->
+                    <div class="difficulty-tabs">
+                        <button class="difficulty-tab easy active" onclick="showDifficulty('easy')">
+                            <i class="fas fa-lightbulb"></i>
+                            Fácil (5 pts)
+                        </button>
+                        <button class="difficulty-tab medium" onclick="showDifficulty('medium')">
+                            <i class="fas fa-brain"></i>
+                            Medio (10 pts)
+                        </button>
+                        <button class="difficulty-tab hard" onclick="showDifficulty('hard')">
+                            <i class="fas fa-puzzle-piece"></i>
+                            Difícil (15 pts)
+                        </button>
+                    </div>
+
+                    <!-- Problems Grid -->
+                    <div class="problems-grid" id="problemsGrid">
+                        <!-- Problems will be dynamically generated here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Puzzles Module Management System
+        class PuzzlesModule {
+            constructor() {
+                this.currentParticipant = null;
+                this.currentDifficulty = 'easy';
+                this.solvedProblems = new Set();
+                this.currentScore = 0;
+                this.problemsSolved = 0;
+                this.currentStreak = 0;
+                this.startTime = Date.now();
+                this.solveTimes = [];
+                this.competitionData = null;
+                this.timeRemaining = 7200;
+                this.timerInterval = null;
+                this.mathJaxReady = false;
+                
+                // Problems with logic puzzles and patterns
+                this.problems = {
+                    easy: [
+                        {
+                            id: 'e1',
+                            statement: '¿Cuál es el siguiente número en la secuencia? 2, 4, 6, 8, ?',
+                            answer: '10',
+                            solution: 'Es una secuencia de números pares: 2, 4, 6, 8, 10. Cada número aumenta en 2.',
+                            figure: `
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <rect x="30" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="80" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="130" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="180" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="230" y="40" width="40" height="40" stroke="var(--puzzles)" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                                    <text x="50" y="65" class="puzzle-number">2</text>
+                                    <text x="100" y="65" class="puzzle-number">4</text>
+                                    <text x="150" y="65" class="puzzle-number">6</text>
+                                    <text x="200" y="65" class="puzzle-number">8</text>
+                                    <text x="250" y="65" class="puzzle-number">?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e2',
+                            statement: 'Si GATO = 1234 y TOGA = 2341, ¿cuánto vale GOTA?',
+                            answer: '1432',
+                            solution: 'Cada letra tiene un valor: G=1, A=2, T=3, O=4. Entonces GOTA = 1432.',
+                            figure: null
+                        },
+                        {
+                            id: 'e3',
+                            statement: 'Un caracol sube 3 metros durante el día y baja 2 metros durante la noche. ¿En cuántos días llegará a la cima de un pozo de 10 metros?',
+                            answer: '8',
+                            solution: 'Día 1-7: sube 1 metro neto cada día (7m). Día 8: sube 3m más y llega a 10m sin bajar.',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="130" y="40" width="40" height="120" fill="none" stroke="var(--puzzles)" stroke-width="3"/>
+                                    <line x1="120" y1="160" x2="180" y2="160" class="puzzle-line"/>
+                                    <text x="190" y="165" class="puzzle-label">0m</text>
+                                    <line x1="120" y1="40" x2="180" y2="40" class="puzzle-line"/>
+                                    <text x="190" y="45" class="puzzle-label">10m</text>
+                                    <circle cx="150" cy="140" r="8" fill="brown"/>
+                                    <text x="150" y="145" text-anchor="middle" class="puzzle-text" style="font-size: 10px;">🐌</text>
+                                    <text x="210" y="100" class="puzzle-label">↑ 3m día</text>
+                                    <text x="210" y="120" class="puzzle-label">↓ 2m noche</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e4',
+                            statement: '¿Cuál es el patrón? 1, 1, 2, 3, 5, 8, ?',
+                            answer: '13',
+                            solution: 'Secuencia de Fibonacci: cada número es la suma de los dos anteriores. 5 + 8 = 13.',
+                            figure: `
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <circle cx="40" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="80" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="120" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="160" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="200" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="240" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="280" cy="60" r="20" stroke="var(--puzzles)" stroke-width="2" stroke-dasharray="3,3" fill="none"/>
+                                    <text x="40" y="65" class="puzzle-number">1</text>
+                                    <text x="80" y="65" class="puzzle-number">1</text>
+                                    <text x="120" y="65" class="puzzle-number">2</text>
+                                    <text x="160" y="65" class="puzzle-number">3</text>
+                                    <text x="200" y="65" class="puzzle-number">5</text>
+                                    <text x="240" y="65" class="puzzle-number">8</text>
+                                    <text x="280" y="65" class="puzzle-number">?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e5',
+                            statement: 'Tengo 5 hermanos. Cada hermano tiene una hermana. ¿Cuántos somos en total en la familia?',
+                            answer: '6',
+                            solution: 'Hay 5 hermanos + 1 hermana (que soy yo) = 6 personas en total.',
+                            figure: null
+                        },
+                        {
+                            id: 'e6',
+                            statement: 'Si un huevo y medio cuesta un peso y medio, ¿cuánto cuestan 3 huevos?',
+                            answer: '3',
+                            solution: '1.5 huevos = 1.5 pesos, entonces 1 huevo = 1 peso. Por tanto, 3 huevos = 3 pesos.',
+                            figure: null
+                        },
+                        {
+                            id: 'e7',
+                            statement: '¿Qué número falta? 9, 16, 25, 36, ?',
+                            answer: '49',
+                            solution: 'Son cuadrados perfectos: 3², 4², 5², 6², 7² = 49.',
+                            figure: `
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <rect x="20" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="70" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="120" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="170" y="40" width="40" height="40" class="puzzle-box"/>
+                                    <rect x="220" y="40" width="40" height="40" stroke="var(--puzzles)" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                                    <text x="40" y="65" class="puzzle-number">9</text>
+                                    <text x="90" y="65" class="puzzle-number">16</text>
+                                    <text x="140" y="65" class="puzzle-number">25</text>
+                                    <text x="190" y="65" class="puzzle-number">36</text>
+                                    <text x="240" y="65" class="puzzle-number">?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e8',
+                            statement: 'Un granjero tiene 17 ovejas. Se le mueren todas menos 9. ¿Cuántas ovejas le quedan?',
+                            answer: '9',
+                            solution: 'Si se mueren todas menos 9, significa que le quedan exactamente 9 ovejas vivas.',
+                            figure: null
+                        },
+                        {
+                            id: 'e9',
+                            statement: 'Complete la analogía: 2 es a 8 como 3 es a ?',
+                            answer: '27',
+                            solution: '2³ = 8, entonces 3³ = 27. La relación es número al cubo.',
+                            figure: null
+                        },
+                        {
+                            id: 'e10',
+                            statement: '¿Cuál es el próximo término? 5, 10, 20, 40, ?',
+                            answer: '80',
+                            solution: 'Cada número se multiplica por 2: 5×2=10, 10×2=20, 20×2=40, 40×2=80.',
+                            figure: `
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <circle cx="50" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="110" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="170" cy="60" r="20" class="puzzle-box"/>
+                                    <circle cx="230" cy="60" r="20" class="puzzle-box"/>
+                                    <text x="50" y="65" class="puzzle-number">5</text>
+                                    <text x="110" y="65" class="puzzle-number">10</text>
+                                    <text x="170" y="65" class="puzzle-number">20</text>
+                                    <text x="230" y="65" class="puzzle-number">40</text>
+                                </svg>
+                            `
+                        }
+                    ],
+                    medium: [
+                        {
+                            id: 'm1',
+                            statement: 'En una isla hay 100 personas. 40 tienen ojos azules, 30 tienen cabello rubio, y 20 tienen ambas características. ¿Cuántas no tienen ninguna de estas características?',
+                            answer: '50',
+                            solution: 'Usando el principio de inclusión-exclusión: 40 + 30 - 20 = 50 tienen al menos una característica. Entonces 100 - 50 = 50 no tienen ninguna.',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="120" cy="100" r="60" fill="rgba(59, 130, 246, 0.3)" stroke="blue" stroke-width="2"/>
+                                    <circle cx="180" cy="100" r="60" fill="rgba(255, 215, 0, 0.3)" stroke="gold" stroke-width="2"/>
+                                    <text x="90" y="105" class="puzzle-text">Ojos azul</text>
+                                    <text x="210" y="105" class="puzzle-text">Cabello rubio</text>
+                                    <text x="150" y="105" class="puzzle-text">20</text>
+                                    <text x="80" y="140" class="puzzle-text">20</text>
+                                    <text x="220" y="140" class="puzzle-text">10</text>
+                                    <text x="150" y="40" class="puzzle-label">Total: 100 personas</text>
+                                </svg>
+                            `
+                        },
+                        {
+                    id: 'm2',
+                    statement: 'Un reloj marca las 3:15. ¿Cuál es el ángulo entre las manecillas?',
+                    answer: '7.5',
+                    solution: 'La manecilla de minutos está a 90° (15 min = 90°). La de horas se mueve 0.5° por minuto: 3:15 → 97.5°. Diferencia: |97.5° - 90°| = 7.5°.',
+                    figure: `
+                        <svg width="200" height="200" viewBox="0 0 200 200">
+                            <!-- Círculo del reloj -->
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="var(--puzzles)" stroke-width="3"/>
+
+                            <!-- Números del reloj -->
+                            <text x="100" y="30" text-anchor="middle" class="puzzle-number">12</text>
+                            <text x="170" y="105" text-anchor="middle" class="puzzle-number">3</text>
+                            <text x="100" y="180" text-anchor="middle" class="puzzle-number">6</text>
+                            <text x="30" y="105" text-anchor="middle" class="puzzle-number">9</text>
+
+                            <!-- Manecilla de minutos (azul) apuntando a las 3 = 90° -->
+                            <line x1="100" y1="100" x2="170" y2="100" stroke="blue" stroke-width="3"/>
+
+                            <!-- Manecilla de horas (roja) apuntando a 97.5° (ligeramente después de las 3) -->
+                            <line x1="100" y1="100" x2="167.7" y2="92.4" stroke="red" stroke-width="4"/>
+
+                            <!-- Centro del reloj -->
+                            <circle cx="100" cy="100" r="5" fill="var(--puzzles)"/>
+                        </svg>
+                    `
+                },
+
+                        {
+                            id: 'm3',
+                            statement: 'Tres amigos A, B y C están en una fila. A no está en el medio, B no está al final. ¿Quién está en el medio?',
+                            answer: 'A',
+                            solution: 'Si A no está en el medio y B no está al final, entonces B está al inicio o en el medio. Si B está en el medio, A no puede estar ahí (contradicción). Entonces B está al inicio, C al final, y A en el medio.',
+                            figure: `
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <rect x="50" y="40" width="50" height="50" class="puzzle-box"/>
+                                    <rect x="125" y="40" width="50" height="50" class="puzzle-box"/>
+                                    <rect x="200" y="40" width="50" height="50" class="puzzle-box"/>
+                                    <text x="75" y="70" class="puzzle-number">?</text>
+                                    <text x="150" y="70" class="puzzle-number">?</text>
+                                    <text x="225" y="70" class="puzzle-number">?</text>
+                                    <text x="75" y="110" class="puzzle-label">Inicio</text>
+                                    <text x="150" y="110" class="puzzle-label">Medio</text>
+                                    <text x="225" y="110" class="puzzle-label">Final</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm4',
+                            statement: 'Un tren viaja a 60 km/h. ¿Cuánto tiempo tarda en pasar completamente por un túnel de 1 km si el tren mide 200 metros?',
+                            answer: '1.2',
+                            solution: 'El tren debe recorrer 1 km + 0.2 km = 1.2 km total. A 60 km/h = 1 km/min, tarda 1.2 minutos.',
+                            figure: `
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <rect x="50" y="60" width="200" height="20" fill="gray" stroke="var(--puzzles)"/>
+                                    <rect x="30" y="50" width="40" height="20" fill="blue" stroke="var(--puzzles)"/>
+                                    <text x="150" y="45" class="puzzle-label">Túnel: 1 km</text>
+                                    <text x="50" y="40" class="puzzle-label">Tren: 200m</text>
+                                    <text x="150" y="100" class="puzzle-label">60 km/h</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm5',
+                            statement: 'Si HOY es MAÑANA de AYER, ¿qué día será PASADO MAÑANA de ANTEAYER?',
+                            answer: 'mañana',
+                            solution: 'Si HOY es MAÑANA de AYER, entonces AYER = HOY - 1. ANTEAYER = HOY - 2. PASADO MAÑANA de ANTEAYER = (HOY - 2) + 2 = HOY. Pero como pregunta qué día será, es MAÑANA.',
+                            figure: null
+                        },
+                        {
+                            id: 'm6',
+                            statement: 'En una caja hay 12 bolas: 4 rojas, 4 azules y 4 verdes. ¿Cuál es el mínimo número de bolas que debo sacar para garantizar que tengo 3 del mismo color?',
+                            answer: '7',
+                            solution: 'En el peor caso, saco 2 de cada color (6 bolas). La séptima bola garantiza tener 3 del mismo color.',
+                            figure: `
+                                <svg width="300" height="120" viewBox="0 0 300 120">
+                                    <circle cx="60" cy="60" r="15" fill="red" stroke="var(--puzzles)"/>
+                                    <circle cx="90" cy="60" r="15" fill="red" stroke="var(--puzzles)"/>
+                                    <circle cx="120" cy="60" r="15" fill="blue" stroke="var(--puzzles)"/>
+                                    <circle cx="150" cy="60" r="15" fill="blue" stroke="var(--puzzles)"/>
+                                    <circle cx="180" cy="60" r="15" fill="green" stroke="var(--puzzles)"/>
+                                    <circle cx="210" cy="60" r="15" fill="green" stroke="var(--puzzles)"/>
+                                    <circle cx="240" cy="60" r="15" stroke="var(--puzzles)" stroke-width="2" stroke-dasharray="3,3" fill="none"/>
+                                    <text x="150" y="100" text-anchor="middle" class="puzzle-label">¿Séptima bola?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm7',
+                            statement: 'Una araña está en una esquina de un cubo de 3×3×3 metros. Una mosca está en la esquina opuesta. ¿Cuál es la distancia más corta que debe recorrer la araña?',
+                            answer: '5',
+                            solution: 'Desplegando el cubo, la araña puede ir en línea recta. La distancia mínima es √(6² + 3²) = √45 = 3√5 ≈ 6.7m, pero considerando el pliegue óptimo es 5m.',
+                            figure: `
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <rect x="50" y="50" width="80" height="80" fill="none" stroke="var(--puzzles)" stroke-width="2"/>
+                                    <rect x="70" y="30" width="80" height="80" fill="none" stroke="var(--puzzles)" stroke-width="1"/>
+                                    <line x1="50" y1="50" x2="70" y2="30" class="puzzle-line"/>
+                                    <line x1="130" y1="50" x2="150" y2="30" class="puzzle-line"/>
+                                    <line x1="130" y1="130" x2="150" y2="110" class="puzzle-line"/>
+                                    <circle cx="55" cy="125" r="3" fill="red"/>
+                                    <circle cx="145" cy="35" r="3" fill="blue"/>
+                                    <text x="30" y="140" class="puzzle-label">🕷️</text>
+                                    <text x="155" y="25" class="puzzle-label">🪰</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm8',
+                            statement: 'Tengo dos monedas que suman 30 centavos. Una no es de 10 centavos. ¿Cuáles son las dos monedas?',
+                            answer: '20,10',
+                            solution: 'Una moneda es de 20 centavos y la otra de 10 centavos. "Una no es de 10 centavos" significa que una de las dos (la de 20) no es de 10.',
+                            figure: null
+                        },
+                        {
+                            id: 'm9',
+                            statement: 'Un problema de lógica: Si todos los gatos son felinos y algunos felinos son salvajes, ¿es cierto que algunos gatos son salvajes?',
+                            answer: 'no',
+                            solution: 'No necesariamente. Los felinos salvajes podrían ser solo tigres, leones, etc., no gatos domésticos. No podemos concluir que algunos gatos sean salvajes.',
+                            figure: null
+                        },
+                        {
+                            id: 'm10',
+                            statement: 'En una carrera, adelantas al que va en segundo lugar. ¿En qué posición quedas?',
+                            answer: '2',
+                            solution: 'Si adelantas al segundo, tomas su lugar, por lo que quedas en segundo lugar.',
+                            figure: null
+                        }
+                    ],
+                    hard: [
+                        {
+                            id: 'h1',
+                            statement: 'Tres prisioneros A, B y C saben que tienen sombreros rojos o azules. A ve que B y C tienen sombreros rojos. Un guardia dice: "Al menos uno tiene sombrero rojo". ¿Puede A deducir su color?',
+                            answer: 'no',
+                            solution: 'A ve dos rojos, pero no puede deducir su color porque tanto si él tiene rojo como azul, la afirmación del guardia sigue siendo verdadera.',
+                            figure: null
+                        },
+                        {
+                            id: 'h2',
+                            statement: 'Un ascensor puede cargar máximo 1000 kg. Tienes que subir 3000 kg de oro en un edificio de 30 pisos usando el mínimo número de viajes. ¿Cuántos viajes necesitas?',
+                            answer: '7',
+                            solution: 'Estrategia óptima: 1er viaje: 1000kg al piso 30. 2do viaje: 1000kg, dejas 334kg en piso 10, 333kg en piso 20, 333kg al piso 30. Necesitas más viajes para optimizar, total: 7 viajes.',
+                            figure: null
+                        },
+                        {
+                            id: 'h3',
+                            statement: 'Tienes 9 monedas idénticas en apariencia, pero una pesa diferente. Con una balanza de platillos (sin pesas), ¿cuál es el mínimo número de pesadas para encontrar la moneda diferente?',
+                            answer: '2',
+                            solution: 'Divide en grupos de 3. 1ra pesada: compara dos grupos. Si equilibran, la diferente está en el tercer grupo. 2da pesada: compara dos monedas del grupo sospechoso.',
+                            figure: `
+                                <svg width="300" height="150" viewBox="0 0 300 150">
+                                    <line x1="150" y1="30" x2="150" y2="60" class="puzzle-line"/>
+                                    <line x1="100" y1="60" x2="200" y2="60" class="puzzle-line"/>
+                                    <rect x="80" y="60" width="40" height="10" class="puzzle-box"/>
+                                    <rect x="180" y="60" width="40" height="10" class="puzzle-box"/>
+                                    <circle cx="90" cy="80" r="8" class="puzzle-point"/>
+                                    <circle cx="110" cy="80" r="8" class="puzzle-point"/>
+                                    <circle cx="130" cy="80" r="8" class="puzzle-point"/>
+                                    <circle cx="170" cy="80" r="8" class="puzzle-point"/>
+                                    <circle cx="190" cy="80" r="8" class="puzzle-point"/>
+                                    <circle cx="210" cy="80" r="8" class="puzzle-point"/>
+                                    <text x="150" y="120" text-anchor="middle" class="puzzle-label">Balanza de platillos</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h4',
+                            statement: 'Un sultán tiene 100 esposas numeradas del 1 al 100. Cada noche visita a la esposa cuyo número es el siguiente primo después del número de la esposa que visitó la noche anterior. Si empezó con la esposa #2, ¿a quién visita en la noche 10?',
+                            answer: '37',
+                            solution: 'Secuencia de primos: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37... La décima noche visita a la esposa #37.',
+                            figure: null
+                        },
+                        {
+                            id: 'h5',
+                            statement: 'En una mesa circular hay 100 sillas numeradas 1-100. Empezando por la silla 1, eliminas cada segunda persona hasta que quede una. ¿Cuál es el número de la última silla ocupada?',
+                            answer: '73',
+                            solution: 'Este es el problema de Josefo. Para n=100, k=2: J(100) = 2×(100-64) + 1 = 73, donde 64 es la mayor potencia de 2 ≤ 100.',
+                            figure: `
+                                <svg width="200" height="200" viewBox="0 0 200 200">
+                                    <circle cx="100" cy="100" r="80" fill="none" stroke="var(--puzzles)" stroke-width="2"/>
+                                    <circle cx="100" cy="30" r="5" class="puzzle-point"/>
+                                    <circle cx="156" cy="40" r="5" class="puzzle-point"/>
+                                    <circle cx="185" cy="85" r="5" class="puzzle-point"/>
+                                    <circle cx="185" cy="115" r="5" class="puzzle-point"/>
+                                    <circle cx="156" cy="160" r="5" class="puzzle-point"/>
+                                    <circle cx="100" cy="170" r="5" class="puzzle-point"/>
+                                    <circle cx="44" cy="160" r="5" class="puzzle-point"/>
+                                    <circle cx="15" cy="115" r="5" class="puzzle-point"/>
+                                    <circle cx="15" cy="85" r="5" class="puzzle-point"/>
+                                    <circle cx="44" cy="40" r="5" class="puzzle-point"/>
+                                    <text x="100" y="25" text-anchor="middle" class="puzzle-label">1</text>
+                                    <text x="100" y="210" text-anchor="middle" class="puzzle-label">Problema de Josefo</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h6',
+                            statement: 'Un laberinto 4×4 tiene la entrada en (1,1) y la salida en (4,4). Solo puedes moverte hacia derecha o abajo. ¿De cuántas maneras diferentes puedes llegar a la salida?',
+                            answer: '20',
+                            solution: 'Necesitas 3 movimientos a la derecha y 3 hacia abajo. Total de caminos = C(6,3) = 6!/(3!×3!) = 20.',
+                            figure: `
+                                <svg width="200" height="200" viewBox="0 0 200 200">
+                                    <rect x="40" y="40" width="120" height="120" fill="none" stroke="var(--puzzles)" stroke-width="2"/>
+                                    <line x1="70" y1="40" x2="70" y2="160" class="puzzle-grid"/>
+                                    <line x1="100" y1="40" x2="100" y2="160" class="puzzle-grid"/>
+                                    <line x1="130" y1="40" x2="130" y2="160" class="puzzle-grid"/>
+                                    <line x1="40" y1="70" x2="160" y2="70" class="puzzle-grid"/>
+                                    <line x1="40" y1="100" x2="160" y2="100" class="puzzle-grid"/>
+                                    <line x1="40" y1="130" x2="160" y2="130" class="puzzle-grid"/>
+                                    <circle cx="55" cy="55" r="6" fill="green"/>
+                                    <circle cx="145" cy="145" r="6" fill="red"/>
+                                    <text x="20" y="60" class="puzzle-label">E</text>
+                                    <text x="170" y="150" class="puzzle-label">S</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h7',
+                            statement: 'Tienes dos jarras: una de 5 litros y otra de 3 litros. ¿Cómo puedes medir exactamente 4 litros usando solo estas jarras y agua ilimitada?',
+                            answer: '4 pasos',
+                            solution: '1) Llena jarra de 5L. 2) Vierte en jarra de 3L (quedan 2L en jarra de 5L). 3) Vacía jarra de 3L. 4) Vierte los 2L de la jarra de 5L a la de 3L. 5) Llena jarra de 5L. 6) Vierte de 5L a 3L hasta llenarla (solo cabe 1L más). Quedan 4L en jarra de 5L.',
+                            figure: `
+                                <svg width="250" height="150" viewBox="0 0 250 150">
+                                    <rect x="50" y="40" width="40" height="80" fill="none" stroke="var(--puzzles)" stroke-width="3"/>
+                                    <rect x="150" y="60" width="30" height="60" fill="none" stroke="var(--puzzles)" stroke-width="3"/>
+                                    <text x="70" y="135" text-anchor="middle" class="puzzle-label">5L</text>
+                                    <text x="165" y="135" text-anchor="middle" class="puzzle-label">3L</text>
+                                    <text x="125" y="30" text-anchor="middle" class="puzzle-label">Medir 4L</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h8',
+                            statement: 'En un torneo de eliminación directa con 127 participantes, ¿cuántos partidos se necesitan para determinar el campeón?',
+                            answer: '126',
+                            solution: 'En cada partido se elimina exactamente un participante. Para eliminar 126 participantes (quedando 1 campeón), se necesitan exactamente 126 partidos.',
+                            figure: null
+                        },
+                        {
+                            id: 'h9',
+                            statement: 'Un hotel infinito tiene infinitas habitaciones numeradas 1, 2, 3... Todas están ocupadas. Llega un huésped más. ¿Cómo puede el conserje acomodarlo?',
+                            answer: 'mover todos',
+                            solution: 'Paradoja del Hotel de Hilbert: pide a cada huésped que se mueva a la habitación con el doble de su número actual (1→2, 2→4, 3→6...). Esto libera todas las habitaciones impares. El nuevo huésped va a la habitación 1.',
+                            figure: null
+                        },
+                        {
+                            id: 'h10',
+                            statement: 'Tienes 1000 botellas de vino, una está envenenada. El veneno mata en exactamente 1 hora. Tienes 10 ratones y 1 hora. ¿Cuál es el mínimo número de ratones que necesitas para identificar la botella envenenada?',
+                            answer: '10',
+                            solution: 'Usa los ratones como un sistema binario. Numera las botellas en binario (0-999). Cada ratón representa un bit. Dale vino a un ratón solo si su bit correspondiente es 1 en el número de la botella. Después de 1 hora, los ratones muertos indican la botella envenenada.',
+                            figure: null
+                        }
+                    ]
+                };
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    await this.initializeModule();
+                } catch (error) {
+                    console.error('Error initializing module:', error);
+                    showError('Error al inicializar el módulo: ' + error.message);
+                }
+            }
+
+            async initializeModule() {
+                showLoading();
+                console.log('🔧 Starting puzzles module initialization...');
+
+                // Wait for MathJax if it hasn't loaded yet
+                await this.waitForMathJax();
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                if (!this.loadParticipant()) {
+                    throw new Error('No hay participante registrado');
+                }
+
+                console.log('✅ Participant loaded:', this.currentParticipant.name);
+
+                this.loadProgress();
+                this.loadTimer();
+                this.startTimer();
+                
+                hideLoading();
+                showMainContent();
+                
+                this.showDifficulty('easy');
+                this.updateStats();
+                this.setupAnimations();
+
+                console.log('🎯 Puzzles module initialization completed successfully');
+            }
+
+            async waitForMathJax() {
+                return new Promise((resolve) => {
+                    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                        console.log('✅ MathJax already ready');
+                        this.mathJaxReady = true;
+                        this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                        resolve();
+                    } else {
+                        console.log('⏳ Waiting for MathJax to be ready...');
+                        this.updateMathJaxStatus('loading', 'Cargando renderizador matemático...');
+                        
+                        const checkMathJax = () => {
+                            if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                                console.log('✅ MathJax is now ready');
+                                this.mathJaxReady = true;
+                                this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                                resolve();
+                            } else {
+                                setTimeout(checkMathJax, 100);
+                            }
+                        };
+                        
+                        // Also listen for the custom event
+                        window.addEventListener('mathjaxReady', () => {
+                            console.log('✅ MathJax ready event received');
+                            this.mathJaxReady = true;
+                            this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                            resolve();
+                        }, { once: true });
+                        
+                        checkMathJax();
+                        
+                        // Timeout fallback
+                        setTimeout(() => {
+                            if (!this.mathJaxReady) {
+                                console.warn('⚠️ MathJax timeout, proceeding without it');
+                                this.updateMathJaxStatus('error', 'Renderizador no disponible (modo texto)');
+                                resolve();
+                            }
+                        }, 10000);
+                    }
+                });
+            }
+
+            updateMathJaxStatus(status, message) {
+                const statusEl = document.getElementById('mathJaxStatus');
+                if (statusEl) {
+                    statusEl.className = `mathjax-status ${status} show`;
+                    statusEl.innerHTML = `
+                        <i class="fas fa-${status === 'loading' ? 'spinner fa-spin' : status === 'ready' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        ${message}
+                    `;
+                    
+                    // Hide after delay
+                    setTimeout(() => {
+                        statusEl.classList.remove('show');
+                    }, status === 'ready' ? 3000 : 5000);
+                }
+            }
+
+            async renderMathJax(element) {
+                if (this.mathJaxReady && window.MathJax && window.MathJax.typesetPromise) {
+                    try {
+                        await window.MathJax.typesetPromise([element]);
+                        console.log('✅ MathJax rendering completed');
+                        return true;
+                    } catch (error) {
+                        console.warn('❌ Error during MathJax rendering:', error);
+                        return false;
+                    }
+                } else {
+                    console.warn('⚠️ MathJax not ready, content displayed as plain text');
+                    return false;
+                }
+            }
+
+            loadParticipant() {
+                try {
+                    const savedParticipant = localStorage.getItem('currentParticipant');
+                    if (!savedParticipant) {
+                        return false;
+                    }
+                    
+                    this.currentParticipant = JSON.parse(savedParticipant);
+                    this.currentScore = this.currentParticipant.scores?.puzzles || 0;
+                    this.problemsSolved = this.currentParticipant.problemsSolved?.puzzles || 0;
+                    this.currentStreak = this.currentParticipant.streak || 0;
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error loading participant:', error);
+                    return false;
+                }
+            }
+
+            loadProgress() {
+                try {
+                    const progressKey = `puzzles_progress_${this.currentParticipant.id}`;
+                    const savedProgress = localStorage.getItem(progressKey);
+                    if (savedProgress) {
+                        this.solvedProblems = new Set(JSON.parse(savedProgress));
+                    }
+
+                    const timesKey = `puzzles_times_${this.currentParticipant.id}`;
+                    const savedTimes = localStorage.getItem(timesKey);
+                    if (savedTimes) {
+                        this.solveTimes = JSON.parse(savedTimes);
+                    }
+                } catch (error) {
+                    console.error('Error loading progress:', error);
+                }
+            }
+
+            saveProgress() {
+                try {
+                    const progressKey = `puzzles_progress_${this.currentParticipant.id}`;
+                    localStorage.setItem(progressKey, JSON.stringify([...this.solvedProblems]));
+
+                    const timesKey = `puzzles_times_${this.currentParticipant.id}`;
+                    localStorage.setItem(timesKey, JSON.stringify(this.solveTimes));
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+
+            loadTimer() {
+                try {
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"duration":7200}');
+                    this.competitionData = competitionData;
+                    
+                    if (competitionData.timerStarted && competitionData.startTime) {
+                        const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                        this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                    } else {
+                        this.timeRemaining = competitionData.duration || 7200;
+                    }
+                } catch (error) {
+                    console.error('Error loading timer:', error);
+                    this.timeRemaining = 7200;
+                }
+            }
+
+            startTimer() {
+                this.updateTimerDisplay();
+                
+                this.timerInterval = setInterval(() => {
+                    try {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (competitionData.timerStarted && competitionData.startTime) {
+                            const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                            this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                            
+                            this.updateTimerDisplay();
+                            
+                            if (this.timeRemaining <= 0) {
+                                clearInterval(this.timerInterval);
+                                alert('¡Tiempo terminado! La competencia ha finalizado.');
+                                window.location.href = '../competencias.html';
+                            }
+                        } else {
+                            this.timeRemaining = competitionData.duration || 7200;
+                            this.updateTimerDisplay();
+                        }
+                    } catch (error) {
+                        console.error('Timer error:', error);
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                try {
+                    const hours = Math.floor(this.timeRemaining / 3600);
+                    const minutes = Math.floor((this.timeRemaining % 3600) / 60);
+                    const seconds = this.timeRemaining % 60;
+                    
+                    const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    const timerElement = document.getElementById('timerTime');
+                    
+                    if (timerElement) {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (!competitionData.timerStarted) {
+                            timerElement.textContent = '⏳ ' + display;
+                            timerElement.style.color = '#ffa726';
+                        } else {
+                            timerElement.textContent = display;
+                            timerElement.style.color = this.timeRemaining <= 300 ? '#ff6b6b' : '#8b5cf6';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating timer display:', error);
+                }
+            }
+
+            showDifficulty(difficulty) {
+                this.currentDifficulty = difficulty;
+                
+                document.querySelectorAll('.difficulty-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                const activeTab = document.querySelector(`.difficulty-tab.${difficulty}`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+                
+                this.generateProblems();
+            }
+
+            async generateProblems() {
+                const problemsGrid = document.getElementById('problemsGrid');
+                if (!problemsGrid) return;
+                
+                console.log('🎯 Generating puzzle problems for difficulty:', this.currentDifficulty);
+                
+                problemsGrid.innerHTML = '';
+                
+                const problems = this.problems[this.currentDifficulty];
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                
+                problems.forEach((problem, index) => {
+                    const problemCard = document.createElement('div');
+                    problemCard.className = `problem-card fade-in ${this.solvedProblems.has(problem.id) ? 'solved' : ''}`;
+                    
+                    const isCorrect = this.solvedProblems.has(problem.id);
+                    
+                    problemCard.innerHTML = `
+                        <div class="problem-header">
+                            <div class="problem-number">
+                                <i class="fas fa-puzzle-piece"></i>
+                                Acertijo ${index + 1}
+                                ${isCorrect ? '<i class="fas fa-check-circle" style="color: var(--success); margin-left: 0.5rem;"></i>' : ''}
+                            </div>
+                            <div class="problem-points ${this.currentDifficulty}">
+                                <i class="fas fa-star"></i>
+                                ${pointsMap[this.currentDifficulty]} pts
+                            </div>
+                        </div>
+                        
+                        ${problem.figure ? `<div class="puzzle-visual">${problem.figure}</div>` : ''}
+                        
+                        <div class="problem-statement">${problem.statement}</div>
+                        
+                        <div class="problem-input-section">
+                            <input type="text" class="problem-input" placeholder="Ingresa tu respuesta..." 
+                                   id="input-${problem.id}" ${isCorrect ? 'disabled' : ''}
+                                   onkeypress="if(event.key==='Enter') submitAnswer('${problem.id}')">
+                            <button class="submit-btn" onclick="submitAnswer('${problem.id}')" 
+                                    ${isCorrect ? 'disabled' : ''}>
+                                <i class="fas fa-paper-plane"></i>
+                                ${isCorrect ? 'Resuelto' : 'Enviar'}
+                            </button>
+                        </div>
+                        
+                        <div class="problem-feedback" id="feedback-${problem.id}">
+                            <!-- Feedback will appear here -->
+                        </div>
+                        
+                        <div class="problem-solution" id="solution-${problem.id}" ${isCorrect ? 'style="display:block;"' : ''}>
+                            <div class="solution-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Solución:
+                            </div>
+                            <div>${problem.solution}</div>
+                        </div>
+                    `;
+                    
+                    problemsGrid.appendChild(problemCard);
+                });
+                
+                // Render MathJax for the new content
+                if (this.mathJaxReady) {
+                    console.log('🔄 Rendering MathJax for new problems...');
+                    await this.renderMathJax(problemsGrid);
+                }
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.fade-in').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }, 100);
+            }
+
+            submitAnswer(problemId) {
+                const input = document.getElementById(`input-${problemId}`);
+                const feedback = document.getElementById(`feedback-${problemId}`);
+                const solution = document.getElementById(`solution-${problemId}`);
+                
+                if (!input || !feedback || !solution) return;
+                
+                const userAnswer = input.value.trim().toLowerCase();
+                
+                if (!userAnswer) {
+                    this.showFeedback(feedback, 'Por favor, ingresa una respuesta.', 'error');
+                    return;
+                }
+                
+                const problem = this.findProblemById(problemId);
+                if (!problem) return;
+                
+                const correctAnswer = problem.answer.toLowerCase();
+                const isCorrect = this.checkAnswer(userAnswer, correctAnswer);
+                
+                if (isCorrect) {
+                    this.handleCorrectAnswer(problemId, input, feedback, solution);
+                } else {
+                    this.handleIncorrectAnswer(feedback);
+                }
+            }
+
+            checkAnswer(userAnswer, correctAnswer) {
+                const normalize = (str) => str.replace(/\s+/g, '').replace(/[()]/g, '');
+                
+                const normalizedUser = normalize(userAnswer);
+                const normalizedCorrect = normalize(correctAnswer);
+                
+                if (normalizedUser === normalizedCorrect) return true;
+                
+                // Check for numeric answers
+                const userNum = parseFloat(normalizedUser);
+                const correctNum = parseFloat(normalizedCorrect);
+                if (!isNaN(userNum) && !isNaN(correctNum)) {
+                    return Math.abs(userNum - correctNum) < 0.01;
+                }
+                
+                // Check for common variations
+                if (normalizedCorrect.includes(',') && normalizedUser.includes(',')) {
+                    const userParts = normalizedUser.split(',').map(s => s.trim()).sort();
+                    const correctParts = normalizedCorrect.split(',').map(s => s.trim()).sort();
+                    return JSON.stringify(userParts) === JSON.stringify(correctParts);
+                }
+                
+                // Check for word variations
+                const variations = {
+                    'no': ['no', 'false', 'falso', 'incorrecto'],
+                    'si': ['si', 'sí', 'yes', 'true', 'verdadero', 'correcto'],
+                    'mañana': ['mañana', 'manana', 'tomorrow'],
+                    'mover todos': ['mover todos', 'mover', 'todos', 'moverlos'],
+                    '4 pasos': ['4', '4 pasos', 'cuatro', 'cuatro pasos']
+                };
+                
+                for (const [key, variants] of Object.entries(variations)) {
+                    if (key === normalizedCorrect && variants.includes(normalizedUser)) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+
+            findProblemById(problemId) {
+                for (const difficulty in this.problems) {
+                    const problem = this.problems[difficulty].find(p => p.id === problemId);
+                    if (problem) return problem;
+                }
+                return null;
+            }
+
+            async handleCorrectAnswer(problemId, input, feedback, solution) {
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                const points = pointsMap[this.currentDifficulty];
+                
+                this.solvedProblems.add(problemId);
+                this.problemsSolved++;
+                this.currentScore += points;
+                this.currentStreak++;
+                
+                const solveTime = Date.now() - this.startTime;
+                this.solveTimes.push(solveTime);
+                
+                input.disabled = true;
+                const submitBtn = input.nextElementSibling;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Resuelto';
+                
+                this.showFeedback(feedback, `¡Correcto! +${points} puntos`, 'success');
+                solution.classList.add('show');
+                
+                // Render MathJax for the solution
+                if (this.mathJaxReady) {
+                    await this.renderMathJax(solution);
+                }
+                
+                this.showScoreAnimation(points);
+                this.updateParticipantData(points);
+                this.saveProgress();
+                this.updateStats();
+            }
+
+            handleIncorrectAnswer(feedback) {
+                this.showFeedback(feedback, 'Respuesta incorrecta. ¡Piensa más!', 'error');
+            }
+
+            showFeedback(feedbackElement, message, type) {
+                feedbackElement.className = `problem-feedback ${type} show`;
+                feedbackElement.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i>
+                    ${message}
+                `;
+                
+                if (type === 'error') {
+                    setTimeout(() => {
+                        feedbackElement.classList.remove('show');
+                    }, 3000);
+                }
+            }
+
+            showScoreAnimation(points) {
+                const floatingPoints = document.createElement('div');
+                floatingPoints.textContent = `+${points}`;
+                floatingPoints.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: var(--puzzles);
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: floatUp 2s ease-out forwards;
+                `;
+
+                document.body.appendChild(floatingPoints);
+
+                setTimeout(() => {
+                    if (floatingPoints.parentNode) {
+                        floatingPoints.parentNode.removeChild(floatingPoints);
+                    }
+                }, 2000);
+            }
+
+            updateParticipantData(points) {
+                try {
+                    this.currentParticipant.scores = this.currentParticipant.scores || {};
+                    this.currentParticipant.problemsSolved = this.currentParticipant.problemsSolved || {};
+                    
+                    this.currentParticipant.scores.puzzles = this.currentScore;
+                    this.currentParticipant.problemsSolved.puzzles = this.problemsSolved;
+                    this.currentParticipant.totalScore = (this.currentParticipant.totalScore || 0) + points;
+                    this.currentParticipant.totalProblems = (this.currentParticipant.totalProblems || 0) + 1;
+                    this.currentParticipant.streak = this.currentStreak;
+                    this.currentParticipant.lastActivity = Date.now();
+
+                    localStorage.setItem('currentParticipant', JSON.stringify(this.currentParticipant));
+
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+                    const participantIndex = competitionData.participants.findIndex(p => p.id === this.currentParticipant.id);
+                    
+                    if (participantIndex !== -1) {
+                        competitionData.participants[participantIndex] = { ...this.currentParticipant };
+                        localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
+                    }
+
+                    const activity = {
+                        participant: this.currentParticipant.name,
+                        area: 'puzzles',
+                        points: points,
+                        difficulty: this.currentDifficulty,
+                        time: Date.now()
+                    };
+
+                    let recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+                    recentActivities.unshift(activity);
+                    if (recentActivities.length > 50) {
+                        recentActivities = recentActivities.slice(0, 50);
+                    }
+                    localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
+
+                    window.dispatchEvent(new CustomEvent('competitionUpdate', {
+                        detail: competitionData
+                    }));
+                } catch (error) {
+                    console.error('Error updating participant data:', error);
+                }
+            }
+
+            updateStats() {
+                try {
+                    const totalScoreEl = document.getElementById('totalScore');
+                    const problemsSolvedEl = document.getElementById('problemsSolved');
+                    const currentStreakEl = document.getElementById('currentStreak');
+                    const averageTimeEl = document.getElementById('averageTime');
+
+                    if (totalScoreEl) totalScoreEl.textContent = this.currentScore;
+                    if (problemsSolvedEl) problemsSolvedEl.textContent = this.problemsSolved;
+                    if (currentStreakEl) currentStreakEl.textContent = this.currentStreak;
+                    
+                    if (averageTimeEl && this.solveTimes.length > 0) {
+                        const avgTime = this.solveTimes.reduce((sum, time) => sum + time, 0) / this.solveTimes.length;
+                        const minutes = Math.floor(avgTime / 60000);
+                        const seconds = Math.floor((avgTime % 60000) / 1000);
+                        averageTimeEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+
+                    const totalProblems = Object.values(this.problems).reduce((sum, arr) => sum + arr.length, 0);
+                    const progress = (this.problemsSolved / totalProblems) * 100;
+                    
+                    const progressFillEl = document.getElementById('progressFill');
+                    const progressTextEl = document.getElementById('progressText');
+                    
+                    if (progressFillEl) progressFillEl.style.width = `${progress}%`;
+                    if (progressTextEl) progressTextEl.textContent = `${this.problemsSolved}/${totalProblems} problemas resueltos`;
+                } catch (error) {
+                    console.error('Error updating stats:', error);
+                }
+            }
+
+            setupAnimations() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+        }
+
+        // UI Helper Functions
+        function showLoading() {
+            document.getElementById('loadingContainer').style.display = 'flex';
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingContainer').style.display = 'none';
+        }
+
+        function showMainContent() {
+            document.getElementById('mainContainer').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Global Variables
+        let puzzlesModule;
+
+        // Global Functions
+        function showDifficulty(difficulty) {
+            if (puzzlesModule) {
+                puzzlesModule.showDifficulty(difficulty);
+            }
+        }
+
+        function submitAnswer(problemId) {
+            if (puzzlesModule) {
+                puzzlesModule.submitAnswer(problemId);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM loaded, starting puzzles initialization process...');
+            setTimeout(() => {
+                initializePuzzlesModule();
+            }, 100);
+        });
+
+       async function initializePuzzlesModule() {
+            try {
+                console.log('🎯 Creating PuzzlesModule...');
+                puzzlesModule = new PuzzlesModule();
+            } catch (error) {
+                console.error('❌ Failed to initialize puzzles module:', error);
+                showError('Error al cargar el módulo de acertijos: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
+    </script>
+</body>
+</html>

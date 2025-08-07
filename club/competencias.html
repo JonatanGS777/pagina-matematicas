@@ -1,0 +1,2777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competencias Matemáticas Digitales - Prof. Yonatan Guerrero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-competition: linear-gradient(135deg, #ff6b6b 0%, #ffa726 50%, #4ecdc4 100%);
+            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            --gradient-silver: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+            --gradient-bronze: linear-gradient(135deg, #cd7f32 0%, #daa520 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Competition Particles */
+        .competition-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .comp-particle {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 600;
+            pointer-events: none;
+            animation: compFloat linear infinite;
+        }
+
+        .comp-particle.trophy {
+            font-size: clamp(20px, 3vw, 28px);
+            color: rgba(255, 215, 0, 0.7);
+        }
+
+        .comp-particle.medal {
+            font-size: clamp(18px, 2.8vw, 24px);
+            color: rgba(192, 192, 192, 0.6);
+        }
+
+        .comp-particle.formula {
+            font-size: clamp(16px, 2.5vw, 22px);
+            color: rgba(78, 205, 196, 0.5);
+        }
+
+        @keyframes compFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(50vh) translateX(var(--drift, 0px)) rotate(180deg) scale(1);
+            }
+            95% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(calc(var(--drift, 0px) * 2)) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-competition);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-back i {
+            margin-right: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            backdrop-filter: blur(20px);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            box-shadow: var(--shadow-soft);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,215,0,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+            font-weight: 400;
+            position: relative;
+            z-index: 2;
+        }
+
+        .competition-status {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .status-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Access Code Section */
+        .access-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .access-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .code-input-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .code-input {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: var(--light);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(240, 147, 251, 0.3);
+            transform: scale(1.05);
+        }
+
+        .code-input.correct {
+            background: var(--success);
+            color: var(--white);
+            border-color: var(--success);
+        }
+
+        .code-input.incorrect {
+            background: var(--danger);
+            color: var(--white);
+            border-color: var(--danger);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .access-btn {
+            display: block;
+            margin: 2rem auto 0;
+            padding: 1rem 3rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .access-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .access-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+            display: none;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--gradient-competition);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        /* Competition Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-main {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .dashboard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Timer Card */
+        .timer-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border: 2px solid var(--danger);
+        }
+
+        .timer-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .timer-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Score Card */
+        .score-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border: 2px solid var(--success);
+        }
+
+        .score-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Competition Areas */
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .area-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .area-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-main);
+        }
+
+        .area-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        /* Disabled state for areas */
+        .area-card {
+            opacity: 0.85;
+            position: relative;
+        }
+
+        .area-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        .area-card.algebra::before {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+        }
+
+        .area-card.geometry::before {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        }
+
+        .area-card.calculus::before {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .area-card.trigonometry::before {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .area-card.mental-calc::before {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+        }
+
+        .area-card.puzzles::before {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        }
+
+        .area-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .area-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .area-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .difficulty-levels {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .difficulty-badge.easy {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+        }
+
+        .difficulty-badge.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .difficulty-badge.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        .area-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 3rem;
+        }
+
+        .leaderboard-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .leaderboard-item.first {
+            background: var(--gradient-gold);
+            color: var(--white);
+        }
+
+        .leaderboard-item.second {
+            background: var(--gradient-silver);
+            color: var(--dark);
+        }
+
+        .leaderboard-item.third {
+            background: var(--gradient-bronze);
+            color: var(--white);
+        }
+
+        .rank-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 1rem;
+            min-width: 40px;
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .participant-school {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .participant-score {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .competition-status {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .code-input-group {
+                justify-content: center;
+            }
+
+            .code-input {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .areas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .bounce {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(135deg, var(--success) 0%, #44a08d 100%);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: 500;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: linear-gradient(135deg, var(--danger) 0%, #f5576c 100%);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: 500;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        /* Floating Points Animation */
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -150%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -250%) scale(0.8);
+            }
+        }
+
+        /* Enhanced Pulse Animation */
+        .pulse {
+            animation: enhancedPulse 0.6s ease-in-out;
+        }
+
+        @keyframes enhancedPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 rgba(102, 126, 234, 0.4);
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+            }
+        }
+
+        /* Notification animations */
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes popOut {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+        }
+
+        /* Waiting timer animation */
+        @keyframes waitingPulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.05);
+            }
+        }
+
+        /* Success glow animation */
+        @keyframes successGlow {
+            0%, 100% { 
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            }
+            50% { 
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(78, 205, 196, 0.8);
+            }
+        }
+        /* Botón hamburguesa - solo visible en móvil */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1001;
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--text-primary);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Animación del botón hamburguesa cuando está activo */
+.mobile-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay para cerrar menú móvil */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Estilos base para nav-controls */
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Actualizar estilos de botones para responsividad */
+.nav-back {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    white-space: nowrap;
+}
+
+.nav-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.nav-back i {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Colores específicos para cada botón */
+.leaderboard-btn {
+    background: var(--success);
+    color: var(--white);
+}
+
+.timer-btn {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.admin-btn {
+    background: var(--text-secondary);
+    color: var(--white);
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.home-btn {
+    background: var(--gradient-main);
+    color: var(--white);
+}
+
+/* Responsive breakpoints - COMPETENCIAS */
+@media (max-width: 1200px) {
+    /* En pantallas medianas, ocultar texto de algunos botones */
+    .admin-btn .btn-text,
+    .timer-btn .btn-text {
+        display: none;
+    }
+    
+    .nav-back {
+        padding: 0.75rem 1rem;
+    }
+    
+    .nav-back i {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* Ocultar más textos en tablet */
+    .leaderboard-btn .btn-text {
+        display: none;
+    }
+    
+    .nav-controls {
+        gap: 0.75rem;
+    }
+    
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+    
+    .logo {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 900px) {
+    /* Punto de quiebre para mostrar menú móvil */
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    .nav-controls {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 320px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border-left: 2px solid rgba(102, 126, 234, 0.2);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 100px 2rem 2rem 2rem;
+        margin: 0;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        gap: 1.5rem;
+    }
+    
+    .nav-controls.active {
+        right: 0;
+    }
+    
+    .nav-controls.active ~ .mobile-menu-overlay {
+        display: block;
+    }
+    
+    /* Estilos de botones en menú móvil */
+    .nav-back {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 1.2rem 1.5rem;
+        border-radius: 15px;
+        font-size: 1rem;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+    
+    .nav-back .btn-text {
+        display: inline !important;
+        margin-left: 0.75rem;
+    }
+    
+    .nav-back::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.3s ease;
+        z-index: -1;
+    }
+    
+    .nav-back:hover::before {
+        left: 100%;
+    }
+    
+    .nav-back:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    /* Separadores visuales en móvil */
+    .leaderboard-btn {
+        border: 2px solid rgba(78, 205, 196, 0.3);
+    }
+    
+    .timer-btn {
+        border: 2px solid rgba(102, 126, 234, 0.3);
+    }
+    
+    .admin-btn {
+        border: 2px solid rgba(113, 128, 150, 0.3);
+        margin-top: 1rem;
+    }
+    
+    .admin-btn::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 20%;
+        width: 60%;
+        height: 1px;
+        background: rgba(113, 128, 150, 0.3);
+    }
+    
+    .home-btn {
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        margin-top: 1rem;
+        background: var(--text-secondary);
+    }
+    
+    .navbar {
+        padding: 1rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ajustes para móviles estándar */
+    .nav-controls {
+        width: 100%;
+    }
+    
+    .hero-content {
+        padding: 3rem 2rem;
+    }
+    
+    .competition-status {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .code-input-group {
+        justify-content: center;
+    }
+    
+    .code-input {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .areas-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section {
+        padding: 3rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Móviles pequeños */
+    .navbar {
+        padding: 0.75rem;
+    }
+    
+    .logo {
+        font-size: 1rem;
+    }
+    
+    .logo i {
+        font-size: 0.9rem;
+    }
+    
+    .mobile-menu-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+    }
+    
+    .nav-controls {
+        width: 100%;
+        padding: 80px 1rem 2rem 1rem;
+    }
+    
+    .nav-back {
+        padding: 1rem 1.2rem;
+        font-size: 0.95rem;
+    }
+    
+    /* Hero section ajustments */
+    .hero-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .status-item {
+        min-width: 120px;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .code-input {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .access-btn {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+/* Animaciones específicas para competencias */
+@media (prefers-reduced-motion: no-preference) {
+    .nav-controls {
+        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .nav-back {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .hamburger-line {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+}
+
+/* Para usuarios que prefieren menos animación */
+@media (prefers-reduced-motion: reduce) {
+    .nav-controls,
+    .nav-back,
+    .hamburger-line,
+    .mobile-menu-btn {
+        transition: none;
+    }
+}
+
+/* Focus visible para accesibilidad */
+.mobile-menu-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.nav-back:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Estados especiales para botones de competencia */
+.timer-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.timer-btn.started {
+    background: var(--success) !important;
+    border-color: var(--success) !important;
+}
+
+.timer-btn.started i {
+    animation: none;
+}
+
+/* Indicadores de estado */
+@keyframes pulse-success {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(78, 205, 196, 0.7); 
+    }
+    50% { 
+        box-shadow: 0 0 0 10px rgba(78, 205, 196, 0); 
+    }
+}
+
+.timer-btn.started {
+    animation: pulse-success 2s infinite;
+}
+
+/* Notificación móvil para estado del timer */
+@media (max-width: 900px) {
+    .timer-status-indicator {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        display: none;
+    }
+    
+    .timer-btn.started .timer-status-indicator {
+        display: block;
+        animation: pulse-success 2s infinite;
+    }
+}
+
+/* Mejoras adicionales para usabilidad móvil */
+@media (max-width: 900px) {
+    .nav-back {
+        touch-action: manipulation; /* Previene delay en touch */
+    }
+    
+    .mobile-menu-btn {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Área de toque más grande para botones pequeños */
+    .admin-btn {
+        min-height: 48px;
+    }
+    
+    /* Separación visual entre secciones de botones */
+    .nav-controls::before {
+        content: 'CONTROLES DE COMPETENCIA';
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-align: center;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+    }
+}
+</style>
+</head>
+<body>
+    <header class="header">
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <i class="fas fa-trophy"></i>
+            Competencias Matemáticas
+        </a>
+        
+        <!-- Botón hamburguesa para móvil -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <div class="nav-controls" id="navControls">
+            <a href="leaderboard.html" class="nav-back leaderboard-btn" target="_blank">
+                <i class="fas fa-trophy"></i>
+                <span class="btn-text">Ver Tabla de Posiciones</span>
+            </a>
+            
+            <button class="nav-back timer-btn" onclick="startCompetitionTimer()">
+                <i class="fas fa-play"></i>
+                <span class="btn-text">Iniciar Timer</span>
+            </button>
+            
+            <button class="nav-back admin-btn" onclick="resetCompetition()">
+                <i class="fas fa-cog"></i>
+                <span class="btn-text">Admin</span>
+            </button>
+            
+            <a href="../index.html" class="nav-back home-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span class="btn-text">Volver al Inicio</span>
+            </a>
+        </div>
+        
+        <!-- Overlay para cerrar menú móvil -->
+        <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+    </nav>
+</header>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    
+    <!-- Competition Particles -->
+    <div class="competition-particles" id="compParticles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🏆 Competencias Matemáticas Digitales</h1>
+            <p class="hero-subtitle">Demuestra tus habilidades matemáticas en tiempo real</p>
+            
+            <div class="competition-status">
+                <div class="status-item">
+                    <div class="status-value" id="activeParticipants">0</div>
+                    <div class="status-label">Participantes</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="totalProblems">180</div>
+                    <div class="status-label">Problemas</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="competitionStatus">En Espera</div>
+                    <div class="status-label">Estado</div>
+                </div>
+            </div>
+
+            <div class="access-section">
+                <h3 class="access-title">
+                    <i class="fas fa-key"></i>
+                    Código de Acceso a la Competencia
+                </h3>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 1rem;">
+                    Ingresa el código proporcionado por el profesor para acceder a la competencia
+                </p>
+                
+                <div class="code-input-group">
+                    <input type="text" class="code-input" maxlength="1" id="code1">
+                    <input type="text" class="code-input" maxlength="1" id="code2">
+                    <input type="text" class="code-input" maxlength="1" id="code3">
+                    <input type="text" class="code-input" maxlength="1" id="code4">
+                    <input type="text" class="code-input" maxlength="1" id="code5">
+                    <input type="text" class="code-input" maxlength="1" id="code6">
+                </div>
+
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    ¡Código correcto! Acceso concedido a la competencia
+                </div>
+
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-times-circle"></i>
+                    Código incorrecto. Verifica e intenta nuevamente
+                </div>
+
+                <button class="access-btn" id="accessBtn" onclick="verifyAccessCode()">
+                    <i class="fas fa-unlock"></i>
+                    Acceder a la Competencia
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Competition Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Competition Dashboard -->
+        <section class="section">
+            <h2 class="section-title">Panel de Competencia</h2>
+            
+            <div class="dashboard">
+                <div class="dashboard-main">
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin-bottom: 2rem; color: var(--text-primary);">
+                        <i class="fas fa-chart-line"></i>
+                        Tu Progreso en Tiempo Real
+                    </h3>
+                    
+                    <div class="areas-grid">
+                        <div class="area-card algebra" onclick="window.location.href='modulos/algebra.html'">
+                            <div class="area-icon">
+                                <i class="fas fa-square-root-alt"></i>
+                            </div>
+                            <h4 class="area-title">Álgebra</h4>
+                            <p class="area-description">Ecuaciones, sistemas lineales, polinomios y funciones</p>
+                            <div class="difficulty-levels">
+                                <span class="difficulty-badge easy">Fácil (5 pts)</span>
+                                <span class="difficulty-badge medium">Medio (10 pts)</span>
+                                <span class="difficulty-badge hard">Difícil (15 pts)</span>
+                            </div>
+                            <div class="area-stats">
+                                <span>30 problemas</span>
+                                <span style="color: var(--warning); font-weight: 600;">🚧 Próximamente</span>
+                            </div>
+                        </div>
+
+                        <div class="area-card geometry" onclick="window.location.href='modulos/geometry.html'">
+
+                            <div class="area-icon">
+                                <i class="fas fa-shapes"></i>
+                            </div>
+                            <h4 class="area-title">Geometría</h4>
+                            <p class="area-description">Figuras planas, sólidos, perímetros y áreas</p>
+                            <div class="difficulty-levels">
+                                <span class="difficulty-badge easy">Fácil (5 pts)</span>
+                                <span class="difficulty-badge medium">Medio (10 pts)</span>
+                                <span class="difficulty-badge hard">Difícil (15 pts)</span>
+                            </div>
+                            <div class="area-stats">
+                                <span>30 problemas</span>
+                                <span style="color: var(--warning); font-weight: 600;">🚧 Próximamente</span>
+                            </div>
+                        </div>
+
+                        <div class="area-card calculus" onclick="window.location.href='modulos/calculus.html'">
+                            <div class="area-icon">
+                                <i class="fas fa-infinity"></i>
+                            </div>
+                            <h4 class="area-title">Cálculo</h4>
+                            <p class="area-description">Límites, derivadas e integrales</p>
+                            <div class="difficulty-levels">
+                                <span class="difficulty-badge easy">Fácil (5 pts)</span>
+                                <span class="difficulty-badge medium">Medio (10 pts)</span>
+                                <span class="difficulty-badge hard">Difícil (15 pts)</span>
+                            </div>
+                            <div class="area-stats">
+                                <span>30 problemas</span>
+                                <span style="color: var(--warning); font-weight: 600;">🚧 Próximamente</span>
+                            </div>
+                        </div>
+
+                        <div class="area-card trigonometry" onclick="window.location.href='modulos/trigonometry.html'">
+                            <div class="area-icon">
+                                <i class="fas fa-wave-square"></i>
+                            </div>
+                            <h4 class="area-title">Trigonometría</h4>
+                            <p class="area-description">Funciones trigonométricas, identidades y aplicaciones</p>
+                            <div class="difficulty-levels">
+                                <span class="difficulty-badge easy">Fácil (5 pts)</span>
+                                <span class="difficulty-badge medium">Medio (10 pts)</span>
+                                <span class="difficulty-badge hard">Difícil (15 pts)</span>
+                            </div>
+                            <div class="area-stats">
+                                <span>30 problemas</span>
+                                <span style="color: var(--warning); font-weight: 600;">🚧 Próximamente</span>
+                            </div>
+                        </div>
+
+                            <div class="area-card statistics" onclick="window.location.href='modulos/statistics.html'">
+                            <div class="area-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h4 class="area-title">Estadísticas</h4>
+                            <p class="area-description">Datos, representaciones gráficas y análisis estadístico básico</p>
+                            <div class="difficulty-levels">
+                                <span class="difficulty-badge easy">Fácil (5 pts)</span>
+                                <span class="difficulty-badge medium">Medio (10 pts)</span>
+                                <span class="difficulty-badge hard">Difícil (15 pts)</span>
+                            </div>
+                            <div class="area-stats">
+                                <span>30 problemas</span>
+                                <span style="color: var(--warning); font-weight: 600;">🚧 Próximamente</span>
+                            </div>
+                        </div>
+
+
+                        <div class="area-card puzzles" onclick="window.location.href='modulos/puzzles.html'">
+                            <div class="area-icon">
+                                <i class="fas fa-puzzle-piece"></i>
+                            </div>
+                            <h4 class="area-title">Acertijos</h4>
+                            <p class="area-description">Lógica matemática, patrones y desafíos mentales</p>
+                            <div class="difficulty-levels">
+                                <span class="difficulty-badge easy">Fácil (5 pts)</span>
+                                <span class="difficulty-badge medium">Medio (10 pts)</span>
+                                <span class="difficulty-badge hard">Difícil (15 pts)</span>
+                            </div>
+                            <div class="area-stats">
+                                <span>30 problemas</span>
+                                <span style="color: var(--warning); font-weight: 600;">🚧 Próximamente</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sidebar">
+                    <div class="timer-card">
+                        <div class="timer-display" id="timer">02:00:00</div>
+                        <div class="timer-label">Tiempo Restante</div>
+                    </div>
+
+                    <div class="score-card">
+                        <div class="score-display" id="currentScore">0</div>
+                        <div class="score-label">Puntos Totales</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard -->
+        <section class="section">
+            <div class="leaderboard fade-in">
+                <h3 class="leaderboard-title">
+                    <i class="fas fa-crown"></i>
+                    Tabla de Posiciones en Vivo
+                    <span id="lastUpdateTime" style="font-size: 0.7rem; opacity: 0.7; margin-left: 1rem;"></span>
+                </h3>
+                
+                <div class="leaderboard-list" id="liveLeaderboardList">
+                    <!-- Real participants will be populated here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Competition Management System
+        class CompetitionManager {
+            constructor() {
+                this.validCodes = [
+                    'MATH24', // Código principal
+                    'COMP25', // Código alternativo
+                    'STEM2024' // Código especial
+                ];
+                this.currentScore = 0;
+                this.timeRemaining = 7200; // 2 horas en segundos
+                this.timerInterval = null;
+                this.participantCount = 0;
+                this.currentParticipant = null;
+                this.competitionData = null;
+                this.areas = ['algebra', 'geometry', 'calculus', 'trigonometry', 'mental-calc', 'puzzles'];
+                
+                this.init();
+            }
+
+            init() {
+                this.setupCodeInputs();
+                this.startParticipantCounter();
+                this.createCompetitionParticles();
+                this.setupAnimations();
+                this.initializeCompetitionData();
+                this.loadExistingData();
+                this.updateLiveLeaderboard();
+                this.startLiveLeaderboardUpdates();
+            }
+
+            initializeCompetitionData() {
+                // Initialize competition data structure if it doesn't exist
+                if (!localStorage.getItem('mathCompetitionData')) {
+                    const competitionData = {
+                        startTime: null,
+                        endTime: null,
+                        duration: 7200, // 2 horas en segundos
+                        timerStarted: false, // New property to track timer state
+                        participants: [],
+                        totalProblems: 180,
+                        areas: ['algebra', 'geometry', 'calculus', 'trigonometry', 'mental-calc', 'puzzles'],
+                        isActive: false,
+                        lastUpdate: Date.now()
+                    };
+                    localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
+                }
+                this.competitionData = JSON.parse(localStorage.getItem('mathCompetitionData'));
+                
+                // Set timer based on competition state
+                if (this.competitionData.timerStarted && this.competitionData.startTime) {
+                    const elapsed = Math.floor((Date.now() - this.competitionData.startTime) / 1000);
+                    this.timeRemaining = Math.max(0, this.competitionData.duration - elapsed);
+                } else {
+                    this.timeRemaining = this.competitionData.duration;
+                }
+            }
+
+            loadExistingData() {
+                // Load existing participant data if returning user
+                const savedParticipant = localStorage.getItem('currentParticipant');
+                if (savedParticipant) {
+                    this.currentParticipant = JSON.parse(savedParticipant);
+                    this.currentScore = this.currentParticipant.totalScore;
+                    document.getElementById('currentScore').textContent = this.currentScore;
+                }
+
+                // Update participant count with real data
+                this.participantCount = this.competitionData.participants.length;
+                document.getElementById('activeParticipants').textContent = this.participantCount;
+                
+                // Update timer button state
+                this.updateTimerButtonState();
+                
+                // Update live leaderboard with current data
+                this.updateLiveLeaderboard();
+            }
+
+            updateTimerButtonState() {
+                // Check if timer has been started and update button accordingly
+                const startButton = document.querySelector('[onclick="startCompetitionTimer()"]');
+                if (startButton && this.competitionData.timerStarted) {
+                    startButton.innerHTML = '<i class="fas fa-check"></i> Timer Iniciado';
+                    startButton.style.background = 'var(--success)';
+                    startButton.disabled = true;
+                }
+            }
+
+            registerParticipant() {
+                // Create participant registration modal
+                const name = prompt('Ingresa tu nombre completo:');
+                if (!name) return false;
+                
+                const school = prompt('Ingresa el nombre de tu escuela:');
+                if (!school) return false;
+
+                // Check if participant already exists
+                const existingParticipant = this.competitionData.participants.find(
+                    p => p.name.toLowerCase() === name.toLowerCase() && p.school.toLowerCase() === school.toLowerCase()
+                );
+
+                if (existingParticipant) {
+                    this.currentParticipant = existingParticipant;
+                    alert(`¡Bienvenido de nuevo, ${name}! Continuarás desde donde lo dejaste.`);
+                } else {
+                    // Create new participant
+                    this.currentParticipant = {
+                        id: Date.now(),
+                        name: name.trim(),
+                        school: school.trim(),
+                        totalScore: 0,
+                        scores: {
+                            algebra: 0,
+                            geometry: 0,
+                            calculus: 0,
+                            trigonometry: 0,
+                            'mental-calc': 0,
+                            puzzles: 0
+                        },
+                        problemsSolved: {
+                            algebra: 0,
+                            geometry: 0,
+                            calculus: 0,
+                            trigonometry: 0,
+                            'mental-calc': 0,
+                            puzzles: 0
+                        },
+                        totalProblems: 0,
+                        streak: 0,
+                        joinTime: Date.now(),
+                        lastActivity: Date.now(),
+                        isActive: true
+                    };
+
+                    // Add to competition data
+                    this.competitionData.participants.push(this.currentParticipant);
+                    this.updateCompetitionData();
+                }
+
+                // Save current participant
+                localStorage.setItem('currentParticipant', JSON.stringify(this.currentParticipant));
+                this.currentScore = this.currentParticipant.totalScore;
+                
+                return true;
+            }
+
+            updateCompetitionData() {
+                this.competitionData.lastUpdate = Date.now();
+                this.competitionData.isActive = true;
+                localStorage.setItem('mathCompetitionData', JSON.stringify(this.competitionData));
+                
+                // Update live leaderboard
+                this.updateLiveLeaderboard();
+                
+                // Trigger update event for other pages
+                window.dispatchEvent(new CustomEvent('competitionUpdate', {
+                    detail: this.competitionData
+                }));
+            }
+
+            addScore(area, points, difficulty) {
+                if (!this.currentParticipant) return;
+
+                // Update participant scores
+                this.currentParticipant.scores[area] += points;
+                this.currentParticipant.problemsSolved[area]++;
+                this.currentParticipant.totalScore += points;
+                this.currentParticipant.totalProblems++;
+                this.currentParticipant.streak++;
+                this.currentParticipant.lastActivity = Date.now();
+
+                // Update current score display
+                this.currentScore = this.currentParticipant.totalScore;
+                document.getElementById('currentScore').textContent = this.currentScore;
+
+                // Find participant in competition data and update
+                const participantIndex = this.competitionData.participants.findIndex(
+                    p => p.id === this.currentParticipant.id
+                );
+                
+                if (participantIndex !== -1) {
+                    this.competitionData.participants[participantIndex] = { ...this.currentParticipant };
+                }
+
+                // Save updated data
+                localStorage.setItem('currentParticipant', JSON.stringify(this.currentParticipant));
+                this.updateCompetitionData();
+
+                // Show score animation
+                this.showScoreAnimation(points, difficulty);
+
+                // Add to recent activity
+                this.addRecentActivity(area, points, difficulty);
+            }
+
+            showScoreAnimation(points, difficulty) {
+                const scoreElement = document.getElementById('currentScore');
+                scoreElement.classList.add('pulse');
+                
+                // Create floating points animation
+                const floatingPoints = document.createElement('div');
+                floatingPoints.textContent = `+${points}`;
+                floatingPoints.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: ${difficulty === 'hard' ? '#ff6b6b' : difficulty === 'medium' ? '#ffe066' : '#4ecdc4'};
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: floatUp 2s ease-out forwards;
+                `;
+
+                document.body.appendChild(floatingPoints);
+
+                setTimeout(() => {
+                    scoreElement.classList.remove('pulse');
+                    if (floatingPoints.parentNode) {
+                        floatingPoints.parentNode.removeChild(floatingPoints);
+                    }
+                }, 2000);
+            }
+
+            addRecentActivity(area, points, difficulty) {
+                const activity = {
+                    participant: this.currentParticipant.name,
+                    area: area,
+                    points: points,
+                    difficulty: difficulty,
+                    time: Date.now()
+                };
+
+                // Get existing activities
+                let recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+                recentActivities.unshift(activity);
+                
+                // Keep only last 50 activities
+                if (recentActivities.length > 50) {
+                    recentActivities = recentActivities.slice(0, 50);
+                }
+
+                localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
+            }
+
+            setupCodeInputs() {
+                const inputs = document.querySelectorAll('.code-input');
+                
+                inputs.forEach((input, index) => {
+                    input.addEventListener('input', (e) => {
+                        const value = e.target.value.toUpperCase();
+                        e.target.value = value;
+                        
+                        // Auto-focus next input
+                        if (value && index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                        
+                        // Reset input styles
+                        e.target.classList.remove('correct', 'incorrect');
+                    });
+
+                    input.addEventListener('keydown', (e) => {
+                        // Handle backspace
+                        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                            inputs[index - 1].focus();
+                        }
+                    });
+
+                    input.addEventListener('paste', (e) => {
+                        e.preventDefault();
+                        const paste = e.clipboardData.getData('text').toUpperCase();
+                        
+                        for (let i = 0; i < Math.min(paste.length, inputs.length - index); i++) {
+                            inputs[index + i].value = paste[i];
+                        }
+                        
+                        // Focus last filled input
+                        const lastIndex = Math.min(index + paste.length - 1, inputs.length - 1);
+                        inputs[lastIndex].focus();
+                    });
+                });
+            }
+
+            verifyCode() {
+                const inputs = document.querySelectorAll('.code-input');
+                const enteredCode = Array.from(inputs).map(input => input.value).join('');
+                
+                const successMsg = document.getElementById('successMessage');
+                const errorMsg = document.getElementById('errorMessage');
+                
+                // Hide previous messages
+                successMsg.classList.remove('show');
+                errorMsg.classList.remove('show');
+                
+                if (this.validCodes.includes(enteredCode)) {
+                    // Correct code
+                    inputs.forEach(input => {
+                        input.classList.add('correct');
+                        input.disabled = true;
+                    });
+                    
+                    successMsg.classList.add('show');
+                    
+                    setTimeout(() => {
+                        // Register participant before starting competition
+                        const registered = this.registerParticipant();
+                        if (registered) {
+                            this.startCompetition();
+                        } else {
+                            // Reset if registration was cancelled
+                            inputs.forEach(input => {
+                                input.classList.remove('correct');
+                                input.disabled = false;
+                                input.value = '';
+                            });
+                            successMsg.classList.remove('show');
+                            inputs[0].focus();
+                        }
+                    }, 2000);
+                    
+                    return true;
+                } else {
+                    // Incorrect code
+                    inputs.forEach(input => {
+                        input.classList.add('incorrect');
+                    });
+                    
+                    errorMsg.classList.add('show');
+                    
+                    setTimeout(() => {
+                        inputs.forEach(input => {
+                            input.classList.remove('incorrect');
+                            input.value = '';
+                        });
+                        inputs[0].focus();
+                    }, 1500);
+                    
+                    return false;
+                }
+            }
+
+            startCompetition() {
+                const mainContent = document.getElementById('mainContent');
+                const hero = document.querySelector('.hero');
+                
+                // Update status to preparing
+                document.getElementById('competitionStatus').textContent = 'Preparando';
+                
+                // Initialize real-time sync
+                this.syncWithLocalStorage();
+                
+                // Show welcome message with participant info
+                alert(`¡Bienvenido ${this.currentParticipant.name}!\n\n⏳ Esperando que el profesor inicie la competencia...\n\nPuedes ver la tabla de posiciones mientras esperas.`);
+                
+                // Show main content with smooth transition
+                setTimeout(() => {
+                    hero.style.display = 'none';
+                    mainContent.classList.add('active');
+                    
+                    // Start timer in standby mode (not counting down yet)
+                    this.startTimerStandby();
+                }, 500);
+            }
+
+            startTimerStandby() {
+                // Show timer but don't count down until professor starts
+                this.updateTimerDisplay();
+                
+                // Check immediately if professor has already started
+                const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                if (competitionData.timerStarted && competitionData.startTime) {
+                    // Timer was already started, go directly to active mode
+                    this.competitionData = competitionData;
+                    document.getElementById('competitionStatus').textContent = 'Activa';
+                    this.startActiveTimer();
+                    return;
+                }
+                
+                // Check every second if competition has been started by professor
+                this.timerInterval = setInterval(() => {
+                    // Check if professor has started the competition
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                    
+                    if (competitionData.timerStarted && competitionData.startTime) {
+                        // Professor has started the timer, switch to active mode
+                        clearInterval(this.timerInterval);
+                        this.competitionData = competitionData;
+                        this.startActiveTimer();
+                        
+                        // Update status
+                        document.getElementById('competitionStatus').textContent = 'Activa';
+                        
+                        // Show start notification
+                        this.showStartNotification();
+                    } else {
+                        // Still waiting, just update display
+                        this.updateTimerDisplay();
+                    }
+                }, 1000);
+            }
+
+            startActiveTimer() {
+                // Now start the real countdown
+                this.timerInterval = setInterval(() => {
+                    // Calculate time remaining based on competition start time
+                    if (this.competitionData.startTime) {
+                        const elapsed = Math.floor((Date.now() - this.competitionData.startTime) / 1000);
+                        this.timeRemaining = Math.max(0, this.competitionData.duration - elapsed);
+                    }
+                    
+                    this.updateTimerDisplay();
+                    
+                    if (this.timeRemaining <= 0) {
+                        this.endCompetition();
+                    }
+                }, 1000);
+            }
+
+            showStartNotification() {
+                // Create a prominent notification that competition has started
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, var(--success) 0%, #44a08d 100%);
+                    color: white;
+                    padding: 2rem 3rem;
+                    border-radius: 25px;
+                    text-align: center;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    z-index: 9999;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                    animation: popIn 0.5s ease-out;
+                    border: 2px solid rgba(255,255,255,0.3);
+                `;
+                
+                notification.innerHTML = `
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                    <div>¡COMPETENCIA INICIADA!</div>
+                    <div style="font-size: 1rem; margin-top: 0.5rem; opacity: 0.9;">El cronómetro está corriendo</div>
+                    <div style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.7;">¡Buena suerte!</div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Add sound effect simulation with animation
+                notification.style.animation = 'popIn 0.5s ease-out, successGlow 1s ease-in-out 0.5s';
+                
+                // Remove after 4 seconds
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.style.animation = 'popOut 0.3s ease-in forwards';
+                        setTimeout(() => {
+                            if (notification.parentNode) {
+                                notification.parentNode.removeChild(notification);
+                            }
+                        }, 300);
+                    }
+                }, 4000);
+            }
+
+            updateAllAreaDisplays() {
+                this.areas.forEach(area => {
+                    this.updateAreaDisplay(area);
+                });
+            }
+
+            startTimer() {
+                // Update timer display immediately
+                this.updateTimerDisplay();
+                
+                this.timerInterval = setInterval(() => {
+                    // Calculate time remaining based on competition start time
+                    if (this.competitionData.startTime) {
+                        const elapsed = Math.floor((Date.now() - this.competitionData.startTime) / 1000);
+                        this.timeRemaining = Math.max(0, this.competitionData.duration - elapsed);
+                    } else {
+                        this.timeRemaining--;
+                    }
+                    
+                    this.updateTimerDisplay();
+                    
+                    if (this.timeRemaining <= 0) {
+                        this.endCompetition();
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                const hours = Math.floor(this.timeRemaining / 3600);
+                const minutes = Math.floor((this.timeRemaining % 3600) / 60);
+                const seconds = this.timeRemaining % 60;
+                
+                const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                const timerElement = document.getElementById('timer');
+                
+                if (timerElement) {
+                    // Check if timer has been started by professor
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                    
+                    if (!competitionData.timerStarted) {
+                        // Timer not started yet - show waiting state
+                        timerElement.textContent = '⏳ ' + display;
+                        timerElement.style.color = 'var(--warning)';
+                        timerElement.style.animation = 'waitingPulse 2s infinite';
+                    } else {
+                        // Timer is active
+                        timerElement.textContent = display;
+                        timerElement.style.animation = 'none';
+                        
+                        // Change color when time is running out
+                        if (this.timeRemaining <= 300) { // 5 minutes
+                            timerElement.style.color = 'var(--danger)';
+                            timerElement.classList.add('pulse');
+                        } else if (this.timeRemaining <= 600) { // 10 minutes
+                            timerElement.style.color = 'var(--warning)';
+                        } else {
+                            timerElement.style.color = 'var(--success)';
+                        }
+                    }
+                }
+                
+                // Update time remaining in status if in hero section
+                const timeRemainingElement = document.getElementById('timeRemaining');
+                if (timeRemainingElement) {
+                    timeRemainingElement.textContent = display;
+                }
+            }
+
+            endCompetition() {
+                clearInterval(this.timerInterval);
+                alert('¡Tiempo terminado! La competencia ha finalizado.');
+                // Aquí se puede agregar lógica para enviar resultados
+            }
+
+            startParticipantCounter() {
+                // Use real participant count from localStorage
+                const updateCounter = () => {
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+                    const activeParticipants = competitionData.participants.filter(p => p.isActive).length;
+                    document.getElementById('activeParticipants').textContent = activeParticipants;
+                    this.participantCount = activeParticipants;
+                    
+                    // Update live leaderboard when participant count changes
+                    this.updateLiveLeaderboard();
+                };
+                
+                // Update immediately
+                updateCounter();
+                
+                // Update every 5 seconds
+                setInterval(updateCounter, 5000);
+                
+                // Listen for competition updates
+                window.addEventListener('competitionUpdate', updateCounter);
+            }
+
+            updateScore(points) {
+                // This method is now handled by addScore
+                // Keeping for compatibility
+                this.currentScore += points;
+                const scoreElement = document.getElementById('currentScore');
+                scoreElement.textContent = this.currentScore;
+                
+                // Animate score change
+                scoreElement.classList.add('pulse');
+                setTimeout(() => {
+                    scoreElement.classList.remove('pulse');
+                }, 600);
+            }
+
+            // Real-time data synchronization
+            syncWithLocalStorage() {
+                // Listen for changes in localStorage from other tabs
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'mathCompetitionData') {
+                        this.competitionData = JSON.parse(e.newValue);
+                        this.participantCount = this.competitionData.participants.length;
+                        document.getElementById('activeParticipants').textContent = this.participantCount;
+                        
+                        // Update timer button state when data changes
+                        this.updateTimerButtonState();
+                        
+                        // Update live leaderboard
+                        this.updateLiveLeaderboard();
+                    }
+                });
+
+                // Listen for competition update events from other pages
+                window.addEventListener('competitionUpdate', (e) => {
+                    this.competitionData = e.detail;
+                    this.participantCount = this.competitionData.participants.length;
+                    document.getElementById('activeParticipants').textContent = this.participantCount;
+                    this.updateTimerButtonState();
+                    this.updateLiveLeaderboard();
+                });
+
+                // Listen for competition reset events
+                window.addEventListener('competitionReset', () => {
+                    // Another page has reset the competition, reload this page
+                    location.reload();
+                });
+            }
+
+            // Live Leaderboard Management
+            updateLiveLeaderboard() {
+                const leaderboardContainer = document.getElementById('liveLeaderboardList');
+                if (!leaderboardContainer) return;
+
+                // Update last update time
+                const lastUpdateElement = document.getElementById('lastUpdateTime');
+                if (lastUpdateElement) {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('es-ES', { 
+                        hour: '2-digit', 
+                        minute: '2-digit', 
+                        second: '2-digit' 
+                    });
+                    lastUpdateElement.textContent = `Actualizado: ${timeString}`;
+                }
+
+                // Get real participants data
+                const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+                const participants = competitionData.participants || [];
+
+                // Filter active participants and sort by score
+                const activeParticipants = participants
+                    .filter(p => p.isActive && p.totalScore >= 0)
+                    .sort((a, b) => b.totalScore - a.totalScore);
+
+                if (activeParticipants.length === 0) {
+                    leaderboardContainer.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; color: var(--primary);"></i>
+                            <h3>Esperando Participantes</h3>
+                            <p>Los participantes aparecerán aquí cuando ingresen con el código de acceso</p>
+                            <p style="margin-top: 1rem; font-size: 0.9rem;">La tabla se actualiza automáticamente</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                leaderboardContainer.innerHTML = '';
+
+                // Show top 10 participants
+                const topParticipants = activeParticipants.slice(0, 10);
+                
+                topParticipants.forEach((participant, index) => {
+                    const rankItem = document.createElement('div');
+                    
+                    // Assign classes based on rank
+                    if (index === 0) {
+                        rankItem.className = 'leaderboard-item first';
+                    } else if (index === 1) {
+                        rankItem.className = 'leaderboard-item second';
+                    } else if (index === 2) {
+                        rankItem.className = 'leaderboard-item third';
+                    } else {
+                        rankItem.className = 'leaderboard-item';
+                    }
+
+                    // Highlight current participant
+                    if (this.currentParticipant && participant.id === this.currentParticipant.id) {
+                        rankItem.classList.add('current-participant');
+                    }
+
+                    // Format last activity time
+                    const lastActivityTime = participant.lastActivity ? 
+                        this.formatTimeAgo(participant.lastActivity) : 'Recién ingresó';
+
+                    // Calculate total problems solved
+                    const totalProblems = participant.problemsSolved ? 
+                        Object.values(participant.problemsSolved).reduce((sum, count) => sum + count, 0) : 
+                        participant.totalProblems || 0;
+
+                    // Add "TÚ" indicator for current participant
+                    const nameDisplay = this.currentParticipant && participant.id === this.currentParticipant.id ? 
+                        `${participant.name} <span class="current-participant-badge">TÚ</span>` : 
+                        participant.name;
+
+                    rankItem.innerHTML = `
+                        <div class="rank-number">${index + 1}</div>
+                        <div class="participant-info">
+                            <div class="participant-name">${nameDisplay}</div>
+                            <div class="participant-school">${participant.school}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                <i class="fas fa-fire"></i> Racha: ${participant.streak || 0} | 
+                                <i class="fas fa-tasks"></i> Problemas: ${totalProblems} | 
+                                <i class="fas fa-clock"></i> ${lastActivityTime}
+                            </div>
+                        </div>
+                        <div class="participant-score">${participant.totalScore} pts</div>
+                    `;
+
+                    leaderboardContainer.appendChild(rankItem);
+                });
+
+                // Add summary if there are more participants
+                if (activeParticipants.length > 10) {
+                    const summary = document.createElement('div');
+                    summary.className = 'leaderboard-summary';
+                    summary.innerHTML = `
+                        <i class="fas fa-ellipsis-h"></i>
+                        Mostrando top 10 de ${activeParticipants.length} participantes totales
+                        <br>
+                        <a href="leaderboard.html" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Ver tabla completa
+                        </a>
+                    `;
+                    leaderboardContainer.appendChild(summary);
+                }
+            }
+
+            formatTimeAgo(timestamp) {
+                const now = Date.now();
+                const diff = Math.floor((now - timestamp) / 1000);
+                
+                if (diff < 30) return 'Ahora mismo';
+                if (diff < 60) return 'Hace unos segundos';
+                if (diff < 3600) return `Hace ${Math.floor(diff / 60)} min`;
+                if (diff < 86400) return `Hace ${Math.floor(diff / 3600)} h`;
+                return `Hace ${Math.floor(diff / 86400)} días`;
+            }
+
+            startLiveLeaderboardUpdates() {
+                // Update leaderboard every 10 seconds
+                setInterval(() => {
+                    // Add visual feedback for update
+                    const lastUpdateElement = document.getElementById('lastUpdateTime');
+                    if (lastUpdateElement) {
+                        lastUpdateElement.style.color = 'var(--success)';
+                        lastUpdateElement.style.fontWeight = '600';
+                    }
+                    
+                    this.updateLiveLeaderboard();
+                    
+                    // Reset visual feedback after a moment
+                    setTimeout(() => {
+                        if (lastUpdateElement) {
+                            lastUpdateElement.style.color = '';
+                            lastUpdateElement.style.fontWeight = '';
+                        }
+                    }, 1000);
+                }, 10000);
+            }
+
+            selectArea(area) {
+                if (!this.currentParticipant) {
+                    alert('Error: No hay participante registrado.');
+                    return;
+                }
+
+                const areaNames = {
+                    'algebra': 'Álgebra',
+                    'geometry': 'Geometría', 
+                    'calculus': 'Cálculo',
+                    'trigonometry': 'Trigonometría',
+                    'mental-calc': 'Cálculo Mental',
+                    'puzzles': 'Acertijos'
+                };
+                
+                // Show coming soon message
+                alert(`📚 Área de ${areaNames[area]}\n\n🚧 PRÓXIMAMENTE 🚧\n\nLos ejercicios para esta área se habilitarán en la siguiente fase.\n\nPor ahora puedes:\n• Ver la tabla de posiciones\n• Esperar a que se abran los módulos de ejercicios`);
+            }
+
+            createCompetitionParticles() {
+                const particlesContainer = document.getElementById('compParticles');
+                const particles = ['🏆', '🥇', '🥈', '🥉', '📊', '📈', '🎯', '⚡', '💯', '🔥'];
+                
+                setInterval(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'comp-particle trophy';
+                    particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+                    
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.setProperty('--drift', (Math.random() - 0.5) * 200 + 'px');
+                    particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                    particle.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    particlesContainer.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 25000);
+                }, 3000);
+            }
+
+            setupAnimations() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+        }
+
+        // Initialize competition manager
+        const competitionManager = new CompetitionManager();
+        
+        // Expose globally for other functions
+        window.competitionManager = competitionManager;
+
+        // Global functions
+        function verifyAccessCode() {
+            competitionManager.verifyCode();
+        }
+
+        function selectArea(area) {
+            competitionManager.selectArea(area);
+        }
+
+        // Start competition timer (Professor only)
+        function startCompetitionTimer() {
+            // Professor access code verification
+            const accessCode = prompt(
+                '🎯 INICIAR CRONÓMETRO - SOLO PROFESOR 🎯\n\n' +
+                'Ingresa el código de acceso del profesor para iniciar el timer:'
+            );
+            
+            // Professor codes
+            const validProfessorCodes = ['PROF2024', 'RESET123', 'TEACHER01'];
+            
+            if (!accessCode || !validProfessorCodes.includes(accessCode.toUpperCase())) {
+                alert('❌ Código incorrecto.\n\nSolo el profesor puede iniciar el cronómetro.');
+                return;
+            }
+            
+            // Check if there are participants
+            const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+            const activeParticipants = competitionData.participants.filter(p => p.isActive).length;
+            
+            if (activeParticipants === 0) {
+                alert('⚠️ No hay participantes registrados.\n\nEspera a que al menos un estudiante ingrese antes de iniciar el timer.');
+                return;
+            }
+            
+            const confirmStart = confirm(
+                `🚀 INICIAR COMPETENCIA 🚀\n\n` +
+                `Participantes listos: ${activeParticipants}\n` +
+                `Duración: 2 horas\n\n` +
+                `¿Iniciar el cronómetro ahora?\n\n` +
+                `⚠️ Una vez iniciado, el tiempo no se puede pausar.`
+            );
+            
+            if (confirmStart) {
+                // Start the competition timer
+                competitionData.timerStarted = true;
+                competitionData.startTime = Date.now();
+                competitionData.endTime = Date.now() + (competitionData.duration * 1000);
+                competitionData.isActive = true;
+                competitionData.lastUpdate = Date.now();
+                
+                localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
+                
+                // Update competition manager instance
+                if (window.competitionManager) {
+                    competitionManager.competitionData = competitionData;
+                    competitionManager.updateTimerButtonState();
+                }
+                
+                // Update button to show it's started
+                const startButton = document.querySelector('[onclick="startCompetitionTimer()"]');
+                if (startButton) {
+                    startButton.innerHTML = '<i class="fas fa-check"></i> Timer Iniciado';
+                    startButton.style.background = 'var(--success)';
+                    startButton.disabled = true;
+                }
+                
+                // Trigger update event for all pages
+                window.dispatchEvent(new CustomEvent('competitionUpdate', {
+                    detail: competitionData
+                }));
+                
+                alert('✅ ¡Cronómetro iniciado!\n\nLa competencia ha comenzado oficialmente.\nTodos los participantes han sido notificados.');
+            }
+        }
+
+        // Reset entire competition
+        function resetCompetition() {
+            // Professor access code verification
+            const accessCode = prompt(
+                '🔒 ACCESO RESTRINGIDO - SOLO PROFESOR 🔒\n\n' +
+                'Ingresa el código de acceso del profesor para reiniciar:'
+            );
+            
+            // Professor codes (you can change these)
+            const validProfessorCodes = ['PROF2024', 'RESET123', 'TEACHER01'];
+            
+            if (!accessCode || !validProfessorCodes.includes(accessCode.toUpperCase())) {
+                alert('❌ Código incorrecto.\n\nSolo el profesor puede reiniciar la competencia.');
+                return;
+            }
+            
+            const confirmReset = confirm(
+                '⚠️ ADVERTENCIA ⚠️\n\n' +
+                'Esto eliminará TODOS los datos de la competencia:\n' +
+                '• Todos los participantes\n' +
+                '• Todas las puntuaciones\n' +
+                '• Toda la actividad reciente\n\n' +
+                '¿Estás seguro de que quieres REINICIAR la competencia?'
+            );
+            
+            if (confirmReset) {
+                const doubleConfirm = confirm(
+                    '🔥 ÚLTIMA CONFIRMACIÓN 🔥\n\n' +
+                    'Esta acción NO se puede deshacer.\n' +
+                    'Se perderán todos los datos permanentemente.\n\n' +
+                    '¿Continuar con el REINICIO COMPLETO?'
+                );
+                
+                if (doubleConfirm) {
+                    // Stop current timer
+                    if (competitionManager.timerInterval) {
+                        clearInterval(competitionManager.timerInterval);
+                    }
+                    
+                    // Clear all competition data
+                    localStorage.removeItem('mathCompetitionData');
+                    localStorage.removeItem('recentActivities');
+                    localStorage.removeItem('currentParticipant');
+                    
+                    // Trigger update event for other pages before reload
+                    window.dispatchEvent(new CustomEvent('competitionReset', {
+                        detail: { action: 'reset', timestamp: Date.now() }
+                    }));
+                    
+                    // Show success message
+                    alert('✅ Competencia reiniciada exitosamente.\n\nTodos los datos han sido eliminados.\nLa página se recargará automáticamente.');
+                    
+                    // Reload page
+                    location.reload();
+                }
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && document.querySelector('.code-input:focus')) {
+                verifyAccessCode();
+            }
+        });
+
+        // Auto-focus first input on load
+        window.addEventListener('load', () => {
+            document.getElementById('code1').focus();
+        });
+
+        // Prevent right-click and dev tools (basic security)
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+        // Variables globales para el menú móvil
+let mobileMenuOpen = false;
+
+function toggleMobileMenu() {
+    const navControls = document.getElementById('navControls');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    
+    if (!mobileMenuOpen) {
+        openMobileMenu();
+    } else {
+        closeMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    const navControls = document.getElementById('navControls');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navControls.classList.add('active');
+    menuBtn.classList.add('active');
+    overlay.style.display = 'block';
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+    
+    mobileMenuOpen = true;
+    
+    // Añadir evento para cerrar con Escape
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+function closeMobileMenu() {
+    const navControls = document.getElementById('navControls');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navControls.classList.remove('active');
+    menuBtn.classList.remove('active');
+    overlay.style.display = 'none';
+    
+    // Restaurar scroll del body
+    document.body.style.overflow = 'auto';
+    
+    mobileMenuOpen = false;
+    
+    // Remover evento de Escape
+    document.removeEventListener('keydown', handleEscapeKey);
+}
+
+// Cerrar menú con tecla Escape
+function handleEscapeKey(event) {
+    if (event.key === 'Escape' && mobileMenuOpen) {
+        closeMobileMenu();
+    }
+}
+
+// Inicializar eventos del menú responsivo para competencias
+function initCompetitionMobileMenu() {
+    // Cerrar menú al hacer click en cualquier botón de navegación
+    const navButtons = document.querySelectorAll('.nav-back');
+    
+    navButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            // No cerrar inmediatamente para botones que requieren confirmación
+            if (this.classList.contains('timer-btn') || this.classList.contains('admin-btn')) {
+                // Estos botones tienen confirmaciones, cerrar después de un delay
+                setTimeout(() => {
+                    if (mobileMenuOpen) {
+                        closeMobileMenu();
+                    }
+                }, 100);
+            } else {
+                // Enlaces normales, cerrar inmediatamente
+                if (mobileMenuOpen) {
+                    closeMobileMenu();
+                }
+            }
+        });
+    });
+    
+    // Cerrar menú al cambiar tamaño de ventana
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 900 && mobileMenuOpen) {
+            closeMobileMenu();
+        }
+    });
+    
+    // Mejorar accesibilidad del menú
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navControls = document.getElementById('navControls');
+    
+    if (menuBtn && navControls) {
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-controls', 'navControls');
+        
+        // Actualizar aria-expanded cuando cambie el estado
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const isActive = navControls.classList.contains('active');
+                    menuBtn.setAttribute('aria-expanded', isActive.toString());
+                }
+            });
+        });
+        
+        observer.observe(navControls, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+    
+    // Actualizar estado visual del botón timer cuando cambie
+    updateTimerButtonState();
+    
+    // Escuchar cambios en el estado de la competencia
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'mathCompetitionData') {
+            updateTimerButtonState();
+        }
+    });
+    
+    window.addEventListener('competitionUpdate', function(e) {
+        updateTimerButtonState();
+    });
+}
+
+// Actualizar estado visual del botón timer
+function updateTimerButtonState() {
+    const timerBtn = document.querySelector('.timer-btn');
+    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+    
+    if (timerBtn && competitionData.timerStarted) {
+        timerBtn.innerHTML = '<i class="fas fa-check"></i><span class="btn-text">Timer Iniciado</span><span class="timer-status-indicator"></span>';
+        timerBtn.classList.add('started');
+        timerBtn.disabled = true;
+        timerBtn.style.background = 'var(--success)';
+        
+        // Actualizar tooltip
+        timerBtn.setAttribute('title', 'El cronómetro ya está en marcha');
+    }
+}
+
+// Manejar clics en botones especiales en móvil
+function handleSpecialButtonClick(buttonType) {
+    // Cerrar menú móvil cuando se hace clic en botones especiales
+    if (mobileMenuOpen && window.innerWidth <= 900) {
+        setTimeout(() => {
+            closeMobileMenu();
+        }, 200);
+    }
+}
+
+// Añadir manejadores especiales para botones de competencia
+function setupCompetitionButtonHandlers() {
+    // Timer button
+    const timerBtn = document.querySelector('.timer-btn');
+    if (timerBtn) {
+        const originalOnClick = timerBtn.onclick;
+        timerBtn.onclick = function(e) {
+            handleSpecialButtonClick('timer');
+            if (originalOnClick) {
+                originalOnClick.call(this, e);
+            }
+        };
+    }
+    
+    // Admin button
+    const adminBtn = document.querySelector('.admin-btn');
+    if (adminBtn) {
+        const originalOnClick = adminBtn.onclick;
+        adminBtn.onclick = function(e) {
+            handleSpecialButtonClick('admin');
+            if (originalOnClick) {
+                originalOnClick.call(this, e);
+            }
+        };
+    }
+}
+
+// Inicializar todo cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initCompetitionMobileMenu();
+    setupCompetitionButtonHandlers();
+});
+
+// También inicializar cuando la ventana se carga completamente
+window.addEventListener('load', function() {
+    initCompetitionMobileMenu();
+    setupCompetitionButtonHandlers();
+});
+</script>
+
+</body>
+</html>

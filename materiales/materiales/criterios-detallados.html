@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criterios de Evaluación Detallados</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            animation: fadeDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subject-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+        }
+
+        .subject-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .subject-icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subject-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+        }
+
+        .content-section {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .content-section h3 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .content-list {
+            list-style: none;
+        }
+
+        .content-list li {
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .content-list li::before {
+            content: '•';
+            color: #6366f1;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .subject-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-book"></i> Criterios de Evaluación</h1>
+        </header>
+
+        <!-- Tarjeta de Trigonometría -->
+        <div class="subject-card">
+            <div class="subject-header">
+                <i class="fas fa-calculator subject-icon"></i>
+                <h2 class="subject-title">Trigonometría Plana</h2>
+            </div>
+            <div class="content-section">
+                <h3>Estándares Principales</h3>
+                <ul class="content-list">
+                    <li>Numeración y Operación: Razonamiento cuantitativo y resolución de problemas con unidades</li>
+                    <li>Geometría y Funciones: Integración en conceptos básicos trigonométricos</li>
+                    <li>Sistema de medición de ángulos y razones trigonométricas</li>
+                </ul>
+            </div>
+            <div class="content-section">
+                <h3>Competencias Desarrolladas</h3>
+                <ul class="content-list">
+                    <li>Relación entre grados y radianes para resolución de problemas</li>
+                    <li>Predicción y resolución de problemas con triángulos rectángulos</li>
+                    <li>Trazado de gráficas de funciones trigonométricas</li>
+                    <li>Aplicación de identidades trigonométricas</li>
+                    <li>Uso de leyes de seno y coseno</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tarjeta de Álgebra -->
+        <div class="subject-card">
+            <div class="subject-header">
+                <i class="fas fa-square-root-alt subject-icon"></i>
+                <h2 class="subject-title">Álgebra</h2>
+            </div>
+            <div class="content-section">
+                <h3>Áreas de Enfoque</h3>
+                <ul class="content-list">
+                    <li>Álgebra y Funciones como énfasis principal</li>
+                    <li>Integración con Numeración, Operación, Geometría y Análisis de Datos</li>
+                    <li>Representación gráfica de funciones avanzadas</li>
+                </ul>
+            </div>
+            <div class="content-section">
+                <h3>Conceptos Clave</h3>
+                <ul class="content-list">
+                    <li>Funciones cuadráticas, polinómicas, racionales, exponenciales y logarítmicas</li>
+                    <li>Regresión lineal y distribución normal</li>
+                    <li>Números imaginarios y complejos</li>
+                    <li>Expresiones racionales y operaciones con radicales</li>
+                    <li>Aplicaciones prácticas y conexiones con la vida diaria</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <a href="criterios_evaluacion.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</body>
+</html>

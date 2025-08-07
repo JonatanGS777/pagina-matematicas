@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Videos Educativos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #141E30, #243B55);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .videos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .video-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .video-card h3 {
+            font-size: 1.2em;
+            margin: 0.8rem 0;
+            color: #fff;
+        }
+
+        .video-card a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .video-card a:hover {
+            background: linear-gradient(45deg, #2980b9, #3498db);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .nota-importancia {
+            padding: 2.5rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 2rem;
+            border-top: 2px solid #3498db;
+        }
+
+        .nota-importancia p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            margin-top: 2rem;
+        }
+
+        footer p {
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .videos-container {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+	 <header>
+	        <h1>Biblioteca de Documentales</h1>
+	        <p>Explora una selección de documentales fascinantes sobre matemáticas.</p>
+	    </header>
+	    <div class="videos-container">
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/V33U1OsFVnQ/0.jpg" alt="Documental 1">
+	            <h3>Versión Completa. Matemáticas para la vida real. Adrián Paenza, matemático</h3>
+	            <a href="https://youtu.be/V33U1OsFVnQ?si=5G4-FnInQJvuP0IS" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/BbA5dpS4CcI/0.jpg" alt="Documental 2">
+	            <h3>V. completa. “Las matemáticas nos hacen más libres y menos manipulables”. Eduardo Sáenz de Cabezón</h3>
+	            <a href="https://youtu.be/BbA5dpS4CcI?si=r2VsTrZNC690VgNT" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <!-- [El resto de las tarjetas de video se mantienen igual...] -->
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/W_d6M0FacwQ/0.jpg" alt="Documental 3">
+	            <h3>El Problema Sin Resolver Más Antiguo En Matemáticas</h3>
+	            <a href="https://www.youtube.com/watch?v=W_d6M0FacwQ" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/dSBvkgEg5AM/0.jpg" alt="Documental 4">
+	            <h3>La Historia COMPLETA de las Matemáticas (Linea de TIEMPO)</h3>
+	            <a href="https://youtu.be/dSBvkgEg5AM?si=iXCYOYbpwQ4RkeOm" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/eAcf73ulv9E/0.jpg" alt="Documental 5">
+	            <h3>V. Completa. Así ve el mundo un matemático. Marcus du Sautoy, matemático y divulgador científico</h3>
+	            <a href="https://youtu.be/eAcf73ulv9E?si=7xYMv40VqA9dpt54" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/RRg38oNQ9vk/0.jpg" alt="Documental 6">
+	            <h3>Las Matemáticas tienen una Terrible Falla</h3>
+	            <a href="https://youtu.be/RRg38oNQ9vk?si=ij7VHQIxtNs-aSMZ" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/MNIiNe0WtvY/0.jpg" alt="Documental 7">
+	            <h3>Algoritmos - cómo gobiernan nuestro mundo | DOCUMENTAL</h3>
+	            <a href="https://youtu.be/MNIiNe0WtvY?si=86boCmy9uuqwfzAS" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/TSvE3ALvunE/0.jpg" alt="Documental 8">
+	            <h3>🧠 Mentes Brillantes | Inexplicable</h3>
+	            <a href="https://youtu.be/TSvE3ALvunE?si=v-OxBZNbvPJjgfvC" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/uXDiwHgy3Fo/0.jpg" alt="Documental 9">
+	            <h3>V. Completa. Ciencia fascinante para personas curiosas. Miguel Alcubierre, doctor en Física</h3>
+	            <a href="https://youtu.be/uXDiwHgy3Fo?si=hi-gZZb3i0wILiVm" target="_blank">Ver en YouTube</a>
+	        </div>
+	        <div class="video-card">
+	            <img src="https://img.youtube.com/vi/GIJ7zr4sYx4/0.jpg" alt="Documental 10">
+	            <h3>Documental AlphaGo (subtítulos en español)</h3>
+	            <a href="https://youtu.be/GIJ7zr4sYx4?si=b7FfDr8wDlyPqVz-" target="_blank">Ver en YouTube</a>
+	        </div>
+	    </div>
+	    <div class="nota-importancia">
+	        <p>Estos documentales no solo ofrecen una visión profunda de conceptos matemáticos, sino que también muestran aplicaciones prácticas que pueden inspirar a futuras generaciones a explorar el fascinante mundo de las matemáticas.</p>
+	    </div>
+	    <footer>
+	        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+	    </footer>
+	</body>
+	</html>

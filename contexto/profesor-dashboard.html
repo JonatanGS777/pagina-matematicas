@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard del Profesor - Historia de las Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #D32F2F;
+            --secondary: #F57C00;
+            --accent: #1976D2;
+            --success: #388E3C;
+            --warning: #F9A825;
+            --danger: #D32F2F;
+            --dark: #1B1B1B;
+            --light: #FAFAFA;
+            --white: #FFFFFF;
+            --text-primary: #2C2C2C;
+            --text-secondary: #5A5A5A;
+            --shadow-soft: 0 8px 32px 0 rgba(211, 47, 47, 0.15);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        --gradient-danger: linear-gradient(135deg, var(--danger) 0%, #FF5722 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .professor-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .professor-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-main);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .access-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn.secondary {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        /* Lock Screen */
+        .lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .lock-screen.hidden {
+            display: none;
+        }
+
+        .lock-content {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .lock-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .lock-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        .stat-card.completed {
+            border-top-color: var(--success);
+        }
+
+        .stat-card.average {
+            border-top-color: var(--warning);
+        }
+
+        .stat-card.time {
+            border-top-color: var(--accent);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card.completed .stat-number {
+            color: var(--success);
+        }
+
+        .stat-card.average .stat-number {
+            color: var(--warning);
+        }
+
+        .stat-card.time .stat-number {
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Controls */
+        .controls-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 25px;
+            width: 300px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 25px;
+            font-size: 1rem;
+            min-width: 150px;
+        }
+
+        .export-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Results Table */
+        .results-section {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: var(--gradient-main);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .refresh-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .results-table th {
+            background: rgba(211, 47, 47, 0.05);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .results-table tr:hover {
+            background: rgba(211, 47, 47, 0.02);
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .grade-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .grade-A {
+            background: rgba(56, 142, 60, 0.2);
+            color: var(--success);
+        }
+
+        .grade-B {
+            background: rgba(249, 168, 37, 0.2);
+            color: var(--warning);
+        }
+
+        .grade-C {
+            background: rgba(25, 118, 210, 0.2);
+            color: var(--accent);
+        }
+
+        .grade-D,
+        .grade-F {
+            background: rgba(211, 47, 47, 0.2);
+            color: var(--danger);
+        }
+
+        .security-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .security-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .security-clean {
+            background: var(--success);
+        }
+
+        .security-warning {
+            background: var(--warning);
+        }
+
+        .security-violation {
+            background: var(--danger);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .view-btn {
+            background: rgba(25, 118, 210, 0.1);
+            color: var(--accent);
+        }
+
+        .download-btn {
+            background: rgba(56, 142, 60, 0.1);
+            color: var(--success);
+        }
+
+        .delete-btn {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--danger);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 25px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .student-detail-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .student-detail-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-item {
+            background: rgba(211, 47, 47, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .answers-section {
+            margin-top: 2rem;
+        }
+
+        .answer-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+
+        .answer-item.correct {
+            border-left-color: var(--success);
+            background: rgba(56, 142, 60, 0.05);
+        }
+
+        .answer-item.incorrect {
+            border-left-color: var(--danger);
+            background: rgba(211, 47, 47, 0.05);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .student-answer {
+            color: var(--danger);
+        }
+
+        .correct-answer {
+            color: var(--success);
+        }
+
+        .answer-item.correct .student-answer {
+            color: var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+            
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .controls-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .results-table {
+                font-size: 0.9rem;
+            }
+
+            .results-table th,
+            .results-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .answer-comparison {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Lock Screen -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-content">
+            <div class="lock-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h1 class="lock-title">Acceso de Profesor</h1>
+            <p>Ingresa la clave para acceder al dashboard</p>
+            <input type="password" class="password-input" id="professorPassword" placeholder="Clave del profesor">
+            <button class="btn" id="unlockBtn">
+                <i class="fas fa-unlock"></i>
+                Acceder
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chalkboard-teacher"></i>
+                Dashboard del Profesor
+            </div>
+            <div class="professor-info">
+                <div class="professor-avatar">YG</div>
+                <div>
+                    <div style="font-weight: 600;">Prof. Yonatan Guerrero</div>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary);">Historia de las Matemáticas</div>
+                </div>
+            </div>
+            <div class="access-controls">
+                <a href="historiamath.html" class="btn secondary">
+                    <i class="fas fa-home"></i>
+                    Página Principal
+                </a>
+                <button class="btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Salir
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalExams">0</div>
+                <div class="stat-label">Exámenes Tomados</div>
+            </div>
+            <div class="stat-card completed">
+                <div class="stat-number" id="completedExams">0</div>
+                <div class="stat-label">Completados Hoy</div>
+            </div>
+            <div class="stat-card average">
+                <div class="stat-number" id="averageScore">0%</div>
+                <div class="stat-label">Promedio General</div>
+            </div>
+            <div class="stat-card time">
+                <div class="stat-number" id="averageTime">0m</div>
+                <div class="stat-label">Tiempo Promedio</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-section">
+            <div class="search-filter">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por nombre o grupo...">
+                <select class="filter-select" id="groupFilter">
+                    <option value="">Todos los grupos</option>
+                    <option value="11-1">11-1</option>
+                    <option value="11-2">11-2</option>
+                    <option value="11-3">11-3</option>
+                    <option value="12-1">12-1</option>
+                    <option value="12-2">12-2</option>
+                    <option value="12-3">12-3</option>
+                </select>
+                <select class="filter-select" id="gradeFilter">
+                    <option value="">Todas las calificaciones</option>
+                    <option value="A">Calificación A</option>
+                    <option value="B">Calificación B</option>
+                    <option value="C">Calificación C</option>
+                    <option value="D">Calificación D</option>
+                    <option value="F">Calificación F</option>
+                </select>
+            </div>
+            <div class="export-controls">
+                <button class="btn" onclick="exportToCSV()">
+                    <i class="fas fa-file-csv"></i>
+                    Exportar CSV
+                </button>
+                <button class="btn secondary" onclick="exportGroupReport()">
+                    <i class="fas fa-file-pdf"></i>
+                    Reporte Grupal
+                </button>
+                <button class="btn" onclick="clearAllExams()" style="background: var(--gradient-danger); border-color: var(--danger);">
+                    <i class="fas fa-trash-alt"></i>
+                    Borrar Todo
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="results-section">
+            <div class="section-header">
+                <h2 class="section-title">Resultados de Exámenes</h2>
+                <button class="refresh-btn" onclick="loadResults()">
+                    <i class="fas fa-sync"></i>
+                    Actualizar
+                </button>
+            </div>
+            <div id="tableContainer">
+                <table class="results-table" id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Grupo</th>
+                            <th>Fecha</th>
+                            <th>Calificación</th>
+                            <th>Porcentaje</th>
+                            <th>Tiempo</th>
+                            <th>Seguridad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                        <tr>
+                            <td colspan="8" class="no-results">
+                                <i class="fas fa-inbox"></i>
+                                <div>No hay resultados disponibles</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Los exámenes aparecerán aquí cuando los estudiantes los completen</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Student Detail Modal -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="studentDetailContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ProfessorDashboard {
+            constructor() {
+                this.PROFESSOR_PASSWORD = 'profesor2025';
+                this.examData = [];
+                this.filteredData = [];
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.checkAccess();
+            }
+            
+            setupEventListeners() {
+                // Unlock functionality
+                document.getElementById('unlockBtn').addEventListener('click', () => this.unlock());
+                document.getElementById('professorPassword').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.unlock();
+                });
+                
+                // Search and filter
+                document.getElementById('searchInput').addEventListener('input', () => this.filterResults());
+                document.getElementById('groupFilter').addEventListener('change', () => this.filterResults());
+                document.getElementById('gradeFilter').addEventListener('change', () => this.filterResults());
+                
+                // Auto-refresh every 30 seconds
+                setInterval(() => this.loadResults(), 30000);
+            }
+            
+            checkAccess() {
+                // Check if already logged in (session storage)
+                if (sessionStorage.getItem('professorAccess') === 'granted') {
+                    this.showDashboard();
+                } else {
+                    this.showLockScreen();
+                }
+            }
+            
+            unlock() {
+                const password = document.getElementById('professorPassword').value;
+                
+                if (password === this.PROFESSOR_PASSWORD) {
+                    sessionStorage.setItem('professorAccess', 'granted');
+                    this.showDashboard();
+                } else {
+                    this.showError('Clave incorrecta');
+                    document.getElementById('professorPassword').value = '';
+                }
+            }
+            
+            showLockScreen() {
+                document.getElementById('lockScreen').classList.remove('hidden');
+            }
+            
+            hideLockScreen() {
+                document.getElementById('lockScreen').classList.add('hidden');
+            }
+            
+            showDashboard() {
+                this.hideLockScreen();
+                this.loadResults();
+            }
+            
+            showError(message) {
+                // Simple error handling - could be enhanced with proper notifications
+                alert(message);
+            }
+            
+            loadResults() {
+                // Load exam results from localStorage
+                const results = JSON.parse(localStorage.getItem('examResults') || '[]');
+                this.examData = results;
+                this.filteredData = results;
+                
+                this.updateStats();
+                this.renderTable();
+            }
+            
+            updateStats() {
+                const totalExams = this.examData.length;
+                const today = new Date().toDateString();
+                const todayExams = this.examData.filter(exam => 
+                    new Date(exam.student.submissionTime).toDateString() === today
+                ).length;
+                
+                let totalScore = 0;
+                let totalTime = 0;
+                
+                this.examData.forEach(exam => {
+                    totalScore += exam.results.percentage;
+                    totalTime += exam.student.timeUsed || 0;
+                });
+                
+                const averageScore = totalExams > 0 ? Math.round(totalScore / totalExams) : 0;
+                const averageTime = totalExams > 0 ? Math.round(totalTime / totalExams / 60) : 0;
+                
+                document.getElementById('totalExams').textContent = totalExams;
+                document.getElementById('completedExams').textContent = todayExams;
+                document.getElementById('averageScore').textContent = averageScore + '%';
+                document.getElementById('averageTime').textContent = averageTime + 'm';
+            }
+            
+            renderTable() {
+                const tbody = document.getElementById('resultsTableBody');
+                
+                if (this.filteredData.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="no-results">
+                                <i class="fas fa-search"></i>
+                                <div>No se encontraron resultados</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Ajusta los filtros para ver más resultados</div>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                tbody.innerHTML = this.filteredData.map(exam => {
+                    const student = exam.student;
+                    const results = exam.results;
+                    const submissionDate = new Date(student.submissionTime).toLocaleDateString('es-ES');
+                    const timeUsed = Math.floor((student.timeUsed || 0) / 60);
+                    const securityStatus = this.getSecurityStatus(student.warningCount || 0);
+                    
+                    return `
+                        <tr>
+                            <td>
+                                <div class="student-name">${student.name}</div>
+                            </td>
+                            <td>${student.group}</td>
+                            <td>${submissionDate}</td>
+                            <td>
+                                <span class="grade-badge grade-${results.grade}">${results.grade}</span>
+                            </td>
+                            <td>
+                                <strong>${results.percentage}%</strong>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    ${results.correct}/${results.total} correctas
+                                </div>
+                            </td>
+                            <td>${timeUsed}m</td>
+                            <td>
+                                <div class="security-status">
+                                    <div class="security-icon ${securityStatus.class}"></div>
+                                    <span style="font-size: 0.9rem;">${securityStatus.text}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn view-btn" onclick="dashboard.viewStudent('${exam.id}')" title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn download-btn" onclick="dashboard.downloadStudentPDF('${exam.id}')" title="Descargar PDF">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="action-btn delete-btn" onclick="deleteStudentExam('${exam.id}')" title="Borrar examen">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            getSecurityStatus(warningCount) {
+                if (warningCount === 0) {
+                    return { class: 'security-clean', text: 'Limpio' };
+                } else if (warningCount <= 2) {
+                    return { class: 'security-warning', text: `${warningCount} alertas` };
+                } else {
+                    return { class: 'security-violation', text: `${warningCount} violaciones` };
+                }
+            }
+            
+            filterResults() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const groupFilter = document.getElementById('groupFilter').value;
+                const gradeFilter = document.getElementById('gradeFilter').value;
+                
+                this.filteredData = this.examData.filter(exam => {
+                    const matchesSearch = exam.student.name.toLowerCase().includes(searchTerm) ||
+                                        exam.student.group.toLowerCase().includes(searchTerm);
+                    const matchesGroup = !groupFilter || exam.student.group === groupFilter;
+                    const matchesGrade = !gradeFilter || exam.results.grade === gradeFilter;
+                    
+                    return matchesSearch && matchesGroup && matchesGrade;
+                });
+                
+                this.renderTable();
+            }
+            
+            viewStudent(examId) {
+                const exam = this.examData.find(e => e.id == examId);
+                if (!exam) return;
+                
+                const modalContent = document.getElementById('studentDetailContent');
+                modalContent.innerHTML = this.generateStudentDetailHTML(exam);
+                
+                document.getElementById('studentModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            generateStudentDetailHTML(exam) {
+                const student = exam.student;
+                const results = exam.results;
+                const submissionDate = new Date(student.submissionTime).toLocaleString('es-ES');
+                const timeUsed = Math.floor((student.timeUsed || 0) / 60);
+                
+                return `
+                    <div class="student-detail-header">
+                        <div class="student-detail-name">${student.name}</div>
+                        <div style="color: var(--text-secondary);">Grupo ${student.group} • ${submissionDate}</div>
+                    </div>
+                    
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Calificación</div>
+                            <div class="detail-value">${results.grade}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Porcentaje</div>
+                            <div class="detail-value">${results.percentage}%</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Correctas</div>
+                            <div class="detail-value">${results.correct}/${results.total}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Tiempo</div>
+                            <div class="detail-value">${timeUsed}m</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Alertas</div>
+                            <div class="detail-value">${student.warningCount || 0}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Estado</div>
+                            <div class="detail-value">${student.forced ? 'Forzado' : 'Normal'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="answers-section">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary);">Respuestas Detalladas</h3>
+                        ${this.generateAnswersHTML(exam)}
+                    </div>
+                `;
+            }
+            
+            generateAnswersHTML(exam) {
+                return exam.questions.map((question, index) => {
+                    const studentAnswer = exam.answers[question.id];
+                    const isCorrect = studentAnswer === question.correct;
+                    const correctOption = question.options[question.correct];
+                    const studentOption = studentAnswer !== null ? question.options[studentAnswer] : 'Sin respuesta';
+                    
+                    return `
+                        <div class="answer-item ${isCorrect ? 'correct' : 'incorrect'}">
+                            <div class="question-text">
+                                ${index + 1}. ${question.text}
+                            </div>
+                            <div class="answer-comparison">
+                                <div>
+                                    <strong>Respuesta del estudiante:</strong><br>
+                                    <span class="student-answer">${studentOption}</span>
+                                </div>
+                                <div>
+                                    <strong>Respuesta correcta:</strong><br>
+                                    <span class="correct-answer">${correctOption}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            async downloadStudentPDF(examId) {
+                const exam = this.examData.find(e => e.id == examId);
+                if (!exam) return;
+                
+                // Create comprehensive PDF for professor
+                const pdfContent = this.createProfessorPDFContent(exam);
+                
+                const element = document.createElement('div');
+                element.innerHTML = pdfContent;
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                
+                const opt = {
+                    margin: 0.5,
+                    filename: `Examen_${exam.student.name.replace(/\s+/g, '_')}_${exam.student.date}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                
+                await html2pdf().set(opt).from(element).save();
+                document.body.removeChild(element);
+            }
+            
+            createProfessorPDFContent(exam) {
+                const student = exam.student;
+                const results = exam.results;
+                
+                return `
+                    <div style="font-family: 'Poppins', Arial, sans-serif; padding: 30px; line-height: 1.5; color: #2C2C2C; font-size: 12px;">
+                        <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #D32F2F; padding-bottom: 15px;">
+                            <h1 style="color: #D32F2F; font-size: 24px; margin: 0; font-weight: 700;">
+                                REPORTE COMPLETO DEL EXAMEN
+                            </h1>
+                            <h2 style="color: #F57C00; font-size: 18px; margin: 8px 0; font-weight: 600;">
+                                Historia de las Matemáticas - Análisis Detallado
+                            </h2>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <h3 style="color: #D32F2F; margin: 0 0 12px 0; font-size: 16px;">Datos del Estudiante</h3>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <p style="margin: 3px 0;"><strong>Nombre:</strong> ${student.name}</p>
+                                <p style="margin: 3px 0;"><strong>Grupo:</strong> ${student.group}</p>
+                                <p style="margin: 3px 0;"><strong>Fecha:</strong> ${new Date(student.date).toLocaleDateString('es-ES')}</p>
+                                <p style="margin: 3px 0;"><strong>Hora de envío:</strong> ${new Date(student.submissionTime).toLocaleString('es-ES')}</p>
+                                <p style="margin: 3px 0;"><strong>Tiempo usado:</strong> ${Math.floor((student.timeUsed || 0) / 60)}:${((student.timeUsed || 0) % 60).toString().padStart(2, '0')}</p>
+                                <p style="margin: 3px 0;"><strong>Advertencias:</strong> ${student.warningCount || 0}</p>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                            <h3 style="color: #1976D2; margin: 0 0 12px 0; font-size: 16px;">Resumen de Resultados</h3>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; text-align: center;">
+                                <div style="background: white; padding: 12px; border-radius: 6px;">
+                                    <h4 style="color: #4CAF50; font-size: 20px; margin: 0;">${results.correct}</h4>
+                                    <p style="margin: 2px 0; font-size: 10px;">Correctas</p>
+                                </div>
+                                <div style="background: white; padding: 12px; border-radius: 6px;">
+                                    <h4 style="color: #FF5722; font-size: 20px; margin: 0;">${results.total - results.correct}</h4>
+                                    <p style="margin: 2px 0; font-size: 10px;">Incorrectas</p>
+                                </div>
+                                <div style="background: white; padding: 12px; border-radius: 6px;">
+                                    <h4 style="color: #2196F3; font-size: 20px; margin: 0;">${results.percentage}%</h4>
+                                    <p style="margin: 2px 0; font-size: 10px;">Puntuación</p>
+                                </div>
+                                <div style="background: white; padding: 12px; border-radius: 6px;">
+                                    <h4 style="color: #9C27B0; font-size: 20px; margin: 0;">${results.grade}</h4>
+                                    <p style="margin: 2px 0; font-size: 10px;">Calificación</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="color: #D32F2F; margin: 0 0 15px 0; font-size: 16px; border-bottom: 2px solid #D32F2F; padding-bottom: 5px;">
+                                Análisis Detallado de Respuestas
+                            </h3>
+                            ${exam.questions.map(question => {
+                                const studentAnswer = exam.answers[question.id];
+                                const isCorrect = studentAnswer === question.correct;
+                                const correctLetter = String.fromCharCode(65 + question.correct);
+                                const studentLetter = studentAnswer !== null ? String.fromCharCode(65 + studentAnswer) : 'Sin respuesta';
+                                
+                                return `
+                                    <div style="margin-bottom: 15px; border-left: 4px solid ${isCorrect ? '#4CAF50' : '#F44336'}; padding-left: 12px; background: ${isCorrect ? '#f1f8e9' : '#ffebee'}; padding: 10px; border-radius: 5px;">
+                                        <div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
+                                            <div style="background: ${isCorrect ? '#4CAF50' : '#F44336'}; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; margin-right: 10px; flex-shrink: 0;">
+                                                ${question.id}
+                                            </div>
+                                            <div style="flex: 1;">
+                                                <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 11px; line-height: 1.4;">
+                                                    ${question.text}
+                                                </p>
+                                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 10px;">
+                                                    <p style="margin: 0;"><strong>Respuesta correcta:</strong> ${correctLetter}. ${question.options[question.correct]}</p>
+                                                    <p style="margin: 0;"><strong>Respuesta del estudiante:</strong> ${studentLetter}${studentAnswer !== null ? '. ' + question.options[studentAnswer] : ''}</p>
+                                                </div>
+                                                <p style="margin: 5px 0 0 0; font-size: 10px; color: ${isCorrect ? '#2e7d32' : '#c62828'}; font-weight: 600;">
+                                                    ${isCorrect ? '✓ CORRECTA' : '✗ INCORRECTA'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; margin-top: 25px;">
+                            <h3 style="color: #666; margin: 0 0 10px 0; font-size: 14px;">Observaciones de Seguridad</h3>
+                            <p style="margin: 0; font-size: 11px; color: #666;">
+                                ${(student.warningCount || 0) > 0 ? 
+                                    `⚠️ El estudiante activó ${student.warningCount} advertencia(s) de seguridad durante el examen.` :
+                                    '✅ No se registraron violaciones de seguridad durante el examen.'
+                                }
+                            </p>
+                            ${student.forced ? 
+                                '<p style="margin: 5px 0 0 0; font-size: 11px; color: #d32f2f;">🔒 Examen enviado automáticamente por violación de seguridad.</p>' : 
+                                ''
+                            }
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 25px; padding: 15px; background: #263238; color: white; border-radius: 8px;">
+                            <p style="margin: 0; font-size: 12px; font-weight: 600;">
+                                DOCUMENTO CONFIDENCIAL - SOLO PARA USO DEL PROFESOR
+                            </p>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.3);">
+                                <p style="margin: 0; font-size: 10px;">
+                                    <strong>Prof. Yonatan Guerrero Soriano</strong><br>
+                                    Departamento de Educación de Puerto Rico
+                                </p>
+                                <p style="margin: 8px 0 0 0; font-size: 9px; opacity: 0.8;">
+                                    Reporte generado: ${new Date().toLocaleString('es-ES')} | ID: ${exam.id}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Global functions
+        function closeModal() {
+            document.getElementById('studentModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('professorAccess');
+            location.reload();
+        }
+        
+        function exportToCSV() {
+            const csvData = dashboard.examData.map(exam => ({
+                'Nombre': exam.student.name,
+                'Grupo': exam.student.group,
+                'Fecha': new Date(exam.student.date).toLocaleDateString('es-ES'),
+                'Calificación': exam.results.grade,
+                'Porcentaje': exam.results.percentage,
+                'Correctas': exam.results.correct,
+                'Total': exam.results.total,
+                'Tiempo (min)': Math.floor((exam.student.timeUsed || 0) / 60),
+                'Advertencias': exam.student.warningCount || 0,
+                'Enviado': exam.student.forced ? 'Automático' : 'Manual'
+            }));
+            
+            const csv = [
+                Object.keys(csvData[0]).join(','),
+                ...csvData.map(row => Object.values(row).join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `resultados_examen_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function exportGroupReport() {
+            alert('Función de reporte grupal en desarrollo. Por ahora, puedes usar el botón "Exportar CSV".');
+        }
+        
+        function clearAllExams() {
+            if (dashboard.examData.length === 0) {
+                alert('No hay exámenes para borrar.');
+                return;
+            }
+            
+            const confirmDelete = confirm(
+                `¿Estás seguro de que quieres borrar TODOS los exámenes?\n\n` +
+                `Se borrarán ${dashboard.examData.length} exámenes.\n` +
+                `Esta acción NO se puede deshacer.`
+            );
+            
+            if (confirmDelete) {
+                const doubleConfirm = confirm(
+                    `CONFIRMACIÓN FINAL:\n\n` +
+                    `¿Realmente quieres borrar todos los exámenes?\n` +
+                    `Escribe "BORRAR" en tu mente y confirma.`
+                );
+                
+                if (doubleConfirm) {
+                    // Clear all data
+                    dashboard.examData = [];
+                    dashboard.filteredData = [];
+                    
+                    // Clear localStorage
+                    localStorage.removeItem('examResults');
+                    
+                    // Refresh display
+                    dashboard.updateStats();
+                    dashboard.renderTable();
+                    
+                    // Show success message
+                    dashboard.showSuccessMessage('Todos los exámenes han sido borrados');
+                }
+            }
+        }
+        
+        // Initialize dashboard
+        let dashboard;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            dashboard = new ProfessorDashboard();
+            console.log('Dashboard inicializado:', dashboard);
+            
+            // Make dashboard globally accessible for debugging
+            window.dashboard = dashboard;
+        });
+        
+        // Alternative function for delete that works globally
+        function deleteStudentExam(examId) {
+            console.log('deleteStudentExam llamado con ID:', examId);
+            if (dashboard && dashboard.deleteExam) {
+                dashboard.deleteExam(examId);
+            } else {
+                console.error('Dashboard no está disponible o deleteExam no existe');
+                alert('Error: Sistema no está listo. Recarga la página.');
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('studentModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        // ESC key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos Matemáticos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #ffffff;
+            background: url('fondo9.png') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.8) 0%, rgba(142, 68, 173, 0.9) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #e67e22, #9b59b6);
+            border-radius: 2px;
+        }
+
+        .resource-list {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-out;
+        }
+
+        ul {
+            list-style-type: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        li {
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        li:hover {
+            transform: translateY(-5px);
+        }
+
+        a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        a::before {
+            content: '\f1eb';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 10px;
+            color: #e67e22;
+            font-size: 1.2em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            ul {
+                grid-template-columns: 1fr;
+            }
+
+            .resource-list {
+                padding: 1rem;
+            }
+        }
+
+        .back-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(45deg, #e67e22, #d35400);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recursos Didácticos Matemáticas en Inglés</h1>
+        <div class="resource-list">
+            <ul>
+                <li><a href="https://www.cuemath.com" target="_blank">Cuemath</a></li>
+                <li><a href="https://www.purplemath.com" target="_blank">Purple Math</a></li>
+                <li><a href="https://www.mathsisfun.com" target="_blank">Math is Fun</a></li>
+                <li><a href="https://www.brilliant.org" target="_blank">Brilliant</a></li>
+                <li><a href="https://www.mathplanet.com" target="_blank">Math Planet</a></li>
+                <li><a href="https://www.ck12.org" target="_blank">CK-12 Foundation</a></li>
+                <li><a href="https://www.ixl.com" target="_blank">IXL Math</a></li>
+                <li><a href="https://www.coolmathgames.com" target="_blank">Cool Math Games</a></li>
+                <li><a href="https://www.prodigygame.com" target="_blank">Prodigy Math Game</a></li>
+                <li><a href="https://www.nrich.maths.org" target="_blank">NRICH</a></li>
+                <li><a href="https://www.openstax.org" target="_blank">OpenStax Math</a></li>
+                <li><a href="https://www.math-drills.com" target="_blank">Math Drills</a></li>
+                <li><a href="https://www.mathantics.com" target="_blank">Math Antics</a></li>
+                <li><a href="https://www.splashlearn.com" target="_blank">SplashLearn</a></li>
+                <li><a href="https://www.numberphile.com" target="_blank">Numberphile</a></li>
+                <li><a href="https://www.thatquiz.org" target="_blank">ThatQuiz</a></li>
+                <li><a href="https://www.weareteachers.com" target="_blank">We Are Teachers</a></li>
+                <li><a href="https://www.topmarks.co.uk" target="_blank">Top Marks</a></li>
+                <li><a href="https://www.illustrativemathematics.org" target="_blank">Illustrative Mathematics</a></li>
+                <li><a href="https://www.k5learning.com" target="_blank">K5 Learning</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <a href="recursos_didacticos.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</body>
+</html>

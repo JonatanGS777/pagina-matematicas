@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Trigonometría</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --background-color: #1a1a2e;
+            --text-color: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: var(--text-color);
+            margin-top: 1rem;
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .button:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .correct {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .incorrect {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .graph-container {
+            width: 100%;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Prueba de Trigonometría</h1>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p>Pregunta <span id="current-question">1</span> de 10</p>
+        </div>
+
+        <div id="questions"></div>
+
+        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                category: "Funciones Trigonométricas",
+                question: "Calcule el valor de sen(30°)",
+                type: "input",
+                answer: "0.5",
+                hint: "Recuerda los valores de los ángulos notables"
+            },
+            {
+                category: "Identidades Trigonométricas",
+                question: "¿Cuál es la identidad fundamental trigonométrica?",
+                type: "multiple",
+                options: [
+                    "sen²(θ) + cos²(θ) = 1",
+                    "tan(θ) = sen(θ)/cos(θ)",
+                    "sen²(θ) - cos²(θ) = 1",
+                    "cot(θ) = cos(θ)/sen(θ)"
+                ],
+                correct: 0
+            },
+            {
+                category: "Conversión de Unidades",
+                question: "Convertir 45° a radianes",
+                type: "input",
+                answer: "0.785398",
+                hint: "Utiliza la fórmula: radianes = grados × (π/180)"
+            },
+            {
+                category: "Triángulos",
+                question: "En un triángulo rectángulo, si uno de sus ángulos es 30° y la hipotenusa mide 10 unidades, ¿cuál es la longitud del cateto opuesto?",
+                type: "input",
+                answer: "5",
+                hint: "Utiliza la función seno"
+            },
+            {
+                category: "Ley de Senos",
+                question: "En un triángulo ABC, si A = 30°, B = 45°, y a = 10 unidades, ¿cuál es el valor de b?",
+                type: "input",
+                answer: "12.47",
+                hint: "Usa la ley de senos: a/sen(A) = b/sen(B)"
+            },
+            {
+                category: "Ley de Cosenos",
+                question: "En un triángulo con lados a = 6, b = 8 y c = 10, ¿cuál es el valor del ángulo A en grados?",
+                type: "input",
+                answer: "36.87",
+                hint: "Usa la ley de cosenos: cos(A) = (b² + c² - a²)/(2bc)"
+            },
+            {
+                category: "Gráficas",
+                question: "¿Cuál es el periodo de la función y = sen(2x)?",
+                type: "multiple",
+                options: ["π", "2π", "π/2", "4π"],
+                correct: 0
+            },
+            {
+                category: "Problemas Verbales",
+                question: "Una escalera de 10 metros está apoyada contra una pared formando un ángulo de 60° con el suelo. ¿A qué altura de la pared llega la escalera?",
+                type: "input",
+                answer: "8.66",
+                hint: "Utiliza sen(60°) para encontrar la altura"
+            },
+            {
+                category: "Grados Decimales",
+                question: "Convertir 30.5° a grados, minutos y segundos",
+                type: "input",
+                answer: "30°30'00\"",
+                hint: "Multiplica la parte decimal por 60 para obtener los minutos"
+            },
+            {
+                category: "Funciones Inversas",
+                question: "Si sen(θ) = 0.5, ¿cuál es el valor de θ en el primer cuadrante (en grados)?",
+                type: "input",
+                answer: "30",
+                hint: "Utiliza arcsen(0.5)"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionDiv = document.getElementById('questions');
+            const question = questions[currentQuestion];
+
+            let html = `
+                <div class="question-card">
+                    <div class="question-title">
+                        <span class="category">${question.category}</span>
+                        <h2>${question.question}</h2>
+                    </div>
+            `;
+
+            if (question.type === 'multiple') {
+                html += `<div class="options">`;
+                question.options.forEach((option, index) => {
+                    html += `
+                        <div class="option" onclick="checkAnswer(${index})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            } else {
+                html += `
+                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
+                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                `;
+            }
+
+            html += `<div class="feedback" id="feedback"></div>`;
+            questionDiv.innerHTML = html;
+
+            // Actualizar progreso
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Renderizar fórmulas matemáticas
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        function checkAnswer(selectedOption = null) {
+            const question = questions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (question.type === 'multiple') {
+                isCorrect = selectedOption === question.correct;
+            } else {
+                const userAnswer = document.getElementById('user-answer').value.trim();
+                isCorrect = Math.abs(parseFloat(userAnswer) - parseFloat(question.answer)) < 0.1;
+            }
+
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = isCorrect ? 
+                '¡Correcto!' : 
+                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+
+            if (isCorrect) score++;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const questionDiv = document.getElementById('questions');
+            const percentage = (score / questions.length) * 100;
+            
+            questionDiv.innerHTML = `
+                <div class="question-card">
+                    <h2>Resultados Finales</h2>
+                    <p>Has completado la prueba de trigonometría.</p>
+                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
+                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
+                </div>
+            `;
+
+            document.getElementById('next-button').style.display = 'none';
+        }
+
+        // Iniciar prueba
+        loadQuestion();
+    </script>
+</body>
+</html>

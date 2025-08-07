@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enlaces Útiles - Matemáticas Digitales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            
+            /* Custom gradients for cards */
+            --gradient-1: linear-gradient(45deg, #FF3366, #FF6B6B);
+            --gradient-2: linear-gradient(45deg, #4158D0, #C850C0);
+            --gradient-3: linear-gradient(45deg, #0093E9, #80D0C7);
+            --gradient-4: linear-gradient(45deg, #00C9FF, #92FE9D);
+            --gradient-5: linear-gradient(45deg, #FC466B, #3F5EFB);
+            --gradient-6: linear-gradient(45deg, #FDBB2D, #22C1C3);
+            --card-bg: rgba(255, 255, 255, 0.15);
+            --card-border: rgba(255, 255, 255, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background with Image */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8)),
+                url('../imagenes/fondoenlaces.png');
+            background-size: 400% 400%, cover;
+            background-position: 0% 50%, center;
+            background-repeat: no-repeat;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%, center; }
+            50% { background-position: 100% 50%, center; }
+            100% { background-position: 0% 50%, center; }
+        }
+
+        /* Enhanced Background Effects */
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(65, 88, 208, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 90% 50%, rgba(200, 80, 192, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(0, 147, 233, 0.3) 0%, transparent 40%);
+            animation: backgroundPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundPulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Floating Shapes */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 25s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            left: 5%;
+            background: rgba(255, 51, 102, 0.2);
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            left: 85%;
+            background: rgba(65, 88, 208, 0.2);
+            animation-delay: 5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            left: 25%;
+            background: rgba(0, 147, 233, 0.2);
+            animation-delay: 10s;
+        }
+
+        .shape:nth-child(4) {
+            width: 70px;
+            height: 70px;
+            left: 65%;
+            background: rgba(200, 80, 192, 0.2);
+            animation-delay: 15s;
+        }
+
+        .shape:nth-child(5) {
+            width: 50px;
+            height: 50px;
+            left: 45%;
+            background: rgba(34, 193, 195, 0.2);
+            animation-delay: 20s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            backdrop-filter: blur(20px);
+            background: var(--glass);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-main);
+            transition: left 0.3s ease;
+            border-radius: 25px;
+            z-index: -1;
+        }
+
+        .nav-link:hover::before {
+            left: 0;
+        }
+
+        .nav-link:hover {
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero-content {
+            backdrop-filter: blur(20px);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            box-shadow: var(--shadow-soft);
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        /* Enlaces Grid */
+        .enlaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            padding: 1rem;
+        }
+
+        .enlace {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 25px;
+            padding: 2.5rem;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .enlace::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .enlace:hover::before {
+            transform: translateX(100%);
+        }
+
+        .enlace::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-main);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 25px;
+            z-index: -1;
+        }
+
+        .enlace:hover::after {
+            opacity: 0.1;
+        }
+
+        .enlace:hover {
+            transform: translateY(-15px) scale(1.03);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .enlace-icono {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 1.5rem;
+            display: block;
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.15));
+            transition: all 0.4s ease;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .enlace:hover .enlace-icono {
+            transform: scale(1.15) rotate(5deg);
+            filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.25));
+        }
+
+        /* Different gradients for titles */
+        .enlace:nth-child(1) h3 { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(2) h3 { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(3) h3 { background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(4) h3 { background: var(--gradient-4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(5) h3 { background: var(--gradient-5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(6) h3 { background: var(--gradient-6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(7) h3 { background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(8) h3 { background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .enlace:nth-child(9) h3 { background: var(--gradient-3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .enlace h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .enlace:hover h3 {
+            transform: translateY(-2px);
+        }
+
+        .enlace p {
+            color: var(--text-primary);
+            line-height: 1.6;
+            text-align: center;
+            font-size: 1rem;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .enlace:hover p {
+            opacity: 1;
+        }
+
+        /* Floating animation for icons with delays */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .enlace:nth-child(1) .enlace-icono { animation-delay: 0s; }
+        .enlace:nth-child(2) .enlace-icono { animation-delay: 0.5s; }
+        .enlace:nth-child(3) .enlace-icono { animation-delay: 1s; }
+        .enlace:nth-child(4) .enlace-icono { animation-delay: 1.5s; }
+        .enlace:nth-child(5) .enlace-icono { animation-delay: 2s; }
+        .enlace:nth-child(6) .enlace-icono { animation-delay: 2.5s; }
+        .enlace:nth-child(7) .enlace-icono { animation-delay: 3s; }
+        .enlace:nth-child(8) .enlace-icono { animation-delay: 3.5s; }
+        .enlace:nth-child(9) .enlace-icono { animation-delay: 4s; }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-main);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .nav-menu.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-link {
+                color: var(--text-primary);
+                width: 100%;
+                text-align: center;
+                padding: 1rem;
+                border-radius: 15px;
+                background: rgba(102, 126, 234, 0.1);
+            }
+
+            .hero {
+                padding: 6rem 1rem 3rem;
+                min-height: 70vh;
+            }
+
+            .hero-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .enlaces-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0;
+            }
+
+            .section {
+                padding: 3rem 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .enlace {
+                padding: 2rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    <div class="background-overlay"></div>
+    
+    <!-- Floating Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-calculator"></i>
+                Matemáticas Digitales
+            </a>
+            
+            <button class="mobile-menu-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+    
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Enlaces Útiles</h1>
+            <p class="hero-subtitle">Recursos matemáticos y tecnológicos para el aprendizaje</p>
+            <p class="hero-description">
+                Descubre una colección cuidadosamente seleccionada de herramientas digitales, 
+                aplicaciones y plataformas que transformarán tu experiencia de aprendizaje matemático.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section">
+            <h2 class="section-title fade-in">Herramientas Matemáticas Digitales</h2>
+            
+            <div class="enlaces-grid">
+                <!-- GeoGebra -->
+                <a href="https://www.geogebra.org" target="_blank" class="enlace fade-in" data-delay="0">
+                    <img src="../imagenes/geogebra.png" alt="GeoGebra" class="enlace-icono">
+                    <h3>GeoGebra</h3>
+                    <p>Herramienta interactiva para geometría, álgebra y cálculo que permite visualizar conceptos matemáticos de forma dinámica.</p>
+                </a>
+
+                <!-- Mathway -->
+                <a href="https://www.mathway.com" target="_blank" class="enlace fade-in" data-delay="100">
+                    <img src="../imagenes/mathway.png" alt="Mathway" class="enlace-icono">
+                    <h3>Mathway</h3>
+                    <p>Resuelve problemas matemáticos paso a paso, desde aritmética básica hasta cálculo avanzado.</p>
+                </a>
+
+                <!-- Photomath -->
+                <a href="https://photomath.com" target="_blank" class="enlace fade-in" data-delay="200">
+                    <img src="../imagenes/photomath.png" alt="Photomath" class="enlace-icono">
+                    <h3>Photomath</h3>
+                    <p>Utiliza la cámara de tu dispositivo para resolver problemas matemáticos de forma instantánea.</p>
+                </a>
+
+                <!-- Khan Academy -->
+                <a href="https://www.khanacademy.org" target="_blank" class="enlace fade-in" data-delay="300">
+                    <img src="../imagenes/khanacademy.png" alt="Khan Academy" class="enlace-icono">
+                    <h3>Khan Academy</h3>
+                    <p>Plataforma gratuita para aprender matemáticas y otras disciplinas con videos y ejercicios interactivos.</p>
+                </a>
+
+                <!-- Desmos -->
+                <a href="https://www.desmos.com" target="_blank" class="enlace fade-in" data-delay="400">
+                    <img src="../imagenes/desmos.png" alt="Desmos" class="enlace-icono">
+                    <h3>Desmos</h3>
+                    <p>Poderosa calculadora gráfica en línea para visualizar funciones y explorar conceptos matemáticos.</p>
+                </a>
+
+                <!-- Symbolab -->
+                <a href="https://www.symbolab.com" target="_blank" class="enlace fade-in" data-delay="500">
+                    <img src="../imagenes/symbolab.png" alt="Symbolab" class="enlace-icono">
+                    <h3>Symbolab</h3>
+                    <p>Herramienta avanzada para resolver ecuaciones complejas con explicaciones paso a paso detalladas.</p>
+                </a>
+
+                <!-- ChatGPT -->
+                <a href="https://chat.openai.com" target="_blank" class="enlace fade-in" data-delay="600">
+                    <img src="../imagenes/chatgpt.png" alt="ChatGPT" class="enlace-icono">
+                    <h3>ChatGPT</h3>
+                    <p>Asistente de IA para resolver dudas y aprender matemáticas de forma interactiva y personalizada.</p>
+                </a>
+
+                <!-- Claude -->
+                <a href="https://claude.ai" target="_blank" class="enlace fade-in" data-delay="700">
+                    <img src="../imagenes/claude.png" alt="Claude" class="enlace-icono">
+                    <h3>Claude</h3>
+                    <p>IA avanzada especializada en ayuda matemática y resolución de problemas complejos con explicaciones claras.</p>
+                </a>
+
+                <!-- Gemini -->
+                <a href="https://gemini.google.com" target="_blank" class="enlace fade-in" data-delay="800">
+                    <img src="../imagenes/gemini.png" alt="Gemini" class="enlace-icono">
+                    <h3>Gemini</h3>
+                    <p>Inteligencia artificial de Google para asistencia matemática avanzada y análisis de problemas complejos.</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+        <p>Inspirando el aprendizaje matemático a través de la tecnología</p>
+    </footer>
+
+    <script src="../js/dark-mode.js"></script>
+    <script>
+        // Inicializar modo oscuro
+        if (window.DarkMode) {
+            window.DarkMode.initDarkMode();
+        }
+    </script>
+
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        mobileToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, delay);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Enhanced hover effects for links
+        const enlaces = document.querySelectorAll('.enlace');
+        enlaces.forEach(enlace => {
+            enlace.addEventListener('mouseenter', () => {
+                // Add subtle scale animation to surrounding cards
+                enlaces.forEach(otherEnlace => {
+                    if (otherEnlace !== enlace) {
+                        otherEnlace.style.transform = 'scale(0.98)';
+                        otherEnlace.style.opacity = '0.7';
+                    }
+                });
+            });
+            
+            enlace.addEventListener('mouseleave', () => {
+                // Reset all cards
+                enlaces.forEach(otherEnlace => {
+                    otherEnlace.style.transform = '';
+                    otherEnlace.style.opacity = '';
+                });
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navbar.contains(e.target) && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                const icon = mobileToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            }
+        });
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Parallax effect for floating shapes
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.shape');
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.1 + (index * 0.05);
+                shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+            });
+        });
+    </script>
+</body>
+</html>

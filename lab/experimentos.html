@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de Experimentos - Matemáticas Digitales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+            --gradient-warning: linear-gradient(135deg, var(--warning) 0%, #ffa726 100%);
+            --gradient-danger: linear-gradient(135deg, var(--danger) 0%, #e91e63 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+        }
+
+        /* Animated Background con imagen superpuesta */
+   .animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-image: 
+        url('../imagenes/mathexp.png'),
+        linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8));
+    background-size: contain, 400% 400%;
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center center;
+}
+
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            backdrop-filter: blur(20px);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-soft);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .section {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .lab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .lab-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lab-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            transition: height 0.3s ease;
+        }
+
+        .lab-card.finances::before {
+            background: var(--gradient-success);
+        }
+
+        .lab-card.algebra::before {
+            background: var(--gradient-warning);
+        }
+
+        .lab-card.geometry::before {
+            background: var(--gradient-danger);
+        }
+
+        .lab-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .lab-card:hover::before {
+            height: 8px;
+        }
+
+        .lab-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .lab-card.finances .lab-icon {
+            background: var(--gradient-success);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lab-card.algebra .lab-icon {
+            background: var(--gradient-warning);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lab-card.geometry .lab-icon {
+            background: var(--gradient-danger);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lab-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .lab-description {
+            text-align: center;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .lab-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .lab-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .lab-features li i {
+            margin-right: 0.5rem;
+            color: var(--success);
+        }
+
+        .lab-button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .lab-card.finances .lab-button {
+            background: var(--gradient-success);
+            color: var(--white);
+        }
+
+        .lab-card.algebra .lab-button {
+            background: var(--gradient-warning);
+            color: var(--white);
+        }
+
+        .lab-card.geometry .lab-button {
+            background: var(--gradient-danger);
+            color: var(--white);
+        }
+
+        .lab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Modal Styles */
+        .lab-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: var(--white);
+            margin: 2rem auto;
+            padding: 0;
+            width: 95%;
+            max-width: 1200px;
+            max-height: 90vh;
+            border-radius: 25px;
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 2rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        /* Experiment Styles */
+        .experiment-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .experiment-controls {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .experiment-display {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .experiment-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .experiment-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Charts and Visual Elements */
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 1rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .results-table th {
+            background: var(--gradient-main);
+            color: var(--white);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .results-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .results-table tr:nth-child(even) {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        /* Formula Display */
+        .formula-container {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .formula-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .formula {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 0.5rem 0;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        /* Algebra Balance */
+        .balance-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .balance-scale {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .balance-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            height: 100px;
+            background: var(--white);
+            border: 3px solid var(--primary);
+            border-radius: 15px;
+            margin: 0 2rem;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .balance-pivot {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid var(--primary);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .variable-block {
+            display: inline-block;
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            background: var(--success);
+            color: var(--white);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: grab;
+        }
+
+        .constant-block {
+            display: inline-block;
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            background: var(--warning);
+            color: var(--dark);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: grab;
+        }
+
+        .operation-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .operation-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--gradient-main);
+            color: var(--white);
+        }
+
+        .operation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .steps-container {
+            background: var(--white);
+            border: 2px solid rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .step {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Unit Circle */
+        .unit-circle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-radius: 15px;
+        }
+
+        .circle-display {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 2rem 0;
+        }
+
+        .unit-circle {
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            position: relative;
+            background: var(--white);
+        }
+
+        .circle-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: var(--dark);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .radius-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 147px;
+            height: 2px;
+            background: var(--danger);
+            transform-origin: 0 50%;
+            transition: transform 0.1s ease;
+        }
+
+        .angle-arc {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--success);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border-right: transparent;
+            border-bottom: transparent;
+            transition: transform 0.1s ease;
+        }
+
+        .angle-slider {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .trig-values {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .trig-value {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .trig-value h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .trig-value .value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', monospace;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .lab-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .experiment-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 98%;
+                margin: 1rem auto;
+                max-height: 95vh;
+            }
+
+            .circle-display {
+                width: 250px;
+                height: 250px;
+            }
+
+            .balance-side {
+                width: 150px;
+                height: 80px;
+                margin: 0 1rem;
+            }
+
+            .operation-buttons {
+                gap: 0.5rem;
+            }
+
+            .operation-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+        /* Background responsivo mejorado */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-image: 
+        url('../imagenes/mathexp.png'),
+        linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8));
+    background-size: cover, 400% 400%;
+    background-repeat: no-repeat, repeat;
+    background-position: center center, center center;
+    background-attachment: fixed, fixed;
+    animation: gradientShift 15s ease infinite;
+}
+
+/* Botón hamburguesa - solo visible en móvil */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1001;
+}
+
+.mobile-menu-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.hamburger-line {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--text-primary);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Animación del botón hamburguesa cuando está activo */
+.mobile-menu-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay para cerrar menú móvil */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Actualizar estilos base del nav-menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-main);
+    transition: left 0.3s ease;
+    z-index: -1;
+}
+
+.nav-link:hover::before,
+.nav-link:focus::before {
+    left: 0;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: var(--white);
+}
+
+.nav-link.active {
+    background: var(--gradient-main);
+    color: var(--white);
+}
+
+.nav-link.active::before {
+    display: none;
+}
+
+.nav-link i {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+.link-text {
+    white-space: nowrap;
+}
+
+/* Responsive para imagen de fondo */
+@media (max-width: 1200px) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center top, center center;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* Ocultar texto de algunos enlaces en tablet */
+    .nav-menu {
+        gap: 1rem;
+    }
+    
+    .nav-link {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+    
+    .logo {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 900px) {
+    /* Mostrar botón hamburguesa */
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    /* Menú móvil para laboratorio */
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 320px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border-left: 2px solid rgba(102, 126, 234, 0.2);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 100px 2rem 2rem 2rem;
+        margin: 0;
+        transition: right 0.3s ease;
+        z-index: 1000;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        gap: 0;
+    }
+    
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    .nav-menu.active ~ .mobile-menu-overlay {
+        display: block;
+    }
+    
+    /* Estilos de los enlaces en móvil */
+    .nav-menu li {
+        margin: 0;
+        width: 100%;
+    }
+    
+    .nav-link {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 1.2rem 1.5rem;
+        border-radius: 15px;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .link-text {
+        margin-left: 0.75rem;
+    }
+    
+    .nav-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.3s ease;
+        z-index: -1;
+    }
+    
+    .nav-link:hover::before {
+        left: 100%;
+    }
+    
+    .nav-link:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    .nav-link.active {
+        background: var(--gradient-main);
+        color: var(--white);
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Imagen de fondo responsiva para móvil */
+    .animated-bg {
+        background-attachment: scroll, scroll;
+        background-size: cover, 400% 400%;
+        background-position: center center, center center;
+    }
+    
+    .navbar {
+        padding: 1rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Ajustes generales para móvil estándar */
+    .hero-content {
+        padding: 2.5rem 1.5rem;
+        margin: 1rem;
+    }
+    
+    .section {
+        padding: 2rem 1rem;
+    }
+    
+    .lab-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .experiment-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .modal-content {
+        width: 98%;
+        margin: 1rem auto;
+        max-height: 95vh;
+    }
+    
+    .modal-header {
+        padding: 1.5rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .circle-display {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .balance-side {
+        width: 150px;
+        height: 80px;
+        margin: 0 1rem;
+    }
+    
+    .operation-buttons {
+        gap: 0.5rem;
+    }
+    
+    .operation-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.75rem;
+    }
+    
+    .logo {
+        font-size: 1rem;
+    }
+    
+    .mobile-menu-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+    }
+    
+    .nav-menu {
+        width: 100%;
+        padding: 80px 1rem 2rem 1rem;
+    }
+    
+    .nav-link {
+        padding: 1rem 1.2rem;
+        font-size: 0.95rem;
+    }
+    
+    /* Hero section ajustments */
+    .hero h1 {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    /* Modal ajustments */
+    .modal-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .experiment-controls,
+    .experiment-display {
+        padding: 1rem;
+    }
+    
+    .control-group input,
+    .control-group select {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+    
+    .lab-card {
+        padding: 1.5rem;
+    }
+    
+    .lab-title {
+        font-size: 1.3rem;
+    }
+}
+
+/* Optimizaciones para imagen de fondo en diferentes ratios */
+@media (min-aspect-ratio: 16/9) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center center, center center;
+    }
+}
+
+@media (max-aspect-ratio: 4/3) {
+    .animated-bg {
+        background-size: contain, 400% 400%;
+        background-position: center top, center center;
+        background-repeat: no-repeat, repeat;
+    }
+}
+
+/* Para pantallas muy pequeñas o con orientación portrait estrecha */
+@media (max-width: 480px) and (max-aspect-ratio: 9/16) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+        background-position: center 20%, center center;
+    }
+}
+
+/* Mejoras para pantallas de alta densidad */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    .animated-bg {
+        background-size: cover, 400% 400%;
+    }
+}
+
+/* Animaciones específicas para laboratorio */
+@media (prefers-reduced-motion: no-preference) {
+    .nav-menu {
+        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .nav-link {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+    
+    .hamburger-line {
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+}
+
+/* Para usuarios que prefieren menos animación */
+@media (prefers-reduced-motion: reduce) {
+    .nav-menu,
+    .nav-link,
+    .hamburger-line,
+    .mobile-menu-btn,
+    .animated-bg {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Focus visible para accesibilidad */
+.mobile-menu-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Ajustes para orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        min-height: 50vh;
+    }
+    
+    .hero-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .animated-bg {
+        background-position: center center, center center;
+    }
+    
+    .nav-menu {
+        padding: 60px 2rem 2rem 2rem;
+        gap: 0.5rem;
+    }
+    
+    .nav-link {
+        padding: 0.8rem 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Optimización para carga de imagen en conexiones lentas */
+@media (max-width: 768px) {
+    .animated-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(-45deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9), rgba(240, 147, 251, 0.9), rgba(78, 205, 196, 0.9));
+        z-index: -1;
+    }
+}
+
+/* Fallback para navegadores que no soportan backdrop-filter */
+@supports not (backdrop-filter: blur(20px)) {
+    .nav-menu {
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .hero-content {
+        background: rgba(255, 255, 255, 0.9);
+    }
+}
+
+/* Indicador visual para el enlace activo en móvil */
+@media (max-width: 900px) {
+    .nav-link.active::after {
+        content: 'ACTUAL';
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        font-size: 0.6rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.2rem 0.5rem;
+        border-radius: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+}
+
+/* Separadores visuales en el menú móvil */
+@media (max-width: 900px) {
+    .nav-menu::before {
+        content: 'NAVEGACIÓN';
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-align: center;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        width: 100%;
+    }
+    
+    /* Agregar separador antes del último enlace (Laboratorio) */
+    .nav-menu li:last-child {
+        border-top: 1px solid rgba(102, 126, 234, 0.2);
+        padding-top: 0.75rem;
+        margin-top: 0.75rem;
+    }
+}
+</style>
+
+</head>
+<body>
+    <header class="header">
+    <nav class="navbar">
+        <a href="../index.html" class="logo">
+            <i class="fas fa-calculator"></i>
+            Matemáticas Digitales
+        </a>
+        
+        <!-- Botón hamburguesa para móvil -->
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="../index.html" class="nav-link">
+                <i class="fas fa-home"></i> 
+                <span class="link-text">Inicio</span>
+            </a></li>
+            <li><a href="../contexto/contexto.html" class="nav-link">
+                <i class="fas fa-book"></i> 
+                <span class="link-text">ContextoMath</span>
+            </a></li>
+            <li><a href="../galeria/galeria.html" class="nav-link">
+                <i class="fas fa-images"></i> 
+                <span class="link-text">Galería</span>
+            </a></li>
+            <li><a href="#" class="nav-link active">
+                <i class="fas fa-flask"></i> 
+                <span class="link-text">Laboratorio</span>
+            </a></li>
+        </ul>
+        
+        <!-- Overlay para cerrar menú móvil -->
+        <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+    </nav>
+</header>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1><i class="fas fa-flask"></i> Laboratorio Experimental</h1>
+            <p>Explora las matemáticas a través de simulaciones interactivas y experimentos virtuales. Cada módulo está diseñado para hacer tangibles los conceptos abstractos.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="section">
+            <div class="lab-grid">
+                <!-- Módulo 1: Finanzas Personales -->
+                <div class="lab-card finances" onclick="openLabModal('finances')">
+                    <div class="lab-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="lab-title">Finanzas Personales</h3>
+                    <p class="lab-description">Simulador comparativo de interés simple y compuesto con visualizaciones gráficas interactivas.</p>
+                    <ul class="lab-features">
+                        <li><i class="fas fa-check"></i> Gráficas comparativas interactivas</li>
+                        <li><i class="fas fa-check"></i> Tabla de crecimiento año por año</li>
+                        <li><i class="fas fa-check"></i> Fórmulas matemáticas explicadas</li>
+                        <li><i class="fas fa-check"></i> Simulación en tiempo real</li>
+                    </ul>
+                    <button class="lab-button">Explorar Módulo</button>
+                </div>
+
+                <!-- Módulo 2: Álgebra -->
+                <div class="lab-card algebra" onclick="openLabModal('algebra')">
+                    <div class="lab-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3 class="lab-title">Balanza Algebraica</h3>
+                    <p class="lab-description">Visualización interactiva de ecuaciones algebraicas usando una balanza virtual.</p>
+                    <ul class="lab-features">
+                        <li><i class="fas fa-check"></i> Balanza interactiva visual</li>
+                        <li><i class="fas fa-check"></i> Operaciones paso a paso</li>
+                        <li><i class="fas fa-check"></i> Bloques para variables y constantes</li>
+                        <li><i class="fas fa-check"></i> Registro de pasos algebraicos</li>
+                    </ul>
+                    <button class="lab-button">Explorar Módulo</button>
+                </div>
+
+                <!-- Módulo 3: Geometría y Trigonometría -->
+                <div class="lab-card geometry" onclick="openLabModal('geometry')">
+                    <div class="lab-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <h3 class="lab-title">Círculo Unitario</h3>
+                    <p class="lab-description">Explorador interactivo del círculo unitario con funciones trigonométricas dinámicas.</p>
+                    <ul class="lab-features">
+                        <li><i class="fas fa-check"></i> Círculo unitario interactivo</li>
+                        <li><i class="fas fa-check"></i> Valores trigonométricos en tiempo real</li>
+                        <li><i class="fas fa-check"></i> Visualización de ángulos</li>
+                        <li><i class="fas fa-check"></i> Triángulo rectángulo dinámico</li>
+                    </ul>
+                    <button class="lab-button">Explorar Módulo</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para Finanzas -->
+    <div id="financesModal" class="lab-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-chart-line"></i> Simulador de Finanzas Personales</h2>
+                <button class="modal-close" onclick="closeLabModal('finances')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="experiment-container">
+                    <div class="experiment-controls">
+                        <h3>Parámetros de Inversión</h3>
+                        <div class="control-group">
+                            <label for="principal">Monto Inicial ($)</label>
+                            <input type="number" id="principal" value="1000" min="1">
+                        </div>
+                        <div class="control-group">
+                            <label for="rate">Tasa de Interés Anual (%)</label>
+                            <input type="number" id="rate" value="5" min="0.1" step="0.1">
+                        </div>
+                        <div class="control-group">
+                            <label for="time">Tiempo (años)</label>
+                            <input type="number" id="time" value="10" min="1" max="50">
+                        </div>
+                        <button class="experiment-button" onclick="calculateInterest()">Calcular y Comparar</button>
+                        
+                        <div class="formula-container">
+                            <div class="formula-title">Fórmulas</div>
+                            <div class="formula">Interés Simple: A = P(1 + rt)</div>
+                            <div class="formula">Interés Compuesto: A = P(1 + r)^t</div>
+                        </div>
+                    </div>
+                    
+                    <div class="experiment-display">
+                        <h3>Comparación Visual</h3>
+                        <div id="interestChart" class="chart-container"></div>
+                        <div id="resultsContainer"></div>
+                    </div>
+                </div>
+                
+                <div id="interestTable"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Álgebra -->
+    <div id="algebraModal" class="lab-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-balance-scale"></i> Balanza Algebraica Interactiva</h2>
+                <button class="modal-close" onclick="closeLabModal('algebra')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="experiment-container">
+                    <div class="experiment-controls">
+                        <h3>Configurar Ecuación</h3>
+                        <div class="control-group">
+                            <label for="equation">Ecuación (formato: 2x+3=9)</label>
+                            <input type="text" id="equation" value="2x+3=9" placeholder="Ej: 2x+3=9">
+                        </div>
+                        <button class="experiment-button" onclick="setupEquation()">Configurar Balanza</button>
+                        
+                        <div class="operation-buttons">
+                            <button class="operation-btn" onclick="applyOperation('add')">Sumar</button>
+                            <button class="operation-btn" onclick="applyOperation('subtract')">Restar</button>
+                            <button class="operation-btn" onclick="applyOperation('multiply')">Multiplicar</button>
+                            <button class="operation-btn" onclick="applyOperation('divide')">Dividir</button>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="operationValue">Valor para operación</label>
+                            <input type="number" id="operationValue" value="1" step="0.1">
+                        </div>
+                        
+                        <button class="experiment-button" onclick="resetEquation()">Reiniciar</button>
+                    </div>
+                    
+                    <div class="experiment-display">
+                        <h3>Balanza Visual</h3>
+                        <div class="balance-container">
+                            <div id="equationDisplay" style="text-align: center; font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem;">2x + 3 = 9</div>
+                            <div class="balance-scale">
+                                <div class="balance-side" id="leftSide">
+                                    <div class="balance-pivot"></div>
+                                </div>
+                                <div style="font-size: 2rem; font-weight: bold; color: var(--primary);">=</div>
+                                <div class="balance-side" id="rightSide">
+                                    <div class="balance-pivot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="steps-container">
+                    <h3>Pasos de Solución</h3>
+                    <div id="algebraSteps"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Geometría -->
+    <div id="geometryModal" class="lab-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-circle"></i> Explorador del Círculo Unitario</h2>
+                <button class="modal-close" onclick="closeLabModal('geometry')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="experiment-container">
+                    <div class="experiment-controls">
+                        <h3>Control de Ángulo</h3>
+                        <div class="control-group">
+                            <label for="angleSlider">Ángulo (grados): <span id="angleValue">0°</span></label>
+                            <input type="range" id="angleSlider" class="angle-slider" min="0" max="360" value="0" oninput="updateAngle(this.value)">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="angleInput">Ángulo exacto (grados)</label>
+                            <input type="number" id="angleInput" value="0" min="0" max="360" oninput="updateAngleFromInput(this.value)">
+                        </div>
+                        
+                        <div class="formula-container">
+                            <div class="formula-title">Conversión</div>
+                            <div class="formula" id="radiansDisplay">Radianes: 0</div>
+                        </div>
+                        
+                        <button class="experiment-button" onclick="animateFullCircle()">Animación Completa</button>
+                    </div>
+                    
+                    <div class="experiment-display">
+                        <h3>Círculo Unitario</h3>
+                        <div class="unit-circle-container">
+                            <div class="circle-display">
+                                <div class="unit-circle">
+                                    <div class="circle-center"></div>
+                                    <div class="radius-line" id="radiusLine"></div>
+                                    <div class="angle-arc" id="angleArc"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="trig-values">
+                                <div class="trig-value">
+                                    <h4>sen(θ)</h4>
+                                    <div class="value" id="sinValue">0.000</div>
+                                </div>
+                                <div class="trig-value">
+                                    <h4>cos(θ)</h4>
+                                    <div class="value" id="cosValue">1.000</div>
+                                </div>
+                                <div class="trig-value">
+                                    <h4>tan(θ)</h4>
+                                    <div class="value" id="tanValue">0.000</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Módulos JavaScript -->
+    <script src="javascript/finanzas.js"></script>
+    <script src="javascript/algebra.js"></script>
+    <script src="javascript/geometria.js"></script>
+    
+    <script>
+        // Instancias globales de los módulos
+        let finanzasModule;
+        let algebraModule;
+        let geometriaModule;
+
+        // Funciones generales del modal
+        function openLabModal(type) {
+            document.getElementById(type + 'Modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Inicializar módulos específicos
+            if (type === 'finances' && !finanzasModule) {
+                finanzasModule = new FinanzasModule();
+                finanzasModule.calculateInterest();
+            } else if (type === 'algebra' && !algebraModule) {
+                algebraModule = new AlgebraModule();
+                algebraModule.setupEquation();
+            } else if (type === 'geometry' && !geometriaModule) {
+                geometriaModule = new GeometriaModule();
+                geometriaModule.updateAngle(0);
+            }
+            
+            // Si ya están inicializados, solo refrescar
+            if (type === 'finances' && finanzasModule) {
+                finanzasModule.calculateInterest();
+            } else if (type === 'algebra' && algebraModule) {
+                algebraModule.setupEquation();
+            } else if (type === 'geometry' && geometriaModule) {
+                geometriaModule.updateAngle(0);
+            }
+        }
+
+        function closeLabModal(type) {
+            document.getElementById(type + 'Modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Detener animaciones si están corriendo
+            if (type === 'geometry' && geometriaModule && geometriaModule.isAnimating) {
+                geometriaModule.stopAnimation();
+            }
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            if (event.target.classList.contains('lab-modal')) {
+                const modalId = event.target.id;
+                const type = modalId.replace('Modal', '');
+                closeLabModal(type);
+            }
+        }
+
+        // Funciones wrapper para mantener compatibilidad con HTML
+        
+        // FINANZAS
+        function calculateInterest() {
+            if (finanzasModule) {
+                finanzasModule.calculateInterest();
+            }
+        }
+
+        // ÁLGEBRA
+        function setupEquation() {
+            if (algebraModule) {
+                algebraModule.setupEquation();
+            }
+        }
+
+        function applyOperation(operation) {
+            if (algebraModule) {
+                algebraModule.applyOperation(operation);
+            }
+        }
+
+        function resetEquation() {
+            if (algebraModule) {
+                algebraModule.resetEquation();
+            }
+        }
+
+        // GEOMETRÍA
+        function updateAngle(degrees) {
+            if (geometriaModule) {
+                geometriaModule.updateAngle(degrees);
+            }
+        }
+
+        function updateAngleFromInput(degrees) {
+            if (geometriaModule) {
+                geometriaModule.updateAngleFromInput(degrees);
+            }
+        }
+
+        function animateFullCircle() {
+            if (geometriaModule) {
+                geometriaModule.animateFullCircle();
+            }
+        }
+
+        // Cerrar modales con tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modals = document.querySelectorAll('.lab-modal');
+                modals.forEach(modal => {
+                    if (modal.style.display === 'block') {
+                        const modalId = modal.id;
+                        const type = modalId.replace('Modal', '');
+                        closeLabModal(type);
+                    }
+                });
+            }
+        });
+
+        // Funciones adicionales de utilidad
+        function exportFinanzasData() {
+            if (finanzasModule) {
+                finanzasModule.exportData();
+            }
+        }
+
+        function undoAlgebraOperation() {
+            if (algebraModule) {
+                algebraModule.undoLastOperation();
+            }
+        }
+
+        function exportTrigData() {
+            if (geometriaModule) {
+                geometriaModule.exportTrigData();
+            }
+        }
+
+        function goToSpecialAngle(angle) {
+            if (geometriaModule) {
+                geometriaModule.goToSpecialAngle(angle);
+            }
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧮 Laboratorio de Matemáticas iniciado');
+            console.log('📊 Módulos disponibles: Finanzas, Álgebra, Geometría');
+            
+            // Agregar indicadores de carga
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 1rem;
+                border-radius: 10px;
+                z-index: 9999;
+                font-family: 'Inter', sans-serif;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                animation: slideInRight 0.5s ease;
+            `;
+            loadingIndicator.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                Laboratorio cargado correctamente
+            `;
+            
+            document.body.appendChild(loadingIndicator);
+            
+            // Remover indicador después de 3 segundos
+            setTimeout(() => {
+                loadingIndicator.style.animation = 'slideOutRight 0.5s ease';
+                setTimeout(() => {
+                    if (loadingIndicator.parentNode) {
+                        loadingIndicator.parentNode.removeChild(loadingIndicator);
+                    }
+                }, 500);
+            }, 3000);
+            
+            // Inyectar animaciones CSS
+            const animationStyles = document.createElement('style');
+            animationStyles.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(animationStyles);
+        });
+
+        // Manejo de errores global
+        window.addEventListener('error', function(event) {
+            console.error('Error en el laboratorio:', event.error);
+            
+            // Mostrar mensaje de error amigable
+            const errorToast = document.createElement('div');
+            errorToast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ef4444;
+                color: white;
+                padding: 1rem;
+                border-radius: 10px;
+                z-index: 9999;
+                font-family: 'Inter', sans-serif;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                animation: slideInRight 0.5s ease;
+            `;
+            errorToast.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                Ha ocurrido un error. Por favor, recarga la página.
+            `;
+            
+            document.body.appendChild(errorToast);
+            
+            setTimeout(() => {
+                if (errorToast.parentNode) {
+                    errorToast.parentNode.removeChild(errorToast);
+                }
+            }, 5000);
+        });
+        // Variables globales para el menú móvil
+let mobileMenuOpen = false;
+
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    
+    if (!mobileMenuOpen) {
+        openMobileMenu();
+    } else {
+        closeMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navMenu.classList.add('active');
+    menuBtn.classList.add('active');
+    overlay.style.display = 'block';
+    
+    // Prevenir scroll del body
+    document.body.style.overflow = 'hidden';
+    
+    mobileMenuOpen = true;
+    
+    // Añadir evento para cerrar con Escape
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+function closeMobileMenu() {
+    const navMenu = document.getElementById('navMenu');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const overlay = document.querySelector('.mobile-menu-overlay');
+    
+    navMenu.classList.remove('active');
+    menuBtn.classList.remove('active');
+    overlay.style.display = 'none';
+    
+    // Restaurar scroll del body
+    document.body.style.overflow = 'auto';
+    
+    mobileMenuOpen = false;
+    
+    // Remover evento de Escape
+    document.removeEventListener('keydown', handleEscapeKey);
+}
+
+// Cerrar menú con tecla Escape
+function handleEscapeKey(event) {
+    if (event.key === 'Escape' && mobileMenuOpen) {
+        closeMobileMenu();
+    }
+}
+
+// Inicializar eventos del menú responsivo para laboratorio
+function initLaboratoryMobileMenu() {
+    // Cerrar menú al hacer click en cualquier enlace de navegación
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            // Solo cerrar si no es el enlace activo (Laboratorio)
+            if (!this.classList.contains('active') && mobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+    });
+    
+    // Cerrar menú al cambiar tamaño de ventana
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 900 && mobileMenuOpen) {
+            closeMobileMenu();
+        }
+        
+        // Ajustar imagen de fondo dinámicamente
+        adjustBackgroundForViewport();
+    });
+    
+    // Mejorar accesibilidad del menú
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (menuBtn && navMenu) {
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-controls', 'navMenu');
+        
+        // Actualizar aria-expanded cuando cambie el estado
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const isActive = navMenu.classList.contains('active');
+                    menuBtn.setAttribute('aria-expanded', isActive.toString());
+                }
+            });
+        });
+        
+        observer.observe(navMenu, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    }
+}
+
+// Ajustar imagen de fondo dinámicamente según viewport
+function adjustBackgroundForViewport() {
+    const animatedBg = document.querySelector('.animated-bg');
+    if (!animatedBg) return;
+    
+    const aspectRatio = window.innerWidth / window.innerHeight;
+    const isSmallScreen = window.innerWidth <= 768;
+    const isVerySmallScreen = window.innerWidth <= 480;
+    
+    if (isVerySmallScreen) {
+        // Móviles muy pequeños: priorizar cobertura total
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center 20%, center center';
+    } else if (isSmallScreen) {
+        // Móviles normales: balance entre cobertura y visibilidad
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center center, center center';
+    } else if (aspectRatio > 1.7) {
+        // Pantallas muy anchas: usar cover
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center center, center center';
+    } else if (aspectRatio < 1.2) {
+        // Pantallas muy altas: usar contain para mostrar imagen completa
+        animatedBg.style.backgroundSize = 'contain, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center top, center center';
+    } else {
+        // Pantallas normales: usar cover
+        animatedBg.style.backgroundSize = 'cover, 400% 400%';
+        animatedBg.style.backgroundPosition = 'center center, center center';
+    }
+}
+
+// Lazy loading optimizado para imagen de fondo
+function optimizeBackgroundLoading() {
+    const animatedBg = document.querySelector('.animated-bg');
+    if (!animatedBg) return;
+    
+    // Crear una imagen temporal para precargar
+    const img = new Image();
+    const imagePath = '../imagenes/mathexp.png';
+    
+    img.onload = function() {
+        // Imagen cargada, aplicar con transición suave
+        animatedBg.style.transition = 'opacity 0.5s ease-in-out';
+        animatedBg.style.opacity = '1';
+        
+        // Ajustar posición según el tamaño real de la imagen
+        adjustBackgroundForViewport();
+    };
+    
+    img.onerror = function() {
+        // Error cargando imagen, usar solo gradiente
+        console.warn('No se pudo cargar la imagen de fondo, usando gradiente de respaldo');
+        animatedBg.style.backgroundImage = 'linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8))';
+    };
+    
+    // Iniciar precarga
+    img.src = imagePath;
+    
+    // Mientras tanto, mostrar solo gradiente con opacidad reducida
+    animatedBg.style.opacity = '0.8';
+}
+
+// Gestión de rendimiento para dispositivos lentos
+function handlePerformanceOptimizations() {
+    // Detectar dispositivos de bajo rendimiento
+    const isLowPerformance = 
+        /Android.*Chrome|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+        window.devicePixelRatio > 2 ||
+        window.innerWidth <= 480;
+    
+    if (isLowPerformance) {
+        // Reducir animaciones en dispositivos lentos
+        const animatedBg = document.querySelector('.animated-bg');
+        if (animatedBg) {
+            animatedBg.style.animationDuration = '30s'; // Animación más lenta
+        }
+        
+        // Reducir efectos visuales en modales si están abiertos
+        const modals = document.querySelectorAll('.lab-modal');
+        modals.forEach(modal => {
+            modal.style.backdropFilter = 'blur(5px)'; // Menos blur
+        });
+    }
+}
+
+// Integración específica con el sistema de modales del laboratorio
+function setupModalIntegration() {
+    // Cerrar menú móvil cuando se abra un modal
+    const originalOpenLabModal = window.openLabModal;
+    if (originalOpenLabModal) {
+        window.openLabModal = function(type) {
+            // Cerrar menú móvil si está abierto
+            if (mobileMenuOpen) {
+                closeMobileMenu();
+            }
+            
+            // Llamar función original
+            return originalOpenLabModal.call(this, type);
+        };
+    }
+    
+    // Escuchar clics en las tarjetas del laboratorio
+    const labCards = document.querySelectorAll('.lab-card');
+    labCards.forEach(card => {
+        card.addEventListener('click', function() {
+            if (mobileMenuOpen) {
+                closeMobileMenu();
+            }
+        });
+    });
+}
+
+// Inicializar todo cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initLaboratoryMobileMenu();
+    optimizeBackgroundLoading();
+    handlePerformanceOptimizations();
+    setupModalIntegration();
+    
+    // Ajustar fondo al cargar
+    setTimeout(adjustBackgroundForViewport, 100);
+    
+    // Actualizar indicador de página activa
+    const currentPage = window.location.pathname.toLowerCase();
+    if (currentPage.includes('experimento') || currentPage.includes('laboratorio')) {
+        const labLink = document.querySelector('.nav-link[href="#"]');
+        if (labLink) {
+            labLink.classList.add('active');
+        }
+    }
+});
+
+// También inicializar cuando la ventana se carga completamente
+window.addEventListener('load', function() {
+    initLaboratoryMobileMenu();
+    adjustBackgroundForViewport();
+    setupModalIntegration();
+});
+
+// Reajustar en cambio de orientación
+window.addEventListener('orientationchange', function() {
+    setTimeout(() => {
+        adjustBackgroundForViewport();
+        
+        // Cerrar menú en cambio de orientación si es necesario
+        if (mobileMenuOpen) {
+            closeMobileMenu();
+        }
+    }, 500);
+});
+
+// Gestión mejorada de eventos del teclado
+document.addEventListener('keydown', function(event) {
+    // Cerrar menú con Escape
+    if (event.key === 'Escape' && mobileMenuOpen) {
+        closeMobileMenu();
+    }
+    
+    // Navegación con teclado en menú móvil
+    if (mobileMenuOpen && event.key === 'Tab') {
+        const focusableElements = document.querySelectorAll('.nav-menu .nav-link');
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        
+        if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+        }
+    }
+});
+
+// Mejorar la accesibilidad con indicadores visuales
+function enhanceAccessibility() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('focus', function() {
+            this.style.outline = '2px solid var(--primary)';
+            this.style.outlineOffset = '2px';
+        });
+        
+        link.addEventListener('blur', function() {
+            this.style.outline = 'none';
+        });
+    });
+}
+
+// Ejecutar mejoras de accesibilidad
+setTimeout(enhanceAccessibility, 500);
+</script>
+
+</body>
+</html>

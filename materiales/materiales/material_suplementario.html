@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Suplementario</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #ffffff;
+            background: url('fondo9.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            width: 100%;
+            border-bottom: 1px solid #555;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+
+        main {
+            padding: 40px;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+            color: #ddd;
+        }
+
+        main p {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        .btn-suplementario {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #9b59b6;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-suplementario:hover {
+            background-color: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-suplementario i {
+            margin-right: 10px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9em;
+            border-top: 1px solid #555;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        header, main, footer {
+            animation: fadeIn 1.5s ease-in;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Material Suplementario</h1>
+        <p>Descubre material adicional que complementa tus conocimientos y ayuda a reforzar tus habilidades en matemáticas.</p>
+    </header>
+    <main>
+        <p>Utiliza estos recursos adicionales como apoyo a tu aprendizaje y profundiza en los temas de tu interés.</p>
+        <a href="biblioteca.html" class="btn-suplementario">
+            <i class="fas fa-book-reader"></i>
+            Explorar Biblioteca
+        </a>
+    </main>
+    <footer>
+        <p>&copy; 2025S Yonatan Guerrero Soriano - Página de Matemáticas</p>
+    </footer>
+</body>
+</html>

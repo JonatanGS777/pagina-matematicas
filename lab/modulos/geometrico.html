@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelado Geométrico - Laboratorio de Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #4ecdc4;
+            --success: #26d0ce;
+            --warning: #f093fb;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(102, 126, 234, 0.37);
+            --shadow-hover: 0 15px 35px rgba(102, 126, 234, 0.25);
+            --gradient-main: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-accent: linear-gradient(135deg, #4ecdc4 0%, #26d0ce 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-accent);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .back-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 25px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gradient-main);
+            border-radius: 20px;
+            color: var(--white);
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Model Section */
+        .model-explanation {
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 2rem;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 3rem;
+        }
+
+        .model-explanation h3 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .model-explanation p {
+            line-height: 1.7;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        /* Controls and Visualization */
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls-panel {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .controls-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .controls-title i {
+            margin-right: 0.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 2rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group input[type="range"]:hover {
+            opacity: 1;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .control-value {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Visualization Panel */
+        .visualization-panel {
+            background: var(--white);
+            border: 2px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 450px;
+            position: relative;
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 100%;
+        }
+
+        .canvas-info {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: rgba(78, 205, 196, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .results-title {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .results-title i {
+            margin-right: 0.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .result-unit {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Model Variants Section */
+        .model-variants {
+            margin-top: 3rem;
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .variants-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .variants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .variant-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .variant-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .variant-card.active {
+            border-color: var(--accent);
+            background: rgba(78, 205, 196, 0.05);
+        }
+
+        .variant-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .variant-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .variant-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .main-interface {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .variants-grid {
+                grid-template-columns: 1fr;
+            }
+
+            canvas {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="modelado.html" class="logo">
+                <i class="fas fa-cube"></i>
+                Modelado Geométrico
+            </a>
+            <a href="modelado.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Menú
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container fade-in">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-cube"></i>
+                Modelado Geométrico
+            </h1>
+            <p class="page-subtitle">Explora volúmenes, áreas y formas geométricas tridimensionales</p>
+        </div>
+
+        <!-- Model Explanation -->
+        <div class="model-explanation">
+            <h3><i class="fas fa-lightbulb"></i> Volumen de Sólidos Geométricos</h3>
+            <p>
+                Experimenta con diferentes sólidos geométricos y observa cómo cambian sus propiedades al modificar las dimensiones. 
+                Calcula volúmenes, áreas superficiales y diagonales en tiempo real. Este modelo te ayuda a visualizar conceptos 
+                geométricos fundamentales y comprender las relaciones entre las dimensiones de los objetos tridimensionales.
+            </p>
+        </div>
+
+        <!-- Model Variants -->
+        <div class="model-variants">
+            <h3 class="variants-title">Selecciona el Sólido Geométrico</h3>
+            <div class="variants-grid">
+                <div class="variant-card active" onclick="selectModel('box')" id="box-variant">
+                    <div class="variant-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h4 class="variant-name">Prisma Rectangular</h4>
+                    <p class="variant-description">Caja con largo, ancho y alto variables</p>
+                </div>
+                
+                <div class="variant-card" onclick="selectModel('cylinder')" id="cylinder-variant">
+                    <div class="variant-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h4 class="variant-name">Cilindro</h4>
+                    <p class="variant-description">Sólido circular con radio y altura</p>
+                </div>
+                
+                <div class="variant-card" onclick="selectModel('sphere')" id="sphere-variant">
+                    <div class="variant-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <h4 class="variant-name">Esfera</h4>
+                    <p class="variant-description">Sólido esférico con radio variable</p>
+                </div>
+                
+                <div class="variant-card" onclick="selectModel('pyramid')" id="pyramid-variant">
+                    <div class="variant-icon">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <h4 class="variant-name">Pirámide</h4>
+                    <p class="variant-description">Pirámide cuadrada con base y altura</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Interface -->
+        <div class="main-interface">
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <h3 class="controls-title">
+                    <i class="fas fa-sliders-h"></i>
+                    Controles
+                </h3>
+                
+                <div id="box-controls" class="model-controls">
+                    <div class="control-group">
+                        <label for="lengthSlider">Largo:</label>
+                        <input type="range" id="lengthSlider" min="1" max="20" value="10" step="0.5">
+                        <span id="lengthValue" class="control-value">10.0 cm</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="widthSlider">Ancho:</label>
+                        <input type="range" id="widthSlider" min="1" max="20" value="8" step="0.5">
+                        <span id="widthValue" class="control-value">8.0 cm</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="heightSlider">Alto:</label>
+                        <input type="range" id="heightSlider" min="1" max="20" value="6" step="0.5">
+                        <span id="heightValue" class="control-value">6.0 cm</span>
+                    </div>
+                </div>
+
+                <div id="cylinder-controls" class="model-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="radiusSlider">Radio:</label>
+                        <input type="range" id="radiusSlider" min="1" max="15" value="5" step="0.5">
+                        <span id="radiusValue" class="control-value">5.0 cm</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="cylHeightSlider">Altura:</label>
+                        <input type="range" id="cylHeightSlider" min="1" max="20" value="10" step="0.5">
+                        <span id="cylHeightValue" class="control-value">10.0 cm</span>
+                    </div>
+                </div>
+
+                <div id="sphere-controls" class="model-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="sphereRadiusSlider">Radio:</label>
+                        <input type="range" id="sphereRadiusSlider" min="1" max="15" value="8" step="0.5">
+                        <span id="sphereRadiusValue" class="control-value">8.0 cm</span>
+                    </div>
+                </div>
+
+                <div id="pyramid-controls" class="model-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="baseSlider">Base:</label>
+                        <input type="range" id="baseSlider" min="2" max="20" value="10" step="0.5">
+                        <span id="baseValue" class="control-value">10.0 cm</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="pyrHeightSlider">Altura:</label>
+                        <input type="range" id="pyrHeightSlider" min="2" max="20" value="12" step="0.5">
+                        <span id="pyrHeightValue" class="control-value">12.0 cm</span>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="animateModel()" id="animateBtn">
+                    <i class="fas fa-play"></i> Animar Modelo
+                </button>
+            </div>
+            
+            <!-- Visualization Panel -->
+            <div class="visualization-panel">
+                <div class="canvas-info" id="canvasInfo">Vista 3D Interactiva</div>
+                <div class="canvas-container">
+                    <canvas id="geometryCanvas" width="500" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel">
+            <h3 class="results-title">
+                <i class="fas fa-calculator"></i>
+                Resultados Calculados
+            </h3>
+            <div class="results-grid" id="resultsGrid">
+                <div class="result-item">
+                    <div class="result-label">Volumen</div>
+                    <div class="result-value" id="volumeResult">480 <span class="result-unit">cm³</span></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Área Superficial</div>
+                    <div class="result-value" id="surfaceAreaResult">376 <span class="result-unit">cm²</span></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Diagonal Espacial</div>
+                    <div class="result-value" id="diagonalResult">14.14 <span class="result-unit">cm</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentModel = 'box';
+        let animationId = null;
+
+        // Model selection
+        function selectModel(modelType) {
+            // Update active variant
+            document.querySelectorAll('.variant-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(`${modelType}-variant`).classList.add('active');
+            
+            // Show/hide controls
+            document.querySelectorAll('.model-controls').forEach(control => {
+                control.style.display = 'none';
+            });
+            document.getElementById(`${modelType}-controls`).style.display = 'block';
+            
+            currentModel = modelType;
+            updateModel();
+        }
+
+        // Update model based on current selection
+        function updateModel() {
+            switch(currentModel) {
+                case 'box':
+                    updateBoxModel();
+                    break;
+                case 'cylinder':
+                    updateCylinderModel();
+                    break;
+                case 'sphere':
+                    updateSphereModel();
+                    break;
+                case 'pyramid':
+                    updatePyramidModel();
+                    break;
+            }
+        }
+
+        // Box model functions
+        function updateBoxModel() {
+            const length = parseFloat(document.getElementById('lengthSlider').value);
+            const width = parseFloat(document.getElementById('widthSlider').value);
+            const height = parseFloat(document.getElementById('heightSlider').value);
+            
+            document.getElementById('lengthValue').textContent = length.toFixed(1) + ' cm';
+            document.getElementById('widthValue').textContent = width.toFixed(1) + ' cm';
+            document.getElementById('heightValue').textContent = height.toFixed(1) + ' cm';
+            
+            const volume = length * width * height;
+            const surfaceArea = 2 * (length * width + width * height + height * length);
+            const diagonal = Math.sqrt(length * length + width * width + height * height);
+            
+            updateResults(volume.toFixed(1) + ' cm³', surfaceArea.toFixed(1) + ' cm²', diagonal.toFixed(2) + ' cm');
+            drawBox(length, width, height);
+        }
+
+        // Cylinder model functions  
+        function updateCylinderModel() {
+            const radius = parseFloat(document.getElementById('radiusSlider').value);
+            const height = parseFloat(document.getElementById('cylHeightSlider').value);
+            
+            document.getElementById('radiusValue').textContent = radius.toFixed(1) + ' cm';
+            document.getElementById('cylHeightValue').textContent = height.toFixed(1) + ' cm';
+            
+            const volume = Math.PI * radius * radius * height;
+            const surfaceArea = 2 * Math.PI * radius * (radius + height);
+            const diameter = 2 * radius;
+            
+            updateResults(volume.toFixed(1) + ' cm³', surfaceArea.toFixed(1) + ' cm²', diameter.toFixed(2) + ' cm', 
+                         'Volumen', 'Área Superficial', 'Diámetro');
+            drawCylinder(radius, height);
+        }
+
+        // Sphere model functions
+        function updateSphereModel() {
+            const radius = parseFloat(document.getElementById('sphereRadiusSlider').value);
+            
+            document.getElementById('sphereRadiusValue').textContent = radius.toFixed(1) + ' cm';
+            
+            const volume = (4/3) * Math.PI * radius * radius * radius;
+            const surfaceArea = 4 * Math.PI * radius * radius;
+            const diameter = 2 * radius;
+            
+            updateResults(volume.toFixed(1) + ' cm³', surfaceArea.toFixed(1) + ' cm²', diameter.toFixed(2) + ' cm',
+                         'Volumen', 'Área Superficial', 'Diámetro');
+            drawSphere(radius);
+        }
+
+        // Pyramid model functions
+        function updatePyramidModel() {
+            const base = parseFloat(document.getElementById('baseSlider').value);
+            const height = parseFloat(document.getElementById('pyrHeightSlider').value);
+            
+            document.getElementById('baseValue').textContent = base.toFixed(1) + ' cm';
+            document.getElementById('pyrHeightValue').textContent = height.toFixed(1) + ' cm';
+            
+            const volume = (1/3) * base * base * height;
+            const slantHeight = Math.sqrt((base/2) * (base/2) + height * height);
+            const surfaceArea = base * base + 2 * base * slantHeight;
+            
+            updateResults(volume.toFixed(1) + ' cm³', surfaceArea.toFixed(1) + ' cm²', slantHeight.toFixed(2) + ' cm',
+                         'Volumen', 'Área Superficial', 'Altura Inclinada');
+            drawPyramid(base, height);
+        }
+
+        // Update results display
+        function updateResults(vol, area, third, label1 = 'Volumen', label2 = 'Área Superficial', label3 = 'Diagonal Espacial') {
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = `
+                <div class="result-item">
+                    <div class="result-label">${label1}</div>
+                    <div class="result-value">${vol}</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">${label2}</div>
+                    <div class="result-value">${area}</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">${label3}</div>
+                    <div class="result-value">${third}</div>
+                </div>
+            `;
+        }
+
+        // Drawing functions
+        function drawBox(length, width, height) {
+            const canvas = document.getElementById('geometryCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const scale = Math.min(300 / Math.max(length, width, height), 15);
+            const scaledLength = length * scale;
+            const scaledWidth = width * scale;
+            const scaledHeight = height * scale;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            const offsetX = scaledWidth * 0.35;
+            const offsetY = scaledHeight * 0.35;
+            
+            // Draw front face
+            const gradient1 = ctx.createLinearGradient(0, 0, scaledLength, scaledHeight);
+            gradient1.addColorStop(0, 'rgba(102, 126, 234, 0.8)');
+            gradient1.addColorStop(1, 'rgba(102, 126, 234, 0.6)');
+            ctx.fillStyle = gradient1;
+            ctx.fillRect(centerX - scaledLength/2, centerY - scaledHeight/2, scaledLength, scaledHeight);
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(centerX - scaledLength/2, centerY - scaledHeight/2, scaledLength, scaledHeight);
+            
+            // Draw top face
+            const gradient2 = ctx.createLinearGradient(0, 0, scaledLength, 0);
+            gradient2.addColorStop(0, 'rgba(78, 205, 196, 0.8)');
+            gradient2.addColorStop(1, 'rgba(78, 205, 196, 0.6)');
+            ctx.fillStyle = gradient2;
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaledLength/2, centerY - scaledHeight/2);
+            ctx.lineTo(centerX - scaledLength/2 + offsetX, centerY - scaledHeight/2 - offsetY);
+            ctx.lineTo(centerX + scaledLength/2 + offsetX, centerY - scaledHeight/2 - offsetY);
+            ctx.lineTo(centerX + scaledLength/2, centerY - scaledHeight/2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw right face
+            const gradient3 = ctx.createLinearGradient(0, 0, 0, scaledHeight);
+            gradient3.addColorStop(0, 'rgba(118, 75, 162, 0.8)');
+            gradient3.addColorStop(1, 'rgba(118, 75, 162, 0.6)');
+            ctx.fillStyle = gradient3;
+            ctx.beginPath();
+            ctx.moveTo(centerX + scaledLength/2, centerY - scaledHeight/2);
+            ctx.lineTo(centerX + scaledLength/2 + offsetX, centerY - scaledHeight/2 - offsetY);
+            ctx.lineTo(centerX + scaledLength/2 + offsetX, centerY + scaledHeight/2 - offsetY);
+            ctx.lineTo(centerX + scaledLength/2, centerY + scaledHeight/2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw back edges
+            ctx.strokeStyle = 'rgba(45, 55, 72, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaledLength/2 + offsetX, centerY - scaledHeight/2 - offsetY);
+            ctx.lineTo(centerX - scaledLength/2 + offsetX, centerY + scaledHeight/2 - offsetY);
+            ctx.moveTo(centerX - scaledLength/2 + offsetX, centerY + scaledHeight/2 - offsetY);
+            ctx.lineTo(centerX + scaledLength/2 + offsetX, centerY + scaledHeight/2 - offsetY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function drawCylinder(radius, height) {
+            const canvas = document.getElementById('geometryCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const scale = Math.min(200 / Math.max(radius * 2, height), 10);
+            const scaledRadius = radius * scale;
+            const scaledHeight = height * scale;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const ellipseHeight = scaledRadius * 0.3;
+            
+            // Draw cylinder body
+            const gradient = ctx.createLinearGradient(centerX - scaledRadius, 0, centerX + scaledRadius, 0);
+            gradient.addColorStop(0, 'rgba(102, 126, 234, 0.3)');
+            gradient.addColorStop(0.5, 'rgba(102, 126, 234, 0.8)');
+            gradient.addColorStop(1, 'rgba(102, 126, 234, 0.3)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(centerX - scaledRadius, centerY - scaledHeight/2, scaledRadius * 2, scaledHeight);
+            
+            // Draw top ellipse
+            ctx.fillStyle = 'rgba(78, 205, 196, 0.8)';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY - scaledHeight/2, scaledRadius, ellipseHeight, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Draw bottom ellipse
+            ctx.fillStyle = 'rgba(118, 75, 162, 0.6)';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY + scaledHeight/2, scaledRadius, ellipseHeight, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw side lines
+            ctx.beginPath();
+            ctx.moveTo(centerX - scaledRadius, centerY - scaledHeight/2);
+            ctx.lineTo(centerX - scaledRadius, centerY + scaledHeight/2);
+            ctx.moveTo(centerX + scaledRadius, centerY - scaledHeight/2);
+            ctx.lineTo(centerX + scaledRadius, centerY + scaledHeight/2);
+            ctx.stroke();
+        }
+
+        function drawSphere(radius) {
+            const canvas = document.getElementById('geometryCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const scale = Math.min(300 / (radius * 2), 12);
+            const scaledRadius = radius * scale;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Create radial gradient for 3D effect
+            const gradient = ctx.createRadialGradient(
+                centerX - scaledRadius * 0.3, centerY - scaledRadius * 0.3, 0,
+                centerX, centerY, scaledRadius
+            );
+            gradient.addColorStop(0, 'rgba(78, 205, 196, 1)');
+            gradient.addColorStop(0.7, 'rgba(102, 126, 234, 0.8)');
+            gradient.addColorStop(1, 'rgba(118, 75, 162, 0.6)');
+            
+            // Draw main sphere
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, scaledRadius, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Draw equator line
+            ctx.strokeStyle = 'rgba(45, 55, 72, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, scaledRadius, scaledRadius * 0.3, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Draw meridian line
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, scaledRadius * 0.3, scaledRadius, 0, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.beginPath();
+            ctx.arc(centerX - scaledRadius * 0.3, centerY - scaledRadius * 0.3, scaledRadius * 0.2, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        function drawPyramid(base, height) {
+            const canvas = document.getElementById('geometryCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const scale = Math.min(300 / Math.max(base, height), 12);
+            const scaledBase = base * scale;
+            const scaledHeight = height * scale;
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            // Calculate points
+            const baseY = centerY + scaledHeight/3;
+            const apexX = centerX;
+            const apexY = centerY - scaledHeight * 2/3;
+            
+            const baseLeft = centerX - scaledBase/2;
+            const baseRight = centerX + scaledBase/2;
+            const baseBack = scaledBase * 0.3;
+            
+            // Draw base
+            ctx.fillStyle = 'rgba(118, 75, 162, 0.6)';
+            ctx.fillRect(baseLeft, baseY - scaledBase/2, scaledBase, scaledBase);
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(baseLeft, baseY - scaledBase/2, scaledBase, scaledBase);
+            
+            // Draw front face
+            const gradient1 = ctx.createLinearGradient(baseLeft, baseY, apexX, apexY);
+            gradient1.addColorStop(0, 'rgba(102, 126, 234, 0.8)');
+            gradient1.addColorStop(1, 'rgba(102, 126, 234, 0.5)');
+            ctx.fillStyle = gradient1;
+            ctx.beginPath();
+            ctx.moveTo(baseLeft, baseY + scaledBase/2);
+            ctx.lineTo(baseRight, baseY + scaledBase/2);
+            ctx.lineTo(apexX, apexY);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw right face
+            const gradient2 = ctx.createLinearGradient(baseRight, baseY, apexX, apexY);
+            gradient2.addColorStop(0, 'rgba(78, 205, 196, 0.7)');
+            gradient2.addColorStop(1, 'rgba(78, 205, 196, 0.4)');
+            ctx.fillStyle = gradient2;
+            ctx.beginPath();
+            ctx.moveTo(baseRight, baseY + scaledBase/2);
+            ctx.lineTo(baseRight, baseY - scaledBase/2);
+            ctx.lineTo(apexX, apexY);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw back edges (dashed)
+            ctx.strokeStyle = 'rgba(45, 55, 72, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(baseLeft, baseY - scaledBase/2);
+            ctx.lineTo(apexX, apexY);
+            ctx.moveTo(baseRight, baseY - scaledBase/2);
+            ctx.lineTo(baseLeft, baseY - scaledBase/2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // Animation function
+        function animateModel() {
+            const btn = document.getElementById('animateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Animando...';
+            
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            
+            let frame = 0;
+            const maxFrames = 120;
+            
+            const animate = () => {
+                if (frame < maxFrames) {
+                    const progress = frame / maxFrames;
+                    const angle = progress * Math.PI * 4; // 2 full rotations
+                    
+                    // Apply sinusoidal transformations based on current model
+                    switch(currentModel) {
+                        case 'box':
+                            animateBox(angle);
+                            break;
+                        case 'cylinder':
+                            animateCylinder(angle);
+                            break;
+                        case 'sphere':
+                            animateSphere(angle);
+                            break;
+                        case 'pyramid':
+                            animatePyramid(angle);
+                            break;
+                    }
+                    
+                    frame++;
+                    animationId = requestAnimationFrame(animate);
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-play"></i> Animar Modelo';
+                    animationId = null;
+                }
+            };
+            
+            animate();
+        }
+
+        function animateBox(angle) {
+            const baseLength = 10;
+            const baseWidth = 8;
+            const baseHeight = 6;
+            
+            const newLength = Math.max(2, baseLength + Math.sin(angle * 1.5) * 4);
+            const newWidth = Math.max(2, baseWidth + Math.cos(angle * 1.2) * 3);
+            const newHeight = Math.max(2, baseHeight + Math.sin(angle * 2) * 3);
+            
+            document.getElementById('lengthSlider').value = newLength;
+            document.getElementById('widthSlider').value = newWidth;
+            document.getElementById('heightSlider').value = newHeight;
+            
+            updateBoxModel();
+        }
+
+        function animateCylinder(angle) {
+            const baseRadius = 5;
+            const baseHeight = 10;
+            
+            const newRadius = Math.max(1, baseRadius + Math.sin(angle * 1.3) * 3);
+            const newHeight = Math.max(2, baseHeight + Math.cos(angle * 1.7) * 5);
+            
+            document.getElementById('radiusSlider').value = newRadius;
+            document.getElementById('cylHeightSlider').value = newHeight;
+            
+            updateCylinderModel();
+        }
+
+        function animateSphere(angle) {
+            const baseRadius = 8;
+            const newRadius = Math.max(2, baseRadius + Math.sin(angle * 1.5) * 4);
+            
+            document.getElementById('sphereRadiusSlider').value = newRadius;
+            updateSphereModel();
+        }
+
+        function animatePyramid(angle) {
+            const baseSize = 10;
+            const baseHeight = 12;
+            
+            const newBase = Math.max(3, baseSize + Math.sin(angle * 1.4) * 4);
+            const newHeight = Math.max(3, baseHeight + Math.cos(angle * 1.6) * 5);
+            
+            document.getElementById('baseSlider').value = newBase;
+            document.getElementById('pyrHeightSlider').value = newHeight;
+            
+            updatePyramidModel();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Box controls
+            document.getElementById('lengthSlider')?.addEventListener('input', updateBoxModel);
+            document.getElementById('widthSlider')?.addEventListener('input', updateBoxModel);
+            document.getElementById('heightSlider')?.addEventListener('input', updateBoxModel);
+            
+            // Cylinder controls
+            document.getElementById('radiusSlider')?.addEventListener('input', updateCylinderModel);
+            document.getElementById('cylHeightSlider')?.addEventListener('input', updateCylinderModel);
+            
+            // Sphere controls
+            document.getElementById('sphereRadiusSlider')?.addEventListener('input', updateSphereModel);
+            
+            // Pyramid controls
+            document.getElementById('baseSlider')?.addEventListener('input', updatePyramidModel);
+            document.getElementById('pyrHeightSlider')?.addEventListener('input', updatePyramidModel);
+            
+            // Initialize with box model
+            updateBoxModel();
+        });
+    </script>
+</body>
+</html>

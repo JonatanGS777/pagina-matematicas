@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicios de Matemáticas</title>
+    <!-- MathJax CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+                inlineMath: [['$','$'], ['\\(','\\)']],
+                displayMath: [['$$','$$'], ['\\[','\\]']],
+                processEscapes: true
+            }
+        });
+    </script>
+    <style>
+        /* ... [Mantenemos los estilos anteriores] ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a, #2c3e50);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .ejercicios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .ejercicio-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .ejercicio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .ejercicio-card h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .categoria {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+
+        .trigonometria { background: #e74c3c; }
+        .algebra { background: #2ecc71; }
+
+        .solucion {
+            margin-top: 10px;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 0 10px;
+        }
+
+        .solucion.mostrar {
+            height: auto;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-filtro {
+            padding: 8px 15px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 20px;
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-filtro:hover {
+            background: #2980b9;
+        }
+
+        .filtros {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .ejercicios-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ejercicios de Matemáticas</h1>
+        <div class="filtros">
+            <button class="btn-filtro" onclick="filtrarEjercicios('todos')">Todos</button>
+            <button class="btn-filtro" onclick="filtrarEjercicios('trigonometria')">Trigonometría</button>
+            <button class="btn-filtro" onclick="filtrarEjercicios('algebra')">Álgebra</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="ejercicios-grid" id="ejercicios-container">
+            <!-- Los ejercicios se cargarán dinámicamente -->
+        </div>
+    </div>
+
+    <script>
+        const ejercicios = [
+            {
+                titulo: "Identidad Trigonométrica",
+                categoria: "trigonometria",
+                enunciado: "Demuestra la identidad: $$\\sin^2(\\theta) + \\cos^2(\\theta) = 1$$",
+                solucion: "Esta identidad fundamental se demuestra usando el teorema de Pitágoras en el círculo unitario: $$\\sin^2(\\theta) + \\cos^2(\\theta) = r^2 = 1$$"
+            },
+            {
+                titulo: "Ecuación Cuadrática",
+                categoria: "algebra",
+                enunciado: "Resuelve la ecuación: $$2x^2 - 7x + 3 = 0$$",
+                solucion: "Usando la fórmula cuadrática: $$x = \\frac{7 \\pm \\sqrt{49-24}}{4} = \\frac{7 \\pm 5}{4}$$ Por lo tanto, $$x_1 = 3$$ y $$x_2 = \\frac{1}{2}$$"
+            },
+            {
+                titulo: "Ley de Senos",
+                categoria: "trigonometria",
+                enunciado: "En un triángulo ABC, si $$a = 8$$, $$A = 45°$$ y $$B = 60°$$, encuentra el lado $$b$$.",
+                solucion: "Usando la ley de senos: $$\\frac{b}{\\sin(45°)} = \\frac{8}{\\sin(60°)}$$ Por lo tanto: $$b = \\frac{8\\sin(60°)}{\\sin(45°)} \\approx 9.80$$ unidades"
+            },
+            {
+                titulo: "Sistema de Ecuaciones",
+                categoria: "algebra",
+                enunciado: "Resuelve el sistema: $$\\begin{cases} 3x + 2y = 12 \\\\ 5x - 3y = 7 \\end{cases}$$",
+                solucion: "Multiplicando la primera ecuación por 3 y la segunda por 2: $$\\begin{cases} 9x + 6y = 36 \\\\ 10x - 6y = 14 \\end{cases}$$ Sumando las ecuaciones: $$19x = 50$$ Por lo tanto: $$x = 3$$ y $$y = 1.5$$"
+            },
+            {
+                titulo: "Ángulo Doble",
+                categoria: "trigonometria",
+                enunciado: "Simplifica: $$\\cos(2\\theta)$$ en términos de $$\\cos(\\theta)$$ y $$\\sin(\\theta)$$",
+                solucion: "Fórmula del ángulo doble: $$\\cos(2\\theta) = \\cos^2(\\theta) - \\sin^2(\\theta) = 2\\cos^2(\\theta) - 1$$"
+            },
+            {
+                titulo: "Factorización Cúbica",
+                categoria: "algebra",
+                enunciado: "Factoriza completamente: $$x^3 - 2x^2 - 4x + 8$$",
+                solucion: "$$x^3 - 2x^2 - 4x + 8 = (x - 2)(x^2 + 0x - 4) = (x - 2)(x + 2)(x - 2)$$"
+            },
+            {
+                titulo: "Funciones Trigonométricas",
+                categoria: "trigonometria",
+                enunciado: "Si $$\\sin(\\theta) = \\frac{3}{5}$$ y $$\\theta$$ está en el segundo cuadrante, encuentra $$\\cos(\\theta)$$ y $$\\tan(\\theta)$$",
+                solucion: "En el segundo cuadrante: $$\\cos(\\theta) = -\\frac{4}{5}$$ (usando el círculo unitario), $$\\tan(\\theta) = -\\frac{3}{4}$$"
+            },
+            {
+                titulo: "Ecuación Exponencial",
+                categoria: "algebra",
+                enunciado: "Resuelve: $$2^{x+1} = 8$$",
+                solucion: "$$2^{x+1} = 2^3$$ Por lo tanto: $$x + 1 = 3$$ $$x = 2$$"
+            },
+            {
+                titulo: "Área Trigonométrica",
+                categoria: "trigonometria",
+                enunciado: "Encuentra el área de un triángulo si dos lados miden $$a=6$$ y $$b=8$$ unidades, y el ángulo entre ellos es $$30°$$",
+                solucion: "Usando la fórmula: $$A = \\frac{1}{2}ab\\sin(C)$$ $$A = \\frac{1}{2}(6)(8)\\sin(30°) = 12$$ unidades cuadradas"
+            },
+            {
+                titulo: "Logaritmos",
+                categoria: "algebra",
+                enunciado: "Resuelve la ecuación: $$\\log_2(x + 3) = 4$$",
+                solucion: "$$2^4 = x + 3$$ $$16 = x + 3$$ $$x = 13$$"
+            }
+        ];
+
+        function crearTarjetaEjercicio(ejercicio, index) {
+            return `
+                <div class="ejercicio-card" data-categoria="${ejercicio.categoria}">
+                    <span class="categoria ${ejercicio.categoria}">${ejercicio.categoria}</span>
+                    <h3>${ejercicio.titulo}</h3>
+                    <p>${ejercicio.enunciado}</p>
+                    <button onclick="toggleSolucion(${index})" class="btn-filtro">Ver solución</button>
+                    <div class="solucion" id="solucion-${index}">
+                        ${ejercicio.solucion}
+                    </div>
+                </div>
+            `;
+        }
+
+        function cargarEjercicios() {
+            const container = document.getElementById('ejercicios-container');
+            container.innerHTML = ejercicios.map((ejercicio, index) => 
+                crearTarjetaEjercicio(ejercicio, index)
+            ).join('');
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        function filtrarEjercicios(categoria) {
+            const cards = document.querySelectorAll('.ejercicio-card');
+            cards.forEach(card => {
+                if (categoria === 'todos' || card.dataset.categoria === categoria) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function toggleSolucion(index) {
+            const solucion = document.getElementById(`solucion-${index}`);
+            solucion.classList.toggle('mostrar');
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+
+        // Cargar ejercicios al iniciar
+        cargarEjercicios();
+    </script>
+</body>
+</html>

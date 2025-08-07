@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Estadísticas - Competencias Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true,
+                packages: {'[+]': ['base', 'ams', 'newcommand', 'mathtools']}
+            },
+            svg: {
+                fontCache: 'global',
+                scale: 1.1
+            },
+            options: {
+                renderActions: {
+                    addMenu: [0, '', ''],
+                    checkLoading: [1, '', '']
+                },
+                menuOptions: {
+                    settings: {
+                        zoom: 'Double-Click',
+                        zscale: '150%'
+                    }
+                }
+            },
+            startup: {
+                ready() {
+                    MathJax.startup.defaultReady();
+                    console.log('✅ MathJax is ready and configured');
+                    // Dispatch a custom event when MathJax is ready
+                    window.dispatchEvent(new CustomEvent('mathjaxReady'));
+                }
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --statistics: #3b82f6;
+            --statistics-light: rgba(59, 130, 246, 0.1);
+            --statistics-dark: #2563eb;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-statistics: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        /* MathJax Styling */
+        .problem-statement .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-statement mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        .problem-statement mjx-container[display="true"] {
+            margin: 0.8rem 0 !important;
+        }
+
+        .problem-solution .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .problem-solution mjx-container {
+            margin: 0.3rem 0 !important;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                linear-gradient(-45deg, rgba(59, 130, 246, 0.8), rgba(29, 78, 216, 0.8), rgba(37, 99, 235, 0.8), rgba(30, 64, 175, 0.8));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-statistics);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-back {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-statistics);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-back i {
+            margin-right: 0.5rem;
+        }
+
+        /* Timer Display */
+        .timer-display {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            border: 2px solid var(--statistics);
+            z-index: 100;
+        }
+
+        .timer-time {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--statistics);
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        /* MathJax Status Indicator */
+        .mathjax-status {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-soft);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mathjax-status.show {
+            opacity: 1;
+        }
+
+        .mathjax-status.ready {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .mathjax-status.error {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--light);
+            border-radius: 50px 50px 0 0;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-top: 4px solid var(--statistics);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-statistics);
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            background: var(--gradient-statistics);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--statistics);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--statistics);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Problems Section */
+        .problems-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .difficulty-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-tab {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-tab.easy {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--statistics);
+        }
+
+        .difficulty-tab.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .difficulty-tab.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        .difficulty-tab.active {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .difficulty-tab.easy.active {
+            background: var(--statistics);
+            color: var(--white);
+        }
+
+        .difficulty-tab.medium.active {
+            background: #daa520;
+            color: var(--white);
+        }
+
+        .difficulty-tab.hard.active {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--statistics);
+        }
+
+        .problem-card.solved {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border-color: var(--success);
+        }
+
+        .problem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--statistics);
+            font-size: 1.2rem;
+        }
+
+        .problem-points {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .problem-points.easy {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--statistics);
+        }
+
+        .problem-points.medium {
+            background: rgba(255, 230, 102, 0.2);
+            color: #daa520;
+        }
+
+        .problem-points.hard {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+
+        /* Statistical Chart Container */
+        .stats-chart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border-radius: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .stats-chart svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .chart-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            fill: var(--text-primary);
+        }
+
+        .chart-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            fill: var(--statistics-dark);
+        }
+
+        .chart-bar {
+            fill: rgba(59, 130, 246, 0.7);
+            stroke: var(--statistics);
+            stroke-width: 1;
+        }
+
+        .chart-line {
+            stroke: var(--statistics);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .chart-point {
+            fill: var(--statistics-dark);
+            r: 3;
+        }
+
+        .chart-area {
+            fill: rgba(59, 130, 246, 0.3);
+            stroke: var(--statistics);
+            stroke-width: 1;
+        }
+
+        .chart-axis {
+            stroke: var(--statistics-dark);
+            stroke-width: 1;
+        }
+
+        .normal-curve {
+            fill: none;
+            stroke: var(--statistics);
+            stroke-width: 3;
+        }
+
+        .problem-statement {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            min-height: 60px;
+        }
+
+        .problem-input-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .problem-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .problem-input:focus {
+            outline: none;
+            border-color: var(--statistics);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-statistics);
+            color: var(--white);
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .problem-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .problem-feedback.success {
+            background: rgba(78, 205, 196, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .problem-feedback.error {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .problem-feedback.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .problem-solution {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 15px;
+            border-left: 4px solid var(--statistics);
+            display: none;
+        }
+
+        .problem-solution.show {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .solution-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-statistics);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 25px;
+            box-shadow: var(--shadow-soft);
+            margin: 2rem 0;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .error-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .problems-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-input-section {
+                flex-direction: column;
+            }
+
+            .timer-display {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 2rem;
+            }
+
+            .mathjax-status {
+                position: relative;
+                bottom: 0;
+                left: 0;
+                margin-top: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .nav-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+            }
+
+            .stats-chart {
+                padding: 0.5rem;
+                margin: 1rem 0;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Score Animation */
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -150%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -250%) scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fas fa-chart-bar"></i>
+                Módulo de Estadísticas
+            </a>
+            
+            <div class="nav-controls">
+                <a href="../leaderboard.html" class="nav-back" target="_blank" style="background: var(--success);">
+                    <i class="fas fa-trophy"></i>
+                    Ver Tabla de Posiciones
+                </a>
+                
+                <a href="../competencias.html" class="nav-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Competencias
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timerDisplay">
+        <div class="timer-time" id="timerTime">02:00:00</div>
+        <div class="timer-label">Tiempo Restante</div>
+    </div>
+
+    <!-- MathJax Status Indicator -->
+    <div class="mathjax-status" id="mathJaxStatus">
+        <i class="fas fa-circle"></i>
+        Cargando renderizador matemático...
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Loading State -->
+            <div class="loading-container" id="loadingContainer">
+                <div class="loading-spinner"></div>
+                <h2>Cargando Módulo de Estadísticas...</h2>
+                <p>Preparando problemas de datos, gráficos y análisis estadístico</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-container" id="errorContainer" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="error-title">Error al Cargar el Módulo</h2>
+                <p class="error-message" id="errorMessage">Ha ocurrido un problema al cargar el módulo de estadísticas.</p>
+                <div class="error-actions">
+                    <a href="../competencias.html" class="nav-back">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver a Competencias
+                    </a>
+                    <button onclick="location.reload()" class="nav-back" style="border: none; background: var(--warning);">
+                        <i class="fas fa-redo"></i>
+                        Intentar de Nuevo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Container (Hidden initially) -->
+            <div id="mainContainer" style="display: none;">
+                <!-- Hero Section -->
+                <section class="hero fade-in">
+                    <div class="hero-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h1 class="hero-title">Estadísticas</h1>
+                    <p class="hero-subtitle">Resuelve problemas de datos, gráficos, probabilidades y análisis estadístico</p>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p style="text-align: center; color: var(--text-secondary); margin-top: 0.5rem;">
+                        Progreso: <span id="progressText">0/30 problemas resueltos</span>
+                    </p>
+                </section>
+
+                <!-- Stats Dashboard -->
+                <section class="stats-dashboard fade-in">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalScore">0</div>
+                        <div class="stat-label">Puntos Totales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="problemsSolved">0</div>
+                        <div class="stat-label">Problemas Resueltos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="currentStreak">0</div>
+                        <div class="stat-label">Racha Actual</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="averageTime">--:--</div>
+                        <div class="stat-label">Tiempo Promedio</div>
+                    </div>
+                </section>
+
+                <!-- Problems Section -->
+                <section class="problems-section fade-in">
+                    <h2 class="section-title">Problemas de Estadísticas</h2>
+                    
+                    <!-- Difficulty Tabs -->
+                    <div class="difficulty-tabs">
+                        <button class="difficulty-tab easy active" onclick="showDifficulty('easy')">
+                            <i class="fas fa-chart-pie"></i>
+                            Fácil (5 pts)
+                        </button>
+                        <button class="difficulty-tab medium" onclick="showDifficulty('medium')">
+                            <i class="fas fa-chart-line"></i>
+                            Medio (10 pts)
+                        </button>
+                        <button class="difficulty-tab hard" onclick="showDifficulty('hard')">
+                            <i class="fas fa-analytics"></i>
+                            Difícil (15 pts)
+                        </button>
+                    </div>
+
+                    <!-- Problems Grid -->
+                    <div class="problems-grid" id="problemsGrid">
+                        <!-- Problems will be dynamically generated here -->
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Statistics Module Management System
+        class StatisticsModule {
+            constructor() {
+                this.currentParticipant = null;
+                this.currentDifficulty = 'easy';
+                this.solvedProblems = new Set();
+                this.currentScore = 0;
+                this.problemsSolved = 0;
+                this.currentStreak = 0;
+                this.startTime = Date.now();
+                this.solveTimes = [];
+                this.competitionData = null;
+                this.timeRemaining = 7200;
+                this.timerInterval = null;
+                this.mathJaxReady = false;
+                
+                // Problems with MathJax notation and statistical charts
+                this.problems = {
+                    easy: [
+                        {
+                            id: 'e1',
+                            statement: 'Encuentra la media de los siguientes datos: 5, 8, 12, 15, 10.',
+                            answer: '10',
+                            solution: 'La media se calcula como $\\bar{x} = \\frac{5 + 8 + 12 + 15 + 10}{5} = \\frac{50}{5} = 10$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="180" x2="250" y2="180" class="chart-axis"/>
+                                    <line x1="50" y1="50" x2="50" y2="180" class="chart-axis"/>
+                                    <rect x="70" y="140" width="30" height="40" class="chart-bar"/>
+                                    <rect x="110" y="120" width="30" height="60" class="chart-bar"/>
+                                    <rect x="150" y="80" width="30" height="100" class="chart-bar"/>
+                                    <rect x="190" y="50" width="30" height="130" class="chart-bar"/>
+                                    <rect x="230" y="100" width="30" height="80" class="chart-bar"/>
+                                    <text x="85" y="195" class="chart-label">5</text>
+                                    <text x="125" y="195" class="chart-label">8</text>
+                                    <text x="165" y="195" class="chart-label">12</text>
+                                    <text x="205" y="195" class="chart-label">15</text>
+                                    <text x="245" y="195" class="chart-label">10</text>
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="red" stroke-width="2" stroke-dasharray="5,5"/>
+                                    <text x="255" y="105" class="chart-label" fill="red">Media = 10</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e2',
+                            statement: 'Determina la mediana del conjunto de datos: 3, 7, 9, 14, 21.',
+                            answer: '9',
+                            solution: 'Los datos ya están ordenados: 3, 7, 9, 14, 21. La mediana es el valor central: 9',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="70" cy="100" r="15" fill="rgba(59, 130, 246, 0.3)" stroke="var(--statistics)"/>
+                                    <circle cx="120" cy="100" r="15" fill="rgba(59, 130, 246, 0.3)" stroke="var(--statistics)"/>
+                                    <circle cx="170" cy="100" r="15" fill="red" stroke="red" stroke-width="3"/>
+                                    <circle cx="220" cy="100" r="15" fill="rgba(59, 130, 246, 0.3)" stroke="var(--statistics)"/>
+                                    <circle cx="270" cy="100" r="15" fill="rgba(59, 130, 246, 0.3)" stroke="var(--statistics)"/>
+                                    <text x="70" y="105" text-anchor="middle" class="chart-text">3</text>
+                                    <text x="120" y="105" text-anchor="middle" class="chart-text">7</text>
+                                    <text x="170" y="105" text-anchor="middle" class="chart-text" fill="red">9</text>
+                                    <text x="220" y="105" text-anchor="middle" class="chart-text">14</text>
+                                    <text x="270" y="105" text-anchor="middle" class="chart-text">21</text>
+                                    <text x="170" y="140" text-anchor="middle" class="chart-label" fill="red">Mediana</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e3',
+                            statement: 'Encuentra la moda de: 2, 5, 3, 5, 8, 5, 7.',
+                            answer: '5',
+                            solution: 'La moda es el valor que aparece con mayor frecuencia. El número 5 aparece 3 veces.',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="180" x2="250" y2="180" class="chart-axis"/>
+                                    <line x1="50" y1="50" x2="50" y2="180" class="chart-axis"/>
+                                    <rect x="70" y="160" width="20" height="20" class="chart-bar"/>
+                                    <rect x="100" y="120" width="20" height="60" class="chart-bar" fill="red"/>
+                                    <rect x="130" y="160" width="20" height="20" class="chart-bar"/>
+                                    <rect x="160" y="160" width="20" height="20" class="chart-bar"/>
+                                    <rect x="190" y="160" width="20" height="20" class="chart-bar"/>
+                                    <text x="80" y="195" class="chart-label">2</text>
+                                    <text x="105" y="195" class="chart-label" fill="red">5</text>
+                                    <text x="140" y="195" class="chart-label">3</text>
+                                    <text x="170" y="195" class="chart-label">7</text>
+                                    <text x="200" y="195" class="chart-label">8</text>
+                                    <text x="110" y="110" class="chart-label" fill="red">3</text>
+                                    <text x="110" y="40" class="chart-label" fill="red">Moda = ?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e4',
+                            statement: 'Calcula el rango de los datos: 12, 18, 7, 25, 9.',
+                            answer: '18',
+                            solution: 'Rango = Valor máximo - Valor mínimo = x - y = p',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--statistics)" stroke-width="3"/>
+                                    <circle cx="90" cy="100" r="5" fill="blue"/>
+                                    <circle cx="130" cy="100" r="5" fill="var(--statistics)"/>
+                                    <circle cx="70" cy="100" r="8" fill="red"/>
+                                    <circle cx="220" cy="100" r="8" fill="red"/>
+                                    <circle cx="110" cy="100" r="5" fill="var(--statistics)"/>
+                                    <text x="70" y="85" class="chart-label" fill="red">7</text>
+                                    <text x="215" y="85" class="chart-label" fill="red">25</text>
+                                    <text x="90" y="120" class="chart-label">12</text>
+                                    <text x="125" y="120" class="chart-label">18</text>
+                                    <text x="105" y="120" class="chart-label">9</text>
+                                    <text x="140" y="140" class="chart-label">Rango = x - y = ?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e5',
+                            statement: 'Si lanzas una moneda, ¿cuál es la probabilidad de obtener cara?',
+                            answer: '0.5',
+                            solution: 'P(cara) = $\\frac{\\text{número de caras}}{\\text{total de resultados}} = \\frac{1}{2} = 0.5$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="120" cy="100" r="40" fill="gold" stroke="var(--statistics)" stroke-width="3"/>
+                                    <text x="120" y="105" text-anchor="middle" class="chart-text">CARA</text>
+                                    <circle cx="220" cy="100" r="40" fill="silver" stroke="var(--statistics)" stroke-width="3"/>
+                                    <text x="220" y="105" text-anchor="middle" class="chart-text">CRUZ</text>
+                                    <text x="170" y="160" text-anchor="middle" class="chart-label">P(Cara) = 1/n = x</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e6',
+                            statement: 'En una clase de 30 estudiantes, 18 son mujeres. ¿Qué porcentaje representa?',
+                            answer: '60',
+                            solution: 'Porcentaje = $\\frac{18}{30} \\times 100\\% = 0.6 \\times 100\\% = 60\\%$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" fill="none" stroke="var(--statistics)" stroke-width="3"/>
+                                    <path d="M 150 30 A 70 70 0 1 1 108 142 Z" fill="rgba(255, 105, 180, 0.6)" stroke="var(--statistics)"/>
+                                    <path d="M 150 30 A 70 70 0 0 1 108 142 Z" fill="rgba(59, 130, 246, 0.6)" stroke="var(--statistics)"/>
+                                    <text x="130" y="70" class="chart-text" fill="white">60%</text>
+                                    <text x="170" y="130" class="chart-text" fill="white">40%</text>
+                                    <text x="150" y="190" text-anchor="middle" class="chart-label">Mujeres: ? </text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e7',
+                            statement: 'Completa la tabla de frecuencias. Si hay 20 datos y las frecuencias son: A=5, B=8, C=?, D=3.',
+                            answer: '4',
+                            solution: 'Total = A + B + C + D, entonces 20 = 5 + 8 + C + 3, por lo tanto C = 4',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="50" y="50" width="200" height="120" fill="none" stroke="var(--statistics)" stroke-width="2"/>
+                                    <line x1="50" y1="90" x2="250" y2="90" stroke="var(--statistics)"/>
+                                    <line x1="150" y1="50" x2="150" y2="170" stroke="var(--statistics)"/>
+                                    <text x="100" y="75" text-anchor="middle" class="chart-text">Categoría</text>
+                                    <text x="200" y="75" text-anchor="middle" class="chart-text">Frecuencia</text>
+                                    <text x="100" y="110" text-anchor="middle" class="chart-text">A</text>
+                                    <text x="200" y="110" text-anchor="middle" class="chart-text">5</text>
+                                    <text x="100" y="130" text-anchor="middle" class="chart-text">B</text>
+                                    <text x="200" y="130" text-anchor="middle" class="chart-text">8</text>
+                                    <text x="100" y="150" text-anchor="middle" class="chart-text">C</text>
+                                    <text x="200" y="150" text-anchor="middle" class="chart-text" fill="red">?</text>
+                                    <text x="100" y="190" text-anchor="middle" class="chart-label">Total = 20</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e8',
+                            statement: 'Al lanzar un dado, ¿cuál es la probabilidad de obtener un número par?',
+                            answer: '0.5',
+                            solution: 'Números pares: 2, 4, 6. P(par) = $\\frac{3}{6} = \\frac{1}{2} = 0.5$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="60" y="80" width="30" height="30" fill="rgba(59, 130, 246, 0.3)" stroke="var(--statistics)"/>
+                                    <rect x="100" y="80" width="30" height="30" fill="red" stroke="var(--statistics)"/>
+                                    <rect x="140" y="80" width="30" height="30" fill="rgba(59, 130, 246, 0.3)" stroke="var(--statistics)"/>
+                                    <rect x="180" y="80" width="30" height="30" fill="red" stroke="var(--statistics)"/>
+                                    <rect x="220" y="80" width="30" height="30" fill="rgba(59, 130, 246, 0.3)" stroke="var(--statistics)"/>
+                                    <rect x="260" y="80" width="30" height="30" fill="red" stroke="var(--statistics)"/>
+                                    <text x="75" y="100" text-anchor="middle" class="chart-text">1</text>
+                                    <text x="115" y="100" text-anchor="middle" class="chart-text">2</text>
+                                    <text x="155" y="100" text-anchor="middle" class="chart-text">3</text>
+                                    <text x="195" y="100" text-anchor="middle" class="chart-text">4</text>
+                                    <text x="235" y="100" text-anchor="middle" class="chart-text">5</text>
+                                    <text x="275" y="100" text-anchor="middle" class="chart-text">6</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e9',
+                            statement: 'Encuentra la frecuencia relativa de "B" si aparece 12 veces en un total de 40 observaciones.',
+                            answer: '0.3',
+                            solution: 'Frecuencia relativa = $\\frac{\\text{frecuencia absoluta}}{\\text{total}} = \\frac{12}{40} = 0.3$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="150" cy="100" r="70" fill="none" stroke="var(--statistics)" stroke-width="3"/>
+                                    <path d="M 150 30 A 70 70 0 0 1 192 158 Z" fill="rgba(59, 130, 246, 0.6)" stroke="var(--statistics)"/>
+                                    <text x="170" y="80" class="chart-text" fill="white">30%</text>
+                            
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'e10',
+                            statement: 'Si la probabilidad de lluvia es 0.7, ¿cuál es la probabilidad de que NO llueva?',
+                            answer: '0.3',
+                            solution: 'P(no lluvia) = 1 - P(lluvia) = 1 - 0.7 = 0.3',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="50" y="80" width="140" height="40" fill="rgba(59, 130, 246, 0.6)" stroke="var(--statistics)"/>
+                                    <rect x="190" y="80" width="60" height="40" fill="rgba(255, 107, 107, 0.6)" stroke="var(--statistics)"/>
+                                    <text x="120" y="105" text-anchor="middle" class="chart-text">Lluvia: 0.7</text>
+                                    <text x="220" y="105" text-anchor="middle" class="chart-text"> x </text>
+                                    <text x="150" y="150" text-anchor="middle" class="chart-label">Probabilidades complementarias</text>
+                                </svg>
+                            `
+                        }
+                    ],
+                    medium: [
+                        {
+                            id: 'm1',
+                            statement: 'Calcula la desviación estándar de los datos: 4, 6, 8, 10, 12. (Media = 8)',
+                            answer: '2.83',
+                            solution: 'Varianza = $\\frac{(4-8)^2+(6-8)^2+(8-8)^2+(10-8)^2+(12-8)^2}{5} = \\frac{40}{5} = 8$. Desviación estándar = $\\sqrt{8} ≈ 2.83$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--statistics)" stroke-width="2"/>
+                                    <circle cx="80" cy="100" r="5" fill="red"/>
+                                    <circle cx="120" cy="100" r="5" fill="red"/>
+                                    <circle cx="160" cy="100" r="8" fill="green"/>
+                                    <circle cx="200" cy="100" r="5" fill="red"/>
+                                    <circle cx="240" cy="100" r="5" fill="red"/>
+                                    <text x="80" y="120" text-anchor="middle" class="chart-label">4</text>
+                                    <text x="120" y="120" text-anchor="middle" class="chart-label">6</text>
+                                    <text x="160" y="120" text-anchor="middle" class="chart-label">8</text>
+                                    <text x="200" y="120" text-anchor="middle" class="chart-label">10</text>
+                                    <text x="240" y="120" text-anchor="middle" class="chart-label">12</text>
+                                    <text x="160" y="80" text-anchor="middle" class="chart-label" fill="green">Media = 8</text>
+                                    <text x="160" y="150" text-anchor="middle" class="chart-label">σ ≈ x</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm2',
+                            statement: 'En una distribución normal con media 50 y desviación estándar 10, ¿qué porcentaje de datos está entre 40 y 60?',
+                            answer: '68',
+                            solution: 'Por la regla 68-95-99.7, aproximadamente 68% de los datos están dentro de 1 desviación estándar de la media.',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <path d="M 50 150 Q 100 80 150 50 Q 200 80 250 150" class="normal-curve"/>
+                                    <line x1="100" y1="50" x2="100" y2="150" stroke="red" stroke-width="2" stroke-dasharray="3,3"/>
+                                    <line x1="200" y1="50" x2="200" y2="150" stroke="red" stroke-width="2" stroke-dasharray="3,3"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="green" stroke-width="2"/>
+                                    <text x="100" y="170" text-anchor="middle" class="chart-label">40</text>
+                                    <text x="150" y="170" text-anchor="middle" class="chart-label">50</text>
+                                    <text x="200" y="170" text-anchor="middle" class="chart-label">60</text>
+                                    <text x="150" y="100" text-anchor="middle" class="chart-label" fill="red">68%</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm3',
+                            statement: 'Calcula el coeficiente de correlación aproximado si r² = 0.64.',
+                            answer: '0.8',
+                            solution: 'Si $r^2 = 0.64$, entonces $r = \\pm\\sqrt{0.64} = \\pm 0.8$. Asumiendo correlación positiva, r = 0.8',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="180" x2="250" y2="180" class="chart-axis"/>
+                                    <line x1="50" y1="50" x2="50" y2="180" class="chart-axis"/>
+                                    <circle cx="80" cy="160" r="3" class="chart-point"/>
+                                    <circle cx="100" cy="140" r="3" class="chart-point"/>
+                                    <circle cx="120" cy="120" r="3" class="chart-point"/>
+                                    <circle cx="140" cy="100" r="3" class="chart-point"/>
+                                    <circle cx="160" cy="80" r="3" class="chart-point"/>
+                                    <circle cx="180" cy="70" r="3" class="chart-point"/>
+                                    <circle cx="200" cy="60" r="3" class="chart-point"/>
+                                    <line x1="70" y1="170" x2="210" y2="50" stroke="red" stroke-width="2"/>
+                                    <text x="150" y="40" text-anchor="middle" class="chart-label">r = x</text>
+                                    <text x="150" y="200" text-anchor="middle" class="chart-label">Correlación fuerte positiva</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm4',
+                            statement: '¿De cuántas maneras se pueden ordenar 5 libros en una estantería?',
+                            answer: '120',
+                            solution: 'Permutaciones de 5 objetos: P(5) = 5! = 5 × 4 × 3 × 2 × 1 = 120',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="60" y="80" width="20" height="60" fill="red" stroke="var(--statistics)"/>
+                                    <rect x="90" y="80" width="20" height="60" fill="blue" stroke="var(--statistics)"/>
+                                    <rect x="120" y="80" width="20" height="60" fill="green" stroke="var(--statistics)"/>
+                                    <rect x="150" y="80" width="20" height="60" fill="yellow" stroke="var(--statistics)"/>
+                                    <rect x="180" y="80" width="20" height="60" fill="purple" stroke="var(--statistics)"/>
+                                    <text x="70" y="110" text-anchor="middle" class="chart-text">1</text>
+                                    <text x="100" y="110" text-anchor="middle" class="chart-text">2</text>
+                                    <text x="130" y="110" text-anchor="middle" class="chart-text">3</text>
+                                    <text x="160" y="110" text-anchor="middle" class="chart-text">4</text>
+                                    <text x="190" y="110" text-anchor="middle" class="chart-text">5</text>
+                                    <text x="150" y="170" text-anchor="middle" class="chart-label">n! = p formas</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm5',
+                            statement: 'Si P(A) = 0.4 y P(B) = 0.5, y A y B son independientes, encuentra P(A ∩ B).',
+                            answer: '0.2',
+                            solution: 'Para eventos independientes: P(A ∩ B) = P(A) × P(B) = 0.4 × 0.5 = 0.2',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <circle cx="120" cy="100" r="50" fill="rgba(255, 0, 0, 0.3)" stroke="red" stroke-width="2"/>
+                                    <circle cx="180" cy="100" r="50" fill="rgba(0, 0, 255, 0.3)" stroke="blue" stroke-width="2"/>
+                                    <text x="90" y="105" text-anchor="middle" class="chart-text">A</text>
+                                    <text x="210" y="105" text-anchor="middle" class="chart-text">B</text>
+                                    <text x="150" y="105" text-anchor="middle" class="chart-text">x</text>
+                                    <text x="70" y="170" class="chart-label">P(A) = 0.4</text>
+                                    <text x="180" y="170" class="chart-label">P(B) = 0.5</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm6',
+                            statement: 'Encuentra la ecuación de la recta de regresión si la pendiente es 2.5 y pasa por el punto (4, 10).',
+                            answer: 'y=2.5x+0',
+                            solution: 'Usando y - y₁ = m(x - x₁): y - 10 = 2.5(x - 4), entonces y = 2.5x + 0',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="180" x2="250" y2="180" class="chart-axis"/>
+                                    <line x1="50" y1="50" x2="50" y2="180" class="chart-axis"/>
+                                    <line x1="70" y1="160" x2="230" y2="60" stroke="red" stroke-width="3"/>
+                                    <circle cx="130" cy="110" r="5" fill="blue"/>
+                                    <text x="135" y="105" class="chart-label">(4, 10)</text>
+                                    <text x="150" y="40" class="chart-label">y = 2.5x + 0</text>
+                                    <text x="150" y="200" text-anchor="middle" class="chart-label">Recta de regresión</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm7',
+                            statement: '¿Cuántas combinaciones de 3 elementos se pueden formar con 8 elementos?',
+                            answer: '56',
+                            solution: 'Combinaciones: C(8,3) = $\\frac{8!}{3!(8-3)!} = \\frac{8!}{3!5!} = \\frac{8×7×6}{3×2×1} = 56$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="80" text-anchor="middle" class="chart-text" style="font-size: 24px;">C(8,3)</text>
+                                    <text x="150" y="110" text-anchor="middle" class="chart-label">Elegir 3 de 8</text>
+                                    <text x="150" y="130" text-anchor="middle" class="chart-label">Sin importar el orden</text>
+                                    <text x="150" y="160" text-anchor="middle" class="chart-text" style="font-size: 20px;">= x</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm8',
+                            statement: 'En una muestra de 100 personas, 60 prefieren café. Calcula el intervalo de confianza del 95% para la proporción.',
+                            answer: '0.504,0.696',
+                            solution: 'p̂ = 0.6, error estándar ≈ 0.049, margen de error ≈ 0.096. IC: [0.504, 0.696]',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--statistics)" stroke-width="3"/>
+                                    <line x1="100" y1="90" x2="100" y2="110" stroke="red" stroke-width="2"/>
+                                    <line x1="200" y1="90" x2="200" y2="110" stroke="red" stroke-width="2"/>
+                                    <circle cx="150" cy="100" r="5" fill="blue"/>
+                                    <text x="100" y="130" text-anchor="middle" class="chart-label">0.504</text>
+                                    <text x="150" y="130" text-anchor="middle" class="chart-label">0.6</text>
+                                    <text x="200" y="130" text-anchor="middle" class="chart-label">0.696</text>
+                                    <text x="150" y="70" text-anchor="middle" class="chart-label">IC 95%</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm9',
+                            statement: 'Si P(A|B) = 0.8 y P(B) = 0.3, encuentra P(A ∩ B).',
+                            answer: '0.24',
+                            solution: 'Por definición de probabilidad condicional: P(A|B) = P(A ∩ B)/P(B), entonces P(A ∩ B) = 0.8 × 0.3 = 0.24',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="100" y="70" width="100" height="80" fill="rgba(0, 0, 255, 0.3)" stroke="blue" stroke-width="2"/>
+                                    <rect x="120" y="90" width="60" height="40" fill="rgba(255, 0, 0, 0.5)" stroke="red" stroke-width="2"/>
+                                    <text x="80" y="85" class="chart-text">B</text>
+                                    <text x="150" y="105" class="chart-text" fill="white">A∩B</text>
+                                    <text x="150" y="180" text-anchor="middle" class="chart-label">P(A|B) = P(A∩B)/P(B)</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'm10',
+                            statement: 'Calcula la varianza de los datos: 2, 4, 6, 8, 10. (Media = 6)',
+                            answer: '8',
+                            solution: 'Varianza = $\\frac{(2-6)^2+(4-6)^2+(6-6)^2+(8-6)^2+(10-6)^2}{5} = \\frac{16+4+0+4+16}{5} = 8$',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--statistics)" stroke-width="2"/>
+                                    <circle cx="80" cy="100" r="5" fill="red"/>
+                                    <circle cx="120" cy="100" r="5" fill="red"/>
+                                    <circle cx="160" cy="100" r="8" fill="green"/>
+                                    <circle cx="200" cy="100" r="5" fill="red"/>
+                                    <circle cx="240" cy="100" r="5" fill="red"/>
+                                    <text x="80" y="80" text-anchor="middle" class="chart-label">(-4)²=16</text>
+                                    <text x="120" y="80" text-anchor="middle" class="chart-label">(-2)²=4</text>
+                                    <text x="160" y="80" text-anchor="middle" class="chart-label">(0)²=0</text>
+                                    <text x="200" y="80" text-anchor="middle" class="chart-label">(2)²=4</text>
+                                    <text x="240" y="80" text-anchor="middle" class="chart-label">(4)²=16</text>
+                                    <text x="160" y="150" text-anchor="middle" class="chart-label">Varianza = x</text>
+                                </svg>
+                            `
+                        }
+                    ],
+                    hard: [
+                        {
+                            id: 'h1',
+                            statement: 'Realiza una prueba de hipótesis para μ = 100 vs μ ≠ 100, con x̄ = 105, s = 12, n = 25, α = 0.05.',
+                            answer: 'rechazar',
+                            solution: 't = (105-100)/(12/√25) = 2.08. |t| > 2.064 (valor crítico), entonces rechazamos H₀.',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <path d="M 50 150 Q 100 80 150 50 Q 200 80 250 150" class="normal-curve"/>
+                                    <line x1="80" y1="50" x2="80" y2="150" stroke="red" stroke-width="2"/>
+                                    <line x1="220" y1="50" x2="220" y2="150" stroke="red" stroke-width="2"/>
+                                    <line x1="190" y1="50" x2="190" y2="150" stroke="blue" stroke-width="3"/>
+                                    <text x="80" y="170" text-anchor="middle" class="chart-label">-2.064</text>
+                                    <text x="220" y="170" text-anchor="middle" class="chart-label">2.064</text>
+                                    <text x="190" y="170" text-anchor="middle" class="chart-label">t=2.08</text>
+                                    <text x="150" y="40" text-anchor="middle" class="chart-label">Rechazar H₀</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h2',
+                            statement: 'Calcula el estadístico chi-cuadrado para independencia con la tabla: |A:10,B:5|C:8,D:12|.',
+                            answer: '1.67',
+                            solution: 'Con frecuencias esperadas calculadas, χ² = Σ(O-E)²/E ≈ 1.67',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="80" y="70" width="140" height="80" fill="none" stroke="var(--statistics)" stroke-width="2"/>
+                                    <line x1="80" y1="110" x2="220" y2="110" stroke="var(--statistics)"/>
+                                    <line x1="150" y1="70" x2="150" y2="150" stroke="var(--statistics)"/>
+                                    <text x="115" y="95" text-anchor="middle" class="chart-text">10</text>
+                                    <text x="185" y="95" text-anchor="middle" class="chart-text">5</text>
+                                    <text x="115" y="135" text-anchor="middle" class="chart-text">8</text>
+                                    <text x="185" y="135" text-anchor="middle" class="chart-text">12</text>
+                                    <text x="150" y="40" text-anchor="middle" class="chart-label">χ² = ?</text>
+                                    <text x="150" y="180" text-anchor="middle" class="chart-label">Tabla de contingencia</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h3',
+                            statement: 'En un ANOVA con 3 grupos (n₁=5, n₂=5, n₃=5), si MSE = 4 y MSB = 20, calcula F.',
+                            answer: '5',
+                            solution: 'F = MSB/MSE = 20/4 = 5. Con gl₁ = 2, gl₂ = 12.',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="60" y="80" width="40" height="60" fill="rgba(255, 0, 0, 0.3)" stroke="red"/>
+                                    <rect x="130" y="80" width="40" height="60" fill="rgba(0, 255, 0, 0.3)" stroke="green"/>
+                                    <rect x="200" y="80" width="40" height="60" fill="rgba(0, 0, 255, 0.3)" stroke="blue"/>
+                                    <text x="80" y="110" text-anchor="middle" class="chart-text">G1</text>
+                                    <text x="150" y="110" text-anchor="middle" class="chart-text">G2</text>
+                                    <text x="220" y="110" text-anchor="middle" class="chart-text">G3</text>
+                                    <text x="150" y="40" text-anchor="middle" class="chart-label">F = ?</text>
+                                    <text x="150" y="180" text-anchor="middle" class="chart-label">ANOVA: 3 grupos</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h4',
+                            statement: 'Para una regresión múltiple Y = β₀ + β₁X₁ + β₂X₂, si R² = 0.75, calcula R² ajustado con n = 20, p = 2.',
+                            answer: '0.72',
+                            solution: 'R²ₐⱼ = 1 - (1-R²)(n-1)/(n-p-1) = 1 - (0.25)(19)/17 ≈ 0.72',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <text x="150" y="70" text-anchor="middle" class="chart-text" style="font-size: 18px;">Y = β₀ + β₁X₁ + β₂X₂</text>
+                                    <text x="150" y="100" text-anchor="middle" class="chart-label">R² = 0.75</text>
+                                    <text x="150" y="120" text-anchor="middle" class="chart-label">n = 20, p = 2</text>
+                                    <text x="150" y="150" text-anchor="middle" class="chart-text" style="font-size: 16px;">R²ₐⱼ = ?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h5',
+                            statement: 'Calcula la probabilidad de X ≤ 2 en una distribución Poisson con λ = 3.',
+                            answer: '0.423',
+                            solution: 'P(X≤2) = P(X=0) + P(X=1) + P(X=2) = e⁻³(1 + 3 + 4.5) ≈ 0.423',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="180" x2="250" y2="180" class="chart-axis"/>
+                                    <line x1="50" y1="50" x2="50" y2="180" class="chart-axis"/>
+                                    <rect x="70" y="160" width="20" height="20" class="chart-bar" fill="red"/>
+                                    <rect x="100" y="120" width="20" height="60" class="chart-bar" fill="red"/>
+                                    <rect x="130" y="90" width="20" height="90" class="chart-bar" fill="red"/>
+                                    <rect x="160" y="70" width="20" height="110" class="chart-bar"/>
+                                    <rect x="190" y="80" width="20" height="100" class="chart-bar"/>
+                                    <text x="80" y="200" text-anchor="middle" class="chart-label">0</text>
+                                    <text x="110" y="200" text-anchor="middle" class="chart-label">1</text>
+                                    <text x="140" y="200" text-anchor="middle" class="chart-label">2</text>
+                                    <text x="170" y="200" text-anchor="middle" class="chart-label">3</text>
+                                    <text x="200" y="200" text-anchor="middle" class="chart-label">4</text>
+                                    <text x="150" y="40" text-anchor="middle" class="chart-label">P(X≤2) = ?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h6',
+                            statement: 'Encuentra el intervalo de confianza del 99% para μ con x̄ = 25, σ = 6, n = 36.',
+                            answer: '22.42,27.58',
+                            solution: 'IC: x̄ ± z₀.₀₀₅(σ/√n) = 25 ± 2.576(6/6) = 25 ± 2.58 = [22.42, 27.58]',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <path d="M 50 150 Q 100 80 150 50 Q 200 80 250 150" class="normal-curve"/>
+                                    <line x1="80" y1="50" x2="80" y2="150" stroke="red" stroke-width="2"/>
+                                    <line x1="220" y1="50" x2="220" y2="150" stroke="red" stroke-width="2"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="green" stroke-width="2"/>
+                                    <text x="80" y="170" text-anchor="middle" class="chart-label">22.42</text>
+                                    <text x="150" y="170" text-anchor="middle" class="chart-label">25</text>
+                                    <text x="220" y="170" text-anchor="middle" class="chart-label">27.58</text>
+                                    <text x="150" y="40" text-anchor="middle" class="chart-label">IC 99%</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h7',
+                            statement: 'Calcula la probabilidad P(Z > 1.96) en una distribución normal estándar.',
+                            answer: '0.025',
+                            solution: 'P(Z > 1.96) = 1 - Φ(1.96) = 1 - 0.975 = 0.025',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <path d="M 50 150 Q 100 80 150 50 Q 200 80 250 150" class="normal-curve"/>
+                                    <path d="M 200 80 Q 225 115 250 150 L 250 150 L 200 150 Z" fill="red" opacity="0.3"/>
+                                    <line x1="150" y1="50" x2="150" y2="150" stroke="green" stroke-width="2"/>
+                                    <line x1="200" y1="50" x2="200" y2="150" stroke="red" stroke-width="2"/>
+                                    <text x="150" y="170" text-anchor="middle" class="chart-label">0</text>
+                                    <text x="200" y="170" text-anchor="middle" class="chart-label">1.96</text>
+                                    <text x="225" y="120" text-anchor="middle" class="chart-label" fill="red">?</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h8',
+                            statement: 'En un diseño experimental 2×3, con 4 réplicas por celda, ¿cuántos grados de libertad tiene el error?',
+                            answer: '18',
+                            solution: 'Total: 2×3×4 = 24. gl_error = N - ab = 24 - (2×3) = 18',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <rect x="80" y="70" width="140" height="100" fill="none" stroke="var(--statistics)" stroke-width="2"/>
+                                    <line x1="80" y1="110" x2="220" y2="110" stroke="var(--statistics)"/>
+                                    <line x1="80" y1="150" x2="220" y2="150" stroke="var(--statistics)"/>
+                                    <line x1="126" y1="70" x2="126" y2="170" stroke="var(--statistics)"/>
+                                    <line x1="173" y1="70" x2="173" y2="170" stroke="var(--statistics)"/>
+                                    <text x="150" y="40" text-anchor="middle" class="chart-label">Diseño 2×3</text>
+                                    <text x="150" y="180" text-anchor="middle" class="chart-label">gl_error = ?</text>
+                                    <text x="150" y="200" text-anchor="middle" class="chart-label">4 réplicas/celda</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h9',
+                            statement: 'Calcula el estadístico de Durbin-Watson si Σ(eᵢ - eᵢ₋₁)² = 48 y Σeᵢ² = 30.',
+                            answer: '1.6',
+                            solution: 'DW = Σ(eᵢ - eᵢ₋₁)²/Σeᵢ² = 48/30 = 1.6',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <line x1="50" y1="100" x2="250" y2="100" stroke="var(--statistics)" stroke-width="3"/>
+                                    <text x="50" y="120" class="chart-label">0</text>
+                                    <text x="125" y="120" class="chart-label">2</text>
+                                    <text x="250" y="120" class="chart-label">4</text>
+                                    <circle cx="100" cy="100" r="8" fill="red"/>
+                                    <text x="100" y="80" text-anchor="middle" class="chart-label">DW=?</text>
+                                    <text x="150" y="150" text-anchor="middle" class="chart-label">Test Durbin-Watson</text>
+                                    <text x="150" y="170" text-anchor="middle" class="chart-label">Autocorrelación</text>
+                                </svg>
+                            `
+                        },
+                        {
+                            id: 'h10',
+                            statement: 'Para una distribución binomial con n = 20, p = 0.3, calcula P(X = 8) usando aproximación normal.',
+                            answer: '0.087',
+                            solution: 'μ = 6, σ = 2.05. Con corrección por continuidad: P(7.5 < X < 8.5) ≈ 0.087',
+                            figure: `
+                                <svg width="300" height="200" viewBox="0 0 300 200">
+                                    <path d="M 50 150 Q 100 80 150 50 Q 200 80 250 150" class="normal-curve"/>
+                                    <line x1="180" y1="50" x2="180" y2="150" stroke="red" stroke-width="2"/>
+                                    <line x1="200" y1="50" x2="200" y2="150" stroke="red" stroke-width="2"/>
+                                    <path d="M 180 95 Q 190 80 200 95 L 200 150 L 180 150 Z" fill="red" opacity="0.5"/>
+                                    <text x="150" y="170" text-anchor="middle" class="chart-label">μ=6</text>
+                                    <text x="190" y="170" text-anchor="middle" class="chart-label">X=8</text>
+                                    <text x="190" y="70" text-anchor="middle" class="chart-label">P≈?</text>
+                                </svg>
+                            `
+                        }
+                    ]
+                };
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    await this.initializeModule();
+                } catch (error) {
+                    console.error('Error initializing module:', error);
+                    showError('Error al inicializar el módulo: ' + error.message);
+                }
+            }
+
+            async initializeModule() {
+                showLoading();
+                console.log('🔧 Starting statistics module initialization...');
+
+                // Wait for MathJax if it hasn't loaded yet
+                await this.waitForMathJax();
+
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                if (!this.loadParticipant()) {
+                    throw new Error('No hay participante registrado');
+                }
+
+                console.log('✅ Participant loaded:', this.currentParticipant.name);
+
+                this.loadProgress();
+                this.loadTimer();
+                this.startTimer();
+                
+                hideLoading();
+                showMainContent();
+                
+                this.showDifficulty('easy');
+                this.updateStats();
+                this.setupAnimations();
+
+                console.log('🎯 Statistics module initialization completed successfully');
+            }
+
+            async waitForMathJax() {
+                return new Promise((resolve) => {
+                    if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                        console.log('✅ MathJax already ready');
+                        this.mathJaxReady = true;
+                        this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                        resolve();
+                    } else {
+                        console.log('⏳ Waiting for MathJax to be ready...');
+                        this.updateMathJaxStatus('loading', 'Cargando renderizador matemático...');
+                        
+                        const checkMathJax = () => {
+                            if (window.MathJax && window.MathJax.startup && window.MathJax.startup.document) {
+                                console.log('✅ MathJax is now ready');
+                                this.mathJaxReady = true;
+                                this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                                resolve();
+                            } else {
+                                setTimeout(checkMathJax, 100);
+                            }
+                        };
+                        
+                        // Also listen for the custom event
+                        window.addEventListener('mathjaxReady', () => {
+                            console.log('✅ MathJax ready event received');
+                            this.mathJaxReady = true;
+                            this.updateMathJaxStatus('ready', 'Renderizador matemático listo');
+                            resolve();
+                        }, { once: true });
+                        
+                        checkMathJax();
+                        
+                        // Timeout fallback
+                        setTimeout(() => {
+                            if (!this.mathJaxReady) {
+                                console.warn('⚠️ MathJax timeout, proceeding without it');
+                                this.updateMathJaxStatus('error', 'Renderizador no disponible (modo texto)');
+                                resolve();
+                            }
+                        }, 10000);
+                    }
+                });
+            }
+
+            updateMathJaxStatus(status, message) {
+                const statusEl = document.getElementById('mathJaxStatus');
+                if (statusEl) {
+                    statusEl.className = `mathjax-status ${status} show`;
+                    statusEl.innerHTML = `
+                        <i class="fas fa-${status === 'loading' ? 'spinner fa-spin' : status === 'ready' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                        ${message}
+                    `;
+                    
+                    // Hide after delay
+                    setTimeout(() => {
+                        statusEl.classList.remove('show');
+                    }, status === 'ready' ? 3000 : 5000);
+                }
+            }
+
+            async renderMathJax(element) {
+                if (this.mathJaxReady && window.MathJax && window.MathJax.typesetPromise) {
+                    try {
+                        await window.MathJax.typesetPromise([element]);
+                        console.log('✅ MathJax rendering completed');
+                        return true;
+                    } catch (error) {
+                        console.warn('❌ Error during MathJax rendering:', error);
+                        return false;
+                    }
+                } else {
+                    console.warn('⚠️ MathJax not ready, content displayed as plain text');
+                    return false;
+                }
+            }
+
+            loadParticipant() {
+                try {
+                    const savedParticipant = localStorage.getItem('currentParticipant');
+                    if (!savedParticipant) {
+                        return false;
+                    }
+                    
+                    this.currentParticipant = JSON.parse(savedParticipant);
+                    this.currentScore = this.currentParticipant.scores?.statistics || 0;
+                    this.problemsSolved = this.currentParticipant.problemsSolved?.statistics || 0;
+                    this.currentStreak = this.currentParticipant.streak || 0;
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error loading participant:', error);
+                    return false;
+                }
+            }
+
+            loadProgress() {
+                try {
+                    const progressKey = `statistics_progress_${this.currentParticipant.id}`;
+                    const savedProgress = localStorage.getItem(progressKey);
+                    if (savedProgress) {
+                        this.solvedProblems = new Set(JSON.parse(savedProgress));
+                    }
+
+                    const timesKey = `statistics_times_${this.currentParticipant.id}`;
+                    const savedTimes = localStorage.getItem(timesKey);
+                    if (savedTimes) {
+                        this.solveTimes = JSON.parse(savedTimes);
+                    }
+                } catch (error) {
+                    console.error('Error loading progress:', error);
+                }
+            }
+
+            saveProgress() {
+                try {
+                    const progressKey = `statistics_progress_${this.currentParticipant.id}`;
+                    localStorage.setItem(progressKey, JSON.stringify([...this.solvedProblems]));
+
+                    const timesKey = `statistics_times_${this.currentParticipant.id}`;
+                    localStorage.setItem(timesKey, JSON.stringify(this.solveTimes));
+                } catch (error) {
+                    console.error('Error saving progress:', error);
+                }
+            }
+
+            loadTimer() {
+                try {
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"duration":7200}');
+                    this.competitionData = competitionData;
+                    
+                    if (competitionData.timerStarted && competitionData.startTime) {
+                        const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                        this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                    } else {
+                        this.timeRemaining = competitionData.duration || 7200;
+                    }
+                } catch (error) {
+                    console.error('Error loading timer:', error);
+                    this.timeRemaining = 7200;
+                }
+            }
+
+            startTimer() {
+                this.updateTimerDisplay();
+                
+                this.timerInterval = setInterval(() => {
+                    try {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (competitionData.timerStarted && competitionData.startTime) {
+                            const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
+                            this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+                            
+                            this.updateTimerDisplay();
+                            
+                            if (this.timeRemaining <= 0) {
+                                clearInterval(this.timerInterval);
+                                alert('¡Tiempo terminado! La competencia ha finalizado.');
+                                window.location.href = '../competencias.html';
+                            }
+                        } else {
+                            this.timeRemaining = competitionData.duration || 7200;
+                            this.updateTimerDisplay();
+                        }
+                    } catch (error) {
+                        console.error('Timer error:', error);
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                try {
+                    const hours = Math.floor(this.timeRemaining / 3600);
+                    const minutes = Math.floor((this.timeRemaining % 3600) / 60);
+                    const seconds = this.timeRemaining % 60;
+                    
+                    const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    const timerElement = document.getElementById('timerTime');
+                    
+                    if (timerElement) {
+                        const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{}');
+                        
+                        if (!competitionData.timerStarted) {
+                            timerElement.textContent = '⏳ ' + display;
+                            timerElement.style.color = '#ffa726';
+                        } else {
+                            timerElement.textContent = display;
+                            timerElement.style.color = this.timeRemaining <= 300 ? '#ff6b6b' : '#3b82f6';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating timer display:', error);
+                }
+            }
+
+            showDifficulty(difficulty) {
+                this.currentDifficulty = difficulty;
+                
+                document.querySelectorAll('.difficulty-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                const activeTab = document.querySelector(`.difficulty-tab.${difficulty}`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+                
+                this.generateProblems();
+            }
+
+            async generateProblems() {
+                const problemsGrid = document.getElementById('problemsGrid');
+                if (!problemsGrid) return;
+                
+                console.log('🎯 Generating statistics problems for difficulty:', this.currentDifficulty);
+                
+                problemsGrid.innerHTML = '';
+                
+                const problems = this.problems[this.currentDifficulty];
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                
+                problems.forEach((problem, index) => {
+                    const problemCard = document.createElement('div');
+                    problemCard.className = `problem-card fade-in ${this.solvedProblems.has(problem.id) ? 'solved' : ''}`;
+                    
+                    const isCorrect = this.solvedProblems.has(problem.id);
+                    
+                    problemCard.innerHTML = `
+                        <div class="problem-header">
+                            <div class="problem-number">
+                                <i class="fas fa-chart-bar"></i>
+                                Problema ${index + 1}
+                                ${isCorrect ? '<i class="fas fa-check-circle" style="color: var(--success); margin-left: 0.5rem;"></i>' : ''}
+                            </div>
+                            <div class="problem-points ${this.currentDifficulty}">
+                                <i class="fas fa-star"></i>
+                                ${pointsMap[this.currentDifficulty]} pts
+                            </div>
+                        </div>
+                        
+                        ${problem.figure ? `<div class="stats-chart">${problem.figure}</div>` : ''}
+                        
+                        <div class="problem-statement">${problem.statement}</div>
+                        
+                        <div class="problem-input-section">
+                            <input type="text" class="problem-input" placeholder="Ingresa tu respuesta..." 
+                                   id="input-${problem.id}" ${isCorrect ? 'disabled' : ''}
+                                   onkeypress="if(event.key==='Enter') submitAnswer('${problem.id}')">
+                            <button class="submit-btn" onclick="submitAnswer('${problem.id}')" 
+                                    ${isCorrect ? 'disabled' : ''}>
+                                <i class="fas fa-paper-plane"></i>
+                                ${isCorrect ? 'Resuelto' : 'Enviar'}
+                            </button>
+                        </div>
+                        
+                        <div class="problem-feedback" id="feedback-${problem.id}">
+                            <!-- Feedback will appear here -->
+                        </div>
+                        
+                        <div class="problem-solution" id="solution-${problem.id}" ${isCorrect ? 'style="display:block;"' : ''}>
+                            <div class="solution-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Solución:
+                            </div>
+                            <div>${problem.solution}</div>
+                        </div>
+                    `;
+                    
+                    problemsGrid.appendChild(problemCard);
+                });
+                
+                // Render MathJax for the new content
+                if (this.mathJaxReady) {
+                    console.log('🔄 Rendering MathJax for new problems...');
+                    await this.renderMathJax(problemsGrid);
+                }
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.fade-in').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }, 100);
+            }
+
+            submitAnswer(problemId) {
+                const input = document.getElementById(`input-${problemId}`);
+                const feedback = document.getElementById(`feedback-${problemId}`);
+                const solution = document.getElementById(`solution-${problemId}`);
+                
+                if (!input || !feedback || !solution) return;
+                
+                const userAnswer = input.value.trim().toLowerCase();
+                
+                if (!userAnswer) {
+                    this.showFeedback(feedback, 'Por favor, ingresa una respuesta.', 'error');
+                    return;
+                }
+                
+                const problem = this.findProblemById(problemId);
+                if (!problem) return;
+                
+                const correctAnswer = problem.answer.toLowerCase();
+                const isCorrect = this.checkAnswer(userAnswer, correctAnswer);
+                
+                if (isCorrect) {
+                    this.handleCorrectAnswer(problemId, input, feedback, solution);
+                } else {
+                    this.handleIncorrectAnswer(feedback);
+                }
+            }
+
+            checkAnswer(userAnswer, correctAnswer) {
+                const normalize = (str) => str.replace(/\s+/g, '').replace(/[()]/g, '');
+                
+                const normalizedUser = normalize(userAnswer);
+                const normalizedCorrect = normalize(correctAnswer);
+                
+                if (normalizedUser === normalizedCorrect) return true;
+                
+                // Check for decimal approximations
+                const userNum = parseFloat(normalizedUser);
+                const correctNum = parseFloat(normalizedCorrect);
+                if (!isNaN(userNum) && !isNaN(correctNum)) {
+                    return Math.abs(userNum - correctNum) < 0.01;
+                }
+                
+                // Check for fraction notation
+                if (normalizedCorrect.includes('/')) {
+                    const userWithSlash = normalizedUser.replace(/÷/g, '/');
+                    if (userWithSlash === normalizedCorrect) return true;
+                }
+                
+                // Check for percentage
+                if (normalizedCorrect.includes('%') || normalizedUser.includes('%')) {
+                    const userPercent = normalizedUser.replace(/%/g, '');
+                    const correctPercent = normalizedCorrect.replace(/%/g, '');
+                    if (userPercent === correctPercent) return true;
+                }
+                
+                // Check for multiple answers separated by comma
+                if (normalizedCorrect.includes(',') && normalizedUser.includes(',')) {
+                    const userParts = normalizedUser.split(',').map(s => s.trim()).sort();
+                    const correctParts = normalizedCorrect.split(',').map(s => s.trim()).sort();
+                    return JSON.stringify(userParts) === JSON.stringify(correctParts);
+                }
+                
+                // Check for statistical notation
+                const statSubs = [
+                    ['mean', 'media'], ['median', 'mediana'], ['mode', 'moda'],
+                    ['variance', 'varianza'], ['standard deviation', 'desviacion estandar'],
+                    ['reject', 'rechazar'], ['accept', 'aceptar']
+                ];
+                
+                let userConverted = normalizedUser;
+                let correctConverted = normalizedCorrect;
+                
+                statSubs.forEach(([eng, spa]) => {
+                    userConverted = userConverted.replace(new RegExp(eng, 'g'), spa);
+                    correctConverted = correctConverted.replace(new RegExp(eng, 'g'), spa);
+                });
+                
+                if (userConverted === correctConverted) return true;
+                
+                return false;
+            }
+
+            findProblemById(problemId) {
+                for (const difficulty in this.problems) {
+                    const problem = this.problems[difficulty].find(p => p.id === problemId);
+                    if (problem) return problem;
+                }
+                return null;
+            }
+
+            async handleCorrectAnswer(problemId, input, feedback, solution) {
+                const pointsMap = { easy: 5, medium: 10, hard: 15 };
+                const points = pointsMap[this.currentDifficulty];
+                
+                this.solvedProblems.add(problemId);
+                this.problemsSolved++;
+                this.currentScore += points;
+                this.currentStreak++;
+                
+                const solveTime = Date.now() - this.startTime;
+                this.solveTimes.push(solveTime);
+                
+                input.disabled = true;
+                const submitBtn = input.nextElementSibling;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Resuelto';
+                
+                this.showFeedback(feedback, `¡Correcto! +${points} puntos`, 'success');
+                solution.classList.add('show');
+                
+                // Render MathJax for the solution
+                if (this.mathJaxReady) {
+                    await this.renderMathJax(solution);
+                }
+                
+                this.showScoreAnimation(points);
+                this.updateParticipantData(points);
+                this.saveProgress();
+                this.updateStats();
+            }
+
+            handleIncorrectAnswer(feedback) {
+                this.showFeedback(feedback, 'Respuesta incorrecta. ¡Inténtalo de nuevo!', 'error');
+            }
+
+            showFeedback(feedbackElement, message, type) {
+                feedbackElement.className = `problem-feedback ${type} show`;
+                feedbackElement.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i>
+                    ${message}
+                `;
+                
+                if (type === 'error') {
+                    setTimeout(() => {
+                        feedbackElement.classList.remove('show');
+                    }, 3000);
+                }
+            }
+
+            showScoreAnimation(points) {
+                const floatingPoints = document.createElement('div');
+                floatingPoints.textContent = `+${points}`;
+                floatingPoints.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: var(--statistics);
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: floatUp 2s ease-out forwards;
+                `;
+
+                document.body.appendChild(floatingPoints);
+
+                setTimeout(() => {
+                    if (floatingPoints.parentNode) {
+                        floatingPoints.parentNode.removeChild(floatingPoints);
+                    }
+                }, 2000);
+            }
+
+            updateParticipantData(points) {
+                try {
+                    this.currentParticipant.scores = this.currentParticipant.scores || {};
+                    this.currentParticipant.problemsSolved = this.currentParticipant.problemsSolved || {};
+                    
+                    this.currentParticipant.scores.statistics = this.currentScore;
+                    this.currentParticipant.problemsSolved.statistics = this.problemsSolved;
+                    this.currentParticipant.totalScore = (this.currentParticipant.totalScore || 0) + points;
+                    this.currentParticipant.totalProblems = (this.currentParticipant.totalProblems || 0) + 1;
+                    this.currentParticipant.streak = this.currentStreak;
+                    this.currentParticipant.lastActivity = Date.now();
+
+                    localStorage.setItem('currentParticipant', JSON.stringify(this.currentParticipant));
+
+                    const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
+                    const participantIndex = competitionData.participants.findIndex(p => p.id === this.currentParticipant.id);
+                    
+                    if (participantIndex !== -1) {
+                        competitionData.participants[participantIndex] = { ...this.currentParticipant };
+                        localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
+                    }
+
+                    const activity = {
+                        participant: this.currentParticipant.name,
+                        area: 'statistics',
+                        points: points,
+                        difficulty: this.currentDifficulty,
+                        time: Date.now()
+                    };
+
+                    let recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+                    recentActivities.unshift(activity);
+                    if (recentActivities.length > 50) {
+                        recentActivities = recentActivities.slice(0, 50);
+                    }
+                    localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
+
+                    window.dispatchEvent(new CustomEvent('competitionUpdate', {
+                        detail: competitionData
+                    }));
+                } catch (error) {
+                    console.error('Error updating participant data:', error);
+                }
+            }
+
+            updateStats() {
+                try {
+                    const totalScoreEl = document.getElementById('totalScore');
+                    const problemsSolvedEl = document.getElementById('problemsSolved');
+                    const currentStreakEl = document.getElementById('currentStreak');
+                    const averageTimeEl = document.getElementById('averageTime');
+
+                    if (totalScoreEl) totalScoreEl.textContent = this.currentScore;
+                    if (problemsSolvedEl) problemsSolvedEl.textContent = this.problemsSolved;
+                    if (currentStreakEl) currentStreakEl.textContent = this.currentStreak;
+                    
+                    if (averageTimeEl && this.solveTimes.length > 0) {
+                        const avgTime = this.solveTimes.reduce((sum, time) => sum + time, 0) / this.solveTimes.length;
+                        const minutes = Math.floor(avgTime / 60000);
+                        const seconds = Math.floor((avgTime % 60000) / 1000);
+                        averageTimeEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+
+                    const totalProblems = Object.values(this.problems).reduce((sum, arr) => sum + arr.length, 0);
+                    const progress = (this.problemsSolved / totalProblems) * 100;
+                    
+                    const progressFillEl = document.getElementById('progressFill');
+                    const progressTextEl = document.getElementById('progressText');
+                    
+                    if (progressFillEl) progressFillEl.style.width = `${progress}%`;
+                    if (progressTextEl) progressTextEl.textContent = `${this.problemsSolved}/${totalProblems} problemas resueltos`;
+                } catch (error) {
+                    console.error('Error updating stats:', error);
+                }
+            }
+
+            setupAnimations() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+        }
+
+        // UI Helper Functions
+        function showLoading() {
+            document.getElementById('loadingContainer').style.display = 'flex';
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingContainer').style.display = 'none';
+        }
+
+        function showMainContent() {
+            document.getElementById('mainContainer').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loadingContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Global Variables
+        let statisticsModule;
+
+        // Global Functions
+        function showDifficulty(difficulty) {
+            if (statisticsModule) {
+                statisticsModule.showDifficulty(difficulty);
+            }
+        }
+
+        function submitAnswer(problemId) {
+            if (statisticsModule) {
+                statisticsModule.submitAnswer(problemId);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM loaded, starting statistics initialization process...');
+            setTimeout(() => {
+                initializeStatisticsModule();
+            }, 100);
+        });
+
+        async function initializeStatisticsModule() {
+            try {
+                console.log('🎯 Creating StatisticsModule...');
+                statisticsModule = new StatisticsModule();
+            } catch (error) {
+                console.error('❌ Failed to initialize statistics module:', error);
+                showError('Error al cargar el módulo de estadísticas: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

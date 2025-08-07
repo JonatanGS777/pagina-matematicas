@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen de Sistemas de Ecuaciones</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --background-light: #f8f9fa;
+            --text-dark: #2b2d42;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .question {
+            background: var(--background-light);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #3651d4;
+        }
+
+        #resultado {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2b2d42;
+        }
+
+        .hint {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-function"></i> Sistemas de Ecuaciones</h1>
+        
+        <form id="examenForm">
+            <!-- Método de eliminación -->
+            <div class="question">
+                <p>1. Resuelve el sistema por eliminación:</p>
+                <p>\[ \begin{cases} 2x + y = 7 \\ x - y = 1 \end{cases} \]</p>
+                <p class="hint">Escribe la respuesta como (x,y)</p>
+                <input type="text" name="q1" placeholder="(x,y)" data-respuesta="(3,1)">
+            </div>
+
+            <div class="question">
+                <p>2. Resuelve:</p>
+                <p>\[ \begin{cases} 3x + 2y = 12 \\ 4x - 3y = 1 \end{cases} \]</p>
+                <input type="text" name="q2" placeholder="(x,y)" data-respuesta="(2,3)">
+            </div>
+
+            <!-- Método de sustitución -->
+            <div class="question">
+                <p>3. Resuelve por sustitución:</p>
+                <p>\[ \begin{cases} y = 2x - 3 \\ 3x + y = 5 \end{cases} \]</p>
+                <input type="text" name="q3" placeholder="(x,y)" data-respuesta="(2,1)">
+            </div>
+
+            <div class="question">
+                <p>4. Resuelve:</p>
+                <p>\[ \begin{cases} y = x + 4 \\ 2x + y = 10 \end{cases} \]</p>
+                <input type="text" name="q4" placeholder="(x,y)" data-respuesta="(2,6)">
+            </div>
+
+            <!-- Análisis gráfico -->
+            <div class="question">
+                <p>5. ¿Cuántas soluciones tiene el sistema?</p>
+                <p>\[ \begin{cases} x + y = 5 \\ x + y = 3 \end{cases} \]</p>
+                <input type="text" name="q5" placeholder="Número de soluciones" data-respuesta="0">
+            </div>
+
+            <div class="question">
+                <p>6. ¿Cuántas soluciones tiene el sistema?</p>
+                <p>\[ \begin{cases} 2x + y = 4 \\ 4x + 2y = 8 \end{cases} \]</p>
+                <input type="text" name="q6" placeholder="Número de soluciones" data-respuesta="infinitas">
+            </div>
+
+            <!-- Sistemas más complejos -->
+            <div class="question">
+                <p>7. Resuelve:</p>
+                <p>\[ \begin{cases} \frac{x}{2} + y = 5 \\ 3x - 2y = 4 \end{cases} \]</p>
+                <input type="text" name="q7" placeholder="(x,y)" data-respuesta="(4,3)">
+            </div>
+
+            <div class="question">
+                <p>8. Resuelve:</p>
+                <p>\[ \begin{cases} 2(x + 1) = y + 3 \\ 3x - 2y = 1 \end{cases} \]</p>
+                <input type="text" name="q8" placeholder="(x,y)" data-respuesta="(1,1)">
+            </div>
+
+            <!-- Problemas verbales -->
+            <div class="question">
+                <p>9. La suma de dos números es 20 y su diferencia es 4. ¿Cuáles son los números?</p>
+                <p class="hint">Escribe el número mayor primero, separado por coma</p>
+                <input type="text" name="q9" placeholder="x,y" data-respuesta="12,8">
+            </div>
+
+            <div class="question">
+                <p>10. En una granja hay pollos y conejos. Si hay 50 cabezas y 140 patas en total, ¿cuántos animales hay de cada tipo?</p>
+                <p class="hint">Escribe (pollos,conejos)</p>
+                <input type="text" name="q10" placeholder="(x,y)" data-respuesta="(30,20)">
+            </div>
+
+            <!-- Más sistemas -->
+            <div class="question">
+                <p>11. Resuelve:</p>
+                <p>\[ \begin{cases} 5x - 2y = 1 \\ 3x + 4y = 35 \end{cases} \]</p>
+                <input type="text" name="q11" placeholder="(x,y)" data-respuesta="(5,5)">
+            </div>
+
+            <div class="question">
+                <p>12. La edad de un padre es el triple que la de su hijo. Dentro de 10 años, la edad del padre será el doble que la del hijo. ¿Qué edad tienen ahora?</p>
+                <p class="hint">Escribe (padre,hijo)</p>
+                <input type="text" name="q12" placeholder="(x,y)" data-respuesta="(30,10)">
+            </div>
+
+            <!-- Análisis de sistemas -->
+            <div class="question">
+                <p>13. Para el sistema:</p>
+                <p>\[ \begin{cases} ax + y = 1 \\ x + y = 2 \end{cases} \]</p>
+                <p>¿Qué valor debe tener 'a' para que el sistema tenga una única solución?</p>
+                <input type="text" name="q13" placeholder="a = ?" data-respuesta="2">
+            </div>
+
+            <div class="question">
+                <p>14. Resuelve:</p>
+                <p>\[ \begin{cases} \frac{x}{3} + \frac{y}{2} = 4 \\ \frac{x}{2} - \frac{y}{3} = 1 \end{cases} \]</p>
+                <input type="text" name="q14" placeholder="(x,y)" data-respuesta="(6,4)">
+            </div>
+
+            <!-- Problemas de aplicación -->
+            <div class="question">
+                <p>15. Un rectángulo tiene un perímetro de 20 unidades y un área de 24 unidades cuadradas. Encuentra sus dimensiones.</p>
+                <p class="hint">Escribe (largo,ancho)</p>
+                <input type="text" name="q15" placeholder="(x,y)" data-respuesta="(6,4)">
+            </div>
+
+            <div class="question">
+                <p>16. Una tienda vendió lápices a $2 y bolígrafos a $3. Si vendieron 100 artículos en total y recaudaron $250, ¿cuántos artículos de cada tipo vendieron?</p>
+                <input type="text" name="q16" placeholder="(lápices,bolígrafos)" data-respuesta="(50,50)">
+            </div>
+
+            <!-- Sistemas especiales -->
+            <div class="question">
+                <p>17. ¿Qué tipo de solución tiene el sistema?</p>
+                <p>\[ \begin{cases} 3x - y = 5 \\ -6x + 2y = -10 \end{cases} \]</p>
+                <input type="text" name="q17" placeholder="única/infinitas/ninguna" data-respuesta="infinitas">
+            </div>
+
+            <div class="question">
+                <p>18. Resuelve:</p>
+                <p>\[ \begin{cases} x + y + 2 = 0 \\ 2x + 2y + 4 = 0 \end{cases} \]</p>
+                <input type="text" name="q18" placeholder="única/infinitas/ninguna" data-respuesta="infinitas">
+            </div>
+
+            <!-- Problemas complejos -->
+            <div class="question">
+                <p>19. Un número de dos dígitos es igual a 7 veces la suma de sus dígitos. Si el dígito de las decenas es 2 unidades mayor que el de las unidades, ¿cuál es el número?</p>
+                <input type="text" name="q19" placeholder="número" data-respuesta="63">
+            </div>
+
+            <div class="question">
+                <p>20. Dos ciclistas parten del mismo punto en direcciones perpendiculares. Uno viaja a 12 km/h y el otro a 9 km/h. ¿Después de cuántas horas estarán a 15 km de distancia uno del otro?</p>
+                <input type="text" name="q20" placeholder="horas" data-respuesta="1">
+            </div>
+
+            <button type="submit">Calificar Examen</button>
+        </form>
+
+        <div id="resultado">
+            <h2>Resultado del Examen</h2>
+            <p class="score">Tu calificación: <span id="calificacion"></span>/20</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('examenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let correctas = 0;
+            const inputs = document.querySelectorAll('input[type="text"]');
+            
+            inputs.forEach(input => {
+                let respuestaCorrecta = input.dataset.respuesta.toLowerCase();
+                let respuestaUsuario = input.value.toLowerCase().trim();
+                
+                // Normalizar respuestas
+                respuestaUsuario = respuestaUsuario.replace(/\s+/g, '');
+                respuestaCorrecta = respuestaCorrecta.replace(/\s+/g, '');
+                
+                // Para respuestas numéricas
+                if (!isNaN(respuestaCorrecta)) {
+                    if (Math.abs(parseFloat(respuestaUsuario) - parseFloat(respuestaCorrecta)) <= 0.1) {
+                        correctas++;
+                        input.style.borderColor = '#4caf50';
+                    } else {
+                        input.style.borderColor = '#f44336';
+                    }
+                } 
+                // Para respuestas que son pares ordenados o texto
+                else {
+                    if (respuestaUsuario === respuestaCorrecta) {
+                        correctas++;
+                        input.style.borderColor = '#4caf50';
+                    } else {
+                        input.style.borderColor = '#f44336';
+                    }
+                }
+            });
+
+            document.getElementById('resultado').style.display = 'block';
+            document.getElementById('calificacion').textContent = correctas;
+            
+            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Inicializar MathJax
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    </script>
+</body>
+</html>

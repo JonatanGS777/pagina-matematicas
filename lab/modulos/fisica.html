@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fenómenos Físicos - Laboratorio de Matemáticas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #f093fb;
+            --secondary: #f5576c;
+            --accent: #ff6b95;
+            --success: #ff8fab;
+            --warning: #ffa726;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(240, 147, 251, 0.37);
+            --shadow-hover: 0 15px 35px rgba(240, 147, 251, 0.25);
+            --gradient-main: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-accent: linear-gradient(135deg, #ff6b95 0%, #ff8fab 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(240, 147, 251, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-accent);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .back-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 25px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--gradient-main);
+            border-radius: 20px;
+            color: var(--white);
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Model Section */
+        .model-explanation {
+            background: rgba(240, 147, 251, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 2rem;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 3rem;
+        }
+
+        .model-explanation h3 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .model-explanation p {
+            line-height: 1.7;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+
+        /* Physics Models Selection */
+        .models-selector {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .selector-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .models-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .model-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .model-card.active {
+            border-color: var(--accent);
+            background: rgba(240, 147, 251, 0.05);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.2);
+        }
+
+        .model-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .model-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .model-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Controls and Visualization */
+        .main-interface {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls-panel {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .controls-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .controls-title i {
+            margin-right: 0.5rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .control-group input[type="range"]:hover {
+            opacity: 1;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .control-value {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--gradient-main);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--gradient-accent);
+            margin-top: 0.5rem;
+        }
+
+        /* Visualization Panel */
+        .visualization-panel {
+            background: var(--white);
+            border: 2px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .simulation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .simulation-title {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .simulation-info {
+            background: rgba(240, 147, 251, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 15px;
+            min-height: 450px;
+        }
+
+        canvas {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 100%;
+        }
+
+        .simulation-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .sim-btn {
+            background: var(--gradient-accent);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .sim-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .sim-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            background: rgba(240, 147, 251, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .results-title {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .results-title i {
+            margin-right: 0.5rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .result-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.4rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .result-unit {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Physics Formulas */
+        .formula-display {
+            background: rgba(240, 147, 251, 0.05);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .formula-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .formula-equation {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.3rem;
+            color: var(--accent);
+            font-weight: 600;
+            background: var(--white);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .main-interface {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .models-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .simulation-controls {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            canvas {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .trail {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 165, 0, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="modelado.html" class="logo">
+                <i class="fas fa-rocket"></i>
+                Fenómenos Físicos
+            </a>
+            <a href="modelado.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Menú
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container fade-in">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-rocket"></i>
+                Simulación de Fenómenos Físicos
+            </h1>
+            <p class="page-subtitle">Modela movimientos y fuerzas del mundo real con matemáticas</p>
+        </div>
+
+        <!-- Model Explanation -->
+        <div class="model-explanation">
+            <h3><i class="fas fa-lightbulb"></i> Física y Matemáticas en Acción</h3>
+            <p>
+                Descubre cómo las matemáticas describen el movimiento y las fuerzas en nuestro mundo. Desde el tiro 
+                parabólico de un proyectil hasta la distancia de frenado de un vehículo, las ecuaciones físicas 
+                nos permiten predecir y comprender fenómenos naturales. Experimenta con diferentes parámetros y 
+                observa cómo cambian los resultados en tiempo real.
+            </p>
+        </div>
+
+        <!-- Models Selector -->
+        <div class="models-selector">
+            <h3 class="selector-title">Selecciona el Fenómeno Físico</h3>
+            <div class="models-cards">
+                <div class="model-card active" onclick="selectPhysicsModel('projectile')" id="projectile-card">
+                    <div class="model-icon">
+                        <i class="fas fa-baseball-ball"></i>
+                    </div>
+                    <h4 class="model-name">Tiro Parabólico</h4>
+                    <p class="model-description">Movimiento de proyectiles bajo la gravedad</p>
+                </div>
+                
+                <div class="model-card" onclick="selectPhysicsModel('braking')" id="braking-card">
+                    <div class="model-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h4 class="model-name">Distancia de Frenado</h4>
+                    <p class="model-description">Frenado de vehículos y fricción</p>
+                </div>
+                
+                <div class="model-card" onclick="selectPhysicsModel('pendulum')" id="pendulum-card">
+                    <div class="model-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h4 class="model-name">Péndulo Simple</h4>
+                    <p class="model-description">Movimiento armónico simple</p>
+                </div>
+                
+                <div class="model-card" onclick="selectPhysicsModel('spring')" id="spring-card">
+                    <div class="model-icon">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </div>
+                    <h4 class="model-name">Masa-Resorte</h4>
+                    <p class="model-description">Oscilaciones elásticas</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formula Display -->
+        <div class="formula-display" id="formulaDisplay">
+            <div class="formula-title">Ecuación del Tiro Parabólico</div>
+            <div class="formula-equation" id="formulaEquation">
+                y = x·tan(θ) - (g·x²)/(2·v₀²·cos²(θ))
+            </div>
+        </div>
+
+        <!-- Main Interface -->
+        <div class="main-interface">
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <h3 class="controls-title">
+                    <i class="fas fa-sliders-h"></i>
+                    Parámetros Físicos
+                </h3>
+                
+                <!-- Projectile Controls -->
+                <div id="projectile-controls" class="physics-controls">
+                    <div class="control-group">
+                        <label for="velocity">Velocidad inicial (m/s):</label>
+                        <input type="range" id="velocity" min="5" max="50" value="25" step="1">
+                        <span id="velocityValue" class="control-value">25 m/s</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="angle">Ángulo de lanzamiento (°):</label>
+                        <input type="range" id="angle" min="15" max="75" value="45" step="1">
+                        <span id="angleValue" class="control-value">45°</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="gravity">Gravedad (m/s²):</label>
+                        <input type="range" id="gravity" min="1" max="15" value="9.8" step="0.1">
+                        <span id="gravityValue" class="control-value">9.8 m/s²</span>
+                    </div>
+                </div>
+
+                <!-- Braking Controls -->
+                <div id="braking-controls" class="physics-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="speed">Velocidad inicial (km/h):</label>
+                        <input type="range" id="speed" min="20" max="150" value="60" step="5">
+                        <span id="speedValue" class="control-value">60 km/h</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="friction">Coeficiente de fricción:</label>
+                        <input type="range" id="friction" min="0.1" max="1.0" value="0.7" step="0.1">
+                        <span id="frictionValue" class="control-value">0.7</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="reactionTime">Tiempo de reacción (s):</label>
+                        <input type="range" id="reactionTime" min="0.5" max="3.0" value="1.5" step="0.1">
+                        <span id="reactionTimeValue" class="control-value">1.5 s</span>
+                    </div>
+                </div>
+
+                <!-- Pendulum Controls -->
+                <div id="pendulum-controls" class="physics-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="length">Longitud (m):</label>
+                        <input type="range" id="length" min="0.5" max="3.0" value="1.0" step="0.1">
+                        <span id="lengthValue" class="control-value">1.0 m</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="amplitude">Amplitud inicial (°):</label>
+                        <input type="range" id="amplitude" min="5" max="45" value="20" step="1">
+                        <span id="amplitudeValue" class="control-value">20°</span>
+                    </div>
+                </div>
+
+                <!-- Spring Controls -->
+                <div id="spring-controls" class="physics-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="springConstant">Constante del resorte (N/m):</label>
+                        <input type="range" id="springConstant" min="10" max="200" value="50" step="10">
+                        <span id="springConstantValue" class="control-value">50 N/m</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="mass">Masa (kg):</label>
+                        <input type="range" id="mass" min="0.1" max="5.0" value="1.0" step="0.1">
+                        <span id="massValue" class="control-value">1.0 kg</span>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="displacement">Desplazamiento inicial (m):</label>
+                        <input type="range" id="displacement" min="0.1" max="2.0" value="0.5" step="0.1">
+                        <span id="displacementValue" class="control-value">0.5 m</span>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="startSimulation()" id="simulateBtn">
+                    <i class="fas fa-play"></i> Iniciar Simulación
+                </button>
+                
+                <button class="btn btn-secondary" onclick="resetSimulation()" id="resetBtn">
+                    <i class="fas fa-redo"></i> Reiniciar
+                </button>
+            </div>
+            
+            <!-- Visualization Panel -->
+            <div class="visualization-panel">
+                <div class="simulation-header">
+                    <div class="simulation-title" id="simulationTitle">
+                        <i class="fas fa-play-circle"></i>
+                        Simulación de Tiro Parabólico
+                    </div>
+                    <div class="simulation-info" id="simulationInfo">
+                        En espera
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="physicsCanvas" width="600" height="400"></canvas>
+                </div>
+                <div class="simulation-controls">
+                    <button class="sim-btn" onclick="pauseSimulation()" id="pauseBtn">
+                        <i class="fas fa-pause"></i> Pausar
+                    </button>
+                    <button class="sim-btn" onclick="slowMotion()" id="slowBtn">
+                        <i class="fas fa-turtle"></i> Cámara Lenta
+                    </button>
+                    <button class="sim-btn" onclick="showTrajectory()" id="trajectoryBtn">
+                        <i class="fas fa-route"></i> Mostrar Trayectoria
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel">
+            <h3 class="results-title">
+                <i class="fas fa-calculator"></i>
+                Resultados de la Simulación
+            </h3>
+            <div class="results-grid" id="resultsGrid">
+                <div class="result-item">
+                    <div class="result-label">Alcance máximo</div>
+                    <div class="result-value">63.8 <span class="result-unit">m</span></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Altura máxima</div>
+                    <div class="result-value">15.9 <span class="result-unit">m</span></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Tiempo de vuelo</div>
+                    <div class="result-value">3.6 <span class="result-unit">s</span></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">Velocidad final</div>
+                    <div class="result-value">25.0 <span class="result-unit">m/s</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentPhysicsModel = 'projectile';
+        let animationId = null;
+        let isSimulating = false;
+        let isPaused = false;
+        let showTrail = false;
+        let slowMotionActive = false;
+        let simulationSpeed = 1;
+
+        // Canvas and physics variables
+        let canvas, ctx;
+        let projectilePos = { x: 0, y: 0 };
+        let simulationTime = 0;
+        let trails = [];
+
+        // Physics model selection
+        function selectPhysicsModel(modelType) {
+            // Update active card
+            document.querySelectorAll('.model-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(`${modelType}-card`).classList.add('active');
+            
+            // Show/hide controls
+            document.querySelectorAll('.physics-controls').forEach(control => {
+                control.style.display = 'none';
+            });
+            document.getElementById(`${modelType}-controls`).style.display = 'block';
+            
+            currentPhysicsModel = modelType;
+            updateFormulaDisplay();
+            updateSimulationTitle();
+            resetSimulation();
+            updateResults();
+        }
+
+        function updateFormulaDisplay() {
+            const formulas = {
+                projectile: {
+                    title: 'Ecuación del Tiro Parabólico',
+                    equation: 'y = x·tan(θ) - (g·x²)/(2·v₀²·cos²(θ))'
+                },
+                braking: {
+                    title: 'Distancia de Frenado',
+                    equation: 'd = v²/(2·μ·g) + v·t_reacción'
+                },
+                pendulum: {
+                    title: 'Período del Péndulo Simple',
+                    equation: 'T = 2π·√(L/g)'
+                },
+                spring: {
+                    title: 'Oscilación Masa-Resorte',
+                    equation: 'T = 2π·√(m/k)'
+                }
+            };
+            
+            const formula = formulas[currentPhysicsModel];
+            document.querySelector('.formula-title').textContent = formula.title;
+            document.getElementById('formulaEquation').textContent = formula.equation;
+        }
+
+        function updateSimulationTitle() {
+            const titles = {
+                projectile: 'Simulación de Tiro Parabólico',
+                braking: 'Simulación de Frenado',
+                pendulum: 'Simulación de Péndulo',
+                spring: 'Simulación Masa-Resorte'
+            };
+            
+            document.getElementById('simulationTitle').innerHTML = 
+                '<i class="fas fa-play-circle"></i> ' + titles[currentPhysicsModel];
+        }
+
+        // Simulation control functions
+        function startSimulation() {
+            if (isSimulating && !isPaused) {
+                return;
+            }
+            
+            isSimulating = true;
+            isPaused = false;
+            simulationTime = 0;
+            trails = [];
+            
+            const btn = document.getElementById('simulateBtn');
+            btn.innerHTML = '<i class="fas fa-stop"></i> Detener';
+            btn.onclick = stopSimulation;
+            
+            document.getElementById('simulationInfo').textContent = 'Simulando...';
+            
+            canvas = document.getElementById('physicsCanvas');
+            ctx = canvas.getContext('2d');
+            
+            animate();
+        }
+
+        function stopSimulation() {
+            isSimulating = false;
+            isPaused = false;
+            
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            
+            const btn = document.getElementById('simulateBtn');
+            btn.innerHTML = '<i class="fas fa-play"></i> Iniciar Simulación';
+            btn.onclick = startSimulation;
+            
+            document.getElementById('simulationInfo').textContent = 'Detenido';
+        }
+
+        function pauseSimulation() {
+            if (!isSimulating) return;
+            
+            isPaused = !isPaused;
+            const btn = document.getElementById('pauseBtn');
+            
+            if (isPaused) {
+                btn.innerHTML = '<i class="fas fa-play"></i> Continuar';
+                document.getElementById('simulationInfo').textContent = 'Pausado';
+            } else {
+                btn.innerHTML = '<i class="fas fa-pause"></i> Pausar';
+                document.getElementById('simulationInfo').textContent = 'Simulando...';
+                animate();
+            }
+        }
+
+        function resetSimulation() {
+            stopSimulation();
+            simulationTime = 0;
+            projectilePos = { x: 0, y: 0 };
+            trails = [];
+            
+            if (canvas) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawStaticElements();
+            }
+            
+            document.getElementById('simulationInfo').textContent = 'En espera';
+        }
+
+        function slowMotion() {
+            slowMotionActive = !slowMotionActive;
+            simulationSpeed = slowMotionActive ? 0.3 : 1;
+            
+            const btn = document.getElementById('slowBtn');
+            if (slowMotionActive) {
+                btn.innerHTML = '<i class="fas fa-rabbit"></i> Velocidad Normal';
+                btn.style.background = 'var(--gradient-main)';
+            } else {
+                btn.innerHTML = '<i class="fas fa-turtle"></i> Cámara Lenta';
+                btn.style.background = 'var(--gradient-accent)';
+            }
+        }
+
+        function showTrajectory() {
+            showTrail = !showTrail;
+            const btn = document.getElementById('trajectoryBtn');
+            
+            if (showTrail) {
+                btn.innerHTML = '<i class="fas fa-eye-slash"></i> Ocultar Trayectoria';
+                btn.style.background = 'var(--gradient-main)';
+            } else {
+                btn.innerHTML = '<i class="fas fa-route"></i> Mostrar Trayectoria';
+                btn.style.background = 'var(--gradient-accent)';
+                trails = [];
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            if (!isSimulating || isPaused) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawStaticElements();
+            
+            switch (currentPhysicsModel) {
+                case 'projectile':
+                    animateProjectile();
+                    break;
+                case 'braking':
+                    animateBraking();
+                    break;
+                case 'pendulum':
+                    animatePendulum();
+                    break;
+                case 'spring':
+                    animateSpring();
+                    break;
+            }
+            
+            if (showTrail) {
+                drawTrail();
+            }
+            
+            simulationTime += 0.03 * simulationSpeed;
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Projectile motion animation
+        function animateProjectile() {
+            const velocity = parseFloat(document.getElementById('velocity').value);
+            const angle = parseFloat(document.getElementById('angle').value) * Math.PI / 180;
+            const gravity = parseFloat(document.getElementById('gravity').value);
+            
+            const vx = velocity * Math.cos(angle);
+            const vy = velocity * Math.sin(angle);
+            
+            const x = vx * simulationTime;
+            const y = vy * simulationTime - 0.5 * gravity * simulationTime * simulationTime;
+            
+            // Scale for canvas
+            const scale = 5;
+            const canvasX = 50 + x * scale;
+            const canvasY = canvas.height - 50 - y * scale;
+            
+            if (y >= 0 && canvasX < canvas.width - 50) {
+                projectilePos = { x: canvasX, y: canvasY };
+                
+                // Add to trail
+                if (showTrail && trails.length < 100) {
+                    trails.push({ x: canvasX, y: canvasY, age: 0 });
+                }
+                
+                // Draw projectile
+                ctx.fillStyle = '#ff6b95';
+                ctx.beginPath();
+                ctx.arc(canvasX, canvasY, 12, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.strokeStyle = '#f5576c';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Draw velocity vector
+                const vectorScale = 3;
+                const currentVx = vx;
+                const currentVy = vy - gravity * simulationTime;
+                
+                ctx.strokeStyle = '#ff0000';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(canvasX, canvasY);
+                ctx.lineTo(canvasX + currentVx * vectorScale, canvasY - currentVy * vectorScale);
+                ctx.stroke();
+                
+                // Add arrow head
+                drawArrowHead(canvasX, canvasY, canvasX + currentVx * vectorScale, canvasY - currentVy * vectorScale);
+            } else {
+                stopSimulation();
+            }
+        }
+
+        // Braking animation
+        function animateBraking() {
+            const speed = parseFloat(document.getElementById('speed').value);
+            const friction = parseFloat(document.getElementById('friction').value);
+            const reactionTime = parseFloat(document.getElementById('reactionTime').value);
+            
+            const speedMs = speed / 3.6; // Convert km/h to m/s
+            const gravity = 9.8;
+            
+            let distance, velocity;
+            
+            if (simulationTime <= reactionTime) {
+                // Reaction phase - constant speed
+                distance = speedMs * simulationTime;
+                velocity = speedMs;
+            } else {
+                // Braking phase
+                const brakingTime = simulationTime - reactionTime;
+                const deceleration = friction * gravity;
+                
+                velocity = speedMs - deceleration * brakingTime;
+                
+                if (velocity <= 0) {
+                    velocity = 0;
+                    distance = speedMs * reactionTime + (speedMs * speedMs) / (2 * deceleration);
+                    if (distance > speedMs * reactionTime + speedMs * speedMs / (2 * deceleration)) {
+                        stopSimulation();
+                        return;
+                    }
+                } else {
+                    distance = speedMs * reactionTime + speedMs * brakingTime - 0.5 * deceleration * brakingTime * brakingTime;
+                }
+            }
+            
+            // Draw car
+            const scale = 3;
+            const carX = 50 + distance * scale;
+            const carY = canvas.height - 100;
+            
+            if (carX < canvas.width - 100) {
+                // Car body
+                ctx.fillStyle = simulationTime <= reactionTime ? '#4ecdc4' : '#f5576c';
+                ctx.fillRect(carX, carY - 30, 80, 30);
+                
+                // Car wheels
+                ctx.fillStyle = '#2d3748';
+                ctx.beginPath();
+                ctx.arc(carX + 15, carY, 8, 0, 2 * Math.PI);
+                ctx.arc(carX + 65, carY, 8, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Speed indicator
+                ctx.fillStyle = '#2d3748';
+                ctx.font = '14px Space Grotesk';
+                ctx.fillText(`${(velocity * 3.6).toFixed(1)} km/h`, carX, carY - 40);
+                
+                // Brake marks during braking
+                if (simulationTime > reactionTime && velocity > 0) {
+                    ctx.strokeStyle = 'rgba(45, 55, 72, 0.6)';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(carX + 15, carY + 8);
+                    ctx.lineTo(carX + 15 - 20, carY + 8);
+                    ctx.moveTo(carX + 65, carY + 8);
+                    ctx.lineTo(carX + 65 - 20, carY + 8);
+                    ctx.stroke();
+                }
+            } else {
+                stopSimulation();
+            }
+        }
+
+        // Pendulum animation
+        function animatePendulum() {
+            const length = parseFloat(document.getElementById('length').value);
+            const amplitude = parseFloat(document.getElementById('amplitude').value) * Math.PI / 180;
+            const gravity = 9.8;
+            
+            const omega = Math.sqrt(gravity / length);
+            const theta = amplitude * Math.cos(omega * simulationTime);
+            
+            const centerX = canvas.width / 2;
+            const centerY = 50;
+            const scale = 150;
+            
+            const bobX = centerX + Math.sin(theta) * length * scale;
+            const bobY = centerY + Math.cos(theta) * length * scale;
+            
+            // Draw string
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(bobX, bobY);
+            ctx.stroke();
+            
+            // Draw pivot point
+            ctx.fillStyle = '#4ecdc4';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw bob
+            ctx.fillStyle = '#f093fb';
+            ctx.beginPath();
+            ctx.arc(bobX, bobY, 20, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.strokeStyle = '#f5576c';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Add to trail
+            if (showTrail) {
+                trails.push({ x: bobX, y: bobY, age: 0 });
+                if (trails.length > 200) {
+                    trails.shift();
+                }
+            }
+        }
+
+        // Spring animation
+        function animateSpring() {
+            const springConstant = parseFloat(document.getElementById('springConstant').value);
+            const mass = parseFloat(document.getElementById('mass').value);
+            const initialDisplacement = parseFloat(document.getElementById('displacement').value);
+            
+            const omega = Math.sqrt(springConstant / mass);
+            const displacement = initialDisplacement * Math.cos(omega * simulationTime);
+            
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const scale = 100;
+            
+            const massY = centerY + displacement * scale;
+            
+            // Draw spring
+            drawSpring(centerX, centerY - 100, centerX, massY - 30);
+            
+            // Draw fixed support
+            ctx.fillStyle = '#2d3748';
+            ctx.fillRect(centerX - 50, centerY - 120, 100, 20);
+            
+            // Draw mass
+            ctx.fillStyle = '#f093fb';
+            ctx.fillRect(centerX - 30, massY - 30, 60, 60);
+            ctx.strokeStyle = '#f5576c';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(centerX - 30, massY - 30, 60, 60);
+            
+            // Add displacement indicator
+            ctx.fillStyle = '#2d3748';
+            ctx.font = '14px Space Grotesk';
+            ctx.fillText(`x = ${displacement.toFixed(3)} m`, centerX + 40, massY);
+            
+            // Add to trail for center of mass
+            if (showTrail) {
+                trails.push({ x: centerX, y: massY, age: 0 });
+                if (trails.length > 150) {
+                    trails.shift();
+                }
+            }
+        }
+
+        // Helper functions
+        function drawStaticElements() {
+            // Draw ground for projectile and braking
+            if (currentPhysicsModel === 'projectile' || currentPhysicsModel === 'braking') {
+                ctx.fillStyle = 'rgba(78, 205, 196, 0.3)';
+                ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+                
+                ctx.strokeStyle = 'rgba(78, 205, 196, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height - 50);
+                ctx.lineTo(canvas.width, canvas.height - 50);
+                ctx.stroke();
+            }
+            
+            // Draw reference grid
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 50) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 50) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawTrail() {
+            trails.forEach((point, index) => {
+                const alpha = 1 - (point.age / 100);
+                const size = 3 + alpha * 5;
+                
+                ctx.fillStyle = `rgba(255, 165, 0, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, size, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                point.age++;
+            });
+            
+            // Remove old trail points
+            trails = trails.filter(point => point.age < 100);
+        }
+
+        function drawArrowHead(x1, y1, x2, y2) {
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const headLength = 10;
+            
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(
+                x2 - headLength * Math.cos(angle - Math.PI / 6),
+                y2 - headLength * Math.sin(angle - Math.PI / 6)
+            );
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(
+                x2 - headLength * Math.cos(angle + Math.PI / 6),
+                y2 - headLength * Math.sin(angle + Math.PI / 6)
+            );
+            ctx.stroke();
+        }
+
+        function drawSpring(x1, y1, x2, y2) {
+            const coils = 8;
+            const amplitude = 15;
+            const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            
+            ctx.strokeStyle = '#4ecdc4';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            
+            for (let i = 0; i <= coils * 10; i++) {
+                const t = i / (coils * 10);
+                const x = x1 + t * (x2 - x1) + amplitude * Math.sin(i * Math.PI / 5) * (1 - t) * t;
+                const y = y1 + t * (y2 - y1);
+                ctx.lineTo(x, y);
+            }
+            
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+
+        // Update results based on current model
+        function updateResults() {
+            const resultsGrid = document.getElementById('resultsGrid');
+            let resultsHTML = '';
+            
+            switch (currentPhysicsModel) {
+                case 'projectile':
+                    const velocity = parseFloat(document.getElementById('velocity').value);
+                    const angle = parseFloat(document.getElementById('angle').value) * Math.PI / 180;
+                    const gravity = parseFloat(document.getElementById('gravity').value);
+                    
+                    const range = (velocity * velocity * Math.sin(2 * angle)) / gravity;
+                    const maxHeight = (velocity * velocity * Math.sin(angle) * Math.sin(angle)) / (2 * gravity);
+                    const flightTime = (2 * velocity * Math.sin(angle)) / gravity;
+                    
+                    resultsHTML = `
+                        <div class="result-item">
+                            <div class="result-label">Alcance máximo</div>
+                            <div class="result-value">${range.toFixed(1)} <span class="result-unit">m</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Altura máxima</div>
+                            <div class="result-value">${maxHeight.toFixed(1)} <span class="result-unit">m</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Tiempo de vuelo</div>
+                            <div class="result-value">${flightTime.toFixed(1)} <span class="result-unit">s</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Velocidad final</div>
+                            <div class="result-value">${velocity.toFixed(1)} <span class="result-unit">m/s</span></div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'braking':
+                    const speed = parseFloat(document.getElementById('speed').value);
+                    const friction = parseFloat(document.getElementById('friction').value);
+                    const reactionTime = parseFloat(document.getElementById('reactionTime').value);
+                    
+                    const speedMs = speed / 3.6;
+                    const reactionDistance = speedMs * reactionTime;
+                    const brakingDistance = (speedMs * speedMs) / (2 * friction * 9.8);
+                    const totalDistance = reactionDistance + brakingDistance;
+                    
+                    resultsHTML = `
+                        <div class="result-item">
+                            <div class="result-label">Distancia total</div>
+                            <div class="result-value">${totalDistance.toFixed(1)} <span class="result-unit">m</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Dist. de reacción</div>
+                            <div class="result-value">${reactionDistance.toFixed(1)} <span class="result-unit">m</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Dist. de frenado</div>
+                            <div class="result-value">${brakingDistance.toFixed(1)} <span class="result-unit">m</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Tiempo total</div>
+                            <div class="result-value">${(reactionTime + speedMs / (friction * 9.8)).toFixed(1)} <span class="result-unit">s</span></div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'pendulum':
+                    const length = parseFloat(document.getElementById('length').value);
+                    const amplitude = parseFloat(document.getElementById('amplitude').value);
+                    
+                    const period = 2 * Math.PI * Math.sqrt(length / 9.8);
+                    const frequency = 1 / period;
+                    const maxVelocity = amplitude * Math.PI / 180 * Math.sqrt(9.8 / length);
+                    
+                    resultsHTML = `
+                        <div class="result-item">
+                            <div class="result-label">Período</div>
+                            <div class="result-value">${period.toFixed(2)} <span class="result-unit">s</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Frecuencia</div>
+                            <div class="result-value">${frequency.toFixed(3)} <span class="result-unit">Hz</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Velocidad máxima</div>
+                            <div class="result-value">${maxVelocity.toFixed(2)} <span class="result-unit">m/s</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Energía total</div>
+                            <div class="result-value">${(0.5 * maxVelocity * maxVelocity).toFixed(2)} <span class="result-unit">J/kg</span></div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'spring':
+                    const springConstant = parseFloat(document.getElementById('springConstant').value);
+                    const mass = parseFloat(document.getElementById('mass').value);
+                    const displacement = parseFloat(document.getElementById('displacement').value);
+                    
+                    const springPeriod = 2 * Math.PI * Math.sqrt(mass / springConstant);
+                    const springFrequency = 1 / springPeriod;
+                    const maxSpringVelocity = displacement * Math.sqrt(springConstant / mass);
+                    const totalEnergy = 0.5 * springConstant * displacement * displacement;
+                    
+                    resultsHTML = `
+                        <div class="result-item">
+                            <div class="result-label">Período</div>
+                            <div class="result-value">${springPeriod.toFixed(2)} <span class="result-unit">s</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Frecuencia</div>
+                            <div class="result-value">${springFrequency.toFixed(3)} <span class="result-unit">Hz</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Velocidad máxima</div>
+                            <div class="result-value">${maxSpringVelocity.toFixed(2)} <span class="result-unit">m/s</span></div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-label">Energía total</div>
+                            <div class="result-value">${totalEnergy.toFixed(2)} <span class="result-unit">J</span></div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            resultsGrid.innerHTML = resultsHTML;
+        }
+
+        // Event listeners for parameter updates
+        function setupEventListeners() {
+            // Projectile controls
+            document.getElementById('velocity')?.addEventListener('input', function() {
+                document.getElementById('velocityValue').textContent = this.value + ' m/s';
+                updateResults();
+            });
+            
+            document.getElementById('angle')?.addEventListener('input', function() {
+                document.getElementById('angleValue').textContent = this.value + '°';
+                updateResults();
+            });
+            
+            document.getElementById('gravity')?.addEventListener('input', function() {
+                document.getElementById('gravityValue').textContent = this.value + ' m/s²';
+                updateResults();
+            });
+            
+            // Braking controls
+            document.getElementById('speed')?.addEventListener('input', function() {
+                document.getElementById('speedValue').textContent = this.value + ' km/h';
+                updateResults();
+            });
+            
+            document.getElementById('friction')?.addEventListener('input', function() {
+                document.getElementById('frictionValue').textContent = this.value;
+                updateResults();
+            });
+            
+            document.getElementById('reactionTime')?.addEventListener('input', function() {
+                document.getElementById('reactionTimeValue').textContent = this.value + ' s';
+                updateResults();
+            });
+            
+            // Pendulum controls
+            document.getElementById('length')?.addEventListener('input', function() {
+                document.getElementById('lengthValue').textContent = this.value + ' m';
+                updateResults();
+            });
+            
+            document.getElementById('amplitude')?.addEventListener('input', function() {
+                document.getElementById('amplitudeValue').textContent = this.value + '°';
+                updateResults();
+            });
+            
+            // Spring controls
+            document.getElementById('springConstant')?.addEventListener('input', function() {
+                document.getElementById('springConstantValue').textContent = this.value + ' N/m';
+                updateResults();
+            });
+            
+            document.getElementById('mass')?.addEventListener('input', function() {
+                document.getElementById('massValue').textContent = this.value + ' kg';
+                updateResults();
+            });
+            
+            document.getElementById('displacement')?.addEventListener('input', function() {
+                document.getElementById('displacementValue').textContent = this.value + ' m';
+                updateResults();
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateFormulaDisplay();
+            updateSimulationTitle();
+            updateResults();
+            
+            // Initial canvas setup
+            canvas = document.getElementById('physicsCanvas');
+            ctx = canvas.getContext('2d');
+            drawStaticElements();
+        });
+    </script>
+</body>
+</html>

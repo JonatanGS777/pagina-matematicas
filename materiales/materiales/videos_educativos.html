@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos Educativos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #e67e22;
+            --primary-hover: #cf6a1a;
+            --text-light: #ffffff;
+            --card-bg: rgba(0, 0, 0, 0.6);
+            --header-bg: rgba(0, 0, 0, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            color: var(--text-light);
+            background: url('fondo8.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--header-bg);
+            border-bottom: 2px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            animation: glow 2s infinite;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 1rem;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header:hover h1 {
+            transform: translateY(-5px);
+            color: var(--primary-color);
+        }
+
+        header p {
+            font-size: 1.2em;
+            font-weight: 300;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            width: 100%;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        main p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+
+        .btn-videos {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-videos i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-videos:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-videos:hover i {
+            transform: translateX(5px);
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background: var(--header-bg);
+            text-align: center;
+            font-size: 0.9em;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .btn-videos {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="animate-in">
+        <h1>Videos Educativos</h1>
+        <p>Accede a una variedad de videos documentales que expanden el aprendizaje de conceptos matemáticos complejos y sus investigaciones en los diferentes campos de las ciencias.</p>
+    </header>
+    
+    <main>
+        <div class="content-card animate-in">
+            <p>Utiliza estos videos como apoyo visual para comprender como es el mundo de las matemáticas y utilizalo como material complementario de estudio.</p>
+            <button onclick="explorarVideos()" class="btn-videos">
+                <i class="fas fa-play-circle"></i>
+                Explorar Videos
+            </button>
+        </div>
+    </main>
+
+    <footer class="animate-in">
+        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+    </footer>
+
+    <script>
+        // Animación al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.animate-in');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.animation = `fadeInUp 0.8s ease-out ${index * 0.2}s forwards`;
+            });
+        });
+
+        // Efecto del botón
+		function explorarVideos() {
+		    const btn = document.querySelector('.btn-videos');
+		    const icon = btn.querySelector('i');
+    
+		    // Efecto de click en el botón
+		    btn.style.transform = 'scale(0.95)';
+		    icon.style.transform = 'translateX(10px)';
+    
+		    // Después de la animación, redirige a la página de la biblioteca
+		    setTimeout(() => {
+		        btn.style.transform = 'scale(1)';
+		        icon.style.transform = 'translateX(0)';
+		        window.location.href = 'biblioteca_videos_educativos.html';
+		    }, 150);
+        }
+
+        // Efecto parallax suave
+        document.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            const scrolled = window.pageYOffset;
+            if (scrolled > 50) {
+                header.style.background = 'rgba(0, 0, 0, 0.9)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+        });
+
+        // Efecto de seguimiento del cursor
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.content-card');
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardX = rect.left + rect.width / 2;
+                const cardY = rect.top + rect.height / 2;
+
+                const angleX = (mouseY - cardY) / 30;
+                const angleY = (mouseX - cardX) / -30;
+
+                card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-5px)`;
+            });
+        });
+
+        document.addEventListener('mouseleave', () => {
+            const cards = document.querySelectorAll('.content-card');
+            cards.forEach(card => {
+                card.style.transform = 'rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

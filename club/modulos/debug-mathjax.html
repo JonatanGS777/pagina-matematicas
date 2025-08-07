@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug MathJax Module</title>
+    <script src="mathjax-module.js"></script>
+</head>
+<body>
+    <h1>Debug MathJax Module</h1>
+    <div id="test-content">
+        <p>Prueba inline: $x^2 + y^2 = z^2$</p>
+        <p>Prueba display: $$\frac{-b \pm \sqrt{b^2-4ac}}{2a}$$</p>
+    </div>
+    
+    <div id="log"></div>
+
+    <script>
+        const log = document.getElementById('log');
+        
+        function addLog(message) {
+            console.log(message);
+            log.innerHTML += '<p>' + message + '</p>';
+        }
+
+        async function testMathJax() {
+            addLog('🔍 Testing MathJax module...');
+            
+            // Check if module is loaded
+            addLog('✅ MathJaxModule class: ' + (window.MathJaxModule ? 'FOUND' : 'NOT FOUND'));
+            addLog('✅ Global instance: ' + (window.mathJaxModuleInstance ? 'FOUND' : 'NOT FOUND'));
+            
+            if (window.mathJaxModuleInstance) {
+                const status = window.mathJaxModuleInstance.getStatus();
+                addLog('📊 Status: ' + JSON.stringify(status));
+                
+                addLog('🔄 Waiting for initialization...');
+                await window.mathJaxModuleInstance.initialize();
+                
+                const finalStatus = window.mathJaxModuleInstance.getStatus();
+                addLog('📊 Final Status: ' + JSON.stringify(finalStatus));
+                
+                addLog('🔍 Is Ready: ' + window.mathJaxModuleInstance.isMathjaxReady());
+                
+                if (window.mathJaxModuleInstance.isMathjaxReady()) {
+                    addLog('🎯 Testing render...');
+                    const testEl = document.getElementById('test-content');
+                    const success = await window.mathJaxModuleInstance.render(testEl);
+                    addLog('🔄 Render result: ' + (success ? 'SUCCESS' : 'FAILED'));
+                }
+            }
+        }
+
+        // Wait for page load
+        window.addEventListener('load', testMathJax);
+    </script>
+</body>
+</html>

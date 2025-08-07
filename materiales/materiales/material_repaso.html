@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos Matemáticos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #9c27b0;
+            --secondary-color: #673ab7;
+            --bg-dark: #2c0735;
+            --text-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), #4a1259);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+            overflow: hidden;
+        }
+
+        .math-symbol {
+            position: absolute;
+            color: var(--text-light);
+            font-size: 2rem;
+            animation: float 20s infinite linear;
+        }
+
+        .geometric-shape {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            opacity: 0.2;
+            animation: rotate 30s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                transform: translate(100px, 100px) rotate(360deg);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #e1bee7;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .recursos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .recurso-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .recurso-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .recurso-card h3 {
+            color: #e1bee7;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .recursos-lista {
+            list-style: none;
+        }
+
+        .recursos-lista li {
+            margin-bottom: 1rem;
+        }
+
+        .recursos-lista a {
+            color: var(--text-light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .recursos-lista a:hover {
+            color: #e1bee7;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(156, 39, 176, 0.2);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quote-section {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #e1bee7;
+        }
+
+        .quote-author {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .recursos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-elements">
+        <script>
+            function createBackgroundElements() {
+                const container = document.querySelector('.background-elements');
+                const symbols = ['∑', '∫', 'π', '√', '∞', 'θ', 'Δ', '∇', 'λ', 'μ', '≈', '±', '÷', '×'];
+                
+                // Crear símbolos matemáticos
+                for (let i = 0; i < 20; i++) {
+                    const symbol = document.createElement('div');
+                    symbol.className = 'math-symbol';
+                    symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    symbol.style.left = `${Math.random() * 100}%`;
+                    symbol.style.top = `${Math.random() * 100}%`;
+                    symbol.style.animationDelay = `${Math.random() * 20}s`;
+                    container.appendChild(symbol);
+                }
+
+                // Crear figuras geométricas
+                const shapes = [
+                    { type: 'triangle', points: '0,30 15,0 30,30' },
+                    { type: 'rectangle', width: 30, height: 30 },
+                    { type: 'circle', radius: 15 }
+                ];
+
+                for (let i = 0; i < 15; i++) {
+                    const shape = document.createElement('div');
+                    shape.className = 'geometric-shape';
+                    const randomShape = shapes[Math.floor(Math.random() * shapes.length)];
+                    
+                    if (randomShape.type === 'circle') {
+                        shape.style.width = `${randomShape.radius * 2}px`;
+                        shape.style.height = `${randomShape.radius * 2}px`;
+                        shape.style.borderRadius = '50%';
+                    } else if (randomShape.type === 'rectangle') {
+                        shape.style.width = `${randomShape.width}px`;
+                        shape.style.height = `${randomShape.height}px`;
+                    }
+                    
+                    shape.style.left = `${Math.random() * 100}%`;
+                    shape.style.top = `${Math.random() * 100}%`;
+                    shape.style.animationDelay = `${Math.random() * 30}s`;
+                    container.appendChild(shape);
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', createBackgroundElements);
+        </script>
+    </div>
+
+    <div class="container">
+        <header class="animate__animated animate__fadeIn">
+            <h1>Recursos de Matemáticas</h1>
+            <p>Materiales seleccionados para fortalecer tu aprendizaje</p>
+        </header>
+
+        <div class="recursos-grid">
+            <div class="recurso-card animate__animated animate__fadeInLeft">
+                <h3>Trigonometría</h3>
+                <div class="tags-container">
+                    <span class="tag">Básico</span>
+                    <span class="tag">Intermedio</span>
+                    <span class="tag">Avanzado</span>
+                </div>
+                <ul class="recursos-lista">
+                    <li>
+                        <a href="https://youtube.com/playlist?list=PL9SnRnlzoyX3kLYWUsrmrq0qy2Bye1JF4&si=aH1WYNygP7is-_OF" target="_blank">
+                            📺 Curso Completo de Trigonometría - EasyMath
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://es.khanacademy.org/math/trigonometry" target="_blank">
+                            🎓 Khan Academy - Trigonometría
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://matemovil.com/trigonometria/" target="_blank">
+                            📚 Matemáticas Móvil - Trigonometría
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="recurso-card animate__animated animate__fadeInRight">
+                <h3>Álgebra</h3>
+                <div class="tags-container">
+                    <span class="tag">Fundamentos</span>
+                    <span class="tag">Ecuaciones</span>
+                    <span class="tag">Funciones</span>
+                </div>
+                <ul class="recursos-lista">
+                    <li>
+                        <a href="https://youtube.com/playlist?list=PL9SnRnlzoyX1sF5fX83CleyK_SATfbhia&si=LC6MIgknZBjPRuxN" target="_blank">
+                            📺 Curso de Álgebra desde Cero - EasyMath
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://es.khanacademy.org/math/algebra" target="_blank">
+                            🎓 Khan Academy - Álgebra
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://sitios.ucsc.cl/pace/wp-content/uploads/sites/41/2020/03/ManualAlgebra.pdf" target="_blank">
+                            📚 Matemática Álgebra - Álgebra Manual, Ministerio de Educación de Chile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quote-section animate__animated animate__fadeIn">
+            <p class="quote">"Las matemáticas no son un camino cauteloso a través de una cadena de deducciones establecidas, sino más bien un viaje a través de una tierra extraña de maravillas."</p>
+            <p class="quote-author">- Marston Morse</p>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.recurso-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
