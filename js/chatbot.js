@@ -29,7 +29,7 @@ class MathChatBot {
             robotica: 'stem/robotica.html',
             programacion: 'stem/programacion.html',
             ingenieria: 'stem/ingenieria.html',
-            ebookStem: 'stem/Ebook STEM/index.html',
+            ebookStem: 'stem/Ebook%20STEM/index.html', // Fixed: URL encoded space
             olimpiadas: 'club/olimpiadas.html',
             proyectos: 'club/proyectos-creativos.html',
             competencias: 'club/competencias.html',
@@ -328,6 +328,7 @@ class MathChatBot {
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 position: relative;
                 overflow: hidden;
+                z-index: 10000;
             }
             
             .chatbot-toggle::before {
@@ -349,6 +350,12 @@ class MathChatBot {
             .chatbot-toggle:hover {
                 transform: scale(1.1);
                 box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+            }
+            
+            .chatbot-toggle.active {
+                pointer-events: none;
+                opacity: 0.3;
+                transform: scale(0.9);
             }
             
             .chatbot-toggle-icon {
@@ -375,6 +382,7 @@ class MathChatBot {
                 opacity: 0;
                 visibility: hidden;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 10001;
             }
             
             .chatbot-window.open {
@@ -437,11 +445,22 @@ class MathChatBot {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: background 0.3s ease;
+                transition: all 0.3s ease;
+                position: relative;
+                font-size: 1rem;
             }
             
             .chatbot-header-btn:hover {
                 background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.1);
+            }
+            
+            .chatbot-header-btn:active {
+                transform: scale(0.95);
+            }
+            
+            #favorites-btn {
+                position: relative;
             }
             
             .chatbot-messages {
@@ -467,41 +486,41 @@ class MathChatBot {
                 border-radius: 3px;
             }
             
-            .message {
+            .chatbot-container .message {
                 animation: messageSlide 0.3s ease;
             }
             
-            .message.bot {
+            .chatbot-container .message.bot {
                 align-self: flex-start;
                 max-width: 85%;
             }
             
-            .message.user {
+            .chatbot-container .message.user {
                 align-self: flex-end;
                 max-width: 85%;
             }
             
-            .message-bubble {
+            .chatbot-container .message-bubble {
                 padding: 0.8rem 1rem;
                 border-radius: 18px;
                 line-height: 1.4;
                 word-wrap: break-word;
             }
             
-            .message.bot .message-bubble {
+            .chatbot-container .message.bot .message-bubble {
                 background: white;
                 border: 1px solid rgba(102, 126, 234, 0.1);
                 color: #2d3748;
                 border-bottom-left-radius: 6px;
             }
             
-            .message.user .message-bubble {
+            .chatbot-container .message.user .message-bubble {
                 background: linear-gradient(135deg, #667eea, #764ba2);
                 color: white;
                 border-bottom-right-radius: 6px;
             }
             
-            .message-card {
+            .chatbot-container .message-card {
                 background: white;
                 border: 1px solid rgba(102, 126, 234, 0.15);
                 border-radius: 12px;
@@ -510,7 +529,7 @@ class MathChatBot {
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             }
             
-            .message-card-title {
+            .chatbot-container .message-card-title {
                 font-weight: 600;
                 color: #2d3748;
                 margin-bottom: 0.5rem;
@@ -570,7 +589,7 @@ class MathChatBot {
                 box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
             }
             
-            .nav-links {
+            .chatbot-container .nav-links {
                 display: flex;
                 flex-direction: column;
                 gap: 0.5rem;
@@ -579,7 +598,7 @@ class MathChatBot {
                 overflow-y: auto;
             }
             
-            .nav-link {
+            .chatbot-container .nav-link {
                 display: flex;
                 align-items: center;
                 gap: 0.8rem;
@@ -592,26 +611,26 @@ class MathChatBot {
                 transition: all 0.2s ease;
             }
             
-            .nav-link:hover {
+            .chatbot-container .nav-link:hover {
                 background: rgba(102, 126, 234, 0.05);
                 border-color: rgba(102, 126, 234, 0.3);
                 transform: translateX(4px);
             }
             
-            .nav-link-icon {
+            .chatbot-container .nav-link-icon {
                 font-size: 1.2rem;
             }
             
-            .nav-link-text {
+            .chatbot-container .nav-link-text {
                 flex: 1;
             }
             
-            .nav-link-title {
+            .chatbot-container .nav-link-title {
                 font-weight: 500;
                 margin: 0;
             }
             
-            .nav-link-desc {
+            .chatbot-container .nav-link-desc {
                 font-size: 0.75rem;
                 color: #718096;
                 margin: 0;
@@ -683,21 +702,21 @@ class MathChatBot {
                 margin-top: 0.8rem;
             }
             
-            .form-group {
+            .chatbot-container .form-group {
                 display: flex;
                 flex-direction: column;
                 gap: 0.3rem;
             }
             
-            .form-label {
+            .chatbot-container .form-label {
                 font-size: 0.85rem;
                 color: #4a5568;
                 font-weight: 500;
             }
             
-            .form-input,
-            .form-select,
-            .form-textarea {
+            .chatbot-container .form-input,
+            .chatbot-container .form-select,
+            .chatbot-container .form-textarea {
                 padding: 0.6rem 0.8rem;
                 border: 1px solid #e5e7eb;
                 border-radius: 8px;
@@ -706,18 +725,18 @@ class MathChatBot {
                 font-family: inherit;
             }
             
-            .form-input:focus,
-            .form-select:focus,
-            .form-textarea:focus {
+            .chatbot-container .form-input:focus,
+            .chatbot-container .form-select:focus,
+            .chatbot-container .form-textarea:focus {
                 border-color: rgba(102, 126, 234, 0.5);
             }
             
-            .form-textarea {
+            .chatbot-container .form-textarea {
                 resize: vertical;
                 min-height: 80px;
             }
             
-            .form-submit {
+            .chatbot-container .form-submit {
                 padding: 0.8rem;
                 background: linear-gradient(135deg, #667eea, #764ba2);
                 color: white;
@@ -728,7 +747,7 @@ class MathChatBot {
                 transition: transform 0.2s ease;
             }
             
-            .form-submit:hover {
+            .chatbot-container .form-submit:hover {
                 transform: translateY(-1px);
             }
             
@@ -803,15 +822,24 @@ class MathChatBot {
                 position: absolute;
                 top: -5px;
                 right: -5px;
-                width: 12px;
-                height: 12px;
-                background: #f59e0b;
+                min-width: 16px;
+                height: 16px;
+                background: #ef4444;
                 border-radius: 50%;
                 display: none;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.65rem;
+                font-weight: bold;
+                color: white;
+                padding: 1px;
+                border: 1.5px solid white;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+                z-index: 1;
             }
             
             .favorites-indicator.active {
-                display: block;
+                display: flex;
             }
             
             .tip-card {
@@ -864,13 +892,13 @@ class MathChatBot {
                 background: linear-gradient(to bottom, #1a202c, #2d3748);
             }
             
-            body.dark-mode .message.bot .message-bubble {
+            body.dark-mode .chatbot-container .message.bot .message-bubble {
                 background: #2d3748;
                 border-color: rgba(102, 126, 234, 0.3);
                 color: #e2e8f0;
             }
             
-            body.dark-mode .message-card {
+            body.dark-mode .chatbot-container .message-card {
                 background: #2d3748;
                 border-color: rgba(102, 126, 234, 0.3);
                 color: #e2e8f0;
@@ -881,28 +909,292 @@ class MathChatBot {
                 border-top-color: #4a5568;
             }
             
-            body.dark-mode .chatbot-input {
+            body.dark-mode .chatbot-container .chatbot-input {
                 background: #1a202c;
                 border-color: #4a5568;
                 color: #e2e8f0;
             }
             
-            /* Mobile responsive */
-            @media (max-width: 480px) {
+            /* Modal styles (for any future modals) */
+            .chatbot-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10003;
+            }
+            @media (max-width: 768px) {
+                .chatbot-toggle {
+                    width: 60px;
+                    height: 60px;
+                    right: 15px;
+                    bottom: 15px;
+                }
+                
+                .chatbot-toggle-icon {
+                    font-size: 1.6rem;
+                }
+                
                 .chatbot-window {
-                    width: calc(100vw - 40px);
-                    height: calc(100vh - 120px);
-                    bottom: 75px;
-                    right: 20px;
+                    width: 380px;
+                    height: 85vh;
+                    max-height: 600px;
+                    right: 10px;
+                    bottom: 80px;
+                }
+                
+                .chatbot-header {
+                    padding: 1rem;
+                }
+                
+                .chatbot-avatar {
+                    width: 35px;
+                    height: 35px;
+                    font-size: 1rem;
+                }
+                
+                .chatbot-title {
+                    font-size: 1rem;
+                }
+                
+                .chatbot-subtitle {
+                    font-size: 0.75rem;
+                }
+                
+                .chatbot-header-btn {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 0.9rem;
                 }
                 
                 .period-grid {
                     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
                 }
+            }
+            
+            /* Mobile responsive - Smartphones */
+            @media (max-width: 480px) {
+                .chatbot-container {
+                    bottom: 0;
+                    right: 0;
+                }
                 
                 .chatbot-toggle {
-                    width: 60px;
-                    height: 60px;
+                    width: 55px;
+                    height: 55px;
+                    right: 15px;
+                    bottom: 15px;
+                }
+                
+                .chatbot-toggle-icon {
+                    font-size: 1.4rem;
+                }
+                
+                .chatbot-window {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100%;
+                    max-height: 100%;
+                    border-radius: 0;
+                    z-index: 10002; /* Higher z-index for mobile fullscreen */
+                }
+                
+                .chatbot-window.open {
+                    transform: translateY(0) scale(1);
+                }
+                
+                .chatbot-header {
+                    border-radius: 0;
+                    padding: 1rem;
+                }
+                
+                .chatbot-messages {
+                    height: calc(100vh - 120px);
+                    padding: 1rem;
+                }
+                
+                .chatbot-input-container {
+                    padding: 0.8rem;
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: white;
+                    border-top: 1px solid #e5e7eb;
+                }
+                
+                .chatbot-input {
+                    font-size: 16px; /* Prevents zoom on iOS */
+                }
+                
+                .period-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 0.5rem;
+                }
+                
+                .period-card {
+                    padding: 0.5rem;
+                    font-size: 0.8rem;
+                }
+                
+                .quick-action-chip {
+                    padding: 0.4rem 0.8rem;
+                    font-size: 0.85rem;
+                }
+                
+                .chatbot-container .nav-link {
+                    padding: 0.6rem;
+                }
+                
+                .chatbot-container .nav-link-icon {
+                    font-size: 1rem;
+                }
+                
+                .chatbot-container .nav-link-title {
+                    font-size: 0.9rem;
+                }
+                
+                .chatbot-container .nav-link-desc {
+                    font-size: 0.7rem;
+                }
+                
+                .message-card {
+                    padding: 0.8rem;
+                }
+                
+                .search-form {
+                    flex-direction: column;
+                }
+                
+                .search-input {
+                    width: 100%;
+                }
+                
+                .search-btn {
+                    width: 100%;
+                }
+                
+                .stat-item {
+                    padding: 1rem;
+                }
+                
+                .tip-card {
+                    padding: 0.8rem;
+                }
+                
+                .contact-form {
+                    gap: 0.6rem;
+                }
+                
+                .chatbot-container .form-input,
+                .chatbot-container .form-select,
+                .chatbot-container .form-textarea {
+                    font-size: 16px; /* Prevents zoom on iOS */
+                }
+            }
+            
+            /* Very small devices */
+            @media (max-width: 375px) {
+                .chatbot-toggle {
+                    width: 50px;
+                    height: 50px;
+                    right: 10px;
+                    bottom: 10px;
+                }
+                
+                .chatbot-toggle-icon {
+                    font-size: 1.2rem;
+                }
+                
+                .chatbot-header {
+                    padding: 0.8rem;
+                }
+                
+                .chatbot-title {
+                    font-size: 0.95rem;
+                }
+                
+                .chatbot-subtitle {
+                    font-size: 0.7rem;
+                }
+                
+                .chatbot-header-btn {
+                    width: 28px;
+                    height: 28px;
+                    font-size: 0.8rem;
+                }
+                
+                .chatbot-header-actions {
+                    gap: 0.3rem;
+                }
+                
+                .chatbot-messages {
+                    padding: 0.8rem;
+                }
+                
+                .chatbot-container .message-bubble {
+                    padding: 0.6rem 0.8rem;
+                    font-size: 0.9rem;
+                }
+                
+                .quick-actions {
+                    gap: 0.4rem;
+                }
+                
+                .quick-action-chip {
+                    padding: 0.35rem 0.7rem;
+                    font-size: 0.8rem;
+                }
+            }
+            
+            /* Landscape orientation for mobile */
+            @media (max-height: 500px) and (orientation: landscape) {
+                .chatbot-window {
+                    height: 100vh;
+                    max-height: 100vh;
+                }
+                
+                .chatbot-messages {
+                    height: calc(100vh - 110px);
+                    padding: 0.5rem 1rem;
+                }
+                
+                .chatbot-header {
+                    padding: 0.5rem 1rem;
+                }
+                
+                .chatbot-input-container {
+                    padding: 0.5rem;
+                }
+                
+                .quick-actions {
+                    margin-top: 0.4rem;
+                }
+            }
+            
+            /* iPad and tablets in portrait */
+            @media (min-width: 481px) and (max-width: 1024px) and (orientation: portrait) {
+                .chatbot-window {
+                    width: min(450px, 90vw);
+                    height: 70vh;
+                    max-height: 700px;
+                }
+            }
+            
+            /* iPad Pro and large tablets */
+            @media (min-width: 1024px) and (max-width: 1366px) {
+                .chatbot-window {
+                    width: 420px;
+                    height: 650px;
                 }
             }
         `;
@@ -925,14 +1217,14 @@ class MathChatBot {
                     </div>
                     <div class="chatbot-header-actions">
                         <button class="chatbot-header-btn" id="favorites-btn" title="Favoritos">
-                            ⭐
+                            <span style="position: relative;">⭐</span>
                             <span class="favorites-indicator"></span>
                         </button>
                         <button class="chatbot-header-btn" id="refresh-btn" title="Nueva conversación">
-                            🔄
+                            <span>🔄</span>
                         </button>
                         <button class="chatbot-header-btn" id="close-btn" title="Cerrar">
-                            ✕
+                            <span>✕</span>
                         </button>
                     </div>
                 </div>
@@ -964,21 +1256,45 @@ class MathChatBot {
         // Toggle chat
         this.toggleButton.addEventListener('click', () => this.toggleChat());
         
-        // Close button
-        document.getElementById('close-btn').addEventListener('click', () => this.closeChat());
+        // Close button - use chatContainer for better scoping
+        const closeBtn = this.chatContainer.querySelector('#close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.closeChat();
+            });
+        }
         
-        // Refresh button
-        document.getElementById('refresh-btn').addEventListener('click', () => this.resetConversation());
+        // Refresh button - use chatContainer for better scoping
+        const refreshBtn = this.chatContainer.querySelector('#refresh-btn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.resetConversation();
+                // Uncomment next line if you want hard page reload instead
+                // location.reload();
+            });
+        }
         
-        // Favorites button
-        document.getElementById('favorites-btn').addEventListener('click', () => this.showFavorites());
+        // Favorites button - use chatContainer for better scoping
+        const favoritesBtn = this.chatContainer.querySelector('#favorites-btn');
+        if (favoritesBtn) {
+            favoritesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.showFavorites();
+            });
+        }
         
         // Send message
         this.sendButton.addEventListener('click', () => this.sendMessage());
         
-        // Enter key
-        this.inputField.addEventListener('keypress', (e) => {
+        // Enter key - using keydown instead of deprecated keypress
+        this.inputField.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !this.isTyping) {
+                e.preventDefault();
                 this.sendMessage();
             }
         });
@@ -990,6 +1306,18 @@ class MathChatBot {
             }
             if (e.target.classList.contains('period-card')) {
                 this.showPeriodHistory(e.target.dataset.period);
+            }
+        });
+        
+        // Prevent closing when clicking inside the chat window
+        this.chatWindow.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+        
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen) {
+                this.closeChat();
             }
         });
     }
@@ -1007,6 +1335,9 @@ class MathChatBot {
         this.chatWindow.classList.add('open');
         this.toggleButton.classList.add('active');
         this.inputField.focus();
+        
+        // Update favorites indicator
+        this.updateFavoritesIndicator();
         
         // Check for daily tip
         this.checkDailyTip();
@@ -1395,8 +1726,9 @@ class MathChatBot {
             const searchInput = document.getElementById('history-search-input');
             if (searchInput) {
                 searchInput.focus();
-                searchInput.addEventListener('keypress', (e) => {
+                searchInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') {
+                        e.preventDefault();
                         this.performSearch();
                     }
                 });
@@ -1814,13 +2146,12 @@ Enviado desde el Chat Bot de Historia Matemática
             const prefs = JSON.parse(localStorage.getItem('mathbot_preferences') || '{}');
             if (prefs.favorites) {
                 this.favoriteTopics = new Set(prefs.favorites);
-                if (this.favoriteTopics.size > 0) {
-                    const indicator = document.querySelector('.favorites-indicator');
-                    if (indicator) {
-                        indicator.classList.add('active');
-                    }
-                }
             }
+            
+            // Update indicator after DOM is ready
+            setTimeout(() => {
+                this.updateFavoritesIndicator();
+            }, 100);
         } catch (e) {
             console.log('No preferences found');
         }
