@@ -4,102 +4,329 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olimpiadas Matemáticas - Prof. Yonatan Guerrero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ==================== CSS Variables ==================== */
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #f093fb;
-            --success: #4ecdc4;
-            --warning: #ffe066;
-            --gold: #FFD700;
-            --silver: #C0C0C0;
-            --bronze: #CD7F32;
-            --dark: #2d3748;
-            --light: #f7fafc;
-            --white: #ffffff;
-            --text-primary: #2d3748;
-            --text-secondary: #718096;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
-            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
-            --gradient-olympic: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6347 100%);
+            /* Colors */
+            --color-primary: #2563eb;
+            --color-primary-dark: #1d4ed8;
+            --color-secondary: #7c3aed;
+            --color-accent: #f59e0b;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-gold: #fbbf24;
+            --color-silver: #9ca3af;
+            --color-bronze: #d97706;
+            
+            /* Neutrals */
+            --color-white: #ffffff;
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-400: #9ca3af;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-700: #374151;
+            --color-gray-800: #1f2937;
+            --color-gray-900: #111827;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
+            --gradient-olympic: linear-gradient(135deg, var(--color-gold) 0%, #f97316 50%, var(--color-danger) 100%);
+            --gradient-hero: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --space-24: 6rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.125rem;
+            --radius-md: 0.375rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+            --radius-2xl: 1rem;
+            --radius-3xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Fonts */
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            --font-size-5xl: 3rem;
+            --font-size-6xl: 3.75rem;
         }
 
+        /* ==================== Reset & Base ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: var(--text-primary);
+            line-height: 1.6;
+            color: var(--color-gray-900);
+            background-color: var(--color-gray-50);
             overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        /* ==================== Layout Components ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        .container--lg {
+            max-width: 1400px;
+        }
+
+        .container--sm {
+            max-width: 768px;
+        }
+
+        /* ==================== Header Component ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-gray-200);
+            transition: var(--transition-base);
+        }
+
+        .header--scrolled {
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .header__nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            padding: 0 var(--space-4);
+        }
+
+        .header__logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: var(--transition-base);
+        }
+
+        .header__logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header__logo-icon {
+            font-size: var(--font-size-2xl);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header__menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            list-style: none;
+        }
+
+        .header__menu-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            font-weight: 500;
+            color: var(--color-gray-700);
+            text-decoration: none;
+            border-radius: var(--radius-full);
+            transition: var(--transition-base);
             position: relative;
-            padding-top: 80px;
-        }
-
-        /* Animated Background */
-        .animated-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Mathematical Patterns Background */
-        .math-patterns {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.1;
-            background-image: 
-                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px),
-                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px);
-        }
-
-        /* Floating Olympic Symbols */
-        .olympic-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
             overflow: hidden;
         }
 
-        .olympic-symbol {
+        .header__menu-link::before {
+            content: '';
             position: absolute;
-            font-size: 20px;
-            opacity: 0.6;
-            animation: floatUp 20s linear infinite;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: left var(--transition-slow);
+            z-index: -1;
         }
 
-        @keyframes floatUp {
+        .header__menu-link:hover {
+            color: var(--color-white);
+            transform: translateY(-2px);
+        }
+
+        .header__menu-link:hover::before {
+            left: 0;
+        }
+
+        .header__menu-link--active {
+            background: var(--gradient-primary);
+            color: var(--color-white);
+        }
+
+        .header__mobile-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-lg);
+            transition: var(--transition-base);
+            z-index: 1001;
+        }
+
+        .header__mobile-btn:hover {
+            background: var(--color-gray-100);
+        }
+
+        .header__hamburger {
+            width: 24px;
+            height: 3px;
+            background: var(--color-gray-700);
+            border-radius: var(--radius-sm);
+            transition: var(--transition-base);
+            margin: 2px 0;
+        }
+
+        .header__mobile-btn--active .header__hamburger:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .header__mobile-btn--active .header__hamburger:nth-child(2) {
+            opacity: 0;
+        }
+
+        .header__mobile-btn--active .header__hamburger:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* ==================== Hero Component ==================== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--gradient-hero);
+            padding-top: 80px;
+        }
+
+        .hero__background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-hero);
+            animation: gradientShift 10s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { 
+                background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
+            }
+            25% { 
+                background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 50%, var(--color-primary) 100%);
+            }
+            50% { 
+                background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 50%, var(--color-secondary) 100%);
+            }
+            75% { 
+                background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%);
+            }
+        }
+
+        .hero__particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .hero__particle {
+            position: absolute;
+            font-size: var(--font-size-xl);
+            color: rgba(255, 255, 255, 0.6);
+            animation: float 15s linear infinite;
+        }
+
+        @keyframes float {
             0% {
                 transform: translateY(100vh) rotate(0deg);
                 opacity: 0;
@@ -116,382 +343,485 @@
             }
         }
 
-        /* Header/Navbar */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
-            z-index: 1000;
-            padding: 0;
-            transition: all 0.3s ease;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-        }
-
-        .logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-link {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: var(--primary);
-        }
-
-        .nav-link.active {
-            background: var(--gradient-main);
-            color: var(--white);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 60vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .hero__content {
             position: relative;
-            overflow: hidden;
-            margin-bottom: -50px;
-        }
-
-        .hero-content {
-            text-align: center;
             z-index: 2;
-            padding: 2rem;
+            text-align: center;
+            color: var(--color-white);
             max-width: 900px;
+            padding: var(--space-8);
+            animation: fadeInUp 1s var(--transition-slow);
         }
 
-        .hero-title {
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero__title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(3rem, 6vw, 5rem);
+            font-size: clamp(var(--font-size-4xl), 6vw, var(--font-size-6xl));
             font-weight: 700;
-            color: var(--white);
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            display: inline-block;
+            margin-bottom: var(--space-6);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
         }
 
-        .hero-title::after {
-            content: '∞';
-            position: absolute;
-            right: -60px;
-            top: 0;
-            font-size: 3rem;
-            color: var(--gold);
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 2rem;
+        .hero__subtitle {
+            font-size: var(--font-size-xl);
             font-weight: 300;
+            margin-bottom: var(--space-8);
+            opacity: 0.9;
+            line-height: 1.4;
         }
 
-        .trophy-container {
+        .hero__trophies {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
+            gap: var(--space-8);
+            margin-bottom: var(--space-10);
         }
 
-        .trophy {
-            font-size: 3rem;
+        .hero__trophy {
+            font-size: var(--font-size-5xl);
             animation: bounce 2s ease-in-out infinite;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .trophy.gold { color: var(--gold); animation-delay: 0s; }
-        .trophy.silver { color: var(--silver); animation-delay: 0.2s; }
-        .trophy.bronze { color: var(--bronze); animation-delay: 0.4s; }
+        .hero__trophy--gold {
+            color: var(--color-gold);
+            animation-delay: 0s;
+        }
+
+        .hero__trophy--silver {
+            color: var(--color-silver);
+            animation-delay: 0.2s;
+        }
+
+        .hero__trophy--bronze {
+            color: var(--color-bronze);
+            animation-delay: 0.4s;
+        }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
         }
 
-        /* Main Content */
-        .main-content {
-            background: var(--light);
-            border-radius: 50px 50px 0 0;
+        .hero__cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-8);
+            background: var(--color-white);
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: var(--font-size-lg);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition-base);
             position: relative;
-            z-index: 10;
-            padding-top: 80px;
-            margin-top: -50px;
+            overflow: hidden;
         }
 
+        .hero__cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: left var(--transition-slow);
+            z-index: -1;
+        }
+
+        .hero__cta:hover {
+            transform: translateY(-3px);
+            color: var(--color-white);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .hero__cta:hover::before {
+            left: 0;
+        }
+
+        /* ==================== Section Component ==================== */
         .section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: var(--space-20) 0;
+            position: relative;
         }
 
-        .section-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2.5rem, 4vw, 3.5rem);
-            font-weight: 700;
+        .section--gray {
+            background: var(--color-gray-50);
+        }
+
+        .section__header {
             text-align: center;
-            margin-bottom: 3rem;
-            background: var(--gradient-main);
+            margin-bottom: var(--space-16);
+        }
+
+        .section__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(var(--font-size-3xl), 4vw, var(--font-size-5xl));
+            font-weight: 700;
+            margin-bottom: var(--space-6);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             position: relative;
         }
 
-        .section-title::after {
+        .section__title::after {
             content: '';
             position: absolute;
             bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
+            width: 80px;
             height: 4px;
-            background: var(--gradient-main);
-            border-radius: 2px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
         }
 
-        /* Competition Levels */
-        .levels-grid {
+        .section__subtitle {
+            font-size: var(--font-size-xl);
+            color: var(--color-gray-600);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ==================== Card Component ==================== */
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-8);
+            margin-top: var(--space-12);
         }
 
-        .level-card {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.3s ease;
+        .card {
+            background: var(--color-white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-base);
             position: relative;
             overflow: hidden;
-            border: 2px solid transparent;
+            border: 1px solid var(--color-gray-100);
         }
 
-        .level-card::before {
+        .card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: var(--gradient-main);
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
-        .level-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-            border-color: var(--primary);
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
         }
 
-        .level-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: inline-block;
+        .card__icon {
+            font-size: var(--font-size-5xl);
+            margin-bottom: var(--space-6);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .level-title {
-            font-size: 1.5rem;
+        .card__title {
+            font-size: var(--font-size-2xl);
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+            color: var(--color-gray-900);
         }
 
-        .level-description {
-            color: var(--text-secondary);
+        .card__description {
+            color: var(--color-gray-600);
+            margin-bottom: var(--space-6);
             line-height: 1.6;
-            margin-bottom: 1.5rem;
         }
 
-        .level-features {
+        .card__features {
             list-style: none;
         }
 
-        .level-features li {
-            padding: 0.5rem 0;
-            color: var(--text-secondary);
+        .card__feature {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--space-3);
+            padding: var(--space-2) 0;
+            color: var(--color-gray-700);
         }
 
-        .level-features li::before {
+        .card__feature::before {
             content: '✓';
-            color: var(--success);
-            font-weight: bold;
+            color: var(--color-success);
+            font-weight: 700;
+            font-size: var(--font-size-lg);
         }
 
-        /* Practice Problems */
-        .problems-section {
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 30px;
-            padding: 3rem;
-            margin: 3rem 0;
+        /* Prize Card Variants */
+        .card--gold {
+            border: 2px solid var(--color-gold);
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
         }
 
-        .problem-categories {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            margin-bottom: 2rem;
+        .card--gold::before {
+            background: linear-gradient(135deg, var(--color-gold) 0%, #f59e0b 100%);
         }
 
-        .category-btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            background: var(--white);
-            color: var(--text-primary);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .card--gold .card__icon {
+            background: linear-gradient(135deg, var(--color-gold) 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .category-btn:hover,
-        .category-btn.active {
-            background: var(--gradient-main);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        .card--gold .card__title {
+            color: #92400e;
         }
 
-        .problems-grid {
-            display: grid;
-            gap: 1.5rem;
+        .card--silver {
+            border: 2px solid var(--color-silver);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
 
-        .problem-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+        .card--silver::before {
+            background: linear-gradient(135deg, var(--color-silver) 0%, #64748b 100%);
         }
 
-        .problem-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        .card--silver .card__icon {
+            background: linear-gradient(135deg, var(--color-silver) 0%, #64748b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .problem-header {
+        .card--silver .card__title {
+            color: #475569;
+        }
+
+        .card--bronze {
+            border: 2px solid var(--color-bronze);
+            background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
+        }
+
+        .card--bronze::before {
+            background: linear-gradient(135deg, var(--color-bronze) 0%, #ea580c 100%);
+        }
+
+        .card--bronze .card__icon {
+            background: linear-gradient(135deg, var(--color-bronze) 0%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card--bronze .card__title {
+            color: #9a3412;
+        }
+
+        /* Prize Card Hover Effects */
+        .card--gold:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.3), 0 8px 10px -6px rgba(245, 158, 11, 0.2);
+        }
+
+        .card--silver:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(156, 163, 175, 0.3), 0 8px 10px -6px rgba(156, 163, 175, 0.2);
+        }
+
+        .card--bronze:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(217, 119, 6, 0.3), 0 8px 10px -6px rgba(217, 119, 6, 0.2);
+        }
+
+        /* Prize Card Shine Effect */
+        .card--gold,
+        .card--silver,
+        .card--bronze {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card--gold::after,
+        .card--silver::after,
+        .card--bronze::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+            opacity: 0;
+        }
+
+        .card--gold:hover::after,
+        .card--silver:hover::after,
+        .card--bronze:hover::after {
+            animation: shineOnce 0.8s ease-out;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            50% {
+                left: 100%;
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        @keyframes shineOnce {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* ==================== Problem Component ==================== */
+        .problem-section {
+            background: var(--color-white);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-12);
+            margin: var(--space-12) 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .problem {
+            background: var(--color-gray-50);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            margin-bottom: var(--space-6);
+            border: 1px solid var(--color-gray-200);
+            transition: var(--transition-base);
+        }
+
+        .problem:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .problem__header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: var(--space-4);
+            flex-wrap: wrap;
+            gap: var(--space-4);
         }
 
-        .problem-difficulty {
-            padding: 0.5rem 1rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            font-weight: 500;
+        .problem__title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-gray-900);
         }
 
-        .difficulty-easy {
-            background: rgba(78, 205, 196, 0.2);
-            color: var(--success);
+        .problem__difficulty {
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .difficulty-medium {
-            background: rgba(255, 230, 102, 0.2);
-            color: #f39c12;
+        .problem__difficulty--easy {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
         }
 
-        .difficulty-hard {
-            background: rgba(240, 147, 251, 0.2);
-            color: var(--accent);
+        .problem__difficulty--medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
         }
 
-        .problem-content {
-            color: var(--text-primary);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
+        .problem__difficulty--hard {
+            background: rgba(124, 58, 237, 0.1);
+            color: var(--color-secondary);
+        }
+
+        .problem__content {
             font-family: 'Space Grotesk', sans-serif;
+            font-size: var(--font-size-lg);
+            line-height: 1.7;
+            color: var(--color-gray-800);
+            margin-bottom: var(--space-6);
         }
 
-        .problem-actions {
+        .problem__actions {
             display: flex;
-            gap: 1rem;
+            gap: var(--space-3);
+            flex-wrap: wrap;
         }
 
-        .problem-btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 20px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
+        .problem__btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: var(--space-2);
+            padding: var(--space-3) var(--space-6);
+            border: none;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-base);
+            cursor: pointer;
         }
 
-        .solve-btn {
-            background: var(--gradient-main);
-            color: var(--white);
+        .problem__btn--primary {
+            background: var(--gradient-primary);
+            color: var(--color-white);
         }
 
-        .hint-btn {
-            background: rgba(102, 126, 234, 0.1);
-            color: var(--primary);
+        .problem__btn--secondary {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
         }
 
-        .problem-btn:hover {
+        .problem__btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-md);
         }
 
-        /* Timeline */
+        /* ==================== Timeline Component ==================== */
         .timeline {
             position: relative;
-            padding: 2rem 0;
+            padding: var(--space-8) 0;
         }
 
         .timeline::before {
@@ -500,272 +830,158 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 3px;
+            width: 4px;
             height: 100%;
-            background: var(--gradient-main);
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
         }
 
-        .timeline-item {
+        .timeline__item {
             position: relative;
-            padding: 2rem;
-            width: calc(50% - 30px);
-            margin-bottom: 2rem;
+            padding: var(--space-8);
+            width: calc(50% - var(--space-8));
+            margin-bottom: var(--space-8);
         }
 
-        .timeline-item:nth-child(odd) {
+        .timeline__item:nth-child(odd) {
             margin-left: auto;
             text-align: left;
         }
 
-        .timeline-item:nth-child(even) {
+        .timeline__item:nth-child(even) {
             text-align: right;
         }
 
-        .timeline-content {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
+        .timeline__content {
+            background: var(--color-white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-lg);
             position: relative;
+            transition: var(--transition-base);
         }
 
-        .timeline-dot {
+        .timeline__content:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .timeline__dot {
             position: absolute;
             width: 20px;
             height: 20px;
-            background: var(--gradient-main);
+            background: var(--gradient-primary);
             border-radius: 50%;
             top: 50%;
             transform: translateY(-50%);
+            box-shadow: 0 0 0 4px var(--color-white);
         }
 
-        .timeline-item:nth-child(odd) .timeline-dot {
-            left: -40px;
+        .timeline__item:nth-child(odd) .timeline__dot {
+            left: -44px;
         }
 
-        .timeline-item:nth-child(even) .timeline-dot {
-            right: -40px;
+        .timeline__item:nth-child(even) .timeline__dot {
+            right: -44px;
         }
 
-        .timeline-date {
+        .timeline__date {
             background: var(--gradient-olympic);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            color: var(--color-white);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-full);
             display: inline-block;
             font-weight: 600;
-            margin-bottom: 1rem;
+            margin-bottom: var(--space-3);
+            font-size: var(--font-size-sm);
         }
 
-        /* Achievement Gallery */
-        .achievements-grid {
+        .timeline__title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--color-gray-900);
+        }
+
+        .timeline__description {
+            color: var(--color-gray-600);
+            line-height: 1.6;
+        }
+
+        /* ==================== Achievement Component ==================== */
+        .achievement-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            gap: var(--space-6);
+            margin-top: var(--space-12);
         }
 
-        .achievement-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
+        .achievement {
+            background: var(--color-white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
             text-align: center;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-base);
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--color-gray-100);
         }
 
-        .achievement-card::before {
+        .achievement::before {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
-            animation: shimmer 3s infinite;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            animation: shimmer 4s infinite;
         }
 
         @keyframes shimmer {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
-        .achievement-card:hover {
-            transform: translateY(-10px) scale(1.05);
+        .achievement:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-xl);
         }
 
-        .medal-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+        .achievement__icon {
+            font-size: var(--font-size-5xl);
+            margin-bottom: var(--space-4);
         }
 
-        .achievement-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
+        .achievement__title {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+            color: var(--color-gray-900);
         }
 
-        .achievement-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        .achievement__description {
+            color: var(--color-gray-600);
+            font-size: var(--font-size-sm);
         }
 
-        /* Resources Section */
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .resource-card {
-            background: var(--white);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.3s ease;
-        }
-
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .resource-header {
-            background: var(--gradient-main);
-            padding: 1.5rem;
-            color: var(--white);
-        }
-
-        .resource-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .resource-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-
-        .resource-body {
-            padding: 1.5rem;
-        }
-
-        .resource-links {
-            list-style: none;
-        }
-
-        .resource-links li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .resource-links li:last-child {
-            border-bottom: none;
-        }
-
-        .resource-links a {
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .resource-links a:hover {
-            color: var(--secondary);
-            transform: translateX(5px);
-        }
-
-        /* Testimonials */
-        .testimonials-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .testimonial-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .quote-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            opacity: 0.2;
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            color: var(--text-primary);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--gradient-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        .author-info {
-            flex: 1;
-        }
-
-        .author-name {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .author-achievement {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: var(--gradient-main);
-            border-radius: 30px;
-            padding: 4rem 2rem;
+        /* ==================== CTA Component ==================== */
+        .cta {
+            background: var(--gradient-primary);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-16) var(--space-8);
             text-align: center;
-            margin: 4rem 0;
+            margin: var(--space-20) 0;
             position: relative;
             overflow: hidden;
         }
 
-        .cta-section::before {
+        .cta::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -775,62 +991,70 @@
             background: repeating-linear-gradient(
                 45deg,
                 transparent,
-                transparent 10px,
-                rgba(255,255,255,0.1) 10px,
-                rgba(255,255,255,0.1) 20px
+                transparent 20px,
+                rgba(255, 255, 255, 0.1) 20px,
+                rgba(255, 255, 255, 0.1) 40px
             );
-            animation: slide 20s linear infinite;
+            animation: slidePattern 15s linear infinite;
         }
 
-        @keyframes slide {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
+        @keyframes slidePattern {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(40px, 40px);
+            }
         }
 
-        .cta-content {
+        .cta__content {
             position: relative;
             z-index: 1;
         }
 
-        .cta-title {
-            font-size: 2.5rem;
-            color: var(--white);
-            margin-bottom: 1rem;
+        .cta__title {
+            font-size: var(--font-size-4xl);
             font-weight: 700;
+            color: var(--color-white);
+            margin-bottom: var(--space-4);
         }
 
-        .cta-text {
-            font-size: 1.2rem;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 2rem;
+        .cta__description {
+            font-size: var(--font-size-xl);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--space-8);
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.6;
         }
 
-        .cta-button {
-            display: inline-block;
-            background: var(--white);
-            color: var(--primary);
-            padding: 1rem 3rem;
-            border-radius: 30px;
-            font-weight: 600;
+        .cta__button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-4) var(--space-8);
+            background: var(--color-white);
+            color: var(--color-primary);
             text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-weight: 600;
+            font-size: var(--font-size-lg);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-xl);
+            transition: var(--transition-base);
         }
 
-        .cta-button:hover {
+        .cta__button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: var(--shadow-2xl);
         }
 
-        /* Footer */
+        /* ==================== Footer Component ==================== */
         .footer {
-            background: var(--dark);
-            color: var(--white);
+            background: var(--color-gray-900);
+            color: var(--color-white);
             text-align: center;
-            padding: 3rem 2rem;
+            padding: var(--space-12) 0;
             position: relative;
         }
 
@@ -840,625 +1064,381 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
+            height: 4px;
             background: var(--gradient-olympic);
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .timeline::before {
-                left: 30px;
-            }
-
-            .timeline-item {
-                width: calc(100% - 60px);
-                margin-left: 60px;
-                text-align: left;
-            }
-
-            .timeline-item:nth-child(even) {
-                text-align: left;
-            }
-
-            .timeline-dot {
-                left: -45px !important;
-                right: auto !important;
-            }
-
-            .hero-title::after {
-                display: none;
-            }
-
-            .levels-grid,
-            .resources-grid,
-            .testimonials-container {
-                grid-template-columns: 1fr;
-            }
-
-            .trophy-container {
-                gap: 1rem;
-            }
-
-            .trophy {
-                font-size: 2rem;
-            }
+        .footer__text {
+            margin-bottom: var(--space-2);
+            opacity: 0.9;
         }
 
-        /* Animations on scroll */
+        /* ==================== Utility Classes ==================== */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.6s ease;
+            transition: opacity var(--transition-slow), transform var(--transition-slow);
         }
 
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        /* Botón hamburguesa - solo visible en móvil */
-.mobile-menu-btn {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1001;
-}
 
-.mobile-menu-btn:hover {
-    background: rgba(102, 126, 234, 0.1);
-}
+        .text-center {
+            text-align: center;
+        }
 
-.hamburger-line {
-    display: block;
-    width: 24px;
-    height: 3px;
-    background: var(--text-primary);
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
+        .mb-0 {
+            margin-bottom: 0;
+        }
 
-/* Animación del botón hamburguesa cuando está activo */
-.mobile-menu-btn.active .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
+        /* ==================== Responsive Design ==================== */
+        @media (max-width: 768px) {
+            .header__menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: stretch;
+                padding: 100px var(--space-6) var(--space-6);
+                border-left: 1px solid var(--color-gray-200);
+                box-shadow: var(--shadow-xl);
+                transition: right var(--transition-slow);
+                z-index: 999;
+            }
 
-.mobile-menu-btn.active .hamburger-line:nth-child(2) {
-    opacity: 0;
-}
+            .header__menu--active {
+                right: 0;
+            }
 
-.mobile-menu-btn.active .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-}
+            .header__menu-item {
+                margin-bottom: var(--space-2);
+            }
 
-/* Overlay para cerrar menú móvil */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
+            .header__menu-link {
+                padding: var(--space-4);
+                border-radius: var(--radius-xl);
+                justify-content: flex-start;
+            }
 
-/* Responsive breakpoints - ACTUALIZADO para OLIMPIADAS */
-@media (max-width: 768px) {
-    
-    /* Mostrar botón hamburguesa */
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    /* Ocultar menú por defecto en móvil */
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 280px;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        border-left: 2px solid rgba(102, 126, 234, 0.2);
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        padding: 80px 0 20px 0;
-        margin: 0;
-        list-style: none;
-        transition: right 0.3s ease;
-        z-index: 1000;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* Mostrar menú cuando está activo */
-    .nav-menu.active {
-        right: 0;
-    }
-    
-    /* Mostrar overlay cuando menú está activo */
-    .nav-menu.active ~ .mobile-menu-overlay {
-        display: block;
-    }
-    
-    /* Estilos de los enlaces en móvil */
-    .nav-menu li {
-        margin: 0;
-        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
-    }
-    
-    .nav-menu li:last-child {
-        border-bottom: none;
-    }
-    
-    .nav-link {
-        display: flex;
-        align-items: center;
-        padding: 1rem 2rem;
-        color: var(--text-primary);
-        text-decoration: none;
-        font-weight: 500;
-        border-radius: 0;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        font-size: 1.1rem;
-        gap: 0.75rem;
-    }
-    
-    .nav-link::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: var(--gradient-main);
-        transition: left 0.3s ease;
-        z-index: -1;
-    }
-    
-    .nav-link:hover::before,
-    .nav-link:focus::before {
-        left: 0;
-    }
-    
-    .nav-link:hover,
-    .nav-link:focus {
-        color: var(--white);
-        transform: translateX(5px);
-    }
-    
-    .nav-link.active {
-        background: var(--gradient-main);
-        color: var(--white);
-    }
-    
-    .nav-link.active::before {
-        display: none;
-    }
-    
-    .nav-link i {
-        margin-right: 0;
-        font-size: 1.2rem;
-    }
-    
-    /* Ajustar navbar en móvil */
-    .navbar {
-        padding: 1rem;
-    }
-    
-    /* Logo más pequeño en móvil */
-    .logo {
-        font-size: 1.2rem;
-    }
-    
-    /* Ajustar hero para móvil */
-    .hero {
-        min-height: 50vh;
-        margin-bottom: -30px;
-    }
-    
-    .hero-content {
-        padding: 1rem;
-    }
-}
+            .header__mobile-btn {
+                display: flex;
+            }
 
-/* Tablet */
-@media (max-width: 1024px) and (min-width: 769px) {
-    .navbar {
-        padding: 1rem 1.5rem;
-    }
-    
-    .nav-menu {
-        gap: 1rem;
-    }
-    
-    .nav-link {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.9rem;
-        gap: 0.4rem;
-    }
-    
-    .logo {
-        font-size: 1.3rem;
-    }
-}
+            .hero__trophies {
+                gap: var(--space-6);
+            }
 
-/* Móviles pequeños */
-@media (max-width: 480px) {
-    .navbar {
-        padding: 0.75rem;
-    }
-    
-    .logo {
-        font-size: 1rem;
-    }
-    
-    .nav-menu {
-        width: 100%;
-        right: -100%;
-    }
-    
-    .nav-menu.active {
-        right: 0;
-    }
-    
-    .mobile-menu-btn {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .hamburger-line {
-        width: 20px;
-        height: 2px;
-    }
-    
-    /* Ajustes específicos para pantallas muy pequeñas */
-    .hero-title {
-        font-size: clamp(2rem, 8vw, 3rem) !important;
-    }
-    
-    .hero-subtitle {
-        font-size: 1.2rem;
-    }
-    
-    .trophy {
-        font-size: 2rem !important;
-    }
-    
-    .trophy-container {
-        gap: 1rem !important;
-    }
-}
+            .hero__trophy {
+                font-size: var(--font-size-4xl);
+            }
 
-/* Animaciones suaves */
-@media (prefers-reduced-motion: no-preference) {
-    .nav-menu {
-        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-    
-    .nav-link {
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-}
+            .timeline::before {
+                left: var(--space-8);
+            }
 
-/* Para usuarios que prefieren menos animación */
-@media (prefers-reduced-motion: reduce) {
-    .nav-menu,
-    .nav-link,
-    .hamburger-line,
-    .mobile-menu-btn {
-        transition: none;
-    }
-}
+            .timeline__item {
+                width: calc(100% - var(--space-16));
+                margin-left: var(--space-16);
+                text-align: left;
+            }
 
-/* Focus visible para accesibilidad */
-.mobile-menu-btn:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
+            .timeline__item:nth-child(even) {
+                text-align: left;
+            }
 
-.nav-link:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
+            .timeline__dot {
+                left: -44px !important;
+                right: auto !important;
+            }
 
-/* Mejoras adicionales para la página de olimpiadas */
-@media (max-width: 768px) {
-    /* Ajustar sección de niveles */
-    .levels-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    /* Ajustar timeline */
-    .timeline::before {
-        left: 30px;
-    }
-    
-    .timeline-item {
-        width: calc(100% - 60px);
-        margin-left: 60px;
-        text-align: left;
-    }
-    
-    .timeline-item:nth-child(even) {
-        text-align: left;
-    }
-    
-    .timeline-dot {
-        left: -45px !important;
-        right: auto !important;
-    }
-    
-    /* Ajustar grids responsivos */
-    .resources-grid,
-    .testimonials-container,
-    .achievements-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Ajustar padding de secciones en móvil */
-    .section {
-        padding: 3rem 1rem;
-    }
-    
-    /* CTA responsive */
-    .cta-section {
-        margin: 2rem 1rem;
-        padding: 3rem 1.5rem;
-    }
-    
-    .cta-title {
-        font-size: 2rem;
-    }
-    
-    .cta-text {
-        font-size: 1.1rem;
-    }
-}
+            .card-grid,
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
 
-/* Pantallas extra pequeñas */
-@media (max-width: 360px) {
-    .level-card,
-    .problem-card,
-    .resource-card,
-    .testimonial-card,
-    .achievement-card {
-        padding: 1.5rem;
-    }
-    
-    .section-title {
-        font-size: 2rem;
-    }
-    
-    .navbar {
-        padding: 0.5rem;
-    }
-    
-    .logo {
-        font-size: 0.9rem;
-    }
-}
-</style>
+            .problem__header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section {
+                padding: var(--space-16) 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 var(--space-3);
+            }
+
+            .hero__content {
+                padding: var(--space-6);
+            }
+
+            .hero__title {
+                font-size: var(--font-size-4xl);
+            }
+
+            .hero__subtitle {
+                font-size: var(--font-size-lg);
+            }
+
+            .section__title {
+                font-size: var(--font-size-3xl);
+            }
+
+            .card,
+            .problem,
+            .timeline__content,
+            .achievement {
+                padding: var(--space-6);
+            }
+
+            .cta {
+                padding: var(--space-12) var(--space-6);
+            }
+
+            .cta__title {
+                font-size: var(--font-size-3xl);
+            }
+        }
+
+        /* ==================== Print Styles ==================== */
+        @media print {
+            .header,
+            .hero__particles,
+            .cta {
+                display: none;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: var(--space-8);
+            }
+
+            .section {
+                padding: var(--space-8) 0;
+            }
+        }
+
+        /* ==================== Reduced Motion ==================== */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg"></div>
-    <div class="math-patterns"></div>
-    
-    <!-- Olympic Particles -->
-    <div class="olympic-particles" id="olympicParticles"></div>
-
-   <header class="header">
-    <nav class="navbar">
-        <a href="../index.html" class="logo">
-            <i class="fas fa-calculator"></i>
-            Matemáticas Digitales
-        </a>
-        
-        <!-- Botón hamburguesa para móvil -->
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-        </button>
-        
-        <ul class="nav-menu" id="navMenu">
-            <li><a href="../index.html" class="nav-link">
-                <i class="fas fa-home"></i>
-                Inicio
-            </a></li>
-            <li><a href="#" class="nav-link active">
-                <i class="fas fa-trophy"></i>
-                Olimpiadas
-            </a></li>
-            <li><a href="../club/competencias.html" class="nav-link">
-                <i class="fas fa-medal"></i>
-                Competencias
-            </a></li>
-            <li><a href="../materiales/materiales.html" class="nav-link">
-                <i class="fas fa-book"></i>
-                Recursos
-            </a></li>
-        </ul>
-        
-        <!-- Overlay para cerrar menú móvil -->
-        <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
-    </nav>
-</header>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="container">
+            <div class="header__nav">
+                <a href="../index.html" class="header__logo">
+                    <i class="fas fa-calculator header__logo-icon"></i>
+                    <span>Matemáticas Digitales</span>
+                </a>
+                
+                <button class="header__mobile-btn" id="mobileMenuBtn" aria-label="Abrir menú de navegación">
+                    <span class="header__hamburger"></span>
+                    <span class="header__hamburger"></span>
+                    <span class="header__hamburger"></span>
+                </button>
+                
+                <ul class="header__menu" id="headerMenu">
+                    <li class="header__menu-item">
+                        <a href="../index.html" class="header__menu-link">
+                            <i class="fas fa-home"></i>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+                    <li class="header__menu-item">
+                        <a href="#" class="header__menu-link header__menu-link--active">
+                            <i class="fas fa-trophy"></i>
+                            <span>Olimpiadas</span>
+                        </a>
+                    </li>
+                    <li class="header__menu-item">
+                        <a href="../club/competencias.html" class="header__menu-link">
+                            <i class="fas fa-medal"></i>
+                            <span>Competencias</span>
+                        </a>
+                    </li>
+                    <li class="header__menu-item">
+                        <a href="../materiales/materiales.html" class="header__menu-link">
+                            <i class="fas fa-book"></i>
+                            <span>Recursos</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Olimpiadas Matemáticas</h1>
-            <p class="hero-subtitle">Escuela Superior María Teresa Piñeiro - Club de Matemáticas</p>
-            <div class="trophy-container">
-                <i class="fas fa-trophy trophy gold"></i>
-                <i class="fas fa-trophy trophy silver"></i>
-                <i class="fas fa-trophy trophy bronze"></i>
+        <div class="hero__background"></div>
+        <div class="hero__particles" id="heroParticles"></div>
+        
+        <div class="hero__content">
+            <h1 class="hero__title">Olimpiadas Matemáticas</h1>
+            <p class="hero__subtitle">Escuela Superior María Teresa Piñeiro - Club de Matemáticas</p>
+            
+            <div class="hero__trophies">
+                <i class="fas fa-trophy hero__trophy hero__trophy--gold"></i>
+                <i class="fas fa-trophy hero__trophy hero__trophy--silver"></i>
+                <i class="fas fa-trophy hero__trophy hero__trophy--bronze"></i>
             </div>
+            
+            <a href="../club/competencias.html" class="hero__cta">
+                <i class="fas fa-rocket"></i>
+                <span>Practica en Competencias Digitales</span>
+            </a>
         </div>
     </section>
 
     <!-- Main Content -->
-    <main class="main-content">
-        <!-- About Olympics Section -->
+    <main>
+        <!-- About Section -->
         <section class="section">
-            <h2 class="section-title fade-in">Nuestras Olimpiadas Locales</h2>
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-primary); margin-bottom: 2rem;">
-                    Nuestras Olimpiadas Matemáticas locales son competencias emocionantes donde los estudiantes 
-                    del Club de Matemáticas demuestran sus habilidades resolviendo problemas creativos. Es una 
-                    oportunidad perfecta para brillar, aprender de los compañeros y desarrollar el amor por las 
-                    matemáticas en un ambiente divertido y retador.
-                </p>
-                <div style="background: rgba(102, 126, 234, 0.1); border-radius: 20px; padding: 1.5rem; margin-top: 2rem;">
-                    <h3 style="color: var(--primary); margin-bottom: 1rem;">¿Quién puede participar?</h3>
-                    <p style="color: var(--text-secondary);">
-                        Todos los estudiantes de nuestra escuela están invitados a participar. 
-                        No necesitas experiencia previa, solo entusiasmo y ganas de aprender. 
-                        ¡Los miembros del club te ayudarán a prepararte!
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title fade-in">Nuestras Olimpiadas Presenciales</h2>
+                    <p class="section__subtitle fade-in">
+                        Las Olimpiadas Matemáticas son eventos presenciales especiales donde los estudiantes 
+                        demuestran sus habilidades en un ambiente competitivo y emocionante. Mientras las 
+                        competencias digitales son para práctica continua, las olimpiadas son los grandes eventos del año.
                     </p>
+                </div>
+
+                <div class="card-grid">
+                    <article class="card fade-in">
+                        <div class="card__icon">🌟</div>
+                        <h3 class="card__title">Categoría Novato</h3>
+                        <p class="card__description">
+                            Para estudiantes nuevos en el Club de Matemáticas que están descubriendo su pasión por los números.
+                        </p>
+                        <ul class="card__features">
+                            <li class="card__feature">Problemas de lógica divertidos</li>
+                            <li class="card__feature">Acertijos matemáticos básicos</li>
+                            <li class="card__feature">Geometría elemental</li>
+                            <li class="card__feature">Retos numéricos creativos</li>
+                        </ul>
+                    </article>
+
+                    <article class="card fade-in">
+                        <div class="card__icon">🚀</div>
+                        <h3 class="card__title">Categoría Intermedia</h3>
+                        <p class="card__description">
+                            Para miembros activos del club con experiencia en resolución de problemas matemáticos avanzados.
+                        </p>
+                        <ul class="card__features">
+                            <li class="card__feature">Álgebra y ecuaciones complejas</li>
+                            <li class="card__feature">Problemas de razonamiento lógico</li>
+                            <li class="card__feature">Geometría aplicada</li>
+                            <li class="card__feature">Desafíos de probabilidad</li>
+                        </ul>
+                    </article>
+
+                    <article class="card fade-in">
+                        <div class="card__icon">💎</div>
+                        <h3 class="card__title">Categoría Avanzada</h3>
+                        <p class="card__description">
+                            Para nuestros veteranos del club que buscan los retos matemáticos más desafiantes y complejos.
+                        </p>
+                        <ul class="card__features">
+                            <li class="card__feature">Problemas de olimpiadas internacionales</li>
+                            <li class="card__feature">Demostraciones matemáticas</li>
+                            <li class="card__feature">Trigonometría avanzada</li>
+                            <li class="card__feature">Pensamiento abstracto complejo</li>
+                        </ul>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- Competition Levels -->
-        <section class="section">
-            <h2 class="section-title fade-in">Niveles de Competencia</h2>
-            <div class="levels-grid">
-                <div class="level-card fade-in">
-                    <div class="level-icon">🌟</div>
-                    <h3 class="level-title">Categoría Novato</h3>
-                    <p class="level-description">
-                        Para estudiantes nuevos en el Club de Matemáticas que están descubriendo su pasión por los números.
+        <!-- Practice Problems Section -->
+        <section class="section section--gray">
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title fade-in">Problemas de Práctica</h2>
+                    <p class="section__subtitle fade-in">
+                        Resuelve estos problemas de ejemplo para prepararte para las olimpiadas. 
+                        Cada uno representa el tipo de desafío que encontrarás en las competencias.
                     </p>
-                    <ul class="level-features">
-                        <li>Problemas de lógica divertidos</li>
-                        <li>Acertijos matemáticos</li>
-                        <li>Geometría básica</li>
-                        <li>Retos numéricos creativos</li>
-                    </ul>
                 </div>
 
-                <div class="level-card fade-in">
-                    <div class="level-icon">🚀</div>
-                    <h3 class="level-title">Categoría Intermedia</h3>
-                    <p class="level-description">
-                        Para miembros activos del club con experiencia en resolución de problemas matemáticos.
-                    </p>
-                    <ul class="level-features">
-                        <li>Álgebra y ecuaciones</li>
-                        <li>Problemas de razonamiento</li>
-                        <li>Geometría aplicada</li>
-                        <li>Desafíos de probabilidad</li>
-                    </ul>
-                </div>
-
-                <div class="level-card fade-in">
-                    <div class="level-icon">💎</div>
-                    <h3 class="level-title">Categoría Avanzada</h3>
-                    <p class="level-description">
-                        Para nuestros veteranos del club que buscan los retos matemáticos más desafiantes.
-                    </p>
-                    <ul class="level-features">
-                        <li>Problemas de olimpiadas</li>
-                        <li>Demostraciones matemáticas</li>
-                        <li>Trigonometría avanzada</li>
-                        <li>Pensamiento abstracto</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Practice Problems -->
-        <section class="section">
-            <h2 class="section-title fade-in">¡Practica para la Olimpiada!</h2>
-            <div class="problems-section">
-                <div class="problem-categories">
-                    <button class="category-btn active">Todos</button>
-                    <button class="category-btn">Lógica</button>
-                    <button class="category-btn">Geometría</button>
-                    <button class="category-btn">Álgebra</button>
-                    <button class="category-btn">Números</button>
-                </div>
-
-                <p style="text-align: center; color: var(--text-secondary); margin: 1.5rem 0; font-style: italic;">
-                    💡 Estos son ejemplos del tipo de problemas que encontrarás en nuestras olimpiadas. 
-                    ¡Intenta resolverlos y trae tus respuestas al club!
-                </p>
-
-                <div class="problems-grid">
-                    <div class="problem-card fade-in">
-                        <div class="problem-header">
-                            <h4>Reto del Día</h4>
-                            <span class="problem-difficulty difficulty-medium">Intermedio</span>
+                <div class="problem-section fade-in">
+                    <div class="problem">
+                        <div class="problem__header">
+                            <h4 class="problem__title">Reto de Combinatoria</h4>
+                            <span class="problem__difficulty problem__difficulty--medium">Intermedio</span>
                         </div>
-                        <div class="problem-content">
+                        <div class="problem__content">
                             En una fiesta hay 10 personas. Si cada persona saluda a todas las demás 
                             exactamente una vez, ¿cuántos saludos hay en total?
                         </div>
-                        <div class="problem-actions">
-                            <button class="problem-btn solve-btn">
+                        <div class="problem__actions">
+                            <button class="problem__btn problem__btn--primary">
                                 <i class="fas fa-pencil-alt"></i>
                                 Resolver
                             </button>
-                            <button class="problem-btn hint-btn">
+                            <button class="problem__btn problem__btn--secondary">
                                 <i class="fas fa-lightbulb"></i>
-                                Pista
+                                Ver Pista
                             </button>
                         </div>
                     </div>
 
-                    <div class="problem-card fade-in">
-                        <div class="problem-header">
-                            <h4>Desafío Visual</h4>
-                            <span class="problem-difficulty difficulty-hard">Avanzado</span>
+                    <div class="problem">
+                        <div class="problem__header">
+                            <h4 class="problem__title">Desafío Geométrico</h4>
+                            <span class="problem__difficulty problem__difficulty--hard">Avanzado</span>
                         </div>
-                        <div class="problem-content">
+                        <div class="problem__content">
                             Un cuadrado tiene área 64 cm². Si aumentamos cada lado en 2 cm, 
                             ¿cuál será el área del nuevo cuadrado?
                         </div>
-                        <div class="problem-actions">
-                            <button class="problem-btn solve-btn">
+                        <div class="problem__actions">
+                            <button class="problem__btn problem__btn--primary">
                                 <i class="fas fa-pencil-alt"></i>
                                 Resolver
                             </button>
-                            <button class="problem-btn hint-btn">
+                            <button class="problem__btn problem__btn--secondary">
                                 <i class="fas fa-lightbulb"></i>
-                                Pista
+                                Ver Pista
                             </button>
                         </div>
                     </div>
 
-                    <div class="problem-card fade-in">
-                        <div class="problem-header">
-                            <h4>Acertijo Numérico</h4>
-                            <span class="problem-difficulty difficulty-easy">Básico</span>
+                    <div class="problem">
+                        <div class="problem__header">
+                            <h4 class="problem__title">Acertijo Numérico</h4>
+                            <span class="problem__difficulty problem__difficulty--easy">Básico</span>
                         </div>
-                        <div class="problem-content">
+                        <div class="problem__content">
                             La suma de tres números consecutivos es 72. ¿Cuáles son estos números?
                         </div>
-                        <div class="problem-actions">
-                            <button class="problem-btn solve-btn">
+                        <div class="problem__actions">
+                            <button class="problem__btn problem__btn--primary">
                                 <i class="fas fa-pencil-alt"></i>
                                 Resolver
                             </button>
-                            <button class="problem-btn hint-btn">
+                            <button class="problem__btn problem__btn--secondary">
                                 <i class="fas fa-lightbulb"></i>
-                                Pista
+                                Ver Pista
                             </button>
                         </div>
                     </div>
@@ -1466,250 +1446,174 @@
             </div>
         </section>
 
-        <!-- Timeline -->
+        <!-- Timeline Section -->
         <section class="section">
-            <h2 class="section-title fade-in">Calendario Escolar 2025</h2>
-            <div class="timeline">
-                <div class="timeline-item fade-in">
-                    <div class="timeline-content">
-                        <span class="timeline-date">Agosto</span>
-                        <h4>Inicio del Club</h4>
-                        <p>Bienvenida a nuevos miembros y primeras sesiones de práctica</p>
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title fade-in">Calendario Escolar 2025</h2>
+                    <p class="section__subtitle fade-in">
+                        Conoce las fechas importantes de nuestras olimpiadas y eventos especiales a lo largo del año escolar.
+                    </p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline__item fade-in">
+                        <div class="timeline__content">
+                            <span class="timeline__date">Agosto</span>
+                            <h4 class="timeline__title">Inicio del Club</h4>
+                            <p class="timeline__description">
+                                Bienvenida a nuevos miembros y primeras sesiones de práctica para preparar las competencias.
+                            </p>
+                        </div>
+                        <div class="timeline__dot"></div>
                     </div>
-                    <div class="timeline-dot"></div>
-                </div>
 
-                <div class="timeline-item fade-in">
-                    <div class="timeline-content">
-                        <span class="timeline-date">Octubre</span>
-                        <h4>Mini-Olimpiada de Otoño</h4>
-                        <p>Primera competencia amistosa del año escolar</p>
+                    <div class="timeline__item fade-in">
+                        <div class="timeline__content">
+                            <span class="timeline__date">Octubre</span>
+                            <h4 class="timeline__title">Mini-Olimpiada de Otoño</h4>
+                            <p class="timeline__description">
+                                Primera competencia amistosa del año escolar para evaluar el progreso de los estudiantes.
+                            </p>
+                        </div>
+                        <div class="timeline__dot"></div>
                     </div>
-                    <div class="timeline-dot"></div>
-                </div>
 
-                <div class="timeline-item fade-in">
-                    <div class="timeline-content">
-                        <span class="timeline-date">Febrero</span>
-                        <h4>Semana de las Matemáticas</h4>
-                        <p>Competencias diarias y actividades especiales</p>
+                    <div class="timeline__item fade-in">
+                        <div class="timeline__content">
+                            <span class="timeline__date">Marzo</span>
+                            <h4 class="timeline__title">Semana de las Matemáticas</h4>
+                            <p class="timeline__description">
+                                Competencias diarias, talleres especiales y actividades matemáticas para toda la escuela.
+                            </p>
+                        </div>
+                        <div class="timeline__dot"></div>
                     </div>
-                    <div class="timeline-dot"></div>
-                </div>
 
-                <div class="timeline-item fade-in">
-                    <div class="timeline-content">
-                        <span class="timeline-date">Mayo</span>
-                        <h4>Gran Olimpiada Anual</h4>
-                        <p>¡El evento más esperado del año con premios especiales!</p>
+                    <div class="timeline__item fade-in">
+                        <div class="timeline__content">
+                            <span class="timeline__date">Mayo</span>
+                            <h4 class="timeline__title">Gran Olimpiada Anual</h4>
+                            <p class="timeline__description">
+                                ¡El evento más esperado del año con premios especiales, reconocimientos y celebración!
+                            </p>
+                        </div>
+                        <div class="timeline__dot"></div>
                     </div>
-                    <div class="timeline-dot"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Achievements -->
-         <section class="section">
-            <h2 class="section-title fade-in">Logros del Club</h2>
-            <div class="achievements-grid">
-                <div class="achievement-card fade-in">
-                    <div class="medal-icon">🏆</div>
-                    <h4 class="achievement-title">45 Estudiantes</h4>
-                    <p class="achievement-desc">Participantes este año</p>
-                </div>
-
-                <div class="achievement-card fade-in">
-                    <div class="medal-icon">⭐</div>
-                    <h4 class="achievement-title">12 Ganadores</h4>
-                    <p class="achievement-desc">En diferentes categorías</p>
-                </div>
-
-                <div class="achievement-card fade-in">
-                    <div class="medal-icon">📚</div>
-                    <h4 class="achievement-title">200+ Problemas</h4>
-                    <p class="achievement-desc">Resueltos en grupo</p>
-                </div>
-
-                <div class="achievement-card fade-in">
-                    <div class="medal-icon">🎯</div>
-                    <h4 class="achievement-title">4 Eventos</h4>
-                    <p class="achievement-desc">Olimpiadas al año</p>
                 </div>
             </div>
         </section>
 
         <!-- Prizes Section -->
-        <section class="section">
-            <h2 class="section-title fade-in">Premios y Reconocimientos</h2>
-            <div style="max-width: 800px; margin: 0 auto; text-align: center; margin-bottom: 3rem;">
-                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-primary);">
-                    Todos los participantes reciben certificados y los ganadores obtienen premios especiales 
-                    donados por el departamento de matemáticas y patrocinadores locales.
-                </p>
-            </div>
-            <div class="resources-grid">
-                <div class="resource-card fade-in">
-                    <div class="resource-header" style="background: var(--gradient-olympic);">
-                        <div class="resource-icon">🥇</div>
-                        <h3 class="resource-title">Primer Lugar</h3>
-                    </div>
-                    <div class="resource-body">
-                        <ul class="resource-links" style="list-style: none;">
-                            <li style="padding: 0.5rem 0;">• Trofeo personalizado</li>
-                            <li style="padding: 0.5rem 0;">• Calculadora científica</li>
-                            <li style="padding: 0.5rem 0;">• Kit de geometría profesional</li>
-                            <li style="padding: 0.5rem 0;">• Certificado de honor</li>
-                        </ul>
-                    </div>
+        <section class="section section--gray">
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title fade-in">Premios y Reconocimientos</h2>
+                    <p class="section__subtitle fade-in">
+                        Todos los participantes reciben certificados de participación y los ganadores obtienen premios especiales 
+                        donados por el departamento de matemáticas y patrocinadores locales.
+                    </p>
                 </div>
 
-                <div class="resource-card fade-in">
-                    <div class="resource-header" style="background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);">
-                        <div class="resource-icon">🥈</div>
-                        <h3 class="resource-title">Segundo Lugar</h3>
-                    </div>
-                    <div class="resource-body">
-                        <ul class="resource-links" style="list-style: none;">
-                            <li style="padding: 0.5rem 0;">• Medalla de plata</li>
-                            <li style="padding: 0.5rem 0;">• Libros de matemáticas</li>
-                            <li style="padding: 0.5rem 0;">• Material escolar</li>
-                            <li style="padding: 0.5rem 0;">• Certificado especial</li>
+                <div class="card-grid">
+                    <article class="card card--gold fade-in">
+                        <div class="card__icon">🥇</div>
+                        <h3 class="card__title">Primer Lugar</h3>
+                        <p class="card__description">
+                            El máximo reconocimiento para el campeón de cada categoría.
+                        </p>
+                        <ul class="card__features">
+                            <li class="card__feature">Trofeo personalizado grabado</li>
+                            <li class="card__feature">Calculadora científica avanzada</li>
+                            <li class="card__feature">Kit de geometría profesional</li>
+                            <li class="card__feature">Certificado de honor enmarcado</li>
                         </ul>
-                    </div>
-                </div>
+                    </article>
 
-                <div class="resource-card fade-in">
-                    <div class="resource-header" style="background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);">
-                        <div class="resource-icon">🥉</div>
-                        <h3 class="resource-title">Tercer Lugar</h3>
-                    </div>
-                    <div class="resource-body">
-                        <ul class="resource-links" style="list-style: none;">
-                            <li style="padding: 0.5rem 0;">• Medalla de bronce</li>
-                            <li style="padding: 0.5rem 0;">• Juegos matemáticos</li>
-                            <li style="padding: 0.5rem 0;">• Cupones de cafetería</li>
-                            <li style="padding: 0.5rem 0;">• Certificado de logro</li>
+                    <article class="card card--silver fade-in">
+                        <div class="card__icon">🥈</div>
+                        <h3 class="card__title">Segundo Lugar</h3>
+                        <p class="card__description">
+                            Reconocimiento especial para el subcampeón de la competencia.
+                        </p>
+                        <ul class="card__features">
+                            <li class="card__feature">Medalla de plata oficial</li>
+                            <li class="card__feature">Colección de libros matemáticos</li>
+                            <li class="card__feature">Material escolar especializado</li>
+                            <li class="card__feature">Certificado especial de logro</li>
                         </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+                    </article>
 
-        <!-- Resources -->
-        <section class="section">
-            <h2 class="section-title fade-in">Recursos de Preparación</h2>
-            <div class="resources-grid">
-                <div class="resource-card fade-in">
-                    <div class="resource-header">
-                        <div class="resource-icon">📚</div>
-                        <h3 class="resource-title">Material del Club</h3>
-                    </div>
-                    <div class="resource-body">
-                        <ul class="resource-links">
-                            <li><a href="#"><i class="fas fa-file-pdf"></i> Problemas de Práctica</a></li>
-                            <li><a href="#"><i class="fas fa-file-pdf"></i> Guía para Principiantes</a></li>
-                            <li><a href="#"><i class="fas fa-file-pdf"></i> Trucos Matemáticos</a></li>
-                            <li><a href="#"><i class="fas fa-file-pdf"></i> Olimpiadas Pasadas</a></li>
+                    <article class="card card--bronze fade-in">
+                        <div class="card__icon">🥉</div>
+                        <h3 class="card__title">Tercer Lugar</h3>
+                        <p class="card__description">
+                            Premio de reconocimiento para el tercer lugar de cada categoría.
+                        </p>
+                        <ul class="card__features">
+                            <li class="card__feature">Medalla de bronce conmemorativa</li>
+                            <li class="card__feature">Juegos matemáticos educativos</li>
+                            <li class="card__feature">Cupones de cafetería escolar</li>
+                            <li class="card__feature">Certificado de participación destacada</li>
                         </ul>
-                    </div>
-                </div>
-
-                <div class="resource-card fade-in">
-                    <div class="resource-header">
-                        <div class="resource-icon">🎥</div>
-                        <h3 class="resource-title">Recursos Digitales</h3>
-                    </div>
-                    <div class="resource-body">
-                        <ul class="resource-links">
-                            <li><a href="#"><i class="fas fa-play-circle"></i> Videos del Prof. Guerrero</a></li>
-                            <li><a href="#"><i class="fas fa-play-circle"></i> Soluciones Explicadas</a></li>
-                            <li><a href="#"><i class="fas fa-play-circle"></i> Tips de Campeones</a></li>
-                            <li><a href="#"><i class="fas fa-play-circle"></i> Sesiones Grabadas</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="resource-card fade-in">
-                    <div class="resource-header">
-                        <div class="resource-icon">🏋️</div>
-                        <h3 class="resource-title">Horario del Club</h3>
-                    </div>
-                    <div class="resource-body">
-                        <ul class="resource-links">
-                            <li><a href="#"><i class="fas fa-calendar"></i> Lunes: Práctica General</a></li>
-                            <li><a href="#"><i class="fas fa-calendar"></i> Miércoles: Resolución de Problemas</a></li>
-                            <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Viernes: Preparación Olimpiadas</a></li>
-                            <li><a href="#"><i class="fas fa-users"></i> Sábados: Sesiones Especiales en Ocasiones</a></li>
-                        </ul>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- Testimonials -->
+        <!-- Achievements Section -->
         <section class="section">
-            <h2 class="section-title fade-in">Lo que dicen nuestros estudiantes</h2>
-            <div class="testimonials-container">
-                <div class="testimonial-card fade-in">
-                    <i class="fas fa-quote-right quote-icon"></i>
-                    <p class="testimonial-text">
-                        "Participar en las olimpiadas del club me ayudó a perder el miedo a los problemas difíciles. 
-                        Ahora disfruto cada reto matemático y he mejorado mucho mis calificaciones."
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title fade-in">Enfoque del Club</h2>
+                    <p class="section__subtitle fade-in">
+                        Queremos el impacto positivo en los estudiantes, con el fin de que puedan desarrollar sus capacidades de análisis, resolución de problemas y aplicación a la vida diaria
                     </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">JM</div>
-                        <div class="author-info">
-                            <div class="author-name">José Martínez</div>
-                            <div class="author-achievement">Ganador Categoría Intermedia</div>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="testimonial-card fade-in">
-                    <i class="fas fa-quote-right quote-icon"></i>
-                    <p class="testimonial-text">
-                        "El profesor Guerrero hace que las matemáticas sean divertidas. Las olimpiadas escolares 
-                        son mi evento favorito del año. ¡Me encanta competir con mis amigos!"
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">VR</div>
-                        <div class="author-info">
-                            <div class="author-name">Valeria Rivera</div>
-                            <div class="author-achievement">Miembro destacado del Club</div>
-                        </div>
-                    </div>
-                </div>
+                <div class="achievement-grid">
+                    <article class="achievement fade-in">
+                        <div class="achievement__icon">🏆</div>
+                        <h4 class="achievement__title">Motivar Estudiantes</h4>
+                        <p class="achievement__description">Participantes activos este año</p>
+                    </article>
 
-                <div class="testimonial-card fade-in">
-                    <i class="fas fa-quote-right quote-icon"></i>
-                    <p class="testimonial-text">
-                        "Nunca pensé que sería bueno en matemáticas hasta que entré al club. Las olimpiadas 
-                        me demostraron que puedo resolver problemas que antes creía imposibles."
-                    </p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">LS</div>
-                        <div class="author-info">
-                            <div class="author-name">Luis Soto</div>
-                            <div class="author-achievement">Premio al Progreso 2024</div>
-                        </div>
-                    </div>
+                    <article class="achievement fade-in">
+                        <div class="achievement__icon">⭐</div>
+                        <h4 class="achievement__title">Desarrolar competidores</h4>
+                        <p class="achievement__description">En diferentes categorías</p>
+                    </article>
+
+                    <article class="achievement fade-in">
+                        <div class="achievement__icon">📚</div>
+                        <h4 class="achievement__title">Resolución Problemas</h4>
+                        <p class="achievement__description">En cualquier ámbito científico</p>
+                    </article>
+
+                    <article class="achievement fade-in">
+                        <div class="achievement__icon">🎯</div>
+                        <h4 class="achievement__title">Participar en Eventos</h4>
+                        <p class="achievement__description">Olimpiadas programadas durante el año</p>
+                    </article>
                 </div>
             </div>
         </section>
 
         <!-- CTA Section -->
-        <section class="section">
-            <div class="cta-section">
-                <div class="cta-content">
-                    <h2 class="cta-title">¿Quieres ser parte del Club?</h2>
-                    <p class="cta-text">
-                        Únete a nuestro Club de Matemáticas y participa en las próximas olimpiadas escolares. 
-                        No necesitas ser un genio, ¡solo tener ganas de aprender y divertirte con las matemáticas!
-                    </p>
-                    <a href="#" class="cta-button">
-                        <i class="fas fa-plus-circle"></i>
-                        Únete al Club
-                    </a>
+        <section class="section section--gray">
+            <div class="container">
+                <div class="cta fade-in">
+                    <div class="cta__content">
+                        <h2 class="cta__title">¿Listo para el Desafío?</h2>
+                        <p class="cta__description">
+                            Únete a nuestro Club de Matemáticas y participa en las próximas olimpiadas. 
+                            Practica en nuestras competencias digitales para estar completamente preparado.
+                        </p>
+                        <a href="../club/competencias.html" class="cta__button">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Comenzar a Practicar</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1717,208 +1621,280 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 Prof. Yonatan Guerrero - Club de Matemáticas</p>
-        <p>Inspirando el amor por las matemáticas en nuestra escuela</p>
+        <div class="container">
+            <p class="footer__text">&copy; 2025 Prof. Yonatan Guerrero - Club de Matemáticas</p>
+            <p class="footer__text mb-0">Inspirando el amor por las matemáticas en nuestra escuela</p>
+        </div>
     </footer>
 
     <script>
-        // Create Olympic Particles
-        function createOlympicParticles() {
-            const container = document.getElementById('olympicParticles');
-            const symbols = ['∑', 'π', '∞', '√', 'θ', 'Δ', 'α', 'β', 'γ', '∫'];
-            
-            setInterval(() => {
-                const particle = document.createElement('div');
-                particle.className = 'olympic-symbol';
-                particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                particle.style.fontSize = (15 + Math.random() * 15) + 'px';
-                particle.style.color = `hsl(${Math.random() * 60 + 200}, 70%, 60%)`;
-                
-                container.appendChild(particle);
-                
-                setTimeout(() => {
-                    particle.remove();
-                }, 25000);
-            }, 1000);
-        }
+        class OlimpiadasApp {
+            constructor() {
+                this.mobileMenuOpen = false;
+                this.init();
+            }
 
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+            init() {
+                this.setupEventListeners();
+                this.setupIntersectionObserver();
+                this.createParticles();
+                this.setupHeaderScroll();
+                this.setupProblemInteractions();
+            }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+            setupEventListeners() {
+                // Mobile menu
+                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                mobileMenuBtn?.addEventListener('click', () => this.toggleMobileMenu());
+
+                // Close menu on link click
+                document.querySelectorAll('.header__menu-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (this.mobileMenuOpen) {
+                            this.closeMobileMenu();
+                        }
+                    });
+                });
+
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 768 && this.mobileMenuOpen) {
+                        this.closeMobileMenu();
+                    }
+                });
+
+                // Handle ESC key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.mobileMenuOpen) {
+                        this.closeMobileMenu();
+                    }
+                });
+            }
+
+            toggleMobileMenu() {
+                if (this.mobileMenuOpen) {
+                    this.closeMobileMenu();
+                } else {
+                    this.openMobileMenu();
                 }
-            });
-        }, observerOptions);
+            }
 
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
+            openMobileMenu() {
+                const menu = document.getElementById('headerMenu');
+                const btn = document.getElementById('mobileMenuBtn');
+                
+                menu?.classList.add('header__menu--active');
+                btn?.classList.add('header__mobile-btn--active');
+                document.body.style.overflow = 'hidden';
+                this.mobileMenuOpen = true;
+                
+                btn?.setAttribute('aria-expanded', 'true');
+            }
 
-        // Category filter functionality
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                categoryBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                // Here you would filter problems based on category
-            });
-        });
+            closeMobileMenu() {
+                const menu = document.getElementById('headerMenu');
+                const btn = document.getElementById('mobileMenuBtn');
+                
+                menu?.classList.remove('header__menu--active');
+                btn?.classList.remove('header__mobile-btn--active');
+                document.body.style.overflow = '';
+                this.mobileMenuOpen = false;
+                
+                btn?.setAttribute('aria-expanded', 'false');
+            }
 
-        // Problem interaction
-        document.querySelectorAll('.solve-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                alert('¡Resuelve este problema en tu cuaderno y tráelo a la próxima reunión del club!');
-            });
-        });
+            setupIntersectionObserver() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
 
-        document.querySelectorAll('.hint-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                alert('Pista: Recuerda las técnicas que practicamos en el club. ¡Tú puedes!');
-            });
-        });
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, observerOptions);
 
-        // Initialize
-        window.addEventListener('load', () => {
-            createOlympicParticles();
-        });
+                document.querySelectorAll('.fade-in').forEach(element => {
+                    observer.observe(element);
+                });
+            }
 
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+            createParticles() {
+                const container = document.getElementById('heroParticles');
+                if (!container) return;
+
+                const symbols = ['∑', 'π', '∞', '√', 'θ', 'Δ', 'α', 'β', 'γ', '∫', 'λ', 'μ', 'σ', 'Ω'];
+                
+                const createParticle = () => {
+                    const particle = document.createElement('div');
+                    particle.className = 'hero__particle';
+                    particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDuration = (12 + Math.random() * 8) + 's';
+                    particle.style.fontSize = (16 + Math.random() * 12) + 'px';
+                    
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 20000);
+                };
+
+                // Create initial particles
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(createParticle, i * 1000);
+                }
+
+                // Continue creating particles
+                setInterval(createParticle, 2000);
+            }
+
+            setupHeaderScroll() {
+                const header = document.getElementById('header');
+                let lastScrollY = window.scrollY;
+
+                const handleScroll = () => {
+                    const currentScrollY = window.scrollY;
+                    
+                    if (currentScrollY > 100) {
+                        header?.classList.add('header--scrolled');
+                    } else {
+                        header?.classList.remove('header--scrolled');
+                    }
+                    
+                    lastScrollY = currentScrollY;
+                };
+
+                // Throttled scroll handler
+                let ticking = false;
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        requestAnimationFrame(() => {
+                            handleScroll();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+            }
+
+            setupProblemInteractions() {
+                const problems = [
+                    {
+                        solution: "Son 45 saludos. Usa la fórmula de combinaciones: C(10,2) = 10×9/2 = 45",
+                        hint: "Piensa en cuántas parejas diferentes puedes formar con 10 personas. Cada pareja se saluda una vez."
+                    },
+                    {
+                        solution: "El área nueva es 100 cm². Si el lado original es 8 cm (√64), el nuevo lado es 10 cm, entonces área = 10² = 100 cm²",
+                        hint: "Primero encuentra el lado del cuadrado original usando la raíz cuadrada del área."
+                    },
+                    {
+                        solution: "Los números son 23, 24 y 25. Si llamamos x al primer número: x + (x+1) + (x+2) = 72, entonces 3x + 3 = 72, x = 23",
+                        hint: "Llama x al primer número. Los otros dos serán x+1 y x+2. Su suma debe ser 72."
+                    }
+                ];
+
+                document.querySelectorAll('.problem').forEach((problem, index) => {
+                    const solveBtn = problem.querySelector('.problem__btn--primary');
+                    const hintBtn = problem.querySelector('.problem__btn--secondary');
+                    
+                    solveBtn?.addEventListener('click', () => {
+                        this.showAlert('Solución', problems[index]?.solution || 'Intenta resolverlo paso a paso en tu cuaderno.');
+                        this.trackEvent('Problem', 'solve', `Problem ${index + 1}`);
+                    });
+                    
+                    hintBtn?.addEventListener('click', () => {
+                        this.showAlert('Pista', problems[index]?.hint || 'Recuerda las técnicas que practicamos en el club.');
+                        this.trackEvent('Problem', 'hint', `Problem ${index + 1}`);
+                    });
+                });
+
+                // Track prize card interactions
+                document.querySelectorAll('.card--gold, .card--silver, .card--bronze').forEach((card, index) => {
+                    card.addEventListener('click', () => {
+                        const prizeType = card.classList.contains('card--gold') ? 'Gold' : 
+                                         card.classList.contains('card--silver') ? 'Silver' : 'Bronze';
+                        this.trackEvent('Prize', 'view', prizeType);
+                    });
+                });
+            }
+
+            showAlert(title, message) {
+                // Create custom modal instead of alert for better UX
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    padding: 1rem;
+                `;
+                
+                const content = document.createElement('div');
+                content.style.cssText = `
+                    background: white;
+                    border-radius: 1rem;
+                    padding: 2rem;
+                    max-width: 500px;
+                    width: 100%;
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                `;
+                
+                content.innerHTML = `
+                    <h3 style="margin: 0 0 1rem 0; color: var(--color-primary); font-size: 1.5rem;">${title}</h3>
+                    <p style="margin: 0 0 1.5rem 0; line-height: 1.6; color: var(--color-gray-700);">${message}</p>
+                    <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" 
+                            style="background: var(--color-primary); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600;">
+                        Entendido
+                    </button>
+                `;
+                
+                modal.appendChild(content);
+                document.body.appendChild(modal);
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                });
+            }
+
+            // Analytics tracking (placeholder)
+            trackEvent(category, action, label) {
+                console.log(`Event: ${category} - ${action} - ${label}`);
+                // Implement actual analytics here
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', action, {
+                        event_category: category,
+                        event_label: label
                     });
                 }
-            });
+            }
+        }
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new OlimpiadasApp();
         });
-        // Variables globales para el menú móvil
-let mobileMenuOpen = false;
 
-function toggleMobileMenu() {
-    const navMenu = document.getElementById('navMenu');
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    
-    if (!mobileMenuOpen) {
-        openMobileMenu();
-    } else {
-        closeMobileMenu();
-    }
-}
-
-function openMobileMenu() {
-    const navMenu = document.getElementById('navMenu');
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const overlay = document.querySelector('.mobile-menu-overlay');
-    
-    navMenu.classList.add('active');
-    menuBtn.classList.add('active');
-    overlay.style.display = 'block';
-    
-    // Prevenir scroll del body
-    document.body.style.overflow = 'hidden';
-    
-    mobileMenuOpen = true;
-    
-    // Añadir evento para cerrar con Escape
-    document.addEventListener('keydown', handleEscapeKey);
-}
-
-function closeMobileMenu() {
-    const navMenu = document.getElementById('navMenu');
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const overlay = document.querySelector('.mobile-menu-overlay');
-    
-    navMenu.classList.remove('active');
-    menuBtn.classList.remove('active');
-    overlay.style.display = 'none';
-    
-    // Restaurar scroll del body
-    document.body.style.overflow = 'auto';
-    
-    mobileMenuOpen = false;
-    
-    // Remover evento de Escape
-    document.removeEventListener('keydown', handleEscapeKey);
-}
-
-// Cerrar menú con tecla Escape
-function handleEscapeKey(event) {
-    if (event.key === 'Escape' && mobileMenuOpen) {
-        closeMobileMenu();
-    }
-}
-
-// Inicializar eventos del menú responsivo
-function initMobileMenu() {
-    // Cerrar menú al hacer click en un enlace
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            // Cerrar menú móvil si está abierto
-            if (mobileMenuOpen) {
-                closeMobileMenu();
+        // Handle page visibility for performance
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pause expensive animations when page is hidden
+                document.documentElement.style.setProperty('--animation-play-state', 'paused');
+            } else {
+                document.documentElement.style.setProperty('--animation-play-state', 'running');
             }
         });
-    });
-    
-    // Cerrar menú al cambiar tamaño de ventana
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && mobileMenuOpen) {
-            closeMobileMenu();
-        }
-    });
-    
-    // Mejorar accesibilidad del menú
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.getElementById('navMenu');
-    
-    if (menuBtn && navMenu) {
-        menuBtn.setAttribute('aria-expanded', 'false');
-        menuBtn.setAttribute('aria-controls', 'navMenu');
-        
-        // Actualizar aria-expanded cuando cambie el estado
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    const isActive = navMenu.classList.contains('active');
-                    menuBtn.setAttribute('aria-expanded', isActive.toString());
-                }
-            });
-        });
-        
-        observer.observe(navMenu, {
-            attributes: true,
-            attributeFilter: ['class']
-        });
-    }
-}
-
-// Añadir al event listener de load existente
-window.addEventListener('load', () => {
-    // Tu código existente...
-    createOlympicParticles();
-    
-    // Inicializar menú móvil
-    initMobileMenu();
-});
-
-// Si ya tienes un DOMContentLoaded, añade esto, si no, crea uno nuevo:
-document.addEventListener('DOMContentLoaded', function() {
-    initMobileMenu();
-});
-</script>
+    </script>
 </body>
 </html>
