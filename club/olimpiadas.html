@@ -1304,7 +1304,7 @@
             
             <a href="../club/practica.html" class="hero__cta">
                 <i class="fas fa-rocket"></i>
-                <span>Practica en Competencias Digitales</span>
+                <span>Practica y Prepárate para las olimpiadas</span>
             </a>
         </div>
     </section>
@@ -1481,7 +1481,7 @@
 
                     <div class="timeline__item fade-in">
                         <div class="timeline__content">
-                            <span class="timeline__date">Febrero</span>
+                            <span class="timeline__date">Marzo</span>
                             <h4 class="timeline__title">Semana de las Matemáticas</h4>
                             <p class="timeline__description">
                                 Competencias diarias, talleres especiales y actividades matemáticas para toda la escuela.
@@ -1565,34 +1565,34 @@
         <section class="section">
             <div class="container">
                 <div class="section__header">
-                    <h2 class="section__title fade-in">Logros del Club</h2>
+                    <h2 class="section__title fade-in">Enfoque General del Club de Matemáticas</h2>
                     <p class="section__subtitle fade-in">
-                        Nuestros números hablan por sí solos. Mira el impacto positivo que hemos tenido en la comunidad estudiantil.
+                        Impactar de manera significativa nuestra comunidad de estudiantes. Con un enfoque en la colaboración y el aprendizaje activo, buscamos fomentar un ambiente donde todos puedan desarrollarse en análisis y cultura de resolución de problemas.
                     </p>
                 </div>
 
                 <div class="achievement-grid">
                     <article class="achievement fade-in">
                         <div class="achievement__icon">🏆</div>
-                        <h4 class="achievement__title">45 Estudiantes</h4>
-                        <p class="achievement__description">Participantes activos este año</p>
+                        <h4 class="achievement__title">Estudiantes preparados para Competir</h4>
+                        <p class="achievement__description"> Cultura de Participantes activos</p>
                     </article>
 
                     <article class="achievement fade-in">
                         <div class="achievement__icon">⭐</div>
-                        <h4 class="achievement__title">12 Ganadores</h4>
+                        <h4 class="achievement__title">Listos para Destacarse y Solucionar problemas</h4>
                         <p class="achievement__description">En diferentes categorías</p>
                     </article>
 
                     <article class="achievement fade-in">
                         <div class="achievement__icon">📚</div>
-                        <h4 class="achievement__title">200+ Problemas</h4>
+                        <h4 class="achievement__title">Desarrollar Capacidades Analíticas</h4>
                         <p class="achievement__description">Resueltos en grupo este año</p>
                     </article>
 
                     <article class="achievement fade-in">
                         <div class="achievement__icon">🎯</div>
-                        <h4 class="achievement__title">4 Eventos</h4>
+                        <h4 class="achievement__title">Participar en Eventos</h4>
                         <p class="achievement__description">Olimpiadas programadas al año</p>
                     </article>
                 </div>
@@ -1625,6 +1625,13 @@
             <p class="footer__text">&copy; 2025 Prof. Yonatan Guerrero - Club de Matemáticas</p>
             <p class="footer__text mb-0">Inspirando el amor por las matemáticas en nuestra escuela</p>
         </div>
+        <!-- NUEVO: Enlace discreto para admin -->
+        <div style="margin-top: 1rem;">
+            <button id="adminAccessBtn" style="background: none; border: none; color: rgba(255,255,255,0.5); font-size: 0.8rem; cursor: pointer; padding: 0.5rem;">
+                ⚙️
+            </button>
+        </div>
+    </div>
     </footer>
 
     <script>
@@ -1640,6 +1647,7 @@
                 this.createParticles();
                 this.setupHeaderScroll();
                 this.setupProblemInteractions();
+                this.setupAdminAccess(); // NUEVO
             }
 
             setupEventListeners() {
@@ -1895,6 +1903,22 @@
                 document.documentElement.style.setProperty('--animation-play-state', 'running');
             }
         });
+        setupAdminAccess() {
+    const adminBtn = document.getElementById('adminAccessBtn');
+    adminBtn?.addEventListener('click', () => {
+        this.requestAdminAccess();
+    });
+}
+
+requestAdminAccess() {
+    const adminKey = prompt('🔒 Acceso Administrativo\n\nIngrese la clave de acceso:');
+    
+    if (adminKey === 'MathClub2025') { // Cambia esta clave
+        window.open('admin.html', '_blank');
+    } else if (adminKey !== null) {
+        alert('❌ Clave incorrecta. Acceso denegado.');
+    }
+}
     </script>
 </body>
 </html>
