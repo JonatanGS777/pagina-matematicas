@@ -1,5 +1,10 @@
 // api/role.js (CommonJS)
+// api/role.js
 const { kv } = require('@vercel/kv');
+
+// ejemplo de uso:
+const valor = await kv.incr('role:estudiantes');
+
 
 // Extrae UID desde cookie "site_uid" (opcional para evitar votos dobles)
 function getUIDFromCookie(req) {
