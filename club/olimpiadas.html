@@ -1625,13 +1625,12 @@
             <p class="footer__text">&copy; 2025 Prof. Yonatan Guerrero - Club de Matemáticas</p>
             <p class="footer__text mb-0">Inspirando el amor por las matemáticas en nuestra escuela</p>
         </div>
-        <!-- NUEVO: Enlace discreto para admin -->
+        <!-- Enlace discreto para admin -->
         <div style="margin-top: 1rem;">
             <button id="adminAccessBtn" style="background: none; border: none; color: rgba(255,255,255,0.5); font-size: 0.8rem; cursor: pointer; padding: 0.5rem;">
                 ⚙️
             </button>
         </div>
-    </div>
     </footer>
 
     <script>
@@ -1647,7 +1646,7 @@
                 this.createParticles();
                 this.setupHeaderScroll();
                 this.setupProblemInteractions();
-                this.setupAdminAccess(); // NUEVO
+                this.setupAdminAccess();
             }
 
             setupEventListeners() {
@@ -1830,6 +1829,23 @@
                 });
             }
 
+            setupAdminAccess() {
+                const adminBtn = document.getElementById('adminAccessBtn');
+                if (!adminBtn) return;
+                
+                adminBtn.addEventListener('click', () => this.requestAdminAccess());
+            }
+
+            requestAdminAccess() {
+                const adminKey = prompt('🔒 Acceso Administrativo\n\nIngrese la clave de acceso:');
+                
+                if (adminKey === 'MathClub2025') {
+                    window.open('admin.html', '_blank');
+                } else if (adminKey !== null) {
+                    alert('❌ Clave incorrecta. Acceso denegado.');
+                }
+            }
+
             showAlert(title, message) {
                 // Create custom modal instead of alert for better UX
                 const modal = document.createElement('div');
@@ -1903,22 +1919,6 @@
                 document.documentElement.style.setProperty('--animation-play-state', 'running');
             }
         });
-        setupAdminAccess() {
-    const adminBtn = document.getElementById('adminAccessBtn');
-    adminBtn?.addEventListener('click', () => {
-        this.requestAdminAccess();
-    });
-}
-
-requestAdminAccess() {
-    const adminKey = prompt('🔒 Acceso Administrativo\n\nIngrese la clave de acceso:');
-    
-    if (adminKey === 'MathClub2025') { // Cambia esta clave
-        window.open('admin.html', '_blank');
-    } else if (adminKey !== null) {
-        alert('❌ Clave incorrecta. Acceso denegado.');
-    }
-}
     </script>
 </body>
 </html>
