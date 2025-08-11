@@ -1,98 +1,87 @@
-// /api/role.js
-import { kv } from '@vercel/kv';
+// api/role.js (CommonJS)
+const { kv } = require('@vercel/kv');
 
+// Extrae UID desde cookie "site_uid" (opcional para evitar votos dobles)
 function getUIDFromCookie(req) {
   const cookie = req.headers.cookie || '';
-  const match = cookie.match(/(?:^|;\s*)site_uid=([^;]+)/);
-  return match ? match[1] : null;
+  const m = cookie.match(/(?:^|;\s*)site_uid=([^;]+)/);
+  return m ? decodeURIComponent(m[1]) : null;
 }
 
-export default async function handler(req, res) {
-  if (req.method === 'GET') {
-    try {
-      // Obtener conteos de cada rol
-      const [estudiantes, maestros, padres, otros] = await Promise.all([
+// Parseo robusto del body (soporta errores de Content-Type)
+async function readJSON(req) {
+  return await new Promise((resolve) => {
+    let buf = '';
+    req.on('data', c => (buf += c));
+    req.on('end', () => {
+      try { resolve(buf ? JSON.parse(buf) : {}); } catch { resolve({}); }
+    });
+  });
+}
+
+module.exports = async (req, res) => {
+  try {
+    res.setHeader('Content-Type', 'application/json');
+
+    if (req.method === 'GET') {
+      const uid = getUIDFromCookie(req);
+      const [e, m, p, o] = await Promise.all([
+        kv.scard('role:set:estudiantes'),
+        kv.scard('role:set:maestros'),
+        kv.scard('role:set:padres'),
+        kv.scard('role:set:otros'),
+      ]);
+      const voted = uid ? !!(await kv.sismember('role:set:voted', uid)) : false;
+
+      return res.status(200).end(JSON.stringify({
+        estudiantes: Number(e || 0),
+        maestros:    Number(m || 0),
+        padres:      Number(p || 0),
+        otros:       Number(o || 0),
+        voted
+      }));
+    }
+
+    if (req.method === 'POST') {
+      const { role } = await readJSON(req);
+      const valid = ['estudiantes', 'maestros', 'padres', 'otros'];
+      if (!valid.includes(role)) {
+        return res.status(400).end(JSON.stringify({ error: 'role inválido' }));
+      }
+
+      const uid = getUIDFromCookie(req);
+      if (uid) {
+        const already = await kv.sismember('role:set:voted', uid);
+        if (already) {
+          return res.status(200).end(JSON.stringify({ error: 'ALREADY_VOTED' }));
+        }
+        await kv.sadd('role:set:voted', uid);
+        await kv.sadd(`role:set:${role}`, uid);
+      } else {
+        // Si no hay UID, añade un marcador único para contar (sin deduplicar)
+        await kv.sadd(`role:set:${role}`, `anon:${Date.now()}:${Math.random().toString(36).slice(2)}`);
+      }
+
+      const [e, m, p, o] = await Promise.all([
         kv.scard('role:set:estudiantes'),
         kv.scard('role:set:maestros'),
         kv.scard('role:set:padres'),
         kv.scard('role:set:otros'),
       ]);
 
-      // Verificar si este UID ya votó
-      const uid = getUIDFromCookie(req);
-      const voted = uid ? await kv.sismember('role:set:voted', uid) : false;
-
-      return res.json({
-        estudiantes: estudiantes || 0,
-        maestros: maestros || 0,
-        padres: padres || 0,
-        otros: otros || 0,
-        voted: voted
-      });
-    } catch (error) {
-      return res.status(500).json({ error: 'Database error' });
+      return res.status(200).end(JSON.stringify({
+        ok: true, role,
+        estudiantes: Number(e || 0),
+        maestros:    Number(m || 0),
+        padres:      Number(p || 0),
+        otros:       Number(o || 0),
+      }));
     }
+
+    res.setHeader('Allow', 'GET, POST');
+    return res.status(405).end(JSON.stringify({ error: 'Method Not Allowed' }));
+  } catch (err) {
+    console.error('ROLE_API_ERROR:', err);
+    return res.status(500).end(JSON.stringify({ error: 'server_error', message: err.message }));
   }
-
-  if (req.method === 'POST') {
-    try {
-      const uid = getUIDFromCookie(req);
-      if (!uid) {
-        return res.status(400).json({ error: 'NO_UID' });
-      }
-
-      const { role } = req.body;
-      const validRoles = ['estudiantes', 'maestros', 'padres', 'otros'];
-      
-      if (!validRoles.includes(role)) {
-        return res.status(400).json({ error: 'INVALID_ROLE' });
-      }
-
-      // Verificar si ya votó
-      const alreadyVoted = await kv.sismember('role:set:voted', uid);
-      if (alreadyVoted) {
-        return res.status(409).json({ error: 'ALREADY_VOTED' });
-      }
-
-      // Registrar voto
-      await kv.sadd('role:set:voted', uid);
-      await kv.sadd(`role:set:${role}`, uid);
-
-      // Devolver conteos actualizados
-      const [estudiantes, maestros, padres, otros] = await Promise.all([
-        kv.scard('role:set:estudiantes'),
-        kv.scard('role:set:maestros'),
-        kv.scard('role:set:padres'),
-        kv.scard('role:set:otros'),
-      ]);
-
-      return res.json({
-        ok: true,
-        estudiantes: estudiantes || 0,
-        maestros: maestros || 0,
-        padres: padres || 0,
-        otros: otros || 0
-      });
-    } catch (error) {
-      return res.status(500).json({ error: 'Database error' });
-    }
-  }
-
-  // Para resetear durante desarrollo (eliminar después)
-  if (req.method === 'DELETE') {
-    try {
-      await Promise.all([
-        kv.del('role:set:voted'),
-        kv.del('role:set:estudiantes'),
-        kv.del('role:set:maestros'),
-        kv.del('role:set:padres'),
-        kv.del('role:set:otros'),
-      ]);
-      return res.json({ ok: true, reset: true });
-    } catch (error) {
-      return res.status(500).json({ error: 'Reset failed' });
-    }
-  }
-
-  res.status(405).json({ error: 'Method not allowed' });
-}
+};
