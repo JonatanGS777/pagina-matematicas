@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrativo - Olimpiadas Matemáticas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables CSS */
+        :root {
+            --color-primary: #2563eb;
+            --color-secondary: #7c3aed;
+            --color-accent: #f59e0b;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-white: #ffffff;
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-700: #374151;
+            --color-gray-800: #1f2937;
+            --color-gray-900: #111827;
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --space-2: 0.5rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-12: 3rem;
+            --radius-lg: 0.5rem;
+            --radius-xl: 0.75rem;
+            --radius-2xl: 1rem;
+            --radius-3xl: 1.5rem;
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--color-gray-50);
+            color: var(--color-gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+
+        /* Header */
+        .header {
+            background: var(--color-white);
+            border-bottom: 1px solid var(--color-gray-200);
+            padding: var(--space-4) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header__content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header__actions {
+            display: flex;
+            gap: var(--space-4);
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .btn--primary {
+            background: var(--gradient-primary);
+            color: var(--color-white);
+        }
+
+        .btn--secondary {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+        }
+
+        .btn--success {
+            background: var(--color-success);
+            color: var(--color-white);
+        }
+
+        .btn--warning {
+            background: var(--color-warning);
+            color: var(--color-white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Content */
+        .main {
+            padding: var(--space-8) 0;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .dashboard-card {
+            background: var(--color-white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-gray-200);
+        }
+
+        .card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+
+        .card__title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+
+        .card__icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .icon--primary {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--color-primary);
+        }
+
+        .icon--success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+
+        .icon--warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+        }
+
+        .icon--danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-danger);
+        }
+
+        .metric {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+        }
+
+        .metric__value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-gray-900);
+        }
+
+        .metric__label {
+            color: var(--color-gray-600);
+            font-size: 0.875rem;
+        }
+
+        .metric__change {
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-lg);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .metric__change--positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+
+        .metric__change--negative {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-danger);
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--color-white);
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-gray-200);
+        }
+
+        .table-header {
+            background: var(--color-gray-50);
+            padding: var(--space-4) var(--space-6);
+            border-bottom: 1px solid var(--color-gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-weight: 600;
+            color: var(--color-gray-900);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: var(--space-4);
+            text-align: left;
+            border-bottom: 1px solid var(--color-gray-100);
+        }
+
+        .table th {
+            background: var(--color-gray-50);
+            font-weight: 600;
+            color: var(--color-gray-700);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table tr:hover {
+            background: var(--color-gray-50);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-lg);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge--novato {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+        }
+
+        .badge--intermedio {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+        }
+
+        .badge--avanzado {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-danger);
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8);
+            color: var(--color-gray-500);
+        }
+
+        .loading__spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--color-gray-200);
+            border-top: 2px solid var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: var(--space-2);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-danger);
+            padding: var(--space-4);
+            border-radius: var(--radius-lg);
+            margin: var(--space-4);
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header__content {
+                flex-direction: column;
+                gap: var(--space-4);
+                text-align: center;
+            }
+
+            .header__actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 600px;
+            }
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .chart-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: var(--color-gray-50);
+            border-radius: var(--radius-lg);
+            color: var(--color-gray-500);
+            font-style: italic;
+        }
+
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot--online {
+            background: var(--color-success);
+        }
+
+        .status-dot--offline {
+            background: var(--color-danger);
+        }
+
+        .status-dot--warning {
+            background: var(--color-warning);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <h1 class="header__title">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard Administrativo
+                </h1>
+                <div class="header__actions">
+                    <div class="status-indicator">
+                        <span class="status-dot status-dot--online" id="apiStatus"></span>
+                        <span id="apiStatusText">API Conectada</span>
+                    </div>
+                    <button class="btn btn--secondary" onclick="refreshAllData()">
+                        <i class="fas fa-sync-alt"></i>
+                        Actualizar
+                    </button>
+                    <button class="btn btn--success" onclick="exportData()">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                    <a href="olimpiadas.html" class="btn btn--primary">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Metrics Dashboard -->
+            <div class="dashboard-grid" id="metricsGrid">
+                <!-- Metric cards will be dynamically generated -->
+            </div>
+
+            <!-- Recent Participants Table -->
+            <div class="table-container" style="margin-bottom: var(--space-8);">
+                <div class="table-header">
+                    <h2 class="table-title">Participantes Registrados</h2>
+                    <div>
+                        <select id="categoryFilter" style="margin-right: var(--space-2); padding: var(--space-2); border: 1px solid var(--color-gray-300); border-radius: var(--radius-lg);">
+                            <option value="">Todas las categorías</option>
+                            <option value="novato">Novato</option>
+                            <option value="intermedio">Intermedio</option>
+                            <option value="avanzado">Avanzado</option>
+                        </select>
+                        <select id="gradeFilter" style="padding: var(--space-2); border: 1px solid var(--color-gray-300); border-radius: var(--radius-lg);">
+                            <option value="">Todos los grados</option>
+                            <option value="7mo">7mo Grado</option>
+                            <option value="8vo">8vo Grado</option>
+                            <option value="9no">9no Grado</option>
+                            <option value="10mo">10mo Grado</option>
+                            <option value="11mo">11mo Grado</option>
+                            <option value="12mo">12mo Grado</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="participantsTableContainer">
+                    <div class="loading">
+                        <div class="loading__spinner"></div>
+                        Cargando participantes...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card__header">
+                        <h3 class="card__title">Distribución por Categorías</h3>
+                        <div class="card__icon icon--primary">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-placeholder" id="categoryChart">
+                            <div>
+                                <i class="fas fa-chart-pie" style="font-size: 2rem; margin-bottom: var(--space-2);"></i>
+                                <div>Gráfico de categorías</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card__header">
+                        <h3 class="card__title">Registros por Día</h3>
+                        <div class="card__icon icon--success">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-placeholder" id="dailyChart">
+                            <div>
+                                <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: var(--space-2);"></i>
+                                <div>Gráfico de registros diarios</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        class AdminDashboard {
+            constructor() {
+                this.participants = [];
+                this.statistics = {};
+                this.refreshInterval = 60000; // 1 minuto
+                this.isOnline = true;
+                this.init();
+            }
+
+            async init() {
+                this.setupEventListeners();
+                await this.loadAllData();
+                this.startPeriodicRefresh();
+            }
+
+            setupEventListeners() {
+                document.getElementById('categoryFilter').addEventListener('change', () => {
+                    this.filterParticipants();
+                });
+
+                document.getElementById('gradeFilter').addEventListener('change', () => {
+                    this.filterParticipants();
+                });
+
+                // Detectar cambios de conectividad
+                window.addEventListener('online', () => {
+                    this.updateConnectionStatus(true);
+                    this.loadAllData();
+                });
+
+                window.addEventListener('offline', () => {
+                    this.updateConnectionStatus(false);
+                });
+            }
+
+            async loadAllData() {
+                try {
+                    await Promise.all([
+                        this.loadStatistics(),
+                        this.loadParticipants()
+                    ]);
+                    this.updateConnectionStatus(true);
+                } catch (error) {
+                    console.error('Error cargando datos:', error);
+                    this.updateConnectionStatus(false);
+                    this.loadFallbackData();
+                }
+            }
+
+            async loadStatistics() {
+                try {
+                    const response = await fetch('/api/stats');
+                    if (!response.ok) throw new Error('Error cargando estadísticas');
+                    
+                    this.statistics = await response.json();
+                    this.renderMetrics();
+                } catch (error) {
+                    console.warn('Error cargando estadísticas:', error);
+                    this.loadLocalStatistics();
+                }
+            }
+
+            async loadParticipants() {
+                try {
+                    const response = await fetch('/api/participants?includeStats=true&limit=1000');
+                    if (!response.ok) throw new Error('Error cargando participantes');
+                    
+                    const data = await response.json();
+                    this.participants = data.participants || [];
+                    this.renderParticipantsTable();
+                } catch (error) {
+                    console.warn('Error cargando participantes:', error);
+                    this.loadLocalParticipants();
+                }
+            }
+
+            loadLocalStatistics() {
+                this.statistics = JSON.parse(localStorage.getItem('globalStats') || '{}');
+                this.renderMetrics();
+            }
+
+            loadLocalParticipants() {
+                this.participants = JSON.parse(localStorage.getItem('olympicsParticipants') || '[]');
+                this.renderParticipantsTable();
+            }
+
+            loadFallbackData() {
+                this.loadLocalStatistics();
+                this.loadLocalParticipants();
+            }
+
+            renderMetrics() {
+                const metricsGrid = document.getElementById('metricsGrid');
+                
+                const metrics = [
+                    {
+                        title: 'Total Visitantes',
+                        value: this.statistics.visitantes || 0,
+                        change: '+12%',
+                        changeType: 'positive',
+                        icon: 'fas fa-eye',
+                        iconClass: 'icon--primary'
+                    },
+                    {
+                        title: 'Participantes Olimpiadas',
+                        value: this.statistics.participantesOlimpiadas || this.participants.length,
+                        change: `+${this.statistics.registrosHoy || 0} hoy`,
+                        changeType: 'positive',
+                        icon: 'fas fa-trophy',
+                        iconClass: 'icon--warning'
+                    },
+                    {
+                        title: 'Estudiantes Registrados',
+                        value: this.statistics.estudiantes || 0,
+                        change: '+8%',
+                        changeType: 'positive',
+                        icon: 'fas fa-graduation-cap',
+                        iconClass: 'icon--success'
+                    },
+                    {
+                        title: 'Total Usuarios',
+                        value: (this.statistics.estudiantes || 0) + (this.statistics.maestros || 0) + (this.statistics.padres || 0),
+                        change: '+15%',
+                        changeType: 'positive',
+                        icon: 'fas fa-users',
+                        iconClass: 'icon--primary'
+                    }
+                ];
+
+                metricsGrid.innerHTML = metrics.map(metric => `
+                    <div class="dashboard-card">
+                        <div class="card__header">
+                            <h3 class="card__title">${metric.title}</h3>
+                            <div class="card__icon ${metric.iconClass}">
+                                <i class="${metric.icon}"></i>
+                            </div>
+                        </div>
+                        <div class="metric">
+                            <span class="metric__value">${metric.value.toLocaleString()}</span>
+                        </div>
+                        <div class="metric__change metric__change--${metric.changeType}">
+                            ${metric.change}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderParticipantsTable() {
+                const container = document.getElementById('participantsTableContainer');
+                
+                if (this.participants.length === 0) {
+                    container.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-info-circle"></i>
+                            No hay participantes registrados aún.
+                        </div>
+                    `;
+                    return;
+                }
+
+                const tableHTML = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Edad</th>
+                                <th>Grado</th>
+                                <th>Categoría</th>
+                                <th>Escuela</th>
+                                <th>Fecha Registro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${this.participants.map(participant => `
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: var(--space-2);">
+                                            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;">
+                                                ${participant.initials || participant.fullName.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 500;">${participant.fullName}</div>
+                                                <div style="font-size: 0.875rem; color: var(--color-gray-500);">${participant.role || 'Estudiante'}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>${participant.age}</td>
+                                    <td>${participant.grade}</td>
+                                    <td>
+                                        <span class="badge badge--${participant.category}">
+                                            ${participant.category}
+                                        </span>
+                                    </td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        ${participant.school || 'No especificado'}
+                                    </td>
+                                    <td>${new Date(participant.registrationDate).toLocaleDateString('es-ES')}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                container.innerHTML = tableHTML;
+            }
+
+            filterParticipants() {
+                const categoryFilter = document.getElementById('categoryFilter').value;
+                const gradeFilter = document.getElementById('gradeFilter').value;
+                
+                let filteredParticipants = [...this.participants];
+
+                if (categoryFilter) {
+                    filteredParticipants = filteredParticipants.filter(p => 
+                        p.category && p.category.toLowerCase() === categoryFilter.toLowerCase()
+                    );
+                }
+
+                if (gradeFilter) {
+                    filteredParticipants = filteredParticipants.filter(p => 
+                        p.grade && p.grade.toLowerCase() === gradeFilter.toLowerCase()
+                    );
+                }
+
+                // Temporalmente actualizar la lista para filtrado
+                const originalParticipants = this.participants;
+                this.participants = filteredParticipants;
+                this.renderParticipantsTable();
+                this.participants = originalParticipants;
+            }
+
+            updateConnectionStatus(isOnline) {
+                this.isOnline = isOnline;
+                const statusDot = document.getElementById('apiStatus');
+                const statusText = document.getElementById('apiStatusText');
+                
+                if (isOnline) {
+                    statusDot.className = 'status-dot status-dot--online';
+                    statusText.textContent = 'API Conectada';
+                } else {
+                    statusDot.className = 'status-dot status-dot--offline';
+                    statusText.textContent = 'Sin Conexión';
+                }
+            }
+
+            startPeriodicRefresh() {
+                setInterval(() => {
+                    if (this.isOnline && document.visibilityState === 'visible') {
+                        this.loadAllData();
+                    }
+                }, this.refreshInterval);
+            }
+
+            async exportData() {
+                try {
+                    const exportData = {
+                        participants: this.participants,
+                        statistics: this.statistics,
+                        exportDate: new Date().toISOString(),
+                        totalParticipants: this.participants.length,
+                        categoryCounts: this.getCategoryCounts(),
+                        gradeCounts: this.getGradeCounts()
+                    };
+
+                    const dataStr = JSON.stringify(exportData, null, 2);
+                    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                    
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(dataBlob);
+                    link.download = `olimpiadas-dashboard-${new Date().toISOString().split('T')[0]}.json`;
+                    link.click();
+                    
+                    // También crear CSV para Excel
+                    this.exportToCSV();
+                    
+                } catch (error) {
+                    console.error('Error exportando datos:', error);
+                    alert('Error al exportar los datos');
+                }
+            }
+
+            exportToCSV() {
+                const csvHeaders = ['Nombre', 'Edad', 'Grado', 'Categoría', 'Escuela', 'Experiencia', 'Fecha Registro'];
+                const csvRows = this.participants.map(p => [
+                    p.fullName,
+                    p.age,
+                    p.grade,
+                    p.category,
+                    p.school || 'No especificado',
+                    p.experience || 'No especificado',
+                    new Date(p.registrationDate).toLocaleDateString('es-ES')
+                ]);
+
+                const csvContent = [csvHeaders, ...csvRows]
+                    .map(row => row.map(field => `"${field}"`).join(','))
+                    .join('\n');
+
+                const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(csvBlob);
+                link.download = `participantes-olimpiadas-${new Date().toISOString().split('T')[0]}.csv`;
+                link.click();
+            }
+
+            getCategoryCounts() {
+                const counts = { novato: 0, intermedio: 0, avanzado: 0 };
+                this.participants.forEach(p => {
+                    if (p.category && counts.hasOwnProperty(p.category)) {
+                        counts[p.category]++;
+                    }
+                });
+                return counts;
+            }
+
+            getGradeCounts() {
+                const counts = {};
+                this.participants.forEach(p => {
+                    counts[p.grade] = (counts[p.grade] || 0) + 1;
+                });
+                return counts;
+            }
+        }
+
+        // Funciones globales
+        function refreshAllData() {
+            if (window.dashboard) {
+                window.dashboard.loadAllData();
+            }
+        }
+
+        function exportData() {
+            if (window.dashboard) {
+                window.dashboard.exportData();
+            }
+        }
+
+        // Inicializar dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboard = new AdminDashboard();
+        });
+    </script>
+</body>
+</html>
