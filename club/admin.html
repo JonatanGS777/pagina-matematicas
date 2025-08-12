@@ -126,6 +126,17 @@
             color: var(--color-white);
         }
 
+        .btn--danger {
+            background: var(--color-danger);
+            color: var(--color-white);
+            font-size: 0.875rem;
+            padding: var(--space-1) var(--space-2);
+        }
+
+        .btn--danger:hover {
+            background: #dc2626;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
@@ -367,6 +378,64 @@
             text-align: center;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--color-white);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            max-width: 400px;
+            width: 90%;
+            box-shadow: var(--shadow-xl);
+            text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--color-danger);
+            margin-bottom: var(--space-4);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--color-gray-900);
+        }
+
+        .modal-text {
+            color: var(--color-gray-600);
+            margin-bottom: var(--space-6);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: var(--space-2);
+            justify-content: center;
+        }
+
+        .participant-name {
+            font-weight: 600;
+            color: var(--color-danger);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .dashboard-grid {
@@ -389,7 +458,7 @@
             }
 
             .table {
-                min-width: 600px;
+                min-width: 700px;
             }
 
             .table-filters {
@@ -409,6 +478,16 @@
 
         .realtime-indicator--active {
             color: var(--color-success);
+        }
+
+        /* Action buttons in table */
+        .action-buttons {
+            display: flex;
+            gap: var(--space-1);
+        }
+
+        .table td:last-child {
+            width: 120px;
         }
     </style>
 </head>
@@ -574,6 +653,32 @@
         </div>
     </main>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <h3 class="modal-title">Confirmar Eliminación</h3>
+            <p class="modal-text">
+                ¿Estás seguro de que deseas eliminar a 
+                <span class="participant-name" id="participantToDelete"></span>?
+                <br><br>
+                Esta acción no se puede deshacer.
+            </p>
+            <div class="modal-actions">
+                <button class="btn btn--secondary" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button class="btn btn--danger" onclick="confirmDelete()" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i>
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ==================== Supabase Configuration ==================== 
         const SUPABASE_CONFIG = {
@@ -584,6 +689,9 @@
         // Initialize Supabase
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // Global variable for delete operation
+        let participantToDeleteId = null;
 
         // ==================== Admin Dashboard ==================== 
         class AdminDashboard {
@@ -693,6 +801,32 @@
                 }
             }
 
+            // ==================== Delete Participant Functionality ==================== 
+            async deleteParticipant(participantId) {
+                try {
+                    // Update status to 'deleted' instead of hard delete
+                    const { error } = await supabaseClient
+                        .from('participants')
+                        .update({ status: 'deleted' })
+                        .eq('id', participantId);
+
+                    if (error) throw error;
+
+                    this.log(`✅ Participante eliminado: ${participantId}`);
+                    
+                    // Reload data to reflect changes
+                    await this.loadAllData();
+                    
+                    // Show success message
+                    this.showTemporaryMessage('Participante eliminado exitosamente');
+                    
+                } catch (error) {
+                    this.log('❌ Error eliminando participante:', error);
+                    this.showError('Error al eliminar el participante');
+                    throw error;
+                }
+            }
+
             // ==================== Real-time Updates ==================== 
             setupRealTimeSubscription() {
                 supabaseClient
@@ -774,6 +908,7 @@
                                 <th>Categoría</th>
                                 <th>Escuela</th>
                                 <th>Fecha Registro</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -802,6 +937,13 @@
                                         ${participant.school || 'No especificado'}
                                     </td>
                                     <td>${new Date(participant.registration_date).toLocaleDateString('es-ES')}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn--danger" onclick="openDeleteModal('${participant.id}', '${participant.full_name}')" title="Eliminar participante">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -955,6 +1097,54 @@
                 console.log(`[AdminDashboard] ${message}`, ...args);
             }
         }
+
+        // ==================== Modal Functions ==================== 
+        function openDeleteModal(participantId, participantName) {
+            participantToDeleteId = participantId;
+            document.getElementById('participantToDelete').textContent = participantName;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeDeleteModal() {
+            participantToDeleteId = null;
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        async function confirmDelete() {
+            if (!participantToDeleteId) return;
+            
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            const originalHTML = confirmBtn.innerHTML;
+            
+            try {
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando...';
+                confirmBtn.disabled = true;
+                
+                await window.dashboard.deleteParticipant(participantToDeleteId);
+                closeDeleteModal();
+                
+            } catch (error) {
+                console.error('Error al eliminar participante:', error);
+            } finally {
+                confirmBtn.innerHTML = originalHTML;
+                confirmBtn.disabled = false;
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('deleteModal');
+            if (e.target === modal) {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
 
         // ==================== Global Functions ==================== 
         function refreshAllData() {
