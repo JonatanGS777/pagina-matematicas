@@ -577,12 +577,13 @@
     <script>
         // ==================== Supabase Configuration ==================== 
         const SUPABASE_CONFIG = {
-            url: 'https://ztrhumtqvmqsskcdcykt.supabase.co', // 🔄 CAMBIAR POR TU URL
-            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0cmh1bXRxdm1xc3NrY2RjeWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTU4ODksImV4cCI6MjA3MDU5MTg4OX0.3bAdCuuI_UTLBFF7O79H6cx8k2dJ04e7Ka80-6i4UIE' // 🔄 KEY Actualizada
+            url: 'https://ztrhumtqvmqsskcdcykt.supabase.co',
+            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0cmh1bXRxdm1xc3NrY2RjeWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTU4ODksImV4cCI6MjA3MDU5MTg4OX0.3bAdCuuI_UTLBFF7O79H6cx8k2dJ04e7Ka80-6i4UIE'
         };
 
         // Initialize Supabase
-        const supabase = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
         // ==================== Admin Dashboard ==================== 
         class AdminDashboard {
@@ -620,7 +621,7 @@
                     this.updateConnectionStatus('loading', 'Conectando a Supabase...');
                     
                     // Test connection
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('participants')
                         .select('count')
                         .limit(1);
@@ -655,7 +656,7 @@
 
             async loadStatistics() {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('participant_stats')
                         .select('*')
                         .single();
@@ -674,7 +675,7 @@
 
             async loadParticipants() {
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('participants')
                         .select('*')
                         .eq('status', 'active')
@@ -694,7 +695,7 @@
 
             // ==================== Real-time Updates ==================== 
             setupRealTimeSubscription() {
-                supabase
+                supabaseClient
                     .channel('admin-dashboard')
                     .on('postgres_changes', {
                         event: '*',

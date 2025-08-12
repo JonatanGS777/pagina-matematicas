@@ -638,12 +638,13 @@
     <script>
         // ==================== Supabase Configuration ==================== 
         const SUPABASE_CONFIG = {
-            url: 'https://ztrhumtqvmqsskcdcykt.supabase.co', // 🔄 CAMBIAR POR TU URL
-            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0cmh1bXRxdm1xc3NrY2RjeWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTU4ODksImV4cCI6MjA3MDU5MTg4OX0.3bAdCuuI_UTLBFF7O79H6cx8k2dJ04e7Ka80-6i4UIE' // 🔄  KEY Actualizada
+            url: 'https://ztrhumtqvmqsskcdcykt.supabase.co',
+            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0cmh1bXRxdm1xc3NrY2RjeWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTU4ODksImV4cCI6MjA3MDU5MTg4OX0.3bAdCuuI_UTLBFF7O79H6cx8k2dJ04e7Ka80-6i4UIE'
         };
 
         // Initialize Supabase client
-        const supabase = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
         // ==================== Olympics Registration App ==================== 
         class OlympicsSupabaseApp {
@@ -680,7 +681,7 @@
                     this.updateStatus('loading', 'Conectando a Supabase...');
                     
                     // Test connection with a simple query
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('participants')
                         .select('count')
                         .limit(1);
@@ -728,7 +729,7 @@
                     this.log('📝 Enviando registro a Supabase...', participantData);
 
                     // Insert into Supabase
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('participants')
                         .insert([participantData])
                         .select();
@@ -762,14 +763,14 @@
 
                     // Get participants and statistics in parallel
                     const [participantsResult, statsResult] = await Promise.all([
-                        supabase
+                        supabaseClient
                             .from('participants')
                             .select('*')
                             .eq('status', 'active')
                             .order('registration_date', { ascending: false })
                             .limit(50),
                         
-                        supabase
+                        supabaseClient
                             .from('participant_stats')
                             .select('*')
                             .single()
@@ -794,7 +795,7 @@
             // ==================== Real-time Updates ==================== 
             setupRealTimeSubscription() {
                 // Subscribe to real-time changes in participants table
-                supabase
+                supabaseClient
                     .channel('participants-channel')
                     .on('postgres_changes', {
                         event: '*',
