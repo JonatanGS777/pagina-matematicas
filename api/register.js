@@ -1,9 +1,39 @@
-import { Redis } from '@vercel/kv';
+import { createClient } from 'redis';
 
-// 🔹 CONEXIÓN NUEVA A TU BASE OLIMPIADAS
-const kv = new Redis({
-  url: process.env.OLIMPIADAS_KV_REDIS_URL
+// Crear cliente Redis para Redis Cloud
+const redis = createClient({
+    url: process.env.OLIMPIADAS_KV_REDIS_URL,
+    socket: {
+        tls: true,
+        rejectUnauthorized: false
+    }
 });
+
+let isConnected = false;
+
+async function connectRedis() {
+    if (!isConnected) {
+        try {
+            await redis.connect();
+            isConnected = true;
+            console.log('✅ Conectado a Redis Cloud');
+        } catch (error) {
+            console.error('❌ Error conectando a Redis:', error);
+            throw error;
+        }
+    }
+}
+
+async function redisOperation(operation) {
+    try {
+        await connectRedis();
+        return await operation(redis);
+    } catch (error) {
+        console.error('Error en operación Redis:', error);
+        isConnected = false;
+        throw error;
+    }
+}
 
 export default async function handler(req, res) {
     // Configurar CORS
@@ -53,7 +83,11 @@ export default async function handler(req, res) {
         }
 
         // Verificar si el email ya está registrado
-        const existingParticipant = await kv.get(`participant:${email}`);
+        const existingParticipant = await redisOperation(async (client) => {
+            const data = await client.get(`participant:${email}`);
+            return data ? JSON.parse(data) : null;
+        });
+
         if (existingParticipant) {
             return res.status(409).json({ error: 'El correo electrónico ya está registrado' });
         }
@@ -74,22 +108,22 @@ export default async function handler(req, res) {
             status: 'active'
         };
 
-        // Guardar en Vercel KV
-        await Promise.all([
+        // Guardar en Redis Cloud
+        await redisOperation(async (client) => {
             // Guardar participante individual
-            kv.set(`participant:${email}`, participant),
+            await client.set(`participant:${participant.email}`, JSON.stringify(participant));
             
             // Agregar a la lista de participantes
-            kv.lpush('participants:list', participant.id),
+            await client.lPush('participants:list', participant.id);
             
             // Guardar por ID para acceso rápido
-            kv.set(`participant:id:${participant.id}`, participant),
-            
-            // Actualizar estadísticas
-            updateStatistics(role)
-        ]);
+            await client.set(`participant:id:${participant.id}`, JSON.stringify(participant));
+        });
 
-        // Logs para debugging (opcional)
+        // Actualizar estadísticas
+        await updateStatistics(role);
+
+        // Logs para debugging
         console.log('Nuevo participante registrado:', {
             id: participant.id,
             email: participant.email,
@@ -121,8 +155,11 @@ export default async function handler(req, res) {
 // Función auxiliar para actualizar estadísticas
 async function updateStatistics(role) {
     try {
-        const statsKey = 'site:statistics';
-        const currentStats = await kv.get(statsKey) || {};
+        // Obtener estadísticas actuales
+        const currentStats = await redisOperation(async (client) => {
+            const data = await client.get('site:statistics');
+            return data ? JSON.parse(data) : {};
+        });
         
         // Actualizar contadores
         const updatedStats = {
@@ -138,15 +175,21 @@ async function updateStatistics(role) {
         // Actualizar estadísticas del día
         const today = new Date().toISOString().split('T')[0];
         const dailyKey = `stats:daily:${today}`;
-        const dailyStats = await kv.get(dailyKey) || { registrations: 0 };
+        
+        const dailyStats = await redisOperation(async (client) => {
+            const data = await client.get(dailyKey);
+            return data ? JSON.parse(data) : { registrations: 0 };
+        });
+        
         dailyStats.registrations += 1;
         
-        await Promise.all([
-            kv.set(statsKey, updatedStats),
-            kv.set(dailyKey, dailyStats),
+        // Guardar estadísticas actualizadas
+        await redisOperation(async (client) => {
+            await client.set('site:statistics', JSON.stringify(updatedStats));
+            await client.set(dailyKey, JSON.stringify(dailyStats));
             // Establecer expiración para las estadísticas diarias (30 días)
-            kv.expire(dailyKey, 30 * 24 * 60 * 60)
-        ]);
+            await client.expire(dailyKey, 30 * 24 * 60 * 60);
+        });
 
     } catch (error) {
         console.error('Error actualizando estadísticas:', error);

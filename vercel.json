@@ -1,26 +1,27 @@
 {
   "version": 2,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/register",
-      "dest": "/api/register.js"
+      "source": "/api/register",
+      "destination": "/api/register.js"
     },
     {
-      "src": "/api/participants",
-      "dest": "/api/participants.js"
+      "source": "/api/participants", 
+      "destination": "/api/participants.js"
     },
     {
-      "src": "/api/stats",
-      "dest": "/api/stats.js"
+      "source": "/api/stats",
+      "destination": "/api/stats.js"
+    },
+    {
+      "source": "/",
+      "destination": "/olimpiadas.html"
     }
   ],
-  "env": {
-    "KV_REST_API_URL": "KV_REST_API_URL",
-    "KV_REST_API_TOKEN": "KV_REST_API_TOKEN"
-  },
   "functions": {
     "api/**/*.js": {
-      "maxDuration": 10
+      "runtime": "@vercel/node",
+      "maxDuration": 30
     }
   }
 }

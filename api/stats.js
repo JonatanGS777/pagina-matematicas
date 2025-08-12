@@ -1,9 +1,39 @@
-import { Redis } from '@vercel/kv';
+import { createClient } from 'redis';
 
-// 🔹 CONEXIÓN NUEVA A TU BASE OLIMPIADAS
-const kv = new Redis({
-  url: process.env.OLIMPIADAS_KV_REDIS_URL
+// Crear cliente Redis para Redis Cloud
+const redis = createClient({
+    url: process.env.OLIMPIADAS_KV_REDIS_URL,
+    socket: {
+        tls: true,
+        rejectUnauthorized: false
+    }
 });
+
+let isConnected = false;
+
+async function connectRedis() {
+    if (!isConnected) {
+        try {
+            await redis.connect();
+            isConnected = true;
+            console.log('✅ Conectado a Redis Cloud');
+        } catch (error) {
+            console.error('❌ Error conectando a Redis:', error);
+            throw error;
+        }
+    }
+}
+
+async function redisOperation(operation) {
+    try {
+        await connectRedis();
+        return await operation(redis);
+    } catch (error) {
+        console.error('Error en operación Redis:', error);
+        isConnected = false;
+        throw error;
+    }
+}
 
 export default async function handler(req, res) {
     // Configurar CORS
@@ -62,7 +92,7 @@ async function getCompleteStatistics() {
             olympicsStats,
             roleVotes
         ] = await Promise.all([
-            kv.get('site:statistics') || {},
+            getSiteStatistics(),
             getVisitorStatistics(),
             getOlympicsStatistics(),
             getRoleVotes()
@@ -98,13 +128,33 @@ async function getCompleteStatistics() {
     }
 }
 
+// Función para obtener estadísticas del sitio
+async function getSiteStatistics() {
+    try {
+        return await redisOperation(async (client) => {
+            const data = await client.get('site:statistics');
+            return data ? JSON.parse(data) : {};
+        });
+    } catch (error) {
+        console.error('Error obteniendo estadísticas del sitio:', error);
+        return {};
+    }
+}
+
 // Función para obtener estadísticas de visitantes
 async function getVisitorStatistics() {
     try {
         const today = new Date().toISOString().split('T')[0];
+        
         const [totalVisitors, todayVisitors] = await Promise.all([
-            kv.get('visitors:total') || 0,
-            kv.get(`visitors:daily:${today}`) || 0
+            redisOperation(async (client) => {
+                const data = await client.get('visitors:total');
+                return data ? parseInt(data) : 0;
+            }),
+            redisOperation(async (client) => {
+                const data = await client.get(`visitors:daily:${today}`);
+                return data ? parseInt(data) : 0;
+            })
         ]);
 
         // Calcular visitantes de la semana
@@ -113,13 +163,18 @@ async function getVisitorStatistics() {
             const date = new Date();
             date.setDate(date.getDate() - i);
             const dateStr = date.toISOString().split('T')[0];
-            const dayVisitors = await kv.get(`visitors:daily:${dateStr}`) || 0;
-            weeklyVisitors += parseInt(dayVisitors);
+            
+            const dayVisitors = await redisOperation(async (client) => {
+                const data = await client.get(`visitors:daily:${dateStr}`);
+                return data ? parseInt(data) : 0;
+            });
+            
+            weeklyVisitors += dayVisitors;
         }
 
         return {
-            total: parseInt(totalVisitors),
-            today: parseInt(todayVisitors),
+            total: totalVisitors,
+            today: todayVisitors,
             thisWeek: weeklyVisitors
         };
         
@@ -132,12 +187,18 @@ async function getVisitorStatistics() {
 // Función para obtener estadísticas específicas de olimpiadas
 async function getOlympicsStatistics() {
     try {
-        const participantIds = await kv.lrange('participants:list', 0, -1);
+        const participantIds = await redisOperation(async (client) => {
+            return await client.lRange('participants:list', 0, -1);
+        });
+        
         const total = participantIds ? participantIds.length : 0;
         
         // Contar registros de hoy
         const today = new Date().toISOString().split('T')[0];
-        const todayStats = await kv.get(`stats:daily:${today}`) || { registrations: 0 };
+        const todayStats = await redisOperation(async (client) => {
+            const data = await client.get(`stats:daily:${today}`);
+            return data ? JSON.parse(data) : { registrations: 0 };
+        });
         
         return {
             total,
@@ -154,17 +215,29 @@ async function getOlympicsStatistics() {
 async function getRoleVotes() {
     try {
         const [estudiantes, maestros, padres, otros] = await Promise.all([
-            kv.get('role:votes:estudiantes') || 0,
-            kv.get('role:votes:maestros') || 0,
-            kv.get('role:votes:padres') || 0,
-            kv.get('role:votes:otros') || 0
+            redisOperation(async (client) => {
+                const data = await client.get('role:votes:estudiantes');
+                return data ? parseInt(data) : 0;
+            }),
+            redisOperation(async (client) => {
+                const data = await client.get('role:votes:maestros');
+                return data ? parseInt(data) : 0;
+            }),
+            redisOperation(async (client) => {
+                const data = await client.get('role:votes:padres');
+                return data ? parseInt(data) : 0;
+            }),
+            redisOperation(async (client) => {
+                const data = await client.get('role:votes:otros');
+                return data ? parseInt(data) : 0;
+            })
         ]);
 
         return {
-            estudiantes: parseInt(estudiantes),
-            maestros: parseInt(maestros),
-            padres: parseInt(padres),
-            otros: parseInt(otros)
+            estudiantes,
+            maestros,
+            padres,
+            otros
         };
         
     } catch (error) {
@@ -182,15 +255,28 @@ async function handleRoleVote(role) {
         }
 
         const voteKey = `role:votes:${role}`;
-        const currentVotes = await kv.get(voteKey) || 0;
-        await kv.set(voteKey, parseInt(currentVotes) + 1);
+        
+        const currentVotes = await redisOperation(async (client) => {
+            const data = await client.get(voteKey);
+            return data ? parseInt(data) : 0;
+        });
+        
+        await redisOperation(async (client) => {
+            await client.set(voteKey, currentVotes + 1);
+        });
         
         // También actualizar las estadísticas generales
-        const statsKey = 'site:statistics';
-        const currentStats = await kv.get(statsKey) || {};
+        const currentStats = await redisOperation(async (client) => {
+            const data = await client.get('site:statistics');
+            return data ? JSON.parse(data) : {};
+        });
+        
         currentStats[role] = (currentStats[role] || 0) + 1;
         currentStats.lastUpdated = new Date().toISOString();
-        await kv.set(statsKey, currentStats);
+        
+        await redisOperation(async (client) => {
+            await client.set('site:statistics', JSON.stringify(currentStats));
+        });
         
     } catch (error) {
         console.error('Error procesando voto de rol:', error);
@@ -206,16 +292,22 @@ async function incrementVisitors() {
         const dailyKey = `visitors:daily:${today}`;
         
         const [currentTotal, currentDaily] = await Promise.all([
-            kv.get(totalKey) || 0,
-            kv.get(dailyKey) || 0
+            redisOperation(async (client) => {
+                const data = await client.get(totalKey);
+                return data ? parseInt(data) : 0;
+            }),
+            redisOperation(async (client) => {
+                const data = await client.get(dailyKey);
+                return data ? parseInt(data) : 0;
+            })
         ]);
         
-        await Promise.all([
-            kv.set(totalKey, parseInt(currentTotal) + 1),
-            kv.set(dailyKey, parseInt(currentDaily) + 1),
+        await redisOperation(async (client) => {
+            await client.set(totalKey, currentTotal + 1);
+            await client.set(dailyKey, currentDaily + 1);
             // Establecer expiración para estadísticas diarias (30 días)
-            kv.expire(dailyKey, 30 * 24 * 60 * 60)
-        ]);
+            await client.expire(dailyKey, 30 * 24 * 60 * 60);
+        });
         
     } catch (error) {
         console.error('Error incrementando visitantes:', error);

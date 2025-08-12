@@ -1,9 +1,39 @@
-import { Redis } from '@vercel/kv';
+import { createClient } from 'redis';
 
-// 🔹 CONEXIÓN NUEVA A TU BASE OLIMPIADAS
-const kv = new Redis({
-  url: process.env.OLIMPIADAS_KV_REDIS_URL
+// Crear cliente Redis para Redis Cloud
+const redis = createClient({
+    url: process.env.OLIMPIADAS_KV_REDIS_URL,
+    socket: {
+        tls: true,
+        rejectUnauthorized: false
+    }
 });
+
+let isConnected = false;
+
+async function connectRedis() {
+    if (!isConnected) {
+        try {
+            await redis.connect();
+            isConnected = true;
+            console.log('✅ Conectado a Redis Cloud');
+        } catch (error) {
+            console.error('❌ Error conectando a Redis:', error);
+            throw error;
+        }
+    }
+}
+
+async function redisOperation(operation) {
+    try {
+        await connectRedis();
+        return await operation(redis);
+    } catch (error) {
+        console.error('Error en operación Redis:', error);
+        isConnected = false;
+        throw error;
+    }
+}
 
 export default async function handler(req, res) {
     // Configurar CORS
@@ -35,7 +65,9 @@ export default async function handler(req, res) {
         const offset = (pageNum - 1) * limitNum;
 
         // Obtener lista de IDs de participantes
-        const participantIds = await kv.lrange('participants:list', 0, -1);
+        const participantIds = await redisOperation(async (client) => {
+            return await client.lRange('participants:list', 0, -1);
+        });
         
         if (!participantIds || participantIds.length === 0) {
             return res.status(200).json({
@@ -51,20 +83,24 @@ export default async function handler(req, res) {
         }
 
         // Obtener datos completos de los participantes
-        const participants = await Promise.all(
-            participantIds.map(async (id) => {
-                try {
-                    return await kv.get(`participant:id:${id}`);
-                } catch (error) {
-                    console.warn(`Error obteniendo participante ${id}:`, error);
-                    return null;
+        const participants = [];
+        for (const id of participantIds) {
+            try {
+                const participant = await redisOperation(async (client) => {
+                    const data = await client.get(`participant:id:${id}`);
+                    return data ? JSON.parse(data) : null;
+                });
+                if (participant) {
+                    participants.push(participant);
                 }
-            })
-        );
+            } catch (error) {
+                console.warn(`Error obteniendo participante ${id}:`, error);
+            }
+        }
 
-        // Filtrar participantes nulos y aplicar filtros
+        // Filtrar participantes activos y aplicar filtros
         let filteredParticipants = participants
-            .filter(participant => participant !== null && participant.status === 'active');
+            .filter(participant => participant && participant.status === 'active');
 
         // Aplicar filtros
         if (category) {
@@ -166,11 +202,17 @@ export default async function handler(req, res) {
 async function getStatistics() {
     try {
         // Obtener estadísticas generales
-        const generalStats = await kv.get('site:statistics') || {};
+        const generalStats = await redisOperation(async (client) => {
+            const data = await client.get('site:statistics');
+            return data ? JSON.parse(data) : {};
+        });
         
         // Obtener estadísticas del día actual
         const today = new Date().toISOString().split('T')[0];
-        const dailyStats = await kv.get(`stats:daily:${today}`) || { registrations: 0 };
+        const dailyStats = await redisOperation(async (client) => {
+            const data = await client.get(`stats:daily:${today}`);
+            return data ? JSON.parse(data) : { registrations: 0 };
+        });
         
         // Obtener estadísticas de la semana
         const weeklyStats = await getWeeklyStats();
@@ -216,7 +258,12 @@ async function getWeeklyStats() {
             const date = new Date(today);
             date.setDate(date.getDate() - i);
             const dateStr = date.toISOString().split('T')[0];
-            const dayStats = await kv.get(`stats:daily:${dateStr}`);
+            
+            const dayStats = await redisOperation(async (client) => {
+                const data = await client.get(`stats:daily:${dateStr}`);
+                return data ? JSON.parse(data) : null;
+            });
+            
             if (dayStats) {
                 weeklyTotal += dayStats.registrations || 0;
             }
@@ -232,14 +279,20 @@ async function getWeeklyStats() {
 // Función auxiliar para obtener distribución por categorías
 async function getCategoryDistribution() {
     try {
-        // Esta sería una implementación más eficiente con índices
-        // Por ahora, una aproximación básica
-        const participantIds = await kv.lrange('participants:list', 0, 100); // Limitar para performance
+        // Obtener IDs de participantes (limitar para performance)
+        const participantIds = await redisOperation(async (client) => {
+            return await client.lRange('participants:list', 0, 100);
+        });
+        
         const distribution = { novato: 0, intermedio: 0, avanzado: 0 };
         
         for (const id of participantIds) {
             try {
-                const participant = await kv.get(`participant:id:${id}`);
+                const participant = await redisOperation(async (client) => {
+                    const data = await client.get(`participant:id:${id}`);
+                    return data ? JSON.parse(data) : null;
+                });
+                
                 if (participant && participant.category) {
                     distribution[participant.category] = (distribution[participant.category] || 0) + 1;
                 }
