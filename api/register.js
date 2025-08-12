@@ -1,36 +1,88 @@
 import { createClient } from 'redis';
 
-// Crear cliente Redis para Redis Cloud
-const redis = createClient({
-    url: process.env.OLIMPIADAS_KV_REDIS_URL,
-    socket: {
-        tls: true,
-        rejectUnauthorized: false
-    }
-});
-
+// Configuración para tu Redis Cloud específico
+let redis = null;
 let isConnected = false;
 
-async function connectRedis() {
-    if (!isConnected) {
-        try {
-            await redis.connect();
-            isConnected = true;
-            console.log('✅ Conectado a Redis Cloud');
-        } catch (error) {
-            console.error('❌ Error conectando a Redis:', error);
-            throw error;
+async function createRedisClient() {
+    const redisUrl = process.env.OLIMPIADAS_KV_REDIS_URL;
+    
+    if (!redisUrl) {
+        throw new Error('Variable de entorno OLIMPIADAS_KV_REDIS_URL no encontrada');
+    }
+
+    console.log('🔄 Conectando a Redis Cloud para registro...');
+    
+    const usesTLS = redisUrl.startsWith('rediss://');
+    
+    try {
+        const clientConfig = {
+            url: redisUrl,
+            socket: {
+                connectTimeout: 10000,
+                lazyConnect: true
+            },
+            retry_delay_on_failover: 100,
+            enable_offline_queue: false
+        };
+
+        if (usesTLS) {
+            clientConfig.socket.tls = true;
+            clientConfig.socket.rejectUnauthorized = false;
         }
+
+        redis = createClient(clientConfig);
+
+        redis.on('error', (err) => {
+            console.error('❌ Redis Error (register):', err.message);
+            isConnected = false;
+        });
+
+        redis.on('ready', () => {
+            console.log('✅ Redis listo para registros');
+            isConnected = true;
+        });
+
+        redis.on('end', () => {
+            console.log('🔌 Redis desconectado (register)');
+            isConnected = false;
+        });
+
+        return redis;
+    } catch (error) {
+        console.error('❌ Error creando cliente Redis (register):', error);
+        throw error;
+    }
+}
+
+async function connectRedis() {
+    if (isConnected && redis) {
+        return redis;
+    }
+
+    try {
+        if (!redis) {
+            redis = await createRedisClient();
+        }
+
+        if (!isConnected) {
+            await redis.connect();
+        }
+
+        return redis;
+    } catch (error) {
+        console.error('❌ Error conectando a Redis (register):', error);
+        isConnected = false;
+        throw error;
     }
 }
 
 async function redisOperation(operation) {
     try {
-        await connectRedis();
-        return await operation(redis);
+        const client = await connectRedis();
+        return await operation(client);
     } catch (error) {
-        console.error('Error en operación Redis:', error);
-        isConnected = false;
+        console.error('🚨 Error en operación Redis (register):', error.message);
         throw error;
     }
 }
@@ -51,6 +103,8 @@ export default async function handler(req, res) {
     }
 
     try {
+        console.log('📝 Nuevo intento de registro...');
+        
         const {
             fullName,
             email,
@@ -65,6 +119,7 @@ export default async function handler(req, res) {
 
         // Validaciones básicas
         if (!fullName || !email || !age || !grade || !category) {
+            console.log('❌ Campos faltantes en registro');
             return res.status(400).json({ 
                 error: 'Campos requeridos faltantes',
                 required: ['fullName', 'email', 'age', 'grade', 'category']
@@ -78,17 +133,21 @@ export default async function handler(req, res) {
         }
 
         // Validar rango de edad
-        if (age < 10 || age > 25) {
+        const ageNum = parseInt(age);
+        if (ageNum < 10 || ageNum > 25) {
             return res.status(400).json({ error: 'La edad debe estar entre 10 y 25 años' });
         }
 
+        console.log(`👤 Registrando: ${fullName} (${email})`);
+
         // Verificar si el email ya está registrado
         const existingParticipant = await redisOperation(async (client) => {
-            const data = await client.get(`participant:${email}`);
+            const data = await client.get(`participant:${email.toLowerCase()}`);
             return data ? JSON.parse(data) : null;
         });
 
         if (existingParticipant) {
+            console.log('⚠️ Email ya registrado:', email);
             return res.status(409).json({ error: 'El correo electrónico ya está registrado' });
         }
 
@@ -97,7 +156,7 @@ export default async function handler(req, res) {
             id: `participant_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             fullName: fullName.trim(),
             email: email.toLowerCase().trim(),
-            age: parseInt(age),
+            age: ageNum,
             grade,
             school: school || 'No especificado',
             category,
@@ -108,28 +167,32 @@ export default async function handler(req, res) {
             status: 'active'
         };
 
+        console.log(`💾 Guardando participante con ID: ${participant.id}`);
+
         // Guardar en Redis Cloud
         await redisOperation(async (client) => {
-            // Guardar participante individual
-            await client.set(`participant:${participant.email}`, JSON.stringify(participant));
+            // Usar pipeline para operaciones atómicas
+            const pipeline = client.multi();
+            
+            // Guardar participante por email
+            pipeline.set(`participant:${participant.email}`, JSON.stringify(participant));
+            
+            // Guardar participante por ID
+            pipeline.set(`participant:id:${participant.id}`, JSON.stringify(participant));
             
             // Agregar a la lista de participantes
-            await client.lPush('participants:list', participant.id);
+            pipeline.lPush('participants:list', participant.id);
             
-            // Guardar por ID para acceso rápido
-            await client.set(`participant:id:${participant.id}`, JSON.stringify(participant));
+            // Ejecutar todas las operaciones
+            await pipeline.exec();
         });
+
+        console.log('✅ Participante guardado en Redis');
 
         // Actualizar estadísticas
         await updateStatistics(role);
-
-        // Logs para debugging
-        console.log('Nuevo participante registrado:', {
-            id: participant.id,
-            email: participant.email,
-            category: participant.category,
-            timestamp: participant.registrationDate
-        });
+        
+        console.log('📊 Estadísticas actualizadas');
 
         // Respuesta exitosa
         res.status(201).json({
@@ -143,11 +206,14 @@ export default async function handler(req, res) {
             }
         });
 
+        console.log(`🎉 Registro completado exitosamente: ${participant.fullName}`);
+
     } catch (error) {
-        console.error('Error en el registro:', error);
+        console.error('💥 Error en el registro:', error);
         res.status(500).json({ 
             error: 'Error interno del servidor',
-            message: 'No se pudo procesar el registro. Por favor intente nuevamente.'
+            message: 'No se pudo procesar el registro. Por favor intente nuevamente.',
+            details: error.message
         });
     }
 }
@@ -155,6 +221,8 @@ export default async function handler(req, res) {
 // Función auxiliar para actualizar estadísticas
 async function updateStatistics(role) {
     try {
+        console.log('📈 Actualizando estadísticas...');
+        
         // Obtener estadísticas actuales
         const currentStats = await redisOperation(async (client) => {
             const data = await client.get('site:statistics');
@@ -182,17 +250,30 @@ async function updateStatistics(role) {
         });
         
         dailyStats.registrations += 1;
+        dailyStats.lastUpdate = new Date().toISOString();
         
         // Guardar estadísticas actualizadas
         await redisOperation(async (client) => {
-            await client.set('site:statistics', JSON.stringify(updatedStats));
-            await client.set(dailyKey, JSON.stringify(dailyStats));
-            // Establecer expiración para las estadísticas diarias (30 días)
-            await client.expire(dailyKey, 30 * 24 * 60 * 60);
+            const pipeline = client.multi();
+            
+            pipeline.set('site:statistics', JSON.stringify(updatedStats));
+            pipeline.set(dailyKey, JSON.stringify(dailyStats));
+            pipeline.expire(dailyKey, 30 * 24 * 60 * 60); // 30 días
+            
+            await pipeline.exec();
         });
 
+        console.log('✅ Estadísticas actualizadas exitosamente');
+
     } catch (error) {
-        console.error('Error actualizando estadísticas:', error);
+        console.error('⚠️ Error actualizando estadísticas:', error);
         // No fallar el registro si hay error en estadísticas
     }
 }
+
+// Cleanup al cerrar
+process.on('SIGTERM', async () => {
+    if (redis && isConnected) {
+        await redis.quit();
+    }
+});

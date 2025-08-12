@@ -1,36 +1,88 @@
 import { createClient } from 'redis';
 
-// Crear cliente Redis para Redis Cloud
-const redis = createClient({
-    url: process.env.OLIMPIADAS_KV_REDIS_URL,
-    socket: {
-        tls: true,
-        rejectUnauthorized: false
-    }
-});
-
+// Configuración para tu Redis Cloud específico
+let redis = null;
 let isConnected = false;
 
-async function connectRedis() {
-    if (!isConnected) {
-        try {
-            await redis.connect();
-            isConnected = true;
-            console.log('✅ Conectado a Redis Cloud');
-        } catch (error) {
-            console.error('❌ Error conectando a Redis:', error);
-            throw error;
+async function createRedisClient() {
+    const redisUrl = process.env.OLIMPIADAS_KV_REDIS_URL;
+    
+    if (!redisUrl) {
+        throw new Error('Variable de entorno OLIMPIADAS_KV_REDIS_URL no encontrada');
+    }
+
+    console.log('🔄 Conectando a Redis Cloud para estadísticas...');
+    
+    const usesTLS = redisUrl.startsWith('rediss://');
+    
+    try {
+        const clientConfig = {
+            url: redisUrl,
+            socket: {
+                connectTimeout: 10000,
+                lazyConnect: true
+            },
+            retry_delay_on_failover: 100,
+            enable_offline_queue: false
+        };
+
+        if (usesTLS) {
+            clientConfig.socket.tls = true;
+            clientConfig.socket.rejectUnauthorized = false;
         }
+
+        redis = createClient(clientConfig);
+
+        redis.on('error', (err) => {
+            console.error('❌ Redis Error (stats):', err.message);
+            isConnected = false;
+        });
+
+        redis.on('ready', () => {
+            console.log('✅ Redis listo para estadísticas');
+            isConnected = true;
+        });
+
+        redis.on('end', () => {
+            console.log('🔌 Redis desconectado (stats)');
+            isConnected = false;
+        });
+
+        return redis;
+    } catch (error) {
+        console.error('❌ Error creando cliente Redis (stats):', error);
+        throw error;
+    }
+}
+
+async function connectRedis() {
+    if (isConnected && redis) {
+        return redis;
+    }
+
+    try {
+        if (!redis) {
+            redis = await createRedisClient();
+        }
+
+        if (!isConnected) {
+            await redis.connect();
+        }
+
+        return redis;
+    } catch (error) {
+        console.error('❌ Error conectando a Redis (stats):', error);
+        isConnected = false;
+        throw error;
     }
 }
 
 async function redisOperation(operation) {
     try {
-        await connectRedis();
-        return await operation(redis);
+        const client = await connectRedis();
+        return await operation(client);
     } catch (error) {
-        console.error('Error en operación Redis:', error);
-        isConnected = false;
+        console.error('🚨 Error en operación Redis (stats):', error.message);
         throw error;
     }
 }
@@ -48,13 +100,24 @@ export default async function handler(req, res) {
 
     try {
         if (req.method === 'GET') {
+            console.log('📊 Obteniendo estadísticas completas...');
+            
             // Obtener estadísticas actuales
             const stats = await getCompleteStatistics();
+            
+            console.log('✅ Estadísticas obtenidas:', {
+                participantes: stats.participantesOlimpiadas,
+                estudiantes: stats.estudiantes,
+                total: stats.visitantes
+            });
+            
             res.status(200).json(stats);
             
         } else if (req.method === 'POST') {
             // Actualizar estadísticas (para uso interno o votaciones)
             const { action, role, value } = req.body;
+            
+            console.log(`📝 Acción de estadísticas: ${action}, rol: ${role}`);
             
             if (action === 'vote' && role) {
                 await handleRoleVote(role);
@@ -75,10 +138,11 @@ export default async function handler(req, res) {
         }
         
     } catch (error) {
-        console.error('Error en API de estadísticas:', error);
+        console.error('💥 Error en API de estadísticas:', error);
         res.status(500).json({ 
             error: 'Error interno del servidor',
-            message: 'No se pudieron obtener las estadísticas'
+            message: 'No se pudieron obtener las estadísticas',
+            details: error.message
         });
     }
 }
@@ -86,19 +150,24 @@ export default async function handler(req, res) {
 // Función para obtener estadísticas completas
 async function getCompleteStatistics() {
     try {
-        const [
-            siteStats,
-            visitorStats,
-            olympicsStats,
-            roleVotes
-        ] = await Promise.all([
-            getSiteStatistics(),
-            getVisitorStatistics(),
-            getOlympicsStatistics(),
-            getRoleVotes()
-        ]);
+        console.log('🔍 Compilando estadísticas...');
+        
+        // Obtener estadísticas generales del sitio
+        const siteStats = await redisOperation(async (client) => {
+            const data = await client.get('site:statistics');
+            return data ? JSON.parse(data) : {};
+        });
+        
+        // Obtener estadísticas de visitantes
+        const visitorStats = await getVisitorStatistics();
+        
+        // Obtener estadísticas de olimpiadas
+        const olympicsStats = await getOlympicsStatistics();
+        
+        // Obtener votaciones de roles
+        const roleVotes = await getRoleVotes();
 
-        return {
+        const completeStats = {
             // Estadísticas de visitantes
             visitantes: visitorStats.total || 0,
             visitantesHoy: visitorStats.today || 0,
@@ -118,26 +187,16 @@ async function getCompleteStatistics() {
             roleVotes: roleVotes,
             
             // Metadatos
-            lastUpdated: new Date().toISOString(),
+            lastUpdated: siteStats.lastUpdated || new Date().toISOString(),
             serverTime: new Date().toISOString()
         };
+        
+        console.log('📈 Estadísticas compiladas exitosamente');
+        return completeStats;
         
     } catch (error) {
         console.error('Error obteniendo estadísticas completas:', error);
         return getDefaultStatistics();
-    }
-}
-
-// Función para obtener estadísticas del sitio
-async function getSiteStatistics() {
-    try {
-        return await redisOperation(async (client) => {
-            const data = await client.get('site:statistics');
-            return data ? JSON.parse(data) : {};
-        });
-    } catch (error) {
-        console.error('Error obteniendo estadísticas del sitio:', error);
-        return {};
     }
 }
 
@@ -187,6 +246,7 @@ async function getVisitorStatistics() {
 // Función para obtener estadísticas específicas de olimpiadas
 async function getOlympicsStatistics() {
     try {
+        // Contar participantes totales
         const participantIds = await redisOperation(async (client) => {
             return await client.lRange('participants:list', 0, -1);
         });
@@ -254,6 +314,8 @@ async function handleRoleVote(role) {
             throw new Error('Rol no válido');
         }
 
+        console.log(`🗳️ Procesando voto para rol: ${role}`);
+
         const voteKey = `role:votes:${role}`;
         
         const currentVotes = await redisOperation(async (client) => {
@@ -278,6 +340,8 @@ async function handleRoleVote(role) {
             await client.set('site:statistics', JSON.stringify(currentStats));
         });
         
+        console.log(`✅ Voto para ${role} procesado exitosamente`);
+        
     } catch (error) {
         console.error('Error procesando voto de rol:', error);
         throw error;
@@ -287,6 +351,8 @@ async function handleRoleVote(role) {
 // Función para incrementar contador de visitantes
 async function incrementVisitors() {
     try {
+        console.log('👥 Incrementando contador de visitantes...');
+        
         const today = new Date().toISOString().split('T')[0];
         const totalKey = 'visitors:total';
         const dailyKey = `visitors:daily:${today}`;
@@ -303,11 +369,16 @@ async function incrementVisitors() {
         ]);
         
         await redisOperation(async (client) => {
-            await client.set(totalKey, currentTotal + 1);
-            await client.set(dailyKey, currentDaily + 1);
-            // Establecer expiración para estadísticas diarias (30 días)
-            await client.expire(dailyKey, 30 * 24 * 60 * 60);
+            const pipeline = client.multi();
+            
+            pipeline.set(totalKey, currentTotal + 1);
+            pipeline.set(dailyKey, currentDaily + 1);
+            pipeline.expire(dailyKey, 30 * 24 * 60 * 60); // 30 días
+            
+            await pipeline.exec();
         });
+        
+        console.log('✅ Contador de visitantes actualizado');
         
     } catch (error) {
         console.error('Error incrementando visitantes:', error);
@@ -337,3 +408,10 @@ function getDefaultStatistics() {
         serverTime: new Date().toISOString()
     };
 }
+
+// Cleanup al cerrar
+process.on('SIGTERM', async () => {
+    if (redis && isConnected) {
+        await redis.quit();
+    }
+});
