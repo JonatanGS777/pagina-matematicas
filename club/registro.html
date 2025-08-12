@@ -8,75 +8,49 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         /* ==================== CSS Variables ==================== */
         :root {
-            /* Colors */
             --color-primary: #2563eb;
-            --color-primary-dark: #1d4ed8;
             --color-secondary: #7c3aed;
             --color-accent: #f59e0b;
             --color-success: #10b981;
-            --color-warning: #f59e0b;
             --color-danger: #ef4444;
-            --color-gold: #fbbf24;
-            
-            /* Neutrals */
             --color-white: #ffffff;
             --color-gray-50: #f9fafb;
             --color-gray-100: #f3f4f6;
             --color-gray-200: #e5e7eb;
             --color-gray-300: #d1d5db;
-            --color-gray-400: #9ca3af;
             --color-gray-500: #6b7280;
             --color-gray-600: #4b5563;
             --color-gray-700: #374151;
             --color-gray-800: #1f2937;
             --color-gray-900: #111827;
-            
-            /* Gradients */
             --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
             --gradient-hero: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
-            
-            /* Shadows */
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
             --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            
-            /* Spacing */
             --space-1: 0.25rem;
             --space-2: 0.5rem;
-            --space-3: 0.75rem;
             --space-4: 1rem;
             --space-6: 1.5rem;
             --space-8: 2rem;
             --space-12: 3rem;
-            --space-16: 4rem;
-            --space-20: 5rem;
-            
-            /* Border Radius */
-            --radius-md: 0.375rem;
             --radius-lg: 0.5rem;
             --radius-xl: 0.75rem;
             --radius-2xl: 1rem;
             --radius-3xl: 1.5rem;
             --radius-full: 9999px;
-            
-            /* Transitions */
             --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ==================== Reset & Base ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
         }
 
         body {
@@ -88,7 +62,6 @@
             padding: var(--space-8) 0;
         }
 
-        /* ==================== Container ==================== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -100,6 +73,26 @@
             text-align: center;
             margin-bottom: var(--space-12);
             color: var(--color-white);
+        }
+
+        .header__back {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--color-white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-2) var(--space-6);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            backdrop-filter: blur(10px);
+            transition: var(--transition-base);
+            margin-bottom: var(--space-8);
+        }
+
+        .header__back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .header__title {
@@ -117,27 +110,7 @@
             margin: 0 auto;
         }
 
-        .header__back {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            color: var(--color-white);
-            text-decoration: none;
-            font-weight: 500;
-            padding: var(--space-3) var(--space-6);
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-full);
-            backdrop-filter: blur(10px);
-            transition: var(--transition-base);
-            margin-bottom: var(--space-8);
-        }
-
-        .header__back:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        /* ==================== Main Content ==================== */
+        /* ==================== Main Layout ==================== */
         .main {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -146,7 +119,7 @@
             margin: 0 auto;
         }
 
-        /* ==================== Registration Form ==================== */
+        /* ==================== Form Section ==================== */
         .form-section {
             background: var(--color-white);
             border-radius: var(--radius-3xl);
@@ -173,6 +146,59 @@
             line-height: 1.6;
         }
 
+        /* ==================== Status Indicator ==================== */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+            padding: var(--space-2) var(--space-4);
+            background: var(--color-gray-50);
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            border: 1px solid var(--color-gray-200);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot--online { background: var(--color-success); }
+        .status-dot--offline { background: var(--color-danger); }
+        .status-dot--loading { background: var(--color-accent); animation: pulse 2s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ==================== Messages ==================== */
+        .message {
+            display: none;
+            padding: var(--space-4);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-6);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.show {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .message--success { background: var(--color-success); color: white; }
+        .message--error { background: var(--color-danger); color: white; }
+        .message--info { background: var(--color-primary); color: white; }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== Form Elements ==================== */
         .form__group {
             margin-bottom: var(--space-6);
         }
@@ -184,8 +210,7 @@
             margin-bottom: var(--space-2);
         }
 
-        .form__input,
-        .form__select {
+        .form__input, .form__select {
             width: 100%;
             padding: var(--space-4);
             border: 2px solid var(--color-gray-200);
@@ -195,15 +220,13 @@
             background: var(--color-white);
         }
 
-        .form__input:focus,
-        .form__select:focus {
+        .form__input:focus, .form__select:focus {
             outline: none;
             border-color: var(--color-primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .form__input.error,
-        .form__select.error {
+        .form__input.error, .form__select.error {
             border-color: var(--color-danger);
         }
 
@@ -237,7 +260,7 @@
 
         .form__submit:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
         }
 
         .form__submit:disabled {
@@ -260,48 +283,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ==================== Success/Error Messages ==================== */
-        .message {
-            display: none;
-            padding: var(--space-4);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--space-6);
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .message.show {
-            display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        .message--success {
-            background: var(--color-success);
-            color: var(--color-white);
-        }
-
-        .message--error {
-            background: var(--color-danger);
-            color: var(--color-white);
-        }
-
-        .message--info {
-            background: var(--color-primary);
-            color: var(--color-white);
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ==================== Registered List ==================== */
+        /* ==================== List Section ==================== */
         .list-section {
             background: var(--color-white);
             border-radius: var(--radius-3xl);
@@ -404,44 +386,27 @@
         }
 
         .participant__badge {
-            padding: var(--space-1) var(--space-3);
+            padding: var(--space-1) var(--space-2);
             border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-        }
-
-        .participant__badge--student {
             background: rgba(16, 185, 129, 0.1);
             color: var(--color-success);
         }
 
-        .participant__badge--teacher {
-            background: rgba(37, 99, 235, 0.1);
-            color: var(--color-primary);
-        }
-
-        .participant__badge--parent {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--color-accent);
-        }
-
-        /* ==================== Loading States ==================== */
+        /* ==================== Loading & Error States ==================== */
         .loading-skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
-            border-radius: var(--radius-md);
+            border-radius: var(--space-1);
         }
 
         @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .skeleton-card {
@@ -463,15 +428,9 @@
             margin-bottom: var(--space-2);
         }
 
-        .skeleton-text--wide {
-            width: 60%;
-        }
+        .skeleton-text--wide { width: 60%; }
+        .skeleton-text--narrow { width: 40%; }
 
-        .skeleton-text--narrow {
-            width: 40%;
-        }
-
-        /* ==================== Error States ==================== */
         .error-message {
             text-align: center;
             padding: var(--space-8);
@@ -484,93 +443,19 @@
             color: var(--color-gray-400);
         }
 
-        /* ==================== Status Indicator ==================== */
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            margin-bottom: var(--space-4);
-            padding: var(--space-2) var(--space-4);
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: var(--radius-lg);
-            font-size: 0.875rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .status-dot--online {
-            background: var(--color-success);
-        }
-
-        .status-dot--offline {
-            background: var(--color-danger);
-        }
-
         /* ==================== Responsive Design ==================== */
         @media (max-width: 1024px) {
             .main {
                 grid-template-columns: 1fr;
                 gap: var(--space-6);
             }
-            
-            .list__stats {
-                grid-template-columns: repeat(3, 1fr);
-            }
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: var(--space-4) 0;
-            }
-
-            .form-section,
-            .list-section {
-                padding: var(--space-6);
-            }
-
-            .header__title {
-                font-size: 2.5rem;
-            }
-
-            .header__subtitle {
-                font-size: 1.1rem;
-            }
-
-            .list__stats {
-                grid-template-columns: 1fr;
-                gap: var(--space-3);
-            }
-
-            .participant-card {
-                flex-direction: column;
-                align-items: flex-start;
-                text-align: left;
-            }
-
-            .participant__info {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .form-section,
-            .list-section {
-                padding: var(--space-4);
-            }
-
-            .participant-card {
-                padding: var(--space-3);
-            }
-
-            .participant__avatar {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
+            body { padding: var(--space-4) 0; }
+            .form-section, .list-section { padding: var(--space-6); }
+            .header__title { font-size: 2.5rem; }
+            .list__stats { grid-template-columns: 1fr; gap: var(--space-2); }
         }
     </style>
 </head>
@@ -600,81 +485,58 @@
 
                 <!-- Status Indicator -->
                 <div class="status-indicator">
-                    <span class="status-dot status-dot--online" id="apiStatus"></span>
-                    <span id="apiStatusText">Conectando...</span>
+                    <span class="status-dot status-dot--loading" id="statusDot"></span>
+                    <span id="statusText">Conectando a Supabase...</span>
                 </div>
 
                 <!-- Messages -->
                 <div id="successMessage" class="message message--success">
                     <i class="fas fa-check-circle"></i>
-                    ¡Registro exitoso! Bienvenido al Club de Matemáticas.
+                    <span id="successText">¡Registro exitoso!</span>
                 </div>
 
                 <div id="errorMessage" class="message message--error">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <span id="errorText">Ha ocurrido un error</span>
+                    <span id="errorText">Error en el registro</span>
                 </div>
 
                 <div id="infoMessage" class="message message--info">
                     <i class="fas fa-info-circle"></i>
-                    <span id="infoText">Información del sistema</span>
+                    <span id="infoText">Información</span>
                 </div>
 
+                <!-- Form -->
                 <form id="registrationForm" class="form">
                     <div class="form__group">
                         <label for="fullName" class="form__label">
-                            <i class="fas fa-user"></i>
-                            Nombre Completo *
+                            <i class="fas fa-user"></i> Nombre Completo *
                         </label>
-                        <input 
-                            type="text" 
-                            id="fullName" 
-                            name="fullName" 
-                            class="form__input" 
-                            required
-                            placeholder="Ej: María González López"
-                        >
-                        <div class="form__error" id="fullNameError">Por favor ingrese su nombre completo</div>
+                        <input type="text" id="fullName" name="fullName" class="form__input" required
+                               placeholder="Ej: María González López">
+                        <div class="form__error" id="fullNameError">El nombre completo es requerido</div>
                     </div>
 
                     <div class="form__group">
                         <label for="email" class="form__label">
-                            <i class="fas fa-envelope"></i>
-                            Correo Electrónico *
+                            <i class="fas fa-envelope"></i> Correo Electrónico *
                         </label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            class="form__input" 
-                            required
-                            placeholder="ejemplo@email.com"
-                        >
-                        <div class="form__error" id="emailError">Por favor ingrese un correo electrónico válido</div>
+                        <input type="email" id="email" name="email" class="form__input" required
+                               placeholder="ejemplo@email.com">
+                        <div class="form__error" id="emailError">Email válido requerido</div>
                     </div>
 
                     <div class="form__group">
                         <label for="age" class="form__label">
-                            <i class="fas fa-birthday-cake"></i>
-                            Edad *
+                            <i class="fas fa-birthday-cake"></i> Edad *
                         </label>
-                        <input 
-                            type="number" 
-                            id="age" 
-                            name="age" 
-                            class="form__input" 
-                            required
-                            min="10" 
-                            max="25"
-                            placeholder="15"
-                        >
-                        <div class="form__error" id="ageError">Por favor ingrese una edad válida (10-25 años)</div>
+                        <input type="number" id="age" name="age" class="form__input" required
+                               min="10" max="25" placeholder="15">
+                        <div class="form__error" id="ageError">Edad entre 10-25 años</div>
                     </div>
 
                     <div class="form__group">
                         <label for="grade" class="form__label">
-                            <i class="fas fa-graduation-cap"></i>
-                            Grado Escolar *
+                            <i class="fas fa-graduation-cap"></i> Grado Escolar *
                         </label>
                         <select id="grade" name="grade" class="form__select" required>
                             <option value="">Seleccionar grado</option>
@@ -685,63 +547,49 @@
                             <option value="11mo">11mo Grado</option>
                             <option value="12mo">12mo Grado</option>
                         </select>
-                        <div class="form__error" id="gradeError">Por favor seleccione su grado escolar</div>
+                        <div class="form__error" id="gradeError">Seleccione un grado</div>
                     </div>
 
                     <div class="form__group">
                         <label for="school" class="form__label">
-                            <i class="fas fa-school"></i>
-                            Escuela
+                            <i class="fas fa-school"></i> Escuela
                         </label>
-                        <input 
-                            type="text" 
-                            id="school" 
-                            name="school" 
-                            class="form__input"
-                            placeholder="Ej: Escuela Superior María Teresa Piñeiro"
-                        >
+                        <input type="text" id="school" name="school" class="form__input"
+                               placeholder="Ej: Escuela Superior Central">
                     </div>
 
                     <div class="form__group">
                         <label for="category" class="form__label">
-                            <i class="fas fa-trophy"></i>
-                            Categoría de Competencia *
+                            <i class="fas fa-trophy"></i> Categoría *
                         </label>
                         <select id="category" name="category" class="form__select" required>
                             <option value="">Seleccionar categoría</option>
                             <option value="novato">Novato (Principiantes)</option>
                             <option value="intermedio">Intermedio (Con experiencia)</option>
-                            <option value="avanzado">Avanzado (Veteranos del club)</option>
+                            <option value="avanzado">Avanzado (Veteranos)</option>
                         </select>
-                        <div class="form__error" id="categoryError">Por favor seleccione una categoría</div>
+                        <div class="form__error" id="categoryError">Seleccione una categoría</div>
                     </div>
 
                     <div class="form__group">
                         <label for="experience" class="form__label">
-                            <i class="fas fa-star"></i>
-                            Experiencia Previa
+                            <i class="fas fa-star"></i> Experiencia Previa
                         </label>
                         <select id="experience" name="experience" class="form__select">
                             <option value="">Seleccionar experiencia</option>
                             <option value="ninguna">Ninguna experiencia</option>
-                            <option value="poca">Poca experiencia (1 año)</option>
+                            <option value="poca">Poca (1 año)</option>
                             <option value="moderada">Moderada (2-3 años)</option>
-                            <option value="mucha">Mucha experiencia (4+ años)</option>
+                            <option value="mucha">Mucha (4+ años)</option>
                         </select>
                     </div>
 
                     <div class="form__group">
                         <label for="motivation" class="form__label">
-                            <i class="fas fa-heart"></i>
-                            ¿Por qué quieres participar en las olimpiadas?
+                            <i class="fas fa-heart"></i> ¿Por qué quieres participar?
                         </label>
-                        <input 
-                            type="text" 
-                            id="motivation" 
-                            name="motivation" 
-                            class="form__input"
-                            placeholder="Ej: Me encantan los desafíos matemáticos y quiero mejorar mis habilidades"
-                        >
+                        <input type="text" id="motivation" name="motivation" class="form__input"
+                               placeholder="Me encantan los desafíos matemáticos...">
                     </div>
 
                     <button type="submit" class="form__submit" id="submitBtn">
@@ -752,36 +600,29 @@
                 </form>
             </section>
 
-            <!-- Registered Participants List -->
+            <!-- Participants List -->
             <section class="list-section">
                 <h2 class="list__title">Participantes Registrados</h2>
 
                 <!-- Statistics -->
                 <div class="list__stats">
                     <div class="stat-card">
-                        <span class="stat-card__number" id="totalCount">0</span>
+                        <span class="stat-card__number" id="totalCount">-</span>
                         <span class="stat-card__label">Total</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-card__number" id="studentCount">0</span>
+                        <span class="stat-card__number" id="studentCount">-</span>
                         <span class="stat-card__label">Estudiantes</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-card__number" id="todayCount">0</span>
+                        <span class="stat-card__number" id="todayCount">-</span>
                         <span class="stat-card__label">Hoy</span>
                     </div>
                 </div>
 
-                <!-- Participants List -->
+                <!-- Participants Container -->
                 <div class="list__container" id="participantsList">
-                    <!-- Loading skeleton while fetching data -->
-                    <div class="skeleton-card">
-                        <div class="loading-skeleton skeleton-avatar"></div>
-                        <div style="flex: 1;">
-                            <div class="loading-skeleton skeleton-text skeleton-text--wide"></div>
-                            <div class="loading-skeleton skeleton-text skeleton-text--narrow"></div>
-                        </div>
-                    </div>
+                    <!-- Loading skeleton -->
                     <div class="skeleton-card">
                         <div class="loading-skeleton skeleton-avatar"></div>
                         <div style="flex: 1;">
@@ -795,100 +636,76 @@
     </div>
 
     <script>
-        // ==================== Configuration ==================== 
-        const CONFIG = {
-            // Auto-detect environment
-            IS_PRODUCTION: !['localhost', '127.0.0.1', ''].includes(window.location.hostname),
-            API_BASE_URL: window.location.origin,
-            DEBUG: ['localhost', '127.0.0.1', ''].includes(window.location.hostname),
-            RETRY_ATTEMPTS: 3,
-            RETRY_DELAY: 1000
+        // ==================== Supabase Configuration ==================== 
+        const SUPABASE_CONFIG = {
+            url: 'https://ztrhumtqvmqsskcdcykt.supabase.co', // 🔄 CAMBIAR POR TU URL
+            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0cmh1bXRxdm1xc3NrY2RjeWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTU4ODksImV4cCI6MjA3MDU5MTg4OX0.3bAdCuuI_UTLBFF7O79H6cx8k2dJ04e7Ka80-6i4UIE' // 🔄  KEY Actualizada
         };
 
-        // ==================== Olympic Registration Class ==================== 
-        class OlympicsRegistration {
+        // Initialize Supabase client
+        const supabase = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // ==================== Olympics Registration App ==================== 
+        class OlympicsSupabaseApp {
             constructor() {
                 this.form = document.getElementById('registrationForm');
-                this.participantsList = document.getElementById('participantsList');
                 this.participants = [];
                 this.statistics = {};
-                this.isOnline = navigator.onLine;
-                this.apiStatus = 'checking';
+                this.isConnected = false;
                 this.init();
             }
 
             async init() {
                 this.setupEventListeners();
-                this.updateConnectionStatus();
-                await this.checkApiHealth();
-                await this.loadParticipants();
+                await this.checkConnection();
+                if (this.isConnected) {
+                    await this.loadParticipants();
+                    this.setupRealTimeSubscription();
+                }
             }
 
             setupEventListeners() {
-                // Form submission
                 this.form.addEventListener('submit', (e) => this.handleSubmit(e));
                 
-                // Real-time validation
+                // Form validation
                 this.form.querySelectorAll('input, select').forEach(field => {
                     field.addEventListener('blur', () => this.validateField(field));
                     field.addEventListener('input', () => this.clearError(field));
                 });
-
-                // Network status
-                window.addEventListener('online', () => {
-                    this.isOnline = true;
-                    this.updateConnectionStatus();
-                    this.checkApiHealth();
-                });
-
-                window.addEventListener('offline', () => {
-                    this.isOnline = false;
-                    this.updateConnectionStatus();
-                });
             }
 
-            // ==================== API Health Check ==================== 
-            async checkApiHealth() {
-                if (!this.isOnline) {
-                    this.apiStatus = 'offline';
-                    this.updateConnectionStatus();
-                    return;
-                }
-
+            // ==================== Supabase Connection ==================== 
+            async checkConnection() {
                 try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    this.updateStatus('loading', 'Conectando a Supabase...');
+                    
+                    // Test connection with a simple query
+                    const { data, error } = await supabase
+                        .from('participants')
+                        .select('count')
+                        .limit(1);
 
-                    const response = await fetch(`${CONFIG.API_BASE_URL}/api/stats`, {
-                        method: 'GET',
-                        signal: controller.signal,
-                        headers: {
-                            'Cache-Control': 'no-cache'
-                        }
-                    });
+                    if (error) throw error;
 
-                    clearTimeout(timeoutId);
-
-                    if (response.ok) {
-                        this.apiStatus = 'online';
-                        this.log('✅ APIs están funcionando correctamente');
-                    } else {
-                        this.apiStatus = 'error';
-                        this.log(`⚠️ API respondió con status ${response.status}`);
-                    }
+                    this.isConnected = true;
+                    this.updateStatus('online', 'Conectado a Supabase ✓');
+                    this.log('✅ Supabase conectado exitosamente');
+                    
                 } catch (error) {
-                    this.apiStatus = 'error';
-                    this.log(`❌ Error de conexión API: ${error.message}`);
+                    this.isConnected = false;
+                    this.updateStatus('offline', 'Error de conexión');
+                    this.log('❌ Error conectando a Supabase:', error.message);
+                    this.showMessage('error', 'Error de conexión a la base de datos. Algunas funciones pueden no estar disponibles.');
                 }
-
-                this.updateConnectionStatus();
             }
 
             // ==================== Form Submission ==================== 
             async handleSubmit(e) {
                 e.preventDefault();
                 
-                if (!this.validateForm()) {
+                if (!this.validateForm()) return;
+                if (!this.isConnected) {
+                    this.showMessage('error', 'Sin conexión a la base de datos');
                     return;
                 }
 
@@ -897,167 +714,107 @@
                 try {
                     const formData = new FormData(this.form);
                     const participantData = {
-                        fullName: formData.get('fullName'),
-                        email: formData.get('email'),
+                        full_name: formData.get('fullName'),
+                        email: formData.get('email').toLowerCase(),
                         age: parseInt(formData.get('age')),
                         grade: formData.get('grade'),
                         school: formData.get('school') || 'No especificado',
                         category: formData.get('category'),
-                        experience: formData.get('experience') || 'No especificado',
-                        motivation: formData.get('motivation') || 'No especificado',
+                        experience: formData.get('experience') || 'ninguna',
+                        motivation: formData.get('motivation') || '',
                         role: 'estudiante'
                     };
 
-                    this.log('📝 Enviando registro...', participantData);
+                    this.log('📝 Enviando registro a Supabase...', participantData);
 
-                    const result = await this.saveParticipant(participantData);
-                    
-                    if (result.success) {
-                        this.showMessage('success', '¡Registro exitoso! Bienvenido al Club de Matemáticas.');
-                        this.form.reset();
-                        await this.loadParticipants();
-                        this.log('✅ Registro completado exitosamente');
-                    } else {
-                        throw new Error(result.error || 'Error desconocido en el registro');
+                    // Insert into Supabase
+                    const { data, error } = await supabase
+                        .from('participants')
+                        .insert([participantData])
+                        .select();
+
+                    if (error) {
+                        if (error.code === '23505') { // Unique constraint violation
+                            throw new Error('Este correo electrónico ya está registrado');
+                        }
+                        throw error;
                     }
+
+                    this.log('✅ Registro exitoso en Supabase:', data[0]);
+                    this.showMessage('success', `¡Bienvenido ${participantData.full_name}! Registro exitoso.`);
+                    this.form.reset();
+
+                    // Refresh participants list
+                    await this.loadParticipants();
 
                 } catch (error) {
-                    this.log('❌ Error en el registro:', error);
-                    let errorMessage = 'Hubo un error al procesar el registro.';
-                    
-                    if (error.message.includes('ya está registrado')) {
-                        errorMessage = 'Este correo electrónico ya está registrado.';
-                    } else if (error.message.includes('faltantes')) {
-                        errorMessage = 'Por favor complete todos los campos requeridos.';
-                    } else if (error.message.includes('edad')) {
-                        errorMessage = 'La edad debe estar entre 10 y 25 años.';
-                    }
-                    
-                    this.showMessage('error', errorMessage);
+                    this.log('❌ Error en registro:', error);
+                    this.showMessage('error', error.message || 'Error al procesar el registro');
                 } finally {
                     this.setLoadingState(false);
                 }
             }
 
-            // ==================== API Requests ==================== 
-            async saveParticipant(data) {
-                try {
-                    // Try API first if online
-                    if (this.apiStatus === 'online') {
-                        const response = await fetch(`${CONFIG.API_BASE_URL}/api/register`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data)
-                        });
-
-                        const result = await response.json();
-
-                        if (!response.ok) {
-                            throw new Error(result.error || `Error ${response.status}`);
-                        }
-
-                        this.log('✅ Registro guardado en base de datos');
-                        return result;
-                    }
-                    
-                    // Fallback to localStorage
-                    return this.saveParticipantLocal(data);
-                    
-                } catch (error) {
-                    this.log('⚠️ API falló, usando almacenamiento local:', error.message);
-                    return this.saveParticipantLocal(data);
-                }
-            }
-
+            // ==================== Data Loading ==================== 
             async loadParticipants() {
                 try {
                     this.showLoadingSkeleton();
-                    
-                    // Try API first if online
-                    if (this.apiStatus === 'online') {
-                        const response = await fetch(`${CONFIG.API_BASE_URL}/api/participants?includeStats=true&limit=100`);
+
+                    // Get participants and statistics in parallel
+                    const [participantsResult, statsResult] = await Promise.all([
+                        supabase
+                            .from('participants')
+                            .select('*')
+                            .eq('status', 'active')
+                            .order('registration_date', { ascending: false })
+                            .limit(50),
                         
-                        if (response.ok) {
-                            const data = await response.json();
-                            
-                            this.participants = data.participants || [];
-                            this.statistics = data.statistics || {};
-                            
-                            this.renderParticipants();
-                            this.updateStatisticsFromApi();
-                            
-                            this.log(`✅ Cargados ${this.participants.length} participantes desde API`);
-                            
-                            if (data.source === 'redis_cloud') {
-                                this.showMessage('info', 'Datos cargados desde la base de datos en tiempo real.', 2000);
-                            }
-                            
-                            return;
-                        }
-                    }
-                    
-                    // Fallback to localStorage
-                    await this.loadParticipantsLocal();
-                    
-                } catch (error) {
-                    this.log('⚠️ Error cargando desde API, usando almacenamiento local:', error);
-                    await this.loadParticipantsLocal();
-                }
-            }
+                        supabase
+                            .from('participant_stats')
+                            .select('*')
+                            .single()
+                    ]);
 
-            // ==================== Local Storage Fallbacks ==================== 
-            async saveParticipantLocal(data) {
-                const participants = JSON.parse(localStorage.getItem('olympicsParticipants') || '[]');
-                
-                // Check if email already exists
-                if (participants.some(p => p.email === data.email)) {
-                    throw new Error('El correo electrónico ya está registrado');
-                }
+                    if (participantsResult.error) throw participantsResult.error;
 
-                const participant = {
-                    ...data,
-                    id: Date.now().toString(),
-                    registrationDate: new Date().toISOString(),
-                    status: 'active'
-                };
+                    this.participants = participantsResult.data || [];
+                    this.statistics = statsResult.data || {};
 
-                participants.push(participant);
-                localStorage.setItem('olympicsParticipants', JSON.stringify(participants));
-                
-                this.log('💾 Participante guardado en localStorage');
-                return { success: true, participant };
-            }
-
-            async loadParticipantsLocal() {
-                try {
-                    await this.simulateApiDelay(500);
-                    
-                    const participants = JSON.parse(localStorage.getItem('olympicsParticipants') || '[]');
-                    this.participants = participants.sort((a, b) => 
-                        new Date(b.registrationDate) - new Date(a.registrationDate)
-                    );
-                    
                     this.renderParticipants();
                     this.updateStatistics();
-                    
-                    this.log(`📱 Cargados ${this.participants.length} participantes desde localStorage`);
-                    
-                    if (this.participants.length > 0) {
-                        this.showMessage('info', 'Mostrando datos almacenados localmente.', 2000);
-                    }
-                    
+
+                    this.log(`✅ Cargados ${this.participants.length} participantes desde Supabase`);
+
                 } catch (error) {
-                    this.log('❌ Error cargando participantes locales:', error);
+                    this.log('❌ Error cargando datos:', error);
                     this.showErrorState();
                 }
             }
 
+            // ==================== Real-time Updates ==================== 
+            setupRealTimeSubscription() {
+                // Subscribe to real-time changes in participants table
+                supabase
+                    .channel('participants-channel')
+                    .on('postgres_changes', {
+                        event: '*',
+                        schema: 'public',
+                        table: 'participants'
+                    }, (payload) => {
+                        this.log('📡 Real-time update:', payload);
+                        this.loadParticipants(); // Refresh data
+                    })
+                    .subscribe();
+
+                this.log('📡 Subscrito a actualizaciones en tiempo real');
+            }
+
             // ==================== UI Rendering ==================== 
             renderParticipants() {
+                const container = document.getElementById('participantsList');
+
                 if (this.participants.length === 0) {
-                    this.participantsList.innerHTML = `
+                    container.innerHTML = `
                         <div class="error-message">
                             <i class="fas fa-users"></i>
                             <p>Aún no hay participantes registrados.</p>
@@ -1067,74 +824,56 @@
                     return;
                 }
 
-                this.participantsList.innerHTML = this.participants.map(participant => {
-                    const initials = participant.fullName.split(' ')
+                container.innerHTML = this.participants.map(participant => {
+                    const initials = participant.full_name
+                        .split(' ')
                         .map(name => name[0])
                         .join('')
                         .substring(0, 2)
                         .toUpperCase();
-                    
-                    const registrationDate = new Date(participant.registrationDate)
+
+                    const date = new Date(participant.registration_date)
                         .toLocaleDateString('es-ES');
-                    
+
                     return `
                         <div class="participant-card">
                             <div class="participant__avatar">${initials}</div>
                             <div class="participant__info">
-                                <div class="participant__name">${participant.fullName}</div>
+                                <div class="participant__name">${participant.full_name}</div>
                                 <div class="participant__details">
-                                    ${participant.grade} • ${participant.category} • Registrado el ${registrationDate}
+                                    ${participant.grade} • ${participant.category} • ${date}
                                 </div>
                             </div>
-                            <div class="participant__badge participant__badge--student">
-                                Estudiante
-                            </div>
+                            <div class="participant__badge">Estudiante</div>
                         </div>
                     `;
                 }).join('');
             }
 
-            updateStatisticsFromApi() {
-                if (this.statistics) {
-                    this.animateCounter('totalCount', this.statistics.total || this.participants.length);
-                    this.animateCounter('studentCount', this.statistics.estudiantes || 
-                        this.participants.filter(p => p.role === 'estudiante').length);
-                    this.animateCounter('todayCount', this.statistics.today || this.getTodayRegistrations());
-                } else {
-                    this.updateStatistics();
-                }
-            }
-
             updateStatistics() {
-                const total = this.participants.length;
-                const students = this.participants.filter(p => p.role === 'estudiante').length;
-                const today = this.getTodayRegistrations();
-
-                this.animateCounter('totalCount', total);
-                this.animateCounter('studentCount', students);
-                this.animateCounter('todayCount', today);
-            }
-
-            getTodayRegistrations() {
-                const today = new Date().toDateString();
-                return this.participants.filter(p => {
-                    const registrationDate = new Date(p.registrationDate);
-                    return registrationDate.toDateString() === today;
-                }).length;
+                this.animateCounter('totalCount', this.statistics.total_participants || this.participants.length);
+                this.animateCounter('studentCount', this.statistics.estudiantes || this.participants.length);
+                this.animateCounter('todayCount', this.statistics.registros_hoy || 0);
             }
 
             animateCounter(elementId, targetValue) {
                 const element = document.getElementById(elementId);
                 const currentValue = parseInt(element.textContent) || 0;
-                const increment = Math.ceil((targetValue - currentValue) / 20);
+                
+                if (targetValue === currentValue) return;
+                
+                const increment = Math.ceil(Math.abs(targetValue - currentValue) / 20);
+                const direction = targetValue > currentValue ? 1 : -1;
                 
                 let current = currentValue;
                 const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= targetValue) {
+                    current += increment * direction;
+                    
+                    if ((direction > 0 && current >= targetValue) || (direction < 0 && current <= targetValue)) {
                         current = targetValue;
                         clearInterval(timer);
                     }
+                    
                     element.textContent = current;
                 }, 50);
             }
@@ -1163,37 +902,25 @@
 
                 switch (field.name) {
                     case 'fullName':
-                        if (!value) {
-                            errorMessage = 'El nombre completo es requerido';
-                            isValid = false;
-                        } else if (value.length < 3) {
-                            errorMessage = 'El nombre debe tener al menos 3 caracteres';
+                        if (!value || value.length < 3) {
+                            errorMessage = 'Nombre completo requerido (mín. 3 caracteres)';
                             isValid = false;
                         }
                         break;
-
                     case 'email':
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!value) {
-                            errorMessage = 'El correo electrónico es requerido';
-                            isValid = false;
-                        } else if (!emailRegex.test(value)) {
-                            errorMessage = 'Por favor ingrese un correo electrónico válido';
+                        if (!value || !emailRegex.test(value)) {
+                            errorMessage = 'Email válido requerido';
                             isValid = false;
                         }
                         break;
-
                     case 'age':
                         const age = parseInt(value);
-                        if (!value) {
-                            errorMessage = 'La edad es requerida';
-                            isValid = false;
-                        } else if (age < 10 || age > 25) {
-                            errorMessage = 'La edad debe estar entre 10 y 25 años';
+                        if (!value || age < 10 || age > 25) {
+                            errorMessage = 'Edad entre 10-25 años requerida';
                             isValid = false;
                         }
                         break;
-
                     case 'grade':
                     case 'category':
                         if (!value) {
@@ -1229,72 +956,46 @@
 
             // ==================== UI State Management ==================== 
             showMessage(type, message, duration = 5000) {
-                const messageElement = document.getElementById(`${type}Message`);
-                const textElement = document.getElementById(`${type}Text`);
+                const messageEl = document.getElementById(`${type}Message`);
+                const textEl = document.getElementById(`${type}Text`);
                 
-                if (textElement) {
-                    textElement.textContent = message;
-                }
-                
-                messageElement.classList.add('show');
+                if (textEl) textEl.textContent = message;
+                messageEl.classList.add('show');
                 
                 setTimeout(() => {
-                    messageElement.classList.remove('show');
+                    messageEl.classList.remove('show');
                 }, duration);
             }
 
-            setLoadingState(isLoading) {
-                const submitBtn = document.getElementById('submitBtn');
-                const loadingSpinner = document.getElementById('loadingSpinner');
-                const submitIcon = document.getElementById('submitIcon');
-                const submitText = document.getElementById('submitText');
-
-                if (isLoading) {
-                    submitBtn.disabled = true;
-                    loadingSpinner.style.display = 'block';
-                    submitIcon.style.display = 'none';
-                    submitText.textContent = 'Procesando registro...';
-                } else {
-                    submitBtn.disabled = false;
-                    loadingSpinner.style.display = 'none';
-                    submitIcon.style.display = 'block';
-                    submitText.textContent = 'Registrarse en las Olimpiadas';
-                }
+            updateStatus(status, text) {
+                const dot = document.getElementById('statusDot');
+                const statusText = document.getElementById('statusText');
+                
+                dot.className = `status-dot status-dot--${status}`;
+                statusText.textContent = text;
             }
 
-            updateConnectionStatus() {
-                const statusDot = document.getElementById('apiStatus');
-                const statusText = document.getElementById('apiStatusText');
-                
-                switch (this.apiStatus) {
-                    case 'online':
-                        statusDot.className = 'status-dot status-dot--online';
-                        statusText.textContent = 'Sistema conectado';
-                        break;
-                    case 'offline':
-                        statusDot.className = 'status-dot status-dot--offline';
-                        statusText.textContent = 'Sin conexión a internet';
-                        break;
-                    case 'error':
-                        statusDot.className = 'status-dot status-dot--offline';
-                        statusText.textContent = 'Error de servidor - Modo local';
-                        break;
-                    case 'checking':
-                        statusDot.className = 'status-dot status-dot--online';
-                        statusText.textContent = 'Verificando conexión...';
-                        break;
+            setLoadingState(isLoading) {
+                const btn = document.getElementById('submitBtn');
+                const spinner = document.getElementById('loadingSpinner');
+                const icon = document.getElementById('submitIcon');
+                const text = document.getElementById('submitText');
+
+                if (isLoading) {
+                    btn.disabled = true;
+                    spinner.style.display = 'block';
+                    icon.style.display = 'none';
+                    text.textContent = 'Registrando...';
+                } else {
+                    btn.disabled = false;
+                    spinner.style.display = 'none';
+                    icon.style.display = 'block';
+                    text.textContent = 'Registrarse en las Olimpiadas';
                 }
             }
 
             showLoadingSkeleton() {
-                this.participantsList.innerHTML = `
-                    <div class="skeleton-card">
-                        <div class="loading-skeleton skeleton-avatar"></div>
-                        <div style="flex: 1;">
-                            <div class="loading-skeleton skeleton-text skeleton-text--wide"></div>
-                            <div class="loading-skeleton skeleton-text skeleton-text--narrow"></div>
-                        </div>
-                    </div>
+                document.getElementById('participantsList').innerHTML = `
                     <div class="skeleton-card">
                         <div class="loading-skeleton skeleton-avatar"></div>
                         <div style="flex: 1;">
@@ -1313,37 +1014,36 @@
             }
 
             showErrorState() {
-                this.participantsList.innerHTML = `
+                document.getElementById('participantsList').innerHTML = `
                     <div class="error-message">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <p>Error al cargar los participantes</p>
-                        <p>Por favor recargue la página</p>
+                        <p>Error cargando participantes</p>
+                        <p>Verifica tu conexión</p>
                     </div>
                 `;
             }
 
-            // ==================== Utilities ==================== 
-            async simulateApiDelay(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-
             log(message, ...args) {
-                if (CONFIG.DEBUG) {
-                    console.log(`[OlympicsRegistration] ${message}`, ...args);
-                }
+                console.log(`[OlympicsSupabase] ${message}`, ...args);
             }
         }
 
-        // ==================== Initialize Application ==================== 
+        // ==================== Initialize App ==================== 
         document.addEventListener('DOMContentLoaded', () => {
-            window.olympicsApp = new OlympicsRegistration();
-        });
-
-        // Handle page visibility changes for better UX
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && window.olympicsApp) {
-                window.olympicsApp.checkApiHealth();
+            // Check if Supabase configuration is set
+            if (SUPABASE_CONFIG.url.includes('your-project-id') || SUPABASE_CONFIG.anonKey.includes('your-anon-key')) {
+                document.getElementById('statusText').textContent = '⚠️ Configuración de Supabase pendiente';
+                document.getElementById('participantsList').innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Configuración pendiente</p>
+                        <p>Actualiza SUPABASE_CONFIG con tus credenciales</p>
+                    </div>
+                `;
+                return;
             }
+
+            window.olympicsApp = new OlympicsSupabaseApp();
         });
     </script>
 </body>

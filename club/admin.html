@@ -8,8 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
-        /* Variables CSS */
         :root {
             --color-primary: #2563eb;
             --color-secondary: #7c3aed;
@@ -123,14 +126,46 @@
             color: var(--color-white);
         }
 
-        .btn--warning {
-            background: var(--color-warning);
-            color: var(--color-white);
-        }
-
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-dot--online {
+            background: var(--color-success);
+        }
+
+        .status-dot--offline {
+            background: var(--color-danger);
+        }
+
+        .status-dot--loading {
+            background: var(--color-warning);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         /* Main Content */
@@ -191,11 +226,6 @@
             color: var(--color-warning);
         }
 
-        .icon--danger {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--color-danger);
-        }
-
         .metric {
             display: flex;
             align-items: baseline;
@@ -210,26 +240,13 @@
             color: var(--color-gray-900);
         }
 
-        .metric__label {
-            color: var(--color-gray-600);
-            font-size: 0.875rem;
-        }
-
         .metric__change {
             padding: var(--space-1) var(--space-2);
             border-radius: var(--radius-lg);
             font-size: 0.75rem;
             font-weight: 600;
-        }
-
-        .metric__change--positive {
             background: rgba(16, 185, 129, 0.1);
             color: var(--color-success);
-        }
-
-        .metric__change--negative {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--color-danger);
         }
 
         /* Tables */
@@ -253,6 +270,18 @@
         .table-title {
             font-weight: 600;
             color: var(--color-gray-900);
+        }
+
+        .table-filters {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .table-filters select {
+            padding: var(--space-2);
+            border: 1px solid var(--color-gray-300);
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
         }
 
         .table {
@@ -362,48 +391,24 @@
             .table {
                 min-width: 600px;
             }
+
+            .table-filters {
+                flex-direction: column;
+                width: 100%;
+            }
         }
 
-        /* Chart Styles */
-        .chart-container {
-            height: 300px;
-            position: relative;
-        }
-
-        .chart-placeholder {
+        /* Real-time indicator */
+        .realtime-indicator {
             display: flex;
             align-items: center;
-            justify-content: center;
-            height: 100%;
-            background: var(--color-gray-50);
-            border-radius: var(--radius-lg);
-            color: var(--color-gray-500);
-            font-style: italic;
-        }
-
-        /* Status Indicators */
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
             gap: var(--space-2);
+            font-size: 0.875rem;
+            color: var(--color-gray-600);
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .status-dot--online {
-            background: var(--color-success);
-        }
-
-        .status-dot--offline {
-            background: var(--color-danger);
-        }
-
-        .status-dot--warning {
-            background: var(--color-warning);
+        .realtime-indicator--active {
+            color: var(--color-success);
         }
     </style>
 </head>
@@ -418,14 +423,18 @@
                 </h1>
                 <div class="header__actions">
                     <div class="status-indicator">
-                        <span class="status-dot status-dot--online" id="apiStatus"></span>
-                        <span id="apiStatusText">API Conectada</span>
+                        <span class="status-dot status-dot--loading" id="connectionStatus"></span>
+                        <span id="connectionText">Conectando...</span>
                     </div>
-                    <button class="btn btn--secondary" onclick="refreshAllData()">
+                    <div class="realtime-indicator" id="realtimeIndicator">
+                        <i class="fas fa-broadcast-tower"></i>
+                        <span>Tiempo real</span>
+                    </div>
+                    <button class="btn btn--secondary" onclick="refreshAllData()" id="refreshBtn">
                         <i class="fas fa-sync-alt"></i>
                         Actualizar
                     </button>
-                    <button class="btn btn--success" onclick="exportData()">
+                    <button class="btn btn--success" onclick="exportData()" id="exportBtn">
                         <i class="fas fa-download"></i>
                         Exportar
                     </button>
@@ -443,21 +452,59 @@
         <div class="container">
             <!-- Metrics Dashboard -->
             <div class="dashboard-grid" id="metricsGrid">
-                <!-- Metric cards will be dynamically generated -->
+                <!-- Loading metrics -->
+                <div class="dashboard-card">
+                    <div class="card__header">
+                        <h3 class="card__title">Total Participantes</h3>
+                        <div class="card__icon icon--primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric__value" id="totalParticipants">-</span>
+                    </div>
+                    <div class="metric__change" id="totalChange">+0</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card__header">
+                        <h3 class="card__title">Registros Hoy</h3>
+                        <div class="card__icon icon--success">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric__value" id="todayRegistrations">-</span>
+                    </div>
+                    <div class="metric__change" id="todayChange">+0 hoy</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card__header">
+                        <h3 class="card__title">Esta Semana</h3>
+                        <div class="card__icon icon--warning">
+                            <i class="fas fa-calendar-week"></i>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric__value" id="weekRegistrations">-</span>
+                    </div>
+                    <div class="metric__change" id="weekChange">+0 esta semana</div>
+                </div>
             </div>
 
-            <!-- Recent Participants Table -->
+            <!-- Participants Table -->
             <div class="table-container" style="margin-bottom: var(--space-8);">
                 <div class="table-header">
                     <h2 class="table-title">Participantes Registrados</h2>
-                    <div>
-                        <select id="categoryFilter" style="margin-right: var(--space-2); padding: var(--space-2); border: 1px solid var(--color-gray-300); border-radius: var(--radius-lg);">
+                    <div class="table-filters">
+                        <select id="categoryFilter">
                             <option value="">Todas las categorías</option>
                             <option value="novato">Novato</option>
                             <option value="intermedio">Intermedio</option>
                             <option value="avanzado">Avanzado</option>
                         </select>
-                        <select id="gradeFilter" style="padding: var(--space-2); border: 1px solid var(--color-gray-300); border-radius: var(--radius-lg);">
+                        <select id="gradeFilter">
                             <option value="">Todos los grados</option>
                             <option value="7mo">7mo Grado</option>
                             <option value="8vo">8vo Grado</option>
@@ -476,38 +523,50 @@
                 </div>
             </div>
 
-            <!-- Analytics Section -->
+            <!-- Category Statistics -->
             <div class="dashboard-grid">
                 <div class="dashboard-card">
                     <div class="card__header">
-                        <h3 class="card__title">Distribución por Categorías</h3>
+                        <h3 class="card__title">Por Categorías</h3>
                         <div class="card__icon icon--primary">
                             <i class="fas fa-chart-pie"></i>
                         </div>
                     </div>
-                    <div class="chart-container">
-                        <div class="chart-placeholder" id="categoryChart">
-                            <div>
-                                <i class="fas fa-chart-pie" style="font-size: 2rem; margin-bottom: var(--space-2);"></i>
-                                <div>Gráfico de categorías</div>
-                            </div>
+                    <div id="categoryStats">
+                        <div class="metric">
+                            <span style="color: var(--color-success); font-weight: 600;">Novatos:</span>
+                            <span id="novatosCount">-</span>
+                        </div>
+                        <div class="metric">
+                            <span style="color: var(--color-warning); font-weight: 600;">Intermedios:</span>
+                            <span id="intermediosCount">-</span>
+                        </div>
+                        <div class="metric">
+                            <span style="color: var(--color-danger); font-weight: 600;">Avanzados:</span>
+                            <span id="avanzadosCount">-</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="dashboard-card">
                     <div class="card__header">
-                        <h3 class="card__title">Registros por Día</h3>
-                        <div class="card__icon icon--success">
-                            <i class="fas fa-chart-line"></i>
+                        <h3 class="card__title">Información del Sistema</h3>
+                        <div class="card__icon icon--primary">
+                            <i class="fas fa-database"></i>
                         </div>
                     </div>
-                    <div class="chart-container">
-                        <div class="chart-placeholder" id="dailyChart">
-                            <div>
-                                <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: var(--space-2);"></i>
-                                <div>Gráfico de registros diarios</div>
-                            </div>
+                    <div>
+                        <div class="metric">
+                            <span style="font-weight: 600;">Base de datos:</span>
+                            <span style="color: var(--color-success);">Supabase</span>
+                        </div>
+                        <div class="metric">
+                            <span style="font-weight: 600;">Última actualización:</span>
+                            <span id="lastUpdate">-</span>
+                        </div>
+                        <div class="metric">
+                            <span style="font-weight: 600;">Estado:</span>
+                            <span id="systemStatus" style="color: var(--color-success);">Activo</span>
                         </div>
                     </div>
                 </div>
@@ -516,19 +575,33 @@
     </main>
 
     <script>
+        // ==================== Supabase Configuration ==================== 
+        const SUPABASE_CONFIG = {
+            url: 'https://ztrhumtqvmqsskcdcykt.supabase.co', // 🔄 CAMBIAR POR TU URL
+            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0cmh1bXRxdm1xc3NrY2RjeWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTU4ODksImV4cCI6MjA3MDU5MTg4OX0.3bAdCuuI_UTLBFF7O79H6cx8k2dJ04e7Ka80-6i4UIE' // 🔄 KEY Actualizada
+        };
+
+        // Initialize Supabase
+        const supabase = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // ==================== Admin Dashboard ==================== 
         class AdminDashboard {
             constructor() {
                 this.participants = [];
                 this.statistics = {};
-                this.refreshInterval = 60000; // 1 minuto
-                this.isOnline = true;
+                this.isConnected = false;
+                this.lastRefresh = null;
                 this.init();
             }
 
             async init() {
                 this.setupEventListeners();
-                await this.loadAllData();
-                this.startPeriodicRefresh();
+                await this.checkConnection();
+                if (this.isConnected) {
+                    await this.loadAllData();
+                    this.setupRealTimeSubscription();
+                    this.startPeriodicRefresh();
+                }
             }
 
             setupEventListeners() {
@@ -539,16 +612,31 @@
                 document.getElementById('gradeFilter').addEventListener('change', () => {
                     this.filterParticipants();
                 });
+            }
 
-                // Detectar cambios de conectividad
-                window.addEventListener('online', () => {
-                    this.updateConnectionStatus(true);
-                    this.loadAllData();
-                });
+            // ==================== Connection & Data Loading ==================== 
+            async checkConnection() {
+                try {
+                    this.updateConnectionStatus('loading', 'Conectando a Supabase...');
+                    
+                    // Test connection
+                    const { data, error } = await supabase
+                        .from('participants')
+                        .select('count')
+                        .limit(1);
 
-                window.addEventListener('offline', () => {
-                    this.updateConnectionStatus(false);
-                });
+                    if (error) throw error;
+
+                    this.isConnected = true;
+                    this.updateConnectionStatus('online', 'Conectado a Supabase');
+                    this.log('✅ Conectado a Supabase exitosamente');
+                    
+                } catch (error) {
+                    this.isConnected = false;
+                    this.updateConnectionStatus('offline', 'Error de conexión');
+                    this.log('❌ Error conectando a Supabase:', error.message);
+                    this.showError('Error de conexión a la base de datos');
+                }
             }
 
             async loadAllData() {
@@ -557,110 +645,108 @@
                         this.loadStatistics(),
                         this.loadParticipants()
                     ]);
-                    this.updateConnectionStatus(true);
+                    this.lastRefresh = new Date();
+                    this.updateLastUpdateTime();
                 } catch (error) {
-                    console.error('Error cargando datos:', error);
-                    this.updateConnectionStatus(false);
-                    this.loadFallbackData();
+                    this.log('❌ Error cargando datos:', error);
+                    this.showError('Error al cargar los datos');
                 }
             }
 
             async loadStatistics() {
                 try {
-                    const response = await fetch('/api/stats');
-                    if (!response.ok) throw new Error('Error cargando estadísticas');
-                    
-                    this.statistics = await response.json();
+                    const { data, error } = await supabase
+                        .from('participant_stats')
+                        .select('*')
+                        .single();
+
+                    if (error) throw error;
+
+                    this.statistics = data || {};
                     this.renderMetrics();
+                    this.log('✅ Estadísticas cargadas desde Supabase');
+                    
                 } catch (error) {
-                    console.warn('Error cargando estadísticas:', error);
-                    this.loadLocalStatistics();
+                    this.log('⚠️ Error cargando estadísticas:', error);
+                    this.statistics = {};
                 }
             }
 
             async loadParticipants() {
                 try {
-                    const response = await fetch('/api/participants?includeStats=true&limit=1000');
-                    if (!response.ok) throw new Error('Error cargando participantes');
-                    
-                    const data = await response.json();
-                    this.participants = data.participants || [];
+                    const { data, error } = await supabase
+                        .from('participants')
+                        .select('*')
+                        .eq('status', 'active')
+                        .order('registration_date', { ascending: false });
+
+                    if (error) throw error;
+
+                    this.participants = data || [];
                     this.renderParticipantsTable();
+                    this.log(`✅ ${this.participants.length} participantes cargados desde Supabase`);
+                    
                 } catch (error) {
-                    console.warn('Error cargando participantes:', error);
-                    this.loadLocalParticipants();
+                    this.log('❌ Error cargando participantes:', error);
+                    this.showError('Error al cargar participantes');
                 }
             }
 
-            loadLocalStatistics() {
-                this.statistics = JSON.parse(localStorage.getItem('globalStats') || '{}');
-                this.renderMetrics();
+            // ==================== Real-time Updates ==================== 
+            setupRealTimeSubscription() {
+                supabase
+                    .channel('admin-dashboard')
+                    .on('postgres_changes', {
+                        event: '*',
+                        schema: 'public',
+                        table: 'participants'
+                    }, (payload) => {
+                        this.log('📡 Real-time update:', payload);
+                        this.handleRealTimeUpdate(payload);
+                    })
+                    .subscribe();
+
+                document.getElementById('realtimeIndicator').classList.add('realtime-indicator--active');
+                this.log('📡 Suscrito a actualizaciones en tiempo real');
             }
 
-            loadLocalParticipants() {
-                this.participants = JSON.parse(localStorage.getItem('olympicsParticipants') || '[]');
-                this.renderParticipantsTable();
-            }
-
-            loadFallbackData() {
-                this.loadLocalStatistics();
-                this.loadLocalParticipants();
-            }
-
-            renderMetrics() {
-                const metricsGrid = document.getElementById('metricsGrid');
+            handleRealTimeUpdate(payload) {
+                // Refresh data on any change
+                this.loadAllData();
                 
-                const metrics = [
-                    {
-                        title: 'Total Visitantes',
-                        value: this.statistics.visitantes || 0,
-                        change: '+12%',
-                        changeType: 'positive',
-                        icon: 'fas fa-eye',
-                        iconClass: 'icon--primary'
-                    },
-                    {
-                        title: 'Participantes Olimpiadas',
-                        value: this.statistics.participantesOlimpiadas || this.participants.length,
-                        change: `+${this.statistics.registrosHoy || 0} hoy`,
-                        changeType: 'positive',
-                        icon: 'fas fa-trophy',
-                        iconClass: 'icon--warning'
-                    },
-                    {
-                        title: 'Estudiantes Registrados',
-                        value: this.statistics.estudiantes || 0,
-                        change: '+8%',
-                        changeType: 'positive',
-                        icon: 'fas fa-graduation-cap',
-                        iconClass: 'icon--success'
-                    },
-                    {
-                        title: 'Total Usuarios',
-                        value: (this.statistics.estudiantes || 0) + (this.statistics.maestros || 0) + (this.statistics.padres || 0),
-                        change: '+15%',
-                        changeType: 'positive',
-                        icon: 'fas fa-users',
-                        iconClass: 'icon--primary'
-                    }
-                ];
+                // Show notification
+                this.showTemporaryMessage('Datos actualizados en tiempo real');
+            }
 
-                metricsGrid.innerHTML = metrics.map(metric => `
-                    <div class="dashboard-card">
-                        <div class="card__header">
-                            <h3 class="card__title">${metric.title}</h3>
-                            <div class="card__icon ${metric.iconClass}">
-                                <i class="${metric.icon}"></i>
-                            </div>
-                        </div>
-                        <div class="metric">
-                            <span class="metric__value">${metric.value.toLocaleString()}</span>
-                        </div>
-                        <div class="metric__change metric__change--${metric.changeType}">
-                            ${metric.change}
-                        </div>
-                    </div>
-                `).join('');
+            showTemporaryMessage(message) {
+                const indicator = document.getElementById('realtimeIndicator');
+                const originalHTML = indicator.innerHTML;
+                
+                indicator.innerHTML = `<i class="fas fa-sync fa-spin"></i> ${message}`;
+                indicator.style.color = 'var(--color-primary)';
+                
+                setTimeout(() => {
+                    indicator.innerHTML = originalHTML;
+                    indicator.style.color = '';
+                }, 3000);
+            }
+
+            // ==================== UI Rendering ==================== 
+            renderMetrics() {
+                const stats = this.statistics;
+                
+                this.animateCounter('totalParticipants', stats.total_participants || 0);
+                this.animateCounter('todayRegistrations', stats.registros_hoy || 0);
+                this.animateCounter('weekRegistrations', stats.registros_semana || 0);
+                
+                this.animateCounter('novatosCount', stats.novatos || 0);
+                this.animateCounter('intermediosCount', stats.intermedios || 0);
+                this.animateCounter('avanzadosCount', stats.avanzados || 0);
+                
+                // Update change indicators
+                document.getElementById('totalChange').textContent = `+${stats.total_participants || 0} total`;
+                document.getElementById('todayChange').textContent = `+${stats.registros_hoy || 0} hoy`;
+                document.getElementById('weekChange').textContent = `+${stats.registros_semana || 0} esta semana`;
             }
 
             renderParticipantsTable() {
@@ -681,6 +767,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Email</th>
                                 <th>Edad</th>
                                 <th>Grado</th>
                                 <th>Categoría</th>
@@ -694,14 +781,15 @@
                                     <td>
                                         <div style="display: flex; align-items: center; gap: var(--space-2);">
                                             <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;">
-                                                ${participant.initials || participant.fullName.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                                                ${participant.full_name.split(' ').map(n => n[0]).join('').substring(0, 2)}
                                             </div>
                                             <div>
-                                                <div style="font-weight: 500;">${participant.fullName}</div>
+                                                <div style="font-weight: 500;">${participant.full_name}</div>
                                                 <div style="font-size: 0.875rem; color: var(--color-gray-500);">${participant.role || 'Estudiante'}</div>
                                             </div>
                                         </div>
                                     </td>
+                                    <td style="font-size: 0.875rem;">${participant.email}</td>
                                     <td>${participant.age}</td>
                                     <td>${participant.grade}</td>
                                     <td>
@@ -712,7 +800,7 @@
                                     <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                         ${participant.school || 'No especificado'}
                                     </td>
-                                    <td>${new Date(participant.registrationDate).toLocaleDateString('es-ES')}</td>
+                                    <td>${new Date(participant.registration_date).toLocaleDateString('es-ES')}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -740,33 +828,56 @@
                     );
                 }
 
-                // Temporalmente actualizar la lista para filtrado
+                // Temporarily update participants for rendering
                 const originalParticipants = this.participants;
                 this.participants = filteredParticipants;
                 this.renderParticipantsTable();
                 this.participants = originalParticipants;
             }
 
-            updateConnectionStatus(isOnline) {
-                this.isOnline = isOnline;
-                const statusDot = document.getElementById('apiStatus');
-                const statusText = document.getElementById('apiStatusText');
+            // ==================== Utilities ==================== 
+            animateCounter(elementId, targetValue) {
+                const element = document.getElementById(elementId);
+                if (!element) return;
                 
-                if (isOnline) {
-                    statusDot.className = 'status-dot status-dot--online';
-                    statusText.textContent = 'API Conectada';
-                } else {
-                    statusDot.className = 'status-dot status-dot--offline';
-                    statusText.textContent = 'Sin Conexión';
+                const currentValue = parseInt(element.textContent) || 0;
+                if (targetValue === currentValue) return;
+                
+                const increment = Math.ceil(Math.abs(targetValue - currentValue) / 20);
+                const direction = targetValue > currentValue ? 1 : -1;
+                
+                let current = currentValue;
+                const timer = setInterval(() => {
+                    current += increment * direction;
+                    
+                    if ((direction > 0 && current >= targetValue) || (direction < 0 && current <= targetValue)) {
+                        current = targetValue;
+                        clearInterval(timer);
+                    }
+                    
+                    element.textContent = current.toLocaleString();
+                }, 50);
+            }
+
+            updateConnectionStatus(status, text) {
+                const statusEl = document.getElementById('connectionStatus');
+                const textEl = document.getElementById('connectionText');
+                
+                statusEl.className = `status-dot status-dot--${status}`;
+                textEl.textContent = text;
+                
+                const systemStatus = document.getElementById('systemStatus');
+                if (systemStatus) {
+                    systemStatus.textContent = status === 'online' ? 'Activo' : 'Desconectado';
+                    systemStatus.style.color = status === 'online' ? 'var(--color-success)' : 'var(--color-danger)';
                 }
             }
 
-            startPeriodicRefresh() {
-                setInterval(() => {
-                    if (this.isOnline && document.visibilityState === 'visible') {
-                        this.loadAllData();
-                    }
-                }, this.refreshInterval);
+            updateLastUpdateTime() {
+                const lastUpdateEl = document.getElementById('lastUpdate');
+                if (lastUpdateEl && this.lastRefresh) {
+                    lastUpdateEl.textContent = this.lastRefresh.toLocaleTimeString('es-ES');
+                }
             }
 
             async exportData() {
@@ -776,10 +887,14 @@
                         statistics: this.statistics,
                         exportDate: new Date().toISOString(),
                         totalParticipants: this.participants.length,
-                        categoryCounts: this.getCategoryCounts(),
-                        gradeCounts: this.getGradeCounts()
+                        categoryCounts: {
+                            novato: this.participants.filter(p => p.category === 'novato').length,
+                            intermedio: this.participants.filter(p => p.category === 'intermedio').length,
+                            avanzado: this.participants.filter(p => p.category === 'avanzado').length
+                        }
                     };
 
+                    // JSON Export
                     const dataStr = JSON.stringify(exportData, null, 2);
                     const dataBlob = new Blob([dataStr], { type: 'application/json' });
                     
@@ -788,25 +903,28 @@
                     link.download = `olimpiadas-dashboard-${new Date().toISOString().split('T')[0]}.json`;
                     link.click();
                     
-                    // También crear CSV para Excel
+                    // CSV Export
                     this.exportToCSV();
                     
+                    this.log('✅ Datos exportados exitosamente');
+                    
                 } catch (error) {
-                    console.error('Error exportando datos:', error);
-                    alert('Error al exportar los datos');
+                    this.log('❌ Error exportando datos:', error);
+                    this.showError('Error al exportar los datos');
                 }
             }
 
             exportToCSV() {
-                const csvHeaders = ['Nombre', 'Edad', 'Grado', 'Categoría', 'Escuela', 'Experiencia', 'Fecha Registro'];
+                const csvHeaders = ['Nombre', 'Email', 'Edad', 'Grado', 'Categoría', 'Escuela', 'Experiencia', 'Fecha Registro'];
                 const csvRows = this.participants.map(p => [
-                    p.fullName,
+                    p.full_name,
+                    p.email,
                     p.age,
                     p.grade,
                     p.category,
                     p.school || 'No especificado',
                     p.experience || 'No especificado',
-                    new Date(p.registrationDate).toLocaleDateString('es-ES')
+                    new Date(p.registration_date).toLocaleDateString('es-ES')
                 ]);
 
                 const csvContent = [csvHeaders, ...csvRows]
@@ -820,29 +938,36 @@
                 link.click();
             }
 
-            getCategoryCounts() {
-                const counts = { novato: 0, intermedio: 0, avanzado: 0 };
-                this.participants.forEach(p => {
-                    if (p.category && counts.hasOwnProperty(p.category)) {
-                        counts[p.category]++;
+            startPeriodicRefresh() {
+                setInterval(() => {
+                    if (this.isConnected && document.visibilityState === 'visible') {
+                        this.loadAllData();
                     }
-                });
-                return counts;
+                }, 60000); // Refresh every minute
             }
 
-            getGradeCounts() {
-                const counts = {};
-                this.participants.forEach(p => {
-                    counts[p.grade] = (counts[p.grade] || 0) + 1;
-                });
-                return counts;
+            showError(message) {
+                console.error(message);
+            }
+
+            log(message, ...args) {
+                console.log(`[AdminDashboard] ${message}`, ...args);
             }
         }
 
-        // Funciones globales
+        // ==================== Global Functions ==================== 
         function refreshAllData() {
             if (window.dashboard) {
-                window.dashboard.loadAllData();
+                const btn = document.getElementById('refreshBtn');
+                const originalHTML = btn.innerHTML;
+                
+                btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Actualizando...';
+                btn.disabled = true;
+                
+                window.dashboard.loadAllData().finally(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                });
             }
         }
 
@@ -852,8 +977,20 @@
             }
         }
 
-        // Inicializar dashboard
+        // ==================== Initialize Dashboard ==================== 
         document.addEventListener('DOMContentLoaded', () => {
+            // Check configuration
+            if (SUPABASE_CONFIG.url.includes('your-project-id') || SUPABASE_CONFIG.anonKey.includes('your-anon-key')) {
+                document.getElementById('connectionText').textContent = '⚠️ Configuración de Supabase pendiente';
+                document.getElementById('participantsTableContainer').innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Actualiza SUPABASE_CONFIG con tus credenciales
+                    </div>
+                `;
+                return;
+            }
+
             window.dashboard = new AdminDashboard();
         });
     </script>

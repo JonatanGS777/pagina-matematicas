@@ -1,27 +1,3 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/api/register",
-      "destination": "/api/register.js"
-    },
-    {
-      "source": "/api/participants", 
-      "destination": "/api/participants.js"
-    },
-    {
-      "source": "/api/stats",
-      "destination": "/api/stats.js"
-    },
-    {
-      "source": "/",
-      "destination": "/olimpiadas.html"
-    }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "@vercel/node",
-      "maxDuration": 30
-    }
-  }
+  "version": 2
 }

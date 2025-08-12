@@ -1,15 +1,20 @@
 {
-  "name": "pagina-matematicas",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "olimpiadas-matematicas-supabase",
+  "version": "2.0.0",
+  "description": "Sistema de olimpiadas matemáticas con Supabase",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@vercel/kv": "^3.0.0"
-  }
+  "dependencies": {},
+  "keywords": [
+    "olimpiadas",
+    "matematicas", 
+    "supabase",
+    "puerto-rico",
+    "educacion"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT"
 }
