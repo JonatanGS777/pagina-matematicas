@@ -1764,6 +1764,10 @@
                             <i class="fas fa-cube"></i>
                             Modelado Math
                         </a>
+                        <a href="lab/figuras.html" class="dropdown-item">
+                        <i class="fas fa-shapes"></i>
+                            Figuras Geométricas
+                        </a>
                     </div>
                 </li>
             </ul>
@@ -3322,7 +3326,6 @@ window.addEventListener('beforeunload', () => {
     <script src="js/icon-animations.js"></script>
     <script src="js/typewriter-effects.js"></script>
     <script src="js/math-particles.js"></script>
-    <!-- ❌ DESHABILITADO: <script src="js/visitor-counter.js"></script> -->
     <script>
         // Inicializar todos los módulos EXCEPTO el contador de visitantes antiguo
         if (window.MathChatBot) {
@@ -3344,13 +3347,6 @@ window.addEventListener('beforeunload', () => {
         if (window.MathParticles) {
             window.MathParticles.initMathParticles();
         }
-        
-        // ❌ DESHABILITADO: Sistema de contador antiguo
-        /*
-        if (window.VisitorCounter) {
-            window.VisitorCounter.initVisitorCounter();
-        }
-        */
         
         // ✅ SOLO ACTIVO: Sistema Supabase Analytics (ya inicializado arriba)
         console.log('🔧 Sistema de contadores: Solo Supabase Analytics activo');

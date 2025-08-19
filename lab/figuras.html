@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de Figuras Geométricas - Matemáticas Digitales</title>
+    
+    <!-- Fonts y FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #4ecdc4;
+            --warning: #ffe066;
+            --danger: #ff6b6b;
+            --dark: #2d3748;
+            --light: #f7fafc;
+            --white: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --glass: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8));
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gradient-main);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Tabs Navigation */
+        .tabs-container {
+            background: white;
+            border-radius: 25px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            background: transparent;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .tab-btn:not(.active):hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Workspace Layout */
+        .workspace {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 2rem;
+            height: 600px;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            overflow-y: auto;
+        }
+
+        .control-section {
+            margin-bottom: 2rem;
+        }
+
+        .control-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .shape-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .shape-btn {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .shape-btn:hover {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .shape-btn.active {
+            border-color: var(--primary);
+            background: var(--gradient-main);
+            color: white;
+        }
+
+        .shape-btn i {
+            font-size: 1.5rem;
+        }
+
+        .shape-btn span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Controls */
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .control-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .slider-container {
+            position: relative;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+            appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .color-picker {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Canvas Container */
+        .canvas-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .canvas-2d, .canvas-3d {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        .canvas-overlay {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Properties Panel */
+        .properties-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            overflow-y: auto;
+        }
+
+        .property-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .property-item:last-child {
+            border-bottom: none;
+        }
+
+        .property-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .property-value {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: var(--text-primary);
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .workspace {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .workspace {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                height: auto;
+                gap: 1rem;
+            }
+
+            .control-panel, .properties-panel {
+                height: auto;
+                max-height: 300px;
+            }
+
+            .canvas-container {
+                height: 400px;
+                order: -1;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .hero-section {
+                padding: 2rem;
+            }
+
+            .tabs-nav {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                font-size: 0.9rem;
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header-content {
+                padding: 0 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .shape-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="../index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Inicio
+            </a>
+            <h1 class="page-title">
+                <i class="fas fa-shapes"></i>
+                Laboratorio de Figuras Geométricas
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section fade-in">
+            <h2 class="hero-title">Explora y Crea Figuras Geométricas</h2>
+            <p class="hero-description">
+                Descubre el fascinante mundo de la geometría a través de herramientas interactivas. 
+                Crea, manipula y analiza figuras 2D y 3D para comprender mejor sus propiedades matemáticas.
+            </p>
+        </section>
+
+        <!-- Tabs Container -->
+        <div class="tabs-container fade-in">
+            <!-- Navigation Tabs -->
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="2d">
+                    <i class="fas fa-square"></i>
+                    Figuras 2D
+                </button>
+                <button class="tab-btn" data-tab="3d">
+                    <i class="fas fa-cube"></i>
+                    Figuras 3D
+                </button>
+                <button class="tab-btn" data-tab="polyhedra">
+                    <i class="fas fa-gem"></i>
+                    Poliedros
+                </button>
+                <button class="tab-btn" data-tab="custom">
+                    <i class="fas fa-pencil-ruler"></i>
+                    Personalizado
+                </button>
+            </div>
+
+            <!-- 2D Figures Tab -->
+            <div class="tab-content active" id="tab-2d">
+                <div class="workspace">
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-shapes"></i>
+                                Figuras Básicas
+                            </h3>
+                            <div class="shape-grid">
+                                <button class="shape-btn" data-shape="circle">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Círculo</span>
+                                </button>
+                                <button class="shape-btn" data-shape="square">
+                                    <i class="fas fa-square"></i>
+                                    <span>Cuadrado</span>
+                                </button>
+                                <button class="shape-btn" data-shape="triangle">
+                                    <i class="fas fa-play"></i>
+                                    <span>Triángulo</span>
+                                </button>
+                                <button class="shape-btn" data-shape="rectangle">
+                                    <i class="fas fa-rectangle-wide"></i>
+                                    <span>Rectángulo</span>
+                                </button>
+                                <button class="shape-btn" data-shape="pentagon">
+                                    <i class="fas fa-stop"></i>
+                                    <span>Pentágono</span>
+                                </button>
+                                <button class="shape-btn" data-shape="hexagon">
+                                    <i class="fas fa-hexagon"></i>
+                                    <span>Hexágono</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-sliders-h"></i>
+                                Propiedades
+                            </h3>
+                            <div class="control-group">
+                                <label class="control-label">Tamaño</label>
+                                <input type="range" class="slider" id="size2d" min="20" max="200" value="100">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Rotación</label>
+                                <input type="range" class="slider" id="rotation2d" min="0" max="360" value="0">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Color de Relleno</label>
+                                <input type="color" class="color-picker" id="fillColor" value="#667eea">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Color del Borde</label>
+                                <input type="color" class="color-picker" id="strokeColor" value="#2d3748">
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn btn-secondary" id="clear2d">
+                                <i class="fas fa-eraser"></i>
+                                Limpiar
+                            </button>
+                            <button class="action-btn btn-success" id="save2d">
+                                <i class="fas fa-download"></i>
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Container -->
+                    <div class="canvas-container">
+                        <canvas class="canvas-2d" id="canvas2d"></canvas>
+                        <div class="canvas-overlay">
+                            <i class="fas fa-mouse-pointer"></i>
+                            Click para colocar figura
+                        </div>
+                    </div>
+
+                    <!-- Properties Panel -->
+                    <div class="properties-panel">
+                        <h3 class="control-title">
+                            <i class="fas fa-info-circle"></i>
+                            Propiedades de la Figura
+                        </h3>
+                        <div id="properties2d">
+                            <div class="property-item">
+                                <span class="property-label">Tipo:</span>
+                                <span class="property-value" id="figureType">Ninguno</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Área:</span>
+                                <span class="property-value" id="figureArea">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Perímetro:</span>
+                                <span class="property-value" id="figurePerimeter">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Coordenadas:</span>
+                                <span class="property-value" id="figureCoords">(0, 0)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D Figures Tab -->
+            <div class="tab-content" id="tab-3d">
+                <div class="workspace">
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-cube"></i>
+                                Figuras 3D
+                            </h3>
+                            <div class="shape-grid">
+                                <button class="shape-btn" data-shape="sphere">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Esfera</span>
+                                </button>
+                                <button class="shape-btn" data-shape="cube">
+                                    <i class="fas fa-cube"></i>
+                                    <span>Cubo</span>
+                                </button>
+                                <button class="shape-btn" data-shape="cylinder">
+                                    <i class="fas fa-database"></i>
+                                    <span>Cilindro</span>
+                                </button>
+                                <button class="shape-btn" data-shape="cone">
+                                    <i class="fas fa-play"></i>
+                                    <span>Cono</span>
+                                </button>
+                                <button class="shape-btn" data-shape="pyramid">
+                                    <i class="fas fa-mountain"></i>
+                                    <span>Pirámide</span>
+                                </button>
+                                <button class="shape-btn" data-shape="torus">
+                                    <i class="fas fa-circle-notch"></i>
+                                    <span>Toro</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-sliders-h"></i>
+                                Transformaciones
+                            </h3>
+                            <div class="control-group">
+                                <label class="control-label">Escala</label>
+                                <input type="range" class="slider" id="scale3d" min="0.5" max="3" step="0.1" value="1">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Rotación X</label>
+                                <input type="range" class="slider" id="rotationX" min="0" max="360" value="0">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Rotación Y</label>
+                                <input type="range" class="slider" id="rotationY" min="0" max="360" value="0">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Color</label>
+                                <input type="color" class="color-picker" id="color3d" value="#667eea">
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn btn-secondary" id="reset3d">
+                                <i class="fas fa-undo"></i>
+                                Resetear
+                            </button>
+                            <button class="action-btn btn-primary" id="animate3d">
+                                <i class="fas fa-play"></i>
+                                Animar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Container -->
+                    <div class="canvas-container">
+                        <div id="canvas3d"></div>
+                        <div class="canvas-overlay">
+                            <i class="fas fa-mouse-pointer"></i>
+                            Arrastra para rotar
+                        </div>
+                    </div>
+
+                    <!-- Properties Panel -->
+                    <div class="properties-panel">
+                        <h3 class="control-title">
+                            <i class="fas fa-calculator"></i>
+                            Propiedades 3D
+                        </h3>
+                        <div id="properties3d">
+                            <div class="property-item">
+                                <span class="property-label">Figura:</span>
+                                <span class="property-value" id="figure3dType">Ninguna</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Volumen:</span>
+                                <span class="property-value" id="figure3dVolume">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Superficie:</span>
+                                <span class="property-value" id="figure3dSurface">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Vértices:</span>
+                                <span class="property-value" id="figure3dVertices">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Aristas:</span>
+                                <span class="property-value" id="figure3dEdges">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Caras:</span>
+                                <span class="property-value" id="figure3dFaces">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Polyhedra Tab -->
+            <div class="tab-content" id="tab-polyhedra">
+                <div class="workspace">
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-gem"></i>
+                                Sólidos Platónicos
+                            </h3>
+                            <div class="shape-grid">
+                                <button class="shape-btn" data-shape="tetrahedron">
+                                    <i class="fas fa-play"></i>
+                                    <span>Tetraedro</span>
+                                </button>
+                                <button class="shape-btn" data-shape="octahedron">
+                                    <i class="fas fa-gem"></i>
+                                    <span>Octaedro</span>
+                                </button>
+                                <button class="shape-btn" data-shape="icosahedron">
+                                    <i class="fas fa-dice-d20"></i>
+                                    <span>Icosaedro</span>
+                                </button>
+                                <button class="shape-btn" data-shape="dodecahedron">
+                                    <i class="fas fa-dice-d12"></i>
+                                    <span>Dodecaedro</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-eye"></i>
+                                Visualización
+                            </h3>
+                            <div class="control-group">
+                                <label class="control-label">
+                                    <input type="checkbox" id="showWireframe"> Wireframe
+                                </label>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">
+                                    <input type="checkbox" id="showVertices"> Vértices
+                                </label>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">
+                                    <input type="checkbox" id="showEdges"> Aristas
+                                </label>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">
+                                    <input type="checkbox" id="autoRotate" checked> Auto Rotación
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn btn-secondary" id="explodeView">
+                                <i class="fas fa-expand"></i>
+                                Vista Explosiva
+                            </button>
+                            <button class="action-btn btn-success" id="captureImage">
+                                <i class="fas fa-camera"></i>
+                                Capturar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Container -->
+                    <div class="canvas-container">
+                        <div id="canvasPolyhedra"></div>
+                        <div class="canvas-overlay">
+                            <i class="fas fa-hand-rock"></i>
+                            Interactúa con el poliedro
+                        </div>
+                    </div>
+
+                    <!-- Properties Panel -->
+                    <div class="properties-panel">
+                        <h3 class="control-title">
+                            <i class="fas fa-ruler"></i>
+                            Propiedades del Poliedro
+                        </h3>
+                        <div id="propertiesPolyhedra">
+                            <div class="property-item">
+                                <span class="property-label">Nombre:</span>
+                                <span class="property-value" id="polyhedronName">Ninguno</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Vértices:</span>
+                                <span class="property-value" id="polyhedronVertices">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Aristas:</span>
+                                <span class="property-value" id="polyhedronEdges">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Caras:</span>
+                                <span class="property-value" id="polyhedronFaces">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Euler (V-E+F):</span>
+                                <span class="property-value" id="eulerCharacteristic">2</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Tipo de Cara:</span>
+                                <span class="property-value" id="faceType">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Tab -->
+            <div class="tab-content" id="tab-custom">
+                <div class="workspace">
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-pencil-ruler"></i>
+                                Herramientas de Dibujo
+                            </h3>
+                            <div class="shape-grid">
+                                <button class="shape-btn" data-tool="freehand">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    <span>Mano Alzada</span>
+                                </button>
+                                <button class="shape-btn" data-tool="line">
+                                    <i class="fas fa-minus"></i>
+                                    <span>Línea</span>
+                                </button>
+                                <button class="shape-btn" data-tool="polygon">
+                                    <i class="fas fa-draw-polygon"></i>
+                                    <span>Polígono</span>
+                                </button>
+                                <button class="shape-btn" data-tool="bezier">
+                                    <i class="fas fa-bezier-curve"></i>
+                                    <span>Curva</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="control-section">
+                            <h3 class="control-title">
+                                <i class="fas fa-palette"></i>
+                                Estilo
+                            </h3>
+                            <div class="control-group">
+                                <label class="control-label">Grosor de Línea</label>
+                                <input type="range" class="slider" id="lineWidth" min="1" max="20" value="3">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Opacidad</label>
+                                <input type="range" class="slider" id="opacity" min="0.1" max="1" step="0.1" value="1">
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Color de Trazo</label>
+                                <input type="color" class="color-picker" id="drawColor" value="#667eea">
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn btn-secondary" id="clearCustom">
+                                <i class="fas fa-trash"></i>
+                                Limpiar Todo
+                            </button>
+                            <button class="action-btn btn-primary" id="undoCustom">
+                                <i class="fas fa-undo"></i>
+                                Deshacer
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Container -->
+                    <div class="canvas-container">
+                        <canvas class="canvas-2d" id="canvasCustom"></canvas>
+                        <div class="canvas-overlay">
+                            <i class="fas fa-paint-brush"></i>
+                            Selecciona una herramienta y dibuja
+                        </div>
+                    </div>
+
+                    <!-- Properties Panel -->
+                    <div class="properties-panel">
+                        <h3 class="control-title">
+                            <i class="fas fa-layer-group"></i>
+                            Capas y Análisis
+                        </h3>
+                        <div id="propertiesCustom">
+                            <div class="property-item">
+                                <span class="property-label">Elementos:</span>
+                                <span class="property-value" id="customElements">0</span>
+                            </div>
+                            <div class="property-item">
+                                <span class="property-label">Longitud Total:</span>
+                                <span class="property-value" id="customLength">0 px</span>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="action-btn btn-success" id="analyzeCustom">
+                                <i class="fas fa-search"></i>
+                                Analizar
+                            </button>
+                            <button class="action-btn btn-primary" id="exportCustom">
+                                <i class="fas fa-file-export"></i>
+                                Exportar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Script -->
+    <script>
+        // Show loading state initially
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Initialize the geometry lab
+            if (window.GeometryLab) {
+                window.GeometryLab.init();
+            } else {
+                console.warn('GeometryLab module not loaded');
+            }
+        });
+    </script>
+
+    <!-- Geometry Lab Module will be loaded here -->
+    <script src="../lab/javascript/geometry-lab.js"></script>
+</body>
+</html>
