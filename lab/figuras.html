@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
-            overflow: hidden; /* Evita el scroll de la página principal */
+            overflow: hidden;
         }
         
         .header {
@@ -49,12 +49,12 @@
         
         .main-container {
             display: grid;
-            grid-template-columns: 320px 1fr; /* Un poco más de espacio para la barra lateral */
+            grid-template-columns: 320px 1fr;
             gap: 2rem;
             padding: 2rem;
             max-width: 1600px;
             margin: 0 auto;
-            height: calc(100vh - 120px); /* Ajustar altura */
+            height: calc(100vh - 120px);
         }
         
         .sidebar {
@@ -70,7 +70,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 1rem; /* Padding reducido para dar más espacio */
+            padding: 1rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
@@ -80,19 +80,20 @@
         
         .tabs {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
         
         .tab {
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             border-radius: 25px;
             background: #f7fafc;
             color: #666;
             cursor: pointer;
             transition: all 0.3s ease;
             border: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 500;
         }
         
@@ -190,22 +191,20 @@
             overflow: hidden;
         }
         
-        /* Estilos para el canvas de Three.js */
         .canvas canvas {
             display: block;
             width: 100%;
             height: 100%;
         }
 
-        /* --- Modificaciones para reducir el tamaño del panel de fórmulas --- */
         .info-panel {
             background: linear-gradient(45deg, #f7fafc, #edf2f7);
             border-radius: 12px;
             border-left: 4px solid #4c51bf;
-            padding: 0.75rem; /* Reduce el padding interno */
+            padding: 0.75rem;
             margin-top: 1rem;
-            max-height: 250px; /* Limita la altura máxima del panel */
-            overflow-y: auto;  /* Añade scroll si el contenido es muy largo */
+            max-height: 250px;
+            overflow-y: auto;
         }
 
         .info-panel h4 {
@@ -214,26 +213,15 @@
             margin-bottom: 0.4rem;
         }
         
-        .info-panel .formulas {
-            color: #666;
-            line-height: 1.8;
-            margin: 0.5rem 0;
-        }
-        
         .formula-item {
             margin: 0.3rem 0;
             padding: 0.3rem 0;
             border-bottom: 1px solid #f0f0f0;
-            font-size: 0.9rem; /* Reduce el tamaño de la fuente */
+            font-size: 0.9rem;
         }
         
-        .formula-item:last-child {
-            border-bottom: none;
-        }
-        
-        .info-panel .MathJax {
-            font-size: 1em !important; /* Ajusta el tamaño de la fuente de MathJax */
-        }
+        .formula-item:last-child { border-bottom: none; }
+        .info-panel .MathJax { font-size: 1em !important; }
         
         .properties {
             display: grid;
@@ -251,26 +239,19 @@
         }
         
         .property .label {
-            font-size: 0.7rem; /* Reduce el tamaño de la etiqueta */
+            font-size: 0.7rem;
             color: #666;
             margin-bottom: 0.25rem;
         }
         
         .property .value {
             color: #4c51bf;
-            font-size: 0.9rem; /* Reduce el tamaño del valor */
+            font-size: 0.9rem;
         }
-        /* --- Fin de las modificaciones --- */
         
         @media (max-width: 1024px) {
-            .main-container {
-                grid-template-columns: 1fr;
-                height: auto;
-                padding: 1rem;
-            }
-            .canvas-area {
-                min-height: 400px;
-            }
+            .main-container { grid-template-columns: 1fr; height: auto; padding: 1rem; }
+            .canvas-area { min-height: 400px; }
         }
     </style>
 </head>
@@ -286,6 +267,7 @@
                 <button class="tab active" data-tab="2d">2D</button>
                 <button class="tab" data-tab="3d">3D</button>
                 <button class="tab" data-tab="polyhedra">Poliedros</button>
+                <button class="tab" data-tab="fractals">Fractales</button>
             </div>
             
             <!-- Sección 2D -->
@@ -344,28 +326,45 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Sección Fractales -->
+            <div class="figure-section" id="section-fractals">
+                <div class="figure-type">
+                    <h3>❄️ Fractales Clásicos</h3>
+                    <div class="figure-buttons">
+                        <button class="figure-btn" data-figure="sierpinski">Triángulo de Sierpinski</button>
+                        <button class="figure-btn" data-figure="koch">Copo de Nieve de Koch</button>
+                    </div>
+                </div>
+            </div>
             
             <!-- Controles -->
             <div class="controls">
-                <div class="control-group">
-                    <label for="size-slider">Tamaño (Factor)</label>
-                    <input type="range" id="size-slider" class="slider" min="50" max="150" value="100">
+                <div id="general-controls">
+                    <div class="control-group">
+                        <label for="size-slider">Tamaño (Factor)</label>
+                        <input type="range" id="size-slider" class="slider" min="50" max="150" value="100">
+                    </div>
+                    <div class="control-group" id="rotation-control">
+                        <label for="rotation-slider">Rotación</label>
+                        <input type="range" id="rotation-slider" class="slider" min="0" max="360" value="0">
+                    </div>
+                    <div class="control-group">
+                        <label for="color-picker">Color</label>
+                        <input type="color" id="color-picker" value="#4c51bf" style="width: 100%; height: 40px; border: none; border-radius: 8px; cursor: pointer;">
+                    </div>
                 </div>
-                <div class="control-group">
-                    <label for="rotation-slider">Rotación</label>
-                    <input type="range" id="rotation-slider" class="slider" min="0" max="360" value="0">
-                </div>
-                <div class="control-group">
-                    <label for="color-picker">Color</label>
-                    <input type="color" id="color-picker" value="#4c51bf" style="width: 100%; height: 40px; border: none; border-radius: 8px; cursor: pointer;">
+                <div id="fractal-controls" style="display: none;">
+                    <div class="control-group">
+                        <label for="depth-slider">Iteraciones</label>
+                        <input type="range" id="depth-slider" class="slider" min="0" max="6" value="4">
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="canvas-area">
-            <div class="canvas" id="main-canvas">
-                <!-- El canvas 2D o el renderizador 3D se insertarán aquí dinámicamente -->
-            </div>
+            <div class="canvas" id="main-canvas"></div>
             <div class="info-panel" id="info-panel" style="display: none;">
                 <h4 id="figure-title">Información de la Figura</h4>
                 <div class="formulas" id="figure-formulas"></div>
@@ -374,7 +373,6 @@
         </div>
     </div>
     
-    <!-- Import Map para Three.js -->
     <script type="importmap">
         {
             "imports": {
@@ -384,8 +382,8 @@
         }
     </script>
     
-    <!-- Scripts de la aplicación -->
     <script src="../lab/javascript/mathjax-module.js"></script>
     <script src="../lab/javascript/figuras.js" type="module"></script>
 </body>
 </html>
+
