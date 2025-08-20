@@ -16,6 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             color: #333;
+            overflow: hidden; /* Evita el scroll de la página principal */
         }
         
         .header {
@@ -48,13 +49,12 @@
         
         .main-container {
             display: grid;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: 320px 1fr; /* Un poco más de espacio para la barra lateral */
             gap: 2rem;
             padding: 2rem;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            min-height: calc(100vh - 140px);
-            height: calc(100vh - 140px);
+            height: calc(100vh - 120px); /* Ajustar altura */
         }
         
         .sidebar {
@@ -70,7 +70,7 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 1rem; /* Padding reducido para dar más espacio */
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
@@ -130,9 +130,6 @@
             color: #4c51bf;
             margin-bottom: 0.75rem;
             font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
         
         .figure-buttons {
@@ -180,50 +177,8 @@
             color: #4c51bf;
         }
         
-        .slider-container {
-            position: relative;
-        }
-        
         .slider {
             width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: #e2e8f0;
-            outline: none;
-            -webkit-appearance: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #4c51bf, #9f7aea);
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(76, 81, 191, 0.3);
-        }
-        
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #4c51bf, #9f7aea);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 6px rgba(76, 81, 191, 0.3);
-        }
-        
-        .slider-value {
-            position: absolute;
-            right: 0;
-            top: -30px;
-            background: #4c51bf;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
         }
         
         .canvas {
@@ -235,174 +190,88 @@
             overflow: hidden;
         }
         
+        /* Estilos para el canvas de Three.js */
+        .canvas canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- Modificaciones para reducir el tamaño del panel de fórmulas --- */
         .info-panel {
             background: linear-gradient(45deg, #f7fafc, #edf2f7);
             border-radius: 12px;
-            padding: 1rem;
-            margin-top: 1rem;
             border-left: 4px solid #4c51bf;
+            padding: 0.75rem; /* Reduce el padding interno */
+            margin-top: 1rem;
+            max-height: 250px; /* Limita la altura máxima del panel */
+            overflow-y: auto;  /* Añade scroll si el contenido es muy largo */
         }
-        
+
         .info-panel h4 {
             color: #4c51bf;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
         }
         
         .info-panel .formulas {
             color: #666;
             line-height: 1.8;
-            margin: 1rem 0;
+            margin: 0.5rem 0;
         }
         
         .formula-item {
-            margin: 0.75rem 0;
-            padding: 0.5rem 0;
+            margin: 0.3rem 0;
+            padding: 0.3rem 0;
             border-bottom: 1px solid #f0f0f0;
-            font-size: 1.1rem;
+            font-size: 0.9rem; /* Reduce el tamaño de la fuente */
         }
         
         .formula-item:last-child {
             border-bottom: none;
         }
         
-        /* MathJax styling */
-        .MathJax {
-            font-size: 1.1em !important;
-        }
-        
-        .MathJax_Display {
-            margin: 0.5em 0 !important;
+        .info-panel .MathJax {
+            font-size: 1em !important; /* Ajusta el tamaño de la fuente de MathJax */
         }
         
         .properties {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            gap: 0.4rem;
+            margin-top: 0.4rem;
         }
         
         .property {
             background: white;
-            padding: 0.5rem;
+            padding: 0.4rem;
             border-radius: 8px;
             text-align: center;
             font-weight: 600;
         }
         
         .property .label {
-            font-size: 0.8rem;
+            font-size: 0.7rem; /* Reduce el tamaño de la etiqueta */
             color: #666;
             margin-bottom: 0.25rem;
         }
         
         .property .value {
             color: #4c51bf;
-            font-size: 1.1rem;
+            font-size: 0.9rem; /* Reduce el tamaño del valor */
         }
+        /* --- Fin de las modificaciones --- */
         
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .main-container {
                 grid-template-columns: 1fr;
-                height: calc(100dvh - 160px);
-                min-height: calc(100dvh - 160px);
-                gap: 1rem;
+                height: auto;
                 padding: 1rem;
             }
-            
-            .sidebar {
-                order: 2;
-            }
-            
             .canvas-area {
-                min-height: calc(100dvh - 320px);
-                padding: 1rem;
-            }
-            
-            .canvas {
-                min-height: calc(100dvh - 380px);
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .figure-buttons {
-                grid-template-columns: 1fr;
+                min-height: 400px;
             }
         }
-        
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #666;
-        }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #4c51bf;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* --- Modificaciones para reducir el tamaño del panel de fórmulas --- */
-
-/* Ajusta el panel de información para que sea más compacto */
-.info-panel {
-    padding: 0.75rem; /* Reduce el padding interno */
-    margin-top: 0.75rem;
-    max-height: 220px; /* Limita la altura máxima del panel */
-    overflow-y: auto;  /* Añade scroll si el contenido es muy largo */
-}
-
-/* Reduce el tamaño de la fuente y el espaciado de los ítems de fórmula */
-.formula-item {
-    margin: 0.3rem 0;
-    padding: 0.3rem 0;
-    font-size: 0.9rem; /* Reduce el tamaño de la fuente */
-}
-
-/* Reduce el tamaño de la fuente en las fórmulas renderizadas por MathJax */
-.info-panel .MathJax {
-    font-size: 1em !important; /* Ajusta el tamaño de la fuente de MathJax */
-}
-
-/* Hace que la sección de propiedades sea más compacta */
-.properties {
-    gap: 0.4rem;
-    margin-top: 0.4rem;
-}
-
-.property {
-    padding: 0.4rem;
-}
-
-.property .label {
-    font-size: 0.7rem; /* Reduce el tamaño de la etiqueta */
-}
-
-.property .value {
-    font-size: 0.9rem; /* Reduce el tamaño del valor */
-}
-
-/* Ajusta el título del panel */
-.info-panel h4 {
-    font-size: 1rem;
-    margin-bottom: 0.4rem;
-}
-
-/* --- Fin de las modificaciones --- */
-        
     </style>
 </head>
 <body>
@@ -430,7 +299,6 @@
                         <button class="figure-btn" data-figure="rectangle">Rectángulo</button>
                     </div>
                 </div>
-                
                 <div class="figure-type">
                     <h3>🔶 Polígonos</h3>
                     <div class="figure-buttons">
@@ -453,9 +321,8 @@
                         <button class="figure-btn" data-figure="cone">Cono</button>
                     </div>
                 </div>
-                
                 <div class="figure-type">
-                    <h3>📐 Prismas</h3>
+                    <h3>📐 Prismas y Otros</h3>
                     <div class="figure-buttons">
                         <button class="figure-btn" data-figure="triangular-prism">Prisma Triangular</button>
                         <button class="figure-btn" data-figure="hexagonal-prism">Prisma Hexagonal</button>
@@ -468,22 +335,12 @@
             <!-- Sección Poliedros -->
             <div class="figure-section" id="section-polyhedra">
                 <div class="figure-type">
-                    <h3>💎 Poliedros Regulares</h3>
+                    <h3>💎 Sólidos Platónicos</h3>
                     <div class="figure-buttons">
                         <button class="figure-btn" data-figure="tetrahedron">Tetraedro</button>
                         <button class="figure-btn" data-figure="octahedron">Octaedro</button>
                         <button class="figure-btn" data-figure="dodecahedron">Dodecaedro</button>
                         <button class="figure-btn" data-figure="icosahedron">Icosaedro</button>
-                    </div>
-                </div>
-                
-                <div class="figure-type">
-                    <h3>🏗️ Poliedros Complejos</h3>
-                    <div class="figure-buttons">
-                        <button class="figure-btn" data-figure="truncated-cube">Cubo Truncado</button>
-                        <button class="figure-btn" data-figure="rhombicuboctahedron">Rombicuboctaedro</button>
-                        <button class="figure-btn" data-figure="stella-octangula">Stella Octangula</button>
-                        <button class="figure-btn" data-figure="geodesic">Esfera Geodésica</button>
                     </div>
                 </div>
             </div>
@@ -492,20 +349,12 @@
             <div class="controls">
                 <div class="control-group">
                     <label for="size-slider">Tamaño (Factor)</label>
-                    <div class="slider-container">
-                        <input type="range" id="size-slider" class="slider" min="50" max="250" value="100">
-                        <span class="slider-value" id="size-value">100</span>
-                    </div>
+                    <input type="range" id="size-slider" class="slider" min="50" max="150" value="100">
                 </div>
-                
                 <div class="control-group">
                     <label for="rotation-slider">Rotación</label>
-                    <div class="slider-container">
-                        <input type="range" id="rotation-slider" class="slider" min="0" max="360" value="0">
-                        <span class="slider-value" id="rotation-value">0°</span>
-                    </div>
+                    <input type="range" id="rotation-slider" class="slider" min="0" max="360" value="0">
                 </div>
-                
                 <div class="control-group">
                     <label for="color-picker">Color</label>
                     <input type="color" id="color-picker" value="#4c51bf" style="width: 100%; height: 40px; border: none; border-radius: 8px; cursor: pointer;">
@@ -515,12 +364,8 @@
         
         <div class="canvas-area">
             <div class="canvas" id="main-canvas">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Selecciona una figura para comenzar</p>
-                </div>
+                <!-- El canvas 2D o el renderizador 3D se insertarán aquí dinámicamente -->
             </div>
-            
             <div class="info-panel" id="info-panel" style="display: none;">
                 <h4 id="figure-title">Información de la Figura</h4>
                 <div class="formulas" id="figure-formulas"></div>
@@ -529,7 +374,18 @@
         </div>
     </div>
     
+    <!-- Import Map para Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/"
+            }
+        }
+    </script>
+    
+    <!-- Scripts de la aplicación -->
     <script src="../lab/javascript/mathjax-module.js"></script>
-    <script src="../lab/javascript/figuras.js"></script>
+    <script src="../lab/javascript/figuras.js" type="module"></script>
 </body>
 </html>
