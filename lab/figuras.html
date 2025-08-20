@@ -253,6 +253,57 @@
             .main-container { grid-template-columns: 1fr; height: auto; padding: 1rem; }
             .canvas-area { min-height: 400px; }
         }
+        /* Permite scroll vertical y corrige 100vh en móviles */
+body{
+  overflow: auto;               /* antes: overflow: hidden */
+  min-height: 100dvh;           /* alto dinámico en móvil */
+}
+
+/* Layout fluido: elimina altura rígida */
+.main-container{
+  grid-template-columns: minmax(260px, 360px) 1fr; /* sidebar flexible */
+  gap: clamp(1rem, 2vw, 2rem);
+  height: auto;                                   /* sobreescribe calc(100vh - 120px) */
+  min-height: calc(100dvh - 120px);
+}
+
+/* Canvas adaptable: relación 16:9 en pantallas pequeñas */
+.canvas{
+  min-height: 360px;
+  aspect-ratio: 16 / 9;
+}
+@media (min-width: 1025px){
+  .canvas{ aspect-ratio: auto; min-height: 0; }    /* en desktop vuelve a ocupar todo */
+}
+
+/* Tipografía fluida */
+.header h1{ font-size: clamp(1.4rem, 3.5vw, 2.5rem); }
+.header p{  font-size: clamp(0.9rem, 2.2vw, 1.1rem); }
+
+/* Tabs desplazables en móvil */
+.tabs{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Botoneras que colapsan a 1 columna en pantallas chicas */
+.figure-buttons{ grid-template-columns: 1fr 1fr; }
+@media (max-width: 640px){
+  .figure-buttons{ grid-template-columns: 1fr; }
+}
+
+/* Breakpoints extra */
+@media (max-width: 1024px){
+  .main-container{
+    grid-template-columns: 1fr;
+    padding: clamp(0.75rem, 2.5vw, 1rem);
+  }
+  .canvas-area{ min-height: 50dvh; }
+  /* Si quieres el lienzo arriba y los controles abajo:
+  .canvas-area{ order: 1; }
+  .sidebar{ order: 2; } */
+}
+@media (max-width: 480px){
+  .canvas-area{ padding: 0.5rem; }
+}
+
     </style>
 </head>
 <body>
