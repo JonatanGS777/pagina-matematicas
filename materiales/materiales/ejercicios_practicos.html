@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicios Prácticos</title>
+    <title>Ejercicios Prácticos de Matemáticas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -11,153 +12,814 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            color: #ffffff;
-            background: url('fondo6.png') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-bg: rgba(17, 24, 39, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: rgba(255, 255, 255, 0.2);
         }
 
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: -1;
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
         header {
             text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            width: 100%;
-            border-bottom: 1px solid #555;
+            margin-bottom: 3rem;
+            background: var(--dark-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
         }
 
         header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #f0f4f8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
         }
 
         header p {
-            font-size: 1.1em;
-            font-weight: 300;
-        }
-
-        main {
-            padding: 40px;
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
-            color: #ddd;
-        }
-
-        main p {
-            font-size: 1.2em;
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
             line-height: 1.6;
         }
 
-        .btn-ejercicios {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 15px 30px;
-            background-color: #e74c3c;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            text-decoration: none;
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .btn-ejercicios:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            width: 100%;
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
             text-align: center;
-            font-size: 0.9em;
-            border-top: 1px solid #555;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
         }
 
-        header, main, footer {
-            animation: fadeIn 1.5s ease-in;
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        /* Nuevos estilos para la descripción */
-        .descripcion {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+        .controls {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        .descripcion ul {
-            list-style-type: none;
-            margin-top: 10px;
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
-        .descripcion li {
-            margin: 8px 0;
-            padding-left: 20px;
+        .filter-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
             position: relative;
+            overflow: hidden;
         }
 
-        .descripcion li::before {
-            content: "•";
+        .filter-tab.active {
+            background: var(--primary-gradient);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .filter-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .difficulty-btn.easy { border-color: #10b981; color: #10b981; }
+        .difficulty-btn.medium { border-color: #f59e0b; color: #f59e0b; }
+        .difficulty-btn.hard { border-color: #ef4444; color: #ef4444; }
+
+        .difficulty-btn.active.easy { background: #10b981; color: white; }
+        .difficulty-btn.active.medium { background: #f59e0b; color: white; }
+        .difficulty-btn.active.hard { background: #ef4444; color: white; }
+
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .exercise-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .exercise-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .exercise-category {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-algebra { background: rgba(99, 102, 241, 0.1); color: #6366f1; }
+        .category-trigonometria { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
+        .category-geometria { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .category-estadistica { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+
+        .difficulty-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .difficulty-easy { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .difficulty-medium { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .difficulty-hard { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        .exercise-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .exercise-problem {
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 4px solid #6366f1;
+            padding: 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .answer-section {
+            margin-top: 1rem;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .exercise-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(107, 114, 128, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .btn-success {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .solution {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .solution.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .solution-title {
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .solution-steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .solution-steps li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .solution-steps li::before {
+            content: counter(step-counter);
             position: absolute;
             left: 0;
-            color: #e74c3c;
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .feedback {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 30%;
+            left: 15%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-30px) rotate(180deg); opacity: 0.7; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .exercises-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .exercise-card {
+                padding: 1.5rem;
+            }
+
+            .filter-tabs {
+                justify-content: center;
+            }
+
+            .exercise-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Ejercicios Prácticos</h1>
-        <p>Esta sección contiene ejercicios prácticos diseñados para aplicar y reforzar los conocimientos en matemáticas.</p>
-    </header>
-    <main>
-        <p>Explora los ejercicios y resuelve los problemas para fortalecer tu dominio de los conceptos matemáticos.</p>
-        
-        <div class="descripcion">
-            <p>En esta sección encontrarás:</p>
-            <ul>
-                <li>Ejercicios de trigonometría</li>
-                <li>Problemas de álgebra</li>
-                <li>Soluciones detalladas</li>
-                <li>Sistema de filtrado por categoría</li>
-            </ul>
+    <div class="floating-shapes">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Ejercicios Prácticos de Matemáticas</h1>
+            <p>Resuelve problemas interactivos de álgebra, trigonometría, geometría y estadística con soluciones paso a paso</p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Ejercicios Disponibles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Categorías</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Niveles de Dificultad</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Oportunidades de Aprender</div>
+            </div>
         </div>
 
-        <button onclick="window.location.href='ejercicios_matematicas.html'" class="btn-ejercicios">
-            Iniciar Ejercicios
-        </button>
-    </main>
-    <footer>
-        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
-    </footer>
+        <div class="controls">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-category="all">Todos</button>
+                <button class="filter-tab" data-category="algebra">Álgebra</button>
+                <button class="filter-tab" data-category="trigonometria">Trigonometría</button>
+                <button class="filter-tab" data-category="geometria">Geometría</button>
+                <button class="filter-tab" data-category="estadistica">Estadística</button>
+            </div>
+            
+            <div class="difficulty-selector">
+                <span style="font-weight: 600; margin-right: 1rem;">Dificultad:</span>
+                <button class="difficulty-btn easy active" data-difficulty="easy">Fácil</button>
+                <button class="difficulty-btn medium active" data-difficulty="medium">Medio</button>
+                <button class="difficulty-btn hard active" data-difficulty="hard">Difícil</button>
+            </div>
+        </div>
+
+        <div class="exercises-grid" id="exercisesGrid">
+            <!-- Ejercicios de Álgebra -->
+            <div class="exercise-card" data-category="algebra" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-algebra">Álgebra</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Ecuación Lineal Simple</h3>
+                <div class="exercise-problem">
+                    Resuelve la siguiente ecuación:
+                    <div style="text-align: center; margin: 1rem 0;">
+                        $$2x + 5 = 13$$
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Ingresa tu respuesta" data-answer="4">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">
+                            ✓ Solución Paso a Paso
+                        </div>
+                        <ol class="solution-steps">
+                            <li>Restamos 5 de ambos lados: $2x + 5 - 5 = 13 - 5$</li>
+                            <li>Simplificamos: $2x = 8$</li>
+                            <li>Dividimos ambos lados por 2: $\frac{2x}{2} = \frac{8}{2}$</li>
+                            <li>Resultado final: $x = 4$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicio de Trigonometría -->
+            <div class="exercise-card" data-category="trigonometria" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Identidad Trigonométrica</h3>
+                <div class="exercise-problem">
+                    Calcula el valor de $\sin(30°)$:
+                    <div style="text-align: center; margin: 1rem 0;">
+                        $$\sin(30°) = ?$$
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Ingresa tu respuesta (fracción o decimal)" data-answer="0.5">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">
+                            ✓ Solución Paso a Paso
+                        </div>
+                        <ol class="solution-steps">
+                            <li>El ángulo de 30° es un ángulo especial</li>
+                            <li>En un triángulo rectángulo 30-60-90, los lados están en proporción $1 : \sqrt{3} : 2$</li>
+                            <li>$\sin(30°) = \frac{\text{cateto opuesto}}{\text{hipotenusa}} = \frac{1}{2}$</li>
+                            <li>Por lo tanto: $\sin(30°) = 0.5$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicio de Geometría -->
+            <div class="exercise-card" data-category="geometria" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-geometria">Geometría</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Área del Círculo</h3>
+                <div class="exercise-problem">
+                    Calcula el área de un círculo con radio de 5 cm:
+                    <div style="text-align: center; margin: 1rem 0;">
+                        $$A = \pi r^2$$
+                        $$r = 5 \text{ cm}$$
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Ingresa tu respuesta en cm²" data-answer="78.54">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">
+                            ✓ Solución Paso a Paso
+                        </div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos la fórmula del área: $A = \pi r^2$</li>
+                            <li>Sustituimos $r = 5$: $A = \pi \times 5^2$</li>
+                            <li>Calculamos: $A = \pi \times 25 = 25\pi$</li>
+                            <li>Aproximamos: $A \approx 25 \times 3.14159 = 78.54 \text{ cm}^2$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicio de Estadística -->
+            <div class="exercise-card" data-category="estadistica" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-estadistica">Estadística</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Media Aritmética</h3>
+                <div class="exercise-problem">
+                    Calcula la media aritmética de los siguientes datos:
+                    <div style="text-align: center; margin: 1rem 0;">
+                        $$\text{Datos: } 12, 15, 18, 21, 24$$
+                        $$\bar{x} = \frac{\sum x_i}{n}$$
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Ingresa la media" data-answer="18">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">
+                            ✓ Solución Paso a Paso
+                        </div>
+                        <ol class="solution-steps">
+                            <li>Sumamos todos los valores: $12 + 15 + 18 + 21 + 24 = 90$</li>
+                            <li>Contamos el número de datos: $n = 5$</li>
+                            <li>Aplicamos la fórmula: $\bar{x} = \frac{90}{5}$</li>
+                            <li>Resultado: $\bar{x} = 18$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicio de Álgebra Avanzada -->
+            <div class="exercise-card" data-category="algebra" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-algebra">Álgebra</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Ecuación Cuadrática</h3>
+                <div class="exercise-problem">
+                    Resuelve la ecuación cuadrática:
+                    <div style="text-align: center; margin: 1rem 0;">
+                        $$x^2 - 5x + 6 = 0$$
+                    </div>
+                    (Ingresa las dos soluciones separadas por coma)
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="x₁, x₂" data-answer="2,3">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">
+                            ✓ Solución Paso a Paso
+                        </div>
+                        <ol class="solution-steps">
+                            <li>Identificamos: $a = 1$, $b = -5$, $c = 6$</li>
+                            <li>Aplicamos la fórmula cuadrática: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$</li>
+                            <li>Calculamos el discriminante: $\Delta = (-5)^2 - 4(1)(6) = 25 - 24 = 1$</li>
+                            <li>Sustituimos: $x = \frac{5 \pm \sqrt{1}}{2} = \frac{5 \pm 1}{2}$</li>
+                            <li>Soluciones: $x_1 = \frac{5 + 1}{2} = 3$ y $x_2 = \frac{5 - 1}{2} = 2$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicio de Geometría Avanzada -->
+            <div class="exercise-card" data-category="geometria" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-geometria">Geometría</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Volumen de una Esfera</h3>
+                <div class="exercise-problem">
+                    Calcula el volumen de una esfera con radio 3 cm:
+                    <div style="text-align: center; margin: 1rem 0;">
+                        $$V = \frac{4}{3}\pi r^3$$
+                        $$r = 3 \text{ cm}$$
+                    </div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Volumen en cm³" data-answer="113.1">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">
+                            ✓ Solución Paso a Paso
+                        </div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos la fórmula: $V = \frac{4}{3}\pi r^3$</li>
+                            <li>Sustituimos $r = 3$: $V = \frac{4}{3}\pi \times 3^3$</li>
+                            <li>Calculamos: $V = \frac{4}{3}\pi \times 27 = \frac{108\pi}{3} = 36\pi$</li>
+                            <li>Aproximamos: $V \approx 36 \times 3.14159 = 113.1 \text{ cm}^3$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de MathJax
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+
+        // Funcionalidad de filtros
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                filterExercises();
+            });
+        });
+
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                filterExercises();
+            });
+        });
+
+        function filterExercises() {
+            const activeCategory = document.querySelector('.filter-tab.active').dataset.category;
+            const activeDifficulties = Array.from(document.querySelectorAll('.difficulty-btn.active')).map(btn => btn.dataset.difficulty);
+            
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                const cardCategory = card.dataset.category;
+                const cardDifficulty = card.dataset.difficulty;
+                
+                const categoryMatch = activeCategory === 'all' || cardCategory === activeCategory;
+                const difficultyMatch = activeDifficulties.includes(cardDifficulty);
+                
+                if (categoryMatch && difficultyMatch) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function checkAnswer(button) {
+            const card = button.closest('.exercise-card');
+            const input = card.querySelector('.answer-input');
+            const feedback = card.querySelector('.feedback');
+            const correctAnswer = input.dataset.answer;
+            const userAnswer = input.value.trim();
+            
+            feedback.style.display = 'block';
+            feedback.classList.remove('correct', 'incorrect');
+            
+            // Normalizar respuestas para comparación
+            const normalizedCorrect = correctAnswer.toLowerCase().replace(/\s/g, '');
+            const normalizedUser = userAnswer.toLowerCase().replace(/\s/g, '');
+            
+            if (normalizedUser === normalizedCorrect || 
+                (normalizedCorrect.includes(',') && normalizedCorrect.split(',').sort().join(',') === normalizedUser.split(',').sort().join(','))) {
+                feedback.classList.add('correct');
+                feedback.textContent = '¡Correcto! Excelente trabajo.';
+                button.textContent = '✓ Correcto';
+                button.disabled = true;
+                button.style.background = 'var(--success-gradient)';
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.textContent = 'Incorrecto. Inténtalo de nuevo o revisa la solución.';
+            }
+        }
+
+        function toggleSolution(button) {
+            const card = button.closest('.exercise-card');
+            const solution = card.querySelector('.solution');
+            
+            if (solution.classList.contains('show')) {
+                solution.classList.remove('show');
+                button.textContent = 'Ver Solución';
+            } else {
+                solution.classList.add('show');
+                button.textContent = 'Ocultar Solución';
+                // Re-renderizar MathJax para la solución
+                MathJax.typesetPromise([solution]);
+            }
+        }
+
+        // Inicializar MathJax cuando la página cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            MathJax.typesetPromise();
+        });
+    </script>
 </body>
 </html>
