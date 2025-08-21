@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicios Prácticos de Matemáticas</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            },
+            startup: {
+                typeset: false
+            }
+        };
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
     <style>
         * {
@@ -53,7 +69,6 @@
             font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
             background: linear-gradient(135deg, #ffffff, #f0f4f8);
-            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem;
@@ -89,7 +104,6 @@
             font-size: 2rem;
             font-weight: 800;
             background: var(--primary-gradient);
-            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 0.5rem;
@@ -184,6 +198,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
+            display: block;
         }
 
         .exercise-card::before {
@@ -256,6 +271,12 @@
             line-height: 1.6;
         }
 
+        .math-display {
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+        }
+
         .answer-section {
             margin-top: 1rem;
         }
@@ -312,6 +333,12 @@
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .solution {
@@ -527,9 +554,7 @@
                 <h3 class="exercise-title">Ecuación Lineal Simple</h3>
                 <div class="exercise-problem">
                     Resuelve la siguiente ecuación:
-                    <div style="text-align: center; margin: 1rem 0;">
-                        $$2x + 5 = 13$$
-                    </div>
+                    <div class="math-display">$$2x + 5 = 13$$</div>
                 </div>
                 <div class="answer-section">
                     <input type="text" class="answer-input" placeholder="Ingresa tu respuesta" data-answer="4">
@@ -539,124 +564,48 @@
                     </div>
                     <div class="feedback"></div>
                     <div class="solution">
-                        <div class="solution-title">
-                            ✓ Solución Paso a Paso
-                        </div>
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
                         <ol class="solution-steps">
-                            <li>Restamos 5 de ambos lados: $2x + 5 - 5 = 13 - 5$</li>
-                            <li>Simplificamos: $2x = 8$</li>
-                            <li>Dividimos ambos lados por 2: $\frac{2x}{2} = \frac{8}{2}$</li>
-                            <li>Resultado final: $x = 4$</li>
+                            <li>Restamos 5 de ambos lados: $$2x + 5 - 5 = 13 - 5$$</li>
+                            <li>Simplificamos: $$2x = 8$$</li>
+                            <li>Dividimos ambos lados por 2: $$\frac{2x}{2} = \frac{8}{2}$$</li>
+                            <li>Resultado final: $$x = 4$$</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <!-- Ejercicio de Trigonometría -->
-            <div class="exercise-card" data-category="trigonometria" data-difficulty="medium">
+            <div class="exercise-card" data-category="algebra" data-difficulty="medium">
                 <div class="exercise-header">
-                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="exercise-category category-algebra">Álgebra</span>
                     <span class="difficulty-badge difficulty-medium">Medio</span>
                 </div>
-                <h3 class="exercise-title">Identidad Trigonométrica</h3>
+                <h3 class="exercise-title">Sistema de Ecuaciones</h3>
                 <div class="exercise-problem">
-                    Calcula el valor de $\sin(30°)$:
-                    <div style="text-align: center; margin: 1rem 0;">
-                        $$\sin(30°) = ?$$
-                    </div>
+                    Resuelve el sistema de ecuaciones:
+                    <div class="math-display">$$\begin{cases} x + y = 7 \\ 2x - y = 2 \end{cases}$$</div>
+                    (Ingresa x,y)
                 </div>
                 <div class="answer-section">
-                    <input type="text" class="answer-input" placeholder="Ingresa tu respuesta (fracción o decimal)" data-answer="0.5">
+                    <input type="text" class="answer-input" placeholder="x,y" data-answer="3,4">
                     <div class="exercise-actions">
                         <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
                         <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
                     </div>
                     <div class="feedback"></div>
                     <div class="solution">
-                        <div class="solution-title">
-                            ✓ Solución Paso a Paso
-                        </div>
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
                         <ol class="solution-steps">
-                            <li>El ángulo de 30° es un ángulo especial</li>
-                            <li>En un triángulo rectángulo 30-60-90, los lados están en proporción $1 : \sqrt{3} : 2$</li>
-                            <li>$\sin(30°) = \frac{\text{cateto opuesto}}{\text{hipotenusa}} = \frac{1}{2}$</li>
-                            <li>Por lo tanto: $\sin(30°) = 0.5$</li>
+                            <li>Método de suma: sumamos las ecuaciones: $$(x + y) + (2x - y) = 7 + 2$$</li>
+                            <li>Simplificamos: $$3x = 9$$</li>
+                            <li>Resolvemos para x: $$x = 3$$</li>
+                            <li>Sustituimos en la primera ecuación: $$3 + y = 7$$</li>
+                            <li>Resolvemos para y: $$y = 4$$</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <!-- Ejercicio de Geometría -->
-            <div class="exercise-card" data-category="geometria" data-difficulty="medium">
-                <div class="exercise-header">
-                    <span class="exercise-category category-geometria">Geometría</span>
-                    <span class="difficulty-badge difficulty-medium">Medio</span>
-                </div>
-                <h3 class="exercise-title">Área del Círculo</h3>
-                <div class="exercise-problem">
-                    Calcula el área de un círculo con radio de 5 cm:
-                    <div style="text-align: center; margin: 1rem 0;">
-                        $$A = \pi r^2$$
-                        $$r = 5 \text{ cm}$$
-                    </div>
-                </div>
-                <div class="answer-section">
-                    <input type="text" class="answer-input" placeholder="Ingresa tu respuesta en cm²" data-answer="78.54">
-                    <div class="exercise-actions">
-                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
-                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
-                    </div>
-                    <div class="feedback"></div>
-                    <div class="solution">
-                        <div class="solution-title">
-                            ✓ Solución Paso a Paso
-                        </div>
-                        <ol class="solution-steps">
-                            <li>Aplicamos la fórmula del área: $A = \pi r^2$</li>
-                            <li>Sustituimos $r = 5$: $A = \pi \times 5^2$</li>
-                            <li>Calculamos: $A = \pi \times 25 = 25\pi$</li>
-                            <li>Aproximamos: $A \approx 25 \times 3.14159 = 78.54 \text{ cm}^2$</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ejercicio de Estadística -->
-            <div class="exercise-card" data-category="estadistica" data-difficulty="easy">
-                <div class="exercise-header">
-                    <span class="exercise-category category-estadistica">Estadística</span>
-                    <span class="difficulty-badge difficulty-easy">Fácil</span>
-                </div>
-                <h3 class="exercise-title">Media Aritmética</h3>
-                <div class="exercise-problem">
-                    Calcula la media aritmética de los siguientes datos:
-                    <div style="text-align: center; margin: 1rem 0;">
-                        $$\text{Datos: } 12, 15, 18, 21, 24$$
-                        $$\bar{x} = \frac{\sum x_i}{n}$$
-                    </div>
-                </div>
-                <div class="answer-section">
-                    <input type="text" class="answer-input" placeholder="Ingresa la media" data-answer="18">
-                    <div class="exercise-actions">
-                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
-                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
-                    </div>
-                    <div class="feedback"></div>
-                    <div class="solution">
-                        <div class="solution-title">
-                            ✓ Solución Paso a Paso
-                        </div>
-                        <ol class="solution-steps">
-                            <li>Sumamos todos los valores: $12 + 15 + 18 + 21 + 24 = 90$</li>
-                            <li>Contamos el número de datos: $n = 5$</li>
-                            <li>Aplicamos la fórmula: $\bar{x} = \frac{90}{5}$</li>
-                            <li>Resultado: $\bar{x} = 18$</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Ejercicio de Álgebra Avanzada -->
             <div class="exercise-card" data-category="algebra" data-difficulty="hard">
                 <div class="exercise-header">
                     <span class="exercise-category category-algebra">Álgebra</span>
@@ -665,9 +614,7 @@
                 <h3 class="exercise-title">Ecuación Cuadrática</h3>
                 <div class="exercise-problem">
                     Resuelve la ecuación cuadrática:
-                    <div style="text-align: center; margin: 1rem 0;">
-                        $$x^2 - 5x + 6 = 0$$
-                    </div>
+                    <div class="math-display">$$x^2 - 5x + 6 = 0$$</div>
                     (Ingresa las dos soluciones separadas por coma)
                 </div>
                 <div class="answer-section">
@@ -678,33 +625,351 @@
                     </div>
                     <div class="feedback"></div>
                     <div class="solution">
-                        <div class="solution-title">
-                            ✓ Solución Paso a Paso
-                        </div>
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
                         <ol class="solution-steps">
-                            <li>Identificamos: $a = 1$, $b = -5$, $c = 6$</li>
-                            <li>Aplicamos la fórmula cuadrática: $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$</li>
-                            <li>Calculamos el discriminante: $\Delta = (-5)^2 - 4(1)(6) = 25 - 24 = 1$</li>
-                            <li>Sustituimos: $x = \frac{5 \pm \sqrt{1}}{2} = \frac{5 \pm 1}{2}$</li>
-                            <li>Soluciones: $x_1 = \frac{5 + 1}{2} = 3$ y $x_2 = \frac{5 - 1}{2} = 2$</li>
+                            <li>Identificamos: $$a = 1, b = -5, c = 6$$</li>
+                            <li>Aplicamos la fórmula cuadrática: $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$</li>
+                            <li>Calculamos el discriminante: $$\Delta = (-5)^2 - 4(1)(6) = 25 - 24 = 1$$</li>
+                            <li>Sustituimos: $$x = \frac{5 \pm \sqrt{1}}{2} = \frac{5 \pm 1}{2}$$</li>
+                            <li>Soluciones: $$x_1 = \frac{5 + 1}{2} = 3, \quad x_2 = \frac{5 - 1}{2} = 2$$</li>
                         </ol>
                     </div>
                 </div>
             </div>
 
-            <!-- Ejercicio de Geometría Avanzada -->
+            <div class="exercise-card" data-category="algebra" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-algebra">Álgebra</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Simplificación de Expresiones</h3>
+                <div class="exercise-problem">
+                    Simplifica la siguiente expresión:
+                    <div class="math-display">$$3x + 2x - 5x + 7$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Forma simplificada" data-answer="7">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Agrupamos términos semejantes: $$3x + 2x - 5x + 7$$</li>
+                            <li>Sumamos los coeficientes de x: $$3 + 2 - 5 = 0$$</li>
+                            <li>Por tanto: $$0x + 7 = 7$$</li>
+                            <li>Resultado: $$7$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="algebra" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-algebra">Álgebra</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Factorización</h3>
+                <div class="exercise-problem">
+                    Factoriza la expresión:
+                    <div class="math-display">$$x^2 + 8x + 16$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Forma factorizada" data-answer="(x+4)²">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Reconocemos el patrón: $$a^2 + 2ab + b^2 = (a + b)^2$$</li>
+                            <li>Identificamos: $$a = x, b = 4$$</li>
+                            <li>Verificamos: $$2ab = 2(x)(4) = 8x$$ ✓</li>
+                            <li>Por tanto: $$x^2 + 8x + 16 = (x + 4)^2$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="algebra" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-algebra">Álgebra</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Ecuación Exponencial</h3>
+                <div class="exercise-problem">
+                    Resuelve la ecuación:
+                    <div class="math-display">$$3^{x+1} = 27$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Valor de x" data-answer="2">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Expresamos 27 como potencia de 3: $$27 = 3^3$$</li>
+                            <li>La ecuación queda: $$3^{x+1} = 3^3$$</li>
+                            <li>Igualamos exponentes: $$x + 1 = 3$$</li>
+                            <li>Resolvemos: $$x = 3 - 1 = 2$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicios de Trigonometría -->
+            <div class="exercise-card" data-category="trigonometria" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Función Seno</h3>
+                <div class="exercise-problem">
+                    Calcula el valor de:
+                    <div class="math-display">$$\sin(30°)$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Valor decimal o fracción" data-answer="0.5">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>30° es un ángulo especial en el triángulo 30-60-90</li>
+                            <li>En este triángulo, los lados están en proporción $$1 : \sqrt{3} : 2$$</li>
+                            <li>$$\sin(30°) = \frac{\text{cateto opuesto}}{\text{hipotenusa}} = \frac{1}{2}$$</li>
+                            <li>Por tanto: $$\sin(30°) = 0.5$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="trigonometria" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Identidad Trigonométrica</h3>
+                <div class="exercise-problem">
+                    Verifica la identidad:
+                    <div class="math-display">$$\sin^2(x) + \cos^2(x) = 1$$</div>
+                    Para x = 45°, calcula $$\sin^2(45°) + \cos^2(45°)$$
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Resultado" data-answer="1">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Sabemos que $$\sin(45°) = \cos(45°) = \frac{\sqrt{2}}{2}$$</li>
+                            <li>Calculamos $$\sin^2(45°) = \left(\frac{\sqrt{2}}{2}\right)^2 = \frac{2}{4} = \frac{1}{2}$$</li>
+                            <li>Calculamos $$\cos^2(45°) = \left(\frac{\sqrt{2}}{2}\right)^2 = \frac{2}{4} = \frac{1}{2}$$</li>
+                            <li>Sumamos: $$\sin^2(45°) + \cos^2(45°) = \frac{1}{2} + \frac{1}{2} = 1$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="trigonometria" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Ecuación Trigonométrica</h3>
+                <div class="exercise-problem">
+                    Resuelve para x en [0°, 360°]:
+                    <div class="math-display">$$2\sin(x) - 1 = 0$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Soluciones en grados" data-answer="30,150">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Despejamos: $$2\sin(x) = 1$$</li>
+                            <li>Dividimos: $$\sin(x) = \frac{1}{2}$$</li>
+                            <li>Buscamos ángulos donde $$\sin(x) = \frac{1}{2}$$ en [0°, 360°]</li>
+                            <li>Primera solución: $$x = 30°$$ (primer cuadrante)</li>
+                            <li>Segunda solución: $$x = 180° - 30° = 150°$$ (segundo cuadrante)</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="trigonometria" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Función Coseno</h3>
+                <div class="exercise-problem">
+                    Calcula:
+                    <div class="math-display">$$\cos(60°)$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Valor decimal" data-answer="0.5">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>60° es un ángulo especial en el triángulo 30-60-90</li>
+                            <li>En este triángulo, los lados están en proporción $$1 : \sqrt{3} : 2$$</li>
+                            <li>$$\cos(60°) = \frac{\text{cateto adyacente}}{\text{hipotenusa}} = \frac{1}{2}$$</li>
+                            <li>Por tanto: $$\cos(60°) = 0.5$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="trigonometria" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Función Tangente</h3>
+                <div class="exercise-problem">
+                    Si $$\sin(x) = \frac{3}{5}$$ y $$\cos(x) = \frac{4}{5}$$, calcula:
+                    <div class="math-display">$$\tan(x)$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Valor de tan(x)" data-answer="0.75">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Recordamos que $$\tan(x) = \frac{\sin(x)}{\cos(x)}$$</li>
+                            <li>Sustituimos los valores dados: $$\tan(x) = \frac{\frac{3}{5}}{\frac{4}{5}}$$</li>
+                            <li>Simplificamos: $$\tan(x) = \frac{3}{5} \times \frac{5}{4} = \frac{3}{4}$$</li>
+                            <li>Convertimos a decimal: $$\tan(x) = 0.75$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="trigonometria" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-trigonometria">Trigonometría</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Suma de Ángulos</h3>
+                <div class="exercise-problem">
+                    Calcula usando la fórmula de suma:
+                    <div class="math-display">$$\sin(75°) = \sin(45° + 30°)$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Valor aproximado (4 decimales)" data-answer="0.9659">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Usamos la fórmula: $$\sin(a + b) = \sin(a)\cos(b) + \cos(a)\sin(b)$$</li>
+                            <li>$$\sin(75°) = \sin(45°)\cos(30°) + \cos(45°)\sin(30°)$$</li>
+                            <li>Sustituimos valores conocidos: $$\frac{\sqrt{2}}{2} \cdot \frac{\sqrt{3}}{2} + \frac{\sqrt{2}}{2} \cdot \frac{1}{2}$$</li>
+                            <li>Simplificamos: $$\frac{\sqrt{6}}{4} + \frac{\sqrt{2}}{4} = \frac{\sqrt{6} + \sqrt{2}}{4}$$</li>
+                            <li>Aproximamos: $$\sin(75°) \approx 0.9659$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicios de Geometría -->
+            <div class="exercise-card" data-category="geometria" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-geometria">Geometría</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Área del Triángulo</h3>
+                <div class="exercise-problem">
+                    Calcula el área de un triángulo con base 8 cm y altura 5 cm:
+                    <div class="math-display">$$A = \frac{1}{2} \times \text{base} \times \text{altura}$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Área en cm²" data-answer="20">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos la fórmula: $$A = \frac{1}{2} \times \text{base} \times \text{altura}$$</li>
+                            <li>Sustituimos valores: $$A = \frac{1}{2} \times 8 \times 5$$</li>
+                            <li>Calculamos: $$A = \frac{1}{2} \times 40 = 20$$</li>
+                            <li>Resultado: $$A = 20 \text{ cm}^2$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="geometria" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-geometria">Geometría</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Área del Círculo</h3>
+                <div class="exercise-problem">
+                    Calcula el área de un círculo con radio 5 cm:
+                    <div class="math-display">$$A = \pi r^2$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Área en cm² (aproximada)" data-answer="78.54">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos la fórmula: $$A = \pi r^2$$</li>
+                            <li>Sustituimos $$r = 5$$: $$A = \pi \times 5^2$$</li>
+                            <li>Calculamos: $$A = \pi \times 25 = 25\pi$$</li>
+                            <li>Aproximamos: $$A \approx 25 \times 3.14159 = 78.54 \text{ cm}^2$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
             <div class="exercise-card" data-category="geometria" data-difficulty="hard">
                 <div class="exercise-header">
                     <span class="exercise-category category-geometria">Geometría</span>
                     <span class="difficulty-badge difficulty-hard">Difícil</span>
                 </div>
-                <h3 class="exercise-title">Volumen de una Esfera</h3>
+                <h3 class="exercise-title">Volumen de la Esfera</h3>
                 <div class="exercise-problem">
                     Calcula el volumen de una esfera con radio 3 cm:
-                    <div style="text-align: center; margin: 1rem 0;">
-                        $$V = \frac{4}{3}\pi r^3$$
-                        $$r = 3 \text{ cm}$$
-                    </div>
+                    <div class="math-display">$$V = \frac{4}{3}\pi r^3$$</div>
                 </div>
                 <div class="answer-section">
                     <input type="text" class="answer-input" placeholder="Volumen en cm³" data-answer="113.1">
@@ -714,14 +979,277 @@
                     </div>
                     <div class="feedback"></div>
                     <div class="solution">
-                        <div class="solution-title">
-                            ✓ Solución Paso a Paso
-                        </div>
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
                         <ol class="solution-steps">
-                            <li>Aplicamos la fórmula: $V = \frac{4}{3}\pi r^3$</li>
-                            <li>Sustituimos $r = 3$: $V = \frac{4}{3}\pi \times 3^3$</li>
-                            <li>Calculamos: $V = \frac{4}{3}\pi \times 27 = \frac{108\pi}{3} = 36\pi$</li>
-                            <li>Aproximamos: $V \approx 36 \times 3.14159 = 113.1 \text{ cm}^3$</li>
+                            <li>Aplicamos la fórmula: $$V = \frac{4}{3}\pi r^3$$</li>
+                            <li>Sustituimos $$r = 3$$: $$V = \frac{4}{3}\pi \times 3^3$$</li>
+                            <li>Calculamos: $$V = \frac{4}{3}\pi \times 27 = \frac{108\pi}{3} = 36\pi$$</li>
+                            <li>Aproximamos: $$V \approx 36 \times 3.14159 = 113.1 \text{ cm}^3$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="geometria" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-geometria">Geometría</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Perímetro del Rectángulo</h3>
+                <div class="exercise-problem">
+                    Calcula el perímetro de un rectángulo con largo 12 cm y ancho 8 cm:
+                    <div class="math-display">$$P = 2(l + w)$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Perímetro en cm" data-answer="40">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos la fórmula: $$P = 2(l + w)$$</li>
+                            <li>Sustituimos $$l = 12$$ y $$w = 8$$: $$P = 2(12 + 8)$$</li>
+                            <li>Calculamos: $$P = 2 \times 20 = 40$$</li>
+                            <li>Resultado: $$P = 40 \text{ cm}$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="geometria" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-geometria">Geometría</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Teorema de Pitágoras</h3>
+                <div class="exercise-problem">
+                    En un triángulo rectángulo, si los catetos miden 3 cm y 4 cm, ¿cuánto mide la hipotenusa?
+                    <div class="math-display">$$c^2 = a^2 + b^2$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Hipotenusa en cm" data-answer="5">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos el teorema de Pitágoras: $$c^2 = a^2 + b^2$$</li>
+                            <li>Sustituimos $$a = 3$$ y $$b = 4$$: $$c^2 = 3^2 + 4^2$$</li>
+                            <li>Calculamos: $$c^2 = 9 + 16 = 25$$</li>
+                            <li>Sacamos raíz cuadrada: $$c = \sqrt{25} = 5$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="geometria" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-geometria">Geometría</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Volumen del Cono</h3>
+                <div class="exercise-problem">
+                    Calcula el volumen de un cono con radio de base 4 cm y altura 9 cm:
+                    <div class="math-display">$$V = \frac{1}{3}\pi r^2 h$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Volumen en cm³" data-answer="150.8">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos la fórmula: $$V = \frac{1}{3}\pi r^2 h$$</li>
+                            <li>Sustituimos $$r = 4$$ y $$h = 9$$: $$V = \frac{1}{3}\pi \times 4^2 \times 9$$</li>
+                            <li>Calculamos: $$V = \frac{1}{3}\pi \times 16 \times 9 = \frac{144\pi}{3} = 48\pi$$</li>
+                            <li>Aproximamos: $$V \approx 48 \times 3.14159 = 150.8 \text{ cm}^3$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejercicios de Estadística -->
+            <div class="exercise-card" data-category="estadistica" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-estadistica">Estadística</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Media Aritmética</h3>
+                <div class="exercise-problem">
+                    Calcula la media aritmética de: 12, 15, 18, 21, 24
+                    <div class="math-display">$$\bar{x} = \frac{\sum x_i}{n}$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Media" data-answer="18">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Sumamos todos los valores: $$12 + 15 + 18 + 21 + 24 = 90$$</li>
+                            <li>Contamos el número de datos: $$n = 5$$</li>
+                            <li>Aplicamos la fórmula: $$\bar{x} = \frac{90}{5}$$</li>
+                            <li>Resultado: $$\bar{x} = 18$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="estadistica" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-estadistica">Estadística</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Mediana</h3>
+                <div class="exercise-problem">
+                    Encuentra la mediana del conjunto: 5, 2, 8, 1, 9, 3, 7
+                    <div class="math-display">$$\text{Mediana = valor central de datos ordenados}$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Mediana" data-answer="5">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Ordenamos los datos: $$1, 2, 3, 5, 7, 8, 9$$</li>
+                            <li>Contamos: $$n = 7$$ (impar)</li>
+                            <li>La posición central es: $$\frac{n+1}{2} = \frac{7+1}{2} = 4$$</li>
+                            <li>El cuarto valor es: $$\text{Mediana} = 5$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="estadistica" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-estadistica">Estadística</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Desviación Estándar</h3>
+                <div class="exercise-problem">
+                    Calcula la desviación estándar de: 2, 4, 6, 8, 10
+                    <div class="math-display">$$s = \sqrt{\frac{\sum(x_i - \bar{x})^2}{n-1}}$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Desviación estándar (2 decimales)" data-answer="3.16">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Calculamos la media: $$\bar{x} = \frac{2+4+6+8+10}{5} = 6$$</li>
+                            <li>Calculamos las desviaciones al cuadrado:
+                                $$(2-6)^2 = 16, (4-6)^2 = 4, (6-6)^2 = 0$$
+                                $$(8-6)^2 = 4, (10-6)^2 = 16$$</li>
+                            <li>Sumamos: $$\sum(x_i - \bar{x})^2 = 16+4+0+4+16 = 40$$</li>
+                            <li>Aplicamos la fórmula: $$s = \sqrt{\frac{40}{5-1}} = \sqrt{10} \approx 3.16$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="estadistica" data-difficulty="easy">
+                <div class="exercise-header">
+                    <span class="exercise-category category-estadistica">Estadística</span>
+                    <span class="difficulty-badge difficulty-easy">Fácil</span>
+                </div>
+                <h3 class="exercise-title">Moda</h3>
+                <div class="exercise-problem">
+                    Encuentra la moda del conjunto: 2, 3, 3, 5, 3, 7, 8, 3, 9
+                    <div class="math-display">$$\text{Moda = valor más frecuente}$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Moda" data-answer="3">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Contamos la frecuencia de cada valor:
+                                $$2: 1 \text{ vez}, 3: 4 \text{ veces}, 5: 1 \text{ vez}$$
+                                $$7: 1 \text{ vez}, 8: 1 \text{ vez}, 9: 1 \text{ vez}$$</li>
+                            <li>El valor más frecuente es 3 (aparece 4 veces)</li>
+                            <li>Por tanto: $$\text{Moda} = 3$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="estadistica" data-difficulty="medium">
+                <div class="exercise-header">
+                    <span class="exercise-category category-estadistica">Estadística</span>
+                    <span class="difficulty-badge difficulty-medium">Medio</span>
+                </div>
+                <h3 class="exercise-title">Probabilidad Simple</h3>
+                <div class="exercise-problem">
+                    Al lanzar un dado, ¿cuál es la probabilidad de obtener un número par?
+                    <div class="math-display">$$P = \frac{\text{casos favorables}}{\text{casos totales}}$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Probabilidad (fracción o decimal)" data-answer="0.5">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Números posibles en un dado: $$\{1, 2, 3, 4, 5, 6\}$$</li>
+                            <li>Números pares: $$\{2, 4, 6\}$$</li>
+                            <li>Casos favorables: $$3$$, Casos totales: $$6$$</li>
+                            <li>Probabilidad: $$P = \frac{3}{6} = \frac{1}{2} = 0.5$$</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-card" data-category="estadistica" data-difficulty="hard">
+                <div class="exercise-header">
+                    <span class="exercise-category category-estadistica">Estadística</span>
+                    <span class="difficulty-badge difficulty-hard">Difícil</span>
+                </div>
+                <h3 class="exercise-title">Combinaciones</h3>
+                <div class="exercise-problem">
+                    ¿De cuántas maneras se pueden elegir 3 estudiantes de un grupo de 8?
+                    <div class="math-display">$$C(n,r) = \frac{n!}{r!(n-r)!}$$</div>
+                </div>
+                <div class="answer-section">
+                    <input type="text" class="answer-input" placeholder="Número de combinaciones" data-answer="56">
+                    <div class="exercise-actions">
+                        <button class="btn btn-primary" onclick="checkAnswer(this)">Verificar</button>
+                        <button class="btn btn-secondary" onclick="toggleSolution(this)">Ver Solución</button>
+                    </div>
+                    <div class="feedback"></div>
+                    <div class="solution">
+                        <div class="solution-title">✓ Solución Paso a Paso</div>
+                        <ol class="solution-steps">
+                            <li>Aplicamos la fórmula: $$C(8,3) = \frac{8!}{3!(8-3)!} = \frac{8!}{3! \cdot 5!}$$</li>
+                            <li>Expandimos: $$C(8,3) = \frac{8 \times 7 \times 6 \times 5!}{3! \times 5!}$$</li>
+                            <li>Simplificamos: $$C(8,3) = \frac{8 \times 7 \times 6}{3!} = \frac{336}{6}$$</li>
+                            <li>Resultado: $$C(8,3) = 56$$</li>
                         </ol>
                     </div>
                 </div>
@@ -730,16 +1258,16 @@
     </div>
 
     <script>
-        // Configuración de MathJax
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: {
-                fontCache: 'global'
+        // Inicializar cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar y cargar MathJax
+            if (window.MathJax) {
+                MathJax.startup.promise.then(() => {
+                    console.log('MathJax cargado correctamente');
+                    MathJax.typesetPromise();
+                });
             }
-        };
+        });
 
         // Funcionalidad de filtros
         document.querySelectorAll('.filter-tab').forEach(tab => {
@@ -790,8 +1318,19 @@
             const normalizedCorrect = correctAnswer.toLowerCase().replace(/\s/g, '');
             const normalizedUser = userAnswer.toLowerCase().replace(/\s/g, '');
             
-            if (normalizedUser === normalizedCorrect || 
-                (normalizedCorrect.includes(',') && normalizedCorrect.split(',').sort().join(',') === normalizedUser.split(',').sort().join(','))) {
+            // Verificar respuestas múltiples (separadas por coma)
+            let isCorrect = false;
+            if (normalizedCorrect.includes(',')) {
+                const correctAnswers = normalizedCorrect.split(',').sort();
+                const userAnswers = normalizedUser.split(',').sort();
+                isCorrect = JSON.stringify(correctAnswers) === JSON.stringify(userAnswers);
+            } else {
+                // Verificar respuesta única
+                isCorrect = normalizedUser === normalizedCorrect || 
+                           Math.abs(parseFloat(normalizedUser) - parseFloat(normalizedCorrect)) < 0.1;
+            }
+            
+            if (isCorrect) {
                 feedback.classList.add('correct');
                 feedback.textContent = '¡Correcto! Excelente trabajo.';
                 button.textContent = '✓ Correcto';
@@ -813,15 +1352,17 @@
             } else {
                 solution.classList.add('show');
                 button.textContent = 'Ocultar Solución';
+                
                 // Re-renderizar MathJax para la solución
-                MathJax.typesetPromise([solution]);
+                if (window.MathJax) {
+                    MathJax.typesetPromise([solution]).then(() => {
+                        console.log('MathJax re-renderizado para solución');
+                    }).catch((err) => {
+                        console.error('Error al re-renderizar MathJax:', err);
+                    });
+                }
             }
         }
-
-        // Inicializar MathJax cuando la página cargue
-        document.addEventListener('DOMContentLoaded', function() {
-            MathJax.typesetPromise();
-        });
     </script>
 </body>
 </html>
