@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rúbricas Detalladas</title>
+    <title>Rúbricas Detalladas - Matemáticas</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -12,6 +12,9 @@
             --accent-color: #2ecc71;
             --dark-color: #2c3e50;
             --light-color: #ecf0f1;
+            --danger-color: #e74c3c;
+            --purple-color: #9b59b6;
+            --teal-color: #1abc9c;
         }
 
         * {
@@ -28,7 +31,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -44,10 +47,27 @@
             margin-bottom: 1rem;
         }
 
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section-title {
+            color: white;
+            text-align: center;
+            margin: 3rem 0 2rem 0;
+            font-size: 1.8rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
         .rubrics-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
+            margin-bottom: 3rem;
             animation: slideUp 1s ease-out;
         }
 
@@ -56,11 +76,24 @@
             border-radius: 15px;
             padding: 2rem;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rubric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
 
         .rubric-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
         .rubric-header {
@@ -76,6 +109,20 @@
             color: var(--primary-color);
         }
 
+        .rubric-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .total-score {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-left: auto;
+            font-weight: bold;
+        }
+
         .rubric-content {
             color: var(--dark-color);
         }
@@ -86,21 +133,79 @@
 
         .criteria-item {
             margin-bottom: 1rem;
-            padding-left: 1.5rem;
-            position: relative;
+            padding: 1rem;
+            background: rgba(74, 144, 226, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
         }
 
-        .criteria-item::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: var(--secondary-color);
+        .criteria-item:hover {
+            background: rgba(74, 144, 226, 0.1);
+            transform: translateX(5px);
+        }
+
+        .criteria-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
         }
 
         .score {
             font-weight: bold;
             color: var(--accent-color);
+            background: rgba(46, 204, 113, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
         }
+
+        .criteria-description {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Estilos específicos para diferentes tipos de rúbricas */
+        .presentation-card .rubric-header i { color: var(--secondary-color); }
+        .algebra-card .rubric-header i { color: var(--purple-color); }
+        .geometry-card .rubric-header i { color: var(--teal-color); }
+        .calculus-card .rubric-header i { color: var(--danger-color); }
+        .statistics-card .rubric-header i { color: var(--accent-color); }
+
+        .scale-indicator {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .scale-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .scale-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .scale-level {
+            text-align: center;
+            padding: 0.3rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .excellent { background: #d4edda; color: #155724; }
+        .good { background: #cce5ff; color: #004085; }
+        .satisfactory { background: #fff3cd; color: #856404; }
+        .needs-improvement { background: #f8d7da; color: #721c24; }
 
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -129,123 +234,675 @@
             text-decoration: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            z-index: 1000;
         }
 
         .back-button:hover {
             background: var(--secondary-color);
             transform: scale(1.05);
         }
+
+        .navigation-menu {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .rubrics-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1><i class="fas fa-star"></i> Rúbricas de Evaluación</h1>
-            <p>Criterios detallados para la evaluación de presentaciones y ejercicios</p>
+            <h1><i class="fas fa-star"></i> Rúbricas de Evaluación - Matemáticas</h1>
+            <p>Criterios detallados para la evaluación integral de conocimientos matemáticos</p>
         </header>
 
+        <nav class="navigation-menu">
+            <div class="nav-links">
+                <a href="#presentaciones" class="nav-link"><i class="fas fa-microphone"></i> Presentaciones</a>
+                <a href="#examenes" class="nav-link"><i class="fas fa-file-alt"></i> Exámenes</a>
+                <a href="#proyectos" class="nav-link"><i class="fas fa-project-diagram"></i> Proyectos</a>
+                <a href="#resolución" class="nav-link"><i class="fas fa-puzzle-piece"></i> Resolución</a>
+            </div>
+        </nav>
+
+        <!-- SECCIÓN: PRESENTACIONES ORALES -->
+        <div id="presentaciones" class="section-title">
+            <i class="fas fa-microphone-alt"></i> Presentaciones Orales
+        </div>
+
         <div class="rubrics-container">
-            <!-- Rúbrica para Presentación Oral -->
-            <div class="rubric-card">
+            <!-- Presentación Oral General -->
+            <div class="rubric-card presentation-card">
                 <div class="rubric-header">
                     <i class="fas fa-microphone-alt"></i>
-                    <h2>Presentación Oral</h2>
+                    <h2>Presentación Oral General</h2>
+                    <span class="total-score">100 pts</span>
                 </div>
                 <div class="rubric-content">
                     <ul class="criteria-list">
                         <li class="criteria-item">
-                            <strong>Claridad en la Exposición</strong> <span class="score">(25 puntos)</span>
-                            <p>Exposición clara y estructurada de conceptos matemáticos</p>
+                            <div class="criteria-title">
+                                <strong>Claridad en la Exposición</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Exposición clara y estructurada de conceptos matemáticos con lenguaje apropiado</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Dominio del Tema</strong> <span class="score">(25 puntos)</span>
-                            <p>Comprensión profunda de los conceptos trigonométricos y algebraicos</p>
+                            <div class="criteria-title">
+                                <strong>Dominio del Tema</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Comprensión profunda y demostración de conocimiento del contenido matemático</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Uso de Ejemplos</strong> <span class="score">(25 puntos)</span>
-                            <p>Ejemplificación práctica y relevante</p>
+                            <div class="criteria-title">
+                                <strong>Uso de Ejemplos y Aplicaciones</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Ejemplificación práctica, relevante y conexiones con situaciones reales</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Manejo del Tiempo</strong> <span class="score">(25 puntos)</span>
-                            <p>Gestión eficiente del tiempo asignado</p>
+                            <div class="criteria-title">
+                                <strong>Organización y Manejo del Tiempo</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Gestión eficiente del tiempo y estructura lógica de la presentación</p>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Rúbrica para Explicación de Ejercicios -->
-            <div class="rubric-card">
+            <!-- Explicación de Ejercicios -->
+            <div class="rubric-card presentation-card">
                 <div class="rubric-header">
-                    <i class="fas fa-square-root-alt"></i>
+                    <i class="fas fa-chalkboard-teacher"></i>
                     <h2>Explicación de Ejercicios</h2>
+                    <span class="total-score">100 pts</span>
                 </div>
                 <div class="rubric-content">
                     <ul class="criteria-list">
                         <li class="criteria-item">
-                            <strong>Procedimiento</strong> <span class="score">(30 puntos)</span>
-                            <p>Desarrollo paso a paso claro y ordenado</p>
+                            <div class="criteria-title">
+                                <strong>Procedimiento</strong>
+                                <span class="score">30 puntos</span>
+                            </div>
+                            <p class="criteria-description">Desarrollo paso a paso claro, ordenado y lógicamente secuenciado</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Precisión Matemática</strong> <span class="score">(25 puntos)</span>
-                            <p>Exactitud en cálculos y uso de fórmulas</p>
+                            <div class="criteria-title">
+                                <strong>Precisión Matemática</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Exactitud en cálculos, uso correcto de fórmulas y propiedades</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Notación Matemática</strong> <span class="score">(25 puntos)</span>
-                            <p>Uso correcto de símbolos y notación</p>
+                            <div class="criteria-title">
+                                <strong>Notación Matemática</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Uso correcto y consistente de símbolos y notación matemática</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Conclusión</strong> <span class="score">(20 puntos)</span>
-                            <p>Interpretación clara de resultados</p>
+                            <div class="criteria-title">
+                                <strong>Interpretación de Resultados</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Análisis e interpretación clara de resultados y conclusiones</p>
                         </li>
                     </ul>
                 </div>
             </div>
+        </div>
 
-            <!-- Rúbrica para Ejercicios de Àlgebra (25 pto) -->
-            <div class="rubric-card">
+        <!-- SECCIÓN: EXÁMENES POR ÁREA -->
+        <div id="examenes" class="section-title">
+            <i class="fas fa-file-alt"></i> Exámenes por Área Matemática
+        </div>
+
+        <div class="rubrics-container">
+            <!-- Álgebra -->
+            <div class="rubric-card algebra-card">
                 <div class="rubric-header">
                     <i class="fas fa-superscript"></i>
                     <h2>Examen de Álgebra</h2>
+                    <span class="total-score">100 pts</span>
                 </div>
                 <div class="rubric-content">
                     <ul class="criteria-list">
                         <li class="criteria-item">
-                            <strong>Proceso</strong> <span class="score">(20 puntos)</span>
-                            <p>Desarrollo detallado y ordenado de los pasos de solución</p>
+                            <div class="criteria-title">
+                                <strong>Identificación de Conceptos</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Reconocimiento correcto de tipos de ecuaciones, funciones y expresiones</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Resultados</strong> <span class="score">(3 puntos)</span>
-                            <p>Precisión en los resultados finales</p>
+                            <div class="criteria-title">
+                                <strong>Proceso Algebraico</strong>
+                                <span class="score">50 puntos</span>
+                            </div>
+                            <p class="criteria-description">Desarrollo detallado y ordenado de manipulaciones algebraicas</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Unidades</strong> <span class="score">(2 puntos)</span>
-                            <p>Uso correcto de unidades de medida</p>
+                            <div class="criteria-title">
+                                <strong>Precisión en Resultados</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Exactitud en los resultados finales y simplificaciones apropiadas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Verificación y Unidades</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Comprobación de resultados y uso correcto de unidades</p>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Rúbrica para Ejercicios de Trigonometría (25 pto) -->
+            <!-- Trigonometría -->
             <div class="rubric-card">
                 <div class="rubric-header">
                     <i class="fas fa-calculator"></i>
                     <h2>Examen de Trigonometría</h2>
+                    <span class="total-score">120 pts</span>
                 </div>
                 <div class="rubric-content">
                     <ul class="criteria-list">
                         <li class="criteria-item">
-                            <strong>Proceso</strong> <span class="score">(20 puntos)</span>
-                            <p>Procedimiento completo en la resolución de problemas trigonométricos</p>
+                            <div class="criteria-title">
+                                <strong>Identificación de Funciones</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Reconocimiento de funciones trigonométricas y sus propiedades</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Resultados</strong> <span class="score">(3 puntos)</span>
-                            <p>Exactitud en los cálculos y respuestas finales</p>
+                            <div class="criteria-title">
+                                <strong>Proceso Trigonométrico</strong>
+                                <span class="score">60 puntos</span>
+                            </div>
+                            <p class="criteria-description">Procedimiento completo en resolución de identidades y ecuaciones</p>
                         </li>
                         <li class="criteria-item">
-                            <strong>Unidades</strong> <span class="score">(2 puntos)</span>
-                            <p>Uso apropiado de unidades angulares y métricas</p>
+                            <div class="criteria-title">
+                                <strong>Aplicaciones Prácticas</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Resolución de problemas de triángulos y aplicaciones geométricas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Precisión y Unidades</strong>
+                                <span class="score">15 puntos</span>
+                            </div>
+                            <p class="criteria-description">Exactitud en cálculos y uso apropiado de unidades angulares</p>
                         </li>
                     </ul>
+                </div>
+            </div>
+
+            <!-- Cálculo -->
+            <div class="rubric-card calculus-card">
+                <div class="rubric-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h2>Examen de Cálculo</h2>
+                    <span class="total-score">200 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Comprensión Conceptual</strong>
+                                <span class="score">40 puntos</span>
+                            </div>
+                            <p class="criteria-description">Entendimiento profundo de límites, derivadas e integrales</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Aplicación de Técnicas</strong>
+                                <span class="score">80 puntos</span>
+                            </div>
+                            <p class="criteria-description">Uso correcto de reglas de derivación, integración y teoremas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Desarrollo del Proceso</strong>
+                                <span class="score">50 puntos</span>
+                            </div>
+                            <p class="criteria-description">Procedimiento ordenado, justificación matemática de pasos</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Interpretación y Aplicaciones</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Análisis gráfico y contextual de resultados</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Precisión y Notación</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Exactitud en resultados y notación matemática apropiada</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Geometría -->
+            <div class="rubric-card geometry-card">
+                <div class="rubric-header">
+                    <i class="fas fa-shapes"></i>
+                    <h2>Examen de Geometría</h2>
+                    <span class="total-score">100 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Construcciones y Diagramas</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Trazos precisos, diagramas claros y etiquetado correcto</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Aplicación de Teoremas</strong>
+                                <span class="score">35 puntos</span>
+                            </div>
+                            <p class="criteria-description">Uso correcto de teoremas y propiedades geométricas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Demostraciones</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Estructura lógica y rigor en demostraciones geométricas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Cálculos y Medidas</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Precisión en cálculos de áreas, perímetros y volúmenes</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Unidades y Presentación</strong>
+                                <span class="score">5 puntos</span>
+                            </div>
+                            <p class="criteria-description">Uso correcto de unidades y presentación ordenada</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Estadística y Probabilidad -->
+            <div class="rubric-card statistics-card">
+                <div class="rubric-header">
+                    <i class="fas fa-chart-bar"></i>
+                    <h2>Estadística y Probabilidad</h2>
+                    <span class="total-score">120 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Organización de Datos</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Organización clara de datos en tablas, gráficos y distribuciones</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Cálculos Estadísticos</strong>
+                                <span class="score">40 puntos</span>
+                            </div>
+                            <p class="criteria-description">Exactitud en medidas de tendencia central, dispersión y correlación</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Análisis Probabilístico</strong>
+                                <span class="score">30 puntos</span>
+                            </div>
+                            <p class="criteria-description">Aplicación correcta de leyes y teoremas de probabilidad</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Interpretación de Resultados</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Análisis contextual y conclusiones estadísticamente válidas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Presentación y Fórmulas</strong>
+                                <span class="score">5 puntos</span>
+                            </div>
+                            <p class="criteria-description">Uso correcto de fórmulas y presentación profesional</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Matemáticas Discretas -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-sitemap"></i>
+                    <h2>Matemáticas Discretas</h2>
+                    <span class="total-score">25 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Lógica y Demostración</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Estructura lógica clara en demostraciones y razonamientos</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Teoría de Conjuntos</strong>
+                                <span class="score">8 puntos</span>
+                            </div>
+                            <p class="criteria-description">Manejo correcto de operaciones y propiedades de conjuntos</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Combinatoria</strong>
+                                <span class="score">5 puntos</span>
+                            </div>
+                            <p class="criteria-description">Aplicación correcta de principios de conteo y combinaciones</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Notación</strong>
+                                <span class="score">2 puntos</span>
+                            </div>
+                            <p class="criteria-description">Uso apropiado de notación matemática especializada</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: PROYECTOS Y INVESTIGACIÓN -->
+        <div id="proyectos" class="section-title">
+            <i class="fas fa-project-diagram"></i> Proyectos e Investigación Matemática
+        </div>
+
+        <div class="rubrics-container">
+            <!-- Proyecto de Investigación -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-search"></i>
+                    <h2>Proyecto de Investigación</h2>
+                    <span class="total-score">100 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Planteamiento del Problema</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Definición clara y relevante del problema matemático a investigar</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Metodología</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Estrategia apropiada para abordar el problema y recopilar información</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Desarrollo Matemático</strong>
+                                <span class="score">30 puntos</span>
+                            </div>
+                            <p class="criteria-description">Rigor matemático en el desarrollo y análisis del problema</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Conclusiones y Aplicaciones</strong>
+                                <span class="score">15 puntos</span>
+                            </div>
+                            <p class="criteria-description">Interpretación de resultados y conexiones con aplicaciones prácticas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Presentación</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Organización, claridad y calidad en la presentación del trabajo</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Modelado Matemático -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-cube"></i>
+                    <h2>Modelado Matemático</h2>
+                    <span class="total-score">80 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Identificación de Variables</strong>
+                                <span class="score">15 puntos</span>
+                            </div>
+                            <p class="criteria-description">Identificación correcta y definición de variables relevantes</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Construcción del Modelo</strong>
+                                <span class="score">25 puntos</span>
+                            </div>
+                            <p class="criteria-description">Desarrollo lógico y matemáticamente válido del modelo</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Resolución</strong>
+                                <span class="score">20 puntos</span>
+                            </div>
+                            <p class="criteria-description">Aplicación correcta de técnicas matemáticas para resolver el modelo</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Validación</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Verificación de la coherencia y validez del modelo</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Interpretación</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Análisis e interpretación de resultados en el contexto original</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN: RESOLUCIÓN DE PROBLEMAS -->
+        <div id="resolución" class="section-title">
+            <i class="fas fa-puzzle-piece"></i> Resolución de Problemas y Razonamiento
+        </div>
+
+        <div class="rubrics-container">
+            <!-- Resolución de Problemas Complejos -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-brain"></i>
+                    <h2>Resolución de Problemas</h2>
+                    <span class="total-score">50 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Comprensión del Problema</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Identificación clara de datos, incógnitas y condiciones</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Estrategia de Solución</strong>
+                                <span class="score">15 puntos</span>
+                            </div>
+                            <p class="criteria-description">Selección y aplicación de estrategia apropiada para resolver</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Ejecución</strong>
+                                <span class="score">15 puntos</span>
+                            </div>
+                            <p class="criteria-description">Desarrollo correcto y ordenado de la solución</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Verificación</strong>
+                                <span class="score">5 puntos</span>
+                            </div>
+                            <p class="criteria-description">Comprobación de la validez y coherencia de la solución</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Comunicación</strong>
+                                <span class="score">5 puntos</span>
+                            </div>
+                            <p class="criteria-description">Explicación clara del proceso y respuesta final</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Pensamiento Crítico Matemático -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h2>Pensamiento Crítico</h2>
+                    <span class="total-score">40 pts</span>
+                </div>
+                <div class="rubric-content">
+                    <ul class="criteria-list">
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Análisis</strong>
+                                <span class="score">12 puntos</span>
+                            </div>
+                            <p class="criteria-description">Descomposición efectiva del problema en partes manejables</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Síntesis</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Integración de conceptos y técnicas para crear soluciones</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Evaluación</strong>
+                                <span class="score">10 puntos</span>
+                            </div>
+                            <p class="criteria-description">Valoración crítica de métodos, resultados y alternativas</p>
+                        </li>
+                        <li class="criteria-item">
+                            <div class="criteria-title">
+                                <strong>Creatividad</strong>
+                                <span class="score">8 puntos</span>
+                            </div>
+                            <p class="criteria-description">Originalidad en enfoques y conexiones matemáticas</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Escala de Evaluación General -->
+            <div class="rubric-card">
+                <div class="rubric-header">
+                    <i class="fas fa-ruler"></i>
+                    <h2>Escala de Evaluación</h2>
+                </div>
+                <div class="rubric-content">
+                    <div class="scale-indicator">
+                        <div class="scale-title">Niveles de Desempeño</div>
+                        <div class="scale-levels">
+                            <div class="scale-level excellent">
+                                <strong>Excelente</strong><br>
+                                90-100%
+                            </div>
+                            <div class="scale-level good">
+                                <strong>Bueno</strong><br>
+                                80-89%
+                            </div>
+                            <div class="scale-level satisfactory">
+                                <strong>Satisfactorio</strong><br>
+                                70-79%
+                            </div>
+                            <div class="scale-level needs-improvement">
+                                <strong>Necesita Mejorar</strong><br>
+                                0-69%
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <h4>Criterios Generales:</h4>
+                        <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                            <li><strong>Excelente:</strong> Demuestra dominio completo y aplicación superior</li>
+                            <li><strong>Bueno:</strong> Demuestra comprensión sólida con aplicación efectiva</li>
+                            <li><strong>Satisfactorio:</strong> Demuestra comprensión básica con aplicación adecuada</li>
+                            <li><strong>Necesita Mejorar:</strong> Requiere desarrollo adicional en comprensión y aplicación</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -254,5 +911,41 @@
     <a href="rubricas.html" class="back-button">
         <i class="fas fa-arrow-left"></i> Volver
     </a>
+
+    <script>
+        // Smooth scrolling para navegación
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animación al hacer scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = Math.random() * 0.5 + 's';
+                    entry.target.classList.add('fadeIn');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.rubric-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>
