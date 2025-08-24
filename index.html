@@ -2645,7 +2645,7 @@ class SupabaseAnalytics {
             const { data, error } = await this.supabase
                 .rpc('register_unique_visitor', {
                     visitor_uuid: this.visitorId,
-                    page_name: this.currentPage, // 🔄 DINÁMICO
+                     p_page_name: this.currentPage, 
                     device: deviceType,
                     country: countryCode,
                     referrer_url: referrer
