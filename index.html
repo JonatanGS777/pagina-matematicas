@@ -2992,16 +2992,10 @@ class SupabaseAnalytics {
                         
                         const activeCount = activeUsers ? activeUsers.length : 1;
                         
-                        await this.supabase
-                            .from('unique_visitors')
-                            .update({ last_visit: new Date().toISOString() })
-                            .eq('visitor_id', this.visitorId);
-                        
-                        await this.supabase
-                            .rpc('update_active_users', {
-                                page_name: this.currentPage, // 🔄 DINÁMICO
-                                active_count: activeCount
-                            });
+                        // ✅ Ahora (más seguro)
+                        await this.supabase.rpc('secure_update_last_visit', { p_visitor_id: this.visitorId });
+                        await this.supabase.rpc('secure_update_active_users', { p_page: this.currentPage });
+
                     }
                         
                 } catch (error) {
