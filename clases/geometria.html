@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometría Moderna — Conceptos, Visualizaciones y Calculadoras</title>
+    <meta name="description" content="Una página interactiva para explorar conceptos de geometría 2D y 3D, con visualizaciones SVG y calculadoras integradas.">
+    
+    <!-- MathJax para renderizar fórmulas LaTeX -->
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <!-- Estilos CSS Embebidos -->
+    <style>
+        /* ------------------- */
+        /* VARIABLES Y RESET   */
+        /* ------------------- */
+        :root {
+            /* Colores (Modo Claro por defecto) */
+            --color-bg: #f0f2f5;
+            --color-surface: #ffffff;
+            --color-primary: #005f73;
+            --color-secondary: #0a9396;
+            --color-accent: #ee9b00;
+            --color-text-primary: #0a1128;
+            --color-text-secondary: #5f677a;
+            --color-border: #d9dde8;
+            --color-shadow-light: rgba(255, 255, 255, 0.8);
+            --color-shadow-dark: rgba(163, 177, 198, 0.6);
+            --color-glass-bg: rgba(255, 255, 255, 0.5);
+            --color-hero-blob1: #94d2bd;
+            --color-hero-blob2: #e9d8a6;
+
+            /* Tipografía */
+            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16px -> 18px */
+            --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
+            --font-size-h2: clamp(2rem, 1.25rem + 3.75vw, 3.5rem);
+            --font-size-h3: clamp(1.5rem, 1.1rem + 2vw, 2.25rem);
+            --font-size-small: 0.875rem;
+
+            /* Espaciado */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-xxl: 4rem;
+
+            /* Otros */
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+            --shadow-neumorph: 
+                -6px -6px 12px var(--color-shadow-light),
+                6px 6px 12px var(--color-shadow-dark);
+            --shadow-neumorph-inset: 
+                inset -4px -4px 8px var(--color-shadow-light),
+                inset 4px 4px 8px var(--color-shadow-dark);
+        }
+
+        .dark-theme {
+            --color-bg: #0a1128;
+            --color-surface: #121c33;
+            --color-primary: #94d2bd;
+            --color-secondary: #0a9396;
+            --color-accent: #ee9b00;
+            --color-text-primary: #f0f2f5;
+            --color-text-secondary: #a0a8b9;
+            --color-border: #2a344e;
+            --color-shadow-light: rgba(42, 52, 78, 0.8);
+            --color-shadow-dark: rgba(0, 0, 0, 0.6);
+            --color-glass-bg: rgba(18, 28, 51, 0.5);
+            --color-hero-blob1: #005f73;
+            --color-hero-blob2: #0a9396;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: var(--font-size-base);
+        }
+        
+        html.no-js .js-only {
+            display: none;
+        }
+
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        h1, h2, h3 {
+            line-height: 1.2;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        h1 { font-size: var(--font-size-h1); }
+        h2 { font-size: var(--font-size-h2); }
+        h3 { font-size: var(--font-size-h3); }
+
+        a {
+            color: var(--color-secondary);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
+        }
+        a:hover, a:focus {
+            color: var(--color-accent);
+            text-decoration: underline;
+        }
+
+        img, svg {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Utilidad para accesibilidad */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-accent);
+            color: var(--color-bg);
+            padding: var(--spacing-sm) var(--spacing-md);
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Respetar preferencias de movimiento */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* ------------------- */
+        /* LAYOUT Y COMPONENTES*/
+        /* ------------------- */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Header y Navegación --- */
+        .main-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: var(--spacing-md) 0;
+            background-color: var(--color-glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-text-primary);
+        }
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--color-primary);
+            transition: fill var(--transition-speed) ease;
+        }
+
+        .main-nav ul {
+            display: none; /* Oculto en móvil */
+            list-style: none;
+            gap: var(--spacing-lg);
+        }
+        .main-nav a {
+            font-weight: 500;
+            padding: var(--spacing-sm) 0;
+            position: relative;
+            color: var(--color-text-secondary);
+        }
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--transition-speed) ease;
+        }
+        .main-nav a:hover::after,
+        .main-nav a:focus::after,
+        .main-nav a.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .main-nav a.active {
+            color: var(--color-text-primary);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-text-primary);
+            border-radius: 50%;
+            transition: background-color var(--transition-speed) ease;
+        }
+        .theme-toggle:hover, .theme-toggle:focus-visible {
+            background-color: var(--color-border);
+        }
+        .theme-toggle svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+        .theme-toggle .icon-moon { display: block; }
+        .theme-toggle .icon-sun { display: none; }
+        .dark-theme .theme-toggle .icon-moon { display: none; }
+        .dark-theme .theme-toggle .icon-sun { display: block; }
+
+        @media (min-width: 768px) {
+            .main-nav ul {
+                display: flex;
+            }
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            padding: var(--spacing-xxl) 0;
+            text-align: center;
+            overflow: hidden;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero::before, .hero::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+        }
+        .hero::before {
+            width: 30vw;
+            height: 30vw;
+            min-width: 200px;
+            min-height: 200px;
+            background: var(--color-hero-blob1);
+            top: 10%;
+            left: 15%;
+            animation: blob-move 20s infinite alternate;
+        }
+        .hero::after {
+            width: 25vw;
+            height: 25vw;
+            min-width: 150px;
+            min-height: 150px;
+            background: var(--color-hero-blob2);
+            bottom: 10%;
+            right: 15%;
+            animation: blob-move 25s infinite alternate-reverse;
+        }
+
+        @keyframes blob-move {
+            from { transform: translate(-20%, -10%) scale(1); }
+            to { transform: translate(20%, 10%) scale(1.2); }
+        }
+
+        .hero h1 {
+            margin-bottom: var(--spacing-md);
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            max-width: 60ch;
+            margin: 0 auto var(--spacing-xl);
+        }
+
+        /* --- Botones Neumorphism --- */
+        .btn {
+            display: inline-block;
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            box-shadow: var(--shadow-neumorph);
+        }
+        .btn:hover, .btn:focus-visible {
+            color: var(--color-primary);
+            box-shadow: var(--shadow-neumorph-inset);
+        }
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-surface);
+            box-shadow: none;
+        }
+        .btn-primary:hover, .btn-primary:focus-visible {
+            background-color: var(--color-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.3);
+        }
+
+        /* --- Secciones y Tarjetas --- */
+        .section {
+            padding: var(--spacing-xxl) 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .section:last-of-type {
+            border-bottom: none;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+        .section-header h2 {
+            margin-bottom: var(--spacing-sm);
+        }
+        .section-header p {
+            max-width: 70ch;
+            margin: 0 auto;
+            color: var(--color-text-secondary);
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+        @media (min-width: 600px) {
+            .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 900px) {
+            .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (min-width: 1200px) {
+            .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .card {
+            background-color: var(--color-glass-bg);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-lg);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        .card-header svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            color: var(--color-secondary);
+        }
+        .card-header h3 {
+            font-size: 1.25rem;
+            color: var(--color-text-primary);
+        }
+        .card p {
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        /* --- Figuras 2D Interactivas --- */
+        .figure-card {
+            text-align: center;
+        }
+        .figure-card h4 {
+            margin-bottom: var(--spacing-md);
+            font-size: 1.1rem;
+        }
+        .svg-interactive-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+            max-width: 250px;
+        }
+        .svg-interactive {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+        .svg-interactive .shape {
+            fill: var(--color-primary);
+            fill-opacity: 0.1;
+            stroke: var(--color-primary);
+            stroke-width: 2;
+            transition: fill-opacity var(--transition-speed) ease;
+        }
+        .svg-interactive .label, .svg-interactive .dimension {
+            font-family: var(--font-family-sans);
+            font-size: 10px;
+            fill: var(--color-text-secondary);
+            opacity: 0;
+            transition: opacity var(--transition-speed) ease;
+        }
+        .svg-interactive-container:is(:hover, :focus-within) .shape {
+            fill-opacity: 0.3;
+        }
+        .svg-interactive-container:is(:hover, :focus-within) .label,
+        .svg-interactive-container:is(:hover, :focus-within) .dimension {
+            opacity: 1;
+        }
+        .figure-controls {
+            margin-top: var(--spacing-md);
+        }
+
+        /* --- Sólidos 3D --- */
+        .solid-card svg {
+            margin: 0 auto var(--spacing-md);
+            max-height: 150px;
+        }
+        .solid-card .solid-shape {
+            fill: var(--color-primary);
+            fill-opacity: 0.1;
+            stroke: var(--color-primary);
+            stroke-width: 1;
+        }
+        .solid-card .solid-edge {
+            fill: none;
+            stroke: var(--color-primary);
+            stroke-width: 1;
+        }
+        .solid-card .solid-hidden-edge {
+            stroke-dasharray: 3 3;
+            stroke-opacity: 0.7;
+        }
+
+        /* --- Calculadoras --- */
+        .calculator {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+        .calculator-form {
+            display: grid;
+            gap: var(--spacing-md);
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        .form-group label {
+            font-weight: 500;
+            color: var(--color-text-secondary);
+        }
+        .form-group input, .form-group select {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-surface);
+            color: var(--color-text-primary);
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(0, 95, 115, 0.2);
+        }
+        .calculator-result {
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-md);
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            min-height: 50px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        .calculator-result:empty::before {
+            content: "El resultado aparecerá aquí...";
+            color: var(--color-text-secondary);
+            font-style: italic;
+            font-weight: 400;
+        }
+        .error-message {
+            color: #ae2012;
+            font-size: var(--font-size-small);
+            font-weight: 500;
+        }
+
+        /* --- Tabla de Fórmulas --- */
+        .formulas-table-wrapper {
+            overflow-x: auto;
+        }
+        .formulas-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--spacing-lg);
+        }
+        .formulas-table th, .formulas-table td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: middle;
+        }
+        .formulas-table th {
+            background-color: var(--color-surface);
+            font-weight: 600;
+        }
+        .formulas-table tr:hover {
+            background-color: var(--color-surface);
+        }
+        .formula {
+            font-size: 1.1rem;
+            color: var(--color-secondary);
+        }
+        .dark-theme .formula mjx-container {
+            color: var(--color-secondary) !important;
+        }
+
+        /* --- Glosario --- */
+        #glossary-search {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto var(--spacing-lg);
+            display: block;
+        }
+        .glossary-list dt {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-top: var(--spacing-md);
+        }
+        .glossary-list dd {
+            margin-left: var(--spacing-lg);
+            color: var(--color-text-secondary);
+        }
+
+        /* --- FAQ (Acordeón) --- */
+        .faq-accordion details {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-md);
+            transition: background-color var(--transition-speed) ease;
+        }
+        .faq-accordion details[open] {
+            background-color: var(--color-bg);
+        }
+        .faq-accordion summary {
+            padding: var(--spacing-lg);
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+        .faq-accordion summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform var(--transition-speed) ease;
+        }
+        .faq-accordion details[open] summary::after {
+            transform: rotate(45deg);
+        }
+        .faq-accordion .faq-content {
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+            color: var(--color-text-secondary);
+        }
+
+        /* --- Footer --- */
+        .main-footer {
+            padding: var(--spacing-xl) 0;
+            background-color: var(--color-surface);
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-small);
+        }
+        .main-footer .container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        .footer-links a {
+            margin: 0 var(--spacing-sm);
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo" aria-label="Geometría Moderna - Inicio">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M95 95H5V5l90 90z"/></svg>
+                <span>Geometría Moderna</span>
+            </a>
+            <nav class="main-nav js-only" aria-label="Navegación principal">
+                <ul>
+                    <li><a href="#concepts">Conceptos</a></li>
+                    <li><a href="#figures-2d">Figuras 2D</a></li>
+                    <li><a href="#solids-3d">Sólidos 3D</a></li>
+                    <li><a href="#calculators">Calculadoras</a></li>
+                    <li><a href="#formulas">Fórmulas</a></li>
+                    <li><a href="#glossary">Glosario</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </nav>
+            <div class="header-controls">
+                <button class="theme-toggle js-only" id="theme-toggle" aria-label="Cambiar tema de color">
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Geometría Moderna</h1>
+                <p>Explora el fascinante mundo de las formas, el espacio y las medidas de una manera visual e interactiva. Desde los conceptos más básicos hasta cálculos prácticos.</p>
+                <a href="#concepts" class="btn btn-primary">Comenzar a explorar</a>
+            </div>
+        </section>
+
+        <!-- Conceptos Esenciales -->
+        <section id="concepts" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Conceptos Esenciales</h2>
+                    <p>Los pilares sobre los que se construye toda la geometría. Entiende estas ideas fundamentales para dominar el resto.</p>
+                </div>
+                <div class="grid grid-cols-2 grid-cols-3 grid-cols-4">
+                    <!-- Tarjeta: Punto -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"></circle></svg>
+                            <h3>Punto</h3>
+                        </div>
+                        <p>Es la unidad más básica, sin dimensiones (sin longitud, área o volumen). Representa una posición exacta en el espacio. Se nombra con una letra mayúscula.</p>
+                    </article>
+                    <!-- Tarjeta: Recta -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <h3>Recta</h3>
+                        </div>
+                        <p>Una sucesión infinita de puntos que se extiende en una misma dirección y en dos sentidos opuestos. No tiene principio ni fin. Es unidimensional.</p>
+                    </article>
+                    <!-- Tarjeta: Plano -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20.29 8.29l-8-8a2 2 0 00-2.58 0l-8 8a2 2 0 000 2.82l8 8a2 2 0 002.58 0l8-8a2 2 0 000-2.82z"></path></svg>
+                            <h3>Plano</h3>
+                        </div>
+                        <p>Una superficie bidimensional infinita y plana. Contiene infinitos puntos y rectas. Piensa en una hoja de papel que se extiende sin fin en todas direcciones.</p>
+                    </article>
+                     <!-- Tarjeta: Ángulo -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 19V5l7 7-7 7zM5 12h7"/></svg>
+                            <h3>Ángulo</h3>
+                        </div>
+                        <p>La abertura formada por dos semirrectas (lados) que parten de un mismo punto (vértice). Se mide en grados. Pueden ser agudos (&lt;90°), rectos (=90°) u obtusos (&gt;90°).</p>
+                    </article>
+                     <!-- Tarjeta: Triángulo -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2z"/></svg>
+                            <h3>Triángulo</h3>
+                        </div>
+                        <p>Un polígono de tres lados, tres vértices y tres ángulos internos. La suma de sus ángulos siempre es 180°. Se clasifican por sus lados (equilátero, isósceles, escaleno) o ángulos.</p>
+                    </article>
+                     <!-- Tarjeta: Círculo -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                            <h3>Círculo y Circunferencia</h3>
+                        </div>
+                        <p>La circunferencia es la línea curva cerrada y plana cuyos puntos equidistan de un centro. El círculo es la superficie plana limitada por la circunferencia.</p>
+                    </article>
+                     <!-- Tarjeta: Perímetro -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            <h3>Perímetro</h3>
+                        </div>
+                        <p>La longitud total del contorno de una figura geométrica plana. Se calcula sumando las longitudes de todos sus lados. Es una medida de longitud (unidimensional).</p>
+                    </article>
+                     <!-- Tarjeta: Área -->
+                    <article class="card">
+                        <div class="card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h8v8H2zm12 0h8v8h-8zM2 14h8v8H2zm12 0h8v8h-8z"/></svg>
+                            <h3>Área</h3>
+                        </div>
+                        <p>La medida de la superficie encerrada dentro del perímetro de una figura plana. Se mide en unidades cuadradas (bidimensional). Representa el "espacio" que ocupa la figura.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Figuras 2D -->
+        <section id="figures-2d" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Figuras 2D Interactivas</h2>
+                    <p>Pasa el cursor o enfoca las figuras para ver sus componentes clave. La geometría cobra vida.</p>
+                </div>
+                <div class="grid grid-cols-2 grid-cols-3">
+                    <!-- Triángulo -->
+                    <article class="card figure-card">
+                        <h4>Triángulo</h4>
+                        <div class="svg-interactive-container" tabindex="0">
+                            <svg class="svg-interactive" viewBox="0 0 100 100">
+                                <polygon class="shape" points="50,10 95,90 5,90" />
+                                <line class="dimension" x1="50" y1="10" x2="50" y2="90" stroke="currentColor" stroke-dasharray="2,2"/>
+                                <text class="label" x="53" y="55">altura (h)</text>
+                                <text class="label" x="45" y="98">base (b)</text>
+                                <text class="label" x="18" y="55">lado</text>
+                            </svg>
+                        </div>
+                    </article>
+                    <!-- Cuadrado -->
+                    <article class="card figure-card">
+                        <h4>Cuadrado</h4>
+                        <div class="svg-interactive-container" tabindex="0">
+                            <svg class="svg-interactive" viewBox="0 0 100 100">
+                                <rect class="shape" x="10" y="10" width="80" height="80" />
+                                <text class="label" x="45" y="98">lado (l)</text>
+                                <text class="label" x="0" y="55" transform="rotate(-90 0 55)">lado (l)</text>
+                            </svg>
+                        </div>
+                    </article>
+                    <!-- Rectángulo -->
+                    <article class="card figure-card">
+                        <h4>Rectángulo</h4>
+                        <div class="svg-interactive-container" tabindex="0">
+                            <svg class="svg-interactive" viewBox="0 0 100 100">
+                                <rect class="shape" x="5" y="20" width="90" height="60" />
+                                <text class="label" x="45" y="88">base (b)</text>
+                                <text class="label" x="0" y="55" transform="rotate(-90 0 55)">altura (h)</text>
+                            </svg>
+                        </div>
+                    </article>
+                    <!-- Círculo -->
+                    <article class="card figure-card">
+                        <h4>Círculo</h4>
+                        <div class="svg-interactive-container" tabindex="0">
+                            <svg class="svg-interactive" viewBox="0 0 100 100">
+                                <circle class="shape" cx="50" cy="50" r="45" />
+                                <line class="dimension" x1="50" y1="50" x2="95" y2="50" stroke="currentColor" />
+                                <line class="dimension" x1="5" y1="50" x2="95" y2="50" stroke="currentColor" stroke-dasharray="2,2"/>
+                                <text class="label" x="70" y="45">radio (r)</text>
+                                <text class="label" x="40" y="65">diámetro (d)</text>
+                            </svg>
+                        </div>
+                    </article>
+                     <!-- Paralelogramo -->
+                    <article class="card figure-card">
+                        <h4>Paralelogramo</h4>
+                        <div class="svg-interactive-container" tabindex="0">
+                            <svg class="svg-interactive" viewBox="0 0 100 100">
+                                <polygon class="shape" points="20,80 80,80 100,20 40,20" />
+                                <line class="dimension" x1="40" y1="20" x2="40" y2="80" stroke="currentColor" stroke-dasharray="2,2"/>
+                                <text class="label" x="45" y="88">base (b)</text>
+                                <text class="label" x="43" y="55">altura (h)</text>
+                            </svg>
+                        </div>
+                    </article>
+                     <!-- Trapecio -->
+                    <article class="card figure-card">
+                        <h4>Trapecio</h4>
+                        <div class="svg-interactive-container" tabindex="0">
+                            <svg class="svg-interactive" viewBox="0 0 100 100">
+                                <polygon class="shape" points="10,80 90,80 70,20 30,20" />
+                                <line class="dimension" x1="50" y1="20" x2="50" y2="80" stroke="currentColor" stroke-dasharray="2,2"/>
+                                <text class="label" x="45" y="88">Base mayor (B)</text>
+                                <text class="label" x="40" y="15">base menor (b)</text>
+                                <text class="label" x="53" y="55">altura (h)</text>
+                            </svg>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sólidos 3D -->
+        <section id="solids-3d" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Nociones de Sólidos 3D</h2>
+                    <p>Una introducción a las figuras tridimensionales. Observa sus caras, aristas y vértices en estas ilustraciones isométricas.</p>
+                </div>
+                <div class="grid grid-cols-2 grid-cols-3">
+                    <!-- Cubo -->
+                    <article class="card solid-card">
+                        <h4>Cubo</h4>
+                        <svg viewBox="0 0 100 80">
+                            <g class="solid-shape">
+                                <path class="solid-edge" d="M20 25 L60 25 L60 65 L20 65 Z" />
+                                <path class="solid-edge" d="M20 25 L40 5 L80 5 L60 25" />
+                                <path class="solid-edge" d="M60 65 L80 45 L80 5" />
+                                <path class="solid-edge solid-hidden-edge" d="M20 65 L40 45 L80 45" />
+                                <path class="solid-edge solid-hidden-edge" d="M40 5 L40 45" />
+                            </g>
+                        </svg>
+                        <p>6 caras cuadradas, 12 aristas iguales, 8 vértices.</p>
+                    </article>
+                    <!-- Cilindro -->
+                    <article class="card solid-card">
+                        <h4>Cilindro</h4>
+                        <svg viewBox="0 0 100 80">
+                            <g class="solid-shape">
+                                <ellipse cx="50" cy="15" rx="30" ry="10" />
+                                <path class="solid-edge" d="M20 15 L20 65" />
+                                <path class="solid-edge" d="M80 15 L80 65" />
+                                <ellipse cx="50" cy="65" rx="30" ry="10" class="solid-edge" />
+                                <path class="solid-edge solid-hidden-edge" d="M20 65 A 30 10 0 0 0 80 65" />
+                            </g>
+                        </svg>
+                        <p>2 bases circulares, 1 superficie lateral curva.</p>
+                    </article>
+                    <!-- Cono -->
+                    <article class="card solid-card">
+                        <h4>Cono</h4>
+                        <svg viewBox="0 0 100 80">
+                            <g class="solid-shape">
+                                <ellipse cx="50" cy="65" rx="40" ry="10" />
+                                <path class="solid-edge" d="M10 65 L50 10 L90 65" />
+                                <path class="solid-edge solid-hidden-edge" d="M10 65 A 40 10 0 0 0 90 65" />
+                            </g>
+                        </svg>
+                        <p>1 base circular, 1 vértice (cúspide), 1 superficie lateral curva.</p>
+                    </article>
+                    <!-- Esfera -->
+                    <article class="card solid-card">
+                        <h4>Esfera</h4>
+                        <svg viewBox="0 0 100 80">
+                            <g class="solid-shape">
+                                <circle class="solid-edge" cx="50" cy="40" r="35" />
+                                <ellipse class="solid-edge solid-hidden-edge" cx="50" cy="40" rx="15" ry="35" transform="rotate(20 50 40)"/>
+                            </g>
+                        </svg>
+                        <p>Superficie curva donde todos los puntos equidistan del centro.</p>
+                    </article>
+                    <!-- Pirámide -->
+                    <article class="card solid-card">
+                        <h4>Pirámide (base cuadrada)</h4>
+                        <svg viewBox="0 0 100 80">
+                            <g class="solid-shape">
+                                <path class="solid-edge" d="M10 65 L50 10 L90 65" />
+                                <path class="solid-edge" d="M50 10 L50 65" />
+                                <path class="solid-edge" d="M10 65 L50 65 L90 65" />
+                                <path class="solid-edge solid-hidden-edge" d="M10 65 L30 75 L70 75 L90 65" />
+                                <path class="solid-edge solid-hidden-edge" d="M50 10 L30 75" />
+                                <path class="solid-edge solid-hidden-edge" d="M50 10 L70 75" />
+                            </g>
+                        </svg>
+                        <p>1 base poligonal, caras laterales triangulares, 1 cúspide.</p>
+                    </article>
+                    <!-- Prisma -->
+                    <article class="card solid-card">
+                        <h4>Prisma (base triangular)</h4>
+                        <svg viewBox="0 0 100 80">
+                            <g class="solid-shape">
+                                <path class="solid-edge" d="M20 60 L80 60 L50 10 Z" />
+                                <path class="solid-edge" d="M20 70 L80 70 L50 20 Z" />
+                                <path class="solid-edge" d="M20 60 L20 70" />
+                                <path class="solid-edge" d="M80 60 L80 70" />
+                                <path class="solid-edge" d="M50 10 L50 20" />
+                            </g>
+                        </svg>
+                        <p>2 bases poligonales iguales y paralelas, caras laterales rectangulares.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculadoras -->
+        <section id="calculators" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Calculadoras Geométricas</h2>
+                    <p>Pon a prueba tus conocimientos. Introduce los datos y obtén resultados precisos al instante.</p>
+                </div>
+                <div class="grid grid-cols-2">
+                    <!-- Calculadora de Área y Perímetro -->
+                    <article class="card calculator">
+                        <h3>Área y Perímetro</h3>
+                        <form id="calc-area-perimeter" class="calculator-form">
+                            <div class="form-group">
+                                <label for="shape-select">Selecciona una figura:</label>
+                                <select id="shape-select" name="shape">
+                                    <option value="cuadrado">Cuadrado</option>
+                                    <option value="rectangulo">Rectángulo</option>
+                                    <option value="circulo">Círculo</option>
+                                    <option value="triangulo">Triángulo (base y altura)</option>
+                                </select>
+                            </div>
+                            <div id="shape-inputs">
+                                <!-- Inputs dinámicos aquí -->
+                            </div>
+                            <button type="submit" class="btn">Calcular</button>
+                        </form>
+                        <div id="result-area-perimeter" class="calculator-result" aria-live="polite"></div>
+                    </article>
+
+                    <!-- Calculadora de Pitágoras -->
+                    <article class="card calculator">
+                        <h3>Teorema de Pitágoras ($a^2 + b^2 = c^2$)</h3>
+                        <form id="calc-pythagoras" class="calculator-form">
+                            <p>Introduce dos valores para hallar el tercero. Deja en blanco el que quieres calcular.</p>
+                            <div class="form-group">
+                                <label for="pyth-a">Cateto a:</label>
+                                <input type="text" id="pyth-a" name="a" inputmode="decimal" placeholder="Ej: 3">
+                            </div>
+                             <div class="form-group">
+                                <label for="pyth-b">Cateto b:</label>
+                                <input type="text" id="pyth-b" name="b" inputmode="decimal" placeholder="Ej: 4">
+                            </div>
+                             <div class="form-group">
+                                <label for="pyth-c">Hipotenusa c:</label>
+                                <input type="text" id="pyth-c" name="c" inputmode="decimal" placeholder="Se calculará">
+                            </div>
+                            <button type="submit" class="btn">Calcular</button>
+                        </form>
+                        <div id="result-pythagoras" class="calculator-result" aria-live="polite"></div>
+                    </article>
+
+                    <!-- Calculadora Analítica -->
+                    <article class="card calculator" style="grid-column: 1 / -1;">
+                        <h3>Geometría Analítica</h3>
+                        <form id="calc-analytics" class="calculator-form">
+                            <p>Calcula la distancia, pendiente y punto medio entre dos puntos en el plano cartesiano.</p>
+                            <div class="grid grid-cols-2">
+                                <div class="form-group">
+                                    <label for="analytics-x1">Punto 1 ($x_1$):</label>
+                                    <input type="text" id="analytics-x1" name="x1" inputmode="decimal" placeholder="Ej: 1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="analytics-y1">Punto 1 ($y_1$):</label>
+                                    <input type="text" id="analytics-y1" name="y1" inputmode="decimal" placeholder="Ej: 2" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="analytics-x2">Punto 2 ($x_2$):</label>
+                                    <input type="text" id="analytics-x2" name="x2" inputmode="decimal" placeholder="Ej: 4" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="analytics-y2">Punto 2 ($y_2$):</label>
+                                    <input type="text" id="analytics-y2" name="y2" inputmode="decimal" placeholder="Ej: 6" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn">Calcular</button>
+                        </form>
+                        <div id="result-analytics" class="calculator-result" aria-live="polite"></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fórmulas -->
+        <section id="formulas" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Tabla de Fórmulas</h2>
+                    <p>Un resumen práctico de las fórmulas más importantes para tener siempre a mano.</p>
+                </div>
+                <div class="formulas-table-wrapper">
+                    <table class="formulas-table">
+                        <thead>
+                            <tr>
+                                <th>Figura / Concepto</th>
+                                <th>Fórmula</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cuadrado</td>
+                                <td class="formula">$A = l^2; \quad P = 4l$</td>
+                                <td>Área (A) es lado al cuadrado. Perímetro (P) es 4 por lado.</td>
+                            </tr>
+                            <tr>
+                                <td>Rectángulo</td>
+                                <td class="formula">$A = b \cdot h; \quad P = 2b + 2h$</td>
+                                <td>Área es base por altura. Perímetro es dos veces la base más dos veces la altura.</td>
+                            </tr>
+                            <tr>
+                                <td>Círculo</td>
+                                <td class="formula">$A = \pi \cdot r^2; \quad C = 2\pi r$</td>
+                                <td>Área es Pi por radio al cuadrado. Circunferencia (C) es 2 por Pi por radio.</td>
+                            </tr>
+                            <tr>
+                                <td>Triángulo</td>
+                                <td class="formula">$A = \frac{b \cdot h}{2}$</td>
+                                <td>Área es base por altura, dividido entre 2.</td>
+                            </tr>
+                            <tr>
+                                <td>Teorema de Pitágoras</td>
+                                <td class="formula">$a^2 + b^2 = c^2$</td>
+                                <td>En un triángulo rectángulo, la suma de los cuadrados de los catetos (a, b) es igual al cuadrado de la hipotenusa (c).</td>
+                            </tr>
+                            <tr>
+                                <td>Distancia entre puntos</td>
+                                <td class="formula">$d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$</td>
+                                <td>Raíz cuadrada de la suma de los cuadrados de las diferencias de las coordenadas.</td>
+                            </tr>
+                            <tr>
+                                <td>Pendiente de una recta</td>
+                                <td class="formula">$m = \frac{y_2-y_1}{x_2-x_1}$</td>
+                                <td>Diferencia de las coordenadas 'y' dividida por la diferencia de las 'x'.</td>
+                            </tr>
+                            <tr>
+                                <td>Punto Medio</td>
+                                <td class="formula">$M = \left(\frac{x_1+x_2}{2}, \frac{y_1+y_2}{2}\right)$</td>
+                                <td>El promedio de las coordenadas 'x' y 'y' de los dos puntos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Glosario -->
+        <section id="glossary" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Glosario de Términos</h2>
+                    <p>¿Alguna palabra te resulta desconocida? Búscala aquí para una definición rápida y clara.</p>
+                </div>
+                <div class="form-group js-only">
+                    <label for="glossary-search">Buscar término:</label>
+                    <input type="search" id="glossary-search" class="form-group input" placeholder="Escribe para filtrar...">
+                </div>
+                <dl class="glossary-list">
+                    <div class="glossary-item">
+                        <dt>Arista</dt>
+                        <dd>Segmento de recta donde se encuentran dos caras de un sólido geométrico.</dd>
+                    </div>
+                    <div class="glossary-item">
+                        <dt>Cateto</dt>
+                        <dd>Cada uno de los dos lados menores de un triángulo rectángulo, los que forman el ángulo recto.</dd>
+                    </div>
+                    <div class="glossary-item">
+                        <dt>Congruencia</dt>
+                        <dd>Dos figuras son congruentes si tienen exactamente la misma forma y tamaño.</dd>
+                    </div>
+                    <div class="glossary-item">
+                        <dt>Hipotenusa</dt>
+                        <dd>El lado de mayor longitud de un triángulo rectángulo, opuesto al ángulo recto.</dd>
+                    </div>
+                    <div class="glossary-item">
+                        <dt>Polígono</dt>
+                        <dd>Figura geométrica plana cerrada, limitada por segmentos de recta llamados lados.</dd>
+                    </div>
+                    <div class="glossary-item">
+                        <dt>Semejanza</dt>
+                        <dd>Dos figuras son semejantes si tienen la misma forma pero no necesariamente el mismo tamaño.</dd>
+                    </div>
+                    <div class="glossary-item">
+                        <dt>Vértice</dt>
+                        <dd>Punto donde se unen dos o más lados de un polígono o aristas de un sólido.</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Preguntas Frecuentes (FAQ)</h2>
+                    <p>Respuestas a algunas de las dudas más comunes en el estudio de la geometría.</p>
+                </div>
+                <div class="faq-accordion">
+                    <details>
+                        <summary>¿Cuál es la diferencia entre círculo y circunferencia?</summary>
+                        <div class="faq-content">
+                            <p>La <strong>circunferencia</strong> es solo el borde, la línea curva que delimita la figura. Es una medida de longitud. El <strong>círculo</strong>, en cambio, es toda la superficie interior, incluyendo el borde. Es una medida de área. Imagina un anillo (circunferencia) y una moneda (círculo).</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>¿Por qué la suma de los ángulos de un triángulo es siempre 180°?</summary>
+                        <div class="faq-content">
+                            <p>Esto se puede demostrar visualmente. Si trazas una recta paralela a uno de los lados del triángulo que pase por el vértice opuesto, se forman tres ángulos sobre esa recta que son iguales a los tres ángulos internos del triángulo. Como los ángulos sobre una línea recta suman 180°, los ángulos del triángulo también lo hacen.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>¿Se puede usar el Teorema de Pitágoras en cualquier triángulo?</summary>
+                        <div class="faq-content">
+                            <p>No, el Teorema de Pitágoras se aplica <strong>exclusivamente</strong> a triángulos rectángulos, es decir, aquellos que tienen un ángulo de 90°. Para otros tipos de triángulos, se utilizan otras relaciones como la Ley de Senos o la Ley de Cosenos.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>¿Qué es Pi ($\pi$) y por qué es tan importante?</summary>
+                        <div class="faq-content">
+                            <p>Pi ($\pi$) es una constante matemática que representa la relación entre la circunferencia de un círculo y su diámetro. No importa el tamaño del círculo, si divides su circunferencia entre su diámetro, el resultado siempre será aproximadamente 3.14159... Es un número irracional, lo que significa que tiene infinitos decimales no periódicos. Es fundamental para todos los cálculos relacionados con círculos y esferas.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Volver arriba</a>
+            </div>
+            <p>&copy; 2024 Geometría Moderna. Creado con fines educativos.</p>
+            <p>Contenido bajo licencia Creative Commons. Accesibilidad como prioridad.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Embebido -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Eliminar la clase no-js para mostrar elementos dependientes de JS
+            document.documentElement.classList.remove('no-js');
+
+            /* ------------------- */
+            /* GESTIÓN DEL TEMA    */
+            /* ------------------- */
+            const themeToggle = document.getElementById('theme-toggle');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            let currentTheme = localStorage.getItem('theme');
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark-theme');
+                } else {
+                    document.documentElement.classList.remove('dark-theme');
+                }
+            }
+
+            function toggleTheme() {
+                currentTheme = document.documentElement.classList.contains('dark-theme') ? 'light' : 'dark';
+                localStorage.setItem('theme', currentTheme);
+                applyTheme(currentTheme);
+            }
+
+            if (themeToggle) {
+                // Aplicar tema inicial
+                if (currentTheme) {
+                    applyTheme(currentTheme);
+                } else {
+                    applyTheme(prefersDark.matches ? 'dark' : 'light');
+                }
+                
+                themeToggle.addEventListener('click', toggleTheme);
+                prefersDark.addEventListener('change', (e) => {
+                    if (!localStorage.getItem('theme')) {
+                        applyTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+
+            /* ------------------- */
+            /* SCROLL SPY          */
+            /* ------------------- */
+            const navLinks = document.querySelectorAll('.main-nav a');
+            const sections = document.querySelectorAll('.section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4,
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            /* ------------------- */
+            /* CALCULADORAS        */
+            /* ------------------- */
+            const PI = 3.1415926535;
+
+            // --- Utilidades ---
+            function normalizeNumber(str) {
+                if (!str) return NaN;
+                return parseFloat(str.replace(',', '.'));
+            }
+
+            function formatResult(num) {
+                return parseFloat(num.toFixed(3));
+            }
+
+            function announceResult(element, message) {
+                element.innerHTML = message;
+            }
+
+            // --- Calculadora de Área y Perímetro ---
+            const areaPerimeterForm = document.getElementById('calc-area-perimeter');
+            const shapeSelect = document.getElementById('shape-select');
+            const shapeInputsContainer = document.getElementById('shape-inputs');
+            const resultAreaPerimeter = document.getElementById('result-area-perimeter');
+
+            const shapeInputTemplates = {
+                cuadrado: `
+                    <div class="form-group">
+                        <label for="ap-lado">Lado (l):</label>
+                        <input type="text" id="ap-lado" name="lado" inputmode="decimal" required>
+                    </div>`,
+                rectangulo: `
+                    <div class="form-group">
+                        <label for="ap-base">Base (b):</label>
+                        <input type="text" id="ap-base" name="base" inputmode="decimal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ap-altura">Altura (h):</label>
+                        <input type="text" id="ap-altura" name="altura" inputmode="decimal" required>
+                    </div>`,
+                circulo: `
+                    <div class="form-group">
+                        <label for="ap-radio">Radio (r):</label>
+                        <input type="text" id="ap-radio" name="radio" inputmode="decimal" required>
+                    </div>`,
+                triangulo: `
+                    <div class="form-group">
+                        <label for="ap-base-tri">Base (b):</label>
+                        <input type="text" id="ap-base-tri" name="base" inputmode="decimal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ap-altura-tri">Altura (h):</label>
+                        <input type="text" id="ap-altura-tri" name="altura" inputmode="decimal" required>
+                    </div>`
+            };
+
+            function updateShapeInputs() {
+                shapeInputsContainer.innerHTML = shapeInputTemplates[shapeSelect.value] || '';
+            }
+
+            if (areaPerimeterForm) {
+                updateShapeInputs();
+                shapeSelect.addEventListener('change', updateShapeInputs);
+
+                areaPerimeterForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(areaPerimeterForm);
+                    const shape = formData.get('shape');
+                    let area, perimeter, resultHtml = '';
+
+                    try {
+                        switch (shape) {
+                            case 'cuadrado':
+                                const lado = normalizeNumber(formData.get('lado'));
+                                if (isNaN(lado) || lado <= 0) throw new Error("El lado debe ser un número positivo.");
+                                area = lado * lado;
+                                perimeter = 4 * lado;
+                                resultHtml = `Área: <strong>${formatResult(area)}</strong> u²<br>Perímetro: <strong>${formatResult(perimeter)}</strong> u`;
+                                break;
+                            case 'rectangulo':
+                                const base = normalizeNumber(formData.get('base'));
+                                const altura = normalizeNumber(formData.get('altura'));
+                                if (isNaN(base) || isNaN(altura) || base <= 0 || altura <= 0) throw new Error("La base y la altura deben ser números positivos.");
+                                area = base * altura;
+                                perimeter = 2 * base + 2 * altura;
+                                resultHtml = `Área: <strong>${formatResult(area)}</strong> u²<br>Perímetro: <strong>${formatResult(perimeter)}</strong> u`;
+                                break;
+                            case 'circulo':
+                                const radio = normalizeNumber(formData.get('radio'));
+                                if (isNaN(radio) || radio <= 0) throw new Error("El radio debe ser un número positivo.");
+                                area = PI * radio * radio;
+                                perimeter = 2 * PI * radio;
+                                resultHtml = `Área: <strong>${formatResult(area)}</strong> u²<br>Circunferencia: <strong>${formatResult(perimeter)}</strong> u`;
+                                break;
+                            case 'triangulo':
+                                const baseT = normalizeNumber(formData.get('base'));
+                                const alturaT = normalizeNumber(formData.get('altura'));
+                                if (isNaN(baseT) || isNaN(alturaT) || baseT <= 0 || alturaT <= 0) throw new Error("La base y la altura deben ser números positivos.");
+                                area = (baseT * alturaT) / 2;
+                                resultHtml = `Área: <strong>${formatResult(area)}</strong> u²<br><small>(El perímetro requiere los 3 lados)</small>`;
+                                break;
+                        }
+                        announceResult(resultAreaPerimeter, resultHtml);
+                    } catch (error) {
+                        announceResult(resultAreaPerimeter, `<span class="error-message">${error.message}</span>`);
+                    }
+                });
+            }
+
+            // --- Calculadora de Pitágoras ---
+            const pythagorasForm = document.getElementById('calc-pythagoras');
+            const resultPythagoras = document.getElementById('result-pythagoras');
+
+            if (pythagorasForm) {
+                pythagorasForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    let a = normalizeNumber(document.getElementById('pyth-a').value);
+                    let b = normalizeNumber(document.getElementById('pyth-b').value);
+                    let c = normalizeNumber(document.getElementById('pyth-c').value);
+                    let resultHtml = '';
+
+                    try {
+                        const inputs = [!isNaN(a), !isNaN(b), !isNaN(c)];
+                        const inputCount = inputs.filter(Boolean).length;
+
+                        if (inputCount !== 2) {
+                            throw new Error("Por favor, introduce exactamente dos valores.");
+                        }
+
+                        if (isNaN(c)) { // Calcular hipotenusa
+                            if (a <= 0 || b <= 0) throw new Error("Los catetos deben ser positivos.");
+                            c = Math.sqrt(a*a + b*b);
+                            resultHtml = `La hipotenusa (c) es: <strong>${formatResult(c)}</strong>`;
+                        } else if (isNaN(a)) { // Calcular cateto a
+                            if (c <= 0 || b <= 0) throw new Error("Los lados deben ser positivos.");
+                            if (c <= b) throw new Error("La hipotenusa (c) debe ser mayor que el cateto (b).");
+                            a = Math.sqrt(c*c - b*b);
+                            resultHtml = `El cateto (a) es: <strong>${formatResult(a)}</strong>`;
+                        } else { // Calcular cateto b
+                            if (c <= 0 || a <= 0) throw new Error("Los lados deben ser positivos.");
+                            if (c <= a) throw new Error("La hipotenusa (c) debe ser mayor que el cateto (a).");
+                            b = Math.sqrt(c*c - a*a);
+                            resultHtml = `El cateto (b) es: <strong>${formatResult(b)}</strong>`;
+                        }
+                        announceResult(resultPythagoras, resultHtml);
+                    } catch (error) {
+                        announceResult(resultPythagoras, `<span class="error-message">${error.message}</span>`);
+                    }
+                });
+            }
+            
+            // --- Calculadora Analítica ---
+            const analyticsForm = document.getElementById('calc-analytics');
+            const resultAnalytics = document.getElementById('result-analytics');
+
+            if (analyticsForm) {
+                analyticsForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(analyticsForm);
+                    const x1 = normalizeNumber(formData.get('x1'));
+                    const y1 = normalizeNumber(formData.get('y1'));
+                    const x2 = normalizeNumber(formData.get('x2'));
+                    const y2 = normalizeNumber(formData.get('y2'));
+                    let resultHtml = '';
+
+                    try {
+                        if ([x1, y1, x2, y2].some(isNaN)) {
+                            throw new Error("Todos los campos deben ser números válidos.");
+                        }
+
+                        // Distancia
+                        const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        resultHtml += `Distancia: <strong>${formatResult(distance)}</strong> u<br>`;
+
+                        // Pendiente
+                        let slope;
+                        if (x2 - x1 === 0) {
+                            slope = "Infinita (recta vertical)";
+                        } else {
+                            slope = formatResult((y2 - y1) / (x2 - x1));
+                        }
+                        resultHtml += `Pendiente (m): <strong>${slope}</strong><br>`;
+
+                        // Punto Medio
+                        const midX = (x1 + x2) / 2;
+                        const midY = (y1 + y2) / 2;
+                        resultHtml += `Punto Medio (M): <strong>(${formatResult(midX)}, ${formatResult(midY)})</strong>`;
+
+                        announceResult(resultAnalytics, resultHtml);
+
+                    } catch (error) {
+                        announceResult(resultAnalytics, `<span class="error-message">${error.message}</span>`);
+                    }
+                });
+            }
+            
+            /* ------------------- */
+            /* FILTRO GLOSARIO     */
+            /* ------------------- */
+            const glossarySearch = document.getElementById('glossary-search');
+            const glossaryItems = document.querySelectorAll('.glossary-item');
+
+            if (glossarySearch) {
+                glossarySearch.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    glossaryItems.forEach(item => {
+                        const term = item.querySelector('dt').textContent.toLowerCase();
+                        const definition = item.querySelector('dd').textContent.toLowerCase();
+                        if (term.includes(searchTerm) || definition.includes(searchTerm)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
