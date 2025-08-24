@@ -2668,59 +2668,67 @@ class SupabaseAnalytics {
 
     // 🔄 REALTIME MEJORADO - Con daily_stats y unique_visitors
     async setupRealtime() {
-        try {
-            this.realtimeChannel = this.supabase
-                .channel('analytics_updates')
-                // 1. Analytics updates
-                .on('postgres_changes', 
-                    { 
-                        event: '*', 
-                        schema: 'public', 
-                        table: 'analytics' 
-                    }, 
-                    (payload) => {
-                        this.handleRealtimeUpdate(payload);
-                    }
-                )
-                // 2. 🆕 Daily stats updates
-                .on('postgres_changes', 
-                    { 
-                        event: '*', 
-                        schema: 'public', 
-                        table: 'daily_stats' 
-                    }, 
-                    (payload) => {
-                        this.handleDailyStatsUpdate(payload);
-                    }
-                )
-                // 3. Activity updates
-                .on('postgres_changes', 
-                    { 
-                        event: 'INSERT', 
-                        schema: 'public', 
-                        table: 'realtime_activity' 
-                    }, 
-                    (payload) => {
-                        this.handleActivityUpdate(payload);
-                    }
-                )
-                // 4. 🆕 Unique visitors (para refrescar dispositivos/países)
-                .on('postgres_changes', 
-                    { 
-                        event: 'INSERT', 
-                        schema: 'public', 
-                        table: 'unique_visitors' 
-                    }, 
-                    (payload) => {
+    try {
+        const today = new Date().toISOString().slice(0, 10);
+
+        this.realtimeChannel = this.supabase
+            .channel('analytics_updates')
+
+            // 1. Analytics SOLO de la página actual
+            .on('postgres_changes', 
+                { 
+                    event: '*', 
+                    schema: 'public', 
+                    table: 'analytics',
+                    filter: `page_slug=eq.${this.currentPage}`
+                }, 
+                (payload) => this.handleRealtimeUpdate(payload)
+            )
+
+            // 2. Daily stats SOLO de hoy y de la página actual
+            .on('postgres_changes', 
+                { 
+                    event: '*', 
+                    schema: 'public', 
+                    table: 'daily_stats',
+                    filter: `date=eq.${today},page_slug=eq.${this.currentPage}`
+                }, 
+                (payload) => this.handleDailyStatsUpdate(payload)
+            )
+
+            // 3. Actividades SOLO de la página actual
+            .on('postgres_changes', 
+                { 
+                    event: 'INSERT', 
+                    schema: 'public', 
+                    table: 'realtime_activity',
+                    filter: `page_slug=eq.${this.currentPage}`
+                }, 
+                (payload) => this.handleActivityUpdate(payload)
+            )
+
+            // 4. Nuevos visitantes que incluyan esta página
+            .on('postgres_changes', 
+                { 
+                    event: 'INSERT', 
+                    schema: 'public', 
+                    table: 'unique_visitors'
+                }, 
+                (payload) => {
+                    const visitor = payload.new;
+                    if (visitor.pages_visited?.includes(this.currentPage)) {
                         this.handleNewVisitor(payload);
                     }
-                )
-                .subscribe();
+                }
+            )
 
-        } catch (error) {
-            console.error('Error configurando realtime:', error);
-        }
+            .subscribe();
+
+    } catch (error) {
+        console.error('Error configurando realtime:', error);
     }
+}
+
 
     // 🔄 CARGA INICIAL MEJORADA - Con slug dinámico
     async loadInitialData() {
