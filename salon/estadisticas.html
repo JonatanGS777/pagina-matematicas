@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="es" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estadística Moderna — Una Guía Interactiva</title>
+  
+  <!-- MathJax Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        processEscapes: true
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    /* ------------------- */
+    /* RESET & ROOT        */
+    /* ------------------- */
+    :root {
+      /* Light Theme */
+      --color-primary: #7c3aed;
+      --color-secondary: #06b6d4;
+      --color-accent: #ec4899;
+      --color-emphasis: #84cc16;
+      --color-background: #fffdf7;
+      --color-surface: #ffffff;
+      --color-text: #0b1220;
+      --color-text-muted: #4a5568;
+      --color-border: #0b1220;
+      --shadow-color: #0b1220;
+
+      /* Dark Theme */
+      --dark-primary: #a78bfa;
+      --dark-secondary: #67e8f9;
+      --dark-accent: #f9a8d4;
+      --dark-emphasis: #a3e635;
+      --dark-background: #0b1220;
+      --dark-surface: #111827;
+      --dark-text: #e5e7eb;
+      --dark-text-muted: #9ca3af;
+      --dark-border: #e5e7eb;
+      --dark-shadow-color: #e5e7eb;
+
+      /* Typography */
+      --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --font-size-h1: clamp(2.44rem, 1.8rem + 3.2vw, 4.21rem);
+      --font-size-h2: clamp(1.95rem, 1.5rem + 2.25vw, 3.16rem);
+      --font-size-h3: clamp(1.56rem, 1.28rem + 1.4vw, 2.37rem);
+      --font-size-h4: clamp(1.25rem, 1.1rem + 0.75vw, 1.78rem);
+
+      /* Layout */
+      --border-width: 3px;
+      --border-radius: 8px;
+      --shadow-offset: 5px;
+      --shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--shadow-color);
+      --container-width: 1200px;
+      --spacing: 1.5rem;
+    }
+
+    html.dark {
+      --color-primary: var(--dark-primary);
+      --color-secondary: var(--dark-secondary);
+      --color-accent: var(--dark-accent);
+      --color-emphasis: var(--dark-emphasis);
+      --color-background: var(--dark-background);
+      --color-surface: var(--dark-surface);
+      --color-text: var(--dark-text);
+      --color-text-muted: var(--dark-text-muted);
+      --color-border: var(--dark-border);
+      --shadow-color: var(--dark-shadow-color);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: var(--font-size-base);
+      line-height: 1.6;
+      font-family: var(--font-family);
+      background-color: var(--color-background);
+      color: var(--color-text);
+      scroll-behavior: smooth;
+      scroll-padding-top: 8rem;
+    }
+
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    h1, h2, h3, h4 {
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    h1 { font-size: var(--font-size-h1); }
+    h2 { font-size: var(--font-size-h2); margin-top: 2.5em; margin-bottom: 1em; }
+    h3 { font-size: var(--font-size-h3); margin-top: 2em; margin-bottom: 0.8em; }
+    h4 { font-size: var(--font-size-h4); margin-top: 1.5em; margin-bottom: 0.5em; }
+
+    p, li, blockquote {
+      max-width: 75ch;
+    }
+
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+    a:hover, a:focus {
+      text-decoration: underline;
+      color: var(--color-accent);
+    }
+    
+    /* ------------------- */
+    /* UTILITIES           */
+    /* ------------------- */
+    .skip-link {
+      position: absolute;
+      top: -1000px;
+      left: -1000px;
+      padding: 1rem;
+      background: var(--color-emphasis);
+      color: var(--color-background);
+      z-index: 9999;
+      border: var(--border-width) solid var(--color-border);
+      box-shadow: var(--shadow);
+    }
+    .skip-link:focus {
+      top: 1rem;
+      left: 1rem;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--container-width);
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 var(--spacing);
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* ------------------- */
+    /* COMPONENTS          */
+    /* ------------------- */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      background-color: var(--color-primary);
+      color: white;
+      box-shadow: var(--shadow);
+      transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+    }
+    .btn:hover {
+      transform: translate(2px, 2px);
+      box-shadow: calc(var(--shadow-offset) - 2px) calc(var(--shadow-offset) - 2px) 0 var(--shadow-color);
+      text-decoration: none;
+    }
+    .btn:active {
+      transform: translate(var(--shadow-offset), var(--shadow-offset));
+      box-shadow: none;
+    }
+    .btn.btn-secondary { background-color: var(--color-secondary); }
+    .btn.btn-accent { background-color: var(--color-accent); }
+    
+    .card {
+      background-color: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      padding: var(--spacing);
+      transition: background-color 0.3s ease;
+    }
+    
+    .form-control {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 30%, transparent);
+    }
+    textarea.form-control {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    /* ------------------- */
+    /* HEADER & NAV        */
+    /* ------------------- */
+    .main-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: var(--border-width) solid var(--color-border);
+      padding: 1rem 0;
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--color-text);
+    }
+    .logo svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--color-primary);
+    }
+    .main-nav {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      background-color: var(--color-background);
+      border-bottom: var(--border-width) solid var(--color-border);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      overflow-y: auto;
+      max-height: calc(100vh - 80px);
+    }
+    .main-nav.is-open {
+      transform: translateX(0);
+    }
+    .main-nav ul {
+      list-style: none;
+      padding: var(--spacing);
+    }
+    .main-nav a {
+      display: block;
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      border-radius: var(--border-radius);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .main-nav a.active, .main-nav a:hover {
+      background-color: var(--color-primary);
+      color: white;
+      text-decoration: none;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .theme-toggle, .nav-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 99px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+    }
+    .theme-toggle:hover, .nav-toggle:hover {
+      background-color: color-mix(in srgb, var(--color-border) 10%, transparent);
+    }
+    .theme-toggle svg, .nav-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+    .icon-sun { display: block; }
+    .icon-moon { display: none; }
+    html.dark .icon-sun { display: none; }
+    html.dark .icon-moon { display: block; }
+    
+    @media (min-width: 1024px) {
+      .nav-toggle { display: none; }
+      .main-nav {
+        position: static;
+        transform: none;
+        width: auto;
+        background: none;
+        border: none;
+        max-height: none;
+        overflow: visible;
+      }
+      .main-nav ul {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0;
+      }
+      .main-nav a {
+        padding: 0.5rem 1rem;
+      }
+    }
+
+    /* ------------------- */
+    /* HERO SECTION        */
+    /* ------------------- */
+    .hero {
+      padding: 6rem 0;
+      background-color: var(--color-secondary);
+      border-bottom: var(--border-width) solid var(--color-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero .container {
+      position: relative;
+      z-index: 2;
+    }
+    .hero-title {
+      font-size: var(--font-size-h1);
+      color: var(--color-text);
+      max-width: 20ch;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: var(--font-size-h4);
+      color: var(--color-text);
+      max-width: 50ch;
+      margin-bottom: 2rem;
+    }
+    .hero-shape {
+      position: absolute;
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .shape1 {
+      width: 200px;
+      height: 200px;
+      background-color: var(--color-primary);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      top: 10%;
+      right: 5%;
+      animation: morph 8s ease-in-out infinite;
+    }
+    .shape2 {
+      width: 150px;
+      height: 150px;
+      background-color: var(--color-accent);
+      border: var(--border-width) solid var(--color-border);
+      bottom: -50px;
+      left: 10%;
+      transform: rotate(45deg);
+      animation: spin 12s linear infinite reverse;
+    }
+    @keyframes morph {
+      0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+      50% { border-radius: 60% 40% 30% 70% / 70% 50% 50% 30%; }
+      100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-shape {
+        animation: none;
+      }
+    }
+
+    /* ------------------- */
+    /* MAIN CONTENT        */
+    /* ------------------- */
+    main {
+      padding: 4rem 0;
+    }
+    section {
+      margin-bottom: 4rem;
+    }
+    
+    .grid {
+      display: grid;
+      gap: var(--spacing);
+    }
+    .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+    @media (min-width: 640px) {
+      .sm\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1024px) {
+      .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (min-width: 1200px) {
+      .xl\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* Data Input Section */
+    #data-summary {
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    
+    /* Descriptive Stats Section */
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-card h4 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      border-bottom: var(--border-width) solid var(--color-border);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+      word-break: break-all;
+    }
+    .stat-formula {
+      margin: auto 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+    .stat-desc {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+    .toggle-group {
+      display: flex;
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .toggle-group button {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+    }
+    .toggle-group button:not(:last-child) {
+      border-right: var(--border-width) solid var(--color-border);
+    }
+    .toggle-group button.active {
+      background-color: var(--color-secondary);
+      color: var(--color-text);
+    }
+
+    /* Graphs Section */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+    }
+    .chart-container svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      font-family: var(--font-family);
+      color: var(--color-text);
+    }
+    .chart-container .axis-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .chart-container .tick text {
+      font-size: 0.75rem;
+    }
+    .chart-container .grid-line {
+      stroke: var(--color-text);
+      stroke-opacity: 0.1;
+    }
+    .chart-container .axis-line {
+      stroke: var(--color-text);
+      stroke-width: var(--border-width);
+    }
+    .chart-tooltip {
+      position: absolute;
+      padding: 0.5rem 0.75rem;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+    }
+
+    /* FAQ Section */
+    details {
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+      background-color: var(--color-surface);
+    }
+    details[open] {
+      box-shadow: var(--shadow);
+    }
+    summary {
+      padding: 1rem 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::after {
+      content: '+';
+      font-size: 1.5rem;
+      font-weight: 400;
+      transition: transform 0.2s ease;
+    }
+    details[open] summary::after {
+      content: '−';
+      transform: rotate(180deg);
+    }
+    .faq-content {
+      padding: 0 1.5rem 1.5rem;
+      border-top: var(--border-width) solid var(--color-border);
+    }
+    
+    /* Glossary Section - NEW STYLES */
+    #glossary-list dt {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-top: 1.5rem;
+      padding-bottom: 0.25rem;
+      border-bottom: var(--border-width) solid var(--color-secondary);
+    }
+    #glossary-list dd {
+      margin-left: 0;
+      padding-left: 1rem;
+      margin-top: 0.5rem;
+      border-left: var(--border-width) solid var(--color-border);
+      color: var(--color-text-muted);
+    }
+    #glossary-list dt:first-of-type {
+        margin-top: 0;
+    }
+
+    /* Footer */
+    .main-footer {
+      margin-top: 4rem;
+      padding: 2rem 0;
+      border-top: var(--border-width) solid var(--color-border);
+      background-color: var(--color-surface);
+    }
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="#" class="logo">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 4H6C4.9 4 4 4.9 4 6V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V6C20 4.9 19.1 4 18 4ZM18 6V8H6V6H18ZM11 16H8V14H11V16ZM11 12H8V10H11V12ZM16 16H13V14H16V16ZM16 12H13V10H16V12Z"></path></svg>
+        <span>Estadística Moderna</span>
+      </a>
+      <div class="header-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM12 9c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3zm0-7c.55 0 1 .45 1 1v1c0 .55-.45 1-1 1s-1-.45-1-1V3c0-.55.45-1 1-1zm0 18c-.55 0-1-.45-1-1v-1c0-.55.45-1 1-1s1 .45 1 1v1c0 .55-.45 1-1 1zM4.22 5.64c.39-.39 1.02-.39 1.41 0l.71.71c.39.39.39 1.02 0 1.41-.39.39-1.02.39-1.41 0l-.71-.71c-.39-.39-.39-1.02 0-1.41zm14.14 14.14c-.39.39-1.02.39-1.41 0l-.71-.71c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l.71.71c.39.39.39 1.02 0 1.41zM20 12c0 .55-.45 1-1 1h-1c-.55 0-1-.45-1-1s.45-1 1-1h1c.55 0 1 .45 1 1zM4 12c0-.55.45-1 1-1h1c.55 0 1 .45 1 1s-.45 1-1 1H5c-.55 0-1-.45-1-1zm14.14-6.36c.39.39 1.02.39 1.41 0l.71-.71c.39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0l-.71.71c-.39.39-.39-1.02 0-1.41zM5.64 18.36c-.39.39-1.02.39-1.41 0l-.71-.71c-.39-.39-.39-1.02 0-1.41.39-.39 1.02-.39 1.41 0l.71.71c.39.39.39 1.02 0 1.41z"></path></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9.37 5.51C9.19 6.15 9.1 6.82 9.1 7.5c0 4.08 3.32 7.4 7.4 7.4.68 0 1.35-.09 1.99-.27C17.45 17.19 14.93 19 12 19c-3.86 0-7-3.14-7-7 0-2.93 1.81-5.45 4.37-6.49z"></path></svg>
+        </button>
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path></svg>
+        </button>
+      </div>
+      <nav class="main-nav" id="main-nav">
+        <ul>
+          <li><a href="#datos" class="nav-link">Datos</a></li>
+          <li><a href="#descriptiva" class="nav-link">Descriptiva</a></li>
+          <li><a href="#graficas" class="nav-link">Gráficas</a></li>
+          <li><a href="#probabilidad" class="nav-link">Probabilidad</a></li>
+          <li><a href="#distribuciones" class="nav-link">Distribuciones</a></li>
+          <li><a href="#muestreo" class="nav-link">Muestreo</a></li>
+          <li><a href="#calculadoras" class="nav-link">Calculadoras</a></li>
+          <li><a href="#formulas" class="nav-link">Fórmulas</a></li>
+          <li><a href="#glosario" class="nav-link">Glosario</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    
+    <div class="hero">
+      <div class="hero-shape shape1"></div>
+      <div class="hero-shape shape2"></div>
+      <div class="container">
+        <h1 class="hero-title">Domina el universo de los datos.</h1>
+        <p class="hero-subtitle">Una guía interactiva para explorar, visualizar y entender la estadística de una forma nueva y audaz.</p>
+        <a href="#datos" class="btn">Comenzar a explorar</a>
+      </div>
+    </div>
+    
+    <div class="container">
+
+      <section id="datos">
+        <h2>1. Ingresa tus Datos</h2>
+        <p>Pega tus datos aquí, carga un archivo CSV o usa los datos de ejemplo. La demostración comenzará al instante.</p>
+        <div class="grid sm:grid-cols-2">
+          <div class="input-group">
+            <label for="data-input-1d">Datos de una variable (un número por línea)</label>
+            <textarea id="data-input-1d" class="form-control" placeholder="Ej:&#10;85&#10;92&#10;78&#10;..."></textarea>
+          </div>
+          <div class="input-group">
+            <label for="data-input-2d">Datos de dos variables (x,y por línea)</label>
+            <textarea id="data-input-2d" class="form-control" placeholder="Ej:&#10;170, 65&#10;182, 78&#10;165, 59&#10;..."></textarea>
+          </div>
+        </div>
+        <div>
+          <button id="load-sample-1d" class="btn btn-secondary">Cargar Ejemplo 1D (Notas)</button>
+          <button id="load-sample-2d" class="btn btn-secondary">Cargar Ejemplo 2D (Altura y Peso)</button>
+          <input type="file" id="csv-file" accept=".csv" class="sr-only">
+          <button id="load-csv" class="btn btn-secondary">Cargar .csv</button>
+        </div>
+        <div id="data-summary" class="card" style="margin-top: 1.5rem;" aria-live="polite">
+          Cargando resumen de datos...
+        </div>
+      </section>
+
+      <section id="descriptiva">
+        <h2>2. Estadística Descriptiva</h2>
+        <p>Un resumen numérico de tus datos. Elige si tus datos representan una muestra o una población completa para ver los cálculos correctos.</p>
+        <div class="toggle-group" id="population-type-toggle">
+          <button class="active" data-type="sample">Muestral</button>
+          <button data-type="population">Poblacional</button>
+        </div>
+        <div id="stats-cards-container" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <!-- Stat cards will be injected here by JS -->
+        </div>
+      </section>
+
+      <section id="graficas">
+        <h2>3. Visualización de Datos</h2>
+        <p>Una imagen vale más que mil números. Explora la forma, centro y dispersión de tus datos con estas gráficas interactivas.</p>
+        
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3>Diagrama de Puntos (Dot Plot)</h3>
+          <p>Cada punto representa un dato. Ideal para ver la distribución de conjuntos de datos pequeños.</p>
+          <div class="chart-container" id="dotplot-container"></div>
+        </div>
+
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3>Histograma</h3>
+          <p>Agrupa los datos en "contenedores" (bins) para mostrar la frecuencia. Ajusta el número de bins para descubrir patrones.</p>
+          <div class="input-group">
+            <label for="histogram-bins">Número de Bins: <span id="histogram-bins-value">10</span></label>
+            <input type="range" id="histogram-bins" min="2" max="50" value="10" class="form-control">
+          </div>
+          <div class="chart-container" id="histogram-container"></div>
+        </div>
+
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3>Diagrama de Caja (Box Plot)</h3>
+          <p>El "resumen de cinco números": mínimo, Q1, mediana, Q3 y máximo. Revela la dispersión, simetría y datos atípicos.</p>
+          <div class="chart-container" id="boxplot-container"></div>
+        </div>
+
+        <div class="card">
+          <h3>Diagrama de Dispersión (Scatter Plot)</h3>
+          <p>Para datos de dos variables (x, y). Muestra la relación entre ellas. La línea representa la regresión lineal.</p>
+          <div class="chart-container" id="scatter-container"></div>
+          <div id="regression-summary" class="card" style="margin-top: 1rem;"></div>
+        </div>
+      </section>
+
+      <section id="probabilidad">
+        <h2>4. Probabilidad y Simulaciones</h2>
+        <p>Explora el azar y cómo las frecuencias a largo plazo se acercan a la probabilidad teórica.</p>
+        <div class="grid sm:grid-cols-2">
+          <div class="card">
+            <h3>Lanzar una Moneda</h3>
+            <div class="input-group">
+              <label for="coin-prob">Probabilidad de Cara (P(C)): <span id="coin-prob-value">0.5</span></label>
+              <input type="range" id="coin-prob" min="0" max="1" step="0.01" value="0.5" class="form-control">
+            </div>
+            <button id="flip-coin-1" class="btn">Lanzar 1 vez</button>
+            <button id="flip-coin-100" class="btn">Lanzar 100 veces</button>
+            <button id="reset-coin" class="btn btn-accent">Reiniciar</button>
+            <div id="coin-results" style="margin-top: 1rem;"></div>
+          </div>
+          <div class="card">
+            <h3>Lanzar un Dado (6 caras)</h3>
+            <button id="roll-die-1" class="btn">Lanzar 1 vez</button>
+            <button id="roll-die-100" class="btn">Lanzar 100 veces</button>
+            <button id="reset-die" class="btn btn-accent">Reiniciar</button>
+            <div id="die-results" style="margin-top: 1rem;"></div>
+          </div>
+        </div>
+      </section>
+      
+      <section id="distribuciones">
+        <h2>5. Distribuciones de Probabilidad</h2>
+        <p>Modelos matemáticos que describen la probabilidad de diferentes resultados.</p>
+        <div class="grid sm:grid-cols-2">
+          <div class="card">
+            <h3>Distribución Normal</h3>
+            <p>La famosa "curva de campana". Modela muchos fenómenos naturales.</p>
+            <div class="grid sm:grid-cols-2">
+              <div class="input-group">
+                <label for="normal-mean">Media (\(\mu\)): <span id="normal-mean-value">0</span></label>
+                <input type="range" id="normal-mean" min="-10" max="10" step="0.1" value="0" class="form-control">
+              </div>
+              <div class="input-group">
+                <label for="normal-sd">Desv. Est. (\(\sigma\)): <span id="normal-sd-value">1</span></label>
+                <input type="range" id="normal-sd" min="0.1" max="5" step="0.1" value="1" class="form-control">
+              </div>
+            </div>
+            <div class="chart-container" id="normal-container"></div>
+          </div>
+          <div class="card">
+            <h3>Distribución Binomial</h3>
+            <p>Describe el número de éxitos en \(n\) ensayos independientes, cada uno con probabilidad de éxito \(p\).</p>
+            <div class="grid sm:grid-cols-2">
+              <div class="input-group">
+                <label for="binomial-n">Nº de Ensayos (n): <span id="binomial-n-value">20</span></label>
+                <input type="range" id="binomial-n" min="1" max="100" step="1" value="20" class="form-control">
+              </div>
+              <div class="input-group">
+                <label for="binomial-p">Prob. de Éxito (p): <span id="binomial-p-value">0.5</span></label>
+                <input type="range" id="binomial-p" min="0.01" max="0.99" step="0.01" value="0.5" class="form-control">
+              </div>
+            </div>
+            <div class="chart-container" id="binomial-container"></div>
+            <div id="binomial-summary" class="card" style="margin-top: 1rem;"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="muestreo">
+        <h2>6. Muestreo y Teorema Central del Límite</h2>
+        <p>El TCL es uno de los resultados más importantes de la estadística. Dice que si tomas muestras suficientemente grandes de una población, las medias de esas muestras estarán distribuidas normalmente, ¡sin importar la forma de la distribución de la población original!</p>
+        <div class="card">
+          <h3>Simulación del Teorema Central del Límite (TCL)</h3>
+          <p>Usa los datos que ingresaste como "población". Tomaremos miles de muestras de un tamaño determinado, calcularemos la media de cada una y dibujaremos un histograma de esas medias.</p>
+          <div class="grid sm:grid-cols-3">
+            <div class="input-group">
+              <label for="clt-sample-size">Tamaño de Muestra (m): <span id="clt-sample-size-value">10</span></label>
+              <input type="range" id="clt-sample-size" min="2" max="100" step="1" value="10" class="form-control">
+            </div>
+            <div class="input-group">
+              <label for="clt-reps">Nº de Muestras: <span id="clt-reps-value">1000</span></label>
+              <input type="range" id="clt-reps" min="100" max="5000" step="100" value="1000" class="form-control">
+            </div>
+            <div>
+              <button id="run-clt-sim" class="btn" style="margin-top: 1.75rem;">Ejecutar Simulación</button>
+            </div>
+          </div>
+          <div class="chart-container" id="clt-container"></div>
+          <div id="clt-summary" class="card" style="margin-top: 1rem;"></div>
+        </div>
+      </section>
+      
+      <section id="calculadoras">
+        <h2>7. Calculadoras Rápidas</h2>
+        <p>Herramientas para cálculos estadísticos comunes.</p>
+        <div class="grid sm:grid-cols-2">
+          <div class="card">
+            <h3>Calculadora de Puntuación Z</h3>
+            <p>Calcula cuántas desviaciones estándar un valor \(x\) está de la media \(\mu\).</p>
+            <div class="input-group">
+              <label for="z-x">Valor (x)</label>
+              <input type="number" id="z-x" class="form-control" placeholder="Ej: 85">
+            </div>
+            <div class="input-group">
+              <label for="z-mean">Media (\(\mu\))</label>
+              <input type="number" id="z-mean" class="form-control" placeholder="Ej: 75">
+            </div>
+            <div class="input-group">
+              <label for="z-sd">Desv. Est. (\(\sigma\))</label>
+              <input type="number" id="z-sd" class="form-control" placeholder="Ej: 10">
+            </div>
+            <button id="calculate-z" class="btn">Calcular Z</button>
+            <div id="z-result" class="card" style="margin-top: 1rem;"></div>
+          </div>
+          <!-- More calculators could be added here -->
+        </div>
+      </section>
+
+      <section id="formulas">
+        <h2>8. Tabla de Fórmulas Clave</h2>
+        <div class="card" style="overflow-x: auto;">
+          <table class="table-auto w-full">
+            <thead>
+              <tr><th class="text-left p-2">Medida</th><th class="text-left p-2">Fórmula</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Media Muestral</td><td class="border-t border-[var(--color-border)] p-2">\(\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i\)</td></tr>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Varianza Muestral</td><td class="border-t border-[var(--color-border)] p-2">\(s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2\)</td></tr>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Desviación Estándar Muestral</td><td class="border-t border-[var(--color-border)] p-2">\(s = \sqrt{s^2}\)</td></tr>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Varianza Poblacional</td><td class="border-t border-[var(--color-border)] p-2">\(\sigma^2 = \frac{1}{N} \sum_{i=1}^{N} (x_i - \mu)^2\)</td></tr>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Desviación Estándar Poblacional</td><td class="border-t border-[var(--color-border)] p-2">\(\sigma = \sqrt{\sigma^2}\)</td></tr>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Coeficiente de Correlación (r)</td><td class="border-t border-[var(--color-border)] p-2">\(r = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum(x_i - \bar{x})^2 \sum(y_i - \bar{y})^2}}\)</td></tr>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Probabilidad Binomial</td><td class="border-t border-[var(--color-border)] p-2">\(P(X=k) = \binom{n}{k} p^k (1-p)^{n-k}\)</td></tr>
+              <tr><td class="border-t border-[var(--color-border)] p-2">Puntuación Z</td><td class="border-t border-[var(--color-border)] p-2">\(z = \frac{x - \mu}{\sigma}\)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="glosario">
+        <h2>9. Glosario</h2>
+        <div class="input-group">
+          <label for="glossary-filter">Filtrar términos...</label>
+          <input type="text" id="glossary-filter" class="form-control" placeholder="Escribe para buscar...">
+        </div>
+        <dl id="glossary-list">
+          <dt>Correlación</dt><dd>Medida estadística que expresa hasta qué punto dos variables están relacionadas linealmente.</dd>
+          <dt>Cuartiles</dt><dd>Valores que dividen un conjunto de datos ordenado en cuatro partes iguales. Q1, Q2 (Mediana), Q3.</dd>
+          <dt>Datos Atípicos (Outlier)</dt><dd>Una observación que es numéricamente distante del resto de los datos.</dd>
+          <dt>Desviación Estándar</dt><dd>Medida de la cantidad de variación o dispersión de un conjunto de valores.</dd>
+          <dt>Estadístico</dt><dd>Un número que resume un aspecto de los datos de una muestra (ej. la media muestral \(\bar{x}\)).</dd>
+          <dt>Media</dt><dd>El promedio aritmético de un conjunto de números.</dd>
+          <dt>Mediana</dt><dd>El valor medio en un conjunto de datos ordenado.</dd>
+          <dt>Moda</dt><dd>El valor que aparece con más frecuencia en un conjunto de datos.</dd>
+          <dt>Muestra</dt><dd>Un subconjunto de miembros seleccionados de una población.</dd>
+          <dt>Parámetro</dt><dd>Un número que resume un aspecto de la población completa (ej. la media poblacional \(\mu\)).</dd>
+          <dt>Población</dt><dd>El conjunto completo de elementos que poseen la característica de interés.</dd>
+          <dt>Rango Intercuartílico (IQR)</dt><dd>La diferencia entre el tercer y el primer cuartil (Q3 - Q1). Mide la dispersión del 50% central de los datos.</dd>
+          <dt>Teorema Central del Límite (TCL)</dt><dd>Teorema fundamental que establece que la distribución de las medias muestrales se aproxima a una distribución normal a medida que el tamaño de la muestra crece.</dd>
+          <dt>Varianza</dt><dd>El promedio de las diferencias al cuadrado con respecto a la media. Mide la dispersión.</dd>
+        </dl>
+      </section>
+      
+      <section id="faq">
+        <h2>10. Preguntas Frecuentes</h2>
+        <details>
+          <summary>¿Cuándo debo usar la mediana en lugar de la media?</summary>
+          <div class="faq-content">
+            <p>Usa la <strong>mediana</strong> cuando tu conjunto de datos tenga valores extremos (outliers) o esté muy sesgado. La media es muy sensible a estos valores extremos y puede dar una idea engañosa del "centro" de los datos. La mediana, al ser el valor del medio, no se ve afectada por ellos. Por ejemplo, al analizar salarios, donde unas pocas personas ganan muchísimo más que el resto, la mediana suele ser un mejor indicador del salario "típico".</p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Qué significa realmente la desviación estándar?</summary>
+          <div class="faq-content">
+            <p>La <strong>desviación estándar</strong> te dice, en promedio, qué tan lejos está cada punto de dato de la media. Una desviación estándar pequeña significa que los datos están muy agrupados alrededor de la media (son consistentes). Una desviación estándar grande indica que los datos están muy dispersos. Es como medir la "propagación" de tus datos.</p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Por qué la correlación no implica causalidad?</summary>
+          <div class="faq-content">
+            <p>Este es uno de los principios más importantes en estadística. Que dos variables se muevan juntas (correlación) no significa que una cause la otra. Puede haber una tercera variable oculta (variable de confusión) que cause ambas. Ejemplo clásico: las ventas de helados y los ataques de tiburones están correlacionados. ¿Comer helado causa ataques de tiburón? No. La variable oculta es el calor del verano, que hace que más gente compre helados y más gente se bañe en el mar.</p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Para qué sirve una puntuación Z?</summary>
+          <div class="faq-content">
+            <p>Una <strong>puntuación Z</strong> estandariza un valor, diciéndote exactamente cuántas desviaciones estándar está por encima o por debajo de la media. Esto es increíblemente útil para comparar valores de diferentes distribuciones. Por ejemplo, si sacaste un 80 en un examen de historia (media 70, desv. est. 5) y un 75 en matemáticas (media 60, desv. est. 10), ¿en cuál te fue mejor relativamente? Tu Z en historia es (80-70)/5 = +2. Tu Z en matemáticas es (75-60)/10 = +1.5. ¡Te fue mejor en historia en comparación con tus compañeros!</p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Por qué se divide entre n-1 para la varianza muestral?</summary>
+          <div class="faq-content">
+            <p>Se divide por \(n-1\) (los "grados de libertad") en lugar de \(n\) para obtener una estimación insesgada de la varianza de la población. Cuando usamos la media de una muestra (\(\bar{x}\)) para calcular la varianza, esta media ya está "optimizada" para esa muestra específica, haciendo que las desviaciones al cuadrado sean un poco más pequeñas de lo que serían si usáramos la verdadera media de la población (\(\mu\)). Dividir por \(n-1\) corrige esta subestimación, dándonos una mejor idea de la varianza real de la población de la que proviene la muestra.</p>
+          </div>
+        </details>
+      </section>
+
+    </div>
+  </main>
+  
+  <footer class="main-footer">
+    <div class="container footer-container">
+      <div>
+        <p>&copy; 2024 Estadística Moderna. Creado con fines educativos.</p>
+        <p>Licencia Creative Commons Atribución-NoComercial.</p>
+      </div>
+      <a href="#main-content" class="btn btn-accent">Volver arriba</a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // --- STATE & CORE ELEMENTS ---
+      const state = {
+        data1D: [],
+        data2D: [],
+        stats: {},
+        populationType: 'sample', // 'sample' or 'population'
+        histogramBins: 10,
+        theme: 'light',
+      };
+
+      const dataInput1D = document.getElementById('data-input-1d');
+      const dataInput2D = document.getElementById('data-input-2d');
+      const dataSummary = document.getElementById('data-summary');
+      const statsCardsContainer = document.getElementById('stats-cards-container');
+
+      // --- UTILITY FUNCTIONS ---
+      const formatNumber = (num, decimals = 2) => {
+        if (typeof num !== 'number' || !isFinite(num)) return 'N/A';
+        const rounded = parseFloat(num.toFixed(decimals));
+        return rounded === 0 ? 0 : rounded; // Avoid -0
+      };
+
+      const announce = (message) => {
+        // A proper implementation would use a dedicated ARIA live region
+        console.log(`ARIA Announce: ${message}`);
+      };
+
+      const refreshMathJax = () => {
+        if (window.MathJax && window.MathJax.typeset) {
+          try {
+            window.MathJax.typeset();
+          } catch (e) {
+            console.error("Error typesetting MathJax:", e);
+          }
+        }
+      };
+
+      // --- DATA PARSING ---
+      const parseData1D = (text) => {
+        return text
+          .trim()
+          .split(/[\n\s,;]+/)
+          .map(d => d.replace(',', '.').trim())
+          .filter(d => d !== '')
+          .map(Number)
+          .filter(n => !isNaN(n) && isFinite(n));
+      };
+
+      const parseData2D = (text) => {
+        return text
+          .trim()
+          .split('\n')
+          .map(line => line.replace(/\s+/g, '').split(/[,;]/))
+          .filter(parts => parts.length === 2)
+          .map(parts => parts.map(p => p.replace(',', '.')).map(Number))
+          .filter(pair => pair.every(n => !isNaN(n) && isFinite(n)))
+          .map(pair => ({ x: pair[0], y: pair[1] }));
+      };
+
+      // --- STATISTICAL CALCULATIONS ---
+      const calculateStats = (arr) => {
+        if (!arr || arr.length === 0) return {};
+        const n = arr.length;
+        const sorted = [...arr].sort((a, b) => a - b);
+        
+        const sum = arr.reduce((acc, val) => acc + val, 0);
+        const mean = sum / n;
+        
+        const quantile = (q) => {
+          const pos = (n - 1) * q;
+          const base = Math.floor(pos);
+          const rest = pos - base;
+          if (sorted[base + 1] !== undefined) {
+            return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+          } else {
+            return sorted[base];
+          }
+        };
+        
+        const q1 = quantile(0.25);
+        const median = quantile(0.5);
+        const q3 = quantile(0.75);
+        
+        const modes = (() => {
+          const counts = {};
+          arr.forEach(val => counts[val] = (counts[val] || 0) + 1);
+          let maxFreq = 0;
+          for (const key in counts) {
+            if (counts[key] > maxFreq) maxFreq = counts[key];
+          }
+          if (maxFreq <= 1) return [];
+          return Object.keys(counts).filter(key => counts[key] === maxFreq).map(Number);
+        })();
+
+        const min = sorted[0];
+        const max = sorted[n - 1];
+        const range = max - min;
+        const iqr = q3 - q1;
+        
+        const sumSqDiff = arr.reduce((acc, val) => acc + (val - mean) ** 2, 0);
+        const variance_p = sumSqDiff / n;
+        const sd_p = Math.sqrt(variance_p);
+        const variance_s = n > 1 ? sumSqDiff / (n - 1) : 0;
+        const sd_s = Math.sqrt(variance_s);
+
+        const outliers = arr.filter(val => val < q1 - 1.5 * iqr || val > q3 + 1.5 * iqr);
+        const whiskerLow = Math.max(min, q1 - 1.5 * iqr);
+        const whiskerHigh = Math.min(max, q3 + 1.5 * iqr);
+
+        return {
+          n, sum, mean, median, modes, min, max, range,
+          q1, q3, iqr, variance_p, sd_p, variance_s, sd_s,
+          outliers, whiskerLow, whiskerHigh
+        };
+      };
+      
+      const fitOLS = (data2d) => {
+          if (data2d.length < 2) return { a: NaN, b: NaN, r: NaN };
+
+          const n = data2d.length;
+          const sumX = data2d.reduce((acc, p) => acc + p.x, 0);
+          const sumY = data2d.reduce((acc, p) => acc + p.y, 0);
+          const sumXY = data2d.reduce((acc, p) => acc + p.x * p.y, 0);
+          const sumX2 = data2d.reduce((acc, p) => acc + p.x * p.x, 0);
+          const sumY2 = data2d.reduce((acc, p) => acc + p.y * p.y, 0);
+
+          const meanX = sumX / n;
+          const meanY = sumY / n;
+
+          const b = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+          const a = meanY - b * meanX;
+
+          const rNumerator = n * sumXY - sumX * sumY;
+          const rDenominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+          const r = rDenominator === 0 ? 0 : rNumerator / rDenominator;
+          
+          return { a, b, r };
+      };
+
+      // --- UI UPDATE FUNCTIONS ---
+      const updateDataSummary = () => {
+        let summary = '<h4>Resumen de Datos</h4>';
+        if (state.data1D.length > 0) {
+          summary += `<p><strong>1D:</strong> ${state.stats.n} puntos. Min: ${formatNumber(state.stats.min)}, Max: ${formatNumber(state.stats.max)}.</p>`;
+        } else {
+          summary += '<p><strong>1D:</strong> No hay datos de una variable.</p>';
+        }
+        if (state.data2D.length > 0) {
+          summary += `<p><strong>2D:</strong> ${state.data2D.length} pares (x, y).</p>`;
+        } else {
+          summary += '<p><strong>2D:</strong> No hay datos de dos variables.</p>';
+        }
+        dataSummary.innerHTML = summary;
+      };
+
+      const updateStatsCards = () => {
+        statsCardsContainer.innerHTML = '';
+        if (state.data1D.length === 0) {
+          statsCardsContainer.innerHTML = '<p>Ingresa datos de una variable para ver las estadísticas.</p>';
+          return;
+        }
+
+        const s = state.stats;
+        const isSample = state.populationType === 'sample';
+        const variance = isSample ? s.variance_s : s.variance_p;
+        const sd = isSample ? s.sd_s : s.sd_p;
+        const varianceSymbol = isSample ? 's^2' : '\\sigma^2';
+        const sdSymbol = isSample ? 's' : '\\sigma';
+
+        const cards = [
+          { title: 'Media', value: formatNumber(s.mean), formula: '\\(\\bar{x}\\)', desc: 'El promedio de los datos.' },
+          { title: 'Mediana', value: formatNumber(s.median), formula: '\\(Q_2\\)', desc: 'El valor central de los datos ordenados.' },
+          { title: 'Moda(s)', value: s.modes.length > 0 ? s.modes.map(m => formatNumber(m)).join(', ') : 'Ninguna', formula: '', desc: 'El valor más frecuente.' },
+          { title: 'Tamaño (n)', value: s.n, formula: '\\(n\\)', desc: 'El número total de puntos de datos.' },
+          { title: 'Mínimo', value: formatNumber(s.min), formula: '', desc: 'El valor más pequeño.' },
+          { title: 'Máximo', value: formatNumber(s.max), formula: '', desc: 'El valor más grande.' },
+          { title: 'Rango', value: formatNumber(s.range), formula: '\\(Max - Min\\)', desc: 'La diferencia entre el máximo y el mínimo.' },
+          { title: 'Cuartil 1 (Q1)', value: formatNumber(s.q1), formula: '\\(Q_1\\)', desc: 'El 25% de los datos está por debajo.' },
+          { title: 'Cuartil 3 (Q3)', value: formatNumber(s.q3), formula: '\\(Q_3\\)', desc: 'El 75% de los datos está por debajo.' },
+          { title: 'Rango Intercuartílico (IQR)', value: formatNumber(s.iqr), formula: '\\(Q_3 - Q_1\\)', desc: 'La dispersión del 50% central de los datos.' },
+          { title: `Varianza (${varianceSymbol})`, value: formatNumber(variance), formula: `\\(${varianceSymbol}\\)`, desc: 'Dispersión promedio al cuadrado.' },
+          { title: `Desv. Estándar (${sdSymbol})`, value: formatNumber(sd), formula: `\\(${sdSymbol}\\)`, desc: 'Dispersión promedio de los datos.' },
+        ];
+
+        cards.forEach(card => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'card stat-card';
+          cardEl.innerHTML = `
+            <h4>${card.title}</h4>
+            <div class="stat-value">${card.value}</div>
+            <div class="stat-formula">${card.formula}</div>
+            <p class="stat-desc">${card.desc}</p>
+          `;
+          statsCardsContainer.appendChild(cardEl);
+        });
+        refreshMathJax();
+      };
+
+      // --- SVG CHART RENDERING ---
+      const createSVGContainer = (containerId) => {
+          const container = document.getElementById(containerId);
+          container.innerHTML = ''; // Clear previous
+          const tooltip = document.createElement('div');
+          tooltip.className = 'chart-tooltip';
+          container.appendChild(tooltip);
+
+          const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          const { width, height } = container.getBoundingClientRect();
+          svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+          container.appendChild(svg);
+          return { svg, width, height, tooltip };
+      };
+
+      const renderDotPlot = () => {
+        const { svg, width, height, tooltip } = createSVGContainer('dotplot-container');
+        if (state.data1D.length === 0) return;
+
+        const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+        const w = width - margin.left - margin.right;
+        const h = height - margin.top - margin.bottom;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+        svg.appendChild(g);
+
+        const { min, max } = state.stats;
+        const xScale = val => w * (val - min) / (max - min || 1);
+
+        const counts = {};
+        state.data1D.forEach(d => counts[d] = (counts[d] || 0) + 1);
+
+        const dotRadius = Math.max(2, Math.min(6, w / state.data1D.length / 2));
+
+        Object.entries(counts).forEach(([value, count]) => {
+          for (let i = 0; i < count; i++) {
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', xScale(Number(value)));
+            circle.setAttribute('cy', h - i * (dotRadius * 2.2));
+            circle.setAttribute('r', dotRadius);
+            circle.setAttribute('fill', 'var(--color-primary)');
+            circle.setAttribute('stroke', 'var(--color-border)');
+            circle.setAttribute('stroke-width', '1');
+            g.appendChild(circle);
+            
+            circle.addEventListener('mouseenter', (e) => {
+                tooltip.style.opacity = '1';
+                tooltip.innerHTML = `Valor: ${value}`;
+            });
+            circle.addEventListener('mousemove', (e) => {
+                const containerRect = svg.parentElement.getBoundingClientRect();
+                tooltip.style.left = `${e.clientX - containerRect.left + 15}px`;
+                tooltip.style.top = `${e.clientY - containerRect.top}px`;
+            });
+            circle.addEventListener('mouseleave', () => {
+                tooltip.style.opacity = '0';
+            });
+          }
+        });
+
+        // X Axis
+        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        xAxis.setAttribute('transform', `translate(0, ${h})`);
+        const axisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        axisLine.setAttribute('x1', 0);
+        axisLine.setAttribute('x2', w);
+        axisLine.setAttribute('y1', 0);
+        axisLine.setAttribute('y2', 0);
+        axisLine.setAttribute('class', 'axis-line');
+        xAxis.appendChild(axisLine);
+
+        const tickCount = Math.min(10, Math.floor(w / 60));
+        for (let i = 0; i <= tickCount; i++) {
+          const val = min + (i / tickCount) * (max - min);
+          const x = xScale(val);
+          const tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          tick.setAttribute('transform', `translate(${x}, 0)`);
+          tick.setAttribute('class', 'tick');
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('y2', 5);
+          line.setAttribute('stroke', 'currentColor');
+          tick.appendChild(line);
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('y', 20);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('fill', 'currentColor');
+          text.textContent = formatNumber(val, 1);
+          tick.appendChild(text);
+          xAxis.appendChild(tick);
+        }
+        g.appendChild(xAxis);
+      };
+      
+      const renderHistogram = () => {
+        const { svg, width, height, tooltip } = createSVGContainer('histogram-container');
+        if (state.data1D.length < 2) return;
+
+        const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+        const w = width - margin.left - margin.right;
+        const h = height - margin.top - margin.bottom;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+        svg.appendChild(g);
+
+        const { min, max } = state.stats;
+        const binWidth = (max - min) / state.histogramBins;
+        const bins = Array.from({ length: state.histogramBins }, (_, i) => {
+          const x0 = min + i * binWidth;
+          const x1 = min + (i + 1) * binWidth;
+          return {
+            x0, x1,
+            count: state.data1D.filter(d => d >= x0 && (i === state.histogramBins - 1 ? d <= x1 : d < x1)).length
+          };
+        });
+
+        const maxCount = Math.max(...bins.map(b => b.count));
+        const xScale = val => w * (val - min) / (max - min || 1);
+        const yScale = val => h - (h * val / (maxCount || 1));
+
+        bins.forEach(bin => {
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          const x = xScale(bin.x0);
+          const y = yScale(bin.count);
+          const barWidth = xScale(bin.x1) - x - 1;
+          const barHeight = h - y;
+
+          rect.setAttribute('x', x);
+          rect.setAttribute('y', y);
+          rect.setAttribute('width', Math.max(0, barWidth));
+          rect.setAttribute('height', Math.max(0, barHeight));
+          rect.setAttribute('fill', 'var(--color-secondary)');
+          rect.setAttribute('stroke', 'var(--color-border)');
+          rect.setAttribute('stroke-width', '2');
+          g.appendChild(rect);
+          
+          rect.addEventListener('mouseenter', () => {
+            tooltip.style.opacity = '1';
+            tooltip.innerHTML = `Rango: [${formatNumber(bin.x0, 1)}, ${formatNumber(bin.x1, 1)})<br>Frecuencia: ${bin.count}`;
+          });
+          rect.addEventListener('mousemove', (e) => {
+            const containerRect = svg.parentElement.getBoundingClientRect();
+            tooltip.style.left = `${e.clientX - containerRect.left + 15}px`;
+            tooltip.style.top = `${e.clientY - containerRect.top}px`;
+          });
+          rect.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+          });
+        });
+
+        // Axes (simplified for brevity, similar to dot plot)
+        const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        xAxisG.setAttribute('transform', `translate(0, ${h})`);
+        g.appendChild(xAxisG);
+        const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.appendChild(yAxisG);
+
+        // X Axis
+        const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxisLine.setAttribute('x1', 0);
+        xAxisLine.setAttribute('x2', w);
+        xAxisLine.setAttribute('class', 'axis-line');
+        xAxisG.appendChild(xAxisLine);
+        const xTickCount = Math.min(10, Math.floor(w / 60));
+        for (let i = 0; i <= xTickCount; i++) {
+          const val = min + (i / xTickCount) * (max - min);
+          const x = xScale(val);
+          const tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          tick.setAttribute('transform', `translate(${x}, 0)`);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('y2', 5);
+          line.setAttribute('stroke', 'currentColor');
+          tick.appendChild(line);
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('y', 20);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('fill', 'currentColor');
+          text.textContent = formatNumber(val, 1);
+          tick.appendChild(text);
+          xAxisG.appendChild(tick);
+        }
+
+        // Y Axis
+        const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxisLine.setAttribute('y1', 0);
+        yAxisLine.setAttribute('y2', h);
+        yAxisLine.setAttribute('class', 'axis-line');
+        yAxisG.appendChild(yAxisLine);
+        const yTickCount = Math.min(8, Math.floor(h / 40));
+        for (let i = 0; i <= yTickCount; i++) {
+          const val = (i / yTickCount) * maxCount;
+          const y = yScale(val);
+          const tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          tick.setAttribute('transform', `translate(0, ${y})`);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x2', -5);
+          line.setAttribute('stroke', 'currentColor');
+          tick.appendChild(line);
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', -10);
+          text.setAttribute('dy', '0.32em');
+          text.setAttribute('text-anchor', 'end');
+          text.setAttribute('fill', 'currentColor');
+          text.textContent = formatNumber(val, 0);
+          tick.appendChild(text);
+          yAxisG.appendChild(tick);
+        }
+      };
+      
+      const renderBoxPlot = () => {
+        const { svg, width, height, tooltip } = createSVGContainer('boxplot-container');
+        if (state.data1D.length < 5) return;
+
+        const margin = { top: 40, right: 30, bottom: 40, left: 30 };
+        const w = width - margin.left - margin.right;
+        const h = height - margin.top - margin.bottom;
+        const centerY = h / 2;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+        svg.appendChild(g);
+
+        const { min, max, q1, median, q3, whiskerLow, whiskerHigh, outliers } = state.stats;
+        const domainMin = Math.min(min, whiskerLow);
+        const domainMax = Math.max(max, whiskerHigh);
+        const xScale = val => w * (val - domainMin) / (domainMax - domainMin || 1);
+
+        // Center line
+        const centerLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        centerLine.setAttribute('x1', xScale(whiskerLow));
+        centerLine.setAttribute('x2', xScale(whiskerHigh));
+        centerLine.setAttribute('y1', centerY);
+        centerLine.setAttribute('y2', centerY);
+        centerLine.setAttribute('stroke', 'var(--color-border)');
+        centerLine.setAttribute('stroke-width', '2');
+        g.appendChild(centerLine);
+
+        // Box
+        const box = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        box.setAttribute('x', xScale(q1));
+        box.setAttribute('y', centerY - 30);
+        box.setAttribute('width', xScale(q3) - xScale(q1));
+        box.setAttribute('height', 60);
+        box.setAttribute('fill', 'var(--color-accent)');
+        box.setAttribute('stroke', 'var(--color-border)');
+        box.setAttribute('stroke-width', '2');
+        g.appendChild(box);
+
+        // Median line
+        const medianLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        medianLine.setAttribute('x1', xScale(median));
+        medianLine.setAttribute('x2', xScale(median));
+        medianLine.setAttribute('y1', centerY - 30);
+        medianLine.setAttribute('y2', centerY + 30);
+        medianLine.setAttribute('stroke', 'var(--color-border)');
+        medianLine.setAttribute('stroke-width', '3');
+        g.appendChild(medianLine);
+
+        // Whiskers
+        [whiskerLow, whiskerHigh].forEach(val => {
+          const whisker = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          whisker.setAttribute('x1', xScale(val));
+          whisker.setAttribute('x2', xScale(val));
+          whisker.setAttribute('y1', centerY - 15);
+          whisker.setAttribute('y2', centerY + 15);
+          whisker.setAttribute('stroke', 'var(--color-border)');
+          whisker.setAttribute('stroke-width', '2');
+          g.appendChild(whisker);
+        });
+
+        // Outliers
+        outliers.forEach(val => {
+          const outlier = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          outlier.setAttribute('cx', xScale(val));
+          outlier.setAttribute('cy', centerY);
+          outlier.setAttribute('r', 4);
+          outlier.setAttribute('fill', 'var(--color-primary)');
+          g.appendChild(outlier);
+        });
+
+        // Labels
+        const labels = [
+          { val: whiskerLow, name: 'Mínimo' },
+          { val: q1, name: 'Q1' },
+          { val: median, name: 'Mediana' },
+          { val: q3, name: 'Q3' },
+          { val: whiskerHigh, name: 'Máximo' }
+        ];
+        labels.forEach(({val, name}) => {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', xScale(val));
+          text.setAttribute('y', centerY - 45);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('fill', 'currentColor');
+          text.textContent = `${name}: ${formatNumber(val)}`;
+          g.appendChild(text);
+        });
+      };
+      
+      const renderScatter = () => {
+        const { svg, width, height, tooltip } = createSVGContainer('scatter-container');
+        const summaryEl = document.getElementById('regression-summary');
+        if (state.data2D.length < 2) {
+          summaryEl.innerHTML = '<p>Ingresa al menos 2 pares (x,y) para ver la regresión.</p>';
+          return;
+        }
+
+        const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+        const w = width - margin.left - margin.right;
+        const h = height - margin.top - margin.bottom;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+        svg.appendChild(g);
+
+        const xMin = Math.min(...state.data2D.map(p => p.x));
+        const xMax = Math.max(...state.data2D.map(p => p.x));
+        const yMin = Math.min(...state.data2D.map(p => p.y));
+        const yMax = Math.max(...state.data2D.map(p => p.y));
+
+        const xScale = val => w * (val - xMin) / (xMax - xMin || 1);
+        const yScale = val => h - (h * (val - yMin) / (yMax - yMin || 1));
+
+        // Points
+        state.data2D.forEach(p => {
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', xScale(p.x));
+          circle.setAttribute('cy', yScale(p.y));
+          circle.setAttribute('r', 4);
+          circle.setAttribute('fill', 'var(--color-primary)');
+          circle.setAttribute('opacity', '0.7');
+          g.appendChild(circle);
+          
+          circle.addEventListener('mouseenter', () => {
+            tooltip.style.opacity = '1';
+            tooltip.innerHTML = `(x: ${formatNumber(p.x)}, y: ${formatNumber(p.y)})`;
+          });
+          circle.addEventListener('mousemove', (e) => {
+            const containerRect = svg.parentElement.getBoundingClientRect();
+            tooltip.style.left = `${e.clientX - containerRect.left + 15}px`;
+            tooltip.style.top = `${e.clientY - containerRect.top}px`;
+          });
+          circle.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+          });
+        });
+
+        // Regression Line
+        const { a, b, r } = fitOLS(state.data2D);
+        if (isFinite(a) && isFinite(b)) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', xScale(xMin));
+            line.setAttribute('y1', yScale(a + b * xMin));
+            line.setAttribute('x2', xScale(xMax));
+            line.setAttribute('y2', yScale(a + b * xMax));
+            line.setAttribute('stroke', 'var(--color-accent)');
+            line.setAttribute('stroke-width', '3');
+            g.appendChild(line);
+        }
+        
+        // Axes (simplified)
+        // ...
+        
+        // Summary
+        summaryEl.innerHTML = `
+            <h4>Resumen de Regresión</h4>
+            <p>Ecuación: \\(\\hat{y} = ${formatNumber(a)} + ${formatNumber(b)}x\\)</p>
+            <p>Coeficiente de Correlación (r): \\(r = ${formatNumber(r)}\\)</p>
+        `;
+        refreshMathJax();
+      };
+
+      // --- SIMULATION & DISTRIBUTION RENDERING ---
+      const renderNormal = () => {
+        const { svg, width, height } = createSVGContainer('normal-container');
+        const mean = parseFloat(document.getElementById('normal-mean').value);
+        const sd = parseFloat(document.getElementById('normal-sd').value);
+        
+        const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+        const w = width - margin.left - margin.right;
+        const h = height - margin.top - margin.bottom;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+        svg.appendChild(g);
+        
+        const xMin = mean - 4 * sd;
+        const xMax = mean + 4 * sd;
+        const pdf = x => (1 / (sd * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * ((x - mean) / sd) ** 2);
+        const yMax = pdf(mean);
+
+        const xScale = val => w * (val - xMin) / (xMax - xMin || 1);
+        const yScale = val => h - (h * val / (yMax || 1));
+
+        const points = [];
+        for (let i = 0; i <= 100; i++) {
+          const x = xMin + (i / 100) * (xMax - xMin);
+          points.push(`${xScale(x)},${yScale(pdf(x))}`);
+        }
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${points.join(' L ')}`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', 'var(--color-primary)');
+        path.setAttribute('stroke-width', '3');
+        g.appendChild(path);
+
+        // Axis
+        const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxisLine.setAttribute('x1', 0);
+        xAxisLine.setAttribute('x2', w);
+        xAxisLine.setAttribute('y1', h);
+        xAxisLine.setAttribute('y2', h);
+        xAxisLine.setAttribute('class', 'axis-line');
+        g.appendChild(xAxisLine);
+        
+        for (let i = -3; i <= 3; i++) {
+            const val = mean + i * sd;
+            const x = xScale(val);
+            const tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            tick.setAttribute('transform', `translate(${x}, ${h})`);
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('y2', 5);
+            line.setAttribute('stroke', 'currentColor');
+            tick.appendChild(line);
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('y', 20);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('fill', 'currentColor');
+            text.textContent = `${i}σ`;
+            tick.appendChild(text);
+            g.appendChild(tick);
+        }
+      };
+
+      const renderBinomial = () => {
+        const { svg, width, height } = createSVGContainer('binomial-container');
+        const n = parseInt(document.getElementById('binomial-n').value);
+        const p = parseFloat(document.getElementById('binomial-p').value);
+        const summaryEl = document.getElementById('binomial-summary');
+
+        const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+        const w = width - margin.left - margin.right;
+        const h = height - margin.top - margin.bottom;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+        svg.appendChild(g);
+
+        const factorial = (num) => {
+            let rval=1;
+            for (let i = 2; i <= num; i++) rval = rval * i;
+            return rval;
+        }
+        const combinations = (n, k) => {
+            if (k < 0 || k > n) return 0;
+            if (k === 0 || k === n) return 1;
+            if (k > n / 2) k = n - k;
+            let res = 1;
+            for (let i = 1; i <= k; i++) {
+                res = res * (n - i + 1) / i;
+            }
+            return res;
+        };
+        const pmf = k => combinations(n, k) * (p ** k) * ((1 - p) ** (n - k));
+
+        const probs = Array.from({ length: n + 1 }, (_, k) => ({ k, prob: pmf(k) }));
+        const maxProb = Math.max(...probs.map(d => d.prob));
+
+        const xScale = k => w * (k / n);
+        const yScale = prob => h - (h * prob / (maxProb || 1));
+
+        const barWidth = Math.max(1, w / (n + 1) * 0.8);
+        probs.forEach(({ k, prob }) => {
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', xScale(k) - barWidth / 2);
+          rect.setAttribute('y', yScale(prob));
+          rect.setAttribute('width', barWidth);
+          rect.setAttribute('height', h - yScale(prob));
+          rect.setAttribute('fill', 'var(--color-secondary)');
+          g.appendChild(rect);
+        });
+        
+        summaryEl.innerHTML = `
+            <p>Esperanza (Media): \\(E[X] = np = ${formatNumber(n * p)}\\)</p>
+            <p>Varianza: \\(Var(X) = np(1-p) = ${formatNumber(n * p * (1-p))}\\)</p>
+        `;
+        refreshMathJax();
+      };
+      
+      const runCLTSimulation = () => {
+        if (state.data1D.length < 2) {
+            // Using a custom modal/alert would be better, but alert is simple for this context.
+            const cltContainer = document.getElementById('clt-container');
+            cltContainer.innerHTML = `<p style="padding: 2rem; text-align: center;">Por favor, ingresa datos en la sección "Datos de una variable" para usarlos como población.</p>`;
+            return;
+        }
+        const sampleSize = parseInt(document.getElementById('clt-sample-size').value);
+        const reps = parseInt(document.getElementById('clt-reps').value);
+        
+        const sampleMeans = [];
+        for (let i = 0; i < reps; i++) {
+            let sampleSum = 0;
+            for (let j = 0; j < sampleSize; j++) {
+                sampleSum += state.data1D[Math.floor(Math.random() * state.data1D.length)];
+            }
+            sampleMeans.push(sampleSum / sampleSize);
+        }
+        
+        // Render a histogram of sampleMeans
+        const { svg, width, height } = createSVGContainer('clt-container');
+        const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+        const w = width - margin.left - margin.right;
+        const h = height - margin.top - margin.bottom;
+
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+        svg.appendChild(g);
+        
+        const minMean = Math.min(...sampleMeans);
+        const maxMean = Math.max(...sampleMeans);
+        const numBins = Math.floor(Math.sqrt(reps));
+        const binWidth = (maxMean - minMean) / numBins;
+        
+        const bins = Array.from({ length: numBins }, (_, i) => {
+            const x0 = minMean + i * binWidth;
+            const x1 = minMean + (i + 1) * binWidth;
+            return {
+                x0, x1,
+                count: sampleMeans.filter(d => d >= x0 && (i === numBins - 1 ? d <= x1 : d < x1)).length
+            };
+        });
+
+        const maxCount = Math.max(...bins.map(b => b.count));
+        const xScale = val => w * (val - minMean) / (maxMean - minMean || 1);
+        const yScale = val => h - (h * val / (maxCount || 1));
+
+        bins.forEach(bin => {
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          const x = xScale(bin.x0);
+          const y = yScale(bin.count);
+          rect.setAttribute('x', x);
+          rect.setAttribute('y', y);
+          rect.setAttribute('width', Math.max(0, xScale(bin.x1) - x - 1));
+          rect.setAttribute('height', Math.max(0, h - y));
+          rect.setAttribute('fill', 'var(--color-emphasis)');
+          g.appendChild(rect);
+        });
+        
+        const popMean = state.stats.mean;
+        const meanOfSampleMeans = sampleMeans.reduce((a, b) => a + b, 0) / reps;
+        document.getElementById('clt-summary').innerHTML = `
+            <p>Media de la Población Original: \\(\\mu = ${formatNumber(popMean)}\\)</p>
+            <p>Media de las Medias Muestrales: \\(\\bar{x}_{muestras} = ${formatNumber(meanOfSampleMeans)}\\)</p>
+        `;
+        refreshMathJax();
+      };
+
+
+      // --- MAIN UPDATE & EVENT HANDLERS ---
+      const updateAll = () => {
+        state.stats = calculateStats(state.data1D);
+        updateDataSummary();
+        updateStatsCards();
+        renderDotPlot();
+        renderHistogram();
+        renderBoxPlot();
+        renderScatter();
+        saveState();
+      };
+
+      dataInput1D.addEventListener('input', () => {
+        state.data1D = parseData1D(dataInput1D.value);
+        updateAll();
+      });
+
+      dataInput2D.addEventListener('input', () => {
+        state.data2D = parseData2D(dataInput2D.value);
+        updateAll();
+      });
+      
+      document.getElementById('population-type-toggle').addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+          state.populationType = e.target.dataset.type;
+          document.querySelectorAll('#population-type-toggle button').forEach(btn => btn.classList.remove('active'));
+          e.target.classList.add('active');
+          updateStatsCards();
+          saveState();
+        }
+      });
+      
+      const histogramBinsSlider = document.getElementById('histogram-bins');
+      histogramBinsSlider.addEventListener('input', () => {
+        state.histogramBins = parseInt(histogramBinsSlider.value);
+        document.getElementById('histogram-bins-value').textContent = state.histogramBins;
+        renderHistogram();
+        saveState();
+      });
+
+      // Sample Data Loaders
+      document.getElementById('load-sample-1d').addEventListener('click', () => {
+        dataInput1D.value = "85\n92\n78\n65\n88\n72\n95\n81\n76\n90\n83\n79\n88\n91\n74";
+        dataInput1D.dispatchEvent(new Event('input'));
+      });
+      document.getElementById('load-sample-2d').addEventListener('click', () => {
+        dataInput2D.value = "170, 65\n182, 78\n165, 59\n175, 70\n168, 62\n185, 85\n178, 75\n163, 55\n172, 68\n190, 92";
+        dataInput2D.dispatchEvent(new Event('input'));
+      });
+      
+      // CSV Loader
+      const csvFileInput = document.getElementById('csv-file');
+      document.getElementById('load-csv').addEventListener('click', () => csvFileInput.click());
+      csvFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = e.target.result;
+            // Simple check for 1D vs 2D CSV
+            const firstLine = text.split('\n')[0];
+            if (firstLine.includes(',') || firstLine.includes(';')) {
+                dataInput2D.value = text;
+                dataInput2D.dispatchEvent(new Event('input'));
+            } else {
+                dataInput1D.value = text;
+                dataInput1D.dispatchEvent(new Event('input'));
+            }
+        };
+        reader.readAsText(file);
+      });
+
+      // --- THEME TOGGLE ---
+      const themeToggle = document.getElementById('theme-toggle');
+      const initTheme = () => {
+        const savedTheme = localStorage.getItem('stats-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme) {
+          state.theme = savedTheme;
+        } else {
+          state.theme = prefersDark ? 'dark' : 'light';
+        }
+        document.documentElement.className = state.theme;
+      };
+      themeToggle.addEventListener('click', () => {
+        state.theme = state.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.className = state.theme;
+        localStorage.setItem('stats-theme', state.theme);
+        // Re-render charts to pick up new CSS variable colors
+        updateAll();
+      });
+
+      // --- SCROLL SPY ---
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('section[id]');
+      const scrollSpyObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            navLinks.forEach(link => {
+              link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+            });
+          }
+        });
+      }, { rootMargin: '-20% 0px -80% 0px' });
+      sections.forEach(section => scrollSpyObserver.observe(section));
+
+      // --- MOBILE NAV ---
+      const navToggle = document.getElementById('nav-toggle');
+      const mainNav = document.getElementById('main-nav');
+      navToggle.addEventListener('click', () => {
+        const isOpen = mainNav.classList.toggle('is-open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+      mainNav.addEventListener('click', (e) => {
+        if (e.target.tagName === 'A') {
+          mainNav.classList.remove('is-open');
+          navToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // --- SIMULATIONS & CALCULATORS ---
+      // Probability
+      const coinState = { heads: 0, tails: 0 };
+      const dieState = { counts: [0,0,0,0,0,0] };
+      document.getElementById('flip-coin-1').addEventListener('click', () => flipCoin(1));
+      document.getElementById('flip-coin-100').addEventListener('click', () => flipCoin(100));
+      document.getElementById('reset-coin').addEventListener('click', () => {
+        coinState.heads = 0; coinState.tails = 0; updateCoinResults();
+      });
+      const flipCoin = (times) => {
+        const p = parseFloat(document.getElementById('coin-prob').value);
+        for(let i=0; i<times; i++) {
+            if (Math.random() < p) coinState.heads++;
+            else coinState.tails++;
+        }
+        updateCoinResults();
+      };
+      const updateCoinResults = () => {
+        const total = coinState.heads + coinState.tails;
+        const headPercent = total > 0 ? (coinState.heads / total * 100).toFixed(1) : 0;
+        document.getElementById('coin-results').innerHTML = `
+            <p><strong>Caras:</strong> ${coinState.heads} (${headPercent}%)</p>
+            <p><strong>Cruces:</strong> ${coinState.tails}</p>
+            <p><strong>Total:</strong> ${total}</p>
+        `;
+      };
+      document.getElementById('coin-prob').addEventListener('input', (e) => {
+        document.getElementById('coin-prob-value').textContent = e.target.value;
+      });
+
+      document.getElementById('roll-die-1').addEventListener('click', () => rollDie(1));
+      document.getElementById('roll-die-100').addEventListener('click', () => rollDie(100));
+      document.getElementById('reset-die').addEventListener('click', () => {
+        dieState.counts = [0,0,0,0,0,0]; updateDieResults();
+      });
+      const rollDie = (times) => {
+        for(let i=0; i<times; i++) {
+            const roll = Math.floor(Math.random() * 6);
+            dieState.counts[roll]++;
+        }
+        updateDieResults();
+      };
+      const updateDieResults = () => {
+        const total = dieState.counts.reduce((a,b) => a+b, 0);
+        let html = `<p><strong>Total de lanzamientos:</strong> ${total}</p><ul>`;
+        dieState.counts.forEach((count, i) => {
+            const percent = total > 0 ? (count / total * 100).toFixed(1) : 0;
+            html += `<li><strong>Cara ${i+1}:</strong> ${count} (${percent}%)</li>`;
+        });
+        html += '</ul>';
+        document.getElementById('die-results').innerHTML = html;
+      };
+
+      // Distributions
+      ['normal-mean', 'normal-sd'].forEach(id => {
+          const el = document.getElementById(id);
+          el.addEventListener('input', () => {
+              document.getElementById(`${id}-value`).textContent = el.value;
+              renderNormal();
+          });
+      });
+      ['binomial-n', 'binomial-p'].forEach(id => {
+          const el = document.getElementById(id);
+          el.addEventListener('input', () => {
+              document.getElementById(`${id}-value`).textContent = el.value;
+              renderBinomial();
+          });
+      });
+      
+      // CLT
+      document.getElementById('run-clt-sim').addEventListener('click', runCLTSimulation);
+      ['clt-sample-size', 'clt-reps'].forEach(id => {
+          const el = document.getElementById(id);
+          el.addEventListener('input', () => {
+              document.getElementById(`${id}-value`).textContent = el.value;
+          });
+      });
+
+      // Z-Score Calculator
+      document.getElementById('calculate-z').addEventListener('click', () => {
+          const x = parseFloat(document.getElementById('z-x').value);
+          const mean = parseFloat(document.getElementById('z-mean').value);
+          const sd = parseFloat(document.getElementById('z-sd').value);
+          const resultEl = document.getElementById('z-result');
+          if (isNaN(x) || isNaN(mean) || isNaN(sd) || sd <= 0) {
+              resultEl.innerHTML = '<p>Por favor, ingresa valores numéricos válidos (sd > 0).</p>';
+              return;
+          }
+          const z = (x - mean) / sd;
+          resultEl.innerHTML = `<p>La puntuación Z es: <strong>${formatNumber(z, 3)}</strong></p>`;
+      });
+      
+      // Glossary Filter
+      const glossaryFilter = document.getElementById('glossary-filter');
+      const glossaryItems = document.querySelectorAll('#glossary-list dt, #glossary-list dd');
+      glossaryFilter.addEventListener('input', (e) => {
+        const filter = e.target.value.toLowerCase();
+        document.querySelectorAll('#glossary-list dt').forEach(dt => {
+            const term = dt.textContent.toLowerCase();
+            const definition = dt.nextElementSibling.textContent.toLowerCase();
+            const isVisible = term.includes(filter) || definition.includes(filter);
+            dt.style.display = isVisible ? '' : 'none';
+            dt.nextElementSibling.style.display = isVisible ? '' : 'none';
+        });
+      });
+
+      // --- PERSISTENCE ---
+      const saveState = () => {
+        const stateToSave = {
+          data1D: dataInput1D.value,
+          data2D: dataInput2D.value,
+          populationType: state.populationType,
+          histogramBins: state.histogramBins,
+        };
+        localStorage.setItem('stats-app-state', JSON.stringify(stateToSave));
+      };
+
+      const restoreState = () => {
+        const saved = localStorage.getItem('stats-app-state');
+        if (saved) {
+          const restored = JSON.parse(saved);
+          dataInput1D.value = restored.data1D || '';
+          dataInput2D.value = restored.data2D || '';
+          state.populationType = restored.populationType || 'sample';
+          state.histogramBins = restored.histogramBins || 10;
+
+          document.querySelectorAll('#population-type-toggle button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.type === state.populationType);
+          });
+          histogramBinsSlider.value = state.histogramBins;
+          document.getElementById('histogram-bins-value').textContent = state.histogramBins;
+          
+          state.data1D = parseData1D(dataInput1D.value);
+          state.data2D = parseData2D(dataInput2D.value);
+        }
+      };
+
+      // --- INITIALIZATION ---
+      const init = () => {
+        initTheme();
+        restoreState();
+        updateAll();
+        updateCoinResults();
+        updateDieResults();
+        renderNormal();
+        renderBinomial();
+      };
+
+      init();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álgebra Moderna — Funciones, Gráficas y Calculadoras</title>
+    <meta name="description" content="Una página interactiva para aprender álgebra, con un graficador de funciones SVG, calculadoras y renderizado de fórmulas con MathJax.">
+
+    <!-- MathJax (única dependencia externa permitida) -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['\\[', '\\]']]
+        },
+        options: {
+          skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Estilos CSS Embebidos -->
+    <style>
+        /* ------------------- */
+        /* VARIABLES Y RESET   */
+        /* ------------------- */
+        :root {
+            /* Paleta de Colores (Modo Claro) */
+            --color-primary: #0d9488; /* teal-600 */
+            --color-secondary: #f59e0b; /* amber-500 */
+            --color-tertiary: #6366f1; /* indigo-500 */
+            --color-bg: #f6f7f9;
+            --color-surface: #ffffff;
+            --color-text-primary: #111827; /* gray-900 */
+            --color-text-secondary: #4b5563; /* gray-600 */
+            --color-border: #e5e7eb; /* gray-200 */
+            --color-shadow-light: rgba(255, 255, 255, 0.8);
+            --color-shadow-dark: rgba(200, 200, 210, 0.6);
+            --color-glass-bg: rgba(255, 255, 255, 0.6);
+            --color-hero-blob1: #5eead4; /* teal-300 */
+            --color-hero-blob2: #fcd34d; /* amber-300 */
+            --color-error: #dc2626; /* red-600 */
+
+            /* Tipografía */
+            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+            --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
+            --font-size-h2: clamp(2rem, 1.25rem + 3.75vw, 3.5rem);
+            --font-size-h3: clamp(1.5rem, 1.1rem + 2vw, 2.25rem);
+            --font-size-small: 0.875rem;
+
+            /* Espaciado */
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-xxl: 4rem;
+
+            /* Otros */
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+            --shadow-neumorph: 
+                -5px -5px 10px var(--color-shadow-light),
+                5px 5px 10px var(--color-shadow-dark);
+            --shadow-neumorph-inset: 
+                inset -3px -3px 6px var(--color-shadow-light),
+                inset 3px 3px 6px var(--color-shadow-dark);
+        }
+
+        .dark-theme {
+            --color-primary: #2dd4bf; /* teal-400 */
+            --color-secondary: #facc15; /* amber-400 */
+            --color-tertiary: #818cf8; /* indigo-400 */
+            --color-bg: #111827; /* gray-900 */
+            --color-surface: #1f2937; /* gray-800 */
+            --color-text-primary: #f9fafb; /* gray-50 */
+            --color-text-secondary: #9ca3af; /* gray-400 */
+            --color-border: #374151; /* gray-700 */
+            --color-shadow-light: rgba(55, 65, 81, 0.8);
+            --color-shadow-dark: rgba(0, 0, 0, 0.6);
+            --color-glass-bg: rgba(31, 41, 55, 0.6);
+            --color-hero-blob1: #0d9488;
+            --color-hero-blob2: #b45309;
+            --color-error: #ef4444; /* red-500 */
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: var(--font-size-base); }
+        html.no-js .js-only { display: none; }
+        body {
+            font-family: var(--font-family-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+        h1, h2, h3 { line-height: 1.2; font-weight: 700; color: var(--color-primary); }
+        h1 { font-size: var(--font-size-h1); }
+        h2 { font-size: var(--font-size-h2); }
+        h3 { font-size: var(--font-size-h3); }
+        a { color: var(--color-secondary); text-decoration: none; }
+        a:hover, a:focus { color: var(--color-primary); text-decoration: underline; }
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--color-secondary); color: var(--color-bg); padding: 0.5rem 1rem; z-index: 1000; transition: top 0.3s; }
+        .skip-link:focus { top: 0; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+
+        /* ------------------- */
+        /* LAYOUT Y COMPONENTES*/
+        /* ------------------- */
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        .main-header { position: sticky; top: 0; z-index: 100; padding: var(--spacing-md) 0; background-color: var(--color-glass-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--color-border); }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.25rem; color: var(--color-text-primary); }
+        .logo svg { width: 32px; height: 32px; fill: var(--color-primary); }
+        .main-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .main-nav ul { display: flex; list-style: none; gap: var(--spacing-lg); }
+        .main-nav a { white-space: nowrap; font-weight: 500; padding: 0.5rem 0; position: relative; color: var(--color-text-secondary); }
+        .main-nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--color-secondary); transform: scaleX(0); transform-origin: right; transition: transform var(--transition-speed) ease; }
+        .main-nav a:hover::after, .main-nav a:focus::after, .main-nav a.active::after { transform: scaleX(1); transform-origin: left; }
+        .main-nav a.active { color: var(--color-text-primary); }
+        .header-controls { display: flex; align-items: center; gap: var(--spacing-md); }
+        .theme-toggle { background: none; border: none; cursor: pointer; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; color: var(--color-text-primary); border-radius: 50%; }
+        .theme-toggle:hover, .theme-toggle:focus-visible { background-color: var(--color-border); }
+        .theme-toggle svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; }
+        .theme-toggle .icon-moon { display: block; } .theme-toggle .icon-sun { display: none; }
+        .dark-theme .theme-toggle .icon-moon { display: none; } .dark-theme .theme-toggle .icon-sun { display: block; }
+        
+        .hero { position: relative; padding: var(--spacing-xxl) 0; text-align: center; overflow: hidden; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .hero::before, .hero::after { content: ''; position: absolute; border-radius: 50%; filter: blur(100px); z-index: -1; }
+        .hero::before { width: 30vw; height: 30vw; min-width: 200px; min-height: 200px; background: var(--color-hero-blob1); top: 10%; left: 15%; animation: blob-move 20s infinite alternate; }
+        .hero::after { width: 25vw; height: 25vw; min-width: 150px; min-height: 150px; background: var(--color-hero-blob2); bottom: 10%; right: 15%; animation: blob-move 25s infinite alternate-reverse; }
+        @keyframes blob-move { from { transform: translate(-20%, -10%) scale(1); } to { transform: translate(20%, 10%) scale(1.2); } }
+        .hero h1 { margin-bottom: var(--spacing-md); }
+        .hero p { font-size: 1.25rem; color: var(--color-text-secondary); max-width: 60ch; margin: 0 auto var(--spacing-xl); }
+        
+        .btn { display: inline-block; padding: var(--spacing-md) var(--spacing-xl); border-radius: var(--border-radius); font-weight: 600; text-decoration: none; border: none; cursor: pointer; transition: all var(--transition-speed) ease; background-color: var(--color-bg); color: var(--color-text-primary); box-shadow: var(--shadow-neumorph); }
+        .btn:hover, .btn:focus-visible { color: var(--color-primary); box-shadow: var(--shadow-neumorph-inset); }
+        
+        .section { padding: var(--spacing-xxl) 0; border-bottom: 1px solid var(--color-border); }
+        .section-header { text-align: center; margin-bottom: var(--spacing-xl); }
+        .grid { display: grid; gap: var(--spacing-lg); }
+        @media (min-width: 600px) { .grid-cols-2 { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 900px) { .grid-cols-3 { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 1200px) { .grid-cols-4 { grid-template-columns: repeat(4, 1fr); } }
+        
+        .card { background-color: var(--color-glass-bg); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); border: 1px solid var(--color-border); border-radius: var(--border-radius); padding: var(--spacing-lg); }
+        
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-weight: 500; color: var(--color-text-secondary); }
+        .form-group input, .form-group select { padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--color-border); background-color: var(--color-surface); color: var(--color-text-primary); font-size: 1rem; width: 100%; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent); }
+        .calculator-result { margin-top: var(--spacing-md); padding: var(--spacing-md); background-color: var(--color-bg); border-radius: var(--border-radius); min-height: 50px; font-weight: 600; color: var(--color-primary); }
+        .calculator-result:empty::before { content: "El resultado aparecerá aquí..."; color: var(--color-text-secondary); font-style: italic; font-weight: 400; }
+        .error-message { color: var(--color-error); font-size: var(--font-size-small); font-weight: 500; }
+
+        /* --- Graficador de Funciones --- */
+        #function-plotter { display: grid; gap: var(--spacing-xl); }
+        @media (min-width: 1024px) { #function-plotter { grid-template-columns: 350px 1fr; } }
+        #plot-controls { display: flex; flex-direction: column; gap: var(--spacing-lg); }
+        #plot-display { position: relative; min-height: 450px; }
+        #function-svg { width: 100%; height: 100%; touch-action: none; border: 1px solid var(--color-border); border-radius: var(--border-radius); background-color: var(--color-surface); cursor: grab; }
+        #function-svg.is-panning { cursor: grabbing; }
+        #function-svg .grid-line { stroke: var(--color-border); stroke-width: 0.5; }
+        #function-svg .axis-line { stroke: var(--color-text-secondary); stroke-width: 1; }
+        #function-svg .axis-label { font-size: 10px; fill: var(--color-text-secondary); user-select: none; }
+        #function-svg .function-path { fill: none; stroke-width: 2.5; }
+        #function-path-1 { stroke: var(--color-primary); }
+        #function-path-2 { stroke: var(--color-tertiary); }
+        #plot-tracker { position: absolute; bottom: 10px; left: 10px; background-color: var(--color-glass-bg); padding: 5px 10px; border-radius: 6px; font-family: monospace; font-size: 0.9rem; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
+        #plot-display:hover #plot-tracker { opacity: 1; }
+        .function-control-set { border-left: 3px solid; padding-left: var(--spacing-md); }
+        .function-control-set[data-slot="0"] { border-color: var(--color-primary); }
+        .function-control-set[data-slot="1"] { border-color: var(--color-tertiary); }
+        .control-group label { display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem; }
+        .control-group input[type="range"] { width: 100%; }
+        #current-formula { font-weight: bold; text-align: center; padding: var(--spacing-md); background-color: var(--color-bg); border-radius: var(--border-radius); min-height: 2.5em; }
+        
+        .faq-accordion details { background-color: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--border-radius); margin-bottom: var(--spacing-md); }
+        .faq-accordion summary { padding: var(--spacing-lg); font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-accordion summary::-webkit-details-marker { display: none; }
+        .faq-accordion summary::after { content: '+'; font-size: 1.5rem; transition: transform var(--transition-speed) ease; }
+        .faq-accordion details[open] summary::after { transform: rotate(45deg); }
+        .faq-accordion .faq-content { padding: 0 var(--spacing-lg) var(--spacing-lg); }
+
+        .main-footer { padding: var(--spacing-xl) 0; background-color: var(--color-surface); text-align: center; color: var(--color-text-secondary); font-size: var(--font-size-small); }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo" aria-label="Álgebra Moderna - Inicio">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 4H6V6H18V4ZM18 11H6V13H18V11ZM18 18H6V20H18V18Z" /></svg>
+                <span>Álgebra Moderna</span>
+            </a>
+            <div class="header-controls">
+                <nav class="main-nav js-only" aria-label="Navegación principal">
+                    <ul>
+                        <li><a href="#foundations">Fundamentos</a></li>
+                        <li><a href="#functions">Funciones</a></li>
+                        <li><a href="#calculators">Calculadoras</a></li>
+                        <li><a href="#formulas">Fórmulas</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </nav>
+                <button class="theme-toggle js-only" id="theme-toggle" aria-label="Cambiar tema de color">
+                    <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Álgebra Moderna</h1>
+                <p>Descubre el poder de las variables y las funciones. Visualiza conceptos, resuelve ecuaciones y domina las herramientas del álgebra de forma interactiva.</p>
+                <a href="#foundations" class="btn">Comenzar a aprender</a>
+            </div>
+        </section>
+
+        <!-- Fundamentos -->
+        <section id="foundations" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Fundamentos del Álgebra</h2>
+                    <p>El lenguaje de las matemáticas. Estos son los bloques de construcción esenciales.</p>
+                </div>
+                <div class="grid grid-cols-2 grid-cols-4">
+                    <article class="card"><h3>Variable</h3><p>Un símbolo, usualmente una letra como \(x\) o \(y\), que representa un valor que puede cambiar. Es el corazón del álgebra.</p></article>
+                    <article class="card"><h3>Constante</h3><p>Un valor fijo que no cambia, como \(5\) o \(-\pi\). A diferencia de las variables, su valor es siempre el mismo.</p></article>
+                    <article class="card"><h3>Coeficiente</h3><p>El número que multiplica a una variable. En la expresión \(7x\), el coeficiente es \(7\).</p></article>
+                    <article class="card"><h3>Expresión</h3><p>Una combinación de variables, constantes y operaciones, como \(3x^2 - 2y + 5\). No contiene un signo de igualdad.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Funciones y Graficador -->
+        <section id="functions" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Gráficas de Funciones Interactivas</h2>
+                    <p>Visualiza cómo los parámetros transforman las funciones. Mueve los deslizadores y observa los cambios en tiempo real.</p>
+                </div>
+
+                <div id="function-plotter">
+                    <aside id="plot-controls" class="card">
+                        <div id="function-controls-container"></div>
+                        <button id="add-function-btn" class="btn">Añadir otra función</button>
+                    </aside>
+                    <div id="plot-display">
+                        <svg id="function-svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" aria-labelledby="plot-title" role="img">
+                            <title id="plot-title">Gráfica interactiva de una función matemática.</title>
+                            <defs>
+                                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" class="grid-line" />
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                            <g id="axes-group"></g>
+                            <path id="function-path-1" class="function-path"></path>
+                            <path id="function-path-2" class="function-path"></path>
+                        </svg>
+                        <div id="plot-tracker"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Calculadoras -->
+        <section id="calculators" class="section">
+            <div class="container">
+                 <div class="section-header">
+                    <h2>Calculadoras Algebraicas</h2>
+                    <p>Herramientas rápidas para resolver problemas comunes y evaluar funciones.</p>
+                </div>
+                <div class="grid grid-cols-2">
+                    <article class="card">
+                        <h3>Resolvente Cuadrática</h3>
+                        <p>\( ax^2 + bx + c = 0 \)</p>
+                        <form id="quadratic-solver-form" class="form-group">
+                            <input type="text" name="a" placeholder="Coeficiente a" required>
+                            <input type="text" name="b" placeholder="Coeficiente b" required>
+                            <input type="text" name="c" placeholder="Coeficiente c" required>
+                            <button type="submit" class="btn">Resolver</button>
+                        </form>
+                        <div id="quadratic-result" class="calculator-result" aria-live="polite"></div>
+                    </article>
+                    <article class="card">
+                        <h3>Evaluador de Función</h3>
+                        <p>Usa la función y parámetros activos en la gráfica.</p>
+                        <form id="evaluator-form" class="form-group">
+                            <select name="function_index" id="evaluator-function-select"></select>
+                            <input type="text" name="x_value" placeholder="Introduce un valor de x" required>
+                            <button type="submit" class="btn">Evaluar \(f(x)\)</button>
+                        </form>
+                        <div id="evaluator-result" class="calculator-result" aria-live="polite"></div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fórmulas -->
+        <section id="formulas" class="section">
+            <div class="container">
+                <div class="section-header"><h2>Tabla de Fórmulas Clave</h2></div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead><tr><th>Concepto</th><th>Fórmula</th></tr></thead>
+                        <tbody>
+                            <tr><td>Forma explícita de la recta</td><td>\( y = mx + b \)</td></tr>
+                            <tr><td>Resolvente cuadrática</td><td>\( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \)</td></tr>
+                            <tr><td>Forma canónica (vértice)</td><td>\( y = a(x - h)^2 + k \)</td></tr>
+                            <tr><td>Distancia entre dos puntos</td><td>\( d = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2} \)</td></tr>
+                            <tr><td>Diferencia de cuadrados</td><td>\( a^2 - b^2 = (a - b)(a + b) \)</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section">
+            <div class="container">
+                <div class="section-header"><h2>Preguntas Frecuentes</h2></div>
+                <div class="faq-accordion">
+                    <details>
+                        <summary>¿Cuál es la diferencia entre una expresión y una ecuación?</summary>
+                        <div class="faq-content"><p>Una <strong>expresión</strong> es una frase matemática sin un signo de igual, como \(3x+5\). Una <strong>ecuación</strong> establece que dos expresiones son iguales, como \(3x+5 = 11\). El objetivo con una ecuación suele ser encontrar el valor de la variable que hace cierta la igualdad.</p></div>
+                    </details>
+                    <details>
+                        <summary>¿Qué significa el "dominio" de una función?</summary>
+                        <div class="faq-content"><p>El <strong>dominio</strong> es el conjunto de todos los posibles valores de entrada (usualmente \(x\)) para los cuales la función está definida. Por ejemplo, en la función \(f(x) = \sqrt{x}\), el dominio son todos los números reales no negativos (\(x \ge 0\)), ya que no se puede calcular la raíz cuadrada de un número negativo en los reales.</p></div>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container"><p>&copy; 2024 Álgebra Moderna. Contenido educativo.</p></div>
+    </footer>
+
+    <!-- JavaScript Embebido -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        'use strict';
+        document.documentElement.classList.remove('no-js');
+
+        // --- THEME MANAGEMENT ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        let currentTheme = localStorage.getItem('theme');
+
+        function applyTheme(theme) {
+            document.documentElement.classList.toggle('dark-theme', theme === 'dark');
+        }
+
+        if (themeToggle) {
+            applyTheme(currentTheme || (prefersDark.matches ? 'dark' : 'light'));
+            themeToggle.addEventListener('click', () => {
+                currentTheme = document.documentElement.classList.contains('dark-theme') ? 'light' : 'dark';
+                localStorage.setItem('theme', currentTheme);
+                applyTheme(currentTheme);
+            });
+        }
+
+        // --- SCROLL SPY ---
+        const navLinks = document.querySelectorAll('.main-nav a');
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                    });
+                }
+            });
+        }, { rootMargin: '-50% 0px -50% 0px' });
+        sections.forEach(s => observer.observe(s));
+
+        // --- FUNCTION PLOTTER ---
+        const svg = document.getElementById('function-svg');
+        const controlsContainer = document.getElementById('function-controls-container');
+        const addFuncBtn = document.getElementById('add-function-btn');
+        const tracker = document.getElementById('plot-tracker');
+        
+        const SVG_WIDTH = 600;
+        const SVG_HEIGHT = 400;
+        const ZOOM_FACTOR = 1.1;
+
+        const functionDefs = {
+            linear: { label: "Lineal", formula: (p) => `y = ${p.m}x + ${p.b}`, params: { m: { label: 'Pendiente (m)', min: -5, max: 5, step: 0.1, value: 1 }, b: { label: 'Ordenada (b)', min: -5, max: 5, step: 0.1, value: 0 }}, sample: (x, p) => p.m * x + p.b },
+            quadratic: { label: "Cuadrática", formula: (p) => `y = ${p.a}(x - ${p.h})^2 + ${p.k}`, params: { a: { label: 'Apertura (a)', min: -3, max: 3, step: 0.1, value: 1 }, h: { label: 'Vértice x (h)', min: -5, max: 5, step: 0.1, value: 0 }, k: { label: 'Vértice y (k)', min: -5, max: 5, step: 0.1, value: 0 }}, sample: (x, p) => p.a * Math.pow(x - p.h, 2) + p.k },
+            absolute: { label: "Valor Absoluto", formula: (p) => `y = ${p.a}|x - ${p.h}| + ${p.k}`, params: { a: { label: 'Apertura (a)', min: -3, max: 3, step: 0.1, value: 1 }, h: { label: 'Vértice x (h)', min: -5, max: 5, step: 0.1, value: 0 }, k: { label: 'Vértice y (k)', min: -5, max: 5, step: 0.1, value: 0 }}, sample: (x, p) => p.a * Math.abs(x - p.h) + p.k },
+            sqrt: { label: "Raíz Cuadrada", formula: (p) => `y = ${p.a}\\sqrt{x - ${p.h}} + ${p.k}`, params: { a: { label: 'Amplitud (a)', min: -3, max: 3, step: 0.1, value: 1 }, h: { label: 'Inicio x (h)', min: -5, max: 5, step: 0.1, value: 0 }, k: { label: 'Inicio y (k)', min: -5, max: 5, step: 0.1, value: 0 }}, sample: (x, p) => { const r = x - p.h; return r < 0 ? null : p.a * Math.sqrt(r) + p.k; } },
+            reciprocal: { label: "Recíproca", formula: (p) => `y = \\frac{${p.a}}{x - ${p.h}} + ${p.k}`, params: { a: { label: 'Factor (a)', min: -5, max: 5, step: 0.1, value: 1 }, h: { label: 'Asíntota V (h)', min: -5, max: 5, step: 0.1, value: 0 }, k: { label: 'Asíntota H (k)', min: -5, max: 5, step: 0.1, value: 0 }}, sample: (x, p) => (x - p.h === 0) ? null : p.a / (x - p.h) + p.k },
+            sin: { label: "Seno", formula: (p) => `y = ${p.A}\\sin(${p.B}(x - ${p.C})) + ${p.D}`, params: { A: { label: 'Amplitud (A)', min: -3, max: 3, step: 0.1, value: 1 }, B: { label: 'Frecuencia (B)', min: 0.1, max: 5, step: 0.1, value: 1 }, C: { label: 'Fase (C)', min: -5, max: 5, step: 0.1, value: 0 }, D: { label: 'Vertical (D)', min: -5, max: 5, step: 0.1, value: 0 }}, sample: (x, p) => p.A * Math.sin(p.B * (x - p.C)) + p.D },
+            cos: { label: "Coseno", formula: (p) => `y = ${p.A}\\cos(${p.B}(x - ${p.C})) + ${p.D}`, params: { A: { label: 'Amplitud (A)', min: -3, max: 3, step: 0.1, value: 1 }, B: { label: 'Frecuencia (B)', min: 0.1, max: 5, step: 0.1, value: 1 }, C: { label: 'Fase (C)', min: -5, max: 5, step: 0.1, value: 0 }, D: { label: 'Vertical (D)', min: -5, max: 5, step: 0.1, value: 0 }}, sample: (x, p) => p.A * Math.cos(p.B * (x - p.C)) + p.D }
+        };
+
+        let plotState = {
+            viewport: { xMin: -10, xMax: 10, yMin: -10, yMax: 10 },
+            functions: [ { key: 'linear', params: {}, active: true } ],
+            isPanning: false,
+            lastPanPoint: { x: 0, y: 0 }
+        };
+
+        function toSvgCoords(x, y) {
+            const { xMin, xMax, yMin, yMax } = plotState.viewport;
+            const svgX = (x - xMin) / (xMax - xMin) * SVG_WIDTH;
+            const svgY = SVG_HEIGHT - (y - yMin) / (yMax - yMin) * SVG_HEIGHT;
+            return { x: svgX, y: svgY };
+        }
+        
+        function fromSvgCoords(svgX, svgY) {
+            const { xMin, xMax, yMin, yMax } = plotState.viewport;
+            const x = xMin + (svgX / SVG_WIDTH) * (xMax - xMin);
+            const y = yMin + ( (SVG_HEIGHT - svgY) / SVG_HEIGHT) * (yMax - yMin);
+            return { x, y };
+        }
+
+        function redraw() {
+            const { xMin, xMax, yMin, yMax } = plotState.viewport;
+            const axesGroup = document.getElementById('axes-group');
+            const origin = toSvgCoords(0, 0);
+
+            // Helper to find a "nice" interval for grid lines
+            const getNiceInterval = (range) => {
+                if (range <= 0) return 1;
+                const exponent = Math.floor(Math.log10(range));
+                const fraction = range / Math.pow(10, exponent);
+                let niceFraction;
+                if (fraction < 1.5) niceFraction = 1;
+                else if (fraction < 3) niceFraction = 2;
+                else if (fraction < 7) niceFraction = 5;
+                else niceFraction = 10;
+                // Adjust for more granular ticks when zoomed in
+                return Math.max(1e-9, niceFraction * Math.pow(10, exponent - 1));
+            };
+
+            let labelsHTML = '';
+            const numberFormatter = new Intl.NumberFormat('es', { maximumFractionDigits: 2 });
+
+            // Draw X-axis labels and grid lines
+            const xInterval = getNiceInterval(xMax - xMin);
+            for (let x = Math.ceil(xMin / xInterval) * xInterval; x <= xMax; x += xInterval) {
+                if (Math.abs(x) < 1e-9) continue; // Skip origin label
+                const svgPos = toSvgCoords(x, 0);
+                // Clamp label position to keep it visible
+                const yPos = Math.max(15, Math.min(SVG_HEIGHT - 5, origin.y + 15));
+                labelsHTML += `<text x="${svgPos.x}" y="${yPos}" class="axis-label" text-anchor="middle">${numberFormatter.format(x)}</text>`;
+            }
+
+            // Draw Y-axis labels and grid lines
+            const yInterval = getNiceInterval(yMax - yMin);
+            for (let y = Math.ceil(yMin / yInterval) * yInterval; y <= yMax; y += yInterval) {
+                if (Math.abs(y) < 1e-9) continue; // Skip origin label
+                const svgPos = toSvgCoords(0, y);
+                 // Clamp label position to keep it visible
+                const xPos = Math.max(5, Math.min(SVG_WIDTH - 15, origin.x - 8));
+                labelsHTML += `<text x="${xPos}" y="${svgPos.y + 4}" class="axis-label" text-anchor="end">${numberFormatter.format(y)}</text>`;
+            }
+            
+            // Set all SVG content at once to be more efficient
+            axesGroup.innerHTML = `
+                <line x1="0" y1="${origin.y}" x2="${SVG_WIDTH}" y2="${origin.y}" class="axis-line" />
+                <line x1="${origin.x}" y1="0" x2="${origin.x}" y2="${SVG_HEIGHT}" class="axis-line" />
+                ${labelsHTML}
+            `;
+            
+            plotState.functions.forEach((func, index) => {
+                if (!func.active) return;
+                const path = document.getElementById(`function-path-${index + 1}`);
+                if (!path) return; // Guard against missing path element
+                const def = functionDefs[func.key];
+                let d = '';
+                let lastValid = false;
+                for (let i = 0; i <= SVG_WIDTH; i++) {
+                    const x = xMin + (i / SVG_WIDTH) * (xMax - xMin);
+                    const y = def.sample(x, func.params);
+                    if (y !== null && isFinite(y)) {
+                        const { x: sx, y: sy } = toSvgCoords(x, y);
+                        // Clip path points that are way off-screen to prevent SVG rendering issues
+                        if (sy > -1e4 && sy < 1e4) {
+                            d += (lastValid ? ' L ' : ' M ') + `${sx.toFixed(2)} ${sy.toFixed(2)}`;
+                            lastValid = true;
+                        } else { 
+                            lastValid = false; 
+                        }
+                    } else { 
+                        lastValid = false; 
+                    }
+                }
+                path.setAttribute('d', d);
+            });
+        }
+
+        function setupControls(slot) {
+            const func = plotState.functions[slot];
+            const def = functionDefs[func.key];
+            const controlSet = document.querySelector(`.function-control-set[data-slot="${slot}"]`);
+            const paramControlsContainer = controlSet.querySelector('.parameter-controls');
+            paramControlsContainer.innerHTML = '';
+            
+            Object.keys(def.params).forEach(key => {
+                const p = def.params[key];
+                func.params[key] = func.params[key] ?? p.value;
+
+                const group = document.createElement('div');
+                group.className = 'control-group';
+                group.innerHTML = `
+                    <label for="param-${slot}-${key}">${p.label} <span id="val-${slot}-${key}">${func.params[key]}</span></label>
+                    <input type="range" id="param-${slot}-${key}" min="${p.min}" max="${p.max}" step="${p.step}" value="${func.params[key]}">
+                `;
+                paramControlsContainer.appendChild(group);
+
+                group.querySelector('input').addEventListener('input', (e) => {
+                    const val = parseFloat(e.target.value);
+                    func.params[key] = val;
+                    document.getElementById(`val-${slot}-${key}`).textContent = val;
+                    updateFormula(slot);
+                    redraw();
+                });
+            });
+            updateFormula(slot);
+            redraw();
+        }
+        
+        function updateFormula(slot) {
+            const func = plotState.functions[slot];
+            const def = functionDefs[func.key];
+            const formulaDisplay = document.querySelector(`.function-control-set[data-slot="${slot}"] .current-formula`);
+            formulaDisplay.textContent = `\\( ${def.formula(func.params)} \\)`;
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([formulaDisplay]);
+            }
+        }
+
+        function createFunctionUI(slot) {
+            const func = plotState.functions[slot];
+            const controlSet = document.createElement('div');
+            controlSet.className = 'function-control-set';
+            controlSet.dataset.slot = slot;
+
+            const selectOptions = Object.keys(functionDefs).map(key => `<option value="${key}" ${key === func.key ? 'selected' : ''}>${functionDefs[key].label}</option>`).join('');
+            controlSet.innerHTML = `
+                <div class="form-group">
+                    <label for="function-select-${slot}">Función ${slot + 1}:</label>
+                    <select id="function-select-${slot}">${selectOptions}</select>
+                </div>
+                <div class="current-formula" aria-live="polite"></div>
+                <div class="parameter-controls"></div>
+            `;
+            controlsContainer.appendChild(controlSet);
+            
+            controlSet.querySelector('select').addEventListener('change', (e) => {
+                func.key = e.target.value;
+                func.params = {}; // Reset params on change
+                setupControls(slot);
+                updateEvaluatorSelect();
+            });
+            setupControls(slot);
+        }
+
+        // --- Event Listeners for Plotter ---
+        svg.addEventListener('wheel', e => {
+            e.preventDefault();
+            const rect = svg.getBoundingClientRect();
+            const svgX = e.clientX - rect.left;
+            const svgY = e.clientY - rect.top;
+            const mouseBeforeZoom = fromSvgCoords(svgX, svgY);
+            
+            const scale = e.deltaY < 0 ? 1 / ZOOM_FACTOR : ZOOM_FACTOR;
+            plotState.viewport.xMin = mouseBeforeZoom.x - (mouseBeforeZoom.x - plotState.viewport.xMin) * scale;
+            plotState.viewport.xMax = mouseBeforeZoom.x + (plotState.viewport.xMax - mouseBeforeZoom.x) * scale;
+            plotState.viewport.yMin = mouseBeforeZoom.y - (mouseBeforeZoom.y - plotState.viewport.yMin) * scale;
+            plotState.viewport.yMax = mouseBeforeZoom.y + (plotState.viewport.yMax - mouseBeforeZoom.y) * scale;
+            
+            redraw();
+        });
+
+        svg.addEventListener('mousedown', e => {
+            plotState.isPanning = true;
+            plotState.lastPanPoint = { x: e.clientX, y: e.clientY };
+            svg.classList.add('is-panning');
+        });
+        
+        window.addEventListener('mouseup', () => {
+            plotState.isPanning = false;
+            svg.classList.remove('is-panning');
+        });
+
+        svg.addEventListener('mousemove', e => {
+            const rect = svg.getBoundingClientRect();
+            const svgX = e.clientX - rect.left;
+            const svgY = e.clientY - rect.top;
+            const coords = fromSvgCoords(svgX, svgY);
+            tracker.textContent = `x: ${coords.x.toFixed(2)}, y: ${coords.y.toFixed(2)}`;
+
+            if (plotState.isPanning) {
+                const dx = e.clientX - plotState.lastPanPoint.x;
+                const dy = e.clientY - plotState.lastPanPoint.y;
+                const { xMin, xMax, yMin, yMax } = plotState.viewport;
+                const xRange = xMax - xMin;
+                const yRange = yMax - yMin;
+                
+                plotState.viewport.xMin -= (dx / SVG_WIDTH) * xRange;
+                plotState.viewport.xMax -= (dx / SVG_WIDTH) * xRange;
+                plotState.viewport.yMin += (dy / SVG_HEIGHT) * yRange;
+                plotState.viewport.yMax += (dy / SVG_HEIGHT) * yRange;
+                
+                plotState.lastPanPoint = { x: e.clientX, y: e.clientY };
+                redraw();
+            }
+        });
+
+        addFuncBtn.addEventListener('click', () => {
+            if (plotState.functions.length < 2) {
+                plotState.functions.push({ key: 'quadratic', params: {}, active: true });
+                createFunctionUI(1);
+                addFuncBtn.style.display = 'none';
+                updateEvaluatorSelect();
+            }
+        });
+
+        // --- CALCULATORS ---
+        const qForm = document.getElementById('quadratic-solver-form');
+        const qResult = document.getElementById('quadratic-result');
+        qForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const a = parseFloat(qForm.a.value);
+            const b = parseFloat(qForm.b.value);
+            const c = parseFloat(qForm.c.value);
+            if(isNaN(a) || isNaN(b) || isNaN(c) || a === 0) { qResult.innerHTML = `<span class="error-message">Entradas inválidas. 'a' no puede ser cero.</span>`; return; }
+            const discriminant = b*b - 4*a*c;
+            if (discriminant > 0) {
+                const x1 = (-b + Math.sqrt(discriminant)) / (2*a);
+                const x2 = (-b - Math.sqrt(discriminant)) / (2*a);
+                qResult.textContent = `Raíces reales: \\(x_1 = ${x1.toFixed(3)}, x_2 = ${x2.toFixed(3)}\\)`;
+            } else if (discriminant === 0) {
+                const x = -b / (2*a);
+                qResult.textContent = `Raíz real doble: \\(x = ${x.toFixed(3)}\\)`;
+            } else {
+                const realPart = (-b / (2*a)).toFixed(3);
+                const imagPart = (Math.sqrt(-discriminant) / (2*a)).toFixed(3);
+                qResult.textContent = `Raíces complejas: \\(x = ${realPart} \\pm ${imagPart}i\\)`;
+            }
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([qResult]);
+            }
+        });
+
+        const eForm = document.getElementById('evaluator-form');
+        const eResult = document.getElementById('evaluator-result');
+        const evaluatorSelect = document.getElementById('evaluator-function-select');
+        
+        function updateEvaluatorSelect() {
+            evaluatorSelect.innerHTML = plotState.functions
+                .map((f, i) => `<option value="${i}">Función ${i+1} (${functionDefs[f.key].label})</option>`)
+                .join('');
+        }
+
+        eForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const x = parseFloat(eForm.x_value.value);
+            if(isNaN(x)) { eResult.innerHTML = `<span class="error-message">Entrada inválida.</span>`; return; }
+            const funcIndex = parseInt(evaluatorSelect.value);
+            const func = plotState.functions[funcIndex];
+            const y = functionDefs[func.key].sample(x, func.params);
+            eResult.innerHTML = y === null ? `\\(f(${x})\\) no está definido.` : `\\(f_{${funcIndex+1}}(${x}) = ${y.toFixed(3)}\\)`;
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise([eResult]);
+            }
+        });
+
+        // --- INITIALIZATION ---
+        createFunctionUI(0);
+        updateEvaluatorSelect();
+        redraw();
+    });
+    </script>
+</body>
+</html>
