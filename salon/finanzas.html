@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="es" class="light-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas para Estudiantes: Tu Guía Interactiva</title>
+    
+    <!-- MathJax Configuration (Only external dependency) -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Embedded CSS -->
+    <style>
+        /* ------------------------- */
+        /* ----- RESET & SETUP ----- */
+        /* ------------------------- */
+        :root {
+            /* Raw Color Palette */
+            --palette-emerald: #10b981;
+            --palette-emerald-lighter: #34d399;
+            --palette-marino: #1e3a8a;
+            --palette-marino-lighter: #60a5fa;
+            --palette-melocoton: #f59e8b;
+            --palette-morado-suave: #a78bfa;
+            --palette-morado-suave-lighter: #c4b5fd;
+            --palette-lino: #f8f4ee;
+            --palette-lino-hsl: 36, 43%, 96%;
+            --palette-grafito: #0f172a;
+            --palette-grafito-hsl: 222, 47%, 11%;
+            --palette-surface-dark: #1e293b;
+            --palette-menta: #34d399;
+            --palette-menta-dark: #4ade80;
+            --palette-coral: #fb7185;
+            --palette-coral-dark: #f87171;
+            --palette-text-dark: #f8fafc;
+            --palette-text-muted-dark: #94a3b8;
+            --palette-border-dark: #334155;
+            --palette-shadow-dark: 220 40% 2%;
+            --palette-shadow-dark-strong: 220 40% 0%;
+            --palette-shadow-light: 220 3% 75%;
+            --palette-shadow-light-strong: 220 10% 60%;
+
+            /* Typography (Fluid) */
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --fs-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+            --fs-h1: clamp(2.44rem, 1.5rem + 4.7vw, 4.2rem);
+            --fs-h2: clamp(1.95rem, 1.2rem + 3.75vw, 3.3rem);
+            --fs-h3: clamp(1.56rem, 1rem + 2.8vw, 2.6rem);
+            --fs-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
+
+            /* Spacing & Radius */
+            --space-xs: 0.5rem;
+            --space-sm: 0.75rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --radius-card: 24px;
+            --radius-btn: 12px;
+            --radius-chip: 32px;
+            --radius-input: 10px;
+        }
+
+        .light-mode {
+            --color-primary: var(--palette-emerald);
+            --color-secondary: var(--palette-marino);
+            --color-accent1: var(--palette-melocoton);
+            --color-accent2: var(--palette-morado-suave);
+            --color-bg: var(--palette-lino);
+            --color-bg-hsl: var(--palette-lino-hsl);
+            --color-surface: #ffffff;
+            --color-text: var(--palette-grafito);
+            --color-text-muted: #475569;
+            --color-border: #e2e8f0;
+            --color-success: var(--palette-menta);
+            --color-alert: var(--palette-coral);
+            --shadow-color: var(--palette-shadow-light);
+            --shadow-color-strong: var(--palette-shadow-light-strong);
+            accent-color: var(--palette-emerald);
+        }
+
+        .dark-mode {
+            --color-primary: var(--palette-emerald-lighter);
+            --color-secondary: var(--palette-marino-lighter);
+            --color-accent1: var(--palette-melocoton);
+            --color-accent2: var(--palette-morado-suave-lighter);
+            --color-bg: var(--palette-grafito);
+            --color-bg-hsl: var(--palette-grafito-hsl);
+            --color-surface: var(--palette-surface-dark);
+            --color-text: var(--palette-text-dark);
+            --color-text-muted: var(--palette-text-muted-dark);
+            --color-border: var(--palette-border-dark);
+            --color-success: var(--palette-menta-dark);
+            --color-alert: var(--palette-coral-dark);
+            --shadow-color: var(--palette-shadow-dark);
+            --shadow-color-strong: var(--palette-shadow-dark-strong);
+            accent-color: var(--palette-emerald-lighter);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: var(--fs-base);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        main {
+            display: block;
+        }
+
+        h1, h2, h3 {
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-secondary);
+        }
+        h1 { font-size: var(--fs-h1); }
+        h2 { font-size: var(--fs-h2); margin-block: var(--space-xl) var(--space-lg); }
+        h3 { font-size: var(--fs-h3); margin-block: var(--space-lg) var(--space-md); }
+
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover, a:focus {
+            text-decoration: underline;
+        }
+
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* ------------------------- */
+        /* ---- CLAYMORPHISM UI ---- */
+        /* ------------------------- */
+        .clay-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-card);
+            padding: var(--space-lg);
+            box-shadow: 
+                -8px -8px 16px -8px hsla(var(--shadow-color), 0.1), 
+                8px 8px 16px -8px hsla(var(--shadow-color), 0.1),
+                inset -6px -6px 16px -8px hsla(var(--shadow-color), 0.2),
+                inset 6px 6px 16px -8px hsla(var(--shadow-color), 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--color-border);
+        }
+
+        .clay-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-btn);
+            border: none;
+            font-weight: 600;
+            font-size: var(--fs-base);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            user-select: none;
+            text-align: center;
+        }
+        .clay-btn:focus-visible {
+            outline: 3px solid var(--color-accent2);
+            outline-offset: 3px;
+        }
+        .clay-btn.primary {
+            background-color: var(--color-primary);
+            color: white;
+            box-shadow: 
+                -4px -4px 8px -4px hsla(var(--shadow-color-strong), 0.1), 
+                4px 4px 8px -4px hsla(var(--shadow-color-strong), 0.15);
+        }
+        .clay-btn.primary:hover {
+            transform: scale(1.02) translateY(-2px);
+            box-shadow: 
+                -6px -6px 12px -6px hsla(var(--shadow-color-strong), 0.12), 
+                6px 6px 12px -6px hsla(var(--shadow-color-strong), 0.18);
+        }
+        .clay-btn.secondary {
+            background-color: var(--color-surface);
+            color: var(--color-secondary);
+            border: 1px solid var(--color-border);
+            box-shadow: 
+                -2px -2px 4px -2px hsla(var(--shadow-color), 0.1), 
+                2px 2px 4px -2px hsla(var(--shadow-color), 0.1);
+        }
+        .clay-btn.secondary:hover {
+            transform: scale(1.02);
+            border-color: var(--color-secondary);
+        }
+        
+        .clay-input, .clay-select {
+            width: 100%;
+            padding: var(--space-sm);
+            border-radius: var(--radius-input);
+            border: 1px solid var(--color-border);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-size: var(--fs-base);
+            box-shadow: inset 2px 2px 5px hsla(var(--shadow-color), 0.1);
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .clay-input:focus, .clay-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: inset 2px 2px 5px hsla(var(--shadow-color), 0.1), 0 0 0 3px hsla(var(--color-primary), 0.3);
+        }
+        
+        .clay-chip {
+            display: inline-block;
+            padding: calc(var(--space-xs) * 0.75) var(--space-md);
+            border-radius: var(--radius-chip);
+            background-color: var(--color-bg);
+            color: var(--color-text-muted);
+            font-size: var(--fs-sm);
+            font-weight: 500;
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .clay-chip.active {
+            background-color: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        /* ------------------------- */
+        /* --- LAYOUT & SECTIONS --- */
+        /* ------------------------- */
+        .container {
+            width: min(100% - 2rem, 1200px);
+            margin-inline: auto;
+        }
+
+        .section {
+            padding-block: clamp(3rem, 1rem + 8vh, 6rem);
+            scroll-margin-top: 80px; /* Offset for sticky header */
+        }
+
+        .grid-layout {
+            display: grid;
+            gap: var(--space-lg);
+        }
+        @media (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            }
+        }
+
+        /* Skip to content link */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 1rem;
+            background: var(--color-secondary);
+            color: white;
+            padding: var(--space-sm);
+            z-index: 10000;
+            transition: top 0.3s ease-in-out;
+            border-radius: 0 0 var(--radius-btn) var(--radius-btn);
+        }
+        .skip-link:focus {
+            top: 80px;
+        }
+
+        /* Header & Navigation */
+        .main-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: hsla(var(--color-bg-hsl), 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding-block: var(--space-sm);
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--color-secondary);
+            flex-shrink: 0;
+        }
+        .logo svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--color-primary);
+        }
+        .main-nav {
+            overflow-x: auto;
+            flex-grow: 1;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-primary) var(--color-surface);
+        }
+        .main-nav::-webkit-scrollbar { height: 4px; }
+        .main-nav::-webkit-scrollbar-track { background: transparent; }
+        .main-nav::-webkit-scrollbar-thumb {
+            background-color: var(--color-primary);
+            border-radius: 20px;
+        }
+        .main-nav ul {
+            display: flex;
+            list-style: none;
+            gap: var(--space-md);
+            flex-wrap: nowrap;
+        }
+        .main-nav a {
+            position: relative;
+            padding: var(--space-xs) 0;
+            color: var(--color-text-muted);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        .main-nav a:hover::after,
+        .main-nav a.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .main-nav a.active {
+            color: var(--color-primary);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary); /* Changed for better visibility */
+        }
+        .theme-toggle:focus-visible {
+            outline: 3px solid var(--color-accent2);
+            outline-offset: 3px;
+        }
+        .theme-toggle .icon {
+            width: 24px;
+            height: 24px;
+        }
+        .theme-toggle .sun-icon { display: none; }
+        .theme-toggle .moon-icon { display: block; }
+        .dark-mode .theme-toggle .sun-icon { display: block; }
+        .dark-mode .theme-toggle .moon-icon { display: none; }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            padding-block: clamp(4rem, 2rem + 10vh, 8rem);
+        }
+        .hero h1 {
+            margin-bottom: var(--space-md);
+        }
+        .hero p {
+            font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+            max-width: 60ch;
+            margin-inline: auto;
+            color: var(--color-text-muted);
+            margin-bottom: var(--space-lg);
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 150%;
+            height: 150%;
+            background-color: var(--color-surface);
+            border-radius: 45% 55% 70% 30% / 30% 50% 50% 70%;
+            transform: translate(-50%, -50%) rotate(15deg);
+            z-index: -1;
+            animation: blob-morph 15s infinite ease-in-out;
+            box-shadow: inset 0 0 100px hsla(var(--shadow-color), 0.1);
+        }
+        @keyframes blob-morph {
+            0% { border-radius: 45% 55% 70% 30% / 30% 50% 50% 70%; transform: translate(-50%, -50%) rotate(15deg); }
+            50% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(-50%, -50%) rotate(-15deg) scale(1.05); }
+            100% { border-radius: 45% 55% 70% 30% / 30% 50% 50% 70%; transform: translate(-50%, -50%) rotate(15deg); }
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: var(--space-xs);
+            color: var(--color-text-muted);
+        }
+        .form-grid {
+            display: grid;
+            gap: var(--space-md);
+        }
+        @media (min-width: 500px) {
+            .form-grid { grid-template-columns: 1fr 1fr; }
+        }
+        
+        /* Results & Outputs */
+        .result-box {
+            background-color: var(--color-bg);
+            padding: var(--space-lg);
+            border-radius: var(--radius-card);
+            margin-top: var(--space-lg);
+            border: 1px solid var(--color-border);
+            box-shadow: inset 2px 2px 5px hsla(var(--shadow-color), 0.05);
+        }
+        .result-box h3 {
+            margin-top: 0;
+            color: var(--color-primary);
+        }
+        .result-value {
+            font-size: var(--fs-h3);
+            font-weight: 700;
+            color: var(--color-secondary);
+        }
+
+        /* SVG Charts */
+        .chart-container {
+            width: 100%;
+            height: auto;
+            min-height: 300px;
+            margin-top: var(--space-lg);
+        }
+        .chart-container svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            overflow: visible;
+        }
+        .chart-container .axis-line, .chart-container .grid-line {
+            stroke: var(--color-border);
+            stroke-width: 1;
+        }
+        .chart-container .axis-text {
+            font-size: 10px;
+            fill: var(--color-text-muted);
+        }
+        .chart-container .bar {
+            fill: var(--color-primary);
+            transition: all 0.3s ease;
+        }
+        .chart-container .bar:hover {
+            fill: var(--color-accent1);
+        }
+        .chart-container .line {
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .chart-container .dot {
+            r: 5;
+            stroke-width: 2;
+            stroke: var(--color-surface);
+        }
+        .chart-tooltip {
+            position: absolute;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-btn);
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 8px hsla(var(--shadow-color-strong), 0.1);
+            font-size: var(--fs-sm);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            transform: translate(-50%, -100%);
+            white-space: nowrap;
+            z-index: 1001;
+        }
+        
+        /* Tables */
+        .responsive-table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-block: var(--space-lg);
+        }
+        th, td {
+            padding: var(--space-sm);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        th {
+            font-weight: 600;
+            background-color: var(--color-bg);
+            color: var(--color-text-muted);
+        }
+        tbody tr:hover {
+            background-color: hsla(var(--shadow-color), 0.05);
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            border-bottom: 1px solid var(--color-border);
+        }
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: var(--space-lg) 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--color-text);
+        }
+        .faq-question:hover {
+            color: var(--color-primary);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
+        .faq-answer p {
+            padding-bottom: var(--space-lg);
+            color: var(--color-text-muted);
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px; /* Adjust as needed */
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: var(--space-md);
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            padding-block: var(--space-xl);
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: var(--fs-sm);
+        }
+        .main-footer a {
+            color: var(--color-text-muted);
+            font-weight: 600;
+        }
+        .main-footer a:hover {
+            color: var(--color-primary);
+        }
+        .footer-nav {
+            margin-bottom: var(--space-md);
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mt-lg { margin-top: var(--space-lg); }
+        .d-none { display: none; }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+        
+        /* Print Styles */
+        @media print {
+            .main-header, .main-footer, .clay-btn, .form-group button, .hero .clay-btn, .faq-icon, .theme-toggle {
+                display: none;
+            }
+            body {
+                background-color: #fff;
+                color: #000;
+            }
+            .clay-card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                padding: 1rem;
+                break-inside: avoid;
+            }
+            .section {
+                padding-block: 1.5rem;
+            }
+            h1, h2, h3 {
+                color: #000;
+            }
+            .faq-answer {
+                max-height: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
+    <!-- ======================= -->
+    <!-- ====== HEADER ========= -->
+    <!-- ======================= -->
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo">
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M21.38,10.42a1,1,0,0,0-1,0,7.1,7.1,0,0,1-7.23,7.23,1,1,0,0,0,0,2,9.1,9.1,0,0,0,9.14-9.14A1,1,0,0,0,21.38,10.42ZM12,11a1,1,0,1,0-1-1A1,1,0,0,0,12,11Zm0-5A6,6,0,1,0,6,12,6,6,0,0,0,12,6Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,12,16Z"/></svg>
+                <span>Finanzas para Estudiantes</span>
+            </a>
+            <nav class="main-nav" id="main-nav">
+                <!-- Links will be populated by JS -->
+            </nav>
+            <div class="header-controls">
+                <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema de color">
+                    <svg class="icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12,8a4,4,0,1,1-4,4A4,4,0,0,1,12,8Zm0-2a6,6,0,1,0,6,6A6,6,0,0,0,12,6ZM12,2A1,1,0,0,0,11,3V4a1,1,0,0,0,2,0V3A1,1,0,0,0,12,2ZM4.93,4.93A1,1,0,0,0,4.22,6.34L5,7.12a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L5.64,4.93A1,1,0,0,0,4.93,4.93ZM2,12a1,1,0,0,0-1,1h0a1,1,0,0,0,1,1H3a1,1,0,0,0,0-2H2Zm17.07,7.07a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29l.71-.71a1,1,0,1,0-1.42-1.42l-.71.71A1,1,0,0,0,19.07,19.07ZM20,11H19a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-8,8a1,1,0,0,0,1-1V19a1,1,0,0,0-2,0v1A1,1,0,0,0,12,20ZM7.12,17l-.71.71a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l.71-.71a1,1,0,0,0-1.42-1.42Z"/></svg>
+                    <svg class="icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5,13.81A10,10,0,0,1,11.19,2.5a1,1,0,0,0-1.45,1.06,8,8,0,0,0,8.7,8.7A1,1,0,0,0,21.5,13.81Z"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+
+        <!-- ======================= -->
+        <!-- ====== HERO =========== -->
+        <!-- ======================= -->
+        <section class="hero" id="hero">
+            <div class="container">
+                <h1>Tu Aventura Financiera Comienza Aquí</h1>
+                <p>Aprende a manejar tu dinero de forma inteligente y divertida. Desde crear tu primer presupuesto hasta entender cómo crece tu ahorro, te guiaremos paso a paso.</p>
+                <a href="#presupuesto" class="clay-btn primary">Comenzar a Aprender</a>
+            </div>
+        </section>
+
+        <!-- ======================= -->
+        <!-- ===== PRESUPUESTO ===== -->
+        <!-- ======================= -->
+        <section class="section" id="presupuesto">
+            <div class="container">
+                <h2>Crea tu Presupuesto</h2>
+                <p>Un presupuesto es un plan para tu dinero. Te ayuda a saber cuánto ganas, cuánto gastas y a dónde va cada peso. ¡Es el primer paso para tomar el control!</p>
+                
+                <div class="grid-layout mt-lg">
+                    <div class="clay-card">
+                        <h3>La Regla 50/30/20</h3>
+                        <p>Una guía simple para empezar:</p>
+                        <ul>
+                            <li><strong>50% para Necesidades:</strong> Gastos fijos como transporte, comida en casa, etc.</li>
+                            <li><strong>30% para Deseos:</strong> Salidas con amigos, videojuegos, ropa nueva.</li>
+                            <li><strong>20% para Ahorro y Deudas:</strong> Guardar para el futuro o pagar lo que debes.</li>
+                        </ul>
+                        <button id="print-budget-btn" class="clay-btn secondary mt-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/></svg>
+                            Imprimir Presupuesto
+                        </button>
+                    </div>
+                    <div class="clay-card">
+                        <h3>Editor de Presupuesto</h3>
+                        <form id="budget-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="budget-item-name">Concepto</label>
+                                    <input type="text" id="budget-item-name" class="clay-input" placeholder="Ej: Pasajes" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="budget-item-amount">Monto ($)</label>
+                                    <input type="number" step="0.01" id="budget-item-amount" class="clay-input" placeholder="Ej: 50" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="budget-item-category">Categoría</label>
+                                <select id="budget-item-category" class="clay-select">
+                                    <option value="Necesidades">Necesidades</option>
+                                    <option value="Deseos">Deseos</option>
+                                    <option value="Ahorro">Ahorro</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="clay-btn primary">Agregar Partida</button>
+                        </form>
+                        <div class="responsive-table-container mt-lg">
+                            <table id="budget-table">
+                                <thead><tr><th>Concepto</th><th>Monto</th><th>Categoría</th><th></th></tr></thead>
+                                <tbody><!-- Rows added by JS --></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="clay-card">
+                        <h3>Distribución de Gastos</h3>
+                        <div class="chart-container" id="budget-chart-container">
+                            <svg id="budget-chart" role="img" aria-labelledby="budget-chart-title">
+                                <title id="budget-chart-title">Gráfico de distribución del presupuesto</title>
+                            </svg>
+                        </div>
+                        <div id="budget-summary" class="result-box" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ======================= -->
+        <!-- ====== INTERÉS ======== -->
+        <!-- ======================= -->
+        <section class="section" id="interes">
+            <div class="container">
+                <h2>Interés Simple vs. Compuesto</h2>
+                <p>El interés es el costo de pedir dinero prestado, o la ganancia por prestarlo. ¡Entender la diferencia entre simple y compuesto es clave para que tu dinero crezca!</p>
+                <div class="grid-layout mt-lg">
+                    <div class="clay-card">
+                        <h3>Calculadora de Interés</h3>
+                        <form id="interest-form">
+                            <div class="form-group">
+                                <label for="interest-p">Capital Inicial (P)</label>
+                                <input type="number" id="interest-p" class="clay-input" value="1000">
+                            </div>
+                            <div class="form-group">
+                                <label for="interest-r">Tasa de Interés Anual (r %)</label>
+                                <input type="number" id="interest-r" class="clay-input" value="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="interest-t">Tiempo (t años)</label>
+                                <input type="number" id="interest-t" class="clay-input" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label for="interest-n">Capitalización por año (n)</label>
+                                <select id="interest-n" class="clay-select">
+                                    <option value="1">Anual</option>
+                                    <option value="2">Semestral</option>
+                                    <option value="4">Trimestral</option>
+                                    <option value="12" selected>Mensual</option>
+                                    <option value="365">Diaria</option>
+                                </select>
+                            </div>
+                        </form>
+                        <div id="interest-results" class="result-box" aria-live="polite"></div>
+                    </div>
+                    <div class="clay-card" style="grid-column: span 1 / span 2;">
+                        <h3>Comparación de Crecimiento</h3>
+                        <div class="chart-container" id="interest-chart-container">
+                             <svg id="interest-chart" role="img" aria-labelledby="interest-chart-title">
+                                <title id="interest-chart-title">Gráfico de crecimiento de Interés Simple vs Compuesto</title>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= -->
+        <!-- ====== AHORRO ========= -->
+        <!-- ======================= -->
+        <section class="section" id="ahorro">
+            <div class="container">
+                <h2>Metas de Ahorro</h2>
+                <p>Ahorrar es guardar una parte de tu dinero para el futuro. Con aportes periódicos y el interés compuesto, puedes alcanzar grandes metas.</p>
+                <div class="grid-layout mt-lg">
+                    <div class="clay-card">
+                        <h3>Calculadora de Metas</h3>
+                        <form id="savings-form">
+                            <div class="form-group">
+                                <label for="savings-goal">Meta de Ahorro (M)</label>
+                                <input type="number" id="savings-goal" class="clay-input" value="10000">
+                            </div>
+                            <div class="form-group">
+                                <label for="savings-deposit">Aporte Mensual (d)</label>
+                                <input type="number" id="savings-deposit" class="clay-input" value="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="savings-rate">Tasa Anual (r %)</label>
+                                <input type="number" id="savings-rate" class="clay-input" value="4">
+                            </div>
+                             <div class="form-group">
+                                <label for="savings-time">Años para Ahorrar (t)</label>
+                                <input type="number" id="savings-time" class="clay-input" value="5">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clay-card">
+                        <h3>Resultados de Ahorro</h3>
+                        <p>Calcula el futuro de tus ahorros. La fórmula clave es la del valor futuro de una anualidad:</p>
+                        <p>\[ FV = d \cdot \frac{(1+\frac{r}{m})^{mt}-1}{\frac{r}{m}} \]</p>
+                        <div id="savings-results" class="result-box" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= -->
+        <!-- === DEUDA Y CRÉDITO === -->
+        <!-- ======================= -->
+        <section class="section" id="deuda">
+            <div class="container">
+                <h2>Deuda y Crédito</h2>
+                <p>El crédito te permite comprar algo ahora y pagarlo después, pero casi siempre con intereses. Entender cómo funciona te ayuda a evitar deudas costosas.</p>
+                <div class="grid-layout mt-lg">
+                    <div class="clay-card">
+                        <h3>Calculadora de Préstamo</h3>
+                        <form id="loan-form">
+                            <div class="form-group">
+                                <label for="loan-p">Monto del Préstamo (P)</label>
+                                <input type="number" id="loan-p" class="clay-input" value="5000">
+                            </div>
+                            <div class="form-group">
+                                <label for="loan-apr">Tasa Anual (APR %)</label>
+                                <input type="number" id="loan-apr" class="clay-input" value="15">
+                            </div>
+                            <div class="form-group">
+                                <label for="loan-n">Plazo (años)</label>
+                                <input type="number" id="loan-n" class="clay-input" value="3">
+                            </div>
+                        </form>
+                        <div id="loan-results" class="result-box" aria-live="polite"></div>
+                    </div>
+                    <div class="clay-card" style="grid-column: span 1 / span 2;">
+                        <h3>Tabla de Amortización</h3>
+                        <p>Mira cómo cada pago se divide entre capital e interés. La fórmula de la cuota fija mensual (PMT) es:</p>
+                        <p>\[ \mathrm{PMT} = P \cdot \frac{i(1+i)^n}{(1+i)^n - 1} \]</p>
+                        <div class="responsive-table-container">
+                            <table id="amortization-table">
+                                <thead><tr><th>Mes</th><th>Pago</th><th>Interés</th><th>Capital</th><th>Saldo</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= -->
+        <!-- ====== INFLACIÓN ====== -->
+        <!-- ======================= -->
+        <section class="section" id="inflacion">
+            <div class="container">
+                <h2>Inflación</h2>
+                <p>La inflación hace que tu dinero pierda valor con el tiempo. Lo que hoy compras con $100, en el futuro costará más. ¡Es importante que tus ahorros crezcan más rápido que la inflación!</p>
+                <div class="grid-layout mt-lg">
+                    <div class="clay-card">
+                        <h3>Calculadora de Inflación</h3>
+                        <p>\[ \mathrm{Valor\ Real} = \frac{\mathrm{Valor\ Nominal}}{(1+\pi)^t} \]</p>
+                        <form id="inflation-form">
+                            <div class="form-group">
+                                <label for="inflation-amount">Monto ($)</label>
+                                <input type="number" id="inflation-amount" class="clay-input" value="1000">
+                            </div>
+                            <div class="form-group">
+                                <label for="inflation-rate">Tasa de Inflación Anual (\(\pi\) %)</label>
+                                <input type="number" id="inflation-rate" class="clay-input" value="3">
+                            </div>
+                            <div class="form-group">
+                                <label for="inflation-years">Años (t)</label>
+                                <input type="number" id="inflation-years" class="clay-input" value="10">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clay-card">
+                        <h3>El Poder Adquisitivo</h3>
+                        <div id="inflation-results" class="result-box" aria-live="polite"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= -->
+        <!-- ====== GLOSARIO ======= -->
+        <!-- ======================= -->
+        <section class="section" id="glosario">
+            <div class="container">
+                <h2>Glosario Financiero</h2>
+                <div class="grid-layout">
+                    <div class="clay-card"><strong>Presupuesto:</strong> Un plan detallado de ingresos y gastos durante un período de tiempo.</div>
+                    <div class="clay-card"><strong>APR (Tasa Anual Equivalente):</strong> El costo total de un préstamo en un año, incluyendo intereses y comisiones, expresado como porcentaje.</div>
+                    <div class="clay-card"><strong>Principal:</strong> La cantidad inicial de dinero de un préstamo o una inversión.</div>
+                    <div class="clay-card"><strong>Interés:</strong> El costo de usar el dinero de otra persona o la ganancia por prestar tu dinero.</div>
+                    <div class="clay-card"><strong>Amortización:</strong> El proceso de pagar una deuda a lo largo del tiempo en pagos periódicos.</div>
+                    <div class="clay-card"><strong>Inflación:</strong> El aumento general de los precios y la caída del poder adquisitivo del dinero.</div>
+                    <div class="clay-card"><strong>Anualidad:</strong> Una serie de pagos iguales realizados a intervalos regulares.</div>
+                    <div class="clay-card"><strong>Capitalización:</strong> El proceso donde los intereses generados se añaden al capital principal, generando a su vez nuevos intereses.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= -->
+        <!-- ======== FAQ ========== -->
+        <!-- ======================= -->
+        <section class="section" id="faq">
+            <div class="container">
+                <h2>Preguntas Frecuentes (FAQ)</h2>
+                <div id="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>¿Por qué es importante pagar más que el mínimo en la tarjeta de crédito?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Pagar solo el mínimo alarga enormemente el tiempo que tardas en saldar la deuda. La mayor parte de ese pago se va a intereses, por lo que el capital (la deuda real) disminuye muy lentamente. Pagar más reduce el capital más rápido, lo que te ahorra mucho dinero en intereses a largo plazo.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>¿Qué diferencia hay entre capitalizar mensual vs. anual?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>La capitalización es cuando los intereses se suman a tu dinero. Si capitaliza anualmente, ganas intereses una vez al año. Si capitaliza mensualmente, ganas intereses cada mes sobre un saldo ligeramente mayor (tu dinero más los intereses del mes anterior). Por eso, una capitalización más frecuente (mensual) hace que tu dinero crezca un poco más rápido que una anual, incluso con la misma tasa de interés nominal.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>¿Cómo me afecta la inflación si no tengo mucho dinero?</span>
+                            <svg class="faq-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>La inflación te afecta porque las cosas que compras regularmente (comida, transporte, etc.) se vuelven más caras. Tu dinero, aunque sea poco, compra menos cosas que antes. Por eso es importante que tus ahorros o inversiones crezcan a una tasa mayor que la inflación para que no pierdan su "poder de compra".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- ======================= -->
+    <!-- ====== FOOTER ========= -->
+    <!-- ======================= -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-nav">
+                <a href="#hero">Volver Arriba</a>
+                <a href="#faq">FAQ</a>
+            </div>
+            <p>Creado con fines educativos. Esta página no constituye asesoría financiera profesional.</p>
+            <p>&copy; 2024 Finanzas para Estudiantes. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <div id="chart-tooltip" class="chart-tooltip" role="tooltip"></div>
+
+    <!-- Embedded JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ===================================
+        // ========= CORE & UTILS ============
+        // ===================================
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => document.querySelectorAll(selector);
+        
+        const state = {
+            theme: localStorage.getItem('theme') || 'light',
+            budget: JSON.parse(localStorage.getItem('budget')) || [],
+        };
+
+        const sections = $$('main > section');
+        const navLinks = {};
+
+        function saveState() {
+            localStorage.setItem('theme', state.theme);
+            localStorage.setItem('budget', JSON.stringify(state.budget));
+        }
+
+        function normalizeNumber(str) {
+            if (typeof str !== 'string') str = String(str);
+            const cleanedStr = str.replace(/[^0-9.,-]/g, '').replace(',', '.');
+            return parseFloat(cleanedStr) || 0;
+        }
+
+        function formatMoney(num, currency = 'MXN') {
+            const value = normalizeNumber(num);
+            if (Math.abs(value) < 0.005) return '$0.00'; // Avoid -0.00
+            return value.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: currency,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            });
+        }
+        
+        function announce(message) {
+            let announcer = $('#aria-announcer');
+            if(!announcer) {
+                announcer = document.createElement('div');
+                announcer.id = 'aria-announcer';
+                announcer.className = 'sr-only';
+                announcer.setAttribute('aria-live', 'polite');
+                document.body.appendChild(announcer);
+            }
+            announcer.textContent = message;
+        }
+
+        function refreshMathJax() {
+            if (window.MathJax && window.MathJax.typeset) {
+                window.MathJax.typeset();
+            }
+        }
+
+        // ===================================
+        // ========= THEME TOGGLE ============
+        // ===================================
+        function initTheme() {
+            const themeToggle = $('#theme-toggle');
+            
+            function applyTheme(theme) {
+                document.documentElement.className = `${theme}-mode`;
+                state.theme = theme;
+                saveState();
+                // Redraw charts on theme change to update colors
+                if(window.renderInterestChart) setTimeout(renderInterestChart, 50);
+                if(window.renderBudgetPieChart) setTimeout(renderBudgetPieChart, 50);
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const newTheme = state.theme === 'light' ? 'dark' : 'light';
+                applyTheme(newTheme);
+            });
+
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const initialTheme = localStorage.getItem('theme') || (systemPrefersDark ? 'dark' : 'light');
+            applyTheme(initialTheme);
+        }
+
+        // ===================================
+        // ========= NAVIGATION & SCROLLSPY ==
+        // ===================================
+        function initNavigation() {
+            const navContainer = $('#main-nav');
+            let navHTML = '<ul>';
+            sections.forEach(section => {
+                const id = section.id;
+                const name = section.querySelector('h2')?.textContent || 'Inicio';
+                if (id && name !== 'Inicio') {
+                   navHTML += `<li><a href="#${id}">${name}</a></li>`;
+                }
+            });
+            navHTML += '</ul>';
+            navContainer.innerHTML = navHTML;
+            
+            $$('#main-nav a').forEach(a => {
+                const href = a.getAttribute('href');
+                if (href.startsWith('#')) {
+                    navLinks[href.substring(1)] = a;
+                }
+            });
+        }
+
+        function initScrollSpy() {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        Object.values(navLinks).forEach(link => link.classList.remove('active'));
+                        if (navLinks[id]) {
+                            navLinks[id].classList.add('active');
+                        }
+                    }
+                });
+            }, { rootMargin: '-20% 0px -80% 0px', threshold: 0 });
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        // ===================================
+        // ========= BUDGET SECTION ==========
+        // ===================================
+        function initBudget() {
+            const form = $('#budget-form');
+            const tableBody = $('#budget-table tbody');
+            const summaryEl = $('#budget-summary');
+            const chartEl = $('#budget-chart');
+            const printBtn = $('#print-budget-btn');
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = $('#budget-item-name').value;
+                const amount = normalizeNumber($('#budget-item-amount').value);
+                const category = $('#budget-item-category').value;
+                
+                if (name && amount > 0) {
+                    state.budget.push({ id: Date.now(), name, amount, category });
+                    form.reset();
+                    $('#budget-item-name').focus();
+                    updateBudget();
+                    announce(`Partida "${name}" agregada.`);
+                }
+            });
+
+            tableBody.addEventListener('click', (e) => {
+                if (e.target.closest('.delete-btn')) {
+                    const id = parseInt(e.target.closest('.delete-btn').dataset.id, 10);
+                    const itemIndex = state.budget.findIndex(item => item.id === id);
+                    if (itemIndex > -1) {
+                        const itemName = state.budget[itemIndex].name;
+                        state.budget.splice(itemIndex, 1);
+                        updateBudget();
+                        announce(`Partida "${itemName}" eliminada.`);
+                    }
+                }
+            });
+            
+            printBtn.addEventListener('click', () => window.print());
+
+            function updateBudget() {
+                saveState();
+                renderBudgetTable();
+                renderBudgetSummary();
+                renderBudgetPieChart();
+            }
+
+            function renderBudgetTable() {
+                tableBody.innerHTML = state.budget.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${formatMoney(item.amount)}</td>
+                        <td><span class="clay-chip">${item.category}</span></td>
+                        <td><button class="clay-btn secondary delete-btn" data-id="${item.id}" aria-label="Eliminar ${item.name}">X</button></td>
+                    </tr>
+                `).join('');
+            }
+
+            function renderBudgetSummary() {
+                const totals = state.budget.reduce((acc, item) => {
+                    acc.total += item.amount;
+                    acc[item.category] = (acc[item.category] || 0) + item.amount;
+                    return acc;
+                }, { total: 0 });
+
+                if (totals.total === 0) {
+                    summaryEl.innerHTML = '<p>Agrega partidas para ver tu resumen.</p>';
+                    return;
+                }
+
+                const needsPct = ((totals.Necesidades || 0) / totals.total * 100).toFixed(1);
+                const wantsPct = ((totals.Deseos || 0) / totals.total * 100).toFixed(1);
+                const savingsPct = ((totals.Ahorro || 0) / totals.total * 100).toFixed(1);
+
+                summaryEl.innerHTML = `
+                    <h3>Resumen 50/30/20</h3>
+                    <p><strong>Total:</strong> ${formatMoney(totals.total)}</p>
+                    <p><strong>Necesidades:</strong> ${formatMoney(totals.Necesidades || 0)} (${needsPct}%)</p>
+                    <p><strong>Deseos:</strong> ${formatMoney(totals.Deseos || 0)} (${wantsPct}%)</p>
+                    <p><strong>Ahorro:</strong> ${formatMoney(totals.Ahorro || 0)} (${savingsPct}%)</p>
+                `;
+            }
+
+            window.renderBudgetPieChart = function() {
+                const data = state.budget.reduce((acc, item) => {
+                    if (!acc[item.category]) {
+                        acc[item.category] = { value: 0, name: item.category };
+                    }
+                    acc[item.category].value += item.amount;
+                    return acc;
+                }, {});
+                
+                const chartData = Object.values(data);
+                const total = chartData.reduce((sum, d) => sum + d.value, 0);
+
+                chartEl.innerHTML = '';
+                if (total === 0) return;
+                
+                const style = getComputedStyle(document.body);
+                const colors = {
+                    'Necesidades': style.getPropertyValue('--color-primary'),
+                    'Deseos': style.getPropertyValue('--color-accent1'),
+                    'Ahorro': style.getPropertyValue('--color-secondary')
+                };
+
+                const radius = 80;
+                const cx = 150;
+                const cy = 100;
+                let startAngle = -90;
+
+                chartData.forEach(slice => {
+                    const angle = (slice.value / total) * 360;
+                    const endAngle = startAngle + angle;
+
+                    const x1 = cx + radius * Math.cos(Math.PI * startAngle / 180);
+                    const y1 = cy + radius * Math.sin(Math.PI * startAngle / 180);
+                    const x2 = cx + radius * Math.cos(Math.PI * endAngle / 180);
+                    const y2 = cy + radius * Math.sin(Math.PI * endAngle / 180);
+
+                    const largeArcFlag = angle > 180 ? 1 : 0;
+
+                    const pathData = `M ${cx},${cy} L ${x1},${y1} A ${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} Z`;
+                    
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('d', pathData);
+                    path.setAttribute('fill', colors[slice.name] || '#ccc');
+                    path.dataset.tooltip = `${slice.name}: ${formatMoney(slice.value)}`;
+                    chartEl.appendChild(path);
+
+                    startAngle = endAngle;
+                });
+                
+                chartEl.setAttribute('viewBox', '0 0 300 200');
+                setupTooltips(chartEl);
+            }
+            
+            updateBudget();
+        }
+        
+        // ===================================
+        // ========= INTEREST SECTION ========
+        // ===================================
+        function initInterest() {
+            const form = $('#interest-form');
+            const resultsEl = $('#interest-results');
+            const p = $('#interest-p'), r = $('#interest-r'), t = $('#interest-t'), n = $('#interest-n');
+
+            function calculateAndRender() {
+                const P = normalizeNumber(p.value);
+                const rate = normalizeNumber(r.value) / 100;
+                const time = normalizeNumber(t.value);
+                const freq = normalizeNumber(n.value);
+
+                // Simple Interest: I = Prt
+                const simpleI = P * rate * time;
+                const simpleA = P + simpleI;
+
+                // Compound Interest: A = P(1 + r/n)^(nt)
+                const compoundA = P * Math.pow(1 + rate / freq, freq * time);
+                const compoundI = compoundA - P;
+
+                resultsEl.innerHTML = `
+                    <h3>Resultados</h3>
+                    <p><strong>Interés Simple:</strong> ${formatMoney(simpleI)} (Total: ${formatMoney(simpleA)})</p>
+                    <p><strong>Interés Compuesto:</strong> ${formatMoney(compoundI)} (Total: ${formatMoney(compoundA)})</p>
+                    <p style="color: var(--color-success)"><strong>Diferencia:</strong> ${formatMoney(compoundA - simpleA)}</p>
+                `;
+                
+                renderInterestChart();
+            }
+
+            window.renderInterestChart = function() {
+                const P = normalizeNumber(p.value);
+                const rate = normalizeNumber(r.value) / 100;
+                const time = normalizeNumber(t.value);
+                const freq = normalizeNumber(n.value);
+                
+                const simpleData = [];
+                const compoundData = [];
+
+                for (let i = 0; i <= time; i++) {
+                    simpleData.push({ x: i, y: P + (P * rate * i) });
+                    compoundData.push({ x: i, y: P * Math.pow(1 + rate / freq, freq * i) });
+                }
+                
+                const style = getComputedStyle(document.body);
+                const series = [
+                    { data: simpleData, color: style.getPropertyValue('--color-accent1'), name: 'Simple' },
+                    { data: compoundData, color: style.getPropertyValue('--color-primary'), name: 'Compuesto' }
+                ];
+                
+                renderLineChart($('#interest-chart'), series, 'Año', 'Monto ($)');
+            }
+
+            form.addEventListener('input', calculateAndRender);
+            calculateAndRender();
+        }
+
+        // ===================================
+        // ========= SAVINGS SECTION =========
+        // ===================================
+        function initSavings() {
+            const form = $('#savings-form');
+            const resultsEl = $('#savings-results');
+            const goal = $('#savings-goal'), deposit = $('#savings-deposit'), rate = $('#savings-rate'), time = $('#savings-time');
+            
+            function calculateAndRender() {
+                const M = normalizeNumber(goal.value);
+                const d = normalizeNumber(deposit.value);
+                const r = normalizeNumber(rate.value) / 100;
+                const t = normalizeNumber(time.value);
+                const m = 12; // monthly deposits
+
+                // FV = d * (((1 + r/m)^(mt) - 1) / (r/m))
+                if (r > 0) {
+                    const ratePerPeriod = r / m;
+                    const numPeriods = m * t;
+                    const fv = d * ( (Math.pow(1 + ratePerPeriod, numPeriods) - 1) / ratePerPeriod );
+                    
+                    resultsEl.innerHTML = `
+                        <h3>Proyección de Ahorro</h3>
+                        <p>En <strong>${t} años</strong>, con aportes de <strong>${formatMoney(d)}/mes</strong>, tendrás:</p>
+                        <p class="result-value">${formatMoney(fv)}</p>
+                        <p>Para tu meta de ${formatMoney(M)}, te ${fv >= M ? 'sobrarán ' + formatMoney(fv - M) : 'faltarán ' + formatMoney(M - fv)}.</p>
+                    `;
+                } else { // Handle 0 interest rate
+                    const fv = d * t * 12;
+                     resultsEl.innerHTML = `
+                        <h3>Proyección de Ahorro</h3>
+                        <p>En <strong>${t} años</strong>, con aportes de <strong>${formatMoney(d)}/mes</strong> (sin interés), tendrás:</p>
+                        <p class="result-value">${formatMoney(fv)}</p>
+                        <p>Para tu meta de ${formatMoney(M)}, te ${fv >= M ? 'sobrarán ' + formatMoney(fv - M) : 'faltarán ' + formatMoney(M - fv)}.</p>
+                    `;
+                }
+            }
+
+            form.addEventListener('input', calculateAndRender);
+            calculateAndRender();
+        }
+
+        // ===================================
+        // ========= LOAN SECTION ============
+        // ===================================
+        function initLoan() {
+            const form = $('#loan-form');
+            const resultsEl = $('#loan-results');
+            const tableBody = $('#amortization-table tbody');
+            const p = $('#loan-p'), apr = $('#loan-apr'), n = $('#loan-n');
+
+            function calculateAndRender() {
+                const P = normalizeNumber(p.value);
+                const annualRate = normalizeNumber(apr.value) / 100;
+                const years = normalizeNumber(n.value);
+
+                if (P <= 0 || annualRate < 0 || years <= 0) {
+                    resultsEl.innerHTML = '<h3>Resumen del Préstamo</h3><p>Ingresa valores válidos.</p>';
+                    tableBody.innerHTML = '';
+                    return;
+                }
+
+                const i = annualRate / 12; // monthly interest rate
+                const numPayments = years * 12;
+                let pmt, totalPaid, totalInterest;
+
+                if (i > 0) {
+                    // PMT = P * [i(1+i)^n] / [(1+i)^n - 1]
+                    pmt = P * (i * Math.pow(1 + i, numPayments)) / (Math.pow(1 + i, numPayments) - 1);
+                } else {
+                    pmt = P / numPayments;
+                }
+                
+                totalPaid = pmt * numPayments;
+                totalInterest = totalPaid - P;
+
+                resultsEl.innerHTML = `
+                    <h3>Resumen del Préstamo</h3>
+                    <p><strong>Pago Mensual:</strong> ${formatMoney(pmt)}</p>
+                    <p><strong>Total Pagado:</strong> ${formatMoney(totalPaid)}</p>
+                    <p style="color: var(--color-alert)"><strong>Total Intereses:</strong> ${formatMoney(totalInterest)}</p>
+                `;
+
+                // Amortization schedule
+                let balance = P;
+                let scheduleHTML = '';
+                for (let k = 1; k <= numPayments; k++) {
+                    const interestPayment = balance * i;
+                    const principalPayment = pmt - interestPayment;
+                    balance -= principalPayment;
+                    if (k > 500) break; // Safety break
+                    scheduleHTML += `
+                        <tr>
+                            <td>${k}</td>
+                            <td>${formatMoney(pmt)}</td>
+                            <td>${formatMoney(interestPayment)}</td>
+                            <td>${formatMoney(principalPayment)}</td>
+                            <td>${formatMoney(Math.max(0, balance))}</td>
+                        </tr>
+                    `;
+                }
+                tableBody.innerHTML = scheduleHTML;
+            }
+
+            form.addEventListener('input', calculateAndRender);
+            calculateAndRender();
+        }
+
+        // ===================================
+        // ======== INFLATION SECTION ========
+        // ===================================
+        function initInflation() {
+            const form = $('#inflation-form');
+            const resultsEl = $('#inflation-results');
+            const amount = $('#inflation-amount'), rate = $('#inflation-rate'), years = $('#inflation-years');
+
+            function calculateAndRender() {
+                const nominalValue = normalizeNumber(amount.value);
+                const pi = normalizeNumber(rate.value) / 100;
+                const t = normalizeNumber(years.value);
+
+                // Real Value = Nominal / (1 + pi)^t
+                const realValue = nominalValue / Math.pow(1 + pi, t);
+
+                resultsEl.innerHTML = `
+                    <p>En <strong>${t} años</strong>, con una inflación del <strong>${rate.value}%</strong> anual...</p>
+                    <p><strong>${formatMoney(nominalValue)}</strong> de hoy equivaldrán a:</p>
+                    <p class="result-value">${formatMoney(realValue)}</p>
+                    <p>en poder adquisitivo de hoy.</p>
+                `;
+            }
+
+            form.addEventListener('input', calculateAndRender);
+            calculateAndRender();
+        }
+        
+        // ===================================
+        // ========= FAQ ACCORDION ===========
+        // ===================================
+        function initFaq() {
+            const accordion = $('#faq-accordion');
+            accordion.addEventListener('click', (e) => {
+                const questionBtn = e.target.closest('.faq-question');
+                if (questionBtn) {
+                    const item = questionBtn.parentElement;
+                    item.classList.toggle('active');
+                }
+            });
+        }
+        
+        // ===================================
+        // ========= SVG CHART RENDERER ======
+        // ===================================
+        function renderLineChart(svgEl, series, xLabel, yLabel) {
+            svgEl.innerHTML = '';
+            const padding = { top: 20, right: 20, bottom: 40, left: 60 };
+            const width = svgEl.parentElement.clientWidth;
+            const height = 300;
+            
+            const allData = series.flatMap(s => s.data);
+            if (allData.length === 0) return;
+
+            const xMax = Math.max(...allData.map(d => d.x));
+            const yMax = Math.max(...allData.map(d => d.y));
+
+            const xScale = (x) => padding.left + (x / (xMax || 1)) * (width - padding.left - padding.right);
+            const yScale = (y) => height - padding.bottom - (y / (yMax || 1)) * (height - padding.top - padding.bottom);
+
+            const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            // Y-axis grid and labels
+            for (let i = 0; i <= 5; i++) {
+                const y = yMax * (i / 5);
+                const yPos = yScale(y);
+                g.innerHTML += `<line class="grid-line" x1="${padding.left}" y1="${yPos}" x2="${width - padding.right}" y2="${yPos}" />`;
+                g.innerHTML += `<text class="axis-text" x="${padding.left - 10}" y="${yPos + 4}" text-anchor="end">${formatMoney(y).replace('MXN', '')}</text>`;
+            }
+            // X-axis grid and labels
+            const xTickCount = Math.min(xMax, 10);
+            for (let i = 0; i <= xTickCount; i++) {
+                const x = Math.round(xMax * (i / xTickCount));
+                const xPos = xScale(x);
+                g.innerHTML += `<text class="axis-text" x="${xPos}" y="${height - padding.bottom + 15}" text-anchor="middle">${x}</text>`;
+            }
+            g.innerHTML += `<line class="axis-line" x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}" />`;
+            svgEl.appendChild(g);
+
+            // Lines and Dots
+            series.forEach(s => {
+                const pathData = s.data.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xScale(p.x)} ${yScale(p.y)}`).join(' ');
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathData);
+                path.setAttribute('class', 'line');
+                path.style.stroke = s.color;
+                svgEl.appendChild(path);
+
+                s.data.forEach(p => {
+                    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    dot.setAttribute('cx', xScale(p.x));
+                    dot.setAttribute('cy', yScale(p.y));
+                    dot.setAttribute('class', 'dot');
+                    dot.style.fill = s.color;
+                    dot.dataset.tooltip = `${s.name} - Año ${p.x}: ${formatMoney(p.y)}`;
+                    svgEl.appendChild(dot);
+                });
+            });
+            
+            svgEl.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            setupTooltips(svgEl);
+        }
+
+        // ===================================
+        // ========= SVG TOOLTIPS ============
+        // ===================================
+        function setupTooltips(svgContainer) {
+            const tooltip = $('#chart-tooltip');
+            const elementsWithTooltip = svgContainer.querySelectorAll('[data-tooltip]');
+
+            elementsWithTooltip.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    tooltip.innerHTML = el.dataset.tooltip;
+                    tooltip.style.opacity = '1';
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY - 10}px`;
+                });
+                el.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+
+        // ===================================
+        // ========= INITIALIZATION ==========
+        // ===================================
+        function init() {
+            initTheme();
+            initNavigation();
+            initScrollSpy();
+            initBudget();
+            initInterest();
+            initSavings();
+            initLoan();
+            initInflation();
+            initFaq();
+            refreshMathJax();
+        }
+
+        init();
+    });
+    </script>
+</body>
+</html>
