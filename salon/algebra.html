@@ -116,12 +116,13 @@
         .main-header .container { display: flex; justify-content: space-between; align-items: center; }
         .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.25rem; color: var(--color-text-primary); }
         .logo svg { width: 32px; height: 32px; fill: var(--color-primary); }
-        .main-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        
         .main-nav ul { display: flex; list-style: none; gap: var(--spacing-lg); }
         .main-nav a { white-space: nowrap; font-weight: 500; padding: 0.5rem 0; position: relative; color: var(--color-text-secondary); }
         .main-nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--color-secondary); transform: scaleX(0); transform-origin: right; transition: transform var(--transition-speed) ease; }
         .main-nav a:hover::after, .main-nav a:focus::after, .main-nav a.active::after { transform: scaleX(1); transform-origin: left; }
         .main-nav a.active { color: var(--color-text-primary); }
+        
         .header-controls { display: flex; align-items: center; gap: var(--spacing-md); }
         .theme-toggle { background: none; border: none; cursor: pointer; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; color: var(--color-text-primary); border-radius: 50%; }
         .theme-toggle:hover, .theme-toggle:focus-visible { background-color: var(--color-border); }
@@ -129,6 +130,67 @@
         .theme-toggle .icon-moon { display: block; } .theme-toggle .icon-sun { display: none; }
         .dark-theme .theme-toggle .icon-moon { display: none; } .dark-theme .theme-toggle .icon-sun { display: block; }
         
+        #mobile-menu-btn { display: none; } /* Oculto por defecto */
+
+        /* Estilos para el menú móvil */
+        @media (max-width: 767px) {
+            #mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                cursor: pointer;
+                width: 44px;
+                height: 44px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                z-index: 1001; /* Encima del nav */
+            }
+            #mobile-menu-btn .bar {
+                width: 24px;
+                height: 2px;
+                background-color: var(--color-text-primary);
+                transition: transform 0.3s ease, opacity 0.3s ease;
+            }
+            #mobile-menu-btn.is-open .bar1 {
+                transform: translateY(7px) rotate(45deg);
+            }
+            #mobile-menu-btn.is-open .bar2 {
+                opacity: 0;
+            }
+            #mobile-menu-btn.is-open .bar3 {
+                transform: translateY(-7px) rotate(-45deg);
+            }
+
+            .main-nav {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--color-surface);
+                transform: translateX(100%);
+                transition: transform 0.3s ease-in-out;
+                padding-top: var(--spacing-xxl);
+                z-index: 1000;
+            }
+            .main-nav.is-open {
+                transform: translateX(0);
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            }
+            .main-nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--spacing-xl);
+            }
+            .main-nav a {
+                font-size: 1.25rem;
+            }
+        }
+
         .hero { position: relative; padding: var(--spacing-xxl) 0; text-align: center; overflow: hidden; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .hero::before, .hero::after { content: ''; position: absolute; border-radius: 50%; filter: blur(100px); z-index: -1; }
         .hero::before { width: 30vw; height: 30vw; min-width: 200px; min-height: 200px; background: var(--color-hero-blob1); top: 10%; left: 15%; animation: blob-move 20s infinite alternate; }
@@ -200,7 +262,7 @@
                 <span>Álgebra Moderna</span>
             </a>
             <div class="header-controls">
-                <nav class="main-nav js-only" aria-label="Navegación principal">
+                <nav class="main-nav js-only" id="main-nav" aria-label="Navegación principal">
                     <ul>
                         <li><a href="#foundations">Fundamentos</a></li>
                         <li><a href="#functions">Funciones</a></li>
@@ -212,6 +274,11 @@
                 <button class="theme-toggle js-only" id="theme-toggle" aria-label="Cambiar tema de color">
                     <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+                <button id="mobile-menu-btn" class="js-only" aria-label="Abrir menú" aria-expanded="false">
+                    <span class="bar bar1"></span>
+                    <span class="bar bar2"></span>
+                    <span class="bar bar3"></span>
                 </button>
             </div>
         </div>
@@ -370,6 +437,25 @@
                 currentTheme = document.documentElement.classList.contains('dark-theme') ? 'light' : 'dark';
                 localStorage.setItem('theme', currentTheme);
                 applyTheme(currentTheme);
+            });
+        }
+
+        // --- MOBILE NAVIGATION ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mainNav = document.getElementById('main-nav');
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const isOpen = mobileMenuBtn.classList.toggle('is-open');
+                mainNav.classList.toggle('is-open');
+                mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+            });
+            // Cierra el menú al hacer clic en un enlace
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('is-open');
+                    mainNav.classList.remove('is-open');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                });
             });
         }
 
