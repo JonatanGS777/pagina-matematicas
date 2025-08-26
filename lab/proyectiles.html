@@ -9,6 +9,21 @@
   <!-- Favicon - A simple emoji-based one for self-containment -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
   
+  <!-- MathJax for beautiful formulas -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     /* ------------------- */
@@ -77,10 +92,12 @@
     .app-container {
       display: grid;
       grid-template-columns: 320px 1fr;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto auto auto 1fr auto;
       grid-template-areas:
         "header header"
         "controls simulation"
+        "theory theory"
+        "analysis analysis"
         "footer footer";
       min-height: 100vh;
       gap: 1rem;
@@ -90,6 +107,8 @@
     .app-header { grid-area: header; }
     .controls-panel { grid-area: controls; }
     .simulation-panel { grid-area: simulation; }
+    .theory-section { grid-area: theory; }
+    .analysis-guide { grid-area: analysis; }
     .app-footer { grid-area: footer; }
 
     .card {
@@ -101,7 +120,6 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       transition: background-color 0.3s ease, border 0.3s ease;
-      height: 100%;
       overflow-y: auto;
     }
     
@@ -142,6 +160,8 @@
         font-size: 1.75rem;
         margin: 0;
         font-weight: 700;
+        text-align: center;
+        flex-grow: 1;
     }
     
     .app-header h1 .icon {
@@ -328,7 +348,51 @@
         white-space: nowrap;
         z-index: 100;
     }
+
+    .theory-section .formulas {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }
+    .theory-section .formula-group h3 {
+        color: var(--accent);
+        border-bottom: 2px solid var(--grid);
+        padding-bottom: 0.25rem;
+        margin-bottom: 0.75rem;
+    }
     
+    .analysis-guide details {
+      background-color: var(--grid);
+      border-radius: 8px;
+      margin-top: 1rem;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid var(--border);
+      transition: background-color 0.2s ease;
+    }
+    .analysis-guide details[open] {
+        background-color: var(--bg-card);
+    }
+    .analysis-guide summary {
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .analysis-guide summary::marker {
+      color: var(--accent);
+    }
+    .analysis-guide .guide-content {
+        margin-top: 0.75rem;
+        padding-left: 1.5rem;
+        border-left: 2px solid var(--accent);
+    }
+    .analysis-guide .guide-content p {
+        margin-bottom: 0.5rem;
+    }
+    .analysis-guide .guide-content strong {
+        color: var(--fg);
+    }
+
     .app-footer {
         text-align: center;
         padding-top: 1rem;
@@ -350,13 +414,16 @@
     @media (max-width: 1024px) {
       .app-container {
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto auto auto;
         grid-template-areas:
           "header"
           "controls"
           "simulation"
+          "theory"
+          "analysis"
           "footer";
       }
-      .controls-panel {
+      .controls-panel, .analysis-guide, .theory-section {
           height: auto;
       }
     }
@@ -476,6 +543,78 @@
             </div>
         </div>
     </main>
+
+    <section class="theory-section card">
+        <h2>📜 Fundamentos Teóricos y Fórmulas</h2>
+        <p style="color: var(--muted); margin-top: -0.5rem; margin-bottom: 1rem;">El movimiento parabólico se analiza descomponiendo el movimiento en dos ejes independientes: <strong>horizontal (eje x)</strong> y <strong>vertical (eje y)</strong>.</p>
+        <ul>
+            <li><strong>Eje Horizontal (x):</strong> El movimiento es a velocidad constante (Movimiento Rectilíneo Uniforme, MRU), ya que no hay aceleración horizontal (ignorando la resistencia del aire).</li>
+            <li><strong>Eje Vertical (y):</strong> El movimiento es uniformemente acelerado (MRUA) debido a la aceleración constante de la gravedad, $g$, que apunta hacia abajo.</li>
+        </ul>
+        <div class="formulas">
+            <div class="formula-group">
+                <h3>Componentes de Velocidad</h3>
+                <p>La velocidad inicial $v_0$ con un ángulo $\theta$ se descompone en:</p>
+                <p>Componente horizontal: $v_{0x} = v_0 \cos(\theta)$</p>
+                <p>Componente vertical: $v_{0y} = v_0 \sin(\theta)$</p>
+            </div>
+            <div class="formula-group">
+                <h3>Ecuaciones de Posición</h3>
+                <p>La posición $(x, y)$ en cualquier instante de tiempo $t$ es:</p>
+                <p>Posición en x: $x(t) = v_{0x} \cdot t$</p>
+                <p>Posición en y: $y(t) = y_0 + v_{0y} \cdot t - \frac{1}{2} g t^2$</p>
+            </div>
+            <div class="formula-group">
+                <h3>Métricas Clave del Vuelo</h3>
+                <p><strong>Altura Máxima ($y_{\text{max}}$):</strong> Se alcanza cuando $v_y = 0$.</p>
+                $$ y_{\text{max}} = y_0 + \frac{(v_0 \sin(\theta))^2}{2g} $$
+                <p><strong>Tiempo de Vuelo ($T$):</strong> Tiempo total en el aire. Para el caso simple $y_0 = 0$:</p>
+                $$ T = \frac{2 v_0 \sin(\theta)}{g} $$
+                <p>Para el caso general ($y_0 \ge 0$), resolvemos $y(t)=0$ usando la fórmula cuadrática:</p>
+                $$ \frac{1}{2}gt^2 - (v_0 \sin\theta)t - y_0 = 0 $$
+                $$ T = \frac{v_0\sin\theta + \sqrt{(v_0\sin\theta)^2 + 2gy_0}}{g} $$
+                <p><strong>Alcance ($R$):</strong> Distancia horizontal total recorrida.</p>
+                $$ R = (v_0 \cos\theta) \cdot T $$
+            </div>
+        </div>
+    </section>
+    
+    <section class="analysis-guide card">
+        <h2>🔬 Análisis y Guías de Estudio</h2>
+        <p style="color: var(--muted); margin-top: -0.5rem; margin-bottom: 1rem;">Usa estas preguntas para explorar los conceptos clave del movimiento de proyectiles con el simulador. ¡Experimenta y descubre!</p>
+
+        <details>
+            <summary>Guía 1: El Ángulo Óptimo y los Ángulos Complementarios</summary>
+            <div class="guide-content">
+                <p><strong>Pregunta:</strong> Para una velocidad inicial fija y sin altura inicial, ¿qué ángulo de lanzamiento produce el mayor alcance? ¿Qué sucede si lanzas a 30° y a 60°? ¿Qué observas?</p>
+                <p><strong>Instrucciones:</strong> Fija la velocidad en 30 m/s y la altura en 0 m. Prueba ángulos como 15°, 30°, 45°, 60° y 75°. Anota el alcance para cada uno. Compara los resultados de 30° y 60°. ¿Ves un patrón con los ángulos que suman 90°?</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Guía 2: Gravedad en Otros Mundos</summary>
+            <div class="guide-content">
+                <p><strong>Pregunta:</strong> Lanza un proyectil con los mismos parámetros (ej. v₀=20 m/s, θ=45°) en la Tierra (g=9.81 m/s²) y en la Luna (g=1.62 m/s²). ¿Cómo cambian la altura máxima y el alcance?</p>
+                <p><strong>Instrucciones:</strong> Usa la escena "Tiro Clásico" y luego cambia solo el valor de la gravedad a 1.62. Observa cómo se estira la parábola y compara los resultados numéricos.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Guía 3: El Efecto de la Altura Inicial</summary>
+            <div class="guide-content">
+                <p><strong>Pregunta:</strong> ¿Cómo afecta la altura inicial (y₀) al tiempo de vuelo y al alcance? ¿Es el tiempo de subida igual al tiempo de bajada si y₀ > 0?</p>
+                <p><strong>Instrucciones:</strong> Realiza un lanzamiento desde y₀=0. Anota el tiempo de vuelo. Ahora, aumenta la altura a 5 m y vuelve a lanzar con los mismos v₀ y θ. Compara el nuevo tiempo de vuelo. Observa la forma de la parábola, ¿es simétrica?</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Guía 4: Independencia de Movimientos</summary>
+            <div class="guide-content">
+                <p><strong>Pregunta:</strong> En un tiro horizontal (θ=0°), ¿de qué depende el tiempo que tarda el objeto en caer al suelo? ¿Depende de la velocidad inicial horizontal?</p>
+                <p><strong>Instrucciones:</strong> Usa la escena "Horizontal" (v₀=15 m/s, y₀=5 m). Anota el tiempo de vuelo. Ahora, cambia la velocidad a 30 m/s sin cambiar la altura. ¿Cambia el tiempo de vuelo? ¿Qué concluyes sobre la independencia de los movimientos vertical y horizontal?</p>
+            </div>
+        </details>
+    </section>
     
     <div id="tooltip" class="tooltip"></div>
 
