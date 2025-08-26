@@ -52,7 +52,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: 
+            background:
                 radial-gradient(circle at 20% 20%, rgba(211, 47, 47, 0.3) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(245, 124, 0, 0.3) 0%, transparent 50%),
                 radial-gradient(circle at 40% 60%, rgba(25, 118, 210, 0.2) 0%, transparent 50%),
@@ -176,6 +176,34 @@
         .nav-link.active {
             background: var(--gradient-main);
             color: var(--white);
+        }
+        
+        .mobile-toggle {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-primary);
+            border-radius: 3px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .mobile-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
         }
 
         /* Hero Section */
@@ -2566,6 +2594,13 @@
                         funFact: "La palabra 'algoritmo' deriva de su nombre latinizado."
                     },
                     {
+                        name: "Al-Hazen",
+                        period: "965-1040 d.C.",
+                        achievement: "Método Científico",
+                        quote: "La verdad se busca por sí misma.",
+                        funFact: "Considerado el padre de la óptica moderna y pionero del método científico."
+                    },
+                    {
                         name: "Leonardo Fibonacci",
                         period: "1170-1250",
                         achievement: "Secuencia de Fibonacci",
@@ -2578,6 +2613,27 @@
                         achievement: "Cálculo Diferencial",
                         quote: "Si he visto más lejos es porque me subí a hombros de gigantes.",
                         funFact: "Desarrolló el cálculo a los 23 años durante la cuarentena por la peste."
+                    },
+                    {
+                        name: "Gottfried Leibniz",
+                        period: "1646-1716",
+                        achievement: "Cálculo Integral",
+                        quote: "Es indigno de hombres excelentes perder horas como esclavos en la labor de cálculo.",
+                        funFact: "Desarrolló el sistema binario, la base de la computación moderna."
+                    },
+                    {
+                        name: "Leonhard Euler",
+                        period: "1707-1783",
+                        achievement: "Identidad de Euler",
+                        quote: "Lean a Euler, lean a Euler, él es el maestro de todos nosotros.",
+                        funFact: "Continuó produciendo trabajos matemáticos de primer nivel incluso después de quedarse ciego."
+                    },
+                    {
+                        name: "Carl Friedrich Gauss",
+                        period: "1777-1855",
+                        achievement: "Príncipe de las Matemáticas",
+                        quote: "Las matemáticas son la reina de las ciencias.",
+                        funFact: "A los tres años, corrigió un error en las cuentas de su padre."
                     }
                 ];
                 
@@ -2669,9 +2725,9 @@
                 const modal = document.createElement('div');
                 modal.className = 'mathematician-modal';
                 modal.innerHTML = `
-                    <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
+                    <div class="modal-overlay"></div>
                     <div class="modal-content">
-                        <button class="modal-close" onclick="this.parentElement.parentElement.remove()">
+                        <button class="modal-close">
                             <i class="fas fa-times"></i>
                         </button>
                         <div class="modal-header">
@@ -2712,13 +2768,15 @@
                 document.body.appendChild(modal);
                 document.body.style.overflow = 'hidden';
                 
-                // Remove modal when clicking outside
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal || e.target.classList.contains('modal-overlay')) {
-                        modal.remove();
-                        document.body.style.overflow = 'auto';
-                    }
-                });
+                // Centralized close function
+                const closeModal = () => {
+                    modal.remove();
+                    document.body.style.overflow = 'auto';
+                };
+                
+                // Add event listeners for closing
+                modal.querySelector('.modal-overlay').addEventListener('click', closeModal);
+                modal.querySelector('.modal-close').addEventListener('click', closeModal);
             }
             
             setupDiscoveryAnimations() {
@@ -2798,6 +2856,24 @@
                         description: "Permitió analizar el cambio y el movimiento de forma matemática.",
                         impact: "Revolucionó la física, ingeniería y todas las ciencias aplicadas.",
                         modernUse: "Diseño de cohetes, medicina, economía, simulaciones por computadora."
+                    },
+                    {
+                        title: "Geometría Euclidiana",
+                        description: "Estableció los fundamentos de la lógica matemática a través de axiomas y demostraciones.",
+                        impact: "Fue el estándar de razonamiento matemático por más de 2000 años.",
+                        modernUse: "Arquitectura, ingeniería, diseño gráfico, física."
+                    },
+                    {
+                        title: "Matemáticas Computacionales",
+                        description: "Creó las bases teóricas para la computación y los algoritmos.",
+                        impact: "Hizo posible la revolución digital y la era de la información.",
+                        modernUse: "Toda la tecnología digital, inteligencia artificial, internet."
+                    },
+                    {
+                        title: "Estadística Moderna",
+                        description: "Proporcionó herramientas para analizar datos y entender la incertidumbre.",
+                        impact: "Fundamental para la ciencia experimental, la economía y la toma de decisiones.",
+                        modernUse: "Medicina, finanzas, marketing, aprendizaje automático."
                     }
                 ];
                 
