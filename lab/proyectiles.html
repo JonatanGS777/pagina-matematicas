@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <title>Laboratorio de Proyectiles | Física Interactiva</title>
+  <meta name="description" content="Una simulación interactiva para explorar el movimiento parabólico de proyectiles. Ajusta la velocidad, el ángulo, la altura y la gravedad para entender los conceptos clave de la física.">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Gemini AI for STEM Education">
+  <!-- Favicon - A simple emoji-based one for self-containment -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    /* ------------------- */
+    /* RESET & FONT        */
+    /* ------------------- */
+    :root {
+      --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+      
+      /* Light Theme (Default) */
+      --bg: #f8f9fa;
+      --fg: #212529;
+      --bg-card: rgba(255, 255, 255, 0.75);
+      --border: #dee2e6;
+      --shadow: rgba(0, 0, 0, 0.08);
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-text: #ffffff;
+      --muted: #6c757d;
+      --grid: #e9ecef;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #121212;
+      --fg: #e0e0e0;
+      --bg-card: rgba(33, 37, 41, 0.75);
+      --border: #495057;
+      --shadow: rgba(0, 0, 0, 0.25);
+      --accent: #60a5fa;
+      --accent-hover: #93c5fd;
+      --accent-text: #121212;
+      --muted: #adb5bd;
+      --grid: #343a40;
+      --success: #198754;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overscroll-behavior: none;
+    }
+
+    h1, h2, h3 {
+      line-height: 1.2;
+      margin-bottom: 0.5em;
+      font-weight: 600;
+    }
+
+    /* ------------------- */
+    /* LAYOUT & STRUCTURE  */
+    /* ------------------- */
+    .app-container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      grid-template-rows: auto 1fr auto;
+      grid-template-areas:
+        "header header"
+        "controls simulation"
+        "footer footer";
+      min-height: 100vh;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .app-header { grid-area: header; }
+    .controls-panel { grid-area: controls; }
+    .simulation-panel { grid-area: simulation; }
+    .app-footer { grid-area: footer; }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 24px -4px var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background-color 0.3s ease, border 0.3s ease;
+      height: 100%;
+      overflow-y: auto;
+    }
+    
+    .simulation-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #simulationCanvas {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      cursor: crosshair;
+    }
+
+    /* ------------------- */
+    /* COMPONENTS          */
+    /* ------------------- */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .header-placeholder {
+        width: 40px; /* Same width as theme switcher button */
+    }
+    
+    .app-header h1 {
+        font-size: 1.75rem;
+        margin: 0;
+        font-weight: 700;
+    }
+    
+    .app-header h1 .icon {
+        font-size: 2rem;
+        vertical-align: middle;
+        margin-right: 0.5rem;
+    }
+
+    .theme-switcher {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--fg);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .theme-switcher:hover {
+      background-color: var(--border);
+      transform: scale(1.1) rotate(15deg);
+    }
+    .theme-switcher .icon-moon { display: none; }
+    html[data-theme="dark"] .theme-switcher .icon-sun { display: none; }
+    html[data-theme="dark"] .theme-switcher .icon-moon { display: block; }
+    
+    .control-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .control-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    
+    .input-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      background: var(--grid);
+      outline: none;
+      border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      cursor: pointer;
+      border-radius: 50%;
+      border: 2px solid var(--bg-card);
+      transition: transform 0.2s ease;
+    }
+    .slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+    }
+    .slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      cursor: pointer;
+      border-radius: 50%;
+      border: 2px solid var(--bg-card);
+    }
+
+    .number-input {
+      width: 80px;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      text-align: center;
+    }
+    
+    .unit-label {
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .btn {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+      text-align: center;
+    }
+    .btn:active {
+      transform: translateY(1px);
+    }
+    .btn-primary {
+      background-color: var(--accent);
+      color: var(--accent-text);
+    }
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      box-shadow: 0 4px 15px -5px var(--accent);
+    }
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .btn-secondary:hover {
+      background-color: var(--accent);
+      color: var(--accent-text);
+    }
+    
+    .simulation-controls {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .results-overlay {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 4px 12px var(--shadow);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        max-width: 280px;
+        pointer-events: auto;
+    }
+    
+    .results-overlay h3 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .result-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    .result-item .label { color: var(--muted); }
+    .result-item .value { font-weight: 600; font-family: var(--font-mono); }
+    
+    .tooltip {
+        position: absolute;
+        background-color: var(--fg);
+        color: var(--bg);
+        padding: 0.5rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+        z-index: 100;
+    }
+    
+    .app-footer {
+        text-align: center;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+    .app-footer a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+    .app-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    /* ------------------- */
+    /* RESPONSIVE DESIGN   */
+    /* ------------------- */
+    @media (max-width: 1024px) {
+      .app-container {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "header"
+          "controls"
+          "simulation"
+          "footer";
+      }
+      .controls-panel {
+          height: auto;
+      }
+    }
+    
+    @media (max-width: 768px) {
+        body { font-size: 14px; }
+        .app-container { padding: 0.5rem; }
+        .card { padding: 1rem; }
+        .app-header h1 { font-size: 1.25rem; }
+        .results-overlay {
+            position: static;
+            max-width: none;
+            margin-top: 1rem;
+        }
+        .simulation-wrapper {
+            flex-direction: column-reverse;
+        }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-placeholder"></div>
+      <h1><span class="icon">🎯</span> Laboratorio de Proyectiles</h1>
+      <button class="theme-switcher" id="themeSwitcher" title="Cambiar tema">
+        <span class="icon-sun">☀️</span>
+        <span class="icon-moon">🌙</span>
+      </button>
+    </header>
+
+    <aside class="controls-panel card">
+      <h2><span class="icon">⚙️</span> Parámetros de Entrada</h2>
+      
+      <div class="control-group">
+        <label for="v0Slider">Velocidad inicial (v₀)</label>
+        <div class="input-row">
+          <input type="range" id="v0Slider" class="slider" min="0" max="60" step="0.1" value="20">
+          <input type="number" id="v0Input" class="number-input" min="0" max="60" step="0.1" value="20">
+          <span class="unit-label">m/s</span>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label for="angleSlider">Ángulo de lanzamiento (θ)</label>
+        <div class="input-row">
+          <input type="range" id="angleSlider" class="slider" min="0" max="90" step="1" value="45">
+          <input type="number" id="angleInput" class="number-input" min="0" max="90" step="1" value="45">
+          <span class="unit-label">°</span>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label for="y0Slider">Altura inicial (y₀)</label>
+        <div class="input-row">
+          <input type="range" id="y0Slider" class="slider" min="0" max="10" step="0.1" value="0">
+          <input type="number" id="y0Input" class="number-input" min="0" max="10" step="0.1" value="0">
+          <span class="unit-label">m</span>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label for="gSlider">Aceleración de la gravedad (g)</label>
+        <div class="input-row">
+          <input type="range" id="gSlider" class="slider" min="1" max="20" step="0.01" value="9.81">
+          <input type="number" id="gInput" class="number-input" min="1" max="20" step="0.01" value="9.81">
+          <span class="unit-label">m/s²</span>
+        </div>
+      </div>
+      
+      <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+      
+      <h2><span class="icon">🎬</span> Escenas Predefinidas</h2>
+      <div class="button-group">
+        <button class="btn btn-secondary" id="scene1">Tiro Clásico</button>
+        <button class="btn btn-secondary" id="scene2">Horizontal</button>
+        <button class="btn btn-secondary" id="scene3">Tiro Alto</button>
+        <button class="btn btn-secondary" id="scene4">Lunar</button>
+      </div>
+      <button class="btn btn-secondary" id="resetDefaults" style="width: 100%; margin-top: 0.5rem;">Restablecer Valores</button>
+    </aside>
+
+    <main class="simulation-panel">
+        <div class="simulation-wrapper">
+            <div class="simulation-controls">
+                <button class="btn btn-primary" id="playPauseBtn">▶️ Iniciar</button>
+                <button class="btn btn-secondary" id="resetBtn">⏮️ Reiniciar</button>
+                <select id="simSpeedSelect" class="btn btn-secondary" title="Velocidad de simulación">
+                    <option value="0.25">0.25x</option>
+                    <option value="0.5">0.5x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="2">2x</option>
+                    <option value="4">4x</option>
+                </select>
+            </div>
+            <canvas id="simulationCanvas"></canvas>
+            <div class="results-overlay card">
+                <h3><span class="icon">📊</span> Resultados Clave</h3>
+                <div class="result-item">
+                    <span class="label">Altura Máxima (yₘₐₓ)</span>
+                    <span class="value" id="yMaxValue">0.00 m</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Alcance (R)</span>
+                    <span class="value" id="rangeValue">0.00 m</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Tiempo de Vuelo (T)</span>
+                    <span class="value" id="timeValue">0.00 s</span>
+                </div>
+                <hr style="border: 0; border-top: 1px solid var(--border); margin: 0.75rem 0;">
+                <div class="result-item">
+                    <span class="label">Tiempo Actual (t)</span>
+                    <span class="value" id="currentTimeValue">0.00 s</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="tooltip" class="tooltip"></div>
+
+    <footer class="app-footer">
+      <p>Desarrollado como una herramienta educativa de código abierto. Licencia MIT.</p>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // -----------------------------
+      // --- ELEMENTOS DEL DOM ---
+      // -----------------------------
+      const canvas = document.getElementById('simulationCanvas');
+      const ctx = canvas.getContext('2d');
+      const tooltip = document.getElementById('tooltip');
+
+      // Controles de entrada
+      const sliders = {
+        v0: document.getElementById('v0Slider'),
+        angle: document.getElementById('angleSlider'),
+        y0: document.getElementById('y0Slider'),
+        g: document.getElementById('gSlider'),
+      };
+      const inputs = {
+        v0: document.getElementById('v0Input'),
+        angle: document.getElementById('angleInput'),
+        y0: document.getElementById('y0Input'),
+        g: document.getElementById('gInput'),
+      };
+
+      // Botones de simulación
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const simSpeedSelect = document.getElementById('simSpeedSelect');
+
+      // Botones de escenas
+      const sceneButtons = {
+        scene1: document.getElementById('scene1'),
+        scene2: document.getElementById('scene2'),
+        scene3: document.getElementById('scene3'),
+        scene4: document.getElementById('scene4'),
+        resetDefaults: document.getElementById('resetDefaults'),
+      };
+      
+      // Salidas de resultados
+      const resultDisplays = {
+        yMax: document.getElementById('yMaxValue'),
+        range: document.getElementById('rangeValue'),
+        time: document.getElementById('timeValue'),
+        currentTime: document.getElementById('currentTimeValue'),
+      };
+
+      // Theme switcher
+      const themeSwitcher = document.getElementById('themeSwitcher');
+
+      // -----------------------------
+      // --- ESTADO DE LA SIMULACIÓN ---
+      // -----------------------------
+      let state = {
+        v0: 20,       // Velocidad inicial (m/s)
+        angle: 45,    // Ángulo (grados)
+        y0: 0,        // Altura inicial (m)
+        g: 9.81,      // Gravedad (m/s^2)
+        
+        t: 0,         // Tiempo actual de la simulación (s)
+        isRunning: false,
+        simSpeed: 1,
+        animationFrameId: null,
+        lastTimestamp: 0,
+        
+        // Resultados calculados
+        metrics: {
+          yMax: 0,
+          range: 0,
+          flightTime: 0,
+        },
+        
+        // Trayectoria completa
+        path: []
+      };
+      
+      const defaultState = { ...state };
+
+      // -----------------------------
+      // --- LÓGICA DE FÍSICA ---
+      // -----------------------------
+      
+      /**
+       * Calcula las métricas clave del lanzamiento (altura máxima, alcance, tiempo de vuelo).
+       * @param {object} params - Parámetros de entrada {v0, angle, y0, g}.
+       * @returns {object} - Objeto con yMax, range, flightTime.
+       */
+      function calculateMetrics({ v0, angle, y0, g }) {
+        const angleRad = angle * Math.PI / 180;
+        const v0x = v0 * Math.cos(angleRad);
+        const v0y = v0 * Math.sin(angleRad);
+
+        // Tiempo para alcanzar la altura máxima (cuando vy = 0)
+        const timeToPeak = v0y / g;
+        
+        // Altura máxima
+        // y_max = y₀ + v₀y * t_peak - 0.5 * g * t_peak²
+        const yMax = y0 + (v0y * v0y) / (2 * g);
+
+        // Tiempo de vuelo
+        // Se resuelve la ecuación cuadrática y(t) = 0 = y₀ + v₀y*t - 0.5*g*t²
+        // 0.5*g*t² - v₀y*t - y₀ = 0
+        // Usando la fórmula cuadrática: t = [-b ± sqrt(b² - 4ac)] / 2a
+        // a = 0.5g, b = -v₀y, c = -y₀
+        const flightTime = (v0y + Math.sqrt(v0y * v0y + 2 * g * y0)) / g;
+
+        // Alcance
+        const range = v0x * flightTime;
+
+        return { yMax, range, flightTime };
+      }
+
+      /**
+       * Calcula la posición (x, y) del proyectil en un tiempo t.
+       * @param {number} t - Tiempo en segundos.
+       * @returns {object} - Posición {x, y}.
+       */
+      function getPositionAtTime(t) {
+        const angleRad = state.angle * Math.PI / 180;
+        const v0x = state.v0 * Math.cos(angleRad);
+        const v0y = state.v0 * Math.sin(angleRad);
+        
+        const x = v0x * t;
+        const y = state.y0 + (v0y * t) - (0.5 * state.g * t * t);
+        
+        return { x, y };
+      }
+
+      // -----------------------------
+      // --- LÓGICA DEL CANVAS ---
+      // -----------------------------
+      let canvasState = {
+        scale: 20,    // Pixels por metro
+        originX: 50,  // Origen del eje X en píxeles
+        originY: 50,  // Origen del eje Y en píxeles (desde abajo)
+        padding: 50
+      };
+
+      /**
+       * Ajusta el tamaño del canvas para que sea nítido en pantallas HiDPI/Retina.
+       */
+      function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        draw(); // Redibujar todo al cambiar el tamaño
+      }
+
+      /**
+       * Ajusta la escala y el origen del canvas para que la trayectoria se ajuste bien.
+       */
+      function autoScale() {
+        const { range, yMax } = state.metrics;
+        const rect = canvas.getBoundingClientRect();
+        
+        // Añadimos un pequeño margen para que no quede pegado a los bordes
+        const requiredWidth = range * 1.1 + canvasState.padding;
+        const requiredHeight = yMax * 1.1 + canvasState.padding;
+
+        if (requiredWidth <= 0 || requiredHeight <= 0) {
+            canvasState.scale = 20;
+        } else {
+            const scaleX = rect.width / requiredWidth;
+            const scaleY = rect.height / requiredHeight;
+            canvasState.scale = Math.min(scaleX, scaleY);
+        }
+        
+        canvasState.originX = canvasState.padding / 2;
+        canvasState.originY = canvasState.padding / 2;
+      }
+      
+      /**
+       * Convierte coordenadas del mundo físico a coordenadas del canvas.
+       */
+      function worldToCanvas(x, y) {
+        const { scale, originX, originY } = canvasState;
+        const rect = canvas.getBoundingClientRect();
+        
+        return {
+          cx: originX + x * scale,
+          cy: rect.height - originY - y * scale
+        };
+      }
+      
+      /**
+       * Convierte coordenadas del canvas a coordenadas del mundo físico.
+       */
+      function canvasToWorld(cx, cy) {
+        const { scale, originX, originY } = canvasState;
+        const rect = canvas.getBoundingClientRect();
+        
+        return {
+            x: (cx - originX) / scale,
+            y: (rect.height - originY - cy) / scale
+        };
+      }
+
+      /**
+       * Dibuja la cuadrícula y los ejes.
+       */
+      function drawGrid() {
+        const rect = canvas.getBoundingClientRect();
+        const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--grid');
+        ctx.strokeStyle = gridColor;
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted');
+        ctx.lineWidth = 1;
+        ctx.font = '10px ' + getComputedStyle(document.documentElement).getPropertyValue('--font-sans');
+
+        const { x: worldWidth } = canvasToWorld(rect.width, 0);
+        const { y: worldHeight } = canvasToWorld(0, 0);
+
+        // Determinar el espaciado de la cuadrícula de forma dinámica
+        const desiredLines = 10;
+        const xStep = Math.max(1, Math.pow(10, Math.floor(Math.log10(worldWidth / desiredLines))));
+        const yStep = Math.max(1, Math.pow(10, Math.floor(Math.log10(worldHeight / desiredLines))));
+
+        // Líneas verticales
+        for (let x = 0; x < worldWidth; x += xStep) {
+            const { cx } = worldToCanvas(x, 0);
+            ctx.beginPath();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, rect.height);
+            ctx.stroke();
+            ctx.fillText(`${x.toFixed(0)}m`, cx + 2, rect.height - 5);
+        }
+        
+        // Líneas horizontales
+        for (let y = 0; y < worldHeight; y += yStep) {
+            const { cy } = worldToCanvas(0, y);
+            ctx.beginPath();
+            ctx.moveTo(0, cy);
+            ctx.lineTo(rect.width, cy);
+            ctx.stroke();
+            ctx.fillText(`${y.toFixed(0)}m`, 5, cy - 2);
+        }
+        
+        // Ejes principales
+        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted');
+        const { cx: originCanvasX, cy: originCanvasY } = worldToCanvas(0, 0);
+        ctx.beginPath();
+        ctx.moveTo(originCanvasX, 0);
+        ctx.lineTo(originCanvasX, rect.height);
+        ctx.moveTo(0, originCanvasY);
+        ctx.lineTo(rect.width, originCanvasY);
+        ctx.stroke();
+      }
+
+      /**
+       * Dibuja la trayectoria completa del proyectil.
+       */
+      function drawPath() {
+        if (state.path.length < 2) return;
+        
+        ctx.beginPath();
+        const startPoint = worldToCanvas(state.path[0].x, state.path[0].y);
+        ctx.moveTo(startPoint.cx, startPoint.cy);
+        
+        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 5]);
+
+        for (let i = 1; i < state.path.length; i++) {
+          const { cx, cy } = worldToCanvas(state.path[i].x, state.path[i].y);
+          ctx.lineTo(cx, cy);
+        }
+        ctx.stroke();
+        ctx.setLineDash([]); // Reset dash
+      }
+      
+      /**
+       * Dibuja el proyectil en su posición actual.
+       */
+      function drawProjectile() {
+        if (state.t <= 0) return;
+        
+        const pos = getPositionAtTime(state.t);
+        if (pos.y < 0 && state.t > 0.1) return; // No dibujar bajo el suelo
+        
+        const { cx, cy } = worldToCanvas(pos.x, pos.y);
+        
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--danger');
+        ctx.beginPath();
+        ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      /**
+       * Dibuja marcadores para altura máxima y alcance.
+       */
+      function drawMarkers() {
+        const { yMax, range } = state.metrics;
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+        const successColor = getComputedStyle(document.documentElement).getPropertyValue('--success');
+
+        // Marcador de Altura Máxima
+        const peakTime = (state.v0 * Math.sin(state.angle * Math.PI / 180)) / state.g;
+        const peakPos = getPositionAtTime(peakTime);
+        const { cx: peakCx, cy: peakCy } = worldToCanvas(peakPos.x, peakPos.y);
+        const { cy: y0Cy } = worldToCanvas(0, 0);
+        
+        ctx.strokeStyle = accentColor;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        ctx.moveTo(canvasState.originX, peakCy);
+        ctx.lineTo(peakCx, peakCy);
+        ctx.lineTo(peakCx, y0Cy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        ctx.fillStyle = accentColor;
+        ctx.fillText(`yₘₐₓ = ${yMax.toFixed(2)} m`, peakCx + 10, peakCy);
+
+        // Marcador de Alcance
+        const { cx: rangeCx } = worldToCanvas(range, 0);
+        ctx.strokeStyle = successColor;
+        ctx.beginPath();
+        ctx.moveTo(canvasState.originX, y0Cy);
+        ctx.lineTo(rangeCx, y0Cy);
+        ctx.stroke();
+        
+        ctx.fillStyle = successColor;
+        ctx.fillText(`R = ${range.toFixed(2)} m`, rangeCx - 80, y0Cy - 10);
+      }
+
+      /**
+       * Función principal de dibujo, se llama en cada frame.
+       */
+      function draw() {
+        const rect = canvas.getBoundingClientRect();
+        ctx.clearRect(0, 0, rect.width, rect.height);
+        
+        drawGrid();
+        drawPath();
+        drawMarkers();
+        drawProjectile();
+      }
+
+      // -----------------------------
+      // --- BUCLE DE ANIMACIÓN ---
+      // -----------------------------
+      function animationLoop(timestamp) {
+        if (!state.isRunning) {
+          state.animationFrameId = null;
+          return;
+        }
+
+        const deltaTime = (timestamp - state.lastTimestamp) / 1000; // en segundos
+        state.lastTimestamp = timestamp;
+        
+        state.t += deltaTime * state.simSpeed;
+
+        const currentPos = getPositionAtTime(state.t);
+
+        // Detener la simulación si toca el suelo
+        if (currentPos.y < 0 && state.t > 0.1) {
+          state.t = state.metrics.flightTime;
+          stopSimulation();
+        }
+        
+        if (state.t > state.metrics.flightTime) {
+            state.t = state.metrics.flightTime;
+            stopSimulation();
+        }
+
+        updateResultsDisplay();
+        draw();
+
+        state.animationFrameId = requestAnimationFrame(animationLoop);
+      }
+      
+      function startSimulation() {
+        if (state.isRunning) return;
+        state.isRunning = true;
+        playPauseBtn.innerHTML = '⏸️ Pausar';
+        state.lastTimestamp = performance.now();
+        state.animationFrameId = requestAnimationFrame(animationLoop);
+      }
+      
+      function pauseSimulation() {
+        if (!state.isRunning) return;
+        state.isRunning = false;
+        playPauseBtn.innerHTML = '▶️ Continuar';
+        if (state.animationFrameId) {
+          cancelAnimationFrame(state.animationFrameId);
+          state.animationFrameId = null;
+        }
+      }
+      
+      function stopSimulation() {
+        state.isRunning = false;
+        playPauseBtn.innerHTML = '▶️ Iniciar';
+        if (state.animationFrameId) {
+          cancelAnimationFrame(state.animationFrameId);
+          state.animationFrameId = null;
+        }
+      }
+
+      function resetSimulation() {
+        stopSimulation();
+        state.t = 0;
+        updateResultsDisplay();
+        draw();
+      }
+
+      // -----------------------------
+      // --- ACTUALIZACIÓN DE UI ---
+      // -----------------------------
+      
+      /**
+       * Sincroniza los sliders y los inputs numéricos.
+       * @param {string} source - 'slider' o 'input'.
+       * @param {string} key - La clave del estado (v0, angle, etc.).
+       */
+      function syncInputs(source, key) {
+        if (source === 'slider') {
+          inputs[key].value = sliders[key].value;
+        } else {
+          sliders[key].value = inputs[key].value;
+        }
+        state[key] = parseFloat(inputs[key].value);
+        
+        // Recalcular todo y redibujar
+        state.metrics = calculateMetrics(state);
+        precalculatePath();
+        autoScale();
+        resetSimulation();
+      }
+      
+      /**
+       * Actualiza los valores mostrados en el panel de resultados.
+       */
+      function updateResultsDisplay() {
+        resultDisplays.yMax.textContent = `${state.metrics.yMax.toFixed(2)} m`;
+        resultDisplays.range.textContent = `${state.metrics.range.toFixed(2)} m`;
+        resultDisplays.time.textContent = `${state.metrics.flightTime.toFixed(2)} s`;
+        resultDisplays.currentTime.textContent = `${state.t.toFixed(2)} s`;
+      }
+      
+      /**
+       * Aplica un conjunto de parámetros al estado y actualiza la UI.
+       */
+      function applyState(newState) {
+        Object.assign(state, newState);
+        
+        // Actualizar controles
+        for (const key in sliders) {
+          sliders[key].value = state[key];
+          inputs[key].value = state[key];
+        }
+        
+        // Recalcular y redibujar
+        state.metrics = calculateMetrics(state);
+        precalculatePath();
+        autoScale();
+        resetSimulation();
+      }
+      
+      /**
+       * Calcula previamente la trayectoria completa para dibujarla como guía.
+       */
+      function precalculatePath() {
+        state.path = [];
+        const timeStep = state.metrics.flightTime / 100; // 100 puntos en la trayectoria
+        for (let t = 0; t <= state.metrics.flightTime; t += timeStep) {
+          state.path.push(getPositionAtTime(t));
+        }
+        // Asegurarse de que el último punto esté exactamente en el final
+        state.path.push(getPositionAtTime(state.metrics.flightTime));
+      }
+
+      // -----------------------------
+      // --- MANEJADORES DE EVENTOS ---
+      // -----------------------------
+      for (const key in sliders) {
+        sliders[key].addEventListener('input', () => syncInputs('slider', key));
+        inputs[key].addEventListener('change', () => syncInputs('input', key));
+      }
+
+      playPauseBtn.addEventListener('click', () => {
+        if (state.isRunning) {
+          pauseSimulation();
+        } else {
+          // Si la simulación terminó, reiníciala antes de empezar
+          if (state.t >= state.metrics.flightTime) {
+              resetSimulation();
+          }
+          startSimulation();
+        }
+      });
+      
+      resetBtn.addEventListener('click', resetSimulation);
+      
+      simSpeedSelect.addEventListener('change', (e) => {
+        state.simSpeed = parseFloat(e.target.value);
+      });
+      
+      // Escenas
+      sceneButtons.scene1.addEventListener('click', () => applyState({ v0: 20, angle: 45, y0: 0, g: 9.81 }));
+      sceneButtons.scene2.addEventListener('click', () => applyState({ v0: 15, angle: 0, y0: 5, g: 9.81 }));
+      sceneButtons.scene3.addEventListener('click', () => applyState({ v0: 25, angle: 70, y0: 0, g: 9.81 }));
+      sceneButtons.scene4.addEventListener('click', () => applyState({ v0: 20, angle: 45, y0: 0, g: 1.62 }));
+      sceneButtons.resetDefaults.addEventListener('click', () => applyState(defaultState));
+
+      // Tooltip del canvas
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        
+        const { x: worldX, y: worldY } = canvasToWorld(mouseX, mouseY);
+        
+        // Buscar el punto más cercano en la trayectoria
+        let closestPoint = null;
+        let minDistance = Infinity;
+        
+        state.path.forEach(point => {
+            const distance = Math.sqrt(Math.pow(point.x - worldX, 2) + Math.pow(point.y - worldY, 2));
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestPoint = point;
+            }
+        });
+        
+        // Mostrar tooltip si el cursor está cerca de la trayectoria
+        if (closestPoint && minDistance * canvasState.scale < 15) {
+            tooltip.style.opacity = '1';
+            tooltip.style.left = `${e.clientX + 15}px`;
+            tooltip.style.top = `${e.clientY}px`;
+            
+            const angleRad = state.angle * Math.PI / 180;
+            const v0x = state.v0 * Math.cos(angleRad);
+            const timeAtPoint = closestPoint.x / v0x;
+            
+            tooltip.innerHTML = `
+                t: ${timeAtPoint.toFixed(2)}s<br>
+                x: ${closestPoint.x.toFixed(2)}m<br>
+                y: ${closestPoint.y.toFixed(2)}m
+            `;
+        } else {
+            tooltip.style.opacity = '0';
+        }
+      });
+      
+      canvas.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+      });
+
+      // Theme switcher
+      themeSwitcher.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        draw(); // Redibujar para que los colores de la cuadrícula se actualicen
+      });
+
+      // -----------------------------
+      // --- INICIALIZACIÓN ---
+      // -----------------------------
+      function init() {
+        // Cargar tema guardado
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (prefersDark) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        
+        applyState(state); // Aplicar estado inicial
+        resizeCanvas(); // Configurar tamaño inicial del canvas
+      }
+
+      init();
+    });
+  </script>
+</body>
+</html>
