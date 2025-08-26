@@ -664,7 +664,7 @@
 
       <section id="datos">
         <h2>1. Ingresa tus Datos</h2>
-        <p>Pega tus datos aquí, carga un archivo CSV o usa los datos de ejemplo. La demostración comenzará al instante.</p>
+        <p>Pega tus datos aquí, carga un archivo CSV o usa los datos de ejemplo. La magia comenzará al instante.</p>
         <div class="grid sm:grid-cols-2">
           <div class="input-group">
             <label for="data-input-1d">Datos de una variable (un número por línea)</label>
@@ -1588,11 +1588,6 @@
         g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
         svg.appendChild(g);
 
-        const factorial = (num) => {
-            let rval=1;
-            for (let i = 2; i <= num; i++) rval = rval * i;
-            return rval;
-        }
         const combinations = (n, k) => {
             if (k < 0 || k > n) return 0;
             if (k === 0 || k === n) return 1;
@@ -1630,10 +1625,10 @@
       };
       
       const runCLTSimulation = () => {
+        const cltContainer = document.getElementById('clt-container');
         if (state.data1D.length < 2) {
-            // Using a custom modal/alert would be better, but alert is simple for this context.
-            const cltContainer = document.getElementById('clt-container');
-            cltContainer.innerHTML = `<p style="padding: 2rem; text-align: center;">Por favor, ingresa datos en la sección "Datos de una variable" para usarlos como población.</p>`;
+            cltContainer.innerHTML = `<p style="padding: 2rem; text-align: center; color: var(--color-accent);">Por favor, ingresa datos en la sección "Datos de una variable" para usarlos como población.</p>`;
+            document.getElementById('clt-summary').innerHTML = '';
             return;
         }
         const sampleSize = parseInt(document.getElementById('clt-sample-size').value);

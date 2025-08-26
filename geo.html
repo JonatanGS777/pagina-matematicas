@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modelado Geométrico Interactivo (v2.1 Corregido)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    /* ------------------- */
+    /* RESET & BASE STYLES */
+    /* ------------------- */
+    :root {
+      --primary: #667eea;
+      --secondary: #764ba2;
+      --accent: #06b6d4;
+      --bg: #0b1020;
+      --card: rgba(255, 255, 255, 0.08);
+      --glass: rgba(255, 255, 255, 0.06);
+      --text: #eaf2ff;
+      --text-muted: #a0aec0;
+      --border: rgba(255, 255, 255, 0.1);
+      --focus-ring: #06b6d4;
+      --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --success: #2dd4bf;
+    }
+
+    html.light {
+      --primary: #5a67d8;
+      --secondary: #805ad5;
+      --accent: #00a3c4;
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --glass: rgba(255, 255, 255, 0.7);
+      --text: #1a202c;
+      --text-muted: #4a5568;
+      --border: #e2e8f0;
+      --shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+      --success: #14b8a6;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+    }
+
+    /* ------------------- */
+    /* LAYOUT & STRUCTURE  */
+    /* ------------------- */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .app-header h1 {
+      font-size: 1.5rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      max-width: 1600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 1024px) {
+      main {
+        grid-template-columns: 340px 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas:
+          "models visual"
+          "controls visual";
+      }
+    }
+    
+    @media (min-width: 1280px) {
+        main {
+            grid-template-columns: 380px 1fr;
+        }
+    }
+
+    .models { grid-area: models; }
+    .controls { grid-area: controls; }
+    .visual { grid-area: visual; }
+    
+    footer {
+        text-align: center;
+        padding: 1.5rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+    footer a {
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    /* ------------------- */
+    /* CARD & PANEL STYLES */
+    /* ------------------- */
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .panel h2, .panel h3 {
+      margin-bottom: 1rem;
+      color: var(--text);
+      font-size: 1.25rem;
+    }
+
+    /* ------------------- */
+    /* MODEL SELECTOR      */
+    /* ------------------- */
+    .model-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+
+    .model-card {
+      background: var(--glass);
+      border: 2px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+      color: var(--text-muted);
+      position: relative;
+    }
+
+    .model-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .model-card.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--accent);
+      transform: translateY(-2px) scale(1.02);
+    }
+    
+    .model-card i {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .model-card span {
+      font-weight: 500;
+    }
+
+    /* ------------------- */
+    /* CONTROLS            */
+    /* ------------------- */
+    .controls fieldset {
+      border: none;
+      margin-bottom: 1.5rem;
+      padding: 0;
+    }
+    .controls legend {
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .param-group {
+      margin-bottom: 1rem;
+    }
+
+    .param-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .param-control {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .param-control input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      outline: none;
+    }
+    .param-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--primary);
+      cursor: pointer;
+      border-radius: 50%;
+      border: 3px solid var(--bg);
+      transition: background-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 0 2px transparent;
+    }
+    .param-control input[type="range"]:hover::-webkit-slider-thumb {
+        background-color: var(--secondary);
+    }
+    .param-control input[type="range"]:focus-visible::-webkit-slider-thumb {
+        box-shadow: 0 0 0 2px var(--focus-ring);
+    }
+
+    .param-control input[type="number"] {
+      width: 70px;
+      padding: 0.5rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      color: var(--text);
+      font-size: 1rem;
+      text-align: center;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    input:focus-visible {
+        outline: 2px solid var(--focus-ring);
+        outline-offset: 2px;
+        border-radius: 0.5rem;
+    }
+    
+    .unit-selector {
+        display: flex;
+        background: var(--glass);
+        border-radius: 0.5rem;
+        padding: 4px;
+        border: 1px solid var(--border);
+    }
+    .unit-selector button {
+        flex: 1;
+        padding: 0.5rem;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-radius: 0.375rem;
+        transition: background-color 0.2s, color 0.2s;
+    }
+    .unit-selector button.active {
+        background: var(--primary);
+        color: white;
+    }
+
+    .toggles {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-top: 1px solid var(--border);
+        margin-top: 1rem;
+    }
+    
+    .switch-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--border);
+        transition: .4s;
+        border-radius: 24px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: var(--accent);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+    
+    .actions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+    .actions button {
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--border);
+        background: var(--glass);
+        color: var(--text);
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s, transform 0.1s;
+    }
+    .actions button:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+    .actions button:active {
+        transform: scale(0.98);
+    }
+    .actions button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: var(--glass);
+        color: var(--text-muted);
+        border-color: var(--border);
+    }
+    #animate {
+        grid-column: 1 / -1;
+        background: var(--primary);
+        color: white;
+    }
+    #export {
+        grid-column: 1 / -1;
+    }
+
+    /* ------------------- */
+    /* VISUAL & RESULTS    */
+    /* ------------------- */
+    .visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      min-height: 400px;
+    }
+    
+    .canvas-container {
+        flex-grow: 1;
+        position: relative;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 1rem;
+        overflow: hidden;
+        min-height: 400px;
+    }
+
+    #viewport2d, #viewport3d {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    #viewport3d canvas {
+        display: block;
+    }
+
+    .results {
+      flex-shrink: 0;
+    }
+    .results ul {
+      list-style: none;
+      margin-bottom: 1rem;
+    }
+    .results li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .results li:last-child {
+      border-bottom: none;
+    }
+    .results strong {
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 500;
+      color: var(--accent);
+      margin-left: 1rem;
+    }
+    .copy-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+        opacity: 0.5;
+        transition: opacity 0.2s, color 0.2s;
+    }
+    .results li:hover .copy-btn {
+        opacity: 1;
+    }
+    .copy-btn:hover {
+        color: var(--accent);
+    }
+
+    details {
+        font-size: 0.9rem;
+    }
+    details summary {
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--text-muted);
+    }
+    .formulas {
+        margin-top: 0.5rem;
+        padding: 1rem;
+        background: var(--glass);
+        border-radius: 0.5rem;
+        font-family: monospace;
+        white-space: pre-wrap;
+    }
+    
+    /* ------------------- */
+    /* THEME TOGGLE        */
+    /* ------------------- */
+    #theme-toggle {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--text);
+      font-size: 1.2rem;
+    }
+    
+    html.light #theme-toggle .fa-moon { display: none; }
+    html.dark #theme-toggle .fa-sun { display: none; }
+
+    /* ------------------- */
+    /* NEW ENHANCEMENTS    */
+    /* ------------------- */
+    .sub-panel {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+    }
+    .sub-panel h4 {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        color: var(--text-muted);
+    }
+    .camera-controls {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    .camera-controls button {
+        background: var(--glass);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+    }
+    .camera-controls button:hover {
+        background: var(--primary);
+    }
+    
+    #material-selector {
+        width: 100%;
+        padding: 0.5rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        color: var(--text);
+    }
+    
+    #tooltip {
+        position: fixed;
+        background: #333;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-size: 0.9rem;
+        z-index: 2000;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s;
+        transform: translate(10px, 10px);
+    }
+
+    /* ------------------- */
+    /* ACCESSIBILITY       */
+    /* ------------------- */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="app-header">
+      <h1>Modelado Geométrico 2.1</h1>
+      <button id="theme-toggle" aria-label="Cambiar tema de color" data-tooltip="Cambiar entre modo claro y oscuro">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+      </button>
+    </header>
+
+    <main>
+      <section class="models panel">
+        <h2>1. Selecciona un Sólido</h2>
+        <div class="model-selector">
+          <div class="model-card" data-model="box" role="button" tabindex="0" data-tooltip="Prisma Rectangular">
+            <i class="fa-solid fa-cube"></i>
+            <span>Prisma</span>
+          </div>
+          <div class="model-card" data-model="cylinder" role="button" tabindex="0" data-tooltip="Cilindro Circular">
+            <i class="fa-solid fa-database"></i>
+            <span>Cilindro</span>
+          </div>
+          <div class="model-card" data-model="sphere" role="button" tabindex="0" data-tooltip="Esfera">
+            <i class="fa-solid fa-globe"></i>
+            <span>Esfera</span>
+          </div>
+          <div class="model-card" data-model="pyramid" role="button" tabindex="0" data-tooltip="Pirámide de Base Cuadrada">
+            <i class="fa-solid fa-chart-area"></i>
+            <span>Pirámide</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls panel">
+        <h2>2. Ajusta Parámetros</h2>
+        <fieldset class="units">
+            <legend>Unidades</legend>
+            <div class="unit-selector">
+                <button data-unit="cm" class="active">cm</button>
+                <button data-unit="m">m</button>
+            </div>
+        </fieldset>
+
+        <fieldset id="params-box" class="params">
+          <legend>Dimensiones del Prisma</legend>
+          <div class="param-group">
+            <label for="box-l">Largo (l)</label>
+            <div class="param-control">
+              <input type="range" id="box-l" min="1" max="50" step="0.1" value="10" data-tooltip="Longitud del prisma">
+              <input type="number" id="box-l-num" min="1" max="50" step="0.1" value="10">
+            </div>
+          </div>
+          <div class="param-group">
+            <label for="box-w">Ancho (w)</label>
+            <div class="param-control">
+              <input type="range" id="box-w" min="1" max="50" step="0.1" value="5" data-tooltip="Anchura del prisma">
+              <input type="number" id="box-w-num" min="1" max="50" step="0.1" value="5">
+            </div>
+          </div>
+          <div class="param-group">
+            <label for="box-h">Alto (h)</label>
+            <div class="param-control">
+              <input type="range" id="box-h" min="1" max="50" step="0.1" value="2" data-tooltip="Altura del prisma">
+              <input type="number" id="box-h-num" min="1" max="50" step="0.1" value="2">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset id="params-cylinder" class="params" hidden>
+          <legend>Dimensiones del Cilindro</legend>
+          <div class="param-group">
+            <label for="cyl-r">Radio (r)</label>
+            <div class="param-control">
+              <input type="range" id="cyl-r" min="1" max="50" step="0.1" value="3" data-tooltip="Radio de la base">
+              <input type="number" id="cyl-r-num" min="1" max="50" step="0.1" value="3">
+            </div>
+          </div>
+          <div class="param-group">
+            <label for="cyl-h">Altura (h)</label>
+            <div class="param-control">
+              <input type="range" id="cyl-h" min="1" max="80" step="0.1" value="10" data-tooltip="Altura del cilindro">
+              <input type="number" id="cyl-h-num" min="1" max="80" step="0.1" value="10">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset id="params-sphere" class="params" hidden>
+          <legend>Dimensiones de la Esfera</legend>
+          <div class="param-group">
+            <label for="sph-r">Radio (r)</label>
+            <div class="param-control">
+              <input type="range" id="sph-r" min="1" max="50" step="0.1" value="4" data-tooltip="Radio de la esfera">
+              <input type="number" id="sph-r-num" min="1" max="50" step="0.1" value="4">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset id="params-pyramid" class="params" hidden>
+          <legend>Dimensiones de la Pirámide</legend>
+          <div class="param-group">
+            <label for="pyr-b">Lado de la base (b)</label>
+            <div class="param-control">
+              <input type="range" id="pyr-b" min="1" max="50" step="0.1" value="6" data-tooltip="Lado de la base cuadrada">
+              <input type="number" id="pyr-b-num" min="1" max="50" step="0.1" value="6">
+            </div>
+          </div>
+          <div class="param-group">
+            <label for="pyr-h">Altura (h)</label>
+            <div class="param-control">
+              <input type="range" id="pyr-h" min="1" max="60" step="0.1" value="8" data-tooltip="Altura de la pirámide">
+              <input type="number" id="pyr-h-num" min="1" max="60" step="0.1" value="8">
+            </div>
+          </div>
+        </fieldset>
+        
+        <div class="toggles">
+            <label class="switch-label" for="view3d" data-tooltip="Activar renderizado 3D interactivo">
+                <span>Vista 3D (beta)</span>
+                <span class="switch">
+                    <input type="checkbox" id="view3d">
+                    <span class="slider"></span>
+                </span>
+            </label>
+            <div id="view3d-options" hidden>
+                <label class="switch-label" for="wireframe" data-tooltip="Mostrar solo las aristas del modelo">
+                    <span>Modo Wireframe</span>
+                    <span class="switch">
+                        <input type="checkbox" id="wireframe">
+                        <span class="slider"></span>
+                    </span>
+                </label>
+            </div>
+        </div>
+        
+        <div id="advanced-controls">
+            <div class="sub-panel" id="view3d-controls-panel" hidden>
+                <h4>Controles de Vista 3D</h4>
+                <div class="param-group">
+                    <label for="material-selector">Material</label>
+                    <select id="material-selector" data-tooltip="Cambiar la apariencia del modelo">
+                        <option value="standard">Estándar</option>
+                        <option value="physical">Metálico</option>
+                        <option value="toon">Dibujo (Toon)</option>
+                    </select>
+                </div>
+                <div class="camera-controls">
+                    <button id="cam-top" data-tooltip="Vista Superior (Top)">XY</button>
+                    <button id="cam-front" data-tooltip="Vista Frontal (Front)">XZ</button>
+                    <button id="cam-side" data-tooltip="Vista Lateral (Side)">YZ</button>
+                </div>
+            </div>
+
+            <div class="sub-panel">
+                <h4>Controles de Animación</h4>
+                <div class="param-group">
+                    <label for="anim-speed">Velocidad</label>
+                    <input type="range" id="anim-speed" min="0.1" max="3" step="0.1" value="1" data-tooltip="Velocidad de la animación">
+                </div>
+                <div class="param-group">
+                    <label for="anim-intensity">Intensidad</label>
+                    <input type="range" id="anim-intensity" min="0.05" max="0.5" step="0.01" value="0.15" data-tooltip="Amplitud de la oscilación">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="actions">
+          <button id="animate" data-tooltip="Iniciar animación de los parámetros">Animar modelo</button>
+          <button id="pause" disabled data-tooltip="Pausar la animación">Pausar</button>
+          <button id="resume" disabled data-tooltip="Reanudar la animación">Reanudar</button>
+          <button id="reset" disabled data-tooltip="Restablecer a valores iniciales">Restablecer</button>
+          <button id="export" data-tooltip="Guardar una imagen PNG de la vista actual">Guardar imagen (PNG)</button>
+        </div>
+      </section>
+
+      <section class="visual">
+        <div class="canvas-container" aria-busy="false">
+            <canvas id="viewport2d" aria-label="Vista 2D del sólido"></canvas>
+            <div id="viewport3d" hidden aria-hidden="true"></div>
+        </div>
+        <aside class="results panel" aria-live="polite">
+          <h3>Resultados</h3>
+          <ul>
+            <li>
+                <span>Volumen</span> 
+                <div>
+                    <strong id="vol"></strong>
+                    <button class="copy-btn" data-target="vol" aria-label="Copiar volumen"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </li>
+            <li>
+                <span>Área superficial</span>
+                <div>
+                    <strong id="area"></strong>
+                    <button class="copy-btn" data-target="area" aria-label="Copiar área"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </li>
+            <li>
+                <span id="extra-label"></span>
+                <div>
+                    <strong id="extra"></strong>
+                    <button class="copy-btn" data-target="extra" aria-label="Copiar valor extra"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </li>
+          </ul>
+          <details>
+            <summary>Fórmulas</summary>
+            <div id="formulas-content" class="formulas"></div>
+          </details>
+        </aside>
+      </section>
+    </main>
+    <footer>
+        <p>Desarrollado con <i class="fa-solid fa-heart" style="color: var(--accent);"></i> por Gemini IA. 2024.</p>
+    </footer>
+  </div>
+  <div id="tooltip"></div>
+
+  <!-- Three.js and OrbitControls via CDN -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    // Import Three.js modules only when needed
+    let THREE, OrbitControls;
+
+    // ------------------- */
+    // CONSTANTS           */
+    // ------------------- */
+    const CONSTANTS = {
+        DEBOUNCE_DELAY: 20,
+        CAMERA_DISTANCE: 75,
+        TOOLTIP_OFFSET: 10,
+    };
+
+    // ------------------- */
+    // STATE MANAGEMENT    */
+    // ------------------- */
+    const appState = {
+      model: 'box',
+      units: 'cm',
+      params: {
+        box: { l: 10, w: 5, h: 2 },
+        cylinder: { r: 3, h: 10 },
+        sphere: { r: 4 },
+        pyramid: { b: 6, h: 8 },
+      },
+      anim: {
+        running: false,
+        paused: false,
+        id: null,
+        startTime: 0,
+        pauseTime: 0,
+        initialParams: null,
+        speed: 1,
+        intensity: 0.15,
+      },
+      view3D: false,
+      three: {
+        instance: null,
+        scene: null,
+        camera: null,
+        renderer: null,
+        controls: null,
+        mesh: null,
+        wireframe: false,
+        material: 'standard',
+      },
+      decimalPlaces: 2
+    };
+
+    const FORMULAS = {
+        box: `Volumen (V) = l * w * h
+Área (A) = 2(lw + wh + hl)
+Diagonal (D) = √(l² + w² + h²)`,
+        cylinder: `Volumen (V) = π * r² * h
+Área (A) = 2πr(r + h)
+Diámetro = 2r`,
+        sphere: `Volumen (V) = (4/3) * π * r³
+Área (A) = 4πr²
+Diámetro = 2r`,
+        pyramid: `Apotema (s) = √((b/2)² + h²)
+Volumen (V) = (1/3) * b² * h
+Área (A) = b² + 2bs`
+    };
+
+    // ------------------- */
+    // DOM ELEMENTS CACHE  */
+    // ------------------- */
+    const dom = {
+      themeToggle: document.getElementById('theme-toggle'),
+      modelCards: document.querySelectorAll('.model-card'),
+      paramFieldsets: document.querySelectorAll('.params'),
+      unitSelector: document.querySelector('.unit-selector'),
+      view3DSwitch: document.getElementById('view3d'),
+      view3DOptions: document.getElementById('view3d-options'),
+      wireframeSwitch: document.getElementById('wireframe'),
+      view3DControlsPanel: document.getElementById('view3d-controls-panel'),
+      materialSelector: document.getElementById('material-selector'),
+      canvasContainer: document.querySelector('.canvas-container'),
+      canvas2D: document.getElementById('viewport2d'),
+      viewport3D: document.getElementById('viewport3d'),
+      tooltip: document.getElementById('tooltip'),
+      results: {
+        vol: document.getElementById('vol'),
+        area: document.getElementById('area'),
+        extra: document.getElementById('extra'),
+        extraLabel: document.getElementById('extra-label'),
+        formulas: document.getElementById('formulas-content'),
+      },
+      buttons: {
+        animate: document.getElementById('animate'),
+        pause: document.getElementById('pause'),
+        resume: document.getElementById('resume'),
+        reset: document.getElementById('reset'),
+        export: document.getElementById('export'),
+        camTop: document.getElementById('cam-top'),
+        camFront: document.getElementById('cam-front'),
+        camSide: document.getElementById('cam-side'),
+      },
+      inputs: {
+        box: { l: document.getElementById('box-l'), w: document.getElementById('box-w'), h: document.getElementById('box-h') },
+        cylinder: { r: document.getElementById('cyl-r'), h: document.getElementById('cyl-h') },
+        sphere: { r: document.getElementById('sph-r') },
+        pyramid: { b: document.getElementById('pyr-b'), h: document.getElementById('pyr-h') },
+        animSpeed: document.getElementById('anim-speed'),
+        animIntensity: document.getElementById('anim-intensity'),
+      },
+      numInputs: {
+        box: { l: document.getElementById('box-l-num'), w: document.getElementById('box-w-num'), h: document.getElementById('box-h-num') },
+        cylinder: { r: document.getElementById('cyl-r-num'), h: document.getElementById('cyl-h-num') },
+        sphere: { r: document.getElementById('sph-r-num') },
+        pyramid: { b: document.getElementById('pyr-b-num'), h: document.getElementById('pyr-h-num') },
+      }
+    };
+    const ctx2D = dom.canvas2D.getContext('2d');
+
+    // ------------------- */
+    // UTILITY FUNCTIONS   */
+    // ------------------- */
+    const debounce = (func, delay) => {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+      };
+    };
+
+    const formatNumber = (num) => num.toFixed(appState.decimalPlaces);
+
+    // ------------------- */
+    // STATE PERSISTENCE   */
+    // ------------------- */
+    function saveState() {
+      try {
+        const stateToSave = {
+          model: appState.model,
+          units: appState.units,
+          params: appState.params,
+          theme: document.documentElement.className,
+          view3D: appState.view3D,
+          three: {
+              wireframe: appState.three.wireframe,
+              material: appState.three.material
+          }
+        };
+        localStorage.setItem('geometricModelingStateV2', JSON.stringify(stateToSave));
+      } catch (e) {
+        console.error("Failed to save state to localStorage", e);
+      }
+    }
+
+    function loadState() {
+      try {
+        const savedState = JSON.parse(localStorage.getItem('geometricModelingStateV2'));
+        if (savedState) {
+          appState.model = savedState.model || 'box';
+          appState.units = savedState.units || 'cm';
+          if (savedState.params) {
+              for (const model in appState.params) {
+                  if (savedState.params[model]) {
+                      appState.params[model] = { ...appState.params[model], ...savedState.params[model] };
+                  }
+              }
+          }
+          document.documentElement.className = savedState.theme || 'dark';
+          appState.view3D = savedState.view3D || false;
+          if(savedState.three) {
+              appState.three.wireframe = savedState.three.wireframe || false;
+              appState.three.material = savedState.three.material || 'standard';
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load state from localStorage", e);
+      }
+    }
+
+    // ------------------- */
+    // THEME MANAGEMENT    */
+    // ------------------- */
+    function toggleTheme() {
+      document.documentElement.classList.toggle('light');
+      document.documentElement.classList.toggle('dark');
+      saveState();
+      if (appState.view3D && appState.three.renderer) {
+          update3DMaterial();
+          const isLight = document.documentElement.classList.contains('light');
+          const ambientLight = appState.three.scene.getObjectByProperty('type', 'HemisphereLight');
+          if(ambientLight) ambientLight.groundColor.set(isLight ? 0x444444 : 0x080820);
+      }
+    }
+
+    // ------------------- */
+    // UI UPDATE FUNCTIONS */
+    // ------------------- */
+    function selectModel(modelName) {
+      if (appState.anim.running) stopAnimation(true);
+      dom.canvasContainer.setAttribute('aria-busy', 'true');
+
+      appState.model = modelName;
+      
+      dom.modelCards.forEach(card => {
+        card.classList.toggle('active', card.dataset.model === modelName);
+      });
+
+      dom.paramFieldsets.forEach(fieldset => {
+        fieldset.hidden = fieldset.id !== `params-${modelName}`;
+      });
+
+      updateUIFromState();
+      updateModel();
+      dom.canvasContainer.setAttribute('aria-busy', 'false');
+    }
+
+    function updateUIFromState() {
+        const params = appState.params[appState.model];
+        for (const key in params) {
+            if (dom.inputs[appState.model][key]) {
+                dom.inputs[appState.model][key].value = params[key];
+                dom.numInputs[appState.model][key].value = params[key];
+            }
+        }
+        const unitButtons = dom.unitSelector.querySelectorAll('button');
+        unitButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.unit === appState.units));
+        
+        dom.view3DSwitch.checked = appState.view3D;
+        dom.wireframeSwitch.checked = appState.three.wireframe;
+        dom.materialSelector.value = appState.three.material;
+        dom.view3DOptions.hidden = !appState.view3D;
+        dom.view3DControlsPanel.hidden = !appState.view3D;
+    }
+
+    function updateResults(results) {
+        const unit = appState.units;
+        const areaUnit = `${unit}²`;
+        const volUnit = `${unit}³`;
+
+        dom.results.vol.innerHTML = `${formatNumber(results.volume)} <small>${volUnit}</small>`;
+        dom.results.area.innerHTML = `${formatNumber(results.area)} <small>${areaUnit}</small>`;
+        dom.results.extra.innerHTML = `${formatNumber(results.extra)} <small>${unit}</small>`;
+        dom.results.extraLabel.textContent = results.extraLabel;
+        dom.results.formulas.textContent = FORMULAS[appState.model];
+    }
+
+    // ------------------- */
+    // CALCULATION LOGIC   */
+    // ------------------- */
+    function calculate() {
+      const params = appState.params[appState.model];
+      switch (appState.model) {
+        case 'box': {
+          const { l, w, h } = params;
+          return { volume: l * w * h, area: 2 * (l * w + w * h + h * l), extra: Math.sqrt(l*l + w*w + h*h), extraLabel: 'Diagonal espacial' };
+        }
+        case 'cylinder': {
+          const { r, h } = params;
+          return { volume: Math.PI * r * r * h, area: 2 * Math.PI * r * (r + h), extra: 2 * r, extraLabel: 'Diámetro' };
+        }
+        case 'sphere': {
+          const { r } = params;
+          return { volume: (4 / 3) * Math.PI * r * r * r, area: 4 * Math.PI * r * r, extra: 2 * r, extraLabel: 'Diámetro' };
+        }
+        case 'pyramid': {
+          const { b, h } = params;
+          const slantHeight = Math.sqrt(Math.pow(b / 2, 2) + h * h);
+          return { volume: (1 / 3) * b * b * h, area: b * b + 2 * b * slantHeight, extra: slantHeight, extraLabel: 'Altura inclinada (s)' };
+        }
+        default:
+          return { volume: 0, area: 0, extra: 0, extraLabel: 'N/A' };
+      }
+    }
+
+    // ------------------- */
+    // MAIN UPDATE LOGIC   */
+    // ------------------- */
+    function updateModel() {
+      const currentParams = appState.params[appState.model];
+      for (const key in currentParams) {
+        const input = dom.inputs[appState.model][key];
+        if (input) {
+            const value = parseFloat(input.value);
+            if (!isNaN(value)) currentParams[key] = value;
+        }
+      }
+
+      const results = calculate();
+      updateResults(results);
+
+      if (appState.view3D) {
+        update3DModel();
+      } else {
+        draw2DModel();
+      }
+      
+      if (!appState.anim.running) saveState();
+    }
+    const debouncedUpdateModel = debounce(updateModel, CONSTANTS.DEBOUNCE_DELAY);
+
+    // ------------------- */
+    // 2D DRAWING LOGIC    */
+    // ------------------- */
+    function resizeCanvas() {
+        const { width, height } = dom.canvasContainer.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        dom.canvas2D.width = width * dpr;
+        dom.canvas2D.height = height * dpr;
+        ctx2D.scale(dpr, dpr);
+        dom.canvas2D.style.width = `${width}px`;
+        dom.canvas2D.style.height = `${height}px`;
+        draw2DModel();
+    }
+
+    function draw2DModel() {
+        const { width, height } = dom.canvas2D.getBoundingClientRect();
+        if (width === 0 || height === 0) return;
+        ctx2D.clearRect(0, 0, width, height);
+
+        const isLight = document.documentElement.classList.contains('light');
+        const strokeColor = isLight ? '#4a5568' : '#a0aec0';
+        const fillColor = isLight ? 'rgba(90, 103, 216, 0.1)' : 'rgba(102, 126, 234, 0.1)';
+        
+        ctx2D.strokeStyle = strokeColor;
+        ctx2D.fillStyle = fillColor;
+        ctx2D.lineWidth = 1.5;
+
+        switch (appState.model) {
+            case 'box': drawBox(width, height); break;
+            case 'cylinder': drawCylinder(width, height); break;
+            case 'sphere': drawSphere(width, height); break;
+            case 'pyramid': drawPyramid(width, height); break;
+        }
+    }
+    
+    function getProjection(x, y, z, width, height, scale) {
+        const isoAngle = Math.PI / 6;
+        const screenX = width / 2 + (x - y) * Math.cos(isoAngle) * scale;
+        const screenY = height / 2 + (x + y) * Math.sin(isoAngle) * scale - z * scale;
+        return { x: screenX, y: screenY };
+    }
+
+    function drawBox(width, height) {
+        const { l, w, h } = appState.params.box;
+        const maxDim = Math.max(l, w, h, 20);
+        const scale = Math.min(width, height) * 0.8 / (maxDim * 2);
+        const p = (x, y, z) => getProjection(x, y, z, width, height, scale);
+        const points = [
+            p(-l/2, -w/2, -h/2), p(l/2, -w/2, -h/2), p(l/2, w/2, -h/2), p(-l/2, w/2, -h/2),
+            p(-l/2, -w/2, h/2), p(l/2, -w/2, h/2), p(l/2, w/2, h/2), p(-l/2, w/2, h/2)
+        ];
+        ctx2D.beginPath(); ctx2D.moveTo(points[0].x, points[0].y); ctx2D.lineTo(points[1].x, points[1].y); ctx2D.lineTo(points[2].x, points[2].y); ctx2D.lineTo(points[3].x, points[3].y); ctx2D.closePath(); ctx2D.stroke();
+        ctx2D.beginPath(); ctx2D.moveTo(points[4].x, points[4].y); ctx2D.lineTo(points[5].x, points[5].y); ctx2D.lineTo(points[6].x, points[6].y); ctx2D.lineTo(points[7].x, points[7].y); ctx2D.closePath(); ctx2D.fill(); ctx2D.stroke();
+        ctx2D.beginPath(); ctx2D.moveTo(points[1].x, points[1].y); ctx2D.lineTo(points[5].x, points[5].y); ctx2D.moveTo(points[2].x, points[2].y); ctx2D.lineTo(points[6].x, points[6].y); ctx2D.moveTo(points[3].x, points[3].y); ctx2D.lineTo(points[7].x, points[7].y); ctx2D.stroke();
+        ctx2D.setLineDash([4, 4]); ctx2D.beginPath(); ctx2D.moveTo(points[0].x, points[0].y); ctx2D.lineTo(points[4].x, points[4].y); ctx2D.stroke(); ctx2D.setLineDash([]);
+    }
+
+    function drawCylinder(width, height) {
+        const { r, h } = appState.params.cylinder;
+        const maxDim = Math.max(r * 2, h, 20);
+        const scale = Math.min(width, height) * 0.8 / (maxDim * 1.5);
+        const rx = r * scale, ry = rx * 0.4, ch = h * scale, cx = width / 2, cy = height / 2;
+        ctx2D.beginPath(); ctx2D.ellipse(cx, cy - ch / 2, rx, ry, 0, 0, 2 * Math.PI); ctx2D.fill(); ctx2D.stroke();
+        ctx2D.beginPath(); ctx2D.setLineDash([4, 4]); ctx2D.ellipse(cx, cy + ch / 2, rx, ry, 0, 0, Math.PI); ctx2D.stroke();
+        ctx2D.beginPath(); ctx2D.setLineDash([]); ctx2D.ellipse(cx, cy + ch / 2, rx, ry, 0, Math.PI, 2 * Math.PI); ctx2D.stroke();
+        ctx2D.beginPath(); ctx2D.moveTo(cx - rx, cy - ch / 2); ctx2D.lineTo(cx - rx, cy + ch / 2); ctx2D.moveTo(cx + rx, cy - ch / 2); ctx2D.lineTo(cx + rx, cy + ch / 2); ctx2D.stroke();
+    }
+
+    function drawSphere(width, height) {
+        const { r } = appState.params.sphere;
+        const scale = Math.min(width, height) * 0.8 / (r * 2);
+        const radius = r * scale, cx = width / 2, cy = height / 2;
+        const isLight = document.documentElement.classList.contains('light');
+        const gradColor1 = isLight ? '#f7fafc' : '#eaf2ff', gradColor2 = isLight ? '#a0aec0' : '#0b1020';
+        const gradient = ctx2D.createRadialGradient(cx - radius * 0.3, cy - radius * 0.3, radius * 0.1, cx, cy, radius);
+        gradient.addColorStop(0, gradColor1); gradient.addColorStop(1, gradColor2);
+        ctx2D.fillStyle = gradient;
+        ctx2D.beginPath(); ctx2D.arc(cx, cy, radius, 0, 2 * Math.PI); ctx2D.fill(); ctx2D.stroke();
+        ctx2D.save(); ctx2D.strokeStyle = 'rgba(128,128,128,0.5)'; ctx2D.lineWidth = 1; ctx2D.beginPath(); ctx2D.ellipse(cx, cy, radius, radius * 0.3, 0, 0, 2 * Math.PI); ctx2D.stroke(); ctx2D.beginPath(); ctx2D.ellipse(cx, cy, radius * 0.3, radius, 0, 0, 2 * Math.PI); ctx2D.stroke(); ctx2D.restore();
+    }
+
+    function drawPyramid(width, height) {
+        const { b, h } = appState.params.pyramid;
+        const maxDim = Math.max(b, h, 20);
+        const scale = Math.min(width, height) * 0.8 / (maxDim * 1.5);
+        const p = (x, y, z) => getProjection(x, y, z, width, height, scale);
+        const apex = p(0, 0, h/2);
+        const base = [ p(-b/2, -b/2, -h/2), p(b/2, -b/2, -h/2), p(b/2, b/2, -h/2), p(-b/2, b/2, -h/2) ];
+        ctx2D.beginPath(); ctx2D.moveTo(base[0].x, base[0].y); ctx2D.lineTo(base[1].x, base[1].y); ctx2D.lineTo(base[2].x, base[2].y); ctx2D.lineTo(base[3].x, base[3].y); ctx2D.closePath(); ctx2D.stroke();
+        ctx2D.beginPath(); ctx2D.moveTo(apex.x, apex.y); ctx2D.lineTo(base[1].x, base[1].y); ctx2D.lineTo(base[2].x, base[2].y); ctx2D.closePath(); ctx2D.fill(); ctx2D.stroke();
+        ctx2D.beginPath(); ctx2D.moveTo(apex.x, apex.y); ctx2D.lineTo(base[2].x, base[2].y); ctx2D.lineTo(base[3].x, base[3].y); ctx2D.closePath(); ctx2D.stroke();
+        ctx2D.setLineDash([4, 4]); ctx2D.beginPath(); ctx2D.moveTo(apex.x, apex.y); ctx2D.lineTo(base[0].x, base[0].y); ctx2D.stroke(); ctx2D.setLineDash([]);
+    }
+
+    // ------------------- */
+    // ANIMATION LOGIC     */
+    // ------------------- */
+    function startAnimation() {
+        if (appState.anim.running) return;
+        appState.anim.running = true;
+        appState.anim.paused = false;
+        appState.anim.initialParams = JSON.parse(JSON.stringify(appState.params[appState.model]));
+        appState.anim.startTime = performance.now();
+        
+        dom.buttons.animate.disabled = true;
+        dom.buttons.pause.disabled = false;
+        dom.buttons.resume.disabled = true;
+        dom.buttons.reset.disabled = false;
+        document.querySelectorAll('.param-control input, #anim-speed, #anim-intensity').forEach(input => input.disabled = true);
+
+        function animate(time) {
+            if (!appState.anim.running || appState.anim.paused) return;
+
+            const elapsed = (time - appState.anim.startTime) / 1000;
+            const currentParams = appState.params[appState.model];
+            const initialParams = appState.anim.initialParams;
+
+            for (const key in currentParams) {
+                const initialValue = initialParams[key];
+                const variation = initialValue * appState.anim.intensity;
+                const speed = appState.anim.speed * (1 + (key.charCodeAt(0) % 5) * 0.2);
+                const newValue = initialValue + Math.sin(elapsed * speed) * variation;
+                
+                const slider = dom.inputs[appState.model][key];
+                slider.value = newValue;
+                dom.numInputs[appState.model][key].value = formatNumber(newValue);
+            }
+            updateModel();
+            appState.anim.id = requestAnimationFrame(animate);
+        }
+        appState.anim.id = requestAnimationFrame(animate);
+    }
+
+    function stopAnimation(reset = false) {
+        if(appState.anim.id) cancelAnimationFrame(appState.anim.id);
+        appState.anim.running = false;
+        appState.anim.paused = false;
+
+        dom.buttons.animate.disabled = false;
+        dom.buttons.pause.disabled = true;
+        dom.buttons.resume.disabled = true;
+        dom.buttons.reset.disabled = true;
+        document.querySelectorAll('.param-control input, #anim-speed, #anim-intensity').forEach(input => input.disabled = false);
+
+        if (reset && appState.anim.initialParams) {
+            appState.params[appState.model] = appState.anim.initialParams;
+            updateUIFromState();
+            updateModel();
+        }
+    }
+    
+    function pauseAnimation() {
+        if (!appState.anim.running || appState.anim.paused) return;
+        appState.anim.paused = true;
+        appState.anim.pauseTime = performance.now();
+        dom.buttons.pause.disabled = true;
+        dom.buttons.resume.disabled = false;
+        cancelAnimationFrame(appState.anim.id);
+    }
+    
+    function resumeAnimation() {
+        if (!appState.anim.running || !appState.anim.paused) return;
+        const pauseDuration = performance.now() - appState.anim.pauseTime;
+        appState.anim.startTime += pauseDuration;
+        appState.anim.paused = false;
+        dom.buttons.pause.disabled = false;
+        dom.buttons.resume.disabled = true;
+        requestAnimationFrame(animate);
+    }
+
+    // ------------------- */
+    // 3D VIEW LOGIC       */
+    // ------------------- */
+    async function toggle3DView(enabled) {
+        dom.canvasContainer.setAttribute('aria-busy', 'true');
+        appState.view3D = enabled;
+        dom.canvas2D.hidden = enabled;
+        dom.viewport3D.hidden = !enabled;
+        dom.viewport3D.setAttribute('aria-hidden', !enabled);
+        dom.view3DOptions.hidden = !enabled;
+        dom.view3DControlsPanel.hidden = !enabled;
+
+        if (enabled) {
+            if (!appState.three.renderer) {
+                await init3D();
+            }
+            update3DModel();
+        } else {
+            destroy3D();
+        }
+        saveState();
+        dom.canvasContainer.setAttribute('aria-busy', 'false');
+    }
+
+    async function init3D() {
+        try {
+            if (!THREE) {
+              const threeModule = await import('three');
+              THREE = threeModule;
+              const { OrbitControls: oc } = await import('three/addons/controls/OrbitControls.js');
+              OrbitControls = oc;
+            }
+
+            const { width, height } = dom.viewport3D.getBoundingClientRect();
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            camera.position.z = CONSTANTS.CAMERA_DISTANCE;
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            dom.viewport3D.appendChild(renderer.domElement);
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            
+            const isLight = document.documentElement.classList.contains('light');
+            const ambientLight = new THREE.HemisphereLight(0xffffff, isLight ? 0x444444 : 0x080820, 1.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(1, 1, 1).normalize();
+            scene.add(directionalLight);
+
+            appState.three = { ...appState.three, scene, camera, renderer, controls };
+
+            const onResize = () => {
+                const { width, height } = dom.viewport3D.getBoundingClientRect();
+                if (width === 0 || height === 0) return;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            };
+            const resizeObserver = new ResizeObserver(debounce(onResize, 50));
+            resizeObserver.observe(dom.viewport3D);
+            appState.three.resizeObserver = resizeObserver;
+
+            function animate3D() {
+                appState.three.animationFrameId = requestAnimationFrame(animate3D);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate3D();
+        } catch (error) {
+            console.error("Failed to initialize 3D view:", error);
+            // Fallback to 2D
+            toggle3DView(false);
+            dom.view3DSwitch.checked = false;
+        }
+    }
+
+    function destroy3D() {
+        const { renderer, scene, mesh, controls, resizeObserver, animationFrameId } = appState.three;
+        if (!renderer) return;
+
+        cancelAnimationFrame(animationFrameId);
+        if (resizeObserver) resizeObserver.disconnect();
+        if (controls) controls.dispose();
+        
+        if (scene && mesh) {
+            scene.remove(mesh);
+            mesh.geometry.dispose();
+            mesh.material.dispose();
+        }
+        if (renderer) renderer.dispose();
+        dom.viewport3D.innerHTML = '';
+        appState.three = { ...appState.three, renderer: null, scene: null, mesh: null, controls: null, resizeObserver: null, animationFrameId: null };
+    }
+    
+    function update3DMaterial() {
+        if (!appState.three.mesh) return;
+        const isLight = document.documentElement.classList.contains('light');
+        const color = isLight ? 0x5a67d8 : 0x667eea;
+        
+        let newMaterial;
+        switch(appState.three.material) {
+            case 'physical':
+                newMaterial = new THREE.MeshPhysicalMaterial({ color, roughness: 0.2, metalness: 0.9 });
+                break;
+            case 'toon':
+                newMaterial = new THREE.MeshToonMaterial({ color });
+                break;
+            case 'standard':
+            default:
+                newMaterial = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.1 });
+                break;
+        }
+        newMaterial.wireframe = appState.three.wireframe;
+        
+        appState.three.mesh.material.dispose();
+        appState.three.mesh.material = newMaterial;
+    }
+
+    function update3DModel() {
+        if (!appState.view3D || !appState.three.scene) return;
+        
+        const { scene } = appState.three;
+        if (appState.three.mesh) {
+            scene.remove(appState.three.mesh);
+            appState.three.mesh.geometry.dispose();
+            appState.three.mesh.material.dispose();
+        }
+        
+        let geometry;
+        const params = appState.params[appState.model];
+
+        switch (appState.model) {
+            case 'box': geometry = new THREE.BoxGeometry(params.l, params.h, params.w); break;
+            case 'cylinder': geometry = new THREE.CylinderGeometry(params.r, params.r, params.h, 48); break;
+            case 'sphere': geometry = new THREE.SphereGeometry(params.r, 64, 48); break;
+            case 'pyramid': geometry = new THREE.ConeGeometry(params.b / Math.sqrt(2), params.h, 4); break;
+        }
+        
+        const newMesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial()); // Temp material
+        scene.add(newMesh);
+        appState.three.mesh = newMesh;
+        update3DMaterial(); // Apply correct material
+    }
+    
+    function setCameraView(view) {
+        const { camera, controls } = appState.three;
+        if(!camera || !controls) return;
+        
+        controls.reset();
+        switch(view) {
+            case 'top': camera.position.set(0, CONSTANTS.CAMERA_DISTANCE, 0); break;
+            case 'front': camera.position.set(0, 0, CONSTANTS.CAMERA_DISTANCE); break;
+            case 'side': camera.position.set(CONSTANTS.CAMERA_DISTANCE, 0, 0); break;
+        }
+        camera.lookAt(0, 0, 0);
+    }
+    
+    // ------------------- */
+    // TOOLTIP & COPY LOGIC*/
+    // ------------------- */
+    function showTooltip(e) {
+        const text = e.target.dataset.tooltip;
+        if (!text) return;
+        dom.tooltip.textContent = text;
+        dom.tooltip.style.opacity = 1;
+        positionTooltip(e);
+    }
+    function hideTooltip() {
+        dom.tooltip.style.opacity = 0;
+    }
+    function positionTooltip(e) {
+        dom.tooltip.style.left = `${e.clientX}px`;
+        dom.tooltip.style.top = `${e.clientY}px`;
+    }
+    
+    function copyToClipboard(e) {
+        const button = e.currentTarget;
+        const targetId = button.dataset.target;
+        const textToCopy = document.getElementById(targetId).textContent.trim();
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalIcon = button.innerHTML;
+            button.innerHTML = `<i class="fa-solid fa-check" style="color: var(--success);"></i>`;
+            setTimeout(() => {
+                button.innerHTML = originalIcon;
+            }, 1500);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+
+    // ------------------- */
+    // EVENT LISTENERS     */
+    // ------------------- */
+    function setupEventListeners() {
+      dom.themeToggle.addEventListener('click', toggleTheme);
+      
+      dom.modelCards.forEach(card => {
+        card.addEventListener('click', () => selectModel(card.dataset.model));
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectModel(card.dataset.model); }
+        });
+      });
+
+      dom.unitSelector.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+          appState.units = e.target.dataset.unit;
+          const buttons = dom.unitSelector.querySelectorAll('button');
+          buttons.forEach(btn => btn.classList.remove('active'));
+          e.target.classList.add('active');
+          updateModel();
+        }
+      });
+      
+      document.querySelectorAll('.param-control input').forEach(input => {
+        input.addEventListener('input', (e) => {
+            const [model, param] = e.target.id.split('-');
+            const isRange = e.target.type === 'range';
+            if (isRange) dom.numInputs[model][param].value = e.target.value;
+            else dom.inputs[model][param].value = e.target.value;
+            debouncedUpdateModel();
+        });
+      });
+      
+      dom.view3DSwitch.addEventListener('change', (e) => toggle3DView(e.target.checked));
+      dom.wireframeSwitch.addEventListener('change', (e) => {
+          appState.three.wireframe = e.target.checked;
+          update3DMaterial();
+          saveState();
+      });
+      dom.materialSelector.addEventListener('change', (e) => {
+          appState.three.material = e.target.value;
+          update3DMaterial();
+          saveState();
+      });
+      
+      dom.buttons.camTop.addEventListener('click', () => setCameraView('top'));
+      dom.buttons.camFront.addEventListener('click', () => setCameraView('front'));
+      dom.buttons.camSide.addEventListener('click', () => setCameraView('side'));
+      
+      dom.buttons.animate.addEventListener('click', startAnimation);
+      dom.buttons.pause.addEventListener('click', pauseAnimation);
+      dom.buttons.resume.addEventListener('click', resumeAnimation);
+      dom.buttons.reset.addEventListener('click', () => stopAnimation(true));
+      dom.inputs.animSpeed.addEventListener('input', (e) => appState.anim.speed = parseFloat(e.target.value));
+      dom.inputs.animIntensity.addEventListener('input', (e) => appState.anim.intensity = parseFloat(e.target.value));
+
+      dom.buttons.export.addEventListener('click', exportImage);
+      
+      document.querySelectorAll('[data-tooltip]').forEach(el => {
+          el.addEventListener('mouseenter', showTooltip);
+          el.addEventListener('focus', showTooltip);
+          el.addEventListener('mouseleave', hideTooltip);
+          el.addEventListener('blur', hideTooltip);
+          el.addEventListener('mousemove', positionTooltip);
+      });
+      
+      document.querySelectorAll('.copy-btn').forEach(btn => btn.addEventListener('click', copyToClipboard));
+    }
+    
+    // ------------------- */
+    // EXPORT FUNCTION     */
+    // ------------------- */
+    function exportImage() {
+        const link = document.createElement('a');
+        link.download = `modelo_${appState.model}.png`;
+        
+        try {
+            if (appState.view3D && appState.three.renderer) {
+                appState.three.renderer.render(appState.three.scene, appState.three.camera);
+                link.href = appState.three.renderer.domElement.toDataURL('image/png');
+            } else {
+                link.href = dom.canvas2D.toDataURL('image/png');
+            }
+            link.click();
+        } catch (error) {
+            console.error("Failed to export image:", error);
+            alert("No se pudo exportar la imagen. El contenido podría estar protegido (CORS).");
+        }
+    }
+
+    // ------------------- */
+    // INITIALIZATION      */
+    // ------------------- */
+    async function init() {
+      loadState();
+      setupEventListeners();
+      updateUIFromState();
+      selectModel(appState.model);
+      
+      if(appState.view3D) {
+          await toggle3DView(true);
+      }
+      
+      new ResizeObserver(debounce(resizeCanvas, 100)).observe(dom.canvasContainer);
+      resizeCanvas();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+
+  </script>
+</body>
+</html>
