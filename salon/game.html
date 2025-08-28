@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Masters</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- MathJax for LaTeX rendering -->
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <!-- Chart.js for statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Basic styles and theme variables */
+        :root {
+            --background: #f8fafc; /* slate-50 */
+            --foreground: #020617; /* slate-950 */
+            --card: #ffffff;
+            --card-foreground: #020617;
+            --primary: #6366f1; /* indigo-500 */
+            --primary-foreground: #eef2ff; /* indigo-50 */
+            --secondary: #f1f5f9; /* slate-100 */
+            --secondary-foreground: #0f172a; /* slate-900 */
+            --accent: #e94560;
+            --correct: #4CAF50;
+            --incorrect: #F44336;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        .dark {
+            --background: #0f172a; /* slate-900 */
+            --foreground: #f8fafc; /* slate-50 */
+            --card: #1e293b; /* slate-800 */
+            --card-foreground: #f8fafc;
+            --primary: #818cf8; /* indigo-400 */
+            --primary-foreground: #1e1b4b; /* indigo-950 */
+            --secondary: #334155; /* slate-700 */
+            --secondary-foreground: #f1f5f9; /* slate-100 */
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background);
+            color: var(--foreground);
+            transition: background-color 0.3s, color 0.3s;
+            perspective: 1000px;
+        }
+        
+        /* Custom animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px) rotateY(90deg); }
+            to { opacity: 1; transform: translateX(0) rotateY(0deg); }
+        }
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateX(0) rotateY(0deg); }
+            to { opacity: 0; transform: translateX(50px) rotateY(-90deg); }
+        }
+        .slide-in { animation: slideIn 0.5s forwards; }
+        .slide-out { animation: slideOut 0.5s forwards; }
+
+        @keyframes pulse-correct {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+        .pulse-correct { animation: pulse-correct 1s; }
+
+        @keyframes pulse-incorrect {
+            0% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(244, 67, 54, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0); }
+        }
+        .pulse-incorrect { animation: pulse-incorrect 1s; }
+        
+        .confetti-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 9999;
+        }
+
+        /* Ocultar las flechas en el input de tipo número */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="confetti-container"></div>
+
+    <!-- Header -->
+    <header class="absolute top-0 right-0 p-4 flex items-center gap-4">
+        <button id="lang-toggle" class="p-2 rounded-full bg-secondary hover:bg-primary/20 transition-colors font-bold">ES</button>
+        <button id="theme-toggle" class="p-2 rounded-full bg-secondary hover:bg-primary/20 transition-colors">
+            <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+    </header>
+
+    <main class="w-full max-w-2xl mx-auto">
+        <!-- Start Screen -->
+        <section id="start-screen" class="text-center space-y-8">
+            <h1 class="text-5xl font-extrabold tracking-tight" style="color: var(--accent);">Math Masters</h1>
+            <p id="start-subtitle" class="text-lg text-slate-500 dark:text-slate-400">Elige un modo de juego para empezar a practicar.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button data-mode="arcade" class="game-mode-btn p-6 rounded-lg bg-card shadow-md hover:shadow-lg hover:-translate-y-1 transition-all">
+                    <h2 id="arcade-title" class="text-2xl font-bold">Arcade Rápido</h2>
+                    <p id="arcade-desc" class="text-slate-500 dark:text-slate-400 mt-2">10 preguntas mixtas contra el reloj.</p>
+                </button>
+                <button data-mode="survival" class="game-mode-btn p-6 rounded-lg bg-card shadow-md hover:shadow-lg hover:-translate-y-1 transition-all">
+                    <h2 id="survival-title" class="text-2xl font-bold">Supervivencia</h2>
+                    <p id="survival-desc" class="text-slate-500 dark:text-slate-400 mt-2">¿Cuántas puedes acertar antes de fallar 3 veces?</p>
+                </button>
+            </div>
+            <div class="pt-4">
+                <h3 id="topic-title" class="text-xl font-semibold mb-4">O elige un tema para practicar:</h3>
+                <div id="topic-selection" class="flex flex-wrap justify-center gap-3"></div>
+            </div>
+        </section>
+
+        <!-- Game Screen -->
+        <section id="game-screen" class="hidden">
+            <div class="flex justify-between items-center mb-2 p-3 rounded-lg bg-card shadow-sm text-sm sm:text-lg">
+                <div class="font-semibold"><span data-i18n="hud_score">Puntuación</span>: <span id="score">0</span></div>
+                <div class="font-semibold"><span data-i18n="hud_streak">Racha</span>: <span id="streak">0</span>🔥</div>
+                <div id="lives-container" class="font-semibold hidden"><span data-i18n="hud_lives">Vidas</span>: <span id="lives">❤️❤️❤️</span></div>
+                <div class="font-semibold"><span data-i18n="hud_question">Pregunta</span>: <span id="question-counter">1/10</span></div>
+            </div>
+            <div id="timer-container" class="w-full h-2.5 bg-secondary rounded-full mb-4 overflow-hidden">
+                <div id="timer-bar" class="h-full rounded-full" style="width: 100%; background-color: var(--accent); transition: width 0.1s linear;"></div>
+            </div>
+            <div id="question-area" class="bg-card p-8 rounded-xl shadow-lg min-h-[350px] flex flex-col justify-center">
+                <div id="question-text" class="text-xl md:text-2xl text-center font-medium mb-6"></div>
+                <div id="answer-options"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- End Game Modal -->
+    <div id="end-game-modal" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center opacity-0 invisible transition-opacity duration-300 z-50">
+        <div id="end-modal-content" class="bg-card p-8 rounded-lg shadow-xl text-center space-y-6 transform scale-90 transition-transform duration-300">
+            <h1 id="end-title" class="text-4xl font-bold">¡Juego Terminado!</h1>
+            <div>
+                <p id="end-score-label" class="text-xl">Tu puntuación final es:</p>
+                <p id="final-score" class="text-6xl font-extrabold my-4" style="color: var(--accent);">0</p>
+                <p id="new-highscore" class="text-lg font-semibold text-pink-500 hidden">🎉 ¡Nuevo Récord! 🎉</p>
+            </div>
+            <div class="w-full max-w-sm mx-auto">
+                <h2 id="stats-title" class="text-2xl font-bold mb-4">Estadísticas</h2>
+                <canvas id="stats-chart" width="400" height="200"></canvas>
+            </div>
+            <div class="flex justify-center gap-4">
+                <button id="restart-btn" class="px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg shadow-md hover:opacity-90 transition-opacity">Jugar de Nuevo</button>
+                <button id="main-menu-btn" class="px-8 py-3 bg-secondary text-secondary-foreground font-semibold rounded-lg shadow-md hover:opacity-90 transition-opacity">Menú Principal</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        const screens = {
+            start: document.getElementById('start-screen'),
+            game: document.getElementById('game-screen'),
+        };
+        const hud = {
+            score: document.getElementById('score'),
+            streak: document.getElementById('streak'),
+            timerBar: document.getElementById('timer-bar'),
+            lives: document.getElementById('lives'),
+            livesContainer: document.getElementById('lives-container'),
+            questionCounter: document.getElementById('question-counter'),
+        };
+        const questionElements = {
+            area: document.getElementById('question-area'),
+            text: document.getElementById('question-text'),
+            options: document.getElementById('answer-options'),
+        };
+        const endGameModal = document.getElementById('end-game-modal');
+        const endModalContent = document.getElementById('end-modal-content');
+        const endScreenElements = {
+            title: document.getElementById('end-title'),
+            finalScore: document.getElementById('final-score'),
+            newHighscore: document.getElementById('new-highscore'),
+            statsChart: document.getElementById('stats-chart'),
+        };
+        const buttons = {
+            topicSelection: document.getElementById('topic-selection'),
+            restart: document.getElementById('restart-btn'),
+            mainMenu: document.getElementById('main-menu-btn'),
+            themeToggle: document.getElementById('theme-toggle'),
+            langToggle: document.getElementById('lang-toggle'),
+        };
+
+        let gameState = {};
+        let timerInterval;
+        let statsChartInstance;
+
+        const translations = {
+            es: {
+                start_subtitle: "Elige un modo de juego para empezar a practicar.",
+                arcade_title: "Arcade Rápido",
+                arcade_desc: "10 preguntas mixtas contra el reloj.",
+                survival_title: "Supervivencia",
+                survival_desc: "¿Cuántas puedes acertar antes de fallar 3 veces?",
+                topic_title: "O elige un tema para practicar:",
+                hud_score: "Puntuación",
+                hud_streak: "Racha",
+                hud_lives: "Vidas",
+                hud_question: "Pregunta",
+                end_title: "¡Juego Terminado!",
+                end_score_label: "Tu puntuación final es:",
+                new_highscore: "🎉 ¡Nuevo Récord! 🎉",
+                stats_title: "Estadísticas",
+                restart_btn: "Jugar de Nuevo",
+                main_menu_btn: "Menú Principal",
+                submit_btn: "OK",
+                chart_correct: "Correctas",
+                chart_incorrect: "Incorrectas",
+                chart_title: "Rendimiento por Tema",
+                topic_aritmetica: "Aritmética",
+                topic_algebra: "Álgebra",
+                topic_geometria: "Geometría",
+                topic_fracciones: "Fracciones",
+                topic_funciones: "Funciones",
+                q_aritmetica_div: (a, b) => `¿Cuánto es $${a} \\div ${b}$?`,
+                q_aritmetica_op: (a, b, op) => `¿Cuánto es $${a} ${op} ${b}$?`,
+                q_algebra_solve: (a, b, c) => `Resuelve para $x$: $${a}x + ${b} = ${c}$`,
+                q_geometria_hipo: `Calcula la longitud de la hipotenusa (?) del siguiente triángulo rectángulo:`,
+                q_fracciones_sum: (n1, d1, n2, d2) => `Calcula: $\\frac{${n1}}{${d1}} + \\frac{${n2}}{${d2}}$`,
+                q_funciones_eval: (a, sign, absB, x) => `Si $f(x) = ${a}x ${sign} ${absB}$, calcula $f(${x})$`,
+            },
+            en: {
+                start_subtitle: "Choose a game mode to start practicing.",
+                arcade_title: "Quick Arcade",
+                arcade_desc: "10 mixed questions against the clock.",
+                survival_title: "Survival",
+                survival_desc: "How many can you get right before 3 mistakes?",
+                topic_title: "Or choose a topic to practice:",
+                hud_score: "Score",
+                hud_streak: "Streak",
+                hud_lives: "Lives",
+                hud_question: "Question",
+                end_title: "Game Over!",
+                end_score_label: "Your final score is:",
+                new_highscore: "🎉 New Highscore! 🎉",
+                stats_title: "Statistics",
+                restart_btn: "Play Again",
+                main_menu_btn: "Main Menu",
+                submit_btn: "OK",
+                chart_correct: "Correct",
+                chart_incorrect: "Incorrect",
+                chart_title: "Performance by Topic",
+                topic_aritmetica: "Arithmetic",
+                topic_algebra: "Algebra",
+                topic_geometria: "Geometry",
+                topic_fracciones: "Fractions",
+                topic_funciones: "Functions",
+                q_aritmetica_div: (a, b) => `What is $${a} \\div ${b}$?`,
+                q_aritmetica_op: (a, b, op) => `What is $${a} ${op} ${b}$?`,
+                q_algebra_solve: (a, b, c) => `Solve for $x$: $${a}x + ${b} = ${c}$`,
+                q_geometria_hipo: `Calculate the length of the hypotenuse (?) of the following right triangle:`,
+                q_fracciones_sum: (n1, d1, n2, d2) => `Calculate: $\\frac{${n1}}{${d1}} + \\frac{${n2}}{${d2}}$`,
+                q_funciones_eval: (a, sign, absB, x) => `If $f(x) = ${a}x ${sign} ${absB}$, calculate $f(${x})$`,
+            }
+        };
+        let currentLang = 'es';
+        
+        function t(key, ...args) {
+            const string = translations[currentLang][key];
+            return typeof string === 'function' ? string(...args) : (string || key);
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            buttons.langToggle.textContent = lang.toUpperCase();
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.textContent = t(el.dataset.i18n);
+            });
+            document.getElementById('start-subtitle').textContent = t('start_subtitle');
+            document.getElementById('arcade-title').textContent = t('arcade_title');
+            document.getElementById('arcade-desc').textContent = t('arcade_desc');
+            document.getElementById('survival-title').textContent = t('survival_title');
+            document.getElementById('survival-desc').textContent = t('survival_desc');
+            document.getElementById('topic-title').textContent = t('topic_title');
+            endScreenElements.title.textContent = t('end_title');
+            document.getElementById('end-score-label').textContent = t('end_score_label');
+            endScreenElements.newHighscore.textContent = t('new_highscore');
+            document.getElementById('stats-title').textContent = t('stats_title');
+            buttons.restart.textContent = t('restart_btn');
+            buttons.mainMenu.textContent = t('main_menu_btn');
+
+            renderTopicButtons();
+        }
+
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const sfx = {
+            play: (type) => {
+                if (!audioContext) return;
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                if (type === 'correct') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                } else if (type === 'incorrect') {
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                } else if (type === 'click') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                }
+
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.2);
+            }
+        };
+
+        const questionGenerator = {
+            randInt: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+            gcd: (a, b) => b === 0 ? a : questionGenerator.gcd(b, a % b),
+
+            aritmetica: (difficulty = 1) => {
+                const a = questionGenerator.randInt(1 * difficulty, 10 * difficulty);
+                const b = questionGenerator.randInt(1 * difficulty, 10 * difficulty);
+                const question = { text: t('q_aritmetica_op', a, b, '+'), answer: a + b, signature: `${a}+${b}` };
+                return questionGenerator.generateInputQuestion(question);
+            },
+
+            algebra: (difficulty = 1) => {
+                const a = questionGenerator.randInt(2, 5 * difficulty);
+                const b = questionGenerator.randInt(1, 10 * difficulty);
+                const x_val = questionGenerator.randInt(2, 7 * difficulty);
+                const c = a * x_val + b;
+                const answer = (c - b) / a;
+                const question = { text: t('q_algebra_solve', a, b, c), answer, signature: `${a}-${b}-${c}` };
+                return questionGenerator.generateInputQuestion(question);
+            },
+            
+            geometria: (difficulty = 1) => {
+                const triples = [[3,4,5], [5,12,13], [8,15,17], [7,24,25]];
+                const base = triples[questionGenerator.randInt(0, triples.length - 1)];
+                const mult = questionGenerator.randInt(1, difficulty);
+                const sideA = base[0] * mult;
+                const sideB = base[1] * mult;
+                const hypotenuse = base[2] * mult;
+
+                const text = `
+                    <p class="mb-4">${t('q_geometria_hipo')}</p>
+                    <div class="flex justify-center">
+                        <svg viewBox="0 0 130 140" class="w-40 h-40">
+                            <polygon points="10,120 120,120 10,10" class="fill-transparent stroke-current" stroke-width="2"/>
+                            <text x="65" y="135" font-size="12" text-anchor="middle" dominant-baseline="middle" class="fill-current">${sideB}</text>
+                            <text x="8" y="65" font-size="12" text-anchor="end" dominant-baseline="middle" class="fill-current">${sideA}</text>
+                            <text x="75" y="60" font-size="16" font-weight="bold" class="fill-current">?</text>
+                        </svg>
+                    </div>`;
+
+                const question = { text, answer: hypotenuse, signature: [sideA, sideB].sort().join('-') };
+                return Math.random() > 0.5 ? questionGenerator.generateMultipleChoice(question, () => questionGenerator.randInt(hypotenuse - 5, hypotenuse + 5)) : questionGenerator.generateInputQuestion(question);
+            },
+
+            fracciones: (difficulty = 1) => {
+                const d1 = questionGenerator.randInt(2, 5 * difficulty);
+                const n1 = questionGenerator.randInt(1, d1 - 1);
+                const d2 = (difficulty > 1 && Math.random() > 0.5) ? questionGenerator.randInt(2, 5 * difficulty) : d1;
+                const n2 = questionGenerator.randInt(1, d2 - 1);
+
+                const num = n1 * d2 + n2 * d1;
+                const den = d1 * d2;
+                const commonDivisor = questionGenerator.gcd(num, den);
+                const simplifiedNum = num / commonDivisor;
+                const simplifiedDen = den / commonDivisor;
+                
+                const answer = simplifiedDen === 1 ? `${simplifiedNum}` : `${simplifiedNum}/${simplifiedDen}`;
+                const question = { text: t('q_fracciones_sum', n1, d1, n2, d2), answer, signature: `${n1}/${d1}+${n2}/${d2}` };
+                
+                const distractors = new Set([`${n1+n2}/${d1+d2}`, `${simplifiedNum}/${simplifiedDen + 1}`, `${simplifiedNum+1}/${simplifiedDen}`]);
+                const options = new Set([answer]);
+                const distractorArray = Array.from(distractors);
+                while(options.size < 4 && distractorArray.length > 0) {
+                    const d = distractorArray.pop();
+                    if (d !== answer) options.add(d);
+                }
+                while(options.size < 4) options.add(`${questionGenerator.randInt(1,10)}/${questionGenerator.randInt(2,10)}`);
+
+                return { ...question, options: Array.from(options).sort(() => Math.random() - 0.5), type: 'mc' };
+            },
+            
+            funciones: (difficulty = 1) => {
+                const a = questionGenerator.randInt(2, 5 * difficulty);
+                const b = questionGenerator.randInt(-5 * difficulty, 5 * difficulty);
+                const x = questionGenerator.randInt(1, 5);
+                const answer = a * x + b;
+                const sign = b < 0 ? '-' : '+';
+                const absB = Math.abs(b);
+
+                const question = { text: t('q_funciones_eval', a, sign, absB, x), answer, signature: `${a}-${b}-${x}` };
+                return questionGenerator.generateInputQuestion(question);
+            },
+
+            generateMultipleChoice: (question, distractorFn) => {
+                const options = new Set([question.answer]);
+                while (options.size < 4) {
+                    const distractor = distractorFn();
+                    if (distractor !== question.answer) options.add(distractor);
+                }
+                return { ...question, options: Array.from(options).sort(() => Math.random() - 0.5), type: 'mc' };
+            },
+
+            generateInputQuestion: (question) => {
+                return { ...question, type: 'input' };
+            }
+        };
+        
+        const topics = {
+            'aritmetica': { generator: questionGenerator.aritmetica },
+            'algebra': { generator: questionGenerator.algebra },
+            'geometria': { generator: questionGenerator.geometria },
+            'fracciones': { generator: questionGenerator.fracciones },
+            'funciones': { generator: questionGenerator.funciones },
+        };
+
+        function init() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon-sun').classList.add('hidden');
+                document.getElementById('theme-icon-moon').classList.remove('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon-sun').classList.remove('hidden');
+                document.getElementById('theme-icon-moon').classList.add('hidden');
+            }
+            
+            const savedLang = localStorage.getItem('lang') || 'es';
+            setLanguage(savedLang);
+
+            buttons.restart.addEventListener('click', () => { sfx.play('click'); endGameModal.classList.add('invisible', 'opacity-0'); endModalContent.classList.add('scale-90'); startGame(gameState.mode, gameState.topic); });
+            buttons.mainMenu.addEventListener('click', () => { sfx.play('click'); endGameModal.classList.add('invisible', 'opacity-0'); endModalContent.classList.add('scale-90'); showScreen('start'); });
+            buttons.themeToggle.addEventListener('click', toggleTheme);
+            buttons.langToggle.addEventListener('click', toggleLanguage);
+        }
+        
+        function renderTopicButtons() {
+            buttons.topicSelection.innerHTML = Object.keys(topics).map(key => 
+                `<button data-mode="topic" data-topic="${key}" class="game-mode-btn px-4 py-2 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:bg-primary/20 transition-colors">${t(`topic_${key}`)}</button>`
+            ).join('');
+            
+            document.querySelectorAll('.game-mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sfx.play('click');
+                    const mode = btn.dataset.mode;
+                    const topic = btn.dataset.topic;
+                    startGame(mode, topic);
+                });
+            });
+        }
+
+        function showScreen(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.add('hidden'));
+            screens[screenName].classList.remove('hidden');
+        }
+
+        function startGame(mode, topic = null) {
+            gameState = {
+                mode, topic, score: 0, streak: 0, questionNumber: 0,
+                totalQuestions: mode === 'arcade' ? 10 : (mode === 'topic' ? 15 : Infinity),
+                lives: 3, time: 10, difficulty: 1, questions: [],
+                stats: { correct: 0, incorrect: 0, topicPerformance: {} }
+            };
+            
+            Object.keys(topics).forEach(t => gameState.stats.topicPerformance[t] = { correct: 0, incorrect: 0 });
+
+            setupHUD();
+            generateQuestions();
+            nextQuestion();
+            showScreen('game');
+        }
+
+        function setupHUD() {
+            hud.score.textContent = 0;
+            hud.streak.textContent = '0🔥';
+            if (gameState.mode === 'survival') {
+                hud.livesContainer.classList.remove('hidden');
+                hud.lives.textContent = '❤️❤️❤️';
+            } else {
+                hud.livesContainer.classList.add('hidden');
+            }
+        }
+
+        function generateQuestions() {
+            gameState.questions = [];
+            const questionTopics = gameState.topic ? [gameState.topic] : Object.keys(topics);
+            const lastQuestionSignatures = {};
+            let i = 0;
+            const total = gameState.totalQuestions === Infinity ? 50 : gameState.totalQuestions;
+            while (i < total) {
+                const randomTopic = questionTopics[Math.floor(Math.random() * questionTopics.length)];
+                let question, signature, attempts = 0;
+                do {
+                    question = { ...topics[randomTopic].generator(gameState.difficulty), topic: randomTopic };
+                    signature = question.signature;
+                    attempts++;
+                } while (signature && signature === lastQuestionSignatures[randomTopic] && attempts < 5);
+                lastQuestionSignatures[randomTopic] = signature;
+                gameState.questions.push(question);
+                i++;
+            }
+        }
+        
+        function nextQuestion() {
+            if (gameState.questionNumber >= gameState.questions.length || (gameState.mode !== 'survival' && gameState.questionNumber >= gameState.totalQuestions)) {
+                endGame();
+                return;
+            }
+            
+            questionElements.area.classList.add('slide-out');
+            setTimeout(() => {
+                const question = gameState.questions[gameState.questionNumber];
+                gameState.currentQuestion = question;
+                gameState.questionNumber++;
+
+                hud.questionCounter.textContent = `${gameState.questionNumber}/${gameState.totalQuestions === Infinity ? '∞' : gameState.totalQuestions}`;
+                questionElements.text.innerHTML = question.text;
+                
+                MathJax.typesetPromise([questionElements.text]).catch(err => console.log(err));
+
+                questionElements.options.innerHTML = '';
+                if (question.type === 'mc') {
+                    questionElements.options.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+                    question.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.className = "p-4 text-lg rounded-lg bg-secondary text-secondary-foreground hover:bg-primary/20 transition-all duration-200 transform hover:scale-105";
+                        button.innerHTML = option.toString().includes('/') ? `$\\frac{${option.split('/')[0]}}{${option.split('/')[1]}}$` : option;
+                        button.dataset.answer = option;
+                        button.onclick = () => handleAnswer(button.dataset.answer, button);
+                        questionElements.options.appendChild(button);
+                    });
+                    MathJax.typesetPromise(questionElements.options.childNodes).catch(err => console.log(err));
+                } else { // 'input' type
+                    questionElements.options.className = '';
+                    const form = document.createElement('form');
+                    form.className = 'flex gap-2 justify-center';
+                    form.innerHTML = `
+                        <input type="number" id="answer-input" class="flex-grow max-w-xs p-3 text-lg border-2 border-secondary bg-background text-slate-950 dark:text-slate-50 rounded-lg text-center outline-none focus:border-primary" autocomplete="off" required>
+                        <button type="submit" class="px-6 py-3 font-semibold rounded-lg bg-accent text-white hover:opacity-90 transition-opacity">${t('submit_btn')}</button>
+                    `;
+                    form.onsubmit = (e) => {
+                        e.preventDefault();
+                        const input = form.querySelector('#answer-input');
+                        handleAnswer(input.value, form);
+                        input.disabled = true;
+                    };
+                    questionElements.options.appendChild(form);
+                    setTimeout(() => form.querySelector('#answer-input').focus(), 100);
+                }
+                
+                resetTimer();
+                questionElements.area.classList.remove('slide-out');
+                questionElements.area.classList.add('slide-in');
+                setTimeout(() => questionElements.area.classList.remove('slide-in'), 500);
+            }, 500);
+        }
+
+        function handleAnswer(selectedAnswer, element) {
+            clearInterval(timerInterval);
+            const isCorrect = selectedAnswer == gameState.currentQuestion.answer;
+            const topic = gameState.currentQuestion.topic;
+            
+            const feedbackElement = gameState.currentQuestion.type === 'mc' ? element : element.querySelector('button');
+            feedbackElement.classList.add(isCorrect ? 'pulse-correct' : 'pulse-incorrect');
+            feedbackElement.style.backgroundColor = isCorrect ? 'var(--correct)' : 'var(--incorrect)';
+
+            if (isCorrect) {
+                sfx.play('correct');
+                gameState.score += 100 + (gameState.streak * 10) + Math.round(gameState.time);
+                gameState.streak++;
+                gameState.stats.correct++;
+                gameState.stats.topicPerformance[topic].correct++;
+                if (gameState.streak > 0 && gameState.streak % 3 === 0) gameState.difficulty++;
+            } else {
+                sfx.play('incorrect');
+                gameState.streak = 0;
+                gameState.stats.incorrect++;
+                gameState.stats.topicPerformance[topic].incorrect++;
+                if (gameState.stats.incorrect > 0 && gameState.stats.incorrect % 2 === 0 && gameState.difficulty > 1) gameState.difficulty--;
+                
+                if (gameState.mode === 'survival') {
+                    gameState.lives--;
+                    updateLives();
+                    if (gameState.lives <= 0) {
+                        setTimeout(endGame, 1200);
+                        return;
+                    }
+                }
+            }
+
+            updateHUD();
+            setTimeout(nextQuestion, 1200);
+        }
+
+        function updateHUD() {
+            hud.score.textContent = gameState.score;
+            hud.streak.textContent = `${gameState.streak}🔥`;
+        }
+        
+        function updateLives() {
+            hud.lives.textContent = '❤️'.repeat(gameState.lives) + '🖤'.repeat(3 - gameState.lives);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            gameState.time = 10;
+            hud.timerBar.style.transition = 'none';
+            hud.timerBar.style.width = '100%';
+            void hud.timerBar.offsetWidth;
+            hud.timerBar.style.transition = 'width 0.1s linear';
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                gameState.time -= 0.1;
+                hud.timerBar.style.width = `${(gameState.time / 10) * 100}%`;
+                if (gameState.time <= 0) {
+                    clearInterval(timerInterval);
+                    handleAnswer(null, questionElements.options.querySelector('button, form')); // Time's up is an incorrect answer
+                }
+            }, 100);
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            
+            endScreenElements.finalScore.textContent = gameState.score;
+            const highscoreKey = `highscore_${gameState.mode}${gameState.topic ? `_${gameState.topic}` : ''}`;
+            const currentHighscore = localStorage.getItem(highscoreKey) || 0;
+            if (gameState.score > currentHighscore) {
+                localStorage.setItem(highscoreKey, gameState.score);
+                endScreenElements.newHighscore.classList.remove('hidden');
+                triggerConfetti();
+            } else {
+                endScreenElements.newHighscore.classList.add('hidden');
+            }
+
+            renderStatsChart();
+            endGameModal.classList.remove('invisible', 'opacity-0');
+            endModalContent.classList.remove('scale-90');
+        }
+
+        function renderStatsChart() {
+            const ctx = endScreenElements.statsChart.getContext('2d');
+            const labels = Object.keys(gameState.stats.topicPerformance)
+                .filter(key => gameState.stats.topicPerformance[key].correct > 0 || gameState.stats.topicPerformance[key].incorrect > 0)
+                .map(key => t(`topic_${key}`));
+            
+            const correctData = Object.values(gameState.stats.topicPerformance).filter(v => v.correct > 0 || v.incorrect > 0).map(v => v.correct);
+            const incorrectData = Object.values(gameState.stats.topicPerformance).filter(v => v.correct > 0 || v.incorrect > 0).map(v => v.incorrect);
+
+            if (statsChartInstance) statsChartInstance.destroy();
+
+            statsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: t('chart_correct'),
+                        data: correctData,
+                        backgroundColor: 'rgba(76, 175, 80, 0.6)',
+                    }, {
+                        label: t('chart_incorrect'),
+                        data: incorrectData,
+                        backgroundColor: 'rgba(244, 67, 54, 0.6)',
+                    }]
+                },
+                options: {
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                    responsive: true,
+                    plugins: { title: { display: true, text: t('chart_title') } }
+                }
+            });
+        }
+        
+        function toggleTheme() {
+            sfx.play('click');
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            document.getElementById('theme-icon-sun').classList.toggle('hidden', isDark);
+            document.getElementById('theme-icon-moon').classList.toggle('hidden', !isDark);
+        }
+
+        function toggleLanguage() {
+            sfx.play('click');
+            const newLang = currentLang === 'es' ? 'en' : 'es';
+            localStorage.setItem('lang', newLang);
+            setLanguage(newLang);
+        }
+
+        function triggerConfetti() {
+            const container = document.querySelector('.confetti-container');
+            container.innerHTML = '';
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `position: absolute; width: ${Math.random() * 10 + 5}px; height: ${confetti.style.width}; background-color: hsl(${Math.random() * 360}, 100%, 50%); left: ${Math.random() * 100}%; top: -20px; transform: rotate(${Math.random() * 360}deg); animation: fall ${Math.random() * 3 + 2}s linear forwards;`;
+                container.appendChild(confetti);
+            }
+        }
+        
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = `@keyframes fall { to { top: 110vh; transform: rotate(720deg); } }`;
+        document.head.appendChild(styleSheet);
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
