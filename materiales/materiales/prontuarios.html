@@ -79,6 +79,9 @@
             display: none;
             opacity: 0;
             animation: fadeIn 0.5s forwards;
+            background-color: transparent;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
         .tab-content.active {
             display: block;
@@ -87,6 +90,7 @@
         table {
             border-collapse: collapse;
             width: 100%;
+            margin-top: 1rem;
         }
         th, td {
             border: 1px solid var(--border-color);
@@ -184,7 +188,7 @@
         <!-- Tab Content Container -->
         <div id="content-container">
             <!-- Álgebra II Content -->
-            <div id="content-algebra" class="tab-content active p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner" style="background-color: var(--bg-color);">
+            <div id="content-algebra" class="tab-content active p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner">
                 <h2 class="text-3xl font-bold mb-4 border-b pb-2" style="border-color: var(--border-color);">Álgebra II - 9no Grado</h2>
                 <h3 class="text-xl font-semibold text-indigo-400 mb-2">Descripción del Curso</h3>
                 <p class="mb-6 leading-relaxed" style="color: var(--text-color);">Este curso dará énfasis al área de los estándares de Álgebra y Funciones, integrando las áreas de Numeración y Operación, Geometría, Análisis de Datos y Probabilidad. Se ampliará el concepto de función y la representación gráfica de las funciones cuadráticas, polinómicas, racionales, exponenciales y logarítmicas. Se trabajará con conceptos como regresión lineal, número imaginario y complejo, y la simplificación de expresiones con exponentes racionales. El aprendizaje de la matemática se facilita cuando los estudiantes solucionan problemas matemáticos, se comunican, razonan y reconocen las conexiones de la materia, realizan representaciones y su relación con otros campos del saber y con la vida diaria.</p>
@@ -251,10 +255,27 @@
                         </tbody>
                     </table>
                 </div>
+
+                <h3 class="text-xl font-semibold text-indigo-400 mt-6 mb-2">Notas Generales</h3>
+                <ul class="list-disc list-inside text-gray-400 leading-relaxed space-y-2">
+                    <li>Se debe cumplir con lo estipulado en el reglamento del estudiante del Departamento de Educación en cuanto a la asistencia, el comportamiento, la puntualidad, las entregas y las reposiciones.</li>
+                    <li>Cumplir con los trabajos diarios, asignaciones y exámenes con honestidad y puntualidad.</li>
+                    <li>Los estudiantes que participan del Programa de Educación Especial, Sección 504 de la Ley de Rehabilitación Vocacional y del Programa de Limitaciones Lingüísticas recibirán los acomodos razonables especificados en PEI, Plan de Servicios/Sección 504 y Plan de Desarrollo del Lenguaje, según corresponda.</li>
+                    <li>Si algún estudiante tiene alguna afección médica que requiera adaptaciones curriculares, favor de informarlo a las autoridades escolares.</li>
+                    <li>Este prontuario de curso está sujeto a cambios por condiciones atmosféricas adversas, indisposición del maestro por enfermedad o debido a necesidades académicas (de reenseñanza) de los estudiantes, entre otros.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-indigo-400 mt-6 mb-2">Textos de Referencia</h3>
+                <ul class="list-disc list-inside text-gray-400 leading-relaxed space-y-2">
+                    <li>Big Ideas (CESE). Álgebra II</li>
+                    <li>Dreyfous. Álgebra II</li>
+                    <li>Página electrónica del Departamento de Educación- Programa de Matemáticas: <a href="https://dedigital.dde.pr/course/view.php?id=109" target="_blank" class="text-indigo-400 hover:underline">dedigital.dde.pr</a></li>
+                    <li>El maestro podrá utilizar otros textos disponibles en la escuela autorizados por el DEPR. (Deberá incluirlos como textos de referencia).</li>
+                </ul>
             </div>
 
             <!-- Geometría Content -->
-            <div id="content-geometria" class="tab-content p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner" style="background-color: var(--bg-color);">
+            <div id="content-geometria" class="tab-content p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner">
                 <h2 class="text-3xl font-bold mb-4 border-b pb-2" style="border-color: var(--border-color);">Geometría - 10mo Grado</h2>
                 <h3 class="text-xl font-semibold text-sky-400 mb-2">Descripción del Curso</h3>
                 <p class="mb-6 leading-relaxed" style="color: var(--text-color);">El curso de Geometría desarrolla los cinco estándares de Matemáticas, poniendo especial atención en el estándar de Geometría, con formalidad y rigurosidad en la exposición los conceptos y destrezas geométricos que son fundamentales. Se incluyen los teoremas básicos de la geometría euclidiana para desarrollar justificaciones, establecer conjeturas y argumentos convincentes. Se aplican los conceptos de congruencia y semejanza entre figuras, se hacen construcciones geométricas formales, se justifican y utilizan las fórmulas de área y volumen junto a los conceptos geométricos para crear modelos y resolver problemas matemáticos relacionados con su entorno. El estándar de Numeración se integra por medio de las cantidades y las relaciones entre ellas, los exponentes racionales y las matrices, con el propósito de razonar cuantitativamente en la solución de problemas. De igual forma, en el Álgebra y la Medición, el estudiante escribe y construye expresiones en formas equivalentes, soluciona sistemas de ecuaciones, justifica y aplica las fórmulas asociadas a figuras geométricas bidimensionales y tridimensionales. El enfoque en Análisis de Datos y Probabilidad está basado en la representación visual de datos para comprender las posibles relaciones entre variables, el cálculo de valores esperados y uso de probabilidades para tomar decisiones justas. Debe promoverse el uso y dominio de la tecnología entre las herramientas para acceder, analizar y aplicar la información. Esto permitirá proseguir el estudio de temas matemáticos de mayor profundidad.</p>
@@ -321,10 +342,29 @@
                         </tbody>
                     </table>
                 </div>
+
+                <h3 class="text-xl font-semibold text-sky-400 mt-6 mb-2">Notas Generales</h3>
+                <ul class="list-disc list-inside text-gray-400 leading-relaxed space-y-2">
+                    <li>Se debe cumplir con lo estipulado en el reglamento del estudiante del Departamento de Educación en cuanto a la asistencia, el comportamiento, la puntualidad, las entregas y las reposiciones.</li>
+                    <li>Cumplir con los trabajos diarios, asignaciones y exámenes con honestidad y puntualidad.</li>
+                    <li>Los estudiantes que participan del Programa de Educación Especial, Sección 504 de la Ley de Rehabilitación Vocacional y del Programa de Limitaciones Lingüísticas recibirán los acomodos razonables especificados en PEI, Plan de Servicios/Sección 504 y Plan de Desarrollo del Lenguaje, según corresponda.</li>
+                    <li>Si algún estudiante tiene alguna afección médica que requiera adaptaciones curriculares, favor de informarlo a las autoridades escolares.</li>
+                    <li>Este prontuario de curso está sujeto a cambios por condiciones atmosféricas adversas, indisposición del maestro por enfermedad o debido a necesidades académicas (de reenseñanza) de los estudiantes, entre otros.</li>
+                </ul>
+                
+                <h3 class="text-xl font-semibold text-sky-400 mt-6 mb-2">Textos de Referencia</h3>
+                <ul class="list-disc list-inside text-gray-400 leading-relaxed space-y-2">
+                    <li>Big Ideas (CESE). Geometría</li>
+                    <li>Genial Skills Require. Geometría</li>
+                    <li>HMH. Geometría</li>
+                    <li>Dreyfous. Geometría</li>
+                    <li>Página electrónica del Departamento de Educación- Programa de Matemáticas: <a href="https://dedigital.dde.pr/course/view.php?id=109" target="_blank" class="text-sky-400 hover:underline">dedigital.dde.pr</a></li>
+                    <li>El maestro podrá utilizar otros textos disponibles en la escuela autorizados por el DEPR. (Deberá incluirlos como textos de referencia).</li>
+                </ul>
             </div>
 
             <!-- Trigonometría Content -->
-            <div id="content-trigonometria" class="tab-content p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner" style="background-color: var(--bg-color);">
+            <div id="content-trigonometria" class="tab-content p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner">
                 <h2 class="text-3xl font-bold mb-4 border-b pb-2" style="border-color: var(--border-color);">Trigonometría - 11mo Grado</h2>
                 <h3 class="text-xl font-semibold text-cyan-400 mb-2">Descripción del Curso</h3>
                 <p class="mb-6 leading-relaxed" style="color: var(--text-color);">Este curso de Trigonometría Plana trabaja el estándar de Numeración y Operación cuando el estudiante razona cuantitativamente y usa unidades para resolver problemas matemáticos. Los estándares de Geometría y Funciones se integran en el estudio de los conceptos básicos: sistema de medición de ángulos, razones trigonométricas del triángulo rectángulo, razones trigonométricas para cualquier ángulo, identidades trigonométricas, ecuaciones trigonométricas, ley de senos, teorema del coseno y aplicaciones de la trigonometría. Estudiará las relaciones entre grados y radianes para resolver problemas matemáticos utilizando el cálculo mental y la tecnología; predecirá y resolverá problemas matemáticos en los cuales figuren triángulos rectángulos; estudiará las razones trigonométricas con triángulos rectángulos; trazará gráficas de las funciones trigonométricas; aplicará identidades trigonométricas para resolver problemas matemáticos; desarrollará la capacidad para resolver ecuaciones trigonométricas básicas o usando identidades; usará las leyes de seno y coseno para resolver problemas que involucren triángulo; todo esto enmarcado en la interpretación, la predicción y la resolución de situaciones de la vida diaria.</p>
@@ -357,7 +397,7 @@
                     </div>
                 </div>
 
-                <h3 class="text-xl font-semibold text-cyan-400 mb-2">Plan de Evaluación (Sujeto a Cambios)</h3>
+                <h3 class="text-xl font-semibold text-cyan-400 mt-6 mb-2">Plan de Evaluación (Sujeto a Cambios)</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left table-auto">
                         <thead style="background-color: var(--border-color); color: var(--card-bg);">
@@ -391,6 +431,22 @@
                         </tbody>
                     </table>
                 </div>
+
+                <h3 class="text-xl font-semibold text-cyan-400 mt-6 mb-2">Notas Generales</h3>
+                <ul class="list-disc list-inside text-gray-400 leading-relaxed space-y-2">
+                    <li>Se debe cumplir con lo estipulado en el reglamento del estudiante del Departamento de Educación en cuanto a la asistencia, el comportamiento, la puntualidad, las entregas y las reposiciones.</li>
+                    <li>Cumplir con los trabajos diarios, asignaciones y exámenes con honestidad y puntualidad.</li>
+                    <li>Los estudiantes que participan del Programa de Educación Especial, Sección 504 de la Ley de Rehabilitación Vocacional y del Programa de Limitaciones Lingüísticas recibirán los acomodos razonables especificados en PEI, Plan de Servicios/Sección 504 y Plan de Desarrollo del Lenguaje, según corresponda.</li>
+                    <li>Si algún estudiante tiene alguna afección médica que requiera adaptaciones curriculares, favor de informarlo a las autoridades escolares.</li>
+                    <li>Este prontuario de curso está sujeto a cambios por condiciones atmosféricas adversas, indisposición del maestro por enfermedad o debido a necesidades académicas (de reenseñanza) de los estudiantes, entre otros.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-cyan-400 mt-6 mb-2">Textos de Referencia</h3>
+                <ul class="list-disc list-inside text-gray-400 leading-relaxed space-y-2">
+                    <li>CESE. Trigonometría</li>
+                    <li>Página electrónica del Departamento de Educación- Programa de Matemáticas: <a href="https://dedigital.dde.pr/course/view.php?id=109" target="_blank" class="text-cyan-400 hover:underline">dedigital.dde.pr</a></li>
+                    <li>El maestro podrá utilizar otros textos disponibles en la escuela autorizados por el DEPR (deberá incluirlo como textos de referencia).</li>
+                </ul>
             </div>
         </div>
 
