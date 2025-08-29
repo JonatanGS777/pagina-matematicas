@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuarios de Matemáticas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Dark Theme Colors */
+            --bg-color: #121212; /* Un gris muy oscuro, casi negro */
+            --card-bg: #1e1e1e; /* Un gris oscuro para las tarjetas */
+            --text-color: #e0e0e0; /* Un gris claro para el texto */
+            --border-color: #333333; /* Un gris para los bordes */
+            --accent-indigo: #818cf8; /* indigo-400 */
+            --accent-sky: #38bdf8; /* sky-400 */
+            --accent-cyan: #22d3ee; /* cyan-400 */
+            --button-bg-dark: #2d2d2d;
+            --button-shadow-light: rgba(255, 255, 255, 0.05);
+            --button-shadow-dark: rgba(0, 0, 0, 0.5);
+        }
+        .light-theme {
+            /* Light Theme Colors */
+            --bg-color: #f0f2f5; /* Un gris muy claro */
+            --card-bg: #ffffff; /* Blanco para las tarjetas */
+            --text-color: #333333; /* Gris oscuro para el texto */
+            --border-color: #e0e0e0; /* Gris claro para los bordes */
+            --accent-indigo: #6366f1; /* indigo-500 */
+            --accent-sky: #0ea5e9; /* sky-500 */
+            --accent-cyan: #06b6d4; /* cyan-500 */
+            --button-bg-dark: #f0f0f0;
+            --button-shadow-light: rgba(255, 255, 255, 0.8);
+            --button-shadow-dark: rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+        .neumorphic-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: 
+                -5px -5px 15px var(--button-shadow-light),
+                5px 5px 15px var(--button-shadow-dark);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease-in-out;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+            background-color: var(--button-bg-dark);
+            color: var(--text-color);
+        }
+        .tab-button:hover {
+            transform: translateY(-2px);
+        }
+        .tab-button.active {
+            transform: scale(0.98);
+        }
+        .tab-button.active.algebra-color {
+            background-color: var(--accent-indigo);
+            color: white;
+        }
+        .tab-button.active.geometria-color {
+            background-color: var(--accent-sky);
+            color: white;
+        }
+        .tab-button.active.trigonometria-color {
+            background-color: var(--accent-cyan);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+        /* Sticky Header */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Hamburger Menu */
+        @media (max-width: 767px) {
+            .tabs-container {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 1rem;
+                background-color: var(--bg-color);
+                border-bottom: 1px solid var(--border-color);
+            }
+            .tabs-container.open {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4">
+
+    <!-- Sticky Header with Theme Toggle and Hamburger Menu -->
+    <nav class="w-full sticky-header flex justify-center py-4">
+        <div class="w-full max-w-5xl flex items-center justify-between px-4">
+            <a href="#" class="text-2xl font-bold transition-colors duration-300">
+                <i class="fas fa-book-open mr-2"></i>Prontuarios
+            </a>
+            
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="p-2 rounded-full neumorphic-card">
+                <i class="fas fa-moon"></i>
+            </button>
+
+            <!-- Hamburger Menu Button (Mobile) -->
+            <button id="hamburger-menu" class="md:hidden p-2 rounded-full neumorphic-card ml-4">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Tabs for Courses (Desktop) -->
+            <div id="desktop-tabs" class="hidden md:flex flex-row justify-end space-x-4">
+                <button id="tab-algebra" class="tab-button px-4 py-2 rounded-full font-semibold neumorphic-card" data-target="content-algebra">
+                    <span>Álgebra II (9no)</span>
+                </button>
+                <button id="tab-geometria" class="tab-button px-4 py-2 rounded-full font-semibold neumorphic-card" data-target="content-geometria">
+                    <span>Geometría (10mo)</span>
+                </button>
+                <button id="tab-trigonometria" class="tab-button px-4 py-2 rounded-full font-semibold neumorphic-card" data-target="content-trigonometria">
+                    <span>Trigonometría (11mo)</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Tabs Container -->
+    <div id="mobile-tabs" class="tabs-container md:hidden w-full transition-all duration-300">
+        <button id="mobile-tab-algebra" class="tab-button w-full flex items-center justify-center space-x-2 px-6 py-3 mb-2 rounded-full font-semibold neumorphic-card" data-target="content-algebra">
+            <i class="fas fa-calculator"></i>
+            <span>Álgebra II (9no)</span>
+        </button>
+        <button id="mobile-tab-geometria" class="tab-button w-full flex items-center justify-center space-x-2 px-6 py-3 mb-2 rounded-full font-semibold neumorphic-card" data-target="content-geometria">
+            <i class="fas fa-shapes"></i>
+            <span>Geometría (10mo)</span>
+        </button>
+        <button id="mobile-tab-trigonometria" class="tab-button w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-full font-semibold neumorphic-card" data-target="content-trigonometria">
+            <i class="fas fa-chart-line"></i>
+            <span>Trigonometría (11mo)</span>
+        </button>
+    </div>
+
+    <!-- Main Content Card -->
+    <main class="w-full max-w-5xl neumorphic-card rounded-3xl p-6 md:p-10 mb-8 mt-8">
+        
+        <!-- Tab Content Container -->
+        <div id="content-container">
+            <!-- Álgebra II Content -->
+            <div id="content-algebra" class="tab-content active p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner" style="background-color: var(--bg-color);">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2" style="border-color: var(--border-color);">Álgebra II - 9no Grado</h2>
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Descripción del Curso</h3>
+                <p class="mb-6 leading-relaxed" style="color: var(--text-color);">Este curso dará énfasis al área de los estándares de Álgebra y Funciones, integrando las áreas de Numeración y Operación, Geometría, Análisis de Datos y Probabilidad. Se ampliará el concepto de función y la representación gráfica de las funciones cuadráticas, polinómicas, racionales, exponenciales y logarítmicas. Se trabajará con conceptos como regresión lineal, número imaginario y complejo, y la simplificación de expresiones con exponentes racionales. El aprendizaje de la matemática se facilita cuando los estudiantes solucionan problemas matemáticos, se comunican, razonan y reconocen las conexiones de la materia, realizan representaciones y su relación con otros campos del saber y con la vida diaria.</p>
+                
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Unidades</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <p class="font-medium">Unidad AL.1 - Fundamentos del Álgebra (Semanas 2-6)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante aprenderá los fundamentos como una introducción al Álgebra II. En particular, estudiará la representación de funciones y las relaciones numéricas, algebraicas y gráficas.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad AL.2 - Funciones Lineales de dos variables y la regresión lineal (Semanas 7-13)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante aprenderá ecuaciones lineales e inecuaciones, sistemas de ecuaciones e inecuaciones lineales y la línea de mejor ajuste. Verá la pendiente en contexto y en variación directa e indirecta.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad AL.3 - Funciones cuadráticas (Semanas 14-20)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante representará, aplicará, y discutirá las propiedades de los números complejos. También representará, interpretará y resolverá problemas que involucran funciones cuadráticas usando varios métodos distintos. Traducirá las distintas representaciones de una función (verbal, tablas, símbolos y gráficas) e identificará el dominio, los valores de los campos, las intersecciones y las relaciones entre los coeficientes de la función y las características de la gráfica. Además, aplicará la composición y la descomposición de funciones para crear modelos y resolver problemas.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad AL.4 - Funciones polinómicas y racionales (Semanas 21-27)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante resolverá operaciones básicas con monomios, binomios y polinomios al aplicarlas para analizar el comportamiento gráfico. También explorará las funciones racionales e identificará raíces extrañas. El estudiante resolverá ecuaciones racionales simples y radicales en una variable. Explorará el teorema del residuo y del factor. Interpretará expresiones que representan una cantidad, según su contexto, e interpretará los componentes de una expresión.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad AL.5 - Funciones exponenciales y logarítmicas (Semanas 28-33)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante representará el crecimiento exponencial con funciones y ecuaciones exponenciales, y resolverá problemas matemáticos y de la vida diaria usando funciones logarítmicas. Reconocerá las características principales de estas funciones y la relación inversa entre las funciones logarítmicas y exponenciales, y las aplicará como corresponde.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad AL.6 - Triángulo Rectángulo, Patrones y Sucesiones (Semanas 34-39)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante explorará el teorema de Pitágoras y las propiedades especiales de los triángulos rectángulos. Aplicará la fórmula de distancia y las razones trigonométricas a los triángulos rectángulos. Explorará la secuenciación y las relaciones recurrentes para investigar razones de cambio y patrones. Clasificará y construirá sucesiones mientras desarrolla términos generales y métodos de cálculo, además de investigar el comportamiento a largo plazo de una relación de recurrencia.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Plan de Evaluación (Sujeto a Cambios)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-auto">
+                        <thead style="background-color: var(--border-color); color: var(--card-bg);">
+                            <tr>
+                                <th class="p-3 whitespace-nowrap">Periodo</th>
+                                <th class="p-3 whitespace-nowrap">Instrumento</th>
+                                <th class="p-3 whitespace-nowrap">Puntuación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">10 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">20 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">30 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">40 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">100<br>100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Geometría Content -->
+            <div id="content-geometria" class="tab-content p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner" style="background-color: var(--bg-color);">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2" style="border-color: var(--border-color);">Geometría - 10mo Grado</h2>
+                <h3 class="text-xl font-semibold text-sky-400 mb-2">Descripción del Curso</h3>
+                <p class="mb-6 leading-relaxed" style="color: var(--text-color);">El curso de Geometría desarrolla los cinco estándares de Matemáticas, poniendo especial atención en el estándar de Geometría, con formalidad y rigurosidad en la exposición los conceptos y destrezas geométricos que son fundamentales. Se incluyen los teoremas básicos de la geometría euclidiana para desarrollar justificaciones, establecer conjeturas y argumentos convincentes. Se aplican los conceptos de congruencia y semejanza entre figuras, se hacen construcciones geométricas formales, se justifican y utilizan las fórmulas de área y volumen junto a los conceptos geométricos para crear modelos y resolver problemas matemáticos relacionados con su entorno. El estándar de Numeración se integra por medio de las cantidades y las relaciones entre ellas, los exponentes racionales y las matrices, con el propósito de razonar cuantitativamente en la solución de problemas. De igual forma, en el Álgebra y la Medición, el estudiante escribe y construye expresiones en formas equivalentes, soluciona sistemas de ecuaciones, justifica y aplica las fórmulas asociadas a figuras geométricas bidimensionales y tridimensionales. El enfoque en Análisis de Datos y Probabilidad está basado en la representación visual de datos para comprender las posibles relaciones entre variables, el cálculo de valores esperados y uso de probabilidades para tomar decisiones justas. Debe promoverse el uso y dominio de la tecnología entre las herramientas para acceder, analizar y aplicar la información. Esto permitirá proseguir el estudio de temas matemáticos de mayor profundidad.</p>
+                
+                <h3 class="text-xl font-semibold text-sky-400 mb-2">Unidades</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <p class="font-medium">Unidad GE.1 - Fundamentos de Geometría (Semanas 2-9)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">Esta unidad reúne muchos de los conceptos y teoremas básicos que fundamentan la geometría euclidiana. El estudiante participará en probar y construir teoremas de líneas paralelas y perpendiculares, triángulos y paralelogramos. Esta unidad tiene enfoque en la práctica matemática de hacer argumentos viables y la crítica del razonamiento de otros.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad GE.2 - Semejanza, congruencia y círculos (Semanas 10-20)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante explorará la congruencia y la semejanza de figuras, así como la transformación de las figuras en un plano de coordenadas. Aplicará la geometría de coordenadas y transformaciones (reflexiones, traslaciones y rotaciones), y justificará las figuras semejantes. Estudiará las relaciones entre segmentos como aplicación de semejanza, teoremas básicos sobre círculos.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad GE.3 - Geometría euclidiana (Semanas 21-26)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante repasará y analizará las figuras geométricas con el fin de desarrollar justificaciones para los teoremas de la geometría euclidiana.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad GE.4 - Perímetro, área, volumen y diseños geométricos (Semanas 27-32)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante calculará y justificará el volumen y el área de las superficies de prismas, pirámides, cilindros, conos y esferas. Deducirá y resolverá problemas de circunferencia. Entenderá las relaciones entre las fórmulas para primas, pirámides y cilindros. Determinará cómo los cambios en las dimensiones afectan el perímetro, el área y el volumen de figuras geométricas más comunes. Aplicará su entendimiento y habilidades geométricas en los contextos de la vida diaria.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad GE.5 - Matrices (Semanas 33-35)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante explorará el uso de matrices. Representará e interpretará datos en matrices, desarrollará propiedades para computar matrices y las utilizará para resolver ecuaciones lineales.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad GE.6 - Valor esperado (Semanas 36-39)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante explorará diferentes métodos de colección, interpretación y presentación de datos para hacer inferencias y sacar conclusiones. Usará la regla de multiplicación para determinar el espacio muestral de un experimento, usar simulaciones para estimar los resultados de probabilidades de eventos, analizar datos en dos variables y representar datos gráficamente.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-sky-400 mb-2">Plan de Evaluación (Sujeto a Cambios)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-auto">
+                        <thead style="background-color: var(--border-color); color: var(--card-bg);">
+                            <tr>
+                                <th class="p-3 whitespace-nowrap">Periodo</th>
+                                <th class="p-3 whitespace-nowrap">Instrumento</th>
+                                <th class="p-3 whitespace-nowrap">Puntuación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">10 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">20 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">30 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">40 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">100<br>100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Trigonometría Content -->
+            <div id="content-trigonometria" class="tab-content p-6 md:p-8 rounded-2xl border border-gray-700 shadow-inner" style="background-color: var(--bg-color);">
+                <h2 class="text-3xl font-bold mb-4 border-b pb-2" style="border-color: var(--border-color);">Trigonometría - 11mo Grado</h2>
+                <h3 class="text-xl font-semibold text-cyan-400 mb-2">Descripción del Curso</h3>
+                <p class="mb-6 leading-relaxed" style="color: var(--text-color);">Este curso de Trigonometría Plana trabaja el estándar de Numeración y Operación cuando el estudiante razona cuantitativamente y usa unidades para resolver problemas matemáticos. Los estándares de Geometría y Funciones se integran en el estudio de los conceptos básicos: sistema de medición de ángulos, razones trigonométricas del triángulo rectángulo, razones trigonométricas para cualquier ángulo, identidades trigonométricas, ecuaciones trigonométricas, ley de senos, teorema del coseno y aplicaciones de la trigonometría. Estudiará las relaciones entre grados y radianes para resolver problemas matemáticos utilizando el cálculo mental y la tecnología; predecirá y resolverá problemas matemáticos en los cuales figuren triángulos rectángulos; estudiará las razones trigonométricas con triángulos rectángulos; trazará gráficas de las funciones trigonométricas; aplicará identidades trigonométricas para resolver problemas matemáticos; desarrollará la capacidad para resolver ecuaciones trigonométricas básicas o usando identidades; usará las leyes de seno y coseno para resolver problemas que involucren triángulo; todo esto enmarcado en la interpretación, la predicción y la resolución de situaciones de la vida diaria.</p>
+                
+                <h3 class="text-xl font-semibold text-cyan-400 mb-2">Unidades</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <p class="font-medium">Unidad TR.1 - Los ángulos y sus medidas (Semanas 2-7)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante identificará y clasificará ángulos. Logrará entender teoremas básicos sobre círculos y hallará longitudes de arcos y áreas de sectores de círculos.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad TR.2 - Trigonometría en el triángulo rectángulo (Semanas 8-13)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante definirá las razones o funciones trigonométricas y resolverá problemas en los cuales se utilicen triángulos rectángulos. El estudiante aplicará las funciones trigonométricas a la solución de problemas con triángulos.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad TR.3 - Gráficas de funciones trigonométricas (Semanas 14-20)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante creará modelos y calculará soluciones de ecuaciones trigonométricas por medio de la transformación de funciones trigonométricas. Creará, describirá y hará predicciones sobre fenómenos periódicos para resolver situaciones matemáticas y de la vida diaria.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad TR.4 - Identidades trigonométricas (Semanas 21-25)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante explorará las funciones trigonométricas y comprobará la relación que existe desde un ángulo de un triángulo rectángulo. Aprenderá de identidades trigonométricas y aplicará funciones trigonométricas para resolver triángulos. Desarrollará y aplicará definiciones de la función de seno y coseno, desarrollará identidades fundamentales y resolverá problemas matemáticos de la vida diaria.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad TR.5 - Resolver ecuaciones trigonométricas (Semanas 26-34)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante creará modelos y calculará soluciones de ecuaciones trigonométricas por medio de la transformación de funciones trigonométricas. Creará, describirá y hará predicciones sobre fenómenos periódicos para resolver situaciones matemáticas y de la vida diaria. También aprenderá y aplicará las leyes de senos y cosenos.</p>
+                    </div>
+                    <div>
+                        <p class="font-medium">Unidad TR.6 - Inversas de funciones trigonométricas (Semanas 35-39)</p>
+                        <p class="text-sm leading-snug" style="color: var(--text-color);">El estudiante aprenderá sobre funciones trigonométricas inversas y las aplicará para resolver problemas con triángulos rectángulos.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-cyan-400 mb-2">Plan de Evaluación (Sujeto a Cambios)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left table-auto">
+                        <thead style="background-color: var(--border-color); color: var(--card-bg);">
+                            <tr>
+                                <th class="p-3 whitespace-nowrap">Periodo</th>
+                                <th class="p-3 whitespace-nowrap">Instrumento</th>
+                                <th class="p-3 whitespace-nowrap">Puntuación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">10 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">20 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">30 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">300<br>100</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td class="p-3">40 semanas</td>
+                                <td class="p-3">Exámenes y técnicas de assessment<br>Tareas de desempeño</td>
+                                <td class="p-3">100<br>100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full text-center py-4 text-sm" style="color: var(--text-color);">
+        &copy; 2024 Prontuarios de Matemáticas. Todos los derechos reservados.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+            const themeToggle = document.getElementById('theme-toggle');
+            const hamburgerMenu = document.getElementById('hamburger-menu');
+            const mobileTabsContainer = document.getElementById('mobile-tabs');
+            const body = document.body;
+
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                body.classList.add('light-theme');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            // Function to handle tab switching
+            const switchTab = (target) => {
+                tabs.forEach(t => {
+                    t.classList.remove('active', 'algebra-color', 'geometria-color', 'trigonometria-color');
+                });
+                contents.forEach(c => c.classList.remove('active'));
+
+                const activeTabButton = document.querySelector(`.tab-button[data-target="${target}"]`);
+                const activeContent = document.getElementById(target);
+                
+                if (activeTabButton) {
+                    activeTabButton.classList.add('active');
+                    if (target === 'content-algebra') {
+                        activeTabButton.classList.add('algebra-color');
+                    } else if (target === 'content-geometria') {
+                        activeTabButton.classList.add('geometria-color');
+                    } else if (target === 'content-trigonometria') {
+                        activeTabButton.classList.add('trigonometria-color');
+                    }
+                }
+                
+                if (activeContent) {
+                    activeContent.classList.add('active');
+                }
+            };
+            
+            // Event listeners for all tab buttons
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.target;
+                    switchTab(target);
+                    // Close mobile menu after selecting an option
+                    if (mobileTabsContainer.classList.contains('open')) {
+                        mobileTabsContainer.classList.remove('open');
+                        hamburgerMenu.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                });
+            });
+
+            // Theme toggle logic
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('light-theme');
+                const isLightTheme = body.classList.contains('light-theme');
+                if (isLightTheme) {
+                    localStorage.setItem('theme', 'light');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    localStorage.setItem('theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            });
+
+            // Hamburger menu logic
+            hamburgerMenu.addEventListener('click', () => {
+                mobileTabsContainer.classList.toggle('open');
+                if (mobileTabsContainer.classList.contains('open')) {
+                    hamburgerMenu.innerHTML = '<i class="fas fa-times"></i>';
+                } else {
+                    hamburgerMenu.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+
+            // Initial state
+            switchTab('content-algebra');
+        });
+    </script>
+</body>
+</html>
