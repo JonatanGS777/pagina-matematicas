@@ -732,40 +732,73 @@
             function svgWave({ func = "sin", A = 1, B = 1, C = 0, D = 0, xRange = [-2 * Math.PI, 2 * Math.PI], highlights = {} }) {
                 const svg = createSVGElement('svg', { viewBox: "-100 -60 200 120", preserveAspectRatio: "xMidYMid meet" });
                 const [xMin, xMax] = [-90, 90];
-                const [yMin, yMax] = [-50, 50];
+                const [yMin, yMax] = [-55, 55];
                 const xScale = (xMax - xMin) / (xRange[1] - xRange[0]);
-                const yScale = (yMax - yMin) / (2 * Math.abs(A) + 0.5);
+                
+                // More robust yScale that adds vertical padding and handles A=0
+                const yWaveHeight = 2 * Math.abs(A) || 1;
+                const yScale = (yMax - yMin) / (yWaveHeight * 1.2);
 
                 const mapX = (x) => (x - xRange[0]) * xScale + xMin;
-                const mapY = (y) => -(y * yScale)
+                // New mapY function correctly centers the wave based on the vertical shift D
+                const mapY = (y) => -((y - D) * yScale);
 
                 // Axes
-                svg.appendChild(createSVGElement('line', { x1: xMin, y1: mapY(D), x2: xMax, y2: mapY(D), stroke: 'var(--dot-color)', 'stroke-width': 1 })); // Midline
-                svg.appendChild(createSVGElement('line', { x1: mapX(C), y1: yMin, x2: mapX(C), y2: yMax, stroke: 'var(--dot-color)', 'stroke-width': 1 })); // Y-axis at phase shift
+                // The midline is correctly drawn at svg y=0, which corresponds to the function's y=D
+                svg.appendChild(createSVGElement('line', { x1: xMin, y1: mapY(D), x2: xMax, y2: mapY(D), stroke: 'var(--dot-color)', 'stroke-width': 1 }));
+                // Draw Y-axis at x=0 if in view, otherwise at the phase shift C
+                let yAxisX = 0;
+                if (xRange[0] > 0 || xRange[1] < 0) yAxisX = C;
+                svg.appendChild(createSVGElement('line', { x1: mapX(yAxisX), y1: yMin, x2: mapX(yAxisX), y2: yMax, stroke: 'var(--dot-color)', 'stroke-width': 1 }));
                 
                 // Ticks
-                const period = (2 * Math.PI) / Math.abs(B);
-                for (let i = -4; i <= 4; i++) {
+                const period = (func === 'tan' ? Math.PI : 2 * Math.PI) / Math.abs(B);
+                for (let i = -8; i <= 8; i++) {
                     const xTick = C + i * period / 4;
                     if (xTick >= xRange[0] && xTick <= xRange[1]) {
                         svg.appendChild(createSVGElement('line', { x1: mapX(xTick), y1: mapY(D) - 3, x2: mapX(xTick), y2: mapY(D) + 3, stroke: 'var(--text-color)', 'stroke-width': 0.5}));
                     }
                 }
 
-                // Wave
-                let points = '';
+                // Wave drawing with special handling for tan function to avoid connecting across asymptotes
                 const steps = 200;
-                for (let i = 0; i <= steps; i++) {
-                    const x = xRange[0] + i * (xRange[1] - xRange[0]) / steps;
-                    let y;
-                    switch(func) {
-                        case 'cos': y = A * Math.cos(B * (x - C)) + D; break;
-                        case 'tan': y = A * Math.tan(B * (x - C)) + D; break;
-                        default: y = A * Math.sin(B * (x - C)) + D;
+                if (func === 'tan') {
+                    let lastY = NaN;
+                    let points = '';
+                    const yThreshold = (yMax - yMin) * 2; 
+
+                    for (let i = 0; i <= steps; i++) {
+                        const x = xRange[0] + i * (xRange[1] - xRange[0]) / steps;
+                        let y = A * Math.tan(B * (x - C)) + D;
+
+                        if (isFinite(lastY) && Math.abs(y - lastY) > yThreshold) {
+                            if (points.length > 2) {
+                                svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
+                            }
+                            points = '';
+                        }
+                        
+                        if (isFinite(y)) {
+                             points += `${mapX(x)},${mapY(y)} `;
+                        }
+                        lastY = y;
                     }
-                    points += `${mapX(x)},${mapY(y)} `;
+                    if (points.length > 2) {
+                        svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
+                    }
+                } else {
+                    let points = '';
+                    for (let i = 0; i <= steps; i++) {
+                        const x = xRange[0] + i * (xRange[1] - xRange[0]) / steps;
+                        let y;
+                        switch(func) {
+                            case 'cos': y = A * Math.cos(B * (x - C)) + D; break;
+                            default: y = A * Math.sin(B * (x - C)) + D;
+                        }
+                        points += `${mapX(x)},${mapY(y)} `;
+                    }
+                    svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
                 }
-                svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
                 
                 // Highlights
                 if(highlights.amplitude) {
@@ -867,7 +900,7 @@
 
                 // Category 3: Parameters A, B, C, D
                 { id: 'param1', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Dada la gráfica de \\(y = A\\sin(Bx)\\), determina el valor de la amplitud \\(A\\).', solution: 2, hint: 'La amplitud es la distancia máxima desde la línea central a un pico.', svg: () => svgWave({ func: 'sin', A: 2, B: 1, highlights: { amplitude: true } }) },
-                { id: 'param2', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Dada la gráfica de \\(y = \\cos(Bx)\\), determina el período.', solution: 4*Math.PI, hint: 'El período es la longitud de un ciclo completo de la onda.', svg: () => svgWave({ func: 'cos', A: 1, B: 0.5, highlights: { period: true, periodLabel: '4π' } }) },
+                { id: 'param2', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Dada la gráfica de \\(y = \\cos(Bx)\\), determina el período. (Ingresa la respuesta en términos de \\(\\pi\\), p. ej. `4pi`).', solution: 4*Math.PI, hint: 'El período es la longitud de un ciclo completo de la onda.', svg: () => svgWave({ func: 'cos', A: 1, B: 0.5, highlights: { period: true, periodLabel: '4π' } }) },
                 { id: 'param3', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'La gráfica es de la forma \\(y = \\sin(x) + D\\). ¿Cuál es el valor del desplazamiento vertical \\(D\\)?', solution: 1.5, hint: 'El desplazamiento vertical es el valor de la línea central de la onda.', svg: () => svgWave({ func: 'sin', D: 1.5 }) },
                 { id: 'param4', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'La gráfica es de la forma \\(y = \\cos(x - C)\\). ¿Cuál es el desfase \\(C\\)?', solution: Math.PI/2, hint: 'El desfase es el desplazamiento horizontal. ¿Dónde empieza el ciclo del coseno?', svg: () => svgWave({ func: 'cos', C: Math.PI/2 }) },
                 { id: 'param5', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Determina la amplitud \\(A\\) de la función en la gráfica.', solution: 0.5, hint: 'La amplitud es la mitad de la diferencia entre el valor máximo y mínimo.', svg: () => svgWave({ func: 'sin', A: 0.5, B: 2, highlights: { amplitude: true } }) },
@@ -1238,3 +1271,4 @@
     </script>
 </body>
 </html>
+

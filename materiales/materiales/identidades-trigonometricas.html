@@ -1,248 +1,1243 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
     <title>Examen de Identidades Trigonométricas</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Un examen interactivo de identidades trigonométricas con un editor matemático, validación por equivalencia y seguimiento del historial." />
+    
+    <!-- MathJax v3 Configuration -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        tags: 'ams'
+      },
+      chtml: {
+        fontURL: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2'
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+    <!-- CSS (Styles) -->
     <style>
         :root {
-            --primary-color: #4361ee;
-            --background-light: #f8f9fa;
-            --text-dark: #2b2d42;
-            --basic-color: #4caf50;
-            --intermediate-color: #ff9800;
-            --advanced-color: #f44336;
+            --color-bg: #111827; /* Gris oscuro casi negro */
+            --color-surface: #1f2937; /* Gris oscuro más suave */
+            --color-border: #374151;
+            --color-text-primary: #e5e7eb;
+            --color-text-secondary: #9ca3af;
+            --color-accent-magenta: #e11d48;
+            --color-accent-turquoise: #06b6d4;
+            --color-accent-lime: #84cc16;
+            --color-correct: var(--color-accent-lime);
+            --color-incorrect: var(--color-accent-magenta);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.15);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+            font-family: var(--font-sans);
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        /* --- Aurora Mesh Background --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 15%, hsla(347, 79%, 50%, 0.15) 0px, transparent 40%),
+                radial-gradient(circle at 85% 20%, hsla(187, 94%, 43%, 0.15) 0px, transparent 40%),
+                radial-gradient(circle at 20% 80%, hsla(88, 77%, 52%, 0.15) 0px, transparent 40%),
+                conic-gradient(from 90deg at 1px 1px, #0000 90deg, var(--color-border) 0);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px;
+            z-index: -1;
+            opacity: 0.5;
+            animation: pan-bg 60s linear infinite;
+        }
+        
+        @keyframes pan-bg {
+            0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+            100% { background-position: 100% 100%, 100% 100%, 100% 100%, 100% 100%; }
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        h1, h2 {
+            text-align: center;
+            letter-spacing: -0.5px;
         }
 
         h1 {
-            text-align: center;
-            color: var(--text-dark);
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--color-accent-turquoise), var(--color-accent-magenta), var(--color-accent-lime));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
             margin-bottom: 2rem;
         }
 
-        .difficulty-label {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            color: white;
-            margin-bottom: 10px;
+        .panel {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: all 200ms ease-in-out;
         }
 
-        .basic { background-color: var(--basic-color); }
-        .intermediate { background-color: var(--intermediate-color); }
-        .advanced { background-color: var(--advanced-color); }
+        .panel:focus-within {
+            box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent-turquoise);
+        }
 
-        .question {
-            background: var(--background-light);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
+        .controles, .resultados-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.25rem;
         }
 
         input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 0.6rem 0.8rem;
             font-size: 1rem;
+            transition: border-color 150ms ease, box-shadow 150ms ease;
         }
 
         input[type="text"]:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--color-accent-turquoise);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent-turquoise) 25%, transparent);
         }
-
-        button {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
+        
+        .btn {
+            font-family: var(--font-sans);
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 150ms ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            white-space: nowrap;
         }
 
-        button:hover {
-            background: #3651d4;
+        .btn:focus-visible {
+            outline: 2px solid var(--color-bg);
+            outline-offset: 2px;
         }
 
-        #resultado {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #e8f5e9;
-            border-radius: 8px;
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-accent-magenta);
+            color: white;
+            border-color: var(--color-accent-magenta);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: color-mix(in srgb, var(--color-accent-magenta) 85%, black);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-surface);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--color-border);
+            border-color: color-mix(in srgb, var(--color-border) 80%, white);
+        }
+
+        #preguntas-container {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .pregunta-card {
+            background-color: color-mix(in srgb, var(--color-surface) 90%, transparent);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all 200ms ease;
+            position: relative;
+        }
+        
+        .pregunta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .pregunta-num {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-accent-turquoise);
+        }
+        
+        .pregunta-categoria {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: var(--color-border);
+            color: var(--color-text-secondary);
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-md);
+        }
+
+        .enunciado {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .enunciado mjx-container {
+            margin: 0.5rem 0;
+        }
+
+        .enunciado-svg {
+            background-color: #fff;
+            border-radius: var(--radius-md);
+            padding: 0.5rem;
+            max-width: 250px;
+            margin: 1rem auto;
+            display: block;
+        }
+
+        /* --- Math Input Component --- */
+        .math-input-wrapper {
+            margin-top: 1rem;
+        }
+
+        .math-input-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background-color: var(--color-bg);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            border: 1px solid var(--color-border);
+            border-bottom: none;
+        }
+
+        .math-input-toolbar button {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            background-color: var(--color-surface);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: 0.25rem;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            transition: all 100ms ease;
+        }
+        .math-input-toolbar button:hover {
+            background-color: var(--color-border);
+            color: var(--color-text-primary);
+        }
+
+        .math-input-field {
+            width: 100%;
+            min-height: 80px;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            padding: 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            resize: vertical;
+        }
+        .math-input-field:focus {
+            outline: none;
+            border-color: var(--color-accent-turquoise);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent-turquoise) 25%, transparent);
+        }
+
+        .math-input-preview {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            min-height: 2.5rem;
+            background-color: var(--color-bg);
+            border: 1px dashed var(--color-border);
+            border-radius: var(--radius-md);
+            color: var(--color-text-primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resultado-pregunta {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-weight: bold;
+            padding: 0.3rem 0.8rem;
+            border-radius: 99px;
+            font-size: 0.9rem;
+            animation: fadeIn 0.5s ease;
+        }
+        .resultado-pregunta.correcta {
+            background-color: color-mix(in srgb, var(--color-correct) 20%, transparent);
+            color: var(--color-correct);
+            border: 1px solid var(--color-correct);
+        }
+        .resultado-pregunta.incorrecta {
+            background-color: color-mix(in srgb, var(--color-incorrect) 20%, transparent);
+            color: var(--color-incorrect);
+            border: 1px solid var(--color-incorrect);
+        }
+        
+        .pista-pregunta {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            border-left: 4px solid var(--color-accent-turquoise);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            animation: fadeIn 0.5s ease;
+        }
+
+        #resultados-panel {
             text-align: center;
         }
-
-        .score {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2b2d42;
+        
+        .score-badge {
+            font-size: 2.5rem;
+            font-weight: 800;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem auto;
+            color: white;
         }
+
+        #historial-table {
+            width: 100%;
+            margin-top: 1.5rem;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        #historial-table th, #historial-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        #historial-table th {
+            color: var(--color-text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        #historial-table td {
+            font-size: 0.9rem;
+        }
+        #historial-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .score-cell-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 99px;
+            font-weight: 600;
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+        }
+
+        .hidden { display: none !important; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            :root {
+                --color-bg: #ffffff;
+                --color-surface: #ffffff;
+                --color-border: #dee2e6;
+                --color-text-primary: #000000;
+                --color-text-secondary: #495057;
+            }
+
+            body {
+                background-color: var(--color-bg) !important;
+                color: var(--color-text-primary) !important;
+                font-size: 12pt;
+            }
+            body::before {
+                display: none;
+            }
+
+            main {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .panel, .pregunta-card {
+                box-shadow: none;
+                border: 1px solid var(--color-border);
+                border-radius: 0;
+                padding: 1rem;
+                page-break-inside: avoid;
+            }
+            
+            h1 {
+                font-size: 24pt;
+                color: black !important;
+                background: none;
+                -webkit-text-fill-color: initial;
+            }
+
+            h2, h3, h4 {
+                color: black !important;
+                text-align: left;
+            }
+            
+            #print-header {
+                display: block !important;
+                margin-bottom: 2rem;
+                border-bottom: 2px solid black;
+                padding-bottom: 1rem;
+            }
+            #print-header-info {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .controles, #botones-finales, #historial-panel, footer, .math-input-wrapper {
+                display: none !important;
+            }
+            
+            #preguntas-container, #resultados-panel {
+                display: block !important;
+            }
+
+            .enunciado-svg {
+                border: 1px solid #ccc;
+                max-width: 200px;
+            }
+            
+            .pregunta-card {
+                padding-top: 0.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .resultado-pregunta, .pista-pregunta {
+                position: static;
+                margin-top: 0.5rem;
+                animation: none;
+                border-radius: var(--radius-md);
+            }
+            
+            .pista-pregunta {
+                border-left-width: 1px;
+            }
+
+            .printable-answer {
+                display: block !important;
+                margin-top: 0.5rem;
+                color: var(--color-text-secondary);
+                font-style: italic;
+            }
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-square-root-alt"></i> Examen de Identidades Trigonométricas</h1>
-        
-        <form id="examenForm">
-            <!-- Nivel Básico -->
-            <div class="question">
-                <span class="difficulty-label basic">Básico</span>
-                <p>1. Simplificar \(\sin^2 \theta + \cos^2 \theta\)</p>
-                <input type="text" name="q1" placeholder="Escribe tu respuesta..." data-respuesta="1">
-            </div>
 
-            <div class="question">
-                <span class="difficulty-label basic">Básico</span>
-                <p>2. Si \(\sin \theta = 0.6\), ¿cuánto vale \(\cos^2 \theta\)?</p>
-                <input type="text" name="q2" placeholder="Escribe tu respuesta..." data-respuesta="0.64">
-            </div>
-
-            <div class="question">
-                <span class="difficulty-label basic">Básico</span>
-                <p>3. Simplificar \(\tan \theta = \frac{\sin \theta}{\cos \theta}\). ¿Verdadero o falso?</p>
-                <input type="text" name="q3" placeholder="Escribe verdadero o falso..." data-respuesta="verdadero">
-            </div>
-
-            <!-- Nivel Intermedio -->
-            <div class="question">
-                <span class="difficulty-label intermediate">Intermedio</span>
-                <p>4. Simplificar \(\frac{\sin^2 \theta}{\cos^2 \theta}\)</p>
-                <input type="text" name="q4" placeholder="Escribe tu respuesta en términos de tan..." data-respuesta="tan^2">
-            </div>
-
-            <div class="question">
-                <span class="difficulty-label intermediate">Intermedio</span>
-                <p>5. Si \(\sin \theta = 0.8\) y \(\cos \theta = 0.6\), calcular \(\tan \theta\)</p>
-                <input type="text" name="q5" placeholder="Escribe tu respuesta..." data-respuesta="1.333">
-            </div>
-
-            <div class="question">
-                <span class="difficulty-label intermediate">Intermedio</span>
-                <p>6. Simplificar \(\sec^2 \theta - \tan^2 \theta\)</p>
-                <input type="text" name="q6" placeholder="Escribe tu respuesta..." data-respuesta="1">
-            </div>
-
-            <!-- Nivel Avanzado -->
-            <div class="question">
-                <span class="difficulty-label advanced">Avanzado</span>
-                <p>7. Si \(\sin \theta + \cos \theta = 1\), calcular \(\sin^2 \theta + \cos^2 \theta\)</p>
-                <input type="text" name="q7" placeholder="Escribe tu respuesta..." data-respuesta="1">
-            </div>
-
-            <div class="question">
-                <span class="difficulty-label advanced">Avanzado</span>
-                <p>8. Simplificar \(\frac{1 + \tan^2 \theta}{\sec^2 \theta}\)</p>
-                <input type="text" name="q8" placeholder="Escribe tu respuesta..." data-respuesta="1">
-            </div>
-
-            <div class="question">
-                <span class="difficulty-label advanced">Avanzado</span>
-                <p>9. Si \(\sin \theta = \frac{3}{5}\), calcular \(\sec^2 \theta\)</p>
-                <input type="text" name="q9" placeholder="Escribe tu respuesta..." data-respuesta="2.778">
-            </div>
-
-            <div class="question">
-                <span class="difficulty-label advanced">Avanzado</span>
-                <p>10. Simplificar \(\frac{\sin \theta}{1 + \cos \theta} + \frac{1 + \cos \theta}{\sin \theta}\)</p>
-                <input type="text" name="q10" placeholder="Escribe tu respuesta..." data-respuesta="2">
-            </div>
-
-            <button type="submit">Calificar Examen</button>
-        </form>
-
-        <div id="resultado">
-            <h2>Resultado del Examen</h2>
-            <p class="score">Tu calificación: <span id="calificacion"></span>/10</p>
-            <div id="desglose">
-                <p>Básico: <span id="basico"></span>/3</p>
-                <p>Intermedio: <span id="intermedio"></span>/3</p>
-                <p>Avanzado: <span id="avanzado"></span>/4</p>
+    <main>
+        <!-- This header is only for printing -->
+        <div id="print-header" class="hidden">
+            <h1>Resultados: Examen de Identidades Trigonométricas</h1>
+            <div id="print-header-info">
+                <span id="print-student-name"></span>
+                <span id="print-date"></span>
             </div>
         </div>
-    </div>
 
+        <h1>Examen de Identidades Trigonométricas</h1>
+        <h2>Pon a prueba tu dominio de las identidades fundamentales.</h2>
+
+        <div id="controles-panel" class="panel">
+            <div class="controles">
+                <div class="input-group">
+                    <label for="nombre-estudiante">Nombre del estudiante (opcional)</label>
+                    <input type="text" id="nombre-estudiante" placeholder="Escribe tu nombre aquí">
+                </div>
+                <button id="btn-iniciar" class="btn btn-primary">▶️ Iniciar Nuevo Intento</button>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 1rem;">
+                Instrucciones: Se presentarán 14 preguntas aleatorias. Usa el teclado matemático para escribir tu respuesta. La validación no distingue entre formas trigonométricas equivalentes (p. ej., \( \sin^2 x \) es igual a \( 1-\cos^2 x \)). No se mostrará la respuesta correcta, solo si tu respuesta es correcta o incorrecta junto a una pista.
+            </p>
+        </div>
+
+        <div id="examen-panel" class="hidden">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button id="btn-enviar" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.2rem;">🚀 Enviar Examen</button>
+            </div>
+            <div id="preguntas-container">
+                <!-- Las preguntas se generan aquí con JavaScript -->
+            </div>
+             <div style="text-align: center; margin-top: 2rem;">
+                <button id="btn-enviar-abajo" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.2rem;">🚀 Enviar Examen</button>
+            </div>
+        </div>
+        
+        <div id="resultados-panel" class="panel hidden">
+            <h2>Resultados del Intento</h2>
+            <div id="score-badge" class="score-badge"></div>
+            <p id="score-text" style="font-size: 1.2rem; font-weight: 500;"></p>
+            <p id="feedback-text" style="color: var(--color-text-secondary);"></p>
+
+            <div id="botones-finales" class="resultados-summary" style="margin-top: 2rem;">
+                <button id="btn-reintentar" class="btn btn-primary">🔁 Reintentar</button>
+                <button id="btn-export-csv" class="btn btn-secondary">📄 Exportar CSV</button>
+                <button id="btn-export-json" class="btn btn-secondary">📄 Exportar JSON</button>
+                <button id="btn-export-pdf" class="btn btn-secondary">🖨️ Descargar PDF</button>
+                <button id="btn-copy-summary" class="btn btn-secondary">📋 Copiar Resumen</button>
+            </div>
+        </div>
+        
+        <div id="historial-panel" class="panel">
+             <h2>Historial de Intentos</h2>
+             <table id="historial-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Puntaje</th>
+                        <th>Duración</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filas de historial se insertan aquí -->
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+    
+    <footer>
+        Creado como un recurso educativo avanzado.
+    </footer>
+
+    <!-- JavaScript Application Logic -->
     <script>
-        document.getElementById('examenForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // IIFE para encapsular la lógica de la aplicación
+        (function() {
+            // --- ELEMENTOS DEL DOM ---
+            const btnIniciar = document.getElementById('btn-iniciar');
+            const btnEnviar = document.getElementById('btn-enviar');
+            const btnEnviarAbajo = document.getElementById('btn-enviar-abajo');
+            const btnReintentar = document.getElementById('btn-reintentar');
+            const btnExportCSV = document.getElementById('btn-export-csv');
+            const btnExportJSON = document.getElementById('btn-export-json');
+            const btnExportPDF = document.getElementById('btn-export-pdf');
+            const btnCopySummary = document.getElementById('btn-copy-summary');
+
+            const controlesPanel = document.getElementById('controles-panel');
+            const examenPanel = document.getElementById('examen-panel');
+            const resultadosPanel = document.getElementById('resultados-panel');
+            const historialPanel = document.getElementById('historial-panel');
+            const preguntasContainer = document.getElementById('preguntas-container');
+            const nombreEstudianteInput = document.getElementById('nombre-estudiante');
             
-            let correctas = 0;
-            let basicasCorrectas = 0;
-            let intermediasCorrectas = 0;
-            let avanzadasCorrectas = 0;
-            
-            const inputs = document.querySelectorAll('input[type="text"]');
-            
-            inputs.forEach((input, index) => {
-                let respuestaCorrecta = input.dataset.respuesta;
-                let respuestaUsuario = input.value.toLowerCase().trim();
+            const scoreBadge = document.getElementById('score-badge');
+            const scoreText = document.getElementById('score-text');
+            const feedbackText = document.getElementById('feedback-text');
+            const historialBody = document.querySelector('#historial-table tbody');
+
+            // --- ESTADO DE LA APLICACIÓN ---
+            let estado = {
+                examenActivo: false,
+                preguntasActuales: [],
+                respuestasUsuario: {},
+                resultados: null,
+                tiempoInicio: null,
+                historial: [],
+            };
+
+            // --- BANCO DE PREGUNTAS ---
+            // Un banco de preguntas robusto con más de 56 ítems.
+            const bancoDePreguntas = [
+                // Categoría 1: Fundamentales
+                { id: 'F01', categoria: 'Fundamentales', enunciadoTeX: 'Expresa \\( \\cos^2 x \\) en términos de \\( \\sin x \\).', solucionOculta: '1 - sin(x)^2', pista: 'Recuerda la identidad pitagórica fundamental: \\(\\sin^2 x + \\cos^2 x = 1\\).' },
+                { id: 'F02', categoria: 'Fundamentales', enunciadoTeX: 'Expresa \\( \\tan^2 x \\) en términos de \\( \\sec x \\).', solucionOculta: 'sec(x)^2 - 1', pista: 'Usa la identidad pitagórica que involucra a la tangente y la secante.' },
+                { id: 'F03', categoria: 'Fundamentales', enunciadoTeX: 'Expresa \\( \\cot^2 \\theta \\) en términos de \\( \\csc \\theta \\).', solucionOculta: 'csc(theta)^2 - 1', pista: 'La tercera identidad pitagórica relaciona la cotangente y la cosecante.' },
+                { id: 'F04', categoria: 'Fundamentales', enunciadoTeX: 'Simplifica la expresión \\( \\frac{\\sin x}{\\csc x} + \\frac{\\cos x}{\\sec x} \\).', solucionOculta: '1', pista: 'Reemplaza \\(\\csc x\\) y \\(\\sec x\\) por sus recíprocos.' },
+                { id: 'F05', categoria: 'Fundamentales', enunciadoTeX: 'Expresa \\( \\sec^2 \\alpha - 1 \\) como una sola función trigonométrica.', solucionOculta: 'tan(alpha)^2', pista: 'Revisa las identidades pitagóricas.' },
+                { id: 'F06', categoria: 'Fundamentales', enunciadoTeX: 'Expresa \\( \\csc^2 \\beta - \\cot^2 \\beta \\) como un valor numérico.', solucionOculta: '1', pista: 'Reorganiza una de las identidades pitagóricas.' },
+                { id: 'F07', categoria: 'Fundamentales', enunciadoTeX: 'Simplifica \\( (1 - \\sin x)(1 + \\sin x) \\).', solucionOculta: 'cos(x)^2', pista: 'Esto es una diferencia de cuadrados. ¿Qué resulta de \\(1 - \\sin^2 x\\)?' },
+                { id: 'F08', categoria: 'Fundamentales', enunciadoTeX: 'Expresa \\( \\sin^2 x \\) en términos de \\( \\cos x \\).', solucionOculta: '1-cos(x)^2', pista: 'La identidad pitagórica principal es la clave.' },
+
+                // Categoría 2: Paridad y Co-función
+                { id: 'P01', categoria: 'Paridad y Co-función', enunciadoTeX: 'Simplifica \\( \\sin(-x) \\).', solucionOculta: '-sin(x)', pista: 'La función seno es una función impar.' },
+                { id: 'P02', categoria: 'Paridad y Co-función', enunciadoTeX: 'Simplifica \\( \\cos(-x) \\).', solucionOculta: 'cos(x)', pista: 'La función coseno es una función par.' },
+                { id: 'P03', categoria: 'Paridad y Co-función', enunciadoTeX: 'Expresa \\( \\cos(\\frac{\\pi}{2} - x) \\) como una co-función.', solucionOculta: 'sin(x)', pista: 'El coseno de un ángulo es el seno de su complemento.' },
+                { id: 'P04', categoria: 'Paridad y Co-función', enunciadoTeX: 'Expresa \\( \\tan(\\frac{\\pi}{2} - x) \\) como una co-función.', solucionOculta: 'cot(x)', pista: 'La tangente y la cotangente son co-funciones complementarias.' },
+                { id: 'P05', categoria: 'Paridad y Co-función', enunciadoTeX: 'Simplifica \\( \\csc(- \\theta) \\).', solucionOculta: '-csc(theta)', pista: 'La cosecante tiene la misma paridad que su función recíproca.' },
+                { id: 'P06', categoria: 'Paridad y Co-función', enunciadoTeX: 'Expresa \\( \\sec(\\frac{\\pi}{2} - \\alpha) \\) como una co-función.', solucionOculta: 'csc(alpha)', pista: 'La secante de un ángulo es la cosecante de su complemento.' },
+                { id: 'P07', categoria: 'Paridad y Co-función', enunciadoTeX: 'Simplifica \\( \\tan(-\\beta) \\).', solucionOculta: '-tan(beta)', pista: 'La función tangente es una función impar.' },
+                { id: 'P08', categoria: 'Paridad y Co-función', enunciadoTeX: 'Expresa \\( \\sin(\\frac{\\pi}{2} - x) \\) como una co-función.', solucionOculta: 'cos(x)', pista: 'El seno de un ángulo es el coseno de su complemento.' },
                 
-                // Para respuestas numéricas
-                if (!isNaN(respuestaCorrecta)) {
-                    if (Math.abs(parseFloat(respuestaUsuario) - parseFloat(respuestaCorrecta)) <= 0.01) {
-                        correctas++;
-                        input.style.borderColor = '#4caf50';
-                        
-                        if (index < 3) basicasCorrectas++;
-                        else if (index < 6) intermediasCorrectas++;
-                        else avanzadasCorrectas++;
-                    } else {
-                        input.style.borderColor = '#f44336';
+                // Categoría 3: Suma y Diferencia
+                { id: 'S01', categoria: 'Suma y Diferencia', enunciadoTeX: 'Expande \\( \\sin(A + B) \\).', solucionOculta: 'sin(A)*cos(B) + cos(A)*sin(B)', pista: 'La fórmula de la suma para el seno es "sen-cos, cos-sen".' },
+                { id: 'S02', categoria: 'Suma y Diferencia', enunciadoTeX: 'Expande \\( \\cos(A - B) \\).', solucionOculta: 'cos(A)*cos(B) + sin(A)*sin(B)', pista: 'La fórmula de la diferencia para el coseno es "cos-cos, sen-sen" con el signo opuesto.' },
+                { id: 'S03', categoria: 'Suma y Diferencia', enunciadoTeX: 'Simplifica \\( \\sin(x)\\cos(y) - \\cos(x)\\sin(y) \\).', solucionOculta: 'sin(x - y)', pista: 'Esta es la forma expandida de la fórmula de diferencia para el seno.' },
+                { id: 'S04', categoria: 'Suma y Diferencia', enunciadoTeX: 'Simplifica \\( \\cos(x)\\cos(y) - \\sin(x)\\sin(y) \\).', solucionOculta: 'cos(x + y)', pista: 'Esta es la forma expandida de la fórmula de suma para el coseno.' },
+                { id: 'S05', categoria: 'Suma y Diferencia', enunciadoTeX: 'Expande \\( \\tan(\\alpha + \\beta) \\). No incluyas fracciones en tu respuesta, usa la notación (a)/(b).', solucionOculta: '(tan(alpha) + tan(beta)) / (1 - tan(alpha)*tan(beta))', pista: 'La fórmula de la suma para la tangente tiene una suma en el numerador y una resta en el denominador.' },
+                { id: 'S06', categoria: 'Suma y Diferencia', enunciadoTeX: 'Usa una identidad de suma o diferencia para encontrar el valor exacto de \\(\\cos(15^\\circ)\\). Escribe la respuesta en términos de raíces.', solucionOculta: '(sqrt(6)+sqrt(2))/4', pista: 'Considera \\(15^\\circ = 45^\\circ - 30^\\circ\\).' },
+                { id: 'S07', categoria: 'Suma y Diferencia', enunciadoTeX: 'Usa una identidad de suma o diferencia para encontrar el valor exacto de \\(\\sin(75^\\circ)\\). Escribe la respuesta en términos de raíces.', solucionOculta: '(sqrt(6)+sqrt(2))/4', pista: 'Considera \\(75^\\circ = 45^\\circ + 30^\\circ\\).' },
+                { id: 'S08', categoria: 'Suma y Diferencia', enunciadoTeX: 'Expande \\( \\cos(A+B) \\).', solucionOculta: 'cos(A)*cos(B)-sin(A)*sin(B)', pista: '"cos-cos, sen-sen", el signo cambia.' },
+                
+                // Categoría 4: Ángulo Doble y Mitad
+                { id: 'D01', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'Expresa \\( \\sin(2x) \\) en términos de \\( \\sin x \\) y \\( \\cos x \\).', solucionOculta: '2*sin(x)*cos(x)', pista: 'Es la identidad de ángulo doble más común para el seno.' },
+                { id: 'D02', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'Expresa \\( \\cos(2x) \\) en términos de \\( \\cos x \\) y \\( \\sin x \\).', solucionOculta: 'cos(x)^2 - sin(x)^2', pista: 'Esta es la forma principal de la identidad de ángulo doble para el coseno.' },
+                { id: 'D03', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'Expresa \\( \\cos(2x) \\) solo en términos de \\( \\cos x \\).', solucionOculta: '2*cos(x)^2 - 1', pista: 'Sustituye \\(\\sin^2 x\\) en la identidad principal de \\(\\cos(2x)\\).' },
+                { id: 'D04', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'Expresa \\( \\cos(2x) \\) solo en términos de \\( \\sin x \\).', solucionOculta: '1 - 2*sin(x)^2', pista: 'Sustituye \\(\\cos^2 x\\) en la identidad principal de \\(\\cos(2x)\\).' },
+                { id: 'D05', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'Expresa \\( \\tan(2x) \\). No incluyas fracciones en tu respuesta, usa la notación (a)/(b).', solucionOculta: '(2*tan(x))/(1-tan(x)^2)', pista: 'Similar a la fórmula de suma \\(\\tan(x+x)\\).' },
+                { id: 'D06', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'La expresión \\( \\sqrt{\\frac{1-\\cos x}{2}} \\) es equivalente a:', solucionOculta: 'sin(x/2)', pista: 'Esta es la fórmula de reducción de potencia para el seno, resuelta para el ángulo mitad.' },
+                { id: 'D07', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'La expresión \\( \\frac{1-\\cos(2\\theta)}{\\sin(2\\theta)} \\) se simplifica a:', solucionOculta: 'tan(theta)', pista: 'Usa las identidades de ángulo doble para el numerador y el denominador.' },
+                { id: 'D08', categoria: 'Ángulo Doble y Mitad', enunciadoTeX: 'La expresión \\( \\frac{\\sin(2x)}{1+\\cos(2x)} \\) se simplifica a:', solucionOculta: 'tan(x)', pista: 'Reemplaza el numerador y el denominador con sus identidades de ángulo doble.' },
+                
+                // Categoría 5: Producto-a-Suma / Suma-a-Producto
+                { id: 'PS01', categoria: 'Producto-a-Suma', enunciadoTeX: 'Expresa \\( \\sin(A)\\cos(B) \\) como una suma.', solucionOculta: '0.5*(sin(A+B) + sin(A-B))', pista: 'Comienza con las identidades de suma y diferencia para \\(\\sin\\).' },
+                { id: 'PS02', categoria: 'Producto-a-Suma', enunciadoTeX: 'Expresa \\( \\cos(A)\\cos(B) \\) como una suma.', solucionOculta: '0.5*(cos(A+B) + cos(A-B))', pista: 'Comienza con las identidades de suma y diferencia para \\(\\cos\\).' },
+                { id: 'PS03', categoria: 'Suma-a-Producto', enunciadoTeX: 'Expresa \\( \\sin(A) + \\sin(B) \\) como un producto.', solucionOculta: '2*sin((A+B)/2)*cos((A-B)/2)', pista: 'La fórmula involucra un seno y un coseno con ángulos promedio y semi-diferencia.' },
+                { id: 'PS04', categoria: 'Suma-a-Producto', enunciadoTeX: 'Expresa \\( \\cos(A) - \\cos(B) \\) como un producto.', solucionOculta: '-2*sin((A+B)/2)*sin((A-B)/2)', pista: 'Esta es la única fórmula de suma-a-producto que resulta en dos senos.' },
+                { id: 'PS05', categoria: 'Producto-a-Suma', enunciadoTeX: 'Expresa \\( \\sin(5x)\\sin(3x) \\) como una suma o diferencia.', solucionOculta: '0.5*(cos(2x)-cos(8x))', pista: 'Usa la fórmula producto-a-suma para \\(\\sin(A)\\sin(B)\\).' },
+                { id: 'PS06', categoria: 'Suma-a-Producto', enunciadoTeX: 'Expresa \\( \\cos(6x)+\\cos(2x) \\) como un producto.', solucionOculta: '2*cos(4x)*cos(2x)', pista: 'Usa la fórmula suma-a-producto para \\(\\cos(A)+\\cos(B)\\).' },
+                { id: 'PS07', categoria: 'Producto-a-Suma', enunciadoTeX: 'Expresa \\( 2\\sin(3\\theta)\\cos(\\theta) \\) como una suma.', solucionOculta: 'sin(4*theta) + sin(2*theta)', pista: 'Es el doble de la fórmula producto-a-suma para \\(\\sin(A)\\cos(B)\\).' },
+                { id: 'PS08', categoria: 'Suma-a-Producto', enunciadoTeX: 'Expresa \\( \\sin(x)-\\sin(y) \\) como un producto.', solucionOculta: '2*cos((x+y)/2)*sin((x-y)/2)', pista: 'Similar a la suma de senos, pero con el coseno primero.' },
+
+                // Categoría 6: Reexpresión y Simplificación
+                { id: 'R01', categoria: 'Simplificación', enunciadoTeX: 'Simplifica \\( \\tan x \\cos x \\).', solucionOculta: 'sin(x)', pista: 'Expresa \\(\\tan x\\) en términos de seno y coseno.' },
+                { id: 'R02', categoria: 'Simplificación', enunciadoTeX: 'Simplifica \\( \\frac{1-\\cos^2 x}{\\sin x} \\).', solucionOculta: 'sin(x)', pista: 'Usa la identidad pitagórica en el numerador.' },
+                { id: 'R03', categoria: 'Simplificación', enunciadoTeX: 'Simplifica \\( \\cot \\theta \\sec \\theta \\sin \\theta \\).', solucionOculta: '1', pista: 'Convierte todo a senos y cosenos.' },
+                { id: 'R04', categoria: 'Simplificación', enunciadoTeX: 'Simplifica \\( \\frac{\\sec x - \\cos x}{\\sin x} \\).', solucionOculta: 'tan(x)', pista: 'Expresa \\(\\sec x\\) como \\(1/\\cos x\\) y combina los términos en el numerador.' },
+                { id: 'R05', categoria: 'Simplificación', enunciadoTeX: 'Simplifica la expresión \\( \\sin x + \\cot x \\cos x \\).', solucionOculta: 'csc(x)', pista: 'Reemplaza \\(\\cot x\\) y busca un denominador común.' },
+                { id: 'R06', categoria: 'Simplificación', enunciadoTeX: 'Simplifica \\( \\frac{\\tan x + \\cot x}{\\sec x \\csc x} \\).', solucionOculta: '1', pista: 'Convierte cada función a sus equivalentes en seno y coseno.' },
+                { id: 'R07', categoria: 'Simplificación', enunciadoTeX: 'Simplifica \\( \\frac{\\sin x}{1-\\cos x} - \\frac{1+\\cos x}{\\sin x} \\).', solucionOculta: '0', pista: 'Encuentra un denominador común para las dos fracciones.' },
+                { id: 'R08', categoria: 'Simplificación', enunciadoTeX: 'Simplifica \\( (\\sec x + \\tan x)(1-\\sin x) \\).', solucionOculta: 'cos(x)', pista: 'Convierte secante y tangente a senos y cosenos, luego multiplica.' },
+                { 
+                    id: 'R09', categoria: 'Simplificación', 
+                    enunciadoTeX: 'Observa la figura y simplifica la expresión \\( \\frac{b}{c} \\cdot \\frac{a}{c} \\).', 
+                    solucionOculta: 'sin(theta)*cos(theta)',
+                    pista: 'Identifica qué razones trigonométricas corresponden a \\(b/c\\) y \\(a/c\\) en un triángulo rectángulo.',
+                    svg: '<svg viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg"><polygon points="10,70 90,70 10,10" fill="none" stroke="black" stroke-width="2"/><text x="45" y="75">a</text><text x="5" y="45">b</text><text x="50" y="35" font-style="italic">c</text><text x="15" y="65">&theta;</text><rect x="10" y="65" width="5" height="5" stroke="black" stroke-width="1" fill="none"/></svg>'
+                },
+
+                // Categoría 7: Verificación V/F
+                { id: 'VF01', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( \\sin x = \\sqrt{1-\\cos^2 x} \\) es una identidad para todos los reales.', solucionOculta: 'F', pista: '\\(\\sqrt{A^2} = |A|\\). ¿Qué pasa cuando \\(\\sin x\\) es negativo?' },
+                { id: 'VF02', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( \\tan^2 x + 1 = \\sec^2 x \\) es una identidad.', solucionOculta: 'V', pista: 'Esta es una de las tres identidades pitagóricas fundamentales.' },
+                { id: 'VF03', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( \\sin(x+y) = \\sin x + \\sin y \\) es una identidad.', solucionOculta: 'F', pista: 'Prueba con valores simples, como \\(x=y=\\pi/2\\).' },
+                { id: 'VF04', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( \\frac{\\sin(2x)}{2} = \\sin x \\) es una identidad.', solucionOculta: 'F', pista: 'Recuerda la fórmula de ángulo doble para el seno. Falta un factor.' },
+                { id: 'VF05', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( \\cos(2x) = \\cos^2 x - \\sin^2 x \\) es una identidad.', solucionOculta: 'V', pista: 'Esta es la forma principal de la identidad de ángulo doble para el coseno.' },
+                { id: 'VF06', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( |\\cos x| = \\sqrt{\\cos^2 x} \\) es una identidad.', solucionOculta: 'V', pista: 'La raíz cuadrada de un número al cuadrado es su valor absoluto.' },
+                { id: 'VF07', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( \\sec(-x) = -\\sec(x) \\) es una identidad.', solucionOculta: 'F', pista: 'La secante tiene la misma paridad que el coseno, que es una función par.' },
+                { id: 'VF08', tipo: 'VF', categoria: 'Verificación V/F', enunciadoTeX: 'La ecuación \\( \\sin(\\frac{x}{2}) = \\frac{\\sin x}{2} \\) es una identidad.', solucionOculta: 'F', pista: 'Las funciones trigonométricas no son distributivas sobre la multiplicación escalar de su argumento.' },
+            ];
+
+            // --- LÓGICA DEL PARSER Y EVALUADOR (Shunting-Yard & AST) ---
+            const parser = (() => {
+                const ops = { '+': 1, '-': 1, '*': 2, '/': 2, '^': 3 };
+                const funcs = ['sin', 'cos', 'tan', 'cot', 'sec', 'csc', 'sqrt'];
+                const constants = { 'pi': Math.PI, 'e': Math.E };
+                
+                function tokenize(input) {
+                    const sanitized = input.toLowerCase().replace(/\\(pi|theta)/g, '$1')
+                                       .replace(/[{}]/g, '')
+                                       .replace(/\\/g,' ');
+
+                    const regex = /\s*([a-z]+|[\d.]+|[+\-*/^()])/g;
+                    let tokens = [];
+                    let match;
+                    while ((match = regex.exec(sanitized)) !== null) {
+                        tokens.push(match[1]);
                     }
-                } 
-                // Para respuestas de texto
-                else {
-                    if (respuestaUsuario === respuestaCorrecta.toLowerCase()) {
-                        correctas++;
-                        input.style.borderColor = '#4caf50';
+                    return tokens;
+                }
+
+                // Shunting-Yard para convertir tokens a RPN (notación polaca inversa)
+                function toRPN(tokens) {
+                    let outputQueue = [];
+                    let operatorStack = [];
+
+                    for (const token of tokens) {
+                        if (!isNaN(parseFloat(token))) {
+                            outputQueue.push({ type: 'num', value: parseFloat(token) });
+                        } else if (token in constants) {
+                            outputQueue.push({ type: 'num', value: constants[token] });
+                        } else if (token === 'x' || token === 'theta') {
+                            outputQueue.push({ type: 'var', value: token });
+                        } else if (funcs.includes(token)) {
+                            operatorStack.push({ type: 'func', value: token });
+                        } else if (token in ops) {
+                            while (
+                                operatorStack.length > 0 &&
+                                operatorStack[operatorStack.length - 1].type === 'op' &&
+                                (ops[operatorStack[operatorStack.length - 1].value] >= ops[token])
+                            ) {
+                                outputQueue.push(operatorStack.pop());
+                            }
+                            operatorStack.push({ type: 'op', value: token });
+                        } else if (token === '(') {
+                            operatorStack.push({ type: 'paren', value: '(' });
+                        } else if (token === ')') {
+                            while (operatorStack.length > 0 && operatorStack[operatorStack.length - 1].value !== '(') {
+                                outputQueue.push(operatorStack.pop());
+                            }
+                            if (operatorStack.length === 0) throw new Error("Paréntesis desbalanceados");
+                            operatorStack.pop(); // Pop '('
+                            if (operatorStack.length > 0 && operatorStack[operatorStack.length - 1].type === 'func') {
+                                outputQueue.push(operatorStack.pop());
+                            }
+                        }
+                    }
+
+                    while (operatorStack.length > 0) {
+                        const op = operatorStack.pop();
+                        if (op.value === '(') throw new Error("Paréntesis desbalanceados");
+                        outputQueue.push(op);
+                    }
+                    return outputQueue;
+                }
+                
+                function evaluateRPN(rpn, x) {
+                    let stack = [];
+                    const trigFuncs = {
+                        sin: Math.sin, cos: Math.cos, tan: Math.tan, sqrt: Math.sqrt,
+                        csc: x => 1/Math.sin(x), sec: x => 1/Math.cos(x), cot: x => 1/Math.tan(x)
+                    };
+
+                    for (const token of rpn) {
+                        if (token.type === 'num') {
+                            stack.push(token.value);
+                        } else if (token.type === 'var') {
+                            stack.push(x);
+                        } else if (token.type === 'op') {
+                            if (stack.length < 2) throw new Error("Error de sintaxis del operador");
+                            const b = stack.pop();
+                            const a = stack.pop();
+                            if (token.value === '+') stack.push(a + b);
+                            else if (token.value === '-') stack.push(a - b);
+                            else if (token.value === '*') stack.push(a * b);
+                            else if (token.value === '/') stack.push(a / b);
+                            else if (token.value === '^') stack.push(Math.pow(a, b));
+                        } else if (token.type === 'func') {
+                            if (stack.length < 1) throw new Error("Error de sintaxis de la función");
+                            const arg = stack.pop();
+                            stack.push(trigFuncs[token.value](arg));
+                        }
+                    }
+
+                    if (stack.length !== 1) throw new Error("Expresión mal formada");
+                    return stack[0];
+                }
+
+                return {
+                    evaluate: (expression, x) => {
+                        try {
+                            const tokens = tokenize(expression);
+                            const rpn = toRPN(tokens);
+                            return evaluateRPN(rpn, x);
+                        } catch (e) {
+                            // console.error(`Error evaluando '${expression}':`, e.message);
+                            return NaN;
+                        }
+                    }
+                };
+            })();
+
+            // --- LÓGICA DE VALIDACIÓN ---
+            function sonEquivalentes(exprUsuario, exprSolucion) {
+                const EPSILON = 1e-6;
+                const puntosPrueba = [
+                    -3*Math.PI/4, -Math.PI/2.1, -Math.PI/3, -Math.PI/6, 
+                    Math.PI/6, Math.PI/3, Math.PI/2.1, 3*Math.PI/4
+                ];
+                // Añadir 10 puntos aleatorios
+                for(let i=0; i<10; i++) {
+                    puntosPrueba.push(Math.random() * 2 * Math.PI - Math.PI);
+                }
+
+                let puntosValidos = 0;
+                for (const punto of puntosPrueba) {
+                    const valUsuario = parser.evaluate(exprUsuario, punto);
+                    const valSolucion = parser.evaluate(exprSolucion, punto);
+                    
+                    if (isNaN(valUsuario) || isNaN(valSolucion) || !isFinite(valUsuario) || !isFinite(valSolucion)) {
+                        continue; // Ignorar singularidades o errores
+                    }
+
+                    puntosValidos++;
+                    if (Math.abs(valUsuario - valSolucion) > EPSILON) {
+                         // Manejar equivalencias numéricas comunes como sqrt(2)/2
+                        const specialValues = {
+                            "sqrt(2)/2": Math.sqrt(2)/2, "sqrt(3)/2": Math.sqrt(3)/2, "1/2": 0.5,
+                            "(sqrt(6)+sqrt(2))/4": (Math.sqrt(6)+Math.sqrt(2))/4
+                        };
+                        if(specialValues[exprSolucion] && Math.abs(valUsuario - specialValues[exprSolucion]) < EPSILON) {
+                           continue;
+                        }
                         
-                        if (index < 3) basicasCorrectas++;
-                        else if (index < 6) intermediasCorrectas++;
-                        else avanzadasCorrectas++;
-                    } else {
-                        input.style.borderColor = '#f44336';
+                        return false;
                     }
                 }
-            });
+                
+                // Si no hay suficientes puntos válidos, no podemos estar seguros.
+                // Asumimos que si hay más de 5 y todos coinciden, es correcto.
+                return puntosValidos > 5;
+            }
 
-            document.getElementById('resultado').style.display = 'block';
-            document.getElementById('calificacion').textContent = correctas;
-            document.getElementById('basico').textContent = basicasCorrectas;
-            document.getElementById('intermedio').textContent = intermediasCorrectas;
-            document.getElementById('avanzado').textContent = avanzadasCorrectas;
 
-            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
-        });
+            // --- LÓGICA DEL EXAMEN ---
+            function iniciarExamen() {
+                estado.examenActivo = true;
+                estado.tiempoInicio = new Date();
+                estado.respuestasUsuario = {};
 
-        // Inicializar MathJax
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                // Seleccionar 14 preguntas aleatorias
+                const categorias = {};
+                bancoDePreguntas.forEach(p => {
+                    if (!categorias[p.categoria]) categorias[p.categoria] = [];
+                    categorias[p.categoria].push(p);
+                });
+                
+                estado.preguntasActuales = [];
+                Object.values(categorias).forEach(cat => {
+                    // Mezclar y tomar 2 de cada categoría
+                    const mezcladas = [...cat].sort(() => 0.5 - Math.random());
+                    estado.preguntasActuales.push(...mezcladas.slice(0, 2));
+                });
+                
+                estado.preguntasActuales.sort(() => 0.5 - Math.random()); // Mezcla final
+
+                renderizarPreguntas();
+                
+                controlesPanel.classList.add('hidden');
+                resultadosPanel.classList.add('hidden');
+                examenPanel.classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+
+            function renderizarPreguntas() {
+                preguntasContainer.innerHTML = '';
+                estado.preguntasActuales.forEach((pregunta, index) => {
+                    const esVF = pregunta.tipo === 'VF';
+                    const inputHTML = esVF
+                        ? `
+                        <div class="vf-input-wrapper" role="radiogroup" aria-labelledby="vf-label-${index}">
+                            <label id="vf-label-${index}" class="hidden">Respuesta para pregunta ${index + 1}</label>
+                            <button class="btn btn-secondary" data-value="V" aria-pressed="false">Verdadero</button>
+                            <button class="btn btn-secondary" data-value="F" aria-pressed="false">Falso</button>
+                        </div>
+                        `
+                        : `
+                        <div class="math-input-wrapper">
+                            <div class="math-input-toolbar">
+                                <button data-insert="\\sin()">sin</button> <button data-insert="\\cos()">cos</button> <button data-insert="\\tan()">tan</button>
+                                <button data-insert="\\csc()">csc</button> <button data-insert="\\sec()">sec</button> <button data-insert="\\cot()">cot</button>
+                                <button data-insert="^2">x²</button> <button data-insert="^{}">xⁿ</button> <button data-insert="\\frac{}{}">a/b</button>
+                                <button data-insert="\\sqrt{}">√</button> <button data-insert="\\pi">π</button> <button data-insert="\\theta">θ</button>
+                                <button data-insert="()">()</button>
+                            </div>
+                            <textarea id="respuesta-${index}" class="math-input-field" rows="3" placeholder="Escribe tu respuesta en LaTeX o texto plano (ej. sin(x)^2)"></textarea>
+                            <div class="math-input-preview" aria-live="polite"></div>
+                        </div>
+                        `;
+
+                    const card = document.createElement('div');
+                    card.className = 'pregunta-card';
+                    card.id = `pregunta-${index}`;
+                    card.innerHTML = `
+                        <div class="pregunta-header">
+                           <span class="pregunta-num">Pregunta ${index + 1}</span>
+                           <span class="pregunta-categoria">${pregunta.categoria}</span>
+                        </div>
+                        <div class="enunciado">
+                           ${pregunta.enunciadoTeX}
+                           ${pregunta.svg ? `<img src="data:image/svg+xml;base64,${btoa(pregunta.svg)}" alt="Diagrama de apoyo" class="enunciado-svg">` : ''}
+                        </div>
+                        ${inputHTML}
+                        <div class="resultado-pregunta-container"></div>
+                        <p class="printable-answer hidden"></p>
+                    `;
+                    preguntasContainer.appendChild(card);
+                });
+                
+                // Forzar a MathJax a renderizar el nuevo contenido
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+
+                // Añadir event listeners para los inputs
+                configurarInputsMatematicos();
+            }
+
+            function configurarInputsMatematicos() {
+                estado.preguntasActuales.forEach((pregunta, index) => {
+                    const card = document.getElementById(`pregunta-${index}`);
+                    if (pregunta.tipo === 'VF') {
+                        const buttons = card.querySelectorAll('.vf-input-wrapper button');
+                        buttons.forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                buttons.forEach(b => { b.classList.remove('btn-primary'); b.setAttribute('aria-pressed', 'false') });
+                                btn.classList.add('btn-primary');
+                                btn.setAttribute('aria-pressed', 'true');
+                                estado.respuestasUsuario[pregunta.id] = { texto: btn.dataset.value };
+                            });
+                        });
+                    } else {
+                        const textarea = card.querySelector(`#respuesta-${index}`);
+                        const preview = card.querySelector('.math-input-preview');
+                        const toolbar = card.querySelector('.math-input-toolbar');
+
+                        textarea.addEventListener('input', () => {
+                            const texto = textarea.value;
+                            estado.respuestasUsuario[pregunta.id] = { texto: texto };
+                            preview.innerHTML = `\\(${texto}\\)`;
+                            if (window.MathJax) {
+                                MathJax.typesetPromise([preview]);
+                            }
+                        });
+
+                        toolbar.addEventListener('click', (e) => {
+                            if (e.target.tagName === 'BUTTON') {
+                                const insertText = e.target.dataset.insert;
+                                const start = textarea.selectionStart;
+                                const end = textarea.selectionEnd;
+                                const text = textarea.value;
+                                
+                                textarea.value = text.substring(0, start) + insertText + text.substring(end);
+                                textarea.focus();
+
+                                const cursorPos = insertText.includes('{}') ? start + insertText.indexOf('{') + 1 : start + insertText.length - 1;
+                                textarea.setSelectionRange(cursorPos, cursorPos);
+                                textarea.dispatchEvent(new Event('input'));
+                            }
+                        });
+                    }
+                });
+            }
+            
+            function enviarExamen() {
+                if (!confirm('¿Estás seguro de que quieres enviar tus respuestas?')) return;
+
+                const tiempoFin = new Date();
+                const duracionSeg = Math.round((tiempoFin - estado.tiempoInicio) / 1000);
+                
+                let correctas = 0;
+                let resultadosDetallados = [];
+
+                estado.preguntasActuales.forEach((pregunta, index) => {
+                    const card = document.getElementById(`pregunta-${index}`);
+                    const respuestaUsuario = estado.respuestasUsuario[pregunta.id]?.texto || '';
+                    let esCorrecta = false;
+                    
+                    if (pregunta.tipo === 'VF') {
+                        esCorrecta = respuestaUsuario.toUpperCase() === pregunta.solucionOculta.toUpperCase();
+                    } else if (respuestaUsuario.trim() !== '') {
+                        esCorrecta = sonEquivalentes(respuestaUsuario, pregunta.solucionOculta);
+                    }
+                    
+                    if (esCorrecta) correctas++;
+
+                    resultadosDetallados.push({
+                        id: pregunta.id,
+                        categoria: pregunta.categoria,
+                        enunciado: pregunta.enunciadoTeX,
+                        respuestaUsuario: respuestaUsuario,
+                        esCorrecta: esCorrecta,
+                        pista: pregunta.pista,
+                        svg: pregunta.svg
+                    });
+
+                    // Mostrar resultado en la tarjeta de la pregunta
+                    const container = card.querySelector('.resultado-pregunta-container');
+                    container.innerHTML = `<span class="resultado-pregunta ${esCorrecta ? 'correcta' : 'incorrecta'}">${esCorrecta ? '✅ Correcta' : '❌ Incorrecta'}</span>`;
+                    if (!esCorrecta) {
+                        container.innerHTML += `<div class="pista-pregunta"><strong>Pista:</strong> ${pregunta.pista}</div>`;
+                    }
+
+                    // Preparar para impresión
+                    const printableAnswer = card.querySelector('.printable-answer');
+                    printableAnswer.textContent = `Tu respuesta: ${respuestaUsuario || '(sin respuesta)'}`;
+
+                    // Deshabilitar inputs
+                    if (pregunta.tipo === 'VF') {
+                        card.querySelectorAll('button').forEach(b => b.disabled = true);
+                    } else {
+                        card.querySelector('textarea').disabled = true;
+                    }
+                });
+
+                estado.resultados = {
+                    total: estado.preguntasActuales.length,
+                    correctas: correctas,
+                    incorrectas: estado.preguntasActuales.length - correctas,
+                    porcentaje: Math.round((correctas / estado.preguntasActuales.length) * 100),
+                    duracionSeg: duracionSeg,
+                    fecha: new Date().toISOString(),
+                    detalle: resultadosDetallados
+                };
+                
+                guardarHistorial();
+                mostrarResultados();
+                
+                btnEnviar.classList.add('hidden');
+                btnEnviarAbajo.classList.add('hidden');
+            }
+
+            function mostrarResultados() {
+                const { porcentaje, correctas, total } = estado.resultados;
+                
+                let color;
+                let feedback;
+                if (porcentaje >= 90) { color = 'var(--color-correct)'; feedback = '¡Excelente trabajo! Tienes un dominio impresionante.'; }
+                else if (porcentaje >= 70) { color = 'var(--color-accent-turquoise)'; feedback = '¡Muy bien! Sigue practicando para perfeccionar.'; }
+                else if (porcentaje >= 50) { color = 'orange'; feedback = 'Vas por buen camino. Repasa las áreas de dificultad.'; }
+                else { color = 'var(--color-incorrect)'; feedback = 'Necesitas más práctica. ¡No te rindas y sigue estudiando!'; }
+
+                scoreBadge.style.backgroundColor = color;
+                scoreBadge.style.border = `4px solid ${color}`;
+                scoreBadge.textContent = `${porcentaje}%`;
+                scoreText.textContent = `Obtuviste ${correctas} de ${total} respuestas correctas.`;
+                feedbackText.textContent = feedback;
+                
+                examenPanel.classList.add('hidden'); // Ocultar preguntas al final para mostrar resumen
+                resultadosPanel.classList.remove('hidden');
+                
+                // Mover las preguntas respondidas dentro del panel de resultados para que se impriman
+                resultadosPanel.insertBefore(preguntasContainer, resultadosPanel.children[1]);
+
+                resultadosPanel.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // --- HISTORIAL Y EXPORTACIÓN ---
+            function guardarHistorial() {
+                const intentoActual = {
+                    fecha: estado.resultados.fecha,
+                    porcentaje: estado.resultados.porcentaje,
+                    duracionSeg: estado.resultados.duracionSeg,
+                    resultados: estado.resultados // Guardar todo para exportación
+                };
+                estado.historial.unshift(intentoActual);
+                if (estado.historial.length > 5) {
+                    estado.historial.pop();
+                }
+                localStorage.setItem('trigExamHistory', JSON.stringify(estado.historial));
+                renderizarHistorial();
+            }
+
+            function cargarHistorial() {
+                const guardado = localStorage.getItem('trigExamHistory');
+                if (guardado) {
+                    estado.historial = JSON.parse(guardado);
+                    renderizarHistorial();
+                }
+            }
+
+            function renderizarHistorial() {
+                historialBody.innerHTML = '';
+                if (estado.historial.length === 0) {
+                    historialBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay intentos registrados.</td></tr>';
+                    return;
+                }
+                
+                estado.historial.forEach(intento => {
+                    const { fecha, porcentaje, duracionSeg } = intento;
+                    const d = new Date(fecha);
+                    const fechaStr = d.toLocaleString('es-PR');
+                    const duracionStr = `${Math.floor(duracionSeg / 60)}m ${duracionSeg % 60}s`;
+
+                    let color;
+                    if (porcentaje >= 90) color = 'var(--color-correct)';
+                    else if (porcentaje >= 70) color = 'var(--color-accent-turquoise)';
+                    else if (porcentaje >= 50) color = 'orange';
+                    else color = 'var(--color-incorrect)';
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${fechaStr}</td>
+                        <td><span class="score-cell-badge" style="background-color: ${color};">${porcentaje}%</span></td>
+                        <td>${duracionStr}</td>
+                    `;
+                    historialBody.appendChild(tr);
+                });
+            }
+
+            function exportarCSV() {
+                if (!estado.resultados) return;
+                let csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "timestamp;intento;total_preguntas;correctas;incorrectas;porcentaje;duracion_seg;id_pregunta;categoria;es_correcta\r\n";
+                
+                const intento = 1; // Solo se exporta el último intento
+                estado.resultados.detalle.forEach(p => {
+                    const row = [
+                        estado.resultados.fecha, intento, estado.resultados.total,
+                        estado.resultados.correctas, estado.resultados.incorrectas,
+                        estado.resultados.porcentaje, estado.resultados.duracionSeg,
+                        p.id, p.categoria, p.esCorrecta
+                    ].join(';');
+                    csvContent += row + "\r\n";
+                });
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "resultados_trigonometria.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            function exportarJSON() {
+                if (!estado.resultados) return;
+                 const data = {
+                    nombreEstudiante: nombreEstudianteInput.value,
+                    intento: estado.resultados
+                };
+
+                const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(data, null, 2))}`;
+                const link = document.createElement("a");
+                link.setAttribute("href", jsonString);
+                link.setAttribute("download", "resultados_trigonometria.json");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            function descargarPDF() {
+                if (!estado.resultados) return;
+                
+                document.getElementById('print-student-name').textContent = `Estudiante: ${nombreEstudianteInput.value || 'N/A'}`;
+                const printDate = new Date().toLocaleString('es-PR', { dateStyle: 'full', timeStyle: 'short' });
+                document.getElementById('print-date').textContent = `Fecha: ${printDate}`;
+
+                window.print();
+            }
+            
+            function copiarResumen() {
+                if(!estado.resultados) return;
+                const { porcentaje, correctas, total, duracionSeg } = estado.resultados;
+                const duracionStr = `${Math.floor(duracionSeg / 60)}m ${duracionSeg % 60}s`;
+                const nombre = nombreEstudianteInput.value || 'Estudiante';
+                
+                const resumen = `Resumen del Examen de Identidades Trigonométricas para ${nombre}:\n` +
+                                `--------------------------------------------------\n` +
+                                `Puntaje: ${porcentaje}%\n` +
+                                `Respuestas correctas: ${correctas} de ${total}\n` +
+                                `Duración: ${duracionStr}\n` +
+                                `Fecha: ${new Date().toLocaleString('es-PR')}`;
+                
+                navigator.clipboard.writeText(resumen).then(() => {
+                    alert('Resumen copiado al portapapeles.');
+                }, () => {
+                    alert('Error al copiar el resumen.');
+                });
+            }
+
+            // --- INICIALIZACIÓN ---
+            btnIniciar.addEventListener('click', iniciarExamen);
+            btnReintentar.addEventListener('click', () => location.reload()); // Simple reload for new attempt
+            btnEnviar.addEventListener('click', enviarExamen);
+            btnEnviarAbajo.addEventListener('click', enviarExamen);
+            
+            btnExportCSV.addEventListener('click', exportarCSV);
+            btnExportJSON.addEventListener('click', exportarJSON);
+            btnExportPDF.addEventListener('click', descargarPDF);
+            btnCopySummary.addEventListener('click', copiarResumen);
+
+            cargarHistorial();
+        })();
+
+    });
     </script>
 </body>
 </html>
