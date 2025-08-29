@@ -1,289 +1,1110 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen de Sistemas de Ecuaciones</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #4361ee;
-            --background-light: #f8f9fa;
-            --text-dark: #2b2d42;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen de Sistemas de Ecuaciones Lineales</title>
+  
+  <!-- MathJax v3 Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  
+  <style>
+    /* ------------------- */
+    /* ---   VARIABLES   --- */
+    /* ------------------- */
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg-color: rgba(255, 255, 255, 0.75);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent-primary: #6d28d9;
+      --accent-secondary: #fb7185;
+      --accent-success: #34d399;
+      --accent-error: #f43f5e;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --shadow-color: rgba(0, 0, 0, 0.05);
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
+    /* ------------------- */
+    /* ---    RESETS     --- */
+    /* ------------------- */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        h1 {
-            text-align: center;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-        }
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 1rem;
+    }
 
-        .question {
-            background: var(--background-light);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-        }
+    /* ------------------- */
+    /* ---   LAYOUT      --- */
+    /* ------------------- */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+    
+    header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+    
+    header p {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+    
+    main {
+        flex: 1;
+    }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+    /* ------------------- */
+    /* --- COMPONENTS    --- */
+    /* ------------------- */
+    .card {
+      background: var(--card-bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    
+    .btn {
+      display: inline-block;
+      font-weight: 600;
+      text-align: center;
+      vertical-align: middle;
+      cursor: pointer;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.75rem; /* 2xl equivalent */
+      transition: all 0.2s ease-in-out;
+      text-decoration: none;
+      box-shadow: 0 2px 5px var(--shadow-color);
+    }
+    
+    .btn-primary {
+      color: #fff;
+      background-color: var(--accent-primary);
+      border-color: var(--accent-primary);
+    }
+    .btn-primary:hover {
+      background-color: #5b21b6;
+      border-color: #5b21b6;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      color: var(--accent-primary);
+      background-color: transparent;
+      border-color: var(--accent-primary);
+    }
+    .btn-secondary:hover {
+        background-color: rgba(109, 40, 217, 0.1);
+    }
+    
+    .btn-success {
+      color: #fff;
+      background-color: var(--accent-success);
+      border-color: var(--accent-success);
+    }
+    .btn-success:hover {
+        background-color: #16a34a;
+        border-color: #16a34a;
+    }
 
-        button:hover {
-            background: #3651d4;
-        }
+    .form-group {
+      margin-bottom: 1rem;
+    }
 
-        #resultado {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #e8f5e9;
-            border-radius: 8px;
-            text-align: center;
-        }
+    .form-control {
+      display: block;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ced4da;
+      border-radius: 0.5rem;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    .form-control:focus {
+        border-color: var(--accent-primary);
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(109, 40, 217, 0.25);
+    }
 
-        .score {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2b2d42;
-        }
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-        .hint {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            font-style: italic;
-        }
-    </style>
+    /* ------------------- */
+    /* --- SETUP SCREEN  --- */
+    /* ------------------- */
+    #setup-container .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        align-items: flex-end;
+    }
+    
+    #setup-container .form-group {
+        flex: 1 1 200px;
+    }
+    
+    #setup-container .start-button-container {
+        flex-basis: 100%;
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    #btn-start {
+        padding: 1rem 3rem;
+        font-size: 1.25rem;
+    }
+
+    /* ------------------- */
+    /* --- EXAM VIEW     --- */
+    /* ------------------- */
+    .exam-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-bar-container {
+      flex-grow: 1;
+      height: 1.25rem;
+      background-color: #e9ecef;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      margin: 0 1rem;
+    }
+    
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: var(--accent-primary);
+      transition: width 0.3s ease;
+      border-radius: 0.5rem;
+    }
+    
+    .timer-display, .progress-text {
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+
+    .question-card {
+      position: relative;
+      transition: border-color 0.3s ease;
+    }
+    
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .question-number {
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    
+    .category-chip {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        color: #fff;
+    }
+    
+    .chip-cat1 { background-color: #8b5cf6; } /* violet */
+    .chip-cat2 { background-color: #ec4899; } /* pink */
+    .chip-cat3 { background-color: #22c55e; } /* green */
+    .chip-cat4 { background-color: #f97316; } /* orange */
+    .chip-cat5 { background-color: #3b82f6; } /* blue */
+    .chip-cat6 { background-color: #64748b; } /* slate */
+
+    .question-body {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .response-feedback {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .question-card.correct {
+        border-left: 5px solid var(--accent-success);
+    }
+    .question-card.correct .response-feedback {
+        color: var(--accent-success);
+        opacity: 1;
+    }
+    
+    .question-card.incorrect {
+        border-left: 5px solid var(--accent-error);
+    }
+    .question-card.incorrect .response-feedback {
+        color: var(--accent-error);
+        opacity: 1;
+    }
+    
+    .feedback-hint {
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background-color: rgba(251, 113, 133, 0.1);
+        border: 1px solid rgba(251, 113, 133, 0.3);
+        border-radius: 0.5rem;
+        color: #9f1239;
+        font-size: 0.9rem;
+        display: none;
+    }
+
+    /* ------------------- */
+    /* --- RESULTS VIEW  --- */
+    /* ------------------- */
+    .results-summary {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .results-summary h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .score-badge {
+        display: inline-block;
+        font-size: 2.5rem;
+        font-weight: 800;
+        padding: 1rem 2rem;
+        border-radius: 1rem;
+        color: #fff;
+        margin-bottom: 1rem;
+    }
+    
+    .score-badge.high { background-color: var(--accent-success); }
+    .score-badge.medium { background-color: #f59e0b; }
+    .score-badge.low { background-color: var(--accent-error); }
+    
+    .results-details {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem 0;
+    }
+    
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .history-table th, .history-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .history-table th {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* ------------------- */
+    /* ---   UTILITIES   --- */
+    /* ------------------- */
+    .hidden {
+      display: none !important;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* ------------------- */
+    /* --- RESPONSIVE    --- */
+    /* ------------------- */
+    @media (max-width: 768px) {
+      body { padding: 0.5rem; }
+      .container { padding: 1rem; }
+      header h1 { font-size: 1.8rem; }
+      .btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+      .action-buttons { flex-direction: column; }
+      .exam-header { flex-direction: column; gap: 0.5rem; }
+      .progress-bar-container { width: 100%; }
+    }
+    
+    /* ------------------- */
+    /* --- PRINT STYLES  --- */
+    /* ------------------- */
+    @media print {
+      body {
+        padding: 0;
+        background-color: #fff;
+        color: #000;
+        font-size: 12pt;
+      }
+      header, footer, #setup-container, #exam-container, #results-container .action-buttons, #results-container #history-card {
+        display: none;
+      }
+      
+      .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+        border: none;
+      }
+
+      #print-section {
+        display: block !important;
+      }
+      
+      .print-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #000;
+        padding-bottom: 1rem;
+      }
+      .print-header h1 { font-size: 20pt; }
+      .print-header p { font-size: 12pt; color: #555; }
+      
+      .print-summary {
+        margin-bottom: 2rem;
+        border: 1px solid #ccc;
+        padding: 1rem;
+        border-radius: 0;
+      }
+
+      .print-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem 1rem;
+      }
+
+      .print-summary-grid span {
+        font-weight: bold;
+      }
+      
+      .print-results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 2rem;
+      }
+      .print-results-table th, .print-results-table td {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        text-align: left;
+      }
+      .print-results-table th {
+        background-color: #f2f2f2;
+      }
+      
+      .print-results-table .correct-text { color: #006400; }
+      .print-results-table .incorrect-text { color: #8b0000; }
+      
+      .no-print { display: none; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-function"></i> Sistemas de Ecuaciones</h1>
-        
-        <form id="examenForm">
-            <!-- Método de eliminación -->
-            <div class="question">
-                <p>1. Resuelve el sistema por eliminación:</p>
-                <p>\[ \begin{cases} 2x + y = 7 \\ x - y = 1 \end{cases} \]</p>
-                <p class="hint">Escribe la respuesta como (x,y)</p>
-                <input type="text" name="q1" placeholder="(x,y)" data-respuesta="(3,1)">
+
+  <div class="container">
+    <header>
+      <h1>Examen de Sistemas de Ecuaciones Lineales</h1>
+      <p>Evalúa tus habilidades para resolver y clasificar sistemas de ecuaciones.</p>
+    </header>
+
+    <main>
+      <!-- ============== SETUP CONTAINER ============== -->
+      <section id="setup-container">
+        <div class="card">
+          <div class="controls">
+            <div class="form-group">
+              <label for="student-name">Nombre del estudiante (opcional)</label>
+              <input type="text" id="student-name" class="form-control" placeholder="Ej: Ana Pérez">
             </div>
-
-            <div class="question">
-                <p>2. Resuelve:</p>
-                <p>\[ \begin{cases} 3x + 2y = 12 \\ 4x - 3y = 1 \end{cases} \]</p>
-                <input type="text" name="q2" placeholder="(x,y)" data-respuesta="(2,3)">
+            <div class="form-group">
+              <label>Temporizador</label>
+              <div class="toggle-switch">
+                <input type="checkbox" id="timer-toggle" checked>
+                <label for="timer-toggle">Activado</label>
+              </div>
             </div>
-
-            <!-- Método de sustitución -->
-            <div class="question">
-                <p>3. Resuelve por sustitución:</p>
-                <p>\[ \begin{cases} y = 2x - 3 \\ 3x + y = 5 \end{cases} \]</p>
-                <input type="text" name="q3" placeholder="(x,y)" data-respuesta="(2,1)">
-            </div>
-
-            <div class="question">
-                <p>4. Resuelve:</p>
-                <p>\[ \begin{cases} y = x + 4 \\ 2x + y = 10 \end{cases} \]</p>
-                <input type="text" name="q4" placeholder="(x,y)" data-respuesta="(2,6)">
-            </div>
-
-            <!-- Análisis gráfico -->
-            <div class="question">
-                <p>5. ¿Cuántas soluciones tiene el sistema?</p>
-                <p>\[ \begin{cases} x + y = 5 \\ x + y = 3 \end{cases} \]</p>
-                <input type="text" name="q5" placeholder="Número de soluciones" data-respuesta="0">
-            </div>
-
-            <div class="question">
-                <p>6. ¿Cuántas soluciones tiene el sistema?</p>
-                <p>\[ \begin{cases} 2x + y = 4 \\ 4x + 2y = 8 \end{cases} \]</p>
-                <input type="text" name="q6" placeholder="Número de soluciones" data-respuesta="infinitas">
-            </div>
-
-            <!-- Sistemas más complejos -->
-            <div class="question">
-                <p>7. Resuelve:</p>
-                <p>\[ \begin{cases} \frac{x}{2} + y = 5 \\ 3x - 2y = 4 \end{cases} \]</p>
-                <input type="text" name="q7" placeholder="(x,y)" data-respuesta="(4,3)">
-            </div>
-
-            <div class="question">
-                <p>8. Resuelve:</p>
-                <p>\[ \begin{cases} 2(x + 1) = y + 3 \\ 3x - 2y = 1 \end{cases} \]</p>
-                <input type="text" name="q8" placeholder="(x,y)" data-respuesta="(1,1)">
-            </div>
-
-            <!-- Problemas verbales -->
-            <div class="question">
-                <p>9. La suma de dos números es 20 y su diferencia es 4. ¿Cuáles son los números?</p>
-                <p class="hint">Escribe el número mayor primero, separado por coma</p>
-                <input type="text" name="q9" placeholder="x,y" data-respuesta="12,8">
-            </div>
-
-            <div class="question">
-                <p>10. En una granja hay pollos y conejos. Si hay 50 cabezas y 140 patas en total, ¿cuántos animales hay de cada tipo?</p>
-                <p class="hint">Escribe (pollos,conejos)</p>
-                <input type="text" name="q10" placeholder="(x,y)" data-respuesta="(30,20)">
-            </div>
-
-            <!-- Más sistemas -->
-            <div class="question">
-                <p>11. Resuelve:</p>
-                <p>\[ \begin{cases} 5x - 2y = 1 \\ 3x + 4y = 35 \end{cases} \]</p>
-                <input type="text" name="q11" placeholder="(x,y)" data-respuesta="(5,5)">
-            </div>
-
-            <div class="question">
-                <p>12. La edad de un padre es el triple que la de su hijo. Dentro de 10 años, la edad del padre será el doble que la del hijo. ¿Qué edad tienen ahora?</p>
-                <p class="hint">Escribe (padre,hijo)</p>
-                <input type="text" name="q12" placeholder="(x,y)" data-respuesta="(30,10)">
-            </div>
-
-            <!-- Análisis de sistemas -->
-            <div class="question">
-                <p>13. Para el sistema:</p>
-                <p>\[ \begin{cases} ax + y = 1 \\ x + y = 2 \end{cases} \]</p>
-                <p>¿Qué valor debe tener 'a' para que el sistema tenga una única solución?</p>
-                <input type="text" name="q13" placeholder="a = ?" data-respuesta="2">
-            </div>
-
-            <div class="question">
-                <p>14. Resuelve:</p>
-                <p>\[ \begin{cases} \frac{x}{3} + \frac{y}{2} = 4 \\ \frac{x}{2} - \frac{y}{3} = 1 \end{cases} \]</p>
-                <input type="text" name="q14" placeholder="(x,y)" data-respuesta="(6,4)">
-            </div>
-
-            <!-- Problemas de aplicación -->
-            <div class="question">
-                <p>15. Un rectángulo tiene un perímetro de 20 unidades y un área de 24 unidades cuadradas. Encuentra sus dimensiones.</p>
-                <p class="hint">Escribe (largo,ancho)</p>
-                <input type="text" name="q15" placeholder="(x,y)" data-respuesta="(6,4)">
-            </div>
-
-            <div class="question">
-                <p>16. Una tienda vendió lápices a $2 y bolígrafos a $3. Si vendieron 100 artículos en total y recaudaron $250, ¿cuántos artículos de cada tipo vendieron?</p>
-                <input type="text" name="q16" placeholder="(lápices,bolígrafos)" data-respuesta="(50,50)">
-            </div>
-
-            <!-- Sistemas especiales -->
-            <div class="question">
-                <p>17. ¿Qué tipo de solución tiene el sistema?</p>
-                <p>\[ \begin{cases} 3x - y = 5 \\ -6x + 2y = -10 \end{cases} \]</p>
-                <input type="text" name="q17" placeholder="única/infinitas/ninguna" data-respuesta="infinitas">
-            </div>
-
-            <div class="question">
-                <p>18. Resuelve:</p>
-                <p>\[ \begin{cases} x + y + 2 = 0 \\ 2x + 2y + 4 = 0 \end{cases} \]</p>
-                <input type="text" name="q18" placeholder="única/infinitas/ninguna" data-respuesta="infinitas">
-            </div>
-
-            <!-- Problemas complejos -->
-            <div class="question">
-                <p>19. Un número de dos dígitos es igual a 7 veces la suma de sus dígitos. Si el dígito de las decenas es 2 unidades mayor que el de las unidades, ¿cuál es el número?</p>
-                <input type="text" name="q19" placeholder="número" data-respuesta="63">
-            </div>
-
-            <div class="question">
-                <p>20. Dos ciclistas parten del mismo punto en direcciones perpendiculares. Uno viaja a 12 km/h y el otro a 9 km/h. ¿Después de cuántas horas estarán a 15 km de distancia uno del otro?</p>
-                <input type="text" name="q20" placeholder="horas" data-respuesta="1">
-            </div>
-
-            <button type="submit">Calificar Examen</button>
-        </form>
-
-        <div id="resultado">
-            <h2>Resultado del Examen</h2>
-            <p class="score">Tu calificación: <span id="calificacion"></span>/20</p>
+          </div>
+          <div class="start-button-container">
+            <button id="btn-start" class="btn btn-primary">Iniciar Examen</button>
+          </div>
         </div>
+      </section>
+
+      <!-- ============== EXAM CONTAINER ============== -->
+      <section id="exam-container" class="hidden">
+        <div class="exam-header">
+            <span class="progress-text" id="progress-text">0/14</span>
+            <div class="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+            <span class="timer-display" id="timer-display">00:00</span>
+        </div>
+        <div id="questions-wrapper"></div>
+        <div class="action-buttons">
+          <button id="btn-submit" class="btn btn-success">Enviar Respuestas</button>
+        </div>
+      </section>
+
+      <!-- ============== RESULTS CONTAINER ============== -->
+      <section id="results-container" class="hidden">
+        <div class="card results-summary">
+          <h2>Resultados del Intento</h2>
+          <div id="score-badge" class="score-badge"></div>
+          <div id="results-details" class="results-details"></div>
+        </div>
+        
+        <div class="action-buttons">
+          <button id="btn-retry" class="btn btn-primary">Reintentar Examen</button>
+          <button id="btn-download-csv" class="btn btn-secondary">Descargar CSV</button>
+          <button id="btn-download-json" class="btn btn-secondary">Descargar JSON</button>
+          <button id="btn-download-pdf" class="btn btn-secondary">Descargar PDF</button>
+          <button id="btn-copy-summary" class="btn btn-secondary">Copiar Resumen</button>
+        </div>
+
+        <div id="results-feedback-wrapper"></div>
+        
+        <div id="history-card" class="card">
+          <h3>Últimos 5 Intentos</h3>
+          <div style="overflow-x:auto;">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Fecha y Hora</th>
+                  <th>Puntaje</th>
+                  <th>Correctas</th>
+                  <th>Duración</th>
+                </tr>
+              </thead>
+              <tbody id="history-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Una herramienta pedagógica para practicar sistemas de ecuaciones. Las preguntas se generan aleatoriamente. ¡Éxito!</p>
+    </footer>
+  </div>
+
+  <!-- ============== PRINT SECTION (HIDDEN) ============== -->
+  <div id="print-section" class="hidden">
+    <div class="print-header">
+      <h1>Resultados del Examen: Sistemas de Ecuaciones</h1>
+      <p id="print-student-name"></p>
+      <p id="print-timestamp"></p>
     </div>
+    <div class="print-summary">
+      <h3>Resumen del Intento</h3>
+      <div class="print-summary-grid">
+        <strong>Puntaje:</strong> <span id="print-score"></span>
+        <strong>Correctas:</strong> <span id="print-correct"></span>
+        <strong>Incorrectas:</strong> <span id="print-incorrect"></span>
+        <strong>Duración:</strong> <span id="print-duration"></span>
+      </div>
+    </div>
+    <h3>Detalle de Respuestas</h3>
+    <table class="print-results-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Categoría</th>
+          <th>Estado</th>
+          <th>Pista</th>
+        </tr>
+      </thead>
+      <tbody id="print-table-body"></tbody>
+    </table>
+  </div>
 
-    <script>
-        document.getElementById('examenForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            let correctas = 0;
-            const inputs = document.querySelectorAll('input[type="text"]');
-            
-            inputs.forEach(input => {
-                let respuestaCorrecta = input.dataset.respuesta.toLowerCase();
-                let respuestaUsuario = input.value.toLowerCase().trim();
-                
-                // Normalizar respuestas
-                respuestaUsuario = respuestaUsuario.replace(/\s+/g, '');
-                respuestaCorrecta = respuestaCorrecta.replace(/\s+/g, '');
-                
-                // Para respuestas numéricas
-                if (!isNaN(respuestaCorrecta)) {
-                    if (Math.abs(parseFloat(respuestaUsuario) - parseFloat(respuestaCorrecta)) <= 0.1) {
-                        correctas++;
-                        input.style.borderColor = '#4caf50';
-                    } else {
-                        input.style.borderColor = '#f44336';
-                    }
-                } 
-                // Para respuestas que son pares ordenados o texto
-                else {
-                    if (respuestaUsuario === respuestaCorrecta) {
-                        correctas++;
-                        input.style.borderColor = '#4caf50';
-                    } else {
-                        input.style.borderColor = '#f44336';
-                    }
-                }
+  <script>
+    // IIFE to encapsulate the script
+    (function() {
+      // ------------------- */
+      // ---   CONSTANTS   --- */
+      // ------------------- */
+      const NUM_QUESTIONS = 14;
+      const EPSILON = 1e-6;
+      const HISTORY_KEY = 'examen_sistemas_historial';
+      const MAX_HISTORY_ITEMS = 5;
+
+      // ------------------- */
+      // --- DOM ELEMENTS  --- */
+      // ------------------- */
+      const setupContainer = document.getElementById('setup-container');
+      const examContainer = document.getElementById('exam-container');
+      const resultsContainer = document.getElementById('results-container');
+      const questionsWrapper = document.getElementById('questions-wrapper');
+      const resultsFeedbackWrapper = document.getElementById('results-feedback-wrapper');
+      
+      const btnStart = document.getElementById('btn-start');
+      const btnSubmit = document.getElementById('btn-submit');
+      const btnRetry = document.getElementById('btn-retry');
+      const btnDownloadCsv = document.getElementById('btn-download-csv');
+      const btnDownloadJson = document.getElementById('btn-download-json');
+      const btnDownloadPdf = document.getElementById('btn-download-pdf');
+      const btnCopySummary = document.getElementById('btn-copy-summary');
+
+      const studentNameInput = document.getElementById('student-name');
+      const timerToggle = document.getElementById('timer-toggle');
+      const timerDisplay = document.getElementById('timer-display');
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
+
+      const scoreBadge = document.getElementById('score-badge');
+      const resultsDetails = document.getElementById('results-details');
+      const historyBody = document.getElementById('history-body');
+
+      // ------------------- */
+      // ---   STATE       --- */
+      // ------------------- */
+      let currentQuestions = [];
+      let userAnswers = {};
+      let currentAttemptResult = null;
+      let startTime;
+      let timerInterval;
+
+      // ---------------------------- */
+      // ---   QUESTION BANK      --- */
+      // ---------------------------- */
+      const questionBank = [
+        // CATEGORIA 1: Sistemas 2x2
+        { id: 101, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} x + y = 5 \\\\ x - y = 1 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [3, 2], pista: "Prueba el método de eliminación sumando las dos ecuaciones." },
+        { id: 102, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} 2x + 3y = 7 \\\\ 3x - y = 5 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [2, 1], pista: "Multiplica la segunda ecuación por 3 y luego suma." },
+        { id: 103, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} 5x - 2y = 1 \\\\ 3x + 4y = 11 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [1, 2], pista: "El método de eliminación es eficiente aquí." },
+        { id: 104, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} x = 2y - 1 \\\\ 3x - 5y = 1 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [3, 2], pista: "El método de sustitución es ideal, ya que 'x' está despejada." },
+        { id: 105, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} \\frac{1}{2}x + y = 3 \\\\ x - 2y = -2 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [2, 2], pista: "Puedes multiplicar la primera ecuación por 2 para eliminar fracciones." },
+        { id: 106, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} 4x + 3y = 0 \\\\ 2x - y = -5 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [-1.5, 2], pista: "Revisa los signos al manipular las ecuaciones." },
+        { id: 107, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} 3a - 2b = -9 \\\\ 2a + 5b = 13 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [-1, 3], pista: "Recuerda que las variables pueden ser letras distintas a 'x' e 'y'." },
+        { id: 108, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} x + 3y = 6 \\\\ -2x + y = 5 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [-9/7, 17/7], pista: "Las soluciones pueden ser fraccionarias." },
+        { id: 109, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} 7x - 9y = 5 \\\\ 8x + y = 17 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [2, 1], pista: "Despejar 'y' en la segunda ecuación es un buen primer paso." },
+        { id: 110, categoria: "Sistemas 2x2", enunciadoTeX: "\\[ \\begin{cases} 0.5x + 0.2y = 5 \\\\ 0.3x - 0.1y = 1 \\end{cases} \\]", tipo: "sol_tuple_2", solucion: [10, 0], pista: "Multiplicar ambas ecuaciones por 10 puede simplificar el problema." },
+        
+        // CATEGORIA 2: Sistemas 3x3
+        { id: 201, categoria: "Sistemas 3x3", enunciadoTeX: "\\[ \\begin{cases} x+y+z = 6 \\\\ 2x-y+z = 3 \\\\ x-y+2z = 5 \\end{cases} \\]", tipo: "sol_tuple_3", solucion: [1, 2, 3], pista: "Combina ecuaciones para eliminar una variable y obtener un sistema 2x2." },
+        { id: 202, categoria: "Sistemas 3x3", enunciadoTeX: "\\[ \\begin{cases} x+2y-z = 4 \\\\ 3x-y+z = 5 \\\\ 2x+y+2z=15 \\end{cases} \\]", tipo: "sol_tuple_3", solucion: [2, 3, 4], pista: "Sumar las dos primeras ecuaciones elimina 'z' directamente." },
+        { id: 203, categoria: "Sistemas 3x3", enunciadoTeX: "\\[ \\begin{cases} a-b+c=1 \\\\ a+b+c=3 \\\\ 2a-3b+c=0 \\end{cases} \\]", tipo: "sol_tuple_3", solucion: [1, 1, 1], pista: "Restar la primera ecuación de la segunda es un buen inicio." },
+        { id: 204, categoria: "Sistemas 3x3", enunciadoTeX: "\\[ \\begin{cases} 2x-y+3z=9 \\\\ x+y+z=6 \\\\ x-y+z=2 \\end{cases} \\]", tipo: "sol_tuple_3", solucion: [1, 2, 3], pista: "La segunda y tercera ecuación se pueden combinar fácilmente." },
+        { id: 205, categoria: "Sistemas 3x3", enunciadoTeX: "\\[ \\begin{cases} x+y=3 \\\\ y+z=5 \\\\ x+z=4 \\end{cases} \\]", tipo: "sol_tuple_3", solucion: [1, 2, 3], pista: "Suma las tres ecuaciones. El resultado es muy útil." },
+        { id: 206, categoria: "Sistemas 3x3", enunciadoTeX: "\\[ \\begin{cases} 3x + 2y - z = 8 \\\\ 2x - y + 3z = 3 \\\\ x + y - 2z = 0 \\end{cases} \\]", tipo: "sol_tuple_3", solucion: [2, 1, 0], pista: "Usa el método de eliminación dos veces para reducir a una sola variable." },
+        { id: 207, categoria: "Sistemas 3x3", enunciadoTeX: "\\[ \\begin{cases} 5x-3y+z=1 \\\\ 2x+y-z=4 \\\\ x+2y+3z=8 \\end{cases} \\]", tipo: "sol_tuple_3", solucion: [1, 1, -1], pista: "Ten cuidado con los signos al sumar o restar las ecuaciones." },
+        
+        // CATEGORIA 3: Clasificación
+        { id: 301, categoria: "Clasificación", enunciadoTeX: "Clasifica el sistema: \\[ \\begin{cases} x + y = 2 \\\\ 2x + 2y = 4 \\end{cases} \\]", tipo: "clasificacion", solucion: "I", pista: "Observa que la segunda ecuación es un múltiplo de la primera. Son la misma recta." },
+        { id: 302, categoria: "Clasificación", enunciadoTeX: "Clasifica el sistema: \\[ \\begin{cases} x - y = 3 \\\\ 2x - 2y = 1 \\end{cases} \\]", tipo: "clasificacion", solucion: "N", pista: "Las pendientes son iguales, pero los interceptos son diferentes. Son rectas paralelas." },
+        { id: 303, categoria: "Clasificación", enunciadoTeX: "Clasifica el sistema: \\[ \\begin{cases} x + 2y = 5 \\\\ 3x - y = 1 \\end{cases} \\]", tipo: "clasificacion", solucion: "U", pista: "Las pendientes de las rectas son diferentes, por lo tanto, se cruzan en un único punto." },
+        { id: 304, categoria: "Clasificación", enunciadoTeX: "Clasifica el sistema: \\[ \\begin{cases} y = 3x - 1 \\\\ 6x - 2y = 2 \\end{cases} \\]", tipo: "clasificacion", solucion: "I", pista: "Reorganiza la segunda ecuación a la forma y = mx + b." },
+        { id: 305, categoria: "Clasificación", enunciadoTeX: "Clasifica el sistema: \\[ \\begin{cases} x=4 \\\\ y=2 \\end{cases} \\]", tipo: "clasificacion", solucion: "U", pista: "Una recta vertical y una horizontal siempre tienen una única intersección." },
+        { id: 306, categoria: "Clasificación", enunciadoTeX: "Clasifica el sistema: \\[ \\begin{cases} -x + 3y = 2 \\\\ 2x - 6y = 5 \\end{cases} \\]", tipo: "clasificacion", solucion: "N", pista: "Compara la razón de los coeficientes de x, y, y los términos constantes." },
+        { id: 307, categoria: "Clasificación", enunciadoTeX: "Si al resolver un sistema 3x3 llegas a la expresión \\( 0 = 0 \\), ¿qué tipo de sistema es?", tipo: "clasificacion", solucion: "I", pista: "Una identidad (0=0) indica que hay infinitas soluciones." },
+        { id: 308, categoria: "Clasificación", enunciadoTeX: "Si al resolver un sistema 2x2 llegas a la expresión \\( 0 = 5 \\), ¿qué tipo de sistema es?", tipo: "clasificacion", solucion: "N", pista: "Una contradicción (0=5) indica que no hay soluciones." },
+        
+        // CATEGORIA 4: Modelación Verbal
+        { id: 401, categoria: "Modelación Verbal", enunciadoTeX: "La suma de dos números es 15 y su diferencia es 3. ¿Cuáles son los números? (responde como x,y)", tipo: "sol_tuple_2", solucion: [9, 6], pista: "Define x e y como los dos números. Escribe dos ecuaciones: x+y=15 y x-y=3." },
+        { id: 402, categoria: "Modelación Verbal", enunciadoTeX: "En una granja hay gallinas y conejos. Si se cuentan 30 cabezas y 80 patas en total, ¿cuántas gallinas y conejos hay? (responde como gallinas,conejos)", tipo: "sol_tuple_2", solucion: [20, 10], pista: "Sea g el número de gallinas y c el de conejos. Cabezas: g+c=30. Patas: 2g+4c=80." },
+        { id: 403, categoria: "Modelación Verbal", enunciadoTeX: "Un boleto de adulto para el cine cuesta $8 y uno de niño $5. Si un grupo de 10 personas pagó $62, ¿cuántos adultos y niños había? (responde como adultos,niños)", tipo: "sol_tuple_2", solucion: [4, 6], pista: "Sea 'a' el número de adultos y 'n' el de niños. a+n=10. El costo es 8a+5n=62." },
+        { id: 404, categoria: "Modelación Verbal", enunciadoTeX: "Ana tiene el doble de la edad de Beto. Hace 5 años, Ana tenía el triple de la edad de Beto. ¿Qué edades tienen ahora? (responde como edad Ana, edad Beto)", tipo: "sol_tuple_2", solucion: [20, 10], pista: "Hoy: A = 2B. Hace 5 años: A-5 = 3(B-5). Sustituye la primera ecuación en la segunda." },
+        { id: 405, categoria: "Modelación Verbal", enunciadoTeX: "La suma de tres números es 10. El primero más el segundo es 5. El segundo más el tercero es 7. ¿Cuáles son los números? (responde como x,y,z)", tipo: "sol_tuple_3", solucion: [3, 2, 5], pista: "x+y+z=10, x+y=5, y+z=7. Puedes usar sustitución fácilmente." },
+        { id: 406, categoria: "Modelación Verbal", enunciadoTeX: "Un ángulo de un triángulo mide 90°. La diferencia entre los otros dos ángulos es de 10°. Halla los tres ángulos. (responde como 90, angulo1, angulo2)", tipo: "sol_tuple_3", solucion: [90, 50, 40], pista: "Los ángulos de un triángulo suman 180°. Si uno es 90°, la suma de los otros dos (x+y) es 90. Su diferencia (x-y) es 10." },
+
+        // CATEGORIA 5: Matrices Aumentadas
+        { id: 501, categoria: "Matrices", enunciadoTeX: "Resuelve el sistema representado por la matriz aumentada: \\[ \\left[\\begin{array}{cc|c} 1 & 1 & 7 \\\\ 0 & 1 & 3 \\end{array}\\right] \\]", tipo: "sol_tuple_2", solucion: [4, 3], pista: "La segunda fila te da directamente el valor de 'y'. Luego sustituye hacia arriba (sustitución regresiva)." },
+        { id: 502, categoria: "Matrices", enunciadoTeX: "Resuelve el sistema representado por la matriz aumentada: \\[ \\left[\\begin{array}{cc|c} 1 & 0 & -2 \\\\ 0 & 1 & 5 \\end{array}\\right] \\]", tipo: "sol_tuple_2", solucion: [-2, 5], pista: "Esta matriz está en forma escalonada reducida. La solución es visible directamente." },
+        { id: 503, categoria: "Matrices", enunciadoTeX: "Resuelve el sistema representado por la matriz aumentada: \\[ \\left[\\begin{array}{ccc|c} 1 & 0 & 0 & 5 \\\\ 0 & 1 & 0 & -1 \\\\ 0 & 0 & 1 & 2 \\end{array}\\right] \\]", tipo: "sol_tuple_3", solucion: [5, -1, 2], pista: "La matriz identidad en el lado izquierdo significa que la solución está en la columna de la derecha." },
+        { id: 504, categoria: "Matrices", enunciadoTeX: "Dado el sistema \\( x-y=3, 2x+y=3 \\), ¿cuál es la solución?", tipo: "sol_tuple_2", solucion: [2, -1], pista: "Puedes resolverlo algebraicamente o pensar en su matriz aumentada y aplicar operaciones de fila." },
+        { id: 505, categoria: "Matrices", enunciadoTeX: "Resuelve el sistema representado por: \\[ \\left[\\begin{array}{ccc|c} 1 & 1 & 1 & 6 \\\\ 0 & 1 & 1 & 4 \\\\ 0 & 0 & 1 & 1 \\end{array}\\right] \\]", tipo: "sol_tuple_3", solucion: [2, 3, 1], pista: "Empieza con z=1 y usa sustitución hacia atrás para encontrar 'y' y luego 'x'." },
+      ];
+
+
+      // ---------------------------- */
+      // --- UTILITY FUNCTIONS    --- */
+      // ---------------------------- */
+      const parseNumberOrFraction = (str) => {
+        str = str.trim();
+        if (str.includes('/')) {
+          const parts = str.split('/');
+          const num = parseFloat(parts[0]);
+          const den = parseFloat(parts[1]);
+          if (den === 0 || isNaN(num) || isNaN(den)) return NaN;
+          return num / den;
+        }
+        return parseFloat(str);
+      };
+
+      const areEqual = (a, b) => Math.abs(a - b) < EPSILON;
+      
+      const parseTuple = (str, k) => {
+        str = str.replace(/[()]/g, ''); // remove parentheses
+        str = str.replace(/;/g, ','); // allow semicolon
+        
+        let parts;
+        if (str.includes('=')) { // Handle x=1, y=2
+            parts = str.split(',').map(part => {
+                const sides = part.split('=');
+                return sides.length > 1 ? sides[1].trim() : '';
             });
+        } else {
+            parts = str.split(',');
+        }
+        
+        if (parts.length !== k) return null;
 
-            document.getElementById('resultado').style.display = 'block';
-            document.getElementById('calificacion').textContent = correctas;
-            
-            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        const numbers = parts.map(parseNumberOrFraction);
+        if (numbers.some(isNaN)) return null;
+        
+        return numbers;
+      };
+
+      const normalizeClassInput = (str) => {
+        const s = str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // remove accents
+        if (s === 'u' || s === '1' || s === 'unica') return 'U';
+        if (s === 'n' || s === '0' || s === 'ninguna' || s === 'no') return 'N';
+        if (s === 'i' || s === 'inf' || s === 'infinitas') return 'I';
+        return null;
+      };
+
+      const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      };
+
+      // ------------------------------------ */
+      // ---   CORE APPLICATION LOGIC     --- */
+      // ------------------------------------ */
+      
+      function generateAttempt() {
+        const categories = [...new Set(questionBank.map(q => q.categoria))];
+        let selectedQuestions = [];
+        let questionsPerCategory = Math.ceil(NUM_QUESTIONS / categories.length);
+
+        categories.forEach(cat => {
+            const filtered = shuffleArray(questionBank.filter(q => q.categoria === cat));
+            selectedQuestions.push(...filtered.slice(0, questionsPerCategory));
         });
 
-        // Inicializar MathJax
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-    </script>
+        currentQuestions = shuffleArray(selectedQuestions).slice(0, NUM_QUESTIONS);
+      }
+      
+      function renderQuestions() {
+        questionsWrapper.innerHTML = '';
+        currentQuestions.forEach((q, index) => {
+            const catNum = parseInt(q.categoria.match(/\d/)?.[0] || '6');
+            const questionCard = `
+            <div class="card question-card" id="q-card-${index}" data-question-id="${q.id}">
+              <div class="response-feedback" aria-live="polite"></div>
+              <div class="question-header">
+                <span class="question-number">Pregunta ${index + 1}</span>
+                <span class="category-chip chip-cat${catNum}">${q.categoria}</span>
+              </div>
+              <div class="question-body">
+                ${q.enunciadoTeX}
+              </div>
+              <div class="form-group">
+                <label for="q-input-${index}" class="sr-only">Respuesta para la pregunta ${index + 1}</label>
+                <input type="text" id="q-input-${index}" class="form-control" placeholder="Ingresa tu respuesta aquí">
+              </div>
+              <div class="feedback-hint"></div>
+            </div>
+            `;
+            questionsWrapper.insertAdjacentHTML('beforeend', questionCard);
+        });
+        
+        MathJax.typesetPromise();
+        
+        // Add listeners to update progress bar
+        currentQuestions.forEach((q, index) => {
+            document.getElementById(`q-input-${index}`).addEventListener('input', updateProgress);
+        });
+        updateProgress();
+      }
+
+      function updateProgress() {
+        let answeredCount = 0;
+        currentQuestions.forEach((q, index) => {
+            const input = document.getElementById(`q-input-${index}`);
+            if (input && input.value.trim() !== '') {
+                answeredCount++;
+            }
+        });
+        const percentage = (answeredCount / NUM_QUESTIONS) * 100;
+        progressBar.style.width = `${percentage}%`;
+        progressText.textContent = `${answeredCount}/${NUM_QUESTIONS}`;
+      }
+
+      function startTimer() {
+        if (!timerToggle.checked) {
+            timerDisplay.textContent = 'Desactivado';
+            return;
+        }
+        startTime = new Date();
+        timerInterval = setInterval(() => {
+            const now = new Date();
+            const elapsed = Math.floor((now - startTime) / 1000);
+            const minutes = String(Math.floor(elapsed / 60)).padStart(2, '0');
+            const seconds = String(elapsed % 60).padStart(2, '0');
+            timerDisplay.textContent = `${minutes}:${seconds}`;
+        }, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+      }
+      
+      function evaluateAttempt() {
+        let correctCount = 0;
+        const results = currentQuestions.map((q, index) => {
+          const inputElem = document.getElementById(`q-input-${index}`);
+          const userAnswerRaw = inputElem.value;
+          let isCorrect = false;
+
+          if (q.tipo === 'sol_tuple_2' || q.tipo === 'sol_tuple_3') {
+            const k = q.tipo === 'sol_tuple_2' ? 2 : 3;
+            const userAnswerParsed = parseTuple(userAnswerRaw, k);
+            if (userAnswerParsed) {
+              isCorrect = userAnswerParsed.every((val, i) => areEqual(val, q.solucion[i]));
+            }
+          } else if (q.tipo === 'clasificacion') {
+            const userAnswerParsed = normalizeClassInput(userAnswerRaw);
+            isCorrect = userAnswerParsed === q.solucion;
+          }
+          
+          if (isCorrect) correctCount++;
+          
+          return {
+            id: q.id,
+            categoria: q.categoria,
+            isCorrect,
+            pista: q.pista
+          };
+        });
+        
+        const score = (correctCount / NUM_QUESTIONS) * 100;
+        const duration = Math.floor((new Date() - startTime) / 1000);
+        
+        currentAttemptResult = {
+          timestamp: new Date().toISOString(),
+          score: score,
+          correctCount: correctCount,
+          totalQuestions: NUM_QUESTIONS,
+          duration: timerToggle.checked ? duration : null,
+          results: results,
+          studentName: studentNameInput.value.trim()
+        };
+      }
+      
+      function renderResults() {
+        // Show score
+        scoreBadge.textContent = `${currentAttemptResult.score.toFixed(0)}%`;
+        scoreBadge.className = 'score-badge';
+        if (currentAttemptResult.score >= 80) scoreBadge.classList.add('high');
+        else if (currentAttemptResult.score >= 60) scoreBadge.classList.add('medium');
+        else scoreBadge.classList.add('low');
+        
+        let durationText = timerToggle.checked ? `en ${formatDuration(currentAttemptResult.duration)}.` : '.';
+        resultsDetails.textContent = `Respondiste ${currentAttemptResult.correctCount} de ${currentAttemptResult.totalQuestions} preguntas correctamente ${durationText}`;
+
+        // Clone questions to results feedback view
+        resultsFeedbackWrapper.innerHTML = '';
+        const answeredQuestions = document.getElementById('questions-wrapper').cloneNode(true);
+        answeredQuestions.querySelectorAll('input').forEach(input => input.disabled = true);
+        resultsFeedbackWrapper.appendChild(answeredQuestions);
+
+        // Show feedback on each question
+        currentAttemptResult.results.forEach((res, index) => {
+            const card = resultsFeedbackWrapper.querySelector(`#q-card-${index}`);
+            const feedbackElem = card.querySelector('.response-feedback');
+            const hintElem = card.querySelector('.feedback-hint');
+            
+            if (res.isCorrect) {
+                card.classList.add('correct');
+                feedbackElem.textContent = '✅ Correcta';
+            } else {
+                card.classList.add('incorrect');
+                feedbackElem.textContent = '❌ Incorrecta';
+                hintElem.textContent = `Pista: ${res.pista}`;
+                hintElem.style.display = 'block';
+            }
+        });
+
+        saveHistory(currentAttemptResult);
+        loadHistory();
+      }
+
+      // ------------------------------------ */
+      // ---   HISTORY & LOCALSTORAGE     --- */
+      // ------------------------------------ */
+      function saveHistory(attempt) {
+        let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+        history.unshift(attempt);
+        if (history.length > MAX_HISTORY_ITEMS) {
+            history.pop();
+        }
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      }
+
+      function loadHistory() {
+        const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+        historyBody.innerHTML = '';
+        if (history.length === 0) {
+            historyBody.innerHTML = '<tr><td colspan="4">No hay intentos guardados.</td></tr>';
+            document.getElementById('history-card').classList.add('hidden');
+            return;
+        }
+
+        document.getElementById('history-card').classList.remove('hidden');
+        history.forEach(attempt => {
+            const date = new Date(attempt.timestamp);
+            const formattedDate = new Intl.DateTimeFormat('es-PR', { dateStyle: 'short', timeStyle: 'short' }).format(date);
+            const duration = attempt.duration !== null ? formatDuration(attempt.duration) : 'N/A';
+
+            const row = `
+            <tr>
+              <td>${formattedDate}</td>
+              <td>${attempt.score.toFixed(0)}%</td>
+              <td>${attempt.correctCount}/${attempt.totalQuestions}</td>
+              <td>${duration}</td>
+            </tr>
+            `;
+            historyBody.insertAdjacentHTML('beforeend', row);
+        });
+      }
+      
+      function formatDuration(seconds) {
+          if (seconds === null || seconds === undefined) return 'N/A';
+          const m = Math.floor(seconds / 60);
+          const s = seconds % 60;
+          return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }
+
+      // ------------------------------------ */
+      // ---   EXPORT FUNCTIONS           --- */
+      // ------------------------------------ */
+      function downloadCSV() {
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "timestamp;intento;total_preguntas;correctas;incorrectas;porcentaje;duracion_seg;detalle_por_pregunta\r\n";
+        
+        const details = currentAttemptResult.results.map((r, i) => 
+            `Pregunta ${i+1} (ID ${r.id}): ${r.isCorrect ? 'Correcta' : 'Incorrecta'}`
+        ).join(' | ');
+
+        const row = [
+          currentAttemptResult.timestamp,
+          1, // Assuming this is the first and only attempt being downloaded
+          currentAttemptResult.totalQuestions,
+          currentAttemptResult.correctCount,
+          currentAttemptResult.totalQuestions - currentAttemptResult.correctCount,
+          currentAttemptResult.score.toFixed(2),
+          currentAttemptResult.duration ?? 'N/A',
+          `"${details}"`
+        ].join(';');
+        
+        csvContent += row + "\r\n";
+        
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `resultados_examen_${new Date().getTime()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+      
+      function downloadJSON() {
+        const jsonContent = JSON.stringify(currentAttemptResult, null, 2);
+        const blob = new Blob([jsonContent], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `resultados_examen_${new Date().getTime()}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+      
+      function copySummary() {
+          const summary = `Resumen del Examen de Sistemas de Ecuaciones
+Estudiante: ${currentAttemptResult.studentName || 'No especificado'}
+Fecha: ${new Intl.DateTimeFormat('es-PR', { dateStyle: 'full', timeStyle: 'long' }).format(new Date(currentAttemptResult.timestamp))}
+Puntaje: ${currentAttemptResult.score.toFixed(0)}%
+Resultados: ${currentAttemptResult.correctCount} correctas de ${currentAttemptResult.totalQuestions}
+Duración: ${formatDuration(currentAttemptResult.duration)}
+`;
+        navigator.clipboard.writeText(summary).then(() => {
+            alert('Resumen copiado al portapapeles.');
+        }, () => {
+            alert('Error al copiar el resumen.');
+        });
+      }
+
+      function downloadPDF() {
+        const { studentName, timestamp, score, correctCount, totalQuestions, duration, results } = currentAttemptResult;
+
+        // Populate print section
+        document.getElementById('print-student-name').textContent = studentName ? `Estudiante: ${studentName}` : '';
+        const date = new Date(timestamp);
+        document.getElementById('print-timestamp').textContent = `Fecha: ${new Intl.DateTimeFormat('es-PR', { dateStyle: 'full', timeStyle: 'long', timeZone: 'America/Puerto_Rico' }).format(date)}`;
+        
+        document.getElementById('print-score').textContent = `${score.toFixed(0)}%`;
+        document.getElementById('print-correct').textContent = `${correctCount} / ${totalQuestions}`;
+        document.getElementById('print-incorrect').textContent = `${totalQuestions - correctCount} / ${totalQuestions}`;
+        document.getElementById('print-duration').textContent = formatDuration(duration);
+
+        const tableBody = document.getElementById('print-table-body');
+        tableBody.innerHTML = '';
+        results.forEach((res, index) => {
+            const row = `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${res.categoria}</td>
+              <td>${res.isCorrect ? '<span class="correct-text">Correcta</span>' : '<span class="incorrect-text">Incorrecta</span>'}</td>
+              <td>${res.isCorrect ? '-' : res.pista}</td>
+            </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+        
+        window.print();
+      }
+
+      // ------------------------------------ */
+      // ---   EVENT LISTENERS            --- */
+      // ------------------------------------ */
+      
+      btnStart.addEventListener('click', () => {
+        setupContainer.classList.add('hidden');
+        resultsContainer.classList.add('hidden');
+        examContainer.classList.remove('hidden');
+        
+        generateAttempt();
+        renderQuestions();
+        startTimer();
+      });
+      
+      btnSubmit.addEventListener('click', () => {
+        if (!confirm('¿Estás seguro de que deseas enviar tus respuestas?')) return;
+        stopTimer();
+        evaluateAttempt();
+        renderResults();
+        
+        examContainer.classList.add('hidden');
+        resultsContainer.classList.remove('hidden');
+        window.scrollTo(0, 0);
+      });
+      
+      btnRetry.addEventListener('click', () => {
+        resultsContainer.classList.add('hidden');
+        setupContainer.classList.remove('hidden');
+      });
+      
+      btnDownloadCsv.addEventListener('click', downloadCSV);
+      btnDownloadJson.addEventListener('click', downloadJSON);
+      btnCopySummary.addEventListener('click', copySummary);
+      btnDownloadPdf.addEventListener('click', downloadPDF);
+
+      // ------------------------------------ */
+      // ---   INITIALIZATION             --- */
+      // ------------------------------------ */
+      function init() {
+        loadHistory();
+      }
+
+      init();
+    })();
+  </script>
 </body>
 </html>

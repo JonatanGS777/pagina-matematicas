@@ -1,293 +1,1197 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examen de Ecuaciones Cuadráticas</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- MathJax 3 CDN -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
+    <!-- CSS embebido -->
     <style>
         :root {
-            --primary-color: #4361ee;
-            --background-light: #f8f9fa;
-            --text-dark: #2b2d42;
+            --bg-dark: #0f172a;
+            --bg-surface: #1e293b;
+            --bg-surface-light: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent-cyan: #22d3ee;
+            --accent-yellow: #fde047;
+            --success: #4ade80;
+            --error: #f87171;
+            --shadow-light: rgba(51, 65, 85, 0.5);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+            --border-radius: 12px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+            font-family: var(--font-family);
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .container {
-            max-width: 800px;
+            width: 100%;
+            max-width: 900px;
             margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-
-        h1 {
+        
+        /* --- Encabezado --- */
+        header {
             text-align: center;
-            color: var(--text-dark);
+            padding: 2rem 1rem;
+            border-bottom: 1px solid var(--bg-surface-light);
             margin-bottom: 2rem;
         }
 
-        .question {
-            background: var(--background-light);
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        header h1 svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0.5rem auto 0;
+        }
+
+        /* --- Tarjetas y Neumorfismo --- */
+        .card {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
             padding: 1.5rem;
             margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            border: 1px solid var(--bg-surface-light);
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
         }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+        h2 {
+            color: var(--accent-yellow);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-surface-light);
+            padding-bottom: 0.5rem;
         }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        /* --- Controles y Botones --- */
+        .control-grid, .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
         }
 
-        button {
+        .form-group {
+            flex: 1 1 200px;
+        }
+
+        .form-group label {
             display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .input-field {
             width: 100%;
-            padding: 1rem;
-            background: var(--primary-color);
-            color: white;
+            padding: 0.75rem 1rem;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--bg-surface-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        button:hover {
-            background: #3651d4;
+        .btn:active {
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+            transform: translateY(1px);
         }
 
-        #resultado {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #e8f5e9;
-            border-radius: 8px;
-            text-align: center;
+        .btn-primary {
+            background-color: var(--accent-cyan);
+            color: var(--bg-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--bg-surface-light);
+            color: var(--text-primary);
+        }
+        
+        .btn-tertiary {
+             background-color: transparent;
+             color: var(--accent-cyan);
+             box-shadow: none;
+             border: 1px solid var(--accent-cyan);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .score {
-            font-size: 1.5rem;
+        /* --- Sección del Examen --- */
+        #exam-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-circle {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(var(--accent-cyan) 0deg, var(--bg-surface-light) 0deg);
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #2b2d42;
+        }
+        
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background-color: var(--bg-surface);
+        }
+        
+        .progress-circle span { z-index: 1; }
+
+        #timer-display {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--accent-yellow);
+        }
+        
+        #exam-questions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
         }
 
-        .hint {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            font-style: italic;
+        .question-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            border-left: 5px solid var(--bg-surface-light);
+            transition: border-color 0.3s;
+        }
+        
+        .question-card.correct { border-left-color: var(--success); }
+        .question-card.incorrect { border-left-color: var(--error); }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--accent-cyan);
+        }
+
+        .question-category {
+            background-color: var(--bg-surface-light);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .question-statement {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            min-height: 2rem; /* para evitar saltos de layout con MathJax */
+        }
+        
+        .question-feedback {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none; /* Oculto por defecto */
+        }
+        
+        .feedback-correct {
+            background-color: rgba(74, 222, 128, 0.1);
+            color: var(--success);
+            display: block;
+        }
+        
+        .feedback-incorrect {
+            background-color: rgba(248, 113, 113, 0.1);
+            color: var(--error);
+            display: block;
+        }
+
+        /* --- Sección de Resultados --- */
+        #results-container {
+            display: none; /* Oculto por defecto */
+        }
+
+        .score-display {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        #score-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        #score-text {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        
+        #score-summary {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-surface-light);
+        }
+        
+        .history-table th {
+            color: var(--accent-yellow);
+        }
+        
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .history-table td:nth-child(3) { font-weight: bold; }
+
+        /* --- Toast de Notificación --- */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translate(-50%, 150%);
+            background-color: var(--bg-surface-light);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: transform 0.4s ease-in-out;
+        }
+        
+        #toast.show {
+            transform: translate(-50%, 0);
+        }
+        
+        /* --- Responsividad --- */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            .control-grid {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+        
+        /* --- Estilos de Impresión --- */
+        @media print {
+            :root { /* Usar tema claro para impresión */
+                --bg-dark: #ffffff;
+                --bg-surface: #f8f9fa;
+                --text-primary: #212529;
+                --text-secondary: #6c757d;
+                --accent-cyan: #007bff;
+                --accent-yellow: #ffc107;
+            }
+        
+            body {
+                background-color: white;
+                color: black;
+                padding: 0;
+            }
+
+            .no-print, #control-panel, #exam-container, #results-container .button-group, #history-card, footer {
+                display: none !important;
+            }
+            
+            #print-summary {
+                display: block !important;
+            }
+            
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+                border: none;
+            }
+            
+            .card {
+                box-shadow: none;
+                border: 1px solid #dee2e6;
+            }
+            
+            @page {
+                margin: 1.5cm;
+                size: A4;
+            }
+            
+            #print-header h1 {
+                font-size: 1.5rem;
+                color: black;
+            }
+            
+            #print-results-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 10pt;
+            }
+            
+            #print-results-table th, #print-results-table td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+            
+            #print-results-table th {
+                background-color: #f2f2f2;
+            }
+        }
+        
+        #print-summary {
+            display: none; /* Oculto por defecto, visible solo para impresión */
+        }
+        
+        .print-metadata {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1><i class="fas fa-square-root-alt"></i> Ecuaciones Cuadráticas</h1>
+        <header>
+            <h1>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M22.53,10.26l-2.2-0.32c-0.16-0.57-0.39-1.12-0.68-1.63l1.35-1.83c0.4-0.54,0.3-1.3-0.24-1.7l-1.6-1.17  c-0.54-0.4-1.3-0.3-1.7,0.24l-1.83,1.35c-0.51-0.29-1.06-0.52-1.63-0.68l-0.32-2.2C13.25,1.55,12.68,1,12,1s-1.25,0.55-1.32,1.26  l-0.32,2.2c-0.57,0.16-1.12,0.39-1.63,0.68L6.9,3.79C6.46,3.39,5.69,3.49,5.2,3.99L3.59,5.16c-0.54,0.4-0.64,1.16-0.24,1.7  l1.35,1.83c-0.29,0.51-0.52,1.06-0.68,1.63l-2.2,0.32C1.55,10.75,1,11.32,1,12s0.55,1.25,1.26,1.32l2.2,0.32  c0.16,0.57,0.39,1.12,0.68,1.63l-1.35,1.83c-0.4,0.54-0.3,1.3,0.24,1.7l1.6,1.17c0.54,0.4,1.3,0.3,1.7-0.24l1.83-1.35  c0.51,0.29,1.06,0.52,1.63,0.68l0.32,2.2c0.07,0.71,0.64,1.26,1.32,1.26s1.25-0.55,1.32-1.26l0.32-2.2  c0.57-0.16,1.12-0.39,1.63-0.68l1.83,1.35c0.44,0.4,1.21,0.3,1.7-0.24l1.6-1.17c0.54-0.4,0.64-1.16,0.24-1.7l-1.35-1.83  c0.29-0.51,0.52-1.06,0.68-1.63l2.2-0.32C22.45,13.25,23,12.68,23,12S22.45,10.75,22.53,10.26z M12,16c-2.21,0-4-1.79-4-4  s1.79-4,4-4s4,1.79,4,4S14.21,16,12,16z"/></svg>
+                <span>Examen de Ecuaciones Cuadráticas</span>
+            </h1>
+            <p>Pon a prueba tus habilidades para resolver ecuaciones de segundo grado. Cada intento presenta 12 preguntas aleatorias. ¡Éxito!</p>
+        </header>
+
+        <main class="container">
+            <section id="control-panel" class="card">
+                <h2>Configuración</h2>
+                <div class="control-grid">
+                    <div class="form-group">
+                        <label for="student-name">Nombre del Estudiante (opcional)</label>
+                        <input type="text" id="student-name" class="input-field" placeholder="Escribe tu nombre aquí...">
+                    </div>
+                    <div class="form-group">
+                        <label for="timer-toggle">Temporizador</label>
+                        <div class="button-group">
+                            <input type="checkbox" id="timer-toggle" checked>
+                            <label for="timer-toggle" style="user-select: none; margin-left: 0.5rem;">Activado</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="start-exam-btn" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z"/></svg>
+                            Iniciar Examen
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="exam-container" class="card" style="display:none;">
+                <div id="exam-status">
+                    <div class="progress-circle" id="progress-circle">
+                        <span id="progress-text">0/12</span>
+                    </div>
+                    <div id="timer-display">00:00</div>
+                </div>
+                <div id="exam-questions"></div>
+                <div class="button-group" style="margin-top: 2rem; justify-content: center;">
+                    <button id="submit-exam-btn" class="btn btn-primary">
+                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/><path d="M1.5 14.5A1.5 1.5 0 0 0 3 16h10a1.5 1.5 0 0 0 1.5-1.5V7.854a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V3.5a.5.5 0 0 1 .5-.5h5.02a.5.5 0 0 0 0-1H3a1.5 1.5 0 0 0-1.5 1.5v11z"/><path d="M13.5 1a1.5 1.5 0 0 0-1.5 1.5v1.086a.5.5 0 0 0 1 0V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 0 1 0v-1A1.5 1.5 0 0 0 13.5 1h-1z"/></svg>
+                        Evaluar Examen
+                    </button>
+                </div>
+            </section>
+
+            <section id="results-container" class="card">
+                <h2>Resultados del Intento</h2>
+                <div class="score-display">
+                    <span id="score-badge"></span>
+                    <div id="score-text">0%</div>
+                    <div id="score-summary">Has respondido 0 de 12 preguntas correctamente.</div>
+                </div>
+                
+                <div class="button-group" style="justify-content: center;">
+                    <button id="retry-exam-btn" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+                        Reintentar
+                    </button>
+                    <button id="copy-summary-btn" class="btn btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/><path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zM-1 7a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1H-.5A.5.5 0 0 1-1 7z"/></svg>
+                        Copiar
+                    </button>
+                    <button id="download-pdf-btn" class="btn btn-secondary">PDF</button>
+                    <button id="download-csv-btn" class="btn btn-secondary">CSV</button>
+                    <button id="download-json-btn" class="btn btn-secondary">JSON</button>
+                </div>
+            </section>
+            
+            <section id="history-card" class="card">
+                <h2>Historial de Intentos</h2>
+                <div id="history-container">
+                    <p>No hay intentos guardados todavía.</p>
+                </div>
+            </section>
+        </main>
         
-        <form id="examenForm">
-            <!-- Factorización -->
-            <div class="question">
-                <p>1. Factoriza \(x^2 + 5x + 6\)</p>
-                <p class="hint">Escribe los dos factores separados por coma. Ejemplo: (x+2),(x+3)</p>
-                <input type="text" name="q1" placeholder="(x+?),(x+?)" data-respuesta="(x+n),(x+m)">
+        <footer>
+            <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 2rem;">
+                Creado como una herramienta de práctica. Las preguntas son generadas aleatoriamente.
+            </p>
+        </footer>
+
+        <div id="toast"></div>
+
+        <!-- Plantilla para impresión -->
+        <div id="print-summary">
+            <div id="print-header">
+                <h1>Reporte de Resultados: Ecuaciones Cuadráticas</h1>
+                <hr>
             </div>
-
-            <div class="question">
-                <p>2. Encuentra los ceros de \(x^2 - 16\)</p>
-                <p class="hint">Escribe los valores de x separados por coma. Ejemplo: -4,4</p>
-                <input type="text" name="q2" placeholder="x = ?" data-respuesta="-2,2">
+            <div class="print-metadata">
+                <div><strong>Estudiante:</strong> <span id="print-student-name">N/A</span></div>
+                <div><strong>Fecha:</strong> <span id="print-date"></span></div>
             </div>
-
-            <div class="question">
-                <p>3. Factoriza \(x^2 - 7x + 12\)</p>
-                <input type="text" name="q3" placeholder="(x+?),(x+?)" data-respuesta="(x-3),(x-4)">
+            <div class="print-metadata">
+                 <div><strong>Puntaje:</strong> <span id="print-score"></span></div>
+                 <div><strong>Duración:</strong> <span id="print-duration"></span></div>
             </div>
-
-            <!-- Fórmula Cuadrática -->
-            <div class="question">
-                <p>4. Resuelve usando la fórmula cuadrática: \(2x^2 + 5x - 3 = 0\)</p>
-                <p class="hint">Escribe las soluciones separadas por coma, redondeadas a 2 decimales</p>
-                <input type="text" name="q4" placeholder="x = ?" data-respuesta="-3,-0.5">
-            </div>
-
-            <div class="question">
-                <p>5. Resuelve: \(x^2 + 6x + 9 = 0\)</p>
-                <input type="text" name="q5" placeholder="x = ?" data-respuesta="-3">
-            </div>
-
-            <!-- Discriminante -->
-            <div class="question">
-                <p>6. Calcula el discriminante de \(x^2 + 4x + 4\)</p>
-                <input type="text" name="q6" placeholder="Discriminante = ?" data-respuesta="0">
-            </div>
-
-            <div class="question">
-                <p>7. ¿Cuántas soluciones reales tiene \(2x^2 - 3x + 5 = 0\)? (Usa el discriminante)</p>
-                <input type="text" name="q7" placeholder="Número de soluciones" data-respuesta="0">
-            </div>
-
-            <!-- Cortes con los ejes -->
-            <div class="question">
-                <p>8. Para la parábola \(y = x^2 - 4x + 3\), encuentra el corte con el eje y</p>
-                <input type="text" name="q8" placeholder="y = ?" data-respuesta="3">
-            </div>
-
-            <div class="question">
-                <p>9. Para la parábola \(y = x^2 - x - 6\), encuentra los cortes con el eje x</p>
-                <input type="text" name="q9" placeholder="x = ?" data-respuesta="-2,3">
-            </div>
-
-            <!-- Vértice -->
-            <div class="question">
-                <p>10. Encuentra el vértice de \(y = x^2 + 4x + 1\)</p>
-                <p class="hint">Escribe las coordenadas (x,y) separadas por coma</p>
-                <input type="text" name="q10" placeholder="(x,y)" data-respuesta="-2,-3">
-            </div>
-
-            <!-- Aplicaciones -->
-            <div class="question">
-                <p>11. Un objeto se lanza hacia arriba con una velocidad inicial de 16 m/s. La altura h en metros después de t segundos está dada por \(h = -4.9t^2 + 16t\). ¿Cuánto tiempo tarda en llegar al suelo?</p>
-                <input type="text" name="q11" placeholder="t = ?" data-respuesta="3.27">
-            </div>
-
-            <div class="question">
-                <p>12. ¿Cuál es la altura máxima que alcanza el objeto en el problema anterior?</p>
-                <input type="text" name="q12" placeholder="h = ?" data-respuesta="13.06">
-            </div>
-
-            <!-- Forma Completa -->
-            <div class="question">
-                <p>13. Convierte \(y = x^2 + 6x + 5\) a la forma \(y = a(x - h)^2 + k\). ¿Cuál es el valor de k?</p>
-                <input type="text" name="q13" placeholder="k = ?" data-respuesta="-4">
-            </div>
-
-            <div class="question">
-                <p>14. La ecuación de una parábola es \(y = 2(x - 3)^2 + 1\). ¿Cuál es su vértice?</p>
-                <input type="text" name="q14" placeholder="(x,y)" data-respuesta="3,1">
-            </div>
-
-            <!-- Problemas de Área -->
-            <div class="question">
-                <p>15. Un rectángulo tiene un perímetro de 24 unidades. Expresa su área A en términos de su ancho x.</p>
-                <p class="hint">Escribe el coeficiente de x², luego el coeficiente de x, luego el término independiente, separados por coma</p>
-                <input type="text" name="q15" placeholder="Coeficientes: ?" data-respuesta="1,-12,0">
-            </div>
-
-            <!-- Más Problemas -->
-            <div class="question">
-                <p>16. ¿Para qué valor de x el producto de (x+2) y (x-5) es 0?</p>
-                <input type="text" name="q16" placeholder="x = ?" data-respuesta="-2,5">
-            </div>
-
-            <div class="question">
-                <p>17. La suma de un número y su cuadrado es 12. ¿Cuál es el número positivo?</p>
-                <input type="text" name="q17" placeholder="x = ?" data-respuesta="3">
-            </div>
-
-            <div class="question">
-                <p>18. Para la ecuación \(x^2 + bx + 25 = 0\), si una raíz es -5, ¿cuál es el valor de b?</p>
-                <input type="text" name="q18" placeholder="b = ?" data-respuesta="10">
-            </div>
-
-            <div class="question">
-                <p>19. ¿Cuál es el valor de m para que \(x^2 + mx + 4\) tenga raíces iguales?</p>
-                <input type="text" name="q19" placeholder="m = ?" data-respuesta="4,-4">
-            </div>
-
-            <div class="question">
-                <p>20. Un jardín rectangular debe tener un área de 200 metros cuadrados. Si su largo debe ser 5 metros más que su ancho, ¿cuál debe ser el ancho?</p>
-                <input type="text" name="q20" placeholder="ancho = ?" data-respuesta="10">
-            </div>
-
-            <button type="submit">Calificar Examen</button>
-        </form>
-
-        <div id="resultado">
-            <h2>Resultado del Examen</h2>
-            <p class="score">Tu calificación: <span id="calificacion"></span>/20</p>
+            <h3>Detalle del Intento</h3>
+            <table id="print-results-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Categoría</th>
+                        <th>Pregunta (Enunciado)</th>
+                        <th>Estado</th>
+                        <th>Pista</th>
+                    </tr>
+                </thead>
+                <tbody id="print-table-body">
+                    <!-- Filas generadas por JS -->
+                </tbody>
+            </table>
         </div>
     </div>
 
+    <!-- JavaScript embebido -->
     <script>
-        document.getElementById('examenForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // IIFE para encapsular la lógica de la aplicación
+        (function ExamenCuadraticas() {
+            // --- REFERENCIAS AL DOM ---
+            const dom = {
+                studentName: document.getElementById('student-name'),
+                timerToggle: document.getElementById('timer-toggle'),
+                startBtn: document.getElementById('start-exam-btn'),
+                controlPanel: document.getElementById('control-panel'),
+                examContainer: document.getElementById('exam-container'),
+                questionsContainer: document.getElementById('exam-questions'),
+                submitBtn: document.getElementById('submit-exam-btn'),
+                progressCircle: document.getElementById('progress-circle'),
+                progressText: document.getElementById('progress-text'),
+                timerDisplay: document.getElementById('timer-display'),
+                resultsContainer: document.getElementById('results-container'),
+                scoreBadge: document.getElementById('score-badge'),
+                scoreText: document.getElementById('score-text'),
+                scoreSummary: document.getElementById('score-summary'),
+                retryBtn: document.getElementById('retry-exam-btn'),
+                copySummaryBtn: document.getElementById('copy-summary-btn'),
+                downloadPdfBtn: document.getElementById('download-pdf-btn'),
+                downloadCsvBtn: document.getElementById('download-csv-btn'),
+                downloadJsonBtn: document.getElementById('download-json-btn'),
+                historyContainer: document.getElementById('history-container'),
+                toast: document.getElementById('toast'),
+            };
+
+            // --- ESTADO DE LA APLICACIÓN ---
+            let state = {
+                examInProgress: false,
+                currentQuestions: [],
+                userAnswers: {},
+                startTime: null,
+                timerInterval: null,
+                history: [],
+                lastAttempt: null,
+            };
+
+            const NUM_QUESTIONS = 12;
+            const TOLERANCE = 1e-6;
+            const HISTORY_KEY = 'examen_cuadraticas_historial';
             
-            let correctas = 0;
-            const inputs = document.querySelectorAll('input[type="text"]');
+            // --- UTILIDADES ---
+            const utils = {
+                // Genera un entero aleatorio en [min, max]
+                randInt: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+                
+                // Genera un entero no nulo
+                randIntNoZero: (min, max) => {
+                    let n;
+                    do { n = utils.randInt(min, max); } while (n === 0);
+                    return n;
+                },
+                
+                // Baraja un arreglo
+                shuffle: (array) => {
+                    for (let i = array.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [array[i], array[j]] = [array[j], array[i]];
+                    }
+                    return array;
+                },
+                
+                // Parsea un número o fracción (e.g., "-3/2")
+                parseNumberOrFraction: (str) => {
+                    if (!str) return NaN;
+                    str = str.trim();
+                    if (str.includes('/')) {
+                        const parts = str.split('/');
+                        if (parts.length !== 2) return NaN;
+                        const num = parseFloat(parts[0]);
+                        const den = parseFloat(parts[1]);
+                        if (isNaN(num) || isNaN(den) || den === 0) return NaN;
+                        return num / den;
+                    }
+                    return parseFloat(str);
+                },
+
+                // Parsea la entrada del usuario para las raíces
+                parseRootsInput: (str) => {
+                    if (!str) return [];
+                    return str.split(',')
+                        .map(s => utils.parseNumberOrFraction(s))
+                        .filter(n => !isNaN(n));
+                },
+
+                // Compara dos números con tolerancia
+                equalNumbers: (a, b) => Math.abs(a - b) < TOLERANCE,
+
+                // Compara dos conjuntos de raíces (insensible al orden)
+                equalRootSets: (setA, setB) => {
+                    if (setA.length !== setB.length) return false;
+                    const sortedA = [...setA].sort((a, b) => a - b);
+                    const sortedB = [...setB].sort((a, b) => a - b);
+                    return sortedA.every((val, index) => utils.equalNumbers(val, sortedB[index]));
+                },
+                
+                // Formatea el tiempo en segundos a MM:SS
+                formatTime: (seconds) => {
+                    const min = Math.floor(seconds / 60).toString().padStart(2, '0');
+                    const sec = (seconds % 60).toString().padStart(2, '0');
+                    return `${min}:${sec}`;
+                },
+                
+                // Muestra una notificación toast
+                showToast: (message) => {
+                    dom.toast.textContent = message;
+                    dom.toast.classList.add('show');
+                    setTimeout(() => dom.toast.classList.remove('show'), 3000);
+                }
+            };
             
-            inputs.forEach(input => {
-                let respuestaCorrecta = input.dataset.respuesta.toString().toLowerCase();
-                let respuestaUsuario = input.value.toString().toLowerCase().trim();
-                
-                // Normalizar respuestas
-                respuestaUsuario = respuestaUsuario.replace(/\s+/g, '');
-                
-                if (respuestaCorrecta.includes(',')) {
-                    // Para respuestas múltiples, verificar cada valor posible
-                    const valoresCorrectos = respuestaCorrecta.split(',');
-                    const valoresUsuario = respuestaUsuario.split(',');
+            // --- BANCO DE PREGUNTAS (Generadores) ---
+            const questionBank = {
+                // Categoría 1: Forma general ax^2+bx+c=0, soluciones racionales
+                'Forma General': () => {
+                    const r1 = utils.randInt(-9, 9);
+                    let r2 = utils.randInt(-9, 9);
+                    const a = utils.randIntNoZero(1, 4);
                     
-                    // Verificar si tienen la misma cantidad de valores
-                    if (valoresCorrectos.length === valoresUsuario.length) {
-                        // Para respuestas numéricas con decimales
-                        if (!isNaN(valoresCorrectos[0])) {
-                            let todosCorrectos = true;
-                            valoresUsuario.forEach((val, index) => {
-                                if (Math.abs(parseFloat(val) - parseFloat(valoresCorrectos[index])) > 0.1) {
-                                    todosCorrectos = false;
-                                }
-                            });
-                            if (todosCorrectos) correctas++;
-                        } else {
-                            // Para respuestas de texto
-                            if (respuestaUsuario === respuestaCorrecta) correctas++;
-                        }
+                    const b = -a * (r1 + r2);
+                    const c = a * r1 * r2;
+                    
+                    const signB = b > 0 ? '+' : '-';
+                    const signC = c > 0 ? '+' : '-';
+                    
+                    const enunciadoTeX = `Resuelve la ecuación: \\(${a !== 1 ? a : ''}x^2 ${b !== 0 ? `${signB} ${Math.abs(b)}x` : ''} ${c !== 0 ? `${signC} ${Math.abs(c)}` : ''} = 0\\)`;
+                    return {
+                        enunciadoTeX,
+                        solucion: r1 === r2 ? [r1] : [r1, r2],
+                        pista: 'Verifica la fórmula cuadrática o intenta factorizar el trinomio.'
+                    };
+                },
+                
+                // Categoría 2: Factorización
+                'Factorización': () => {
+                    const r1 = utils.randIntNoZero(-8, 8);
+                    const r2 = utils.randIntNoZero(-8, 8);
+                    if (Math.random() > 0.5) { // Diferencia de cuadrados
+                        const a = utils.randInt(1,5);
+                        const n = utils.randInt(2,6);
+                        const expr = `\\(${a*a}x^2 - ${n*n} = 0\\)`;
+                        return {
+                            enunciadoTeX: `Resuelve por factorización: ${expr}`,
+                            solucion: [n/a, -n/a],
+                            pista: 'Recuerda que \\(a^2 - b^2 = (a-b)(a+b)\\).'
+                        };
+                    } else { // Trinomio
+                        const b = -(r1 + r2);
+                        const c = r1 * r2;
+                        const signB = b >= 0 ? '+' : '-';
+                        const signC = c >= 0 ? '+' : '-';
+                        const expr = `\\(x^2 ${signB} ${Math.abs(b)}x ${signC} ${Math.abs(c)} = 0\\)`;
+                         return {
+                            enunciadoTeX: `Resuelve por factorización: ${expr}`,
+                            solucion: r1 === r2 ? [r1] : [r1, r2],
+                            pista: 'Busca dos números que multiplicados den \\(c\\) y sumados den \\(b\\).'
+                        };
                     }
+                },
+                
+                // Categoría 3: Completación de cuadrado
+                'Completar Cuadrado': () => {
+                    const h = Math.random() > 0.5 ? utils.randInt(-7, 7) : utils.randInt(1,7)/2; // Puede ser entero o fracción
+                    const k = utils.randInt(1, 49);
+                    
+                    const b = 2 * h;
+                    const c = h*h - k;
+
+                    const signB = b >= 0 ? '+' : '-';
+                    const signC = c >= 0 ? '+' : '-';
+
+                    const enunciadoTeX = `Resuelve completando el cuadrado: \\(x^2 ${signB} ${Math.abs(b)}x ${signC} ${Math.abs(c)} = 0\\)`;
+                    const sol1 = -h + Math.sqrt(k);
+                    const sol2 = -h - Math.sqrt(k);
+
+                    return {
+                        enunciadoTeX,
+                        solucion: utils.equalNumbers(sol1, sol2) ? [sol1] : [sol1, sol2],
+                        pista: 'Mueve el término constante, luego suma \\((b/2)^2\\) a ambos lados.'
+                    };
+                },
+                
+                // Categoría 4: Fórmula cuadrática
+                'Fórmula Cuadrática': () => {
+                    const a = utils.randInt(1, 5);
+                    const b = utils.randInt(-12, 12);
+                    const c = utils.randInt(-12, 12);
+                    const delta = b*b - 4*a*c;
+
+                    // Asegurar que haya soluciones reales
+                    if (delta < 0) return questionBank['Fórmula Cuadrática']();
+
+                    const signB = b >= 0 ? '+' : '-';
+                    const signC = c >= 0 ? '+' : '-';
+
+                    const enunciadoTeX = `Usa la fórmula cuadrática para resolver: \\(${a}x^2 ${signB} ${Math.abs(b)}x ${signC} ${Math.abs(c)} = 0\\). Redondea a dos decimales si es necesario.`;
+                    const sol1 = (-b + Math.sqrt(delta)) / (2 * a);
+                    const sol2 = (-b - Math.sqrt(delta)) / (2 * a);
+                    
+                    return {
+                        enunciadoTeX,
+                        solucion: utils.equalNumbers(sol1, sol2) ? [sol1] : [sol1, sol2],
+                        pista: 'La fórmula es \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\). Calcula el discriminante primero.'
+                    };
+                },
+                
+                // Categoría 5: Discriminante
+                'Discriminante': () => {
+                    const a = utils.randInt(1, 5);
+                    const b = utils.randInt(-10, 10);
+                    const c = utils.randInt(-10, 10);
+                    const delta = b * b - 4 * a * c;
+
+                    const signB = b >= 0 ? '+' : '-';
+                    const signC = c >= 0 ? '+' : '-';
+                    const expr = `\\(${a}x^2 ${signB} ${Math.abs(b)}x ${signC} ${Math.abs(c)} = 0\\)`;
+
+                    if (Math.random() > 0.5) { // Preguntar por el valor del discriminante
+                        return {
+                            enunciadoTeX: `Calcula el valor del discriminante (\\(\\Delta = b^2 - 4ac\\)) para la ecuación: ${expr}.`,
+                            solucion: [delta],
+                            pista: 'Identifica \\(a\\), \\(b\\), y \\(c\\) y sustituye en la fórmula del discriminante.'
+                        };
+                    } else { // Preguntar por el número de soluciones reales
+                        let numSol;
+                        if (delta > 0) numSol = 2;
+                        else if (delta === 0) numSol = 1;
+                        else numSol = 0;
+                        return {
+                            enunciadoTeX: `¿Cuántas soluciones reales distintas tiene la ecuación: ${expr}? Responde con 0, 1 o 2.`,
+                            solucion: [numSol],
+                            pista: 'Si \\(\\Delta > 0\\), hay 2 soluciones. Si \\(\\Delta = 0\\), hay 1. Si \\(\\Delta < 0\\), no hay soluciones reales.'
+                        };
+                    }
+                },
+                
+                // Categoría 6: Problemas Verbales
+                'Problemas Verbales': () => {
+                    const type = utils.randInt(1, 2);
+                    if (type === 1) { // Problema de área
+                        const ancho = utils.randInt(3, 10);
+                        const extraLargo = utils.randInt(2, 8);
+                        const largo = ancho + extraLargo;
+                        const area = ancho * largo;
+                        return {
+                            enunciadoTeX: `El área de un rectángulo es ${area} m². El largo es ${extraLargo} metros más que el ancho. ¿Cuál es el valor del ancho en metros?`,
+                            solucion: [ancho],
+                            pista: 'Si el ancho es \\(x\\), el largo es \\(x+${extraLargo}\\). El área es \\(x(x+${extraLargo}) = ${area}\\).'
+                        };
+                    } else { // Problema de números
+                        const n1 = utils.randInt(2, 12);
+                        const diff = utils.randInt(1, 7);
+                        const n2 = n1 + diff;
+                        const producto = n1 * n2;
+                        return {
+                            enunciadoTeX: `El producto de dos números enteros positivos consecutivos es ${producto}. ¿Cuál es el número menor?`,
+                            solucion: [n1],
+                            pista: 'Si un número es \\(n\\), el siguiente es \\(n+1\\). Su producto es \\(n(n+1) = ${producto}\\).'
+                        };
+                    }
+                },
+            };
+            
+            // --- LÓGICA DEL EXAMEN ---
+            function generateExam() {
+                state.currentQuestions = [];
+                const categories = Object.keys(questionBank);
+                const questionsPerCategory = NUM_QUESTIONS / categories.length;
+
+                categories.forEach(category => {
+                    for (let i = 0; i < questionsPerCategory; i++) {
+                        const questionData = questionBank[category]();
+                        state.currentQuestions.push({
+                            id: `${category.slice(0,4)}-${i+1}`,
+                            category: category,
+                            ...questionData
+                        });
+                    }
+                });
+                state.currentQuestions = utils.shuffle(state.currentQuestions);
+            }
+            
+            function renderExam() {
+                dom.questionsContainer.innerHTML = '';
+                state.currentQuestions.forEach((q, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'question-card';
+                    card.id = `q-card-${index}`;
+                    card.innerHTML = `
+                        <div class="question-header">
+                            <span class="question-number">Pregunta ${index + 1}</span>
+                            <span class="question-category">${q.category}</span>
+                        </div>
+                        <div class="question-statement">${q.enunciadoTeX}</div>
+                        <div class="form-group">
+                            <label for="q-input-${index}">Respuesta (separa las raíces con coma, si hay más de una):</label>
+                            <input type="text" id="q-input-${index}" class="input-field" placeholder="Ej: 3, -1/2">
+                        </div>
+                        <div class="question-feedback" id="q-feedback-${index}"></div>
+                    `;
+                    dom.questionsContainer.appendChild(card);
+                });
+
+                // Renderizar con MathJax
+                if (window.MathJax) {
+                    MathJax.typesetPromise([dom.questionsContainer]).catch(err => console.error(err));
+                }
+
+                // Listener para actualizar progreso
+                const inputs = dom.questionsContainer.querySelectorAll('.input-field');
+                inputs.forEach(input => input.addEventListener('input', updateProgress));
+            }
+
+            function startTimer() {
+                state.startTime = new Date();
+                state.timerInterval = setInterval(() => {
+                    const elapsed = Math.floor((new Date() - state.startTime) / 1000);
+                    dom.timerDisplay.textContent = utils.formatTime(elapsed);
+                }, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
+            }
+
+            function updateProgress() {
+                const inputs = dom.questionsContainer.querySelectorAll('.input-field');
+                const answered = Array.from(inputs).filter(input => input.value.trim() !== '').length;
+                dom.progressText.textContent = `${answered}/${NUM_QUESTIONS}`;
+                const angle = (answered / NUM_QUESTIONS) * 360;
+                dom.progressCircle.style.background = `conic-gradient(var(--accent-cyan) ${angle}deg, var(--bg-surface-light) ${angle}deg)`;
+            }
+
+            function startExam() {
+                state.examInProgress = true;
+                dom.controlPanel.style.display = 'none';
+                dom.resultsContainer.style.display = 'none';
+                dom.examContainer.style.display = 'block';
+                
+                generateExam();
+                renderExam();
+                updateProgress();
+                
+                if (dom.timerToggle.checked) {
+                    dom.timerDisplay.style.display = 'block';
+                    startTimer();
                 } else {
-                    // Para respuestas únicas
-                    if (!isNaN(respuestaCorrecta)) {
-                        if (Math.abs(parseFloat(respuestaUsuario) - parseFloat(respuestaCorrecta)) <= 0.1) {
-                            correctas++;
+                    dom.timerDisplay.style.display = 'none';
+                }
+            }
+
+            function submitExam() {
+                if(dom.timerToggle.checked) stopTimer();
+                state.examInProgress = false;
+                
+                const inputs = dom.questionsContainer.querySelectorAll('.input-field');
+                let correctCount = 0;
+                const attemptDetails = [];
+
+                state.currentQuestions.forEach((q, index) => {
+                    const inputElem = inputs[index];
+                    const userAnswerStr = inputElem.value;
+                    const parsedUserAnswer = utils.parseRootsInput(userAnswerStr);
+                    
+                    let isCorrect = false;
+                    if (q.solucion.length === 1) { // Respuesta única (discriminante, raíz doble, etc.)
+                        isCorrect = parsedUserAnswer.length === 1 && utils.equalNumbers(q.solucion[0], parsedUserAnswer[0]);
+                         // Aceptar raíz doble como 4 o 4,4
+                        if (!isCorrect && q.solucion.length === 1) {
+                             const doubleRootSolution = [q.solucion[0], q.solucion[0]];
+                             if(utils.equalRootSets(doubleRootSolution, parsedUserAnswer)) isCorrect = true;
                         }
-                    } else {
-                        if (respuestaUsuario === respuestaCorrecta) correctas++;
+
+                    } else { // Dos raíces
+                        isCorrect = utils.equalRootSets(q.solucion, parsedUserAnswer);
                     }
+                    
+                    const card = document.getElementById(`q-card-${index}`);
+                    const feedback = document.getElementById(`q-feedback-${index}`);
+                    inputElem.disabled = true;
+
+                    if(isCorrect) {
+                        correctCount++;
+                        card.classList.add('correct');
+                        feedback.textContent = '✅ Correcta';
+                        feedback.className = 'question-feedback feedback-correct';
+                    } else {
+                        card.classList.add('incorrect');
+                        feedback.innerHTML = `❌ Incorrecta. <small>${q.pista}</small>`;
+                        feedback.className = 'question-feedback feedback-incorrect';
+                    }
+                    
+                    attemptDetails.push({
+                       id: q.id,
+                       category: q.category,
+                       enunciado: q.enunciadoTeX,
+                       pista: q.pista,
+                       correct: isCorrect,
+                       userAnswer: userAnswerStr,
+                    });
+                });
+                
+                dom.submitBtn.style.display = 'none';
+                
+                const score = (correctCount / NUM_QUESTIONS) * 100;
+                displayResults(correctCount, score, attemptDetails);
+                saveHistory(correctCount, score, attemptDetails);
+            }
+
+            function displayResults(correctCount, score, attemptDetails) {
+                dom.resultsContainer.style.display = 'block';
+                dom.examContainer.scrollIntoView({ behavior: 'smooth' });
+
+                dom.scoreText.textContent = `${score.toFixed(0)}%`;
+                dom.scoreSummary.textContent = `Has respondido ${correctCount} de ${NUM_QUESTIONS} preguntas correctamente.`;
+                
+                let badgeClass = '';
+                let badgeText = '';
+                if (score >= 90) { badgeText = '¡Excelente!'; }
+                else if (score >= 70) { badgeText = '¡Buen Trabajo!'; }
+                else if (score >= 50) { badgeText = 'Sigue Practicando'; }
+                else { badgeText = 'Necesitas Repasar'; }
+
+                dom.scoreBadge.textContent = badgeText;
+                dom.scoreBadge.style.backgroundColor = score >= 70 ? 'var(--success)' : (score >= 50 ? 'var(--accent-yellow)' : 'var(--error)');
+                dom.scoreBadge.style.color = 'var(--bg-dark)';
+            }
+            
+            // --- HISTORIAL Y EXPORTACIÓN ---
+            function saveHistory(correctCount, score, attemptDetails) {
+                const duration = state.startTime ? Math.floor((new Date() - state.startTime) / 1000) : null;
+                const newAttempt = {
+                    timestamp: new Date().toISOString(),
+                    studentName: dom.studentName.value || 'Anónimo',
+                    correct: correctCount,
+                    total: NUM_QUESTIONS,
+                    score: score,
+                    duration: duration,
+                    details: attemptDetails
+                };
+                
+                state.lastAttempt = newAttempt; // Guardar el intento actual para exportar
+                state.history.unshift(newAttempt);
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(state.history));
+                renderHistory();
+            }
+            
+            function loadHistory() {
+                const savedHistory = localStorage.getItem(HISTORY_KEY);
+                if(savedHistory) {
+                    state.history = JSON.parse(savedHistory);
+                    renderHistory();
+                }
+            }
+            
+            function renderHistory() {
+                if (state.history.length === 0) {
+                     dom.historyContainer.innerHTML = '<p>No hay intentos guardados todavía.</p>';
+                     return;
                 }
                 
-                // Marcar visualmente la respuesta
-                if (correctas > 0) {
-                    input.style.borderColor = '#4caf50';
-                } else {
-                    input.style.borderColor = '#f44336';
-                }
-            });
-
-            document.getElementById('resultado').style.display = 'block';
-            document.getElementById('calificacion').textContent = correctas;
+                const table = document.createElement('table');
+                table.className = 'history-table';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Estudiante</th>
+                            <th>Puntaje</th>
+                            <th>Duración</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${state.history.slice(0, 5).map(att => `
+                            <tr>
+                                <td>${new Date(att.timestamp).toLocaleString()}</td>
+                                <td>${att.studentName}</td>
+                                <td>${att.correct}/${att.total} (${att.score.toFixed(0)}%)</td>
+                                <td>${att.duration ? utils.formatTime(att.duration) : 'N/A'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                `;
+                dom.historyContainer.innerHTML = '';
+                dom.historyContainer.appendChild(table);
+            }
             
-            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
-        });
+            function downloadFile(filename, content, mimeType) {
+                const blob = new Blob([content], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+            
+            function downloadCSV() {
+                if(!state.lastAttempt) {
+                    utils.showToast('Completa un intento primero.');
+                    return;
+                }
+                const att = state.lastAttempt;
+                let csvContent = "pregunta;categoria;estado;pista\n";
+                att.details.forEach((d, i) => {
+                    csvContent += `${i + 1};"${d.category}";${d.correct ? 'Correcta' : 'Incorrecta'};"${d.pista}"\n`;
+                });
+                
+                const header = `timestamp;estudiante;correctas;total;puntaje;duracion_seg\n`;
+                const summary = `${att.timestamp};${att.studentName};${att.correct};${att.total};${att.score};${att.duration}\n\n`;
+                
+                downloadFile('resultados_cuadraticas.csv', header + summary + csvContent, 'text/csv;charset=utf-8;');
+            }
+            
+            function downloadJSON() {
+                if(!state.lastAttempt) {
+                    utils.showToast('Completa un intento primero.');
+                    return;
+                }
+                downloadFile('resultados_cuadraticas.json', JSON.stringify(state.lastAttempt, null, 2), 'application/json');
+            }
+            
+            function downloadPDF() {
+                if(!state.lastAttempt) {
+                    utils.showToast('Completa un intento primero.');
+                    return;
+                }
+                const att = state.lastAttempt;
+                
+                // Poblar la plantilla de impresión
+                document.getElementById('print-student-name').textContent = att.studentName;
+                document.getElementById('print-date').textContent = new Date(att.timestamp).toLocaleString();
+                document.getElementById('print-score').textContent = `${att.correct}/${att.total} (${att.score.toFixed(0)}%)`;
+                document.getElementById('print-duration').textContent = att.duration ? utils.formatTime(att.duration) : 'N/A';
+                
+                const tableBody = document.getElementById('print-table-body');
+                tableBody.innerHTML = '';
+                att.details.forEach((d, i) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${i + 1}</td>
+                        <td>${d.category}</td>
+                        <td>${d.enunciado.replace(/\\/g, '\\\\')}</td>
+                        <td>${d.correct ? '✅ Correcta' : '❌ Incorrecta'}</td>
+                        <td>${d.pista}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Renderizar MathJax en la tabla de impresión antes de imprimir
+                if (window.MathJax) {
+                    MathJax.typesetPromise([tableBody])
+                        .then(() => window.print())
+                        .catch(err => {
+                            console.error('Error rendering MathJax for print:', err);
+                            window.print(); // Imprimir de todas formas
+                        });
+                } else {
+                    window.print();
+                }
+            }
 
-        // Inicializar MathJax
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            function copySummary() {
+                if (!state.lastAttempt) {
+                    utils.showToast('Completa un intento primero.');
+                    return;
+                }
+                const att = state.lastAttempt;
+                const summary = `Resumen del Examen de Ecuaciones Cuadráticas
+Estudiante: ${att.studentName}
+Fecha: ${new Date(att.timestamp).toLocaleString()}
+Puntaje: ${att.correct}/${att.total} (${att.score.toFixed(0)}%)
+Duración: ${att.duration ? utils.formatTime(att.duration) : 'N/A'}
+`;
+                try {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = summary;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    utils.showToast('Resumen copiado al portapapeles.');
+                } catch (err) {
+                    console.error('Failed to copy summary:', err);
+                    utils.showToast('Error al copiar el resumen.');
+                }
+            }
+
+            // --- INICIALIZACIÓN Y EVENT LISTENERS ---
+            function init() {
+                dom.startBtn.addEventListener('click', startExam);
+                dom.submitBtn.addEventListener('click', submitExam);
+                dom.retryBtn.addEventListener('click', () => {
+                    dom.submitBtn.style.display = 'block'; // Mostrar botón de evaluar de nuevo
+                    startExam();
+                });
+                dom.downloadCsvBtn.addEventListener('click', downloadCSV);
+                dom.downloadJsonBtn.addEventListener('click', downloadJSON);
+                dom.downloadPdfBtn.addEventListener('click', downloadPDF);
+                dom.copySummaryBtn.addEventListener('click', copySummary);
+                
+                dom.resultsContainer.style.display = 'none'; // Ocultar resultados al inicio
+                
+                loadHistory();
+            }
+
+            init();
+            
+        })(); // Fin de la IIFE
+    });
     </script>
 </body>
 </html>

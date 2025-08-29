@@ -1,216 +1,922 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen de Ecuaciones Lineales</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #4361ee;
-            --background-light: #f8f9fa;
-            --text-dark: #2b2d42;
-        }
+  <meta charset="utf-8" />
+  <title>Examen de Ecuaciones Lineales</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Un examen interactivo de ecuaciones lineales de una variable para practicar y evaluar tus conocimientos. Genera preguntas aleatorias, ofrece retroalimentación y permite descargar los resultados." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- MathJax para renderizar LaTeX -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
+  <style>
+    /* --- Variables y Estilos Base --- */
+    :root {
+      --color-primario: #005f73;
+      --color-secundario: #0a9396;
+      --color-fondo: #f0f8ff;
+      --color-tarjeta: #ffffff;
+      --color-texto: #0d1b2a;
+      --color-texto-claro: #495057;
+      --color-correcto: #2a9d8f;
+      --color-incorrecto: #e76f51;
+      --color-sombra: rgba(0, 0, 0, 0.1);
+      --radio-borde: 8px;
+      --fuente-principal: 'Inter', sans-serif;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        h1 {
-            text-align: center;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-        }
+    html, body {
+      font-family: var(--fuente-principal);
+      background-color: var(--color-fondo);
+      color: var(--color-texto);
+      line-height: 1.6;
+      font-size: 16px;
+    }
 
-        .question {
-            background: var(--background-light);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-        }
+    body {
+      padding: 1rem;
+    }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
+    /* --- Contenedores Principales --- */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background: var(--color-tarjeta);
+      border-radius: var(--radio-borde);
+      box-shadow: 0 4px 15px var(--color-sombra);
+    }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--color-primario);
+      padding-bottom: 1rem;
+    }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+    header h1 {
+      color: var(--color-primario);
+      font-size: 2rem;
+      font-weight: 700;
+    }
 
-        button:hover {
-            background: #3651d4;
-        }
+    /* --- Paneles y Secciones --- */
+    #panel-controles, #panel-progreso, #seccion-resultados {
+      margin-bottom: 1.5rem;
+    }
+    
+    .panel-grupo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: center;
+    }
 
-        #resultado {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #e8f5e9;
-            border-radius: 8px;
-            text-align: center;
-        }
+    footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #ddd;
+        font-size: 0.9rem;
+        color: var(--color-texto-claro);
+    }
 
-        .score {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2b2d42;
-        }
-    </style>
+    /* --- Botones --- */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radio-borde);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+      background-color: var(--color-secundario);
+      color: white;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn:disabled {
+        background-color: #a9a9a9;
+        cursor: not-allowed;
+    }
+
+    .btn-primario {
+      background-color: var(--color-primario);
+    }
+    
+    .btn-descarga {
+        background-color: #6c757d;
+    }
+
+    /* --- Barra de Progreso y Temporizador --- */
+    #panel-progreso {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .barra-progreso-contenedor {
+      flex-grow: 1;
+      height: 20px;
+      background-color: #e9ecef;
+      border-radius: var(--radio-borde);
+      overflow: hidden;
+    }
+    #barra-progreso {
+      width: 0%;
+      height: 100%;
+      background-color: var(--color-secundario);
+      transition: width 0.3s ease;
+    }
+    #info-progreso {
+      font-weight: 500;
+    }
+
+    /* --- Contenedor de Preguntas --- */
+    #contenedor-examen {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .tarjeta-pregunta {
+      background: #fdfdff;
+      padding: 1.5rem;
+      border: 1px solid #e0e0e0;
+      border-radius: var(--radio-borde);
+      transition: box-shadow 0.2s;
+    }
+    
+    .tarjeta-pregunta.evaluada.correcta {
+        border-left: 5px solid var(--color-correcto);
+    }
+    
+    .tarjeta-pregunta.evaluada.incorrecta {
+        border-left: 5px solid var(--color-incorrecto);
+    }
+
+    .encabezado-pregunta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+    
+    .numero-pregunta {
+        background-color: var(--color-primario);
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+    
+    .categoria-pregunta {
+        font-size: 0.8rem;
+        background-color: #e9ecef;
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        color: var(--color-texto-claro);
+    }
+
+    .enunciado {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .area-respuesta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .area-respuesta label {
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    .area-respuesta input {
+      flex-grow: 1;
+      padding: 0.75rem;
+      border: 1px solid #ced4da;
+      border-radius: var(--radio-borde);
+      font-size: 1.1rem;
+      font-family: var(--fuente-principal);
+    }
+    
+    .area-respuesta input:focus {
+        outline: none;
+        border-color: var(--color-secundario);
+        box-shadow: 0 0 0 2px rgba(10, 147, 150, 0.25);
+    }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: var(--radio-borde);
+      font-weight: 500;
+    }
+    
+    .feedback.correcto {
+        background-color: #e0f2f1;
+        color: var(--color-correcto);
+    }
+    
+    .feedback.incorrecto {
+        background-color: #fceae6;
+        color: var(--color-incorrecto);
+    }
+
+    /* --- Sección de Resultados --- */
+    #seccion-resultados h2 {
+        color: var(--color-primario);
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    #resumen-intento {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: var(--radio-borde);
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    #score {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--color-primario);
+    }
+    
+    #detalle-score {
+        font-size: 1.1rem;
+        color: var(--color-texto-claro);
+        margin-top: 0.5rem;
+    }
+
+    #historial-tabla {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    #historial-tabla th, #historial-tabla td {
+      border: 1px solid #dee2e6;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    #historial-tabla th {
+      background-color: var(--color-primario);
+      color: white;
+    }
+
+    /* --- Utilidades --- */
+    .oculto {
+      display: none !important;
+    }
+    
+    /* --- Media Queries para Responsividad --- */
+    @media (min-width: 768px) {
+      body {
+          padding: 2rem;
+      }
+      header h1 {
+        font-size: 2.5rem;
+      }
+      #contenedor-examen {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1><i class="fas fa-equals"></i> Ecuaciones Lineales</h1>
-        
-        <form id="examenForm">
-            <!-- Ecuaciones de un paso -->
-            <div class="question">
-                <p>1. Resuelve: \(x + 5 = 12\)</p>
-                <input type="text" name="q1" placeholder="x = ?" data-respuesta="7">
-            </div>
+  <div class="container" role="main">
+    <header>
+      <h1>Examen de Ecuaciones Lineales</h1>
+      <p>Pon a prueba tus habilidades resolviendo ecuaciones de primer grado.</p>
+    </header>
 
-            <div class="question">
-                <p>2. Resuelve: \(3x = 15\)</p>
-                <input type="text" name="q2" placeholder="x = ?" data-respuesta="5">
-            </div>
-
-            <div class="question">
-                <p>3. Resuelve: \(x - 8 = -3\)</p>
-                <input type="text" name="q3" placeholder="x = ?" data-respuesta="5">
-            </div>
-
-            <!-- Ecuaciones de dos pasos -->
-            <div class="question">
-                <p>4. Resuelve: \(2x + 3 = 11\)</p>
-                <input type="text" name="q4" placeholder="x = ?" data-respuesta="4">
-            </div>
-
-            <div class="question">
-                <p>5. Resuelve: \(4x - 7 = 13\)</p>
-                <input type="text" name="q5" placeholder="x = ?" data-respuesta="5">
-            </div>
-
-            <div class="question">
-                <p>6. Resuelve: \(\frac{x}{3} + 4 = 10\)</p>
-                <input type="text" name="q6" placeholder="x = ?" data-respuesta="18">
-            </div>
-
-            <!-- Ecuaciones con variables en ambos lados -->
-            <div class="question">
-                <p>7. Resuelve: \(3x + 2 = x + 10\)</p>
-                <input type="text" name="q7" placeholder="x = ?" data-respuesta="4">
-            </div>
-
-            <div class="question">
-                <p>8. Resuelve: \(5x - 3 = 2x + 9\)</p>
-                <input type="text" name="q8" placeholder="x = ?" data-respuesta="4">
-            </div>
-
-            <div class="question">
-                <p>9. Resuelve: \(\frac{x}{2} + 3 = \frac{x}{4} + 8\)</p>
-                <input type="text" name="q9" placeholder="x = ?" data-respuesta="20">
-            </div>
-
-            <!-- Problemas verbales -->
-            <div class="question">
-                <p>10. La suma de un número y 7 es igual a 23. ¿Cuál es el número?</p>
-                <input type="text" name="q10" placeholder="x = ?" data-respuesta="16">
-            </div>
-
-            <div class="question">
-                <p>11. El triple de un número menos 4 es igual a 20. ¿Cuál es el número?</p>
-                <input type="text" name="q11" placeholder="x = ?" data-respuesta="8">
-            </div>
-
-            <div class="question">
-                <p>12. Un número aumentado en su mitad es igual a 30. ¿Cuál es el número?</p>
-                <input type="text" name="q12" placeholder="x = ?" data-respuesta="20">
-            </div>
-
-            <div class="question">
-                <p>13. Juan tiene el doble de la edad de María. Si la suma de sus edades es 30, ¿cuál es la edad de María?</p>
-                <input type="text" name="q13" placeholder="Edad de María = ?" data-respuesta="10">
-            </div>
-
-            <div class="question">
-                <p>14. El perímetro de un rectángulo es 24 cm. Si el largo es el doble del ancho, ¿cuánto mide el ancho?</p>
-                <input type="text" name="q14" placeholder="Ancho = ?" data-respuesta="4">
-            </div>
-
-            <div class="question">
-                <p>15. En una granja hay gallinas y conejos. Si en total hay 20 cabezas y 56 patas, ¿cuántas gallinas hay?</p>
-                <input type="text" name="q15" placeholder="Número de gallinas = ?" data-respuesta="12">
-            </div>
-
-            <button type="submit">Calificar Examen</button>
-        </form>
-
-        <div id="resultado">
-            <h2>Resultado del Examen</h2>
-            <p class="score">Tu calificación: <span id="calificacion"></span>/15</p>
+    <section id="panel-controles" aria-label="Controles del examen">
+        <div class="panel-grupo">
+            <button id="btn-iniciar" class="btn btn-primario">Iniciar Examen</button>
+            <button id="btn-enviar" class="btn btn-primario oculto">Enviar Respuestas</button>
+            <button id="btn-reintentar" class="btn oculto">Reintentar</button>
         </div>
+    </section>
+
+    <section id="panel-progreso" class="oculto" aria-label="Progreso del examen">
+        <div class="barra-progreso-contenedor">
+            <div id="barra-progreso" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div id="info-progreso">
+            <span id="contador-respuestas">0/15</span>
+            <span>|</span>
+            <span id="temporizador">00:00</span>
+        </div>
+    </section>
+
+    <div id="contenedor-examen" aria-live="polite">
+        <!-- Las preguntas se insertarán aquí dinámicamente -->
     </div>
 
-    <script>
-        document.getElementById('examenForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    <section id="seccion-resultados" class="oculto" aria-label="Resultados del examen">
+      <h2>Resultados de tu Intento</h2>
+      <div id="resumen-intento">
+        <div id="score">--%</div>
+        <div id="detalle-score"></div>
+        <pre id="resumen-texto-copiar" class="oculto"></pre>
+      </div>
+
+      <div class="panel-grupo">
+        <button id="btn-copiar" class="btn btn-descarga">Copiar Resumen</button>
+        <button id="btn-descargar-json" class="btn btn-descarga">Descargar JSON</button>
+        <button id="btn-descargar-csv" class="btn btn-descarga">Descargar CSV</button>
+        <button id="btn-descargar-pdf" class="btn btn-descarga">Descargar PDF</button>
+      </div>
+      
+      <div id="historial-container">
+          <h3>Últimos 5 Intentos</h3>
+          <table id="historial-tabla">
+              <thead>
+                  <tr>
+                      <th>Fecha y Hora</th>
+                      <th>Puntaje</th>
+                      <th>Duración</th>
+                  </tr>
+              </thead>
+              <tbody id="historial-cuerpo">
+                  <!-- El historial se insertará aquí -->
+              </tbody>
+          </table>
+      </div>
+    </section>
+
+    <footer>
+      <p>Este examen es una herramienta de práctica. Las preguntas se generan aleatoriamente. ¡Sigue practicando para mejorar!</p>
+    </footer>
+  </div>
+
+  <script>
+    // IIFE para encapsular la lógica del examen
+    (function() {
+      // --- REFERENCIAS AL DOM ---
+      const dom = {
+        btnIniciar: document.getElementById('btn-iniciar'),
+        btnEnviar: document.getElementById('btn-enviar'),
+        btnReintentar: document.getElementById('btn-reintentar'),
+        btnCopiar: document.getElementById('btn-copiar'),
+        btnDescargarJSON: document.getElementById('btn-descargar-json'),
+        btnDescargarCSV: document.getElementById('btn-descargar-csv'),
+        btnDescargarPDF: document.getElementById('btn-descargar-pdf'),
+        panelProgreso: document.getElementById('panel-progreso'),
+        barraProgreso: document.getElementById('barra-progreso'),
+        contadorRespuestas: document.getElementById('contador-respuestas'),
+        temporizador: document.getElementById('temporizador'),
+        contenedorExamen: document.getElementById('contenedor-examen'),
+        seccionResultados: document.getElementById('seccion-resultados'),
+        score: document.getElementById('score'),
+        detalleScore: document.getElementById('detalle-score'),
+        resumenTextoCopiar: document.getElementById('resumen-texto-copiar'),
+        historialCuerpo: document.getElementById('historial-cuerpo'),
+      };
+
+      // --- ESTADO DE LA APLICACIÓN ---
+      let estado = {
+        examenActivo: false,
+        preguntasActuales: [],
+        respuestasUsuario: {},
+        inicioTiempo: null,
+        finTiempo: null,
+        intervaloTemporizador: null,
+        ultimoResultado: null,
+        totalPreguntasExamen: 15,
+      };
+
+      const TOLERANCIA_DECIMAL = 1e-6;
+
+      // --- BANCO DE PREGUNTAS ---
+      // Funciones para generar preguntas dinámicamente y asegurar variedad.
+      const bancoDePreguntas = [];
+
+      function enteroAleatorio(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      
+      function enteroNoCero(min, max) {
+          let num;
+          do {
+              num = enteroAleatorio(min, max);
+          } while (num === 0);
+          return num;
+      }
+
+      // Categoría 1: ax + b = cx + d
+      for (let i = 0; i < 12; i++) {
+        let a, c, x;
+        do {
+            a = enteroNoCero(-10, 10);
+            c = enteroNoCero(-10, 10);
+        } while (a === c);
+        
+        x = enteroAleatorio(-10, 10);
+        let b = enteroAleatorio(-20, 20);
+        let d = a * x + b - c * x;
+        
+        bancoDePreguntas.push({
+            id: `cat1_${i}`, categoria: 'Términos en ambos lados',
+            enunciadoTeX: `\\(${a}x ${b >= 0 ? '+' : ''} ${b} = ${c}x ${d >= 0 ? '+' : ''} ${d}\\)`,
+            solucionNumerica: x,
+            pista: 'Agrupa los términos con "x" en un lado y los números en el otro.'
+        });
+      }
+
+      // Categoría 2: k(mx + n) = p
+      for (let i = 0; i < 12; i++) {
+        let k = enteroNoCero(-8, 8);
+        let m = enteroNoCero(-5, 5);
+        let x = enteroAleatorio(-10, 10);
+        let n = enteroAleatorio(-10, 10);
+        let p = k * (m * x + n);
+        
+        bancoDePreguntas.push({
+            id: `cat2_${i}`, categoria: 'Con paréntesis',
+            enunciadoTeX: `\\(${k}(${m}x ${n >= 0 ? '+' : ''} ${n}) = ${p}\\)`,
+            solucionNumerica: x,
+            pista: 'Aplica la propiedad distributiva para eliminar los paréntesis.'
+        });
+      }
+
+      // Categoría 3: Con fracciones
+      for (let i = 0; i < 12; i++) {
+          let den1 = enteroAleatorio(2, 6);
+          let den2 = enteroAleatorio(2, 6);
+          let x = enteroAleatorio(-10, 10);
+          let num1 = enteroNoCero(-5, 5);
+          let b = enteroNoCero(-10, 10);
+          
+          let c = (num1 * x) / den1 + b;
+          let c_num = Math.round(c * den2);
+          
+          if (c_num % den2 === 0) { // Si es entero
+              bancoDePreguntas.push({
+                  id: `cat3_${i}`, categoria: 'Con fracciones',
+                  enunciadoTeX: `\\(\\frac{${num1}}{${den1}}x ${b >= 0 ? '+' : ''} ${b} = ${c_num/den2}\\)`,
+                  solucionNumerica: x,
+                  pista: 'Multiplica toda la ecuación por el mínimo común múltiplo de los denominadores.'
+              });
+          } else { i--; } // Reintentar si la fracción no es simplificable
+      }
+      
+      // Categoría 4: Problemas verbales
+      bancoDePreguntas.push({
+        id: 'cat4_1', categoria: 'Problema verbal',
+        enunciadoTeX: `El triple de un número aumentado en 5 es igual a 20. ¿Cuál es el número?`,
+        solucionNumerica: 5, pista: 'Traduce la frase a una ecuación: 3x + 5 = 20.'
+      });
+      bancoDePreguntas.push({
+        id: 'cat4_2', categoria: 'Problema verbal',
+        enunciadoTeX: `Si a un número le restas 8, obtienes 15. ¿Qué número es?`,
+        solucionNumerica: 23, pista: 'La ecuación es x - 8 = 15.'
+      });
+      bancoDePreguntas.push({
+        id: 'cat4_3', categoria: 'Problema verbal',
+        enunciadoTeX: `La mitad de un número es 12. Encuentra el número.`,
+        solucionNumerica: 24, pista: 'Representa "la mitad" como x/2.'
+      });
+      bancoDePreguntas.push({
+        id: 'cat4_4', categoria: 'Problema verbal',
+        enunciadoTeX: `Dos veces un número menos 4 es igual a 16. ¿Cuál es el número?`,
+        solucionNumerica: 10, pista: 'Escribe la ecuación 2x - 4 = 16.'
+      });
+       bancoDePreguntas.push({
+        id: 'cat4_5', categoria: 'Problema verbal',
+        enunciadoTeX: `La suma de un número y su doble es 27. ¿Cuál es el número?`,
+        solucionNumerica: 9, pista: 'La ecuación es x + 2x = 27.'
+      });
+
+      // --- LÓGICA DEL EXAMEN ---
+      function iniciarExamen() {
+        estado.examenActivo = true;
+        estado.respuestasUsuario = {};
+        
+        // Seleccionar preguntas aleatorias
+        estado.preguntasActuales = [...bancoDePreguntas].sort(() => 0.5 - Math.random()).slice(0, estado.totalPreguntasExamen);
+        
+        renderizarPreguntas();
+        actualizarUIModoExamen();
+        iniciarTemporizador();
+        actualizarProgreso();
+      }
+
+      function renderizarPreguntas() {
+        dom.contenedorExamen.innerHTML = '';
+        estado.preguntasActuales.forEach((pregunta, index) => {
+          const tarjeta = document.createElement('div');
+          tarjeta.className = 'tarjeta-pregunta';
+          tarjeta.id = `pregunta-${pregunta.id}`;
+          tarjeta.innerHTML = `
+            <div class="encabezado-pregunta">
+              <span class="numero-pregunta">${index + 1}</span>
+              <span class="categoria-pregunta">${pregunta.categoria}</span>
+            </div>
+            <div class="enunciado">${pregunta.enunciadoTeX}</div>
+            <div class="area-respuesta">
+                <label for="respuesta-${pregunta.id}">Respuesta:</label>
+                <input type="text" id="respuesta-${pregunta.id}" data-id="${pregunta.id}" placeholder="Ej: 5, -2.5, 3/4">
+            </div>
+            <div class="feedback oculto" role="alert"></div>
+          `;
+          dom.contenedorExamen.appendChild(tarjeta);
+        });
+        MathJax.typesetPromise([dom.contenedorExamen]);
+      }
+      
+      function enviarExamen() {
+        if (!estado.examenActivo) return;
+        
+        detenerTemporizador();
+        estado.examenActivo = false;
+        
+        let correctas = 0;
+        const detalles = [];
+
+        estado.preguntasActuales.forEach((pregunta, index) => {
+            const input = document.getElementById(`respuesta-${pregunta.id}`);
+            const valorUsuario = input.value;
+            const respuestaParseada = parsearRespuesta(valorUsuario);
+
+            const tarjeta = document.getElementById(`pregunta-${pregunta.id}`);
+            const feedbackEl = tarjeta.querySelector('.feedback');
             
-            let correctas = 0;
-            const inputs = document.querySelectorAll('input[type="text"]');
+            let esCorrecta = false;
+            if (respuestaParseada !== null) {
+                esCorrecta = Math.abs(respuestaParseada - pregunta.solucionNumerica) < TOLERANCIA_DECIMAL;
+            }
+
+            tarjeta.classList.add('evaluada');
+            feedbackEl.classList.remove('oculto');
             
-            inputs.forEach(input => {
-                const respuestaCorrecta = parseFloat(input.dataset.respuesta);
-                const respuestaUsuario = parseFloat(input.value);
-                
-                if (respuestaUsuario === respuestaCorrecta) {
-                    correctas++;
-                    input.style.borderColor = '#4caf50';
-                } else {
-                    input.style.borderColor = '#f44336';
-                }
+            if (esCorrecta) {
+                correctas++;
+                tarjeta.classList.add('correcta');
+                feedbackEl.classList.add('correcto');
+                feedbackEl.textContent = '✅ Correcta';
+            } else {
+                tarjeta.classList.add('incorrecta');
+                feedbackEl.classList.add('incorrecto');
+                feedbackEl.textContent = `❌ Incorrecta. Pista: ${pregunta.pista}`;
+            }
+
+            detalles.push({
+                id: pregunta.id,
+                pregunta: index + 1,
+                categoria: pregunta.categoria,
+                enunciado: pregunta.enunciadoTeX,
+                respuestaUsuario: valorUsuario,
+                esCorrecta,
             });
 
-            document.getElementById('resultado').style.display = 'block';
-            document.getElementById('calificacion').textContent = correctas;
-            
-            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+            input.disabled = true;
         });
 
-        // Inicializar MathJax
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-    </script>
+        const total = estado.totalPreguntasExamen;
+        const porcentaje = total > 0 ? (correctas / total) * 100 : 0;
+        const duracionSeg = Math.round((estado.finTiempo - estado.inicioTiempo) / 1000);
+
+        estado.ultimoResultado = {
+            timestamp: new Date(),
+            intento: obtenerHistorial().length + 1,
+            total_preguntas: total,
+            correctas,
+            incorrectas: total - correctas,
+            porcentaje: parseFloat(porcentaje.toFixed(2)),
+            duracion_seg: duracionSeg,
+            detalle_por_pregunta: detalles
+        };
+
+        guardarIntento(estado.ultimoResultado);
+        mostrarResultados();
+        actualizarUIModoResultados();
+      }
+
+      function mostrarResultados() {
+        const { porcentaje, correctas, total_preguntas, duracion_seg } = estado.ultimoResultado;
+        
+        dom.score.textContent = `${porcentaje.toFixed(0)}%`;
+        dom.detalleScore.innerHTML = `
+            Respondiste <strong>${correctas}</strong> de <strong>${total_preguntas}</strong> preguntas correctamente.<br>
+            Duración: <strong>${formatearTiempo(duracion_seg)}</strong>.
+        `;
+
+        // Preparar resumen para copiar
+        let textoResumen = `Resumen del Examen de Ecuaciones Lineales\n`;
+        textoResumen += `-------------------------------------------\n`;
+        textoResumen += `Fecha: ${formatearFecha(new Date())}\n`;
+        textoResumen += `Puntaje: ${porcentaje.toFixed(2)}%\n`;
+        textoResumen += `Correctas: ${correctas}/${total_preguntas}\n`;
+        textoResumen += `Duración: ${formatearTiempo(duracion_seg)}\n`;
+        dom.resumenTextoCopiar.textContent = textoResumen;
+        
+        mostrarHistorial();
+        dom.seccionResultados.scrollIntoView({ behavior: 'smooth' });
+      }
+
+
+      // --- UI Y ESTADO ---
+      function actualizarUIModoExamen() {
+        dom.btnIniciar.classList.add('oculto');
+        dom.btnEnviar.classList.remove('oculto');
+        dom.btnReintentar.classList.add('oculto');
+        dom.panelProgreso.classList.remove('oculto');
+        dom.seccionResultados.classList.add('oculto');
+        dom.contenedorExamen.classList.remove('oculto');
+      }
+      
+      function actualizarUIModoResultados() {
+        dom.btnEnviar.classList.add('oculto');
+        dom.btnReintentar.classList.remove('oculto');
+        dom.panelProgreso.classList.add('oculto');
+        dom.seccionResultados.classList.remove('oculto');
+      }
+      
+      function resetearUI() {
+          dom.btnIniciar.classList.remove('oculto');
+          dom.btnEnviar.classList.add('oculto');
+          dom.btnReintentar.classList.add('oculto');
+          dom.panelProgreso.classList.add('oculto');
+          dom.seccionResultados.classList.add('oculto');
+          dom.contenedorExamen.innerHTML = 'Presiona "Iniciar Examen" para comenzar.';
+          dom.barraProgreso.style.width = '0%';
+          dom.contadorRespuestas.textContent = `0/${estado.totalPreguntasExamen}`;
+          dom.temporizador.textContent = '00:00';
+      }
+
+      function actualizarProgreso() {
+        const inputs = dom.contenedorExamen.querySelectorAll('input[type="text"]');
+        const respondidas = Array.from(inputs).filter(input => input.value.trim() !== '').length;
+        const porcentaje = (respondidas / estado.totalPreguntasExamen) * 100;
+        
+        dom.barraProgreso.style.width = `${porcentaje}%`;
+        dom.barraProgreso.setAttribute('aria-valuenow', porcentaje);
+        dom.contadorRespuestas.textContent = `${respondidas}/${estado.totalPreguntasExamen}`;
+      }
+
+      // --- TEMPORIZADOR ---
+      function iniciarTemporizador() {
+        estado.inicioTiempo = new Date();
+        dom.temporizador.textContent = '00:00';
+        estado.intervaloTemporizador = setInterval(() => {
+          const ahora = new Date();
+          const segundosTranscurridos = Math.floor((ahora - estado.inicioTiempo) / 1000);
+          dom.temporizador.textContent = formatearTiempo(segundosTranscurridos);
+        }, 1000);
+      }
+
+      function detenerTemporizador() {
+        clearInterval(estado.intervaloTemporizador);
+        estado.finTiempo = new Date();
+      }
+
+      // --- UTILIDADES ---
+      function parsearRespuesta(str) {
+        if (typeof str !== 'string' || str.trim() === '') return null;
+        
+        const valorLimpio = str.trim();
+        
+        // Manejar fracciones como "a/b"
+        if (valorLimpio.includes('/')) {
+          const partes = valorLimpio.split('/');
+          if (partes.length === 2) {
+            const numerador = parseFloat(partes[0]);
+            const denominador = parseFloat(partes[1]);
+            if (!isNaN(numerador) && !isNaN(denominador) && denominador !== 0) {
+              return numerador / denominador;
+            }
+          }
+        }
+        
+        // Manejar decimales y enteros
+        const valorNumerico = parseFloat(valorLimpio);
+        return isNaN(valorNumerico) ? null : valorNumerico;
+      }
+      
+      function formatearTiempo(segundos) {
+        const mins = Math.floor(segundos / 60);
+        const secs = segundos % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+
+      function formatearFecha(fecha) {
+        return fecha.toLocaleString('es-PR', {
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit',
+            timeZone: 'America/Puerto_Rico'
+        });
+      }
+
+      // --- PERSISTENCIA (LocalStorage) ---
+      function obtenerHistorial() {
+        try {
+          const historialJSON = localStorage.getItem('examen_lineales_historial');
+          return historialJSON ? JSON.parse(historialJSON) : [];
+        } catch (e) {
+          console.error("Error al leer el historial:", e);
+          return [];
+        }
+      }
+      
+      function guardarIntento(intento) {
+        try {
+          let historial = obtenerHistorial();
+          historial.unshift(intento); // Añadir al principio
+          localStorage.setItem('examen_lineales_historial', JSON.stringify(historial));
+        } catch (e) {
+            console.error("Error al guardar el intento:", e);
+        }
+      }
+
+      function mostrarHistorial() {
+        const historial = obtenerHistorial().slice(0, 5); // Tomar solo los últimos 5
+        dom.historialCuerpo.innerHTML = '';
+        if (historial.length === 0) {
+            dom.historialCuerpo.innerHTML = '<tr><td colspan="3">No hay intentos guardados.</td></tr>';
+            return;
+        }
+        historial.forEach(intento => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${formatearFecha(new Date(intento.timestamp))}</td>
+                <td>${intento.porcentaje.toFixed(1)}%</td>
+                <td>${formatearTiempo(intento.duracion_seg)}</td>
+            `;
+            dom.historialCuerpo.appendChild(fila);
+        });
+      }
+
+      // --- EXPORTACIÓN ---
+      function descargarFichero(contenido, nombreFichero, tipoMIME) {
+          const blob = new Blob([contenido], { type: tipoMIME });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = nombreFichero;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+      }
+      
+      function descargarJSON() {
+        if (!estado.ultimoResultado) return;
+        const contenido = JSON.stringify(estado.ultimoResultado, null, 2);
+        descargarFichero(contenido, `resultados-examen-${Date.now()}.json`, 'application/json');
+      }
+
+      function descargarCSV() {
+        if (!estado.ultimoResultado) return;
+        let csv = 'pregunta_num;categoria;enunciado;respuesta_usuario;es_correcta\n';
+        estado.ultimoResultado.detalle_por_pregunta.forEach(d => {
+            const fila = [
+                d.pregunta,
+                d.categoria,
+                d.enunciado.replace(/\\/g, ''), // Limpiar TeX para CSV
+                `"${d.respuestaUsuario}"`,
+                d.esCorrecta ? 'Sí' : 'No'
+            ].join(';');
+            csv += fila + '\n';
+        });
+        descargarFichero(csv, `resultados-examen-${Date.now()}.csv`, 'text/csv;charset=utf-8;');
+      }
+
+      function descargarPDF() {
+        if (!estado.ultimoResultado) return;
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const { porcentaje, correctas, total_preguntas, duracion_seg, timestamp, detalle_por_pregunta } = estado.ultimoResultado;
+
+        let y = 20; // Posición Y inicial
+        const lineHeight = 7;
+        const margin = 15;
+
+        // --- Encabezado ---
+        doc.setFontSize(20);
+        doc.text("Resultados del Examen de Ecuaciones Lineales", doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
+        y += lineHeight * 2;
+
+        // --- Resumen ---
+        doc.setFontSize(12);
+        doc.text(`Fecha: ${formatearFecha(new Date(timestamp))}`, margin, y);
+        y += lineHeight;
+        doc.text(`Puntaje Final: ${porcentaje.toFixed(1)}%`, margin, y);
+        y += lineHeight;
+        doc.text(`Respuestas Correctas: ${correctas} de ${total_preguntas}`, margin, y);
+        y += lineHeight;
+        doc.text(`Duración: ${formatearTiempo(duracion_seg)}`, margin, y);
+        y += lineHeight * 2;
+
+        // --- Detalles ---
+        doc.setFontSize(14);
+        doc.text("Detalle de Preguntas:", margin, y);
+        y += lineHeight * 1.5;
+        
+        detalle_por_pregunta.forEach((detalle) => {
+            // Comprobar si se necesita un salto de página
+            if (y > 270) {
+                doc.addPage();
+                y = 20;
+            }
+
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Pregunta ${detalle.pregunta}: ${detalle.esCorrecta ? 'Correcta' : 'Incorrecta'}`, margin, y);
+            y += lineHeight;
+            
+            doc.setFont(undefined, 'normal');
+            // Limpiar TeX para una visualización simple en el PDF
+            const enunciadoLimpio = detalle.enunciado.replace(/\\\(|\\\)|\\frac{([^}]+)}{([^}]+)}/g, (match, p1, p2) => {
+                if (p1 && p2) return `${p1}/${p2}`; // Convierte \frac{a}{b} a a/b
+                return ''; // Elimina \( y \)
+            }).trim();
+            
+            // Dividir líneas largas
+            const lineasEnunciado = doc.splitTextToSize(`Enunciado: ${enunciadoLimpio}`, doc.internal.pageSize.getWidth() - margin * 3);
+            doc.text(lineasEnunciado, margin + 5, y);
+            y += lineHeight * lineasEnunciado.length;
+            
+            doc.text(`Tu respuesta: ${detalle.respuestaUsuario || '(Sin respuesta)'}`, margin + 5, y);
+            y += lineHeight * 1.5; // Espacio extra entre preguntas
+        });
+
+        doc.save(`resultados-examen-${Date.now()}.pdf`);
+      }
+
+      function copiarResumen() {
+        navigator.clipboard.writeText(dom.resumenTextoCopiar.textContent).then(() => {
+          const textoOriginal = dom.btnCopiar.textContent;
+          dom.btnCopiar.textContent = '¡Copiado!';
+          setTimeout(() => dom.btnCopiar.textContent = textoOriginal, 2000);
+        }).catch(err => {
+          console.error('Error al copiar:', err);
+          alert('No se pudo copiar el resumen.');
+        });
+      }
+
+      // --- EVENT LISTENERS ---
+      dom.btnIniciar.addEventListener('click', iniciarExamen);
+      dom.btnEnviar.addEventListener('click', enviarExamen);
+      dom.btnReintentar.addEventListener('click', () => {
+        dom.contenedorExamen.innerHTML = ''; // Limpiar para evitar FOUC
+        iniciarExamen();
+      });
+      dom.btnDescargarJSON.addEventListener('click', descargarJSON);
+      dom.btnDescargarCSV.addEventListener('click', descargarCSV);
+      dom.btnDescargarPDF.addEventListener('click', descargarPDF);
+      dom.btnCopiar.addEventListener('click', copiarResumen);
+      dom.contenedorExamen.addEventListener('input', actualizarProgreso);
+      
+      // --- INICIALIZACIÓN ---
+      function inicializar() {
+        resetearUI();
+        mostrarHistorial();
+      }
+
+      // Iniciar la aplicación al cargar la página
+      document.addEventListener('DOMContentLoaded', inicializar);
+
+    })();
+  </script>
 </body>
 </html>
+

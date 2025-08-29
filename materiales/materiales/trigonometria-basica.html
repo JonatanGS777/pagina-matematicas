@@ -1,192 +1,1240 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-PR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen de Trigonometría Básica</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Examen de Funciones Trigonométricas Básicas</title>
+    
+    <!-- MathJax v3 Configuration -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <!-- CSS Styles -->
     <style>
         :root {
-            --primary-color: #4361ee;
-            --background-light: #f8f9fa;
-            --text-dark: #2b2d42;
+            --bg-color: #fdfbf7;
+            --dot-color: #e0ddd7;
+            --text-color: #1c1917;
+            --accent-green: #166534;
+            --accent-orange: #f97316;
+            --accent-blue: #155e75;
+            --card-bg: #fffbeb;
+            --tape-color: rgba(255, 237, 180, 0.5);
+            --correct-bg: #dcfce7;
+            --incorrect-bg: #fee2e2;
+            --correct-text: #166534;
+            --incorrect-text: #991b1b;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* Basic Setup & Dot Grid Background */
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            background-image:
+                radial-gradient(var(--dot-color) 1px, transparent 1px);
+            background-size: 1.5rem 1.5rem;
+            display: flex;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-        }
-
-        .question {
-            background: var(--background-light);
+        /* Main Layout: Sidebar + Content */
+        .sidebar {
+            width: 250px;
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            border-right: 1px solid var(--dot-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
         }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            padding: 2rem 3rem;
         }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        /* Typography */
+        h1, h2, h3 {
+            font-weight: 700;
+            margin-top: 0;
+            color: var(--accent-blue);
         }
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.5rem; border-bottom: 2px solid var(--dot-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        h3 { font-size: 1.25rem; color: var(--accent-green); }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary-color);
+        /* Stepper Navigation */
+        .stepper {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .stepper li {
+            margin-bottom: 0.5rem;
+        }
+        .stepper a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            border: 2px solid transparent;
+        }
+        .stepper a .q-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--dot-color);
+            color: var(--accent-blue);
+            font-weight: 700;
+            margin-right: 1rem;
+            transition: all 0.2s ease-in-out;
+        }
+        .stepper a:hover {
+            background-color: var(--card-bg);
+        }
+        .stepper a.active {
+            background-color: var(--accent-orange);
             color: white;
+            border-color: #c2410c;
+        }
+        .stepper a.active .q-number {
+            background-color: white;
+            color: var(--accent-orange);
+        }
+        .stepper a.answered .q-number {
+            background-color: var(--accent-blue);
+            color: white;
+        }
+        .stepper a.correct .q-number { background-color: var(--correct-text); color: white; }
+        .stepper a.incorrect .q-number { background-color: var(--incorrect-text); color: white; }
+
+
+        /* Question Card (Sticky Note Style) */
+        .question-card {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: relative;
+            border: 1px solid #fde68a;
+            transform: rotate(-1deg);
+            transition: transform 0.2s ease-in-out;
+        }
+        .question-card:nth-child(odd) { transform: rotate(0.8deg); }
+        .question-card:hover { transform: rotate(0deg) scale(1.01); z-index: 10; }
+
+        .question-card::before, .question-card::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            background-color: var(--tape-color);
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            border-left: 1px dashed rgba(0,0,0,0.1);
+            border-right: 1px dashed rgba(0,0,0,0.1);
+        }
+        .question-card::before {
+            top: -15px;
+            left: -15px;
+            transform: rotate(-35deg);
+        }
+        .question-card::after {
+            top: -10px;
+            right: -20px;
+            transform: rotate(25deg);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .category-badge {
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .question-content {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .question-svg {
+            flex-shrink: 0;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 8px;
+            border: 1px solid var(--dot-color);
+            padding: 0.5rem;
+        }
+        .question-body {
+            flex-grow: 1;
+        }
+        .question-body .enunciado { font-size: 1.1rem; margin-bottom: 1rem; }
+        .question-body .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .question-body label {
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+        .question-body input {
+            padding: 0.75rem;
+            border: 2px solid var(--dot-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: var(--font-family);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+            width: 250px;
+        }
+        .question-body input:focus {
+            outline: none;
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+
+        /* Feedback Styles */
+        .feedback {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            min-height: 24px;
+            transition: opacity 0.3s;
+        }
+        .feedback.correct {
+            background-color: var(--correct-bg);
+            color: var(--correct-text);
+            border: 1px solid var(--correct-text);
+        }
+        .feedback.incorrect {
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-text);
+            border: 1px solid var(--incorrect-text);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #3651d4;
-        }
-
-        #resultado {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #e8f5e9;
-            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
             text-align: center;
         }
-
-        .score {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2b2d42;
+        .btn-primary {
+            background-color: var(--accent-orange);
+            color: white;
+            border: 2px solid #c2410c;
         }
+        .btn-primary:hover { background-color: #ea580c; }
+        
+        .btn-secondary {
+            background-color: var(--accent-green);
+            color: white;
+            border: 2px solid #14532d;
+        }
+        .btn-secondary:hover { background-color: #15803d; }
+        
+        .btn-tertiary {
+            background-color: #e0e0e0;
+            color: #333;
+            border: 2px solid #b0b0b0;
+        }
+        .btn-tertiary:hover { background-color: #d0d0d0; }
+
+        /* Control Sections */
+        .exam-controls, .results-section, .initial-screen {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        #results-section .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* History Table */
+        #history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            text-align: left;
+        }
+        #history-table th, #history-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--dot-color);
+        }
+        #history-table th {
+            background-color: var(--bg-color);
+            font-weight: 600;
+        }
+
+        /* Helper Panel */
+        details {
+            background: var(--card-bg);
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            margin-top: 2rem;
+        }
+        details summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--accent-green);
+        }
+        .gallery {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        .gallery-item { text-align: center; }
+        .gallery-item svg { width: 200px; height: 150px; background: white; border-radius: 4px; border: 1px solid var(--dot-color); }
+        
+        /* Utility & Accessibility */
+        .hidden { display: none !important; }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            body { flex-direction: column; }
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                border-right: none;
+                border-bottom: 1px solid var(--dot-color);
+            }
+            .sidebar h2 { display: none; }
+            .stepper { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+            .stepper a .q-text { display: none; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
+            .question-content { flex-direction: column; }
+            .question-svg { width: 100%; max-width: 300px; height: auto; }
+        }
+
+        @media (max-width: 768px) {
+            .question-card::before, .question-card::after { display: none; }
+            .question-card { transform: rotate(0) !important; }
+            .question-body input { width: 100%; }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background-image: none;
+                display: block;
+            }
+            .sidebar, .exam-controls, #results-section, #helper-gallery, footer, .question-card::before, .question-card::after {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+            #print-container {
+                display: block !important;
+                font-family: 'Times New Roman', serif;
+            }
+            .print-header h1 {
+                text-align: center;
+                font-size: 24pt;
+            }
+            .print-question {
+                page-break-inside: avoid;
+                margin-bottom: 1.5rem;
+                border: 1px solid #ccc;
+                padding: 1rem;
+                border-radius: 8px;
+            }
+             .print-question svg {
+                max-width: 250px;
+                display: block;
+                margin: 0 auto;
+            }
+            h1, h2, h3, p, div {
+                color: #000 !important;
+                background-color: transparent !important;
+            }
+            a { text-decoration: none; }
+        }
+        #print-container { display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-calculator"></i> Examen de Trigonometría Básica</h1>
-        
-        <form id="examenForm">
-            <div class="question">
-                <p>1. Calcular el valor de \(\sin(30°)\)</p>
-                <input type="text" name="q1" placeholder="Escribe tu respuesta..." data-respuesta="0.5">
-            </div>
 
-            <div class="question">
-                <p>2. Encuentre el valor de \(\cos(60°)\)</p>
-                <input type="text" name="q2" placeholder="Escribe tu respuesta..." data-respuesta="0.5">
-            </div>
+    <aside class="sidebar">
+        <div>
+            <h2>Navegación</h2>
+            <p id="exam-timer" aria-live="polite">Tiempo: 00:00</p>
+        </div>
+        <nav aria-label="Navegación de Preguntas">
+            <ol class="stepper" id="stepper"></ol>
+        </nav>
+    </aside>
 
-            <div class="question">
-                <p>3. ¿Cuál es el valor de \(\tan(45°)\)?</p>
-                <input type="text" name="q3" placeholder="Escribe tu respuesta..." data-respuesta="1">
-            </div>
+    <main class="main-content">
+        <header>
+            <h1>Examen de Funciones Trigonométricas Básicas</h1>
+        </header>
 
-            <div class="question">
-                <p>4. Calcular \(\sin(90°)\)</p>
-                <input type="text" name="q4" placeholder="Escribe tu respuesta..." data-respuesta="1">
+        <section id="initial-screen">
+            <h2>Instrucciones</h2>
+            <p>Este examen contiene 12 preguntas de opción múltiple y respuesta corta sobre funciones trigonométricas.</p>
+            <p>Puedes intentarlo cuantas veces desees. No se mostrarán las respuestas correctas, solo si tu contestación es correcta o incorrecta y una pista.</p>
+            <div style="margin: 1.5rem 0;">
+                <label for="student-name" style="margin-right: 0.5rem; font-weight: 600;">Nombre del estudiante (opcional):</label>
+                <input type="text" id="student-name" placeholder="Escribe tu nombre" style="padding: 0.5rem; border-radius: 4px; border: 1px solid #ccc;">
             </div>
+            <button id="start-btn" class="btn btn-primary">Iniciar Examen</button>
+        </section>
 
-            <div class="question">
-                <p>5. ¿Cuánto vale \(\cos(0°)\)?</p>
-                <input type="text" name="q5" placeholder="Escribe tu respuesta..." data-respuesta="1">
+        <form id="exam-form" class="hidden">
+            <div id="questions-container"></div>
+            <div class="exam-controls">
+                <button type="submit" id="submit-btn" class="btn btn-secondary">Enviar Examen</button>
             </div>
-
-            <div class="question">
-                <p>6. Si \(\sin(x) = 0.866\), ¿cuál es el valor de x en grados? (Primer cuadrante)</p>
-                <input type="text" name="q6" placeholder="Escribe tu respuesta..." data-respuesta="60">
-            </div>
-
-            <div class="question">
-                <p>7. Calcular \(\tan(60°)\)</p>
-                <input type="text" name="q7" placeholder="Escribe tu respuesta..." data-respuesta="1.732">
-            </div>
-
-            <div class="question">
-                <p>8. ¿Cuál es el valor de \(\cos(180°)\)?</p>
-                <input type="text" name="q8" placeholder="Escribe tu respuesta..." data-respuesta="-1">
-            </div>
-
-            <div class="question">
-                <p>9. Si \(\cos(x) = 0.866\), ¿cuál es el valor de x en grados? (Primer cuadrante)</p>
-                <input type="text" name="q9" placeholder="Escribe tu respuesta..." data-respuesta="30">
-            </div>
-
-            <div class="question">
-                <p>10. Calcular \(\sin(45°)\)</p>
-                <input type="text" name="q10" placeholder="Escribe tu respuesta..." data-respuesta="0.707">
-            </div>
-
-            <button type="submit">Calificar Examen</button>
         </form>
 
-        <div id="resultado">
-            <h2>Resultado del Examen</h2>
-            <p class="score">Tu calificación: <span id="calificacion"></span>/10</p>
-        </div>
-    </div>
+        <section id="results-section" class="hidden">
+            <h2>Resultados</h2>
+            <div id="summary"></div>
+            <div class="button-group">
+                <button id="retry-btn" class="btn btn-primary">Reintentar</button>
+                <button id="copy-summary-btn" class="btn btn-tertiary">Copiar Resumen</button>
+            </div>
+            <h3>Exportar Resultados</h3>
+             <div class="button-group">
+                <button id="csv-btn" class="btn btn-tertiary">Descargar CSV</button>
+                <button id="json-btn" class="btn btn-tertiary">Descargar JSON</button>
+                <button id="pdf-btn" class="btn btn-tertiary">Descargar PDF</button>
+            </div>
+            <h3>Historial de Intentos (últimos 5)</h3>
+            <table id="history-table">
+                <thead>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Puntuación</th>
+                        <th>Duración</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body"></tbody>
+            </table>
+        </section>
 
+        <details id="helper-gallery">
+            <summary>📚 Galería de Gráficas Base</summary>
+            <div class="gallery" id="gallery-container"></div>
+        </details>
+        
+        <footer>
+            <p style="text-align: center; color: #777; margin-top: 2rem;">Herramienta de práctica creada con fines educativos.</p>
+        </footer>
+
+    </main>
+    
+    <!-- This container is only used for printing -->
+    <div id="print-container"></div>
+
+
+    <!-- JavaScript Logic -->
     <script>
-        document.getElementById('examenForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            let correctas = 0;
-            const inputs = document.querySelectorAll('input[type="text"]');
-            
-            inputs.forEach(input => {
-                const respuestaCorrecta = parseFloat(input.dataset.respuesta);
-                const respuestaUsuario = parseFloat(input.value);
-                
-                // Consideramos un margen de error de ±0.01 para respuestas decimales
-                if (Math.abs(respuestaUsuario - respuestaCorrecta) <= 0.01) {
-                    correctas++;
-                    input.style.borderColor = '#4caf50';
-                } else {
-                    input.style.borderColor = '#f44336';
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // IIFE to encapsulate the entire application
+        (function() {
+            // --- STATE MANAGEMENT ---
+            const state = {
+                questions: [],
+                currentAttempt: [],
+                userAnswers: {},
+                startTime: null,
+                endTime: null,
+                timerInterval: null,
+                history: [],
+                studentName: ''
+            };
+
+            // --- DOM ELEMENTS ---
+            const initialScreen = document.getElementById('initial-screen');
+            const examForm = document.getElementById('exam-form');
+            const startBtn = document.getElementById('start-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const retryBtn = document.getElementById('retry-btn');
+            const questionsContainer = document.getElementById('questions-container');
+            const stepper = document.getElementById('stepper');
+            const resultsSection = document.getElementById('results-section');
+            const summaryDiv = document.getElementById('summary');
+            const examTimer = document.getElementById('exam-timer');
+            const historyBody = document.getElementById('history-body');
+            const studentNameInput = document.getElementById('student-name');
+            const copySummaryBtn = document.getElementById('copy-summary-btn');
+            const csvBtn = document.getElementById('csv-btn');
+            const jsonBtn = document.getElementById('json-btn');
+            const pdfBtn = document.getElementById('pdf-btn');
+
+            // --- CONSTANTS ---
+            const EPSILON = 1e-6;
+            const NUM_QUESTIONS = 12;
+
+            // --- UTILITY FUNCTIONS ---
+            const shuffleArray = (array) => array.sort(() => Math.random() - 0.5);
+            const degToRad = (deg) => deg * Math.PI / 180;
+            const radToDeg = (rad) => rad * 180 / Math.PI;
+            const formatTime = (seconds) => {
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                return `${mins}:${secs}`;
+            };
+            const toFixedFloat = (num, precision = 4) => parseFloat(num.toFixed(precision));
+
+            // --- PARSING & EVALUATION ---
+            const TRIG_VALUES_MAP = {
+                'sqrt(3)/2': Math.sqrt(3) / 2, '√3/2': Math.sqrt(3) / 2,
+                'sqrt(2)/2': Math.sqrt(2) / 2, '√2/2': Math.sqrt(2) / 2,
+                '1/2': 0.5,
+                '-sqrt(3)/2': -Math.sqrt(3) / 2, '-√3/2': -Math.sqrt(3) / 2,
+                '-sqrt(2)/2': -Math.sqrt(2) / 2, '-√2/2': -Math.sqrt(2) / 2,
+                '-1/2': -0.5,
+                'sqrt(3)': Math.sqrt(3), '√3': Math.sqrt(3),
+                '-sqrt(3)': -Math.sqrt(3), '-√3': -Math.sqrt(3),
+                 '1': 1, '0': 0, '-1': -1,
+            };
+
+            function mapExactTrig(str) {
+                const cleanedStr = str.trim().replace(/\s/g, '');
+                return TRIG_VALUES_MAP[cleanedStr];
+            }
+
+            function parseNumberOrFraction(str) {
+                str = str.trim();
+                if (str.includes('/')) {
+                    const parts = str.split('/');
+                    if (parts.length === 2) {
+                        const num = parseFloat(parts[0]);
+                        const den = parseFloat(parts[1]);
+                        if (!isNaN(num) && !isNaN(den) && den !== 0) {
+                            return num / den;
+                        }
+                    }
                 }
-            });
+                return parseFloat(str);
+            }
 
-            const resultadoDiv = document.getElementById('resultado');
-            const calificacionSpan = document.getElementById('calificacion');
+            function parsePiFraction(str) {
+                str = str.trim().toLowerCase().replace('π', 'pi');
+                let multiplier = 1;
+                
+                if (str.startsWith('-')) {
+                    multiplier = -1;
+                    str = str.substring(1);
+                }
+
+                if (str === 'pi') return multiplier * Math.PI;
+
+                if (str.includes('pi')) {
+                    if (str.startsWith('pi')) {
+                        str = '1' + str;
+                    }
+                    const parts = str.split('pi');
+                    let numPart = parts[0].replace('*', '').trim();
+                    let denPart = parts.length > 1 && parts[1] ? parts[1].replace('/', '').trim() : '1';
+                    
+                    let num = numPart === '' ? 1 : parseNumberOrFraction(numPart);
+                    let den = denPart === '' ? 1 : parseNumberOrFraction(denPart);
+
+                    if (!isNaN(num) && !isNaN(den) && den !== 0) {
+                        return multiplier * num * Math.PI / den;
+                    }
+                }
+                return parseFloat(str);
+            }
+
+            function compareValues(val1, val2, type) {
+                if (type === 'text') {
+                    return val1.toString().trim().toLowerCase() === val2.toString().trim().toLowerCase();
+                }
+                
+                const num1 = parseFloat(val1);
+                const num2 = parseFloat(val2);
+
+                if (isNaN(num1) || isNaN(num2)) return false;
+
+                return Math.abs(num1 - num2) < EPSILON;
+            }
+
+            function evaluateAnswer(userAnswerStr, solution, type) {
+                let parsedAnswer;
+                const cleanedStr = userAnswerStr.trim().toLowerCase();
+
+                if (type === 'text') {
+                    return compareValues(cleanedStr, solution, 'text');
+                }
+                
+                const mappedVal = mapExactTrig(cleanedStr);
+                if (mappedVal !== undefined) {
+                    parsedAnswer = mappedVal;
+                } else if (type === 'pi') {
+                    parsedAnswer = parsePiFraction(cleanedStr);
+                } else {
+                    parsedAnswer = parseNumberOrFraction(cleanedStr);
+                }
+
+                if (Array.isArray(solution)) {
+                    return solution.some(s => compareValues(parsedAnswer, s, type));
+                } else {
+                    return compareValues(parsedAnswer, solution, type);
+                }
+            }
             
-            resultadoDiv.style.display = 'block';
-            calificacionSpan.textContent = correctas;
+            // --- SVG GENERATORS ---
+            const svgNS = "http://www.w3.org/2000/svg";
 
-            // Scroll hasta el resultado
-            resultadoDiv.scrollIntoView({ behavior: 'smooth' });
-        });
+            const createSVGElement = (tag, attrs) => {
+                const el = document.createElementNS(svgNS, tag);
+                for (let key in attrs) {
+                    el.setAttribute(key, attrs[key]);
+                }
+                return el;
+            };
 
-        // Inicializar MathJax
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            const svgToString = (svgNode) => {
+                const serializer = new XMLSerializer();
+                return serializer.serializeToString(svgNode);
+            };
+
+            function svgUnitCircle({ angleRad = 0, highlightQuadrant = 0, showProjections = false, labels = [] }) {
+                const svg = createSVGElement('svg', { viewBox: "-1.2 -1.2 2.4 2.4", preserveAspectRatio: "xMidYMid meet" });
+                const r = 1;
+                const cx = 0, cy = 0;
+                const x = r * Math.cos(angleRad);
+                const y = -r * Math.sin(angleRad); // SVG y-axis is inverted
+                
+                // Quadrant highlight
+                if (highlightQuadrant > 0) {
+                    const path = createSVGElement('path', {
+                        d: `M 0 0 L 1.1 0 A 1.1 1.1 0 0 1 ${1.1*Math.cos(Math.PI/2)} ${-1.1*Math.sin(Math.PI/2)} Z`,
+                        fill: 'var(--accent-orange)',
+                        'fill-opacity': '0.1',
+                        transform: `rotate(${-90 * (highlightQuadrant - 1)})`
+                    });
+                    svg.appendChild(path);
+                }
+
+                // Axes
+                svg.appendChild(createSVGElement('line', { x1: -1.1, y1: 0, x2: 1.1, y2: 0, stroke: 'var(--dot-color)', 'stroke-width': 0.02 }));
+                svg.appendChild(createSVGElement('line', { x1: 0, y1: -1.1, x2: 0, y2: 1.1, stroke: 'var(--dot-color)', 'stroke-width': 0.02 }));
+                
+                // Circle
+                svg.appendChild(createSVGElement('circle', { cx, cy, r, fill: 'none', stroke: 'var(--text-color)', 'stroke-width': 0.03 }));
+
+                // Angle arc
+                const largeArcFlag = angleRad > Math.PI ? 1 : 0;
+                const arcPath = `M ${r} 0 A ${r/3} ${r/3} 0 ${largeArcFlag} 1 ${r/3 * Math.cos(angleRad)} ${-r/3 * Math.sin(angleRad)}`;
+                svg.appendChild(createSVGElement('path', { d: arcPath, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 0.03 }));
+
+                // Radius line
+                svg.appendChild(createSVGElement('line', { x1: cx, y1: cy, x2: x, y2: y, stroke: 'var(--accent-orange)', 'stroke-width': 0.03 }));
+
+                if (showProjections) {
+                    // Triangle
+                    svg.appendChild(createSVGElement('path', { 
+                        d: `M 0 0 L ${x} 0 L ${x} ${y} Z`, 
+                        fill: 'var(--accent-green)', 
+                        'fill-opacity': 0.2, 
+                        stroke: 'var(--accent-green)', 
+                        'stroke-width': 0.02 
+                    }));
+                }
+                
+                labels.forEach(label => {
+                    const text = createSVGElement('text', {
+                        x: label.x, y: label.y,
+                        'font-size': '0.15px',
+                        'text-anchor': 'middle',
+                        fill: 'var(--text-color)',
+                        'font-weight': 'bold',
+                    });
+                    text.textContent = label.text;
+                    svg.appendChild(text);
+                });
+
+                return svgToString(svg);
+            }
+
+            function svgWave({ func = "sin", A = 1, B = 1, C = 0, D = 0, xRange = [-2 * Math.PI, 2 * Math.PI], highlights = {} }) {
+                const svg = createSVGElement('svg', { viewBox: "-100 -60 200 120", preserveAspectRatio: "xMidYMid meet" });
+                const [xMin, xMax] = [-90, 90];
+                const [yMin, yMax] = [-50, 50];
+                const xScale = (xMax - xMin) / (xRange[1] - xRange[0]);
+                const yScale = (yMax - yMin) / (2 * Math.abs(A) + 0.5);
+
+                const mapX = (x) => (x - xRange[0]) * xScale + xMin;
+                const mapY = (y) => -(y * yScale)
+
+                // Axes
+                svg.appendChild(createSVGElement('line', { x1: xMin, y1: mapY(D), x2: xMax, y2: mapY(D), stroke: 'var(--dot-color)', 'stroke-width': 1 })); // Midline
+                svg.appendChild(createSVGElement('line', { x1: mapX(C), y1: yMin, x2: mapX(C), y2: yMax, stroke: 'var(--dot-color)', 'stroke-width': 1 })); // Y-axis at phase shift
+                
+                // Ticks
+                const period = (2 * Math.PI) / Math.abs(B);
+                for (let i = -4; i <= 4; i++) {
+                    const xTick = C + i * period / 4;
+                    if (xTick >= xRange[0] && xTick <= xRange[1]) {
+                        svg.appendChild(createSVGElement('line', { x1: mapX(xTick), y1: mapY(D) - 3, x2: mapX(xTick), y2: mapY(D) + 3, stroke: 'var(--text-color)', 'stroke-width': 0.5}));
+                    }
+                }
+
+                // Wave
+                let points = '';
+                const steps = 200;
+                for (let i = 0; i <= steps; i++) {
+                    const x = xRange[0] + i * (xRange[1] - xRange[0]) / steps;
+                    let y;
+                    switch(func) {
+                        case 'cos': y = A * Math.cos(B * (x - C)) + D; break;
+                        case 'tan': y = A * Math.tan(B * (x - C)) + D; break;
+                        default: y = A * Math.sin(B * (x - C)) + D;
+                    }
+                    points += `${mapX(x)},${mapY(y)} `;
+                }
+                svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
+                
+                // Highlights
+                if(highlights.amplitude) {
+                    const peakX = func === 'sin' ? C + period / 4 : C;
+                    svg.appendChild(createSVGElement('line', { x1: mapX(peakX), y1: mapY(D), x2: mapX(peakX), y2: mapY(D+A), stroke: 'var(--accent-blue)', 'stroke-width': 1, 'stroke-dasharray': '2,2'}));
+                    const text = createSVGElement('text', { x: mapX(peakX)+3, y: mapY(D+A/2), 'font-size': '6px' });
+                    text.textContent = `A = ${Math.abs(A)}`;
+                    svg.appendChild(text);
+                }
+                if(highlights.period) {
+                    const startX = C;
+                    const endX = C + period;
+                    svg.appendChild(createSVGElement('line', { x1: mapX(startX), y1: mapY(D)-10, x2: mapX(endX), y2: mapY(D)-10, stroke: 'var(--accent-green)', 'stroke-width': 1}));
+                    const text = createSVGElement('text', { x: mapX(startX + period/2), y: mapY(D)-13, 'font-size': '6px', 'text-anchor':'middle' });
+                    text.textContent = `Período = ${highlights.periodLabel}`;
+                    svg.appendChild(text);
+                }
+
+                return svgToString(svg);
+            }
+
+            function svgRightTriangle({ a, b, c, angleA, angleB, labels }) {
+                // Ensure valid triangle
+                if (!c) c = Math.sqrt(a*a + b*b);
+                if (!a) a = Math.sqrt(c*c - b*b);
+                if (!b) b = Math.sqrt(c*c - a*a);
+                
+                const scale = 100 / Math.max(a, b, c/1.4);
+                const width = b * scale + 20;
+                const height = a * scale + 20;
+
+                const svg = createSVGElement('svg', { viewBox: `0 0 ${width} ${height}`, preserveAspectRatio: "xMidYMid meet" });
+                
+                const p1 = {x: 10, y: 10};
+                const p2 = {x: 10, y: 10 + a*scale};
+                const p3 = {x: 10 + b*scale, y: 10 + a*scale};
+                
+                svg.appendChild(createSVGElement('polygon', {
+                    points: `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`,
+                    fill: 'var(--accent-green)',
+                    'fill-opacity': 0.1,
+                    stroke: 'var(--text-color)',
+                    'stroke-width': 2
+                }));
+
+                // Right angle marker
+                svg.appendChild(createSVGElement('path', { d: `M ${p2.x} ${p2.y-10} L ${p2.x+10} ${p2.y-10} L ${p2.x+10} ${p2.y}`, fill: 'none', stroke: 'var(--text-color)', 'stroke-width': 1 }));
+                
+                // Labels
+                const textA = createSVGElement('text', { x: p2.x + 5, y: (p1.y + p2.y)/2, 'font-size': '12px', 'text-anchor':'start' });
+                textA.textContent = labels.a;
+                svg.appendChild(textA);
+
+                const textB = createSVGElement('text', { x: (p2.x + p3.x)/2, y: p2.y + 15, 'font-size': '12px', 'text-anchor':'middle' });
+                textB.textContent = labels.b;
+                svg.appendChild(textB);
+                
+                const textC = createSVGElement('text', { x: (p1.x + p3.x)/2 + 5, y: (p1.y + p3.y)/2 - 5, 'font-size': '12px', 'text-anchor':'middle' });
+                textC.textContent = labels.c;
+                svg.appendChild(textC);
+
+                if (labels.angleA) {
+                    const textAngleA = createSVGElement('text', { x: p1.x+5, y: p1.y+15, 'font-size': '10px' });
+                    textAngleA.textContent = labels.angleA;
+                    svg.appendChild(textAngleA);
+                }
+                if (labels.angleB) {
+                    const textAngleB = createSVGElement('text', { x: p3.x-20, y: p3.y-5, 'font-size': '10px' });
+                    textAngleB.textContent = labels.angleB;
+                    svg.appendChild(textAngleB);
+                }
+                
+                return svgToString(svg);
+            }
+
+            // --- QUESTION BANK ---
+            const questionBank = [
+                // Category 1: Unit Circle Values
+                { id: 'uc1', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(60°)\\).', solution: 0.5, hint: 'El coseno corresponde a la coordenada x en la circunferencia unitaria.', svg: () => svgUnitCircle({ angleRad: degToRad(60), showProjections: true, labels: [{text:'cos(60°)', x:0.25, y: -0.1}] }) },
+                { id: 'uc2', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(\\pi/6)\\).', solution: 0.5, hint: 'El seno corresponde a la coordenada y.', svg: () => svgUnitCircle({ angleRad: Math.PI/6, showProjections: true, labels: [{text:'sin(π/6)', x:0.6, y:-0.25}] }) },
+                { id: 'uc3', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\tan(\\pi/4)\\).', solution: 1, hint: 'Recuerda que tan(θ) = sin(θ)/cos(θ).', svg: () => svgUnitCircle({ angleRad: Math.PI/4, showProjections: true }) },
+                { id: 'uc4', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(150°)\\).', solution: 0.5, hint: '150° está en el segundo cuadrante, donde el seno es positivo.', svg: () => svgUnitCircle({ angleRad: degToRad(150), highlightQuadrant: 2, showProjections: true }) },
+                { id: 'uc5', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(3\\pi/4)\\).', solution: -Math.sqrt(2)/2, hint: '3π/4 está en el segundo cuadrante, donde el coseno es negativo.', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/4, highlightQuadrant: 2, showProjections: true }) },
+                { id: 'uc6', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\tan(225°)\\).', solution: 1, hint: '225° está en el tercer cuadrante. ¿Cómo son los signos de seno y coseno allí?', svg: () => svgUnitCircle({ angleRad: degToRad(225), highlightQuadrant: 3, showProjections: true }) },
+                { id: 'uc7', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(\\pi)\\).', solution: -1, hint: 'El ángulo π (180°) apunta directamente a la izquierda en el eje x.', svg: () => svgUnitCircle({ angleRad: Math.PI }) },
+                { id: 'uc8', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(3\\pi/2)\\).', solution: -1, hint: 'El ángulo 3π/2 (270°) apunta directamente hacia abajo en el eje y.', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/2 }) },
+                { id: 'uc9', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(330°)\\).', solution: Math.sqrt(3)/2, hint: '330° está en el cuarto cuadrante. El coseno es positivo allí.', svg: () => svgUnitCircle({ angleRad: degToRad(330), highlightQuadrant: 4, showProjections: true }) },
+
+                // Category 2: Identify function by graph
+                { id: 'graph1', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica?', solution: 'sin', hint: 'La función pasa por el origen (0,0) y sube.', svg: () => svgWave({ func: 'sin' }) },
+                { id: 'graph2', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica?', solution: 'cos', hint: 'La función alcanza su máximo en x=0.', svg: () => svgWave({ func: 'cos' }) },
+                { id: 'graph3', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica?', solution: 'tan', hint: 'Observa las asíntotas verticales y el comportamiento creciente.', svg: () => svgWave({ func: 'tan', A: 0.5, B:0.5, xRange: [-Math.PI, Math.PI] }) },
+                { id: 'graph4', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa esta gráfica reflejada?', solution: 'cos', hint: 'Es una función reflejada sobre el eje x. ¿Cuál es su forma base?', svg: () => svgWave({ func: 'cos', A: -1 }) },
+                { id: 'graph5', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa esta gráfica con desfase?', solution: 'sin', hint: 'Parece una función seno, pero desplazada horizontalmente.', svg: () => svgWave({ func: 'sin', C: Math.PI/2 }) },
+                { id: 'graph6', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa la gráfica?', solution: 'sin', hint: 'Esta es una reflexión sobre el eje x. ¿Cuál es la función original?', svg: () => svgWave({ func: 'sin', A: -1 }) },
+                { id: 'graph7', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función está desplazada hacia arriba?', solution: 'cos', hint: 'La línea media de la onda no está en y=0.', svg: () => svgWave({ func: 'cos', D: 1 }) },
+                { id: 'graph8', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función tiene un período más corto?', solution: 'sin', hint: 'La onda se repite más frecuentemente que una función seno base.', svg: () => svgWave({ func: 'sin', B: 2 }) },
+                { id: 'graph9', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa la gráfica?', solution: 'cos', hint: 'Observa el valor en x=0. ¿Corresponde a seno o coseno?', svg: () => svgWave({ func: 'cos', C: Math.PI/4 }) },
+
+                // Category 3: Parameters A, B, C, D
+                { id: 'param1', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Dada la gráfica de \\(y = A\\sin(Bx)\\), determina el valor de la amplitud \\(A\\).', solution: 2, hint: 'La amplitud es la distancia máxima desde la línea central a un pico.', svg: () => svgWave({ func: 'sin', A: 2, B: 1, highlights: { amplitude: true } }) },
+                { id: 'param2', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Dada la gráfica de \\(y = \\cos(Bx)\\), determina el período.', solution: 4*Math.PI, hint: 'El período es la longitud de un ciclo completo de la onda.', svg: () => svgWave({ func: 'cos', A: 1, B: 0.5, highlights: { period: true, periodLabel: '4π' } }) },
+                { id: 'param3', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'La gráfica es de la forma \\(y = \\sin(x) + D\\). ¿Cuál es el valor del desplazamiento vertical \\(D\\)?', solution: 1.5, hint: 'El desplazamiento vertical es el valor de la línea central de la onda.', svg: () => svgWave({ func: 'sin', D: 1.5 }) },
+                { id: 'param4', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'La gráfica es de la forma \\(y = \\cos(x - C)\\). ¿Cuál es el desfase \\(C\\)?', solution: Math.PI/2, hint: 'El desfase es el desplazamiento horizontal. ¿Dónde empieza el ciclo del coseno?', svg: () => svgWave({ func: 'cos', C: Math.PI/2 }) },
+                { id: 'param5', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Determina la amplitud \\(A\\) de la función en la gráfica.', solution: 0.5, hint: 'La amplitud es la mitad de la diferencia entre el valor máximo y mínimo.', svg: () => svgWave({ func: 'sin', A: 0.5, B: 2, highlights: { amplitude: true } }) },
+                { id: 'param6', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Determina el período de la función en la gráfica.', solution: Math.PI, hint: 'El período se calcula como 2π/B. Observa cuántos ciclos hay en 2π.', svg: () => svgWave({ func: 'cos', B: 2, highlights: { period: true, periodLabel: 'π' } }) },
+                { id: 'param7', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Determina el desplazamiento vertical \\(D\\) de la función.', solution: -1, hint: 'La línea central está en y = D.', svg: () => svgWave({ func: 'sin', A: 2, D: -1 }) },
+                { id: 'param8', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Para la función \\(y = A\\cos(B(x-C))+D\\), ¿cuál es el valor de \\(A\\)?', solution: 3, hint: 'Mira la distancia del centro a la cresta.', svg: () => svgWave({ func: 'cos', A: 3 }) },
+                { id: 'param9', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Determina el período de la función.', solution: 2*Math.PI, hint: 'La función completa un ciclo en 2π unidades.', svg: () => svgWave({ func: 'sin', B: 1, highlights: {period: true, periodLabel: '2π' } }) },
+
+                // Category 4: Basic Equations
+                { id: 'eq1', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\sin(x) = 1/2\\) en el intervalo \\([0, \\pi)\\).', solution: [Math.PI/6, 5*Math.PI/6], hint: 'El seno es positivo en los cuadrantes I y II.', svg: () => svgUnitCircle({ angleRad: Math.PI/6, highlightQuadrant: 1 }) },
+                { id: 'eq2', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\cos(x) = -1\\) en el intervalo \\([0, 2\\pi)\\).', solution: Math.PI, hint: '¿En qué ángulo la coordenada x es -1?', svg: () => svgUnitCircle({ angleRad: Math.PI }) },
+                { id: 'eq3', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\tan(x) = 1\\) en el intervalo \\([0, \\pi)\\).', solution: Math.PI/4, hint: 'La tangente es 1 cuando seno y coseno son iguales.', svg: () => svgUnitCircle({ angleRad: Math.PI/4, showProjections: true }) },
+                { id: 'eq4', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\cos(x) = \\sqrt{2}/2\\) en el intervalo \\([0, \\pi/2)\\).', solution: Math.PI/4, hint: 'Busca un ángulo notable en el primer cuadrante.', svg: () => svgUnitCircle({ angleRad: Math.PI/4, highlightQuadrant: 1 }) },
+                { id: 'eq5', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\sin(x) = -1\\) en el intervalo \\([0, 2\\pi)\\).', solution: 3*Math.PI/2, hint: '¿En qué ángulo la coordenada y es -1?', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/2 }) },
+                { id: 'eq6', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\cos(x)=0\\) en \\([0, \\pi]\\).', solution: Math.PI/2, hint: 'El coseno es cero en el eje y.', svg: () => svgUnitCircle({ angleRad: Math.PI/2 }) },
+                { id: 'eq7', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\sin(x)=-1/2\\) en \\([\\pi, 2\\pi)\\).', solution: [7*Math.PI/6, 11*Math.PI/6], hint: 'El seno es negativo en los cuadrantes III y IV.', svg: () => svgUnitCircle({ angleRad: 7*Math.PI/6, highlightQuadrant: 3 }) },
+                { id: 'eq8', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\tan(x) = -\\sqrt{3}\\) en \\([\\pi/2, 3\\pi/2]\\).', solution: 2*Math.PI/3, hint: 'La tangente es negativa en el cuadrante II.', svg: () => svgUnitCircle({ angleRad: 2*Math.PI/3, highlightQuadrant: 2 }) },
+                { id: 'eq9', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\cos(x)=- \\sqrt{3}/2\\) en \\([0, \\pi]\\).', solution: 5*Math.PI/6, hint: 'El coseno es negativo en el cuadrante II.', svg: () => svgUnitCircle({ angleRad: 5*Math.PI/6, highlightQuadrant: 2 }) },
+
+                // Category 5: Right Triangles (SOH-CAH-TOA)
+                { id: 'tri1', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'En el triángulo, calcula la longitud del lado \\(x\\). Redondea a 2 decimales.', solution: 5.77, hint: 'Usa la tangente: tan(30°) = opuesto/adyacente.', svg: () => svgRightTriangle({ a: 10, b: null, c: null, angleA: 60, angleB: 30, labels: {a: '10', b: 'x', c:'h', angleB: '30°'} }) },
+                { id: 'tri2', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud de la hipotenusa \\(h\\). Redondea a 2 decimales.', solution: 14.14, hint: 'Usa el seno: sin(45°) = opuesto/hipotenusa.', svg: () => svgRightTriangle({ a: 10, b: 10, c: null, labels: {a: '10', c: 'h', angleB: '45°'} }) },
+                { id: 'tri3', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud del lado \\(y\\). Redondea a 2 decimales.', solution: 8.66, hint: 'Usa el coseno: cos(30°) = adyacente/hipotenusa.', svg: () => svgRightTriangle({ a: 5, b: null, c: 10, labels: {b: 'y', c: '10', angleB: '30°'} }) },
+                { id: 'tri4', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\sin(\\theta) = 3/5\\), y el cateto opuesto es 3, ¿cuál es la hipotenusa?', solution: 5, hint: 'SOH: Seno = Opuesto / Hipotenusa.', svg: () => svgRightTriangle({ a: 3, b: 4, c: 5, labels: {a: '3', b: '4', c: '5', angleB: 'θ'} }) },
+                { id: 'tri5', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\cos(\\theta) = 12/13\\), y el cateto adyacente es 12, ¿cuál es la hipotenusa?', solution: 13, hint: 'CAH: Coseno = Adyacente / Hipotenusa.', svg: () => svgRightTriangle({ a: 5, b: 12, c: 13, labels: {a: '5', b: '12', c: '13', angleB: 'θ'} }) },
+                { id: 'tri6', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\tan(\\theta) = 8/15\\), y el opuesto es 8, ¿cuál es el adyacente?', solution: 15, hint: 'TOA: Tangente = Opuesto / Adyacente.', svg: () => svgRightTriangle({ a: 8, b: 15, c: 17, labels: {a: '8', b: '15', c: '17', angleB: 'θ'} }) },
+                { id: 'tri7', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud del lado \\(x\\).', solution: 5, hint: 'Es un triángulo rectángulo especial 30-60-90.', svg: () => svgRightTriangle({ a: 5, b: 5*Math.sqrt(3), c: 10, labels: {a: 'x', c: '10', angleB: '30°'} }) },
+                { id: 'tri8', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud de la hipotenusa \\(h\\).', solution: 7.07, hint: 'Es un triángulo isósceles rectángulo (45-45-90).', svg: () => svgRightTriangle({ a: 5, b: 5, c: 5*Math.sqrt(2), labels: {a: '5', b: '5', c: 'h'} }) },
+                { id: 'tri9', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud del lado \\(y\\).', solution: 6, hint: 'Usa el Teorema de Pitágoras: a² + b² = c²', svg: () => svgRightTriangle({ a: 8, b: 6, c: 10, labels: {a: '8', b: 'y', c: '10'} }) },
+
+                // Category 6: Applications
+                { id: 'app1', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La gráfica muestra el voltaje de una señal de AC. ¿Cuál es la amplitud (voltaje máximo)?', solution: 5, hint: 'La amplitud es el valor máximo que alcanza la onda.', svg: () => svgWave({ func: 'sin', A: 5, D: 0, xRange: [0, 4], highlights: {amplitude:true} }) },
+                { id: 'app2', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La gráfica muestra el nivel de la marea. ¿Cuál es el período en horas?', solution: 12, hint: 'El período es el tiempo que tarda en completarse un ciclo (de marea alta a marea alta).', svg: () => svgWave({ func: 'cos', B: 2*Math.PI/12, D: 2, xRange: [0, 24], highlights: { period: true, periodLabel: '12h' } }) },
+                { id: 'app3', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'El movimiento de un resorte se describe por la gráfica. ¿Cuál es el desplazamiento vertical (posición de equilibrio)?', solution: 0, hint: 'El desplazamiento vertical es la línea central alrededor de la cual oscila.', svg: () => svgWave({ func: 'cos', A: 10, B: 1, D: 0, xRange: [0, 4*Math.PI] }) },
+                { id: 'app4', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: '¿Cuál es la frecuencia de la señal de voltaje (en Hz), si el período es de 0.5 segundos? \\(f = 1/T\\)', solution: 2, hint: 'Frecuencia es el inverso del período.', svg: () => svgWave({ func: 'sin', B: 2*Math.PI/0.5, xRange: [0, 1], highlights: { period: true, periodLabel: 'T=0.5s' } }) },
+                { id: 'app5', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La altura de una noria se muestra en la gráfica. ¿Cuál es la altura máxima alcanzada?', solution: 20, hint: 'La altura máxima es el punto más alto de la gráfica (D + A).', svg: () => svgWave({ func: 'cos', A: -10, B: 1, D: 10, xRange: [0, 2*Math.PI] }) },
+                { id: 'app6', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La temperatura de un cuarto oscila como se muestra. ¿Cuál es la temperatura promedio?', solution: 22, hint: 'La temperatura promedio corresponde al desplazamiento vertical (línea central).', svg: () => svgWave({ func: 'sin', A: 3, B: 2*Math.PI/24, D: 22, xRange: [0, 48] }) },
+                { id: 'app7', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La gráfica muestra la población de depredadores. ¿Cuál es el tamaño máximo de la población?', solution: 150, hint: 'Busca el valor máximo en el eje vertical.', svg: () => svgWave({ func: 'sin', A: 50, D: 100, xRange: [0, 20] }) },
+                { id: 'app8', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: '¿Cuál es el período del ciclo poblacional en años?', solution: 10, hint: 'Mide la distancia horizontal entre dos picos consecutivos.', svg: () => svgWave({ func: 'sin', A: 50, D: 100, B: 2*Math.PI/10, xRange: [0, 20], highlights: { period: true, periodLabel: '10 años' } }) },
+                { id: 'app9', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: '¿Cuál es el valor mínimo de la onda sonora mostrada?', solution: -2, hint: 'Busca el punto más bajo de la gráfica (D - A).', svg: () => svgWave({ func: 'cos', A: 2, D: 0, xRange: [0, 4] }) },
+            ];
+
+            // --- LOCAL STORAGE ---
+            function loadHistory() {
+                const storedHistory = localStorage.getItem('examen_trig_historial');
+                state.history = storedHistory ? JSON.parse(storedHistory) : [];
+                renderHistory();
+            }
+
+            function saveHistory() {
+                // Keep only the last 5 attempts
+                if (state.history.length > 5) {
+                    state.history = state.history.slice(state.history.length - 5);
+                }
+                localStorage.setItem('examen_trig_historial', JSON.stringify(state.history));
+                renderHistory();
+            }
+
+            // --- RENDER FUNCTIONS ---
+            function renderQuestion(question, index) {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                questionDiv.id = `q-${index}`;
+
+                questionDiv.innerHTML = `
+                    <div class="question-header">
+                        <h3>Pregunta ${index + 1}</h3>
+                        <span class="category-badge">${question.category}</span>
+                    </div>
+                    <div class="question-content">
+                        <div class="question-svg">${question.svg()}</div>
+                        <div class="question-body">
+                            <div class="enunciado">${question.enunciadoTeX}</div>
+                            <div class="input-group">
+                                <label for="answer-${index}">Respuesta:</label>
+                                <input type="text" id="answer-${index}" name="answer-${index}" autocomplete="off">
+                            </div>
+                            <div class="feedback" id="feedback-${index}" aria-live="polite"></div>
+                        </div>
+                    </div>
+                `;
+                questionsContainer.appendChild(questionDiv);
+            }
+
+            function renderStepper() {
+                stepper.innerHTML = '';
+                state.currentAttempt.forEach((q, index) => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = `#q-${index}`;
+                    a.innerHTML = `<span class="q-number">${index + 1}</span> <span class="q-text">${q.category}</span>`;
+                    a.onclick = (e) => {
+                        e.preventDefault();
+                        document.getElementById(`q-${index}`).scrollIntoView({behavior: 'smooth'});
+                        updateActiveStep(index);
+                    };
+                    li.appendChild(a);
+                    stepper.appendChild(li);
+                });
+            }
+
+            function updateActiveStep(activeIndex) {
+                stepper.querySelectorAll('a').forEach((a, index) => {
+                    if (index === activeIndex) {
+                        a.classList.add('active');
+                        a.setAttribute('aria-current', 'step');
+                    } else {
+                        a.classList.remove('active');
+                        a.removeAttribute('aria-current');
+                    }
+                });
+            }
+
+            function renderHistory() {
+                historyBody.innerHTML = '';
+                if(state.history.length === 0) {
+                    historyBody.innerHTML = `<tr><td colspan="3">No hay intentos guardados.</td></tr>`;
+                    return;
+                }
+                [...state.history].reverse().forEach(attempt => {
+                    const row = document.createElement('tr');
+                    const date = new Date(attempt.timestamp).toLocaleString('es-PR');
+                    row.innerHTML = `
+                        <td>${date}</td>
+                        <td>${attempt.score}/${attempt.total} (${attempt.percentage}%)</td>
+                        <td>${formatTime(attempt.duration)}</td>
+                    `;
+                    historyBody.appendChild(row);
+                });
+            }
+
+            function renderGallery() {
+                const galleryContainer = document.getElementById('gallery-container');
+                const baseFunctions = [
+                    { name: '\\(y = \\sin(x)\\)', svg: svgWave({func:'sin'}) },
+                    { name: '\\(y = \\cos(x)\\)', svg: svgWave({func:'cos'}) },
+                    { name: '\\(y = \\tan(x)\\)', svg: svgWave({func:'tan', A: 0.5, B:0.5, xRange: [-Math.PI, Math.PI]}) },
+                ];
+                galleryContainer.innerHTML = baseFunctions.map(item => `
+                    <div class="gallery-item">
+                        <div class="gallery-svg">${item.svg}</div>
+                        <p>${item.name}</p>
+                    </div>
+                `).join('');
+            }
+            
+            // --- EXAM LOGIC ---
+            function startExam() {
+                state.studentName = studentNameInput.value;
+                initialScreen.classList.add('hidden');
+                examForm.classList.remove('hidden');
+                
+                // Select questions
+                const questionsByCategory = questionBank.reduce((acc, q) => {
+                    if (!acc[q.category]) acc[q.category] = [];
+                    acc[q.category].push(q);
+                    return acc;
+                }, {});
+
+                state.currentAttempt = [];
+                const categories = shuffleArray(Object.keys(questionsByCategory));
+                for(let i=0; i<NUM_QUESTIONS; i++) {
+                    const category = categories[i % categories.length];
+                    const availableQuestions = questionsByCategory[category].filter(q => !state.currentAttempt.includes(q));
+                    if(availableQuestions.length > 0) {
+                        const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+                        state.currentAttempt.push(question);
+                    }
+                }
+                
+                state.currentAttempt = shuffleArray(state.currentAttempt);
+
+                questionsContainer.innerHTML = '';
+                state.currentAttempt.forEach(renderQuestion);
+                renderStepper();
+                updateActiveStep(0);
+                
+                MathJax.typesetPromise();
+
+                state.startTime = new Date();
+                state.timerInterval = setInterval(() => {
+                    const elapsed = Math.floor((new Date() - state.startTime) / 1000);
+                    examTimer.textContent = `Tiempo: ${formatTime(elapsed)}`;
+                }, 1000);
+                
+                // Reset scroll and focus
+                window.scrollTo(0, 0);
+                document.getElementById('answer-0').focus();
+            }
+
+            function submitExam(e) {
+                e.preventDefault();
+                state.endTime = new Date();
+                clearInterval(state.timerInterval);
+
+                let score = 0;
+                const results = state.currentAttempt.map((question, index) => {
+                    const input = document.getElementById(`answer-${index}`);
+                    const userAnswer = input.value;
+                    const isCorrect = evaluateAnswer(userAnswer, question.solution, question.type);
+                    if (isCorrect) score++;
+
+                    const feedbackDiv = document.getElementById(`feedback-${index}`);
+                    feedbackDiv.textContent = (isCorrect ? '✅ Correcta. ' : '❌ Incorrecta. ') + question.hint;
+                    feedbackDiv.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                    
+                    const stepperLink = stepper.querySelectorAll('a')[index];
+                    stepperLink.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+                    input.disabled = true;
+                    return { id: question.id, category: question.category, correct: isCorrect, svg: question.svg(), hint: question.hint, enunciado: question.enunciadoTeX };
+                });
+
+                submitBtn.classList.add('hidden');
+                examForm.classList.add('hidden');
+                resultsSection.classList.remove('hidden');
+
+                const total = state.currentAttempt.length;
+                const percentage = Math.round((score / total) * 100);
+                const duration = Math.floor((state.endTime - state.startTime) / 1000);
+
+                summaryDiv.innerHTML = `
+                    <h3>Resumen del Intento</h3>
+                    <p>Has contestado correctamente <strong>${score}</strong> de <strong>${total}</strong> preguntas.</p>
+                    <p>Tu puntuación es del <strong>${percentage}%</strong>.</p>
+                    <p>Tiempo total: <strong>${formatTime(duration)}</strong>.</p>
+                `;
+                
+                const attemptData = {
+                    timestamp: state.startTime.toISOString(),
+                    score,
+                    total,
+                    percentage,
+                    duration,
+                    studentName: state.studentName,
+                    results
+                };
+                
+                state.history.push(attemptData);
+                saveHistory();
+                
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function retryExam() {
+                resultsSection.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+                startExam();
+            }
+
+            // --- EXPORT & COPY ---
+            function getLatestAttempt() {
+                return state.history.length > 0 ? state.history[state.history.length - 1] : null;
+            }
+
+            function copySummary() {
+                const attempt = getLatestAttempt();
+                if (!attempt) return;
+                const summaryText = `Resumen - Examen de Trigonometría\n` +
+                    (attempt.studentName ? `Estudiante: ${attempt.studentName}\n` : '') +
+                    `Fecha: ${new Date(attempt.timestamp).toLocaleString('es-PR')}\n` +
+                    `Puntuación: ${attempt.score}/${attempt.total} (${attempt.percentage}%)\n` +
+                    `Duración: ${formatTime(attempt.duration)}`;
+                
+                navigator.clipboard.writeText(summaryText).then(() => {
+                    alert('Resumen copiado al portapapeles.');
+                }, () => {
+                    alert('Error al copiar el resumen.');
+                });
+            }
+
+            function downloadFile(filename, content, mimeType) {
+                const blob = new Blob([content], { type: mimeType });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+
+            function downloadCSV() {
+                const attempt = getLatestAttempt();
+                if (!attempt) return;
+                let csvContent = "pregunta_id;categoria;estado\n";
+                attempt.results.forEach(res => {
+                    csvContent += `${res.id};${res.category};${res.correct ? 'Correcta' : 'Incorrecta'}\n`;
+                });
+                downloadFile('resultados_trigonometria.csv', csvContent, 'text/csv;charset=utf-8;');
+            }
+            
+            function downloadJSON() {
+                const attempt = getLatestAttempt();
+                if (!attempt) return;
+                const jsonContent = JSON.stringify(attempt, null, 2);
+                downloadFile('resultados_trigonometria.json', jsonContent, 'application/json');
+            }
+
+            function downloadPDF() {
+                const attempt = getLatestAttempt();
+                if (!attempt) return;
+
+                const printContainer = document.getElementById('print-container');
+                let content = `<div class="print-header"><h1>Resultados del Examen de Trigonometría</h1>`;
+                if(attempt.studentName) content += `<p><strong>Estudiante:</strong> ${attempt.studentName}</p>`;
+                content += `<p><strong>Fecha:</strong> ${new Date(attempt.timestamp).toLocaleString('es-PR')}</p>`;
+                content += `<p><strong>Puntuación:</strong> ${attempt.score}/${attempt.total} (${attempt.percentage}%)</p></div>`;
+
+                attempt.results.forEach((res, index) => {
+                    content += `<div class="print-question">
+                        <h3>Pregunta ${index + 1}: ${res.enunciado}</h3>
+                        ${res.svg}
+                        <p><strong>Estado:</strong> ${res.correct ? 'Correcta' : 'Incorrecta'}</p>
+                        <p><strong>Pista:</strong> ${res.hint}</p>
+                    </div>`;
+                });
+
+                printContainer.innerHTML = content;
+                MathJax.typesetPromise([printContainer]).then(() => {
+                    window.print();
+                    printContainer.innerHTML = '';
+                });
+            }
+
+            // --- INITIALIZATION ---
+            function init() {
+                // Event Listeners
+                startBtn.addEventListener('click', startExam);
+                examForm.addEventListener('submit', submitExam);
+                retryBtn.addEventListener('click', retryExam);
+                copySummaryBtn.addEventListener('click', copySummary);
+                csvBtn.addEventListener('click', downloadCSV);
+                jsonBtn.addEventListener('click', downloadJSON);
+                pdfBtn.addEventListener('click', downloadPDF);
+                
+                // Intersection Observer for active step
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const index = parseInt(entry.target.id.split('-')[1]);
+                            updateActiveStep(index);
+                        }
+                    });
+                }, { rootMargin: "-50% 0px -50% 0px" });
+
+                document.querySelectorAll('.question-card').forEach(card => observer.observe(card));
+                // Re-observe after new exam starts
+                const observerConfig = { childList: true };
+                const observerCallback = (mutationsList, obs) => {
+                    for(const mutation of mutationsList) {
+                        if (mutation.type === 'childList') {
+                            document.querySelectorAll('.question-card').forEach(card => observer.observe(card));
+                        }
+                    }
+                };
+                const mutationObserver = new MutationObserver(observerCallback);
+                mutationObserver.observe(questionsContainer, observerConfig);
+
+                loadHistory();
+                renderGallery();
+                MathJax.typesetPromise();
+            }
+
+            init();
+
+        })();
+    });
     </script>
 </body>
 </html>
