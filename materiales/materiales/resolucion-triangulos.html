@@ -1,223 +1,1445 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
     <title>Examen de Resolución de Triángulos</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         :root {
-            --primary-color: #4361ee;
-            --background-light: #f8f9fa;
-            --text-dark: #2b2d42;
+            --color-bg: #1a1a2e;
+            --color-grid: #2c365a;
+            --color-cyan: #00f0ff;
+            --color-lima: #c8ff00;
+            --color-coral: #ff6b6b;
+            --color-text: #f0f0f0;
+            --color-panel: #2a2a4a;
+            --color-border: #3b3b5b;
+            --color-drawing-bg: #4b4b6b;
+            --shadow-subtle: 0 4px 10px rgba(0, 0, 0, 0.4);
+            --radius: 0.75rem;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
             margin: 0;
-            padding: 20px;
+            padding: 2rem;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image:
+                linear-gradient(to right, var(--color-grid) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--color-grid) 1px, transparent 1px);
+            background-size: 2.5rem 2.5rem;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-        }
-
-        .question {
-            background: var(--background-light);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        input[type="text"] {
             width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
+            max-width: 900px;
+            background-color: var(--color-panel);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-subtle);
+            padding: 1.5rem;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--color-bg);
+            padding: 0.5rem;
+            border-radius: var(--radius);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background-color: transparent;
+            color: var(--color-text);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .tab-button:hover {
+            background-color: var(--color-border);
+        }
+
+        .tab-button.active {
+            background-color: var(--color-cyan);
+            color: var(--color-bg);
+            font-weight: bold;
+            box-shadow: 0 0 15px var(--color-cyan);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--color-cyan);
+            font-weight: 300;
+        }
+        
+        h2 { margin-top: 0; }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"], input[type="number"], .input-group > input, .input-group > select, .input-group > .unit-toggle-group {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 1rem;
         }
-
-        input[type="text"]:focus {
+        
+        input:focus, select:focus, button:focus, .unit-toggle-group:focus-within {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--color-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.5);
+        }
+        
+        .question-card {
+            background-color: var(--color-panel);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-subtle);
         }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary-color);
-            color: white;
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-header h3 {
+            margin: 0;
+            color: var(--color-lima);
+        }
+
+        .question-feedback {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: var(--radius);
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+
+        .question-feedback.correct {
+            background-color: rgba(200, 255, 0, 0.1);
+            border-color: var(--color-lima);
+            color: var(--color-lima);
+        }
+        .question-feedback.incorrect {
+            background-color: rgba(255, 107, 107, 0.1);
+            border-color: var(--color-coral);
+            color: var(--color-coral);
+        }
+
+        .quiz-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            border-radius: var(--radius);
             cursor: pointer;
-            transition: background 0.3s;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        button:hover {
-            background: #3651d4;
+        .button-primary {
+            background-color: var(--color-cyan);
+            color: var(--color-bg);
         }
 
-        #resultado {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: #e8f5e9;
-            border-radius: 8px;
+        .button-primary:hover {
+            background-color: #00c0ff;
+        }
+
+        .button-secondary {
+            background-color: var(--color-lima);
+            color: var(--color-bg);
+        }
+        
+        .button-secondary:hover {
+            background-color: #adcf00;
+        }
+        
+        .button-coral {
+            background-color: var(--color-coral);
+            color: var(--color-bg);
+        }
+
+        .button-coral:hover {
+            background-color: #d15c5c;
+        }
+        
+        .results-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .results-summary {
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            padding: 1rem;
+            border-radius: var(--radius);
             text-align: center;
         }
 
-        .score {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2b2d42;
+        .results-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
         }
 
-        .triangle-img {
-            max-width: 300px;
-            margin: 10px auto;
-            display: block;
+        #history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
+
+        .history-item {
+            background-color: var(--color-bg);
+            border: 1px solid var(--color-border);
+            padding: 1rem;
+            border-radius: var(--radius);
+        }
+        
+        .svg-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 1rem auto;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            background-color: var(--color-drawing-bg);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .input-group label {
+            white-space: nowrap;
+        }
+        
+        .unit-toggle-group {
+            display: flex;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background-color: var(--color-bg);
+            padding: 0;
+        }
+        
+        .unit-toggle-group input[type="radio"] {
+            display: none;
+        }
+        
+        .unit-toggle-group label {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            border-right: 1px solid var(--color-border);
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--color-text);
+        }
+        
+        .unit-toggle-group label:last-child {
+            border-right: none;
+        }
+        
+        .unit-toggle-group input[type="radio"]:checked + label {
+            background-color: var(--color-cyan);
+            color: var(--color-bg);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .correct-icon { color: var(--color-lima); }
+        .incorrect-icon { color: var(--color-coral); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid var(--color-border);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--color-bg);
+            color: var(--color-cyan);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        @media screen and (max-width: 600px) {
+            body { padding: 1rem; }
+            .tab-buttons, .quiz-controls, .results-controls { flex-direction: column; }
+            .question-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            body {
+                background: none !important;
+                color: #000 !important;
+                padding: 0 !important;
+                margin: 0;
+                font-size: 12pt;
+                text-shadow: none;
+            }
+
+            .container, .tab-buttons, .tab-panel.active, .quiz-controls, .results-controls, .form-group, .history-section, .quiz-summary {
+                display: none !important;
+            }
+            
+            .print-view {
+                display: block !important;
+                width: 100%;
+                margin: 0 auto;
+                padding: 1rem;
+                color: #000;
+            }
+
+            .print-view h2, .print-view h3 { color: #000; }
+            .print-view .question-card {
+                border: 1px solid #ccc;
+                box-shadow: none;
+                background-color: #fff;
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .print-view .question-card .svg-container {
+                border: 1px solid #ccc;
+                background-color: #f8f8f8;
+            }
+
+            .question-card .question-feedback {
+                background-color: #f0f0f0;
+                border-color: #ccc;
+                color: #000;
+            }
+        }
+
     </style>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                    window.dispatchEvent(new CustomEvent('mathjax-ready'));
+                }
+            }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1><i class="fas fa-shapes"></i> Resolución de Triángulos</h1>
+    <div class="container" id="main-app">
+        <h1 class="text-center">Examen de Resolución de Triángulos</h1>
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="app.showTab('instructions')">Instrucciones</button>
+            <button class="tab-button" onclick="app.showTab('quiz')">Examen</button>
+            <button class="tab-button" onclick="app.showTab('results')">Resultados</button>
+        </div>
         
-        <form id="examenForm">
-            <!-- Encontrar ángulos -->
-            <div class="question">
-                <p>1. En un triángulo rectángulo, si un cateto mide 5 unidades y la hipotenusa mide 13 unidades, ¿cuál es el ángulo agudo que forma ese cateto con la hipotenusa?</p>
-                <input type="text" name="q1" placeholder="Respuesta en grados..." data-respuesta="22.6">
+        <div id="instructions-tab" class="tab-panel active">
+            <h2>Instrucciones</h2>
+            <p>Este examen evalúa su habilidad para resolver triángulos. Se generarán 12 preguntas aleatorias de diferentes categorías. Puede intentarlo cuantas veces quiera.</p>
+            <ul>
+                <li><strong>No hay límite de tiempo.</strong></li>
+                <li>Las preguntas pueden pedirle que encuentre longitudes de lados o medidas de ángulos.</li>
+                <li>Utilice los campos de entrada especiales para ángulos y longitudes. Los ángulos aceptan Grados, Radianes o el formato DMS. Las longitudes aceptan números decimales o fracciones (ej: <code>7/2</code>).</li>
+                <li>Cuando envíe sus respuestas, el sistema le dirá si su respuesta fue correcta o incorrecta y le proporcionará una pista, pero <strong>nunca le revelará la respuesta correcta</strong>.</li>
+            </ul>
+            <div class="form-group">
+                <label for="student-name">Su nombre (opcional):</label>
+                <input type="text" id="student-name" placeholder="Ej: Juan Pérez" />
+            </div>
+            <div class="quiz-controls">
+                <button class="button button-primary" onclick="app.startQuiz()">Iniciar Examen</button>
+            </div>
+        </div>
+
+        <div id="quiz-tab" class="tab-panel">
+            <h2>Examen</h2>
+            <p id="quiz-status" aria-live="polite">Preguntas respondidas: 0/12</p>
+            <form id="quiz-form" onsubmit="event.preventDefault(); app.evaluateQuiz()">
+                <div id="questions-container" class="question-grid"></div>
+                <div class="quiz-controls">
+                    <button type="submit" class="button button-secondary">Enviar Respuestas</button>
+                    <button type="button" class="button button-coral" onclick="app.startQuiz()">Reintentar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="results-tab" class="tab-panel">
+            <h2>Resultados</h2>
+            <div id="results-summary" class="results-summary"></div>
+            <div id="results-table"></div>
+            <div class="results-controls">
+                <button class="button button-primary" onclick="app.startQuiz()">Tomar Otro Intento</button>
+                <button class="button button-primary" onclick="app.exportCSV()">Descargar CSV</button>
+                <button class="button button-primary" onclick="app.exportJSON()">Descargar JSON</button>
+                <button class="button button-primary" onclick="app.exportPDF()">Descargar PDF</button>
+                <button class="button button-primary" onclick="app.copySummary()">Copiar Resumen</button>
             </div>
 
-            <div class="question">
-                <p>2. En un triángulo rectángulo, si \(\sin \theta = 0.6\), ¿cuánto mide el ángulo \(\theta\)?</p>
-                <input type="text" name="q2" placeholder="Respuesta en grados..." data-respuesta="36.87">
-            </div>
-
-            <div class="question">
-                <p>3. En un triángulo rectángulo, si el cateto opuesto mide 8 unidades y el cateto adyacente mide 15 unidades, ¿cuál es el ángulo agudo que forman?</p>
-                <input type="text" name="q3" placeholder="Respuesta en grados..." data-respuesta="28.07">
-            </div>
-
-            <!-- Encontrar lados -->
-            <div class="question">
-                <p>4. En un triángulo rectángulo, si un ángulo mide 30° y la hipotenusa mide 10 unidades, ¿cuánto mide el cateto opuesto?</p>
-                <input type="text" name="q4" placeholder="Respuesta en unidades..." data-respuesta="5">
-            </div>
-
-            <div class="question">
-                <p>5. En un triángulo rectángulo, si un ángulo mide 45° y el cateto adyacente mide 12 unidades, ¿cuánto mide la hipotenusa?</p>
-                <input type="text" name="q5" placeholder="Respuesta en unidades..." data-respuesta="16.97">
-            </div>
-
-            <div class="question">
-                <p>6. Si la hipotenusa mide 20 unidades y uno de los ángulos agudos es 60°, ¿cuánto mide el cateto adyacente?</p>
-                <input type="text" name="q6" placeholder="Respuesta en unidades..." data-respuesta="10">
-            </div>
-
-            <!-- Relaciones trigonométricas -->
-            <div class="question">
-                <p>7. En un triángulo rectángulo, si \(\cos \theta = 0.8\), ¿cuál es el valor de \(\sin \theta\)?</p>
-                <input type="text" name="q7" placeholder="Respuesta decimal..." data-respuesta="0.6">
-            </div>
-
-            <div class="question">
-                <p>8. Si en un triángulo rectángulo \(\tan \theta = 0.75\), ¿cuál es el valor de \(\sec \theta\)?</p>
-                <input type="text" name="q8" placeholder="Respuesta decimal..." data-respuesta="1.25">
-            </div>
-
-            <!-- Problemas combinados -->
-            <div class="question">
-                <p>9. Una escalera de 10 metros está apoyada contra una pared formando un ángulo de 60° con el suelo. ¿A qué altura de la pared llega la escalera?</p>
-                <input type="text" name="q9" placeholder="Respuesta en metros..." data-respuesta="8.66">
-            </div>
-
-            <div class="question">
-                <p>10. Desde un punto en el suelo se observa la cima de un edificio con un ángulo de elevación de 32°. Si la distancia horizontal al edificio es de 45 metros, ¿cuál es la altura del edificio?</p>
-                <input type="text" name="q10" placeholder="Respuesta en metros..." data-respuesta="28.13">
-            </div>
-
-            <div class="question">
-                <p>11. En un triángulo rectángulo, el cateto opuesto mide 12 unidades y la hipotenusa 13 unidades. ¿Cuánto mide el cateto adyacente?</p>
-                <input type="text" name="q11" placeholder="Respuesta en unidades..." data-respuesta="5">
-            </div>
-
-            <div class="question">
-                <p>12. Si en un triángulo rectángulo \(\sin \theta = 0.6\) y el cateto opuesto mide 9 unidades, ¿cuánto mide la hipotenusa?</p>
-                <input type="text" name="q12" placeholder="Respuesta en unidades..." data-respuesta="15">
-            </div>
-
-            <div class="question">
-                <p>13. Un avión vuela a una altura de 2000 metros. El ángulo de depresión para observar un punto en el suelo es de 15°. ¿A qué distancia horizontal se encuentra el punto?</p>
-                <input type="text" name="q13" placeholder="Respuesta en metros..." data-respuesta="7463.03">
-            </div>
-
-            <div class="question">
-                <p>14. En un triángulo rectángulo, si el ángulo θ = 45° y el cateto opuesto mide 8 unidades, ¿cuánto mide el cateto adyacente?</p>
-                <input type="text" name="q14" placeholder="Respuesta en unidades..." data-respuesta="8">
-            </div>
-
-            <div class="question">
-                <p>15. Una persona de 1.8 metros de altura proyecta una sombra de 3.12 metros cuando el ángulo de elevación del sol es de 30°. ¿A qué distancia está la punta de la sombra de la persona?</p>
-                <input type="text" name="q15" placeholder="Respuesta en metros..." data-respuesta="3.6">
-            </div>
-
-            <button type="submit">Calificar Examen</button>
-        </form>
-
-        <div id="resultado">
-            <h2>Resultado del Examen</h2>
-            <p class="score">Tu calificación: <span id="calificacion"></span>/15</p>
+            <h3>Historial de Intentos</h3>
+            <ul id="history-list"></ul>
         </div>
     </div>
+    <div class="print-view" id="print-view"></div>
 
     <script>
-        document.getElementById('examenForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            let correctas = 0;
-            const inputs = document.querySelectorAll('input[type="text"]');
-            
-            inputs.forEach(input => {
-                const respuestaCorrecta = parseFloat(input.dataset.respuesta);
-                const respuestaUsuario = parseFloat(input.value);
-                
-                // Margen de error de ±0.1 para considerar respuestas correctas
-                if (Math.abs(respuestaUsuario - respuestaCorrecta) <= 0.1) {
-                    correctas++;
-                    input.style.borderColor = '#4caf50';
-                } else {
-                    input.style.borderColor = '#f44336';
+        const app = (() => {
+            const state = {
+                activeTab: 'instructions',
+                quiz: [],
+                score: { correct: 0, total: 0 },
+                quizHistory: [],
+                studentName: '',
+                startTime: null
+            };
+
+            const selectors = {
+                app: document.getElementById('main-app'),
+                tabs: document.querySelectorAll('.tab-button'),
+                panels: document.querySelectorAll('.tab-panel'),
+                quizContainer: document.getElementById('questions-container'),
+                quizStatus: document.getElementById('quiz-status'),
+                resultsSummary: document.getElementById('results-summary'),
+                resultsTable: document.getElementById('results-table'),
+                historyList: document.getElementById('history-list'),
+                studentNameInput: document.getElementById('student-name')
+            };
+
+            const tolerances = {
+                angle: 1e-4, // radians
+                length: 1e-4
+            };
+
+            const DEG_TO_RAD = Math.PI / 180;
+            const RAD_TO_DEG = 180 / Math.PI;
+
+            // Utility functions
+            const deg2rad = (deg) => deg * DEG_TO_RAD;
+            const rad2deg = (rad) => rad * RAD_TO_DEG;
+            const toFixedTrim = (num, precision = 4) => parseFloat(num.toFixed(precision));
+            const generateUUID = () => crypto.randomUUID();
+            const formatDuration = (seconds) => {
+                const min = Math.floor(seconds / 60);
+                const sec = Math.floor(seconds % 60);
+                return `${min}m ${sec}s`;
+            };
+
+            const parsers = {
+                parseFraction: (str) => {
+                    if (str.includes('/')) {
+                        const [num, den] = str.split('/').map(Number);
+                        return den !== 0 ? num / den : NaN;
+                    }
+                    return parseFloat(str);
+                },
+                parseDMS: (str) => {
+                    const parts = str.match(/^(-?\d+)°(?:(\d+)'(?:(\d+)")?)?$/);
+                    if (!parts) return NaN;
+                    let sign = parts[1] < 0 ? -1 : 1;
+                    let deg = Math.abs(Number(parts[1]));
+                    let min = Number(parts[2] || 0);
+                    let sec = Number(parts[3] || 0);
+                    return sign * (deg + min / 60 + sec / 3600);
+                },
+                parsePi: (str) => {
+                    str = str.replace(/\s/g, '').toLowerCase();
+                    if (!str.includes('pi')) return parseFloat(str);
+                    str = str.replace('π', 'pi');
+                    if (str === 'pi') return Math.PI;
+                    if (str.startsWith('pi/')) return Math.PI / Number(str.substring(3));
+                    if (str.endsWith('/pi')) return Number(str.substring(0, str.length - 3)) / Math.PI;
+                    if (str.includes('*pi/')) {
+                        const [num, den] = str.split('*pi/').map(Number);
+                        return num * Math.PI / den;
+                    }
+                    if (str.includes('pi/')) {
+                         const [num, den] = str.split('pi/').map(Number);
+                        return num * Math.PI / den;
+                    }
+                    return parseFloat(str.replace('pi', '')) * Math.PI;
                 }
-            });
-
-            document.getElementById('resultado').style.display = 'block';
-            document.getElementById('calificacion').textContent = correctas;
+            };
             
-            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
-        });
+            const evaluateAngle = (userVal, correctVal) => {
+                let parsedVal;
+                const unit = userVal.unit;
+                const text = userVal.value;
 
-        // Inicializar MathJax
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+                if (unit === 'dms') parsedVal = parsers.parseDMS(text);
+                else if (unit === 'rad') parsedVal = parsers.parsePi(text);
+                else parsedVal = parsers.parseFraction(text);
+
+                if (unit === 'deg') parsedVal = deg2rad(parsedVal);
+
+                if (isNaN(parsedVal)) return false;
+                
+                return Math.abs(parsedVal - correctVal) <= tolerances.angle;
+            };
+
+            const evaluateLength = (userVal, correctVal) => {
+                const parsedVal = parsers.parseFraction(userVal);
+                if (isNaN(parsedVal)) return false;
+                return Math.abs(parsedVal - correctVal) <= tolerances.length;
+            };
+
+            const evaluateClassification = (userVal, correctVal) => {
+                return userVal === correctVal;
+            };
+            
+            // SVG Generators - CORREGIDOS para mostrar SOLO datos conocidos
+            const drawBlueprintGrid = (width, height) => {
+                let gridSvg = '';
+                const gridColor = '#6a6a8a';
+                const gridSize = Math.min(width, height) / 20;
+                
+                for (let i = 0; i <= width; i += gridSize) {
+                    gridSvg += `<line x1="${i}" y1="0" x2="${i}" y2="${height}" stroke="${gridColor}" stroke-width="0.5" opacity="0.3"/>`;
+                }
+                for (let i = 0; i <= height; i += gridSize) {
+                    gridSvg += `<line x1="0" y1="${i}" x2="${width}" y2="${i}" stroke="${gridColor}" stroke-width="0.5" opacity="0.3"/>`;
+                }
+                return gridSvg;
+            };
+            
+            // TRIÁNGULO RECTÁNGULO - Solo muestra valores DADOS
+            const svgRightTriangle = (data) => {
+                const width = 400;
+                const height = 300;
+                const margin = 40;
+                
+                // Usar valores dados, no todos los calculados
+                const { givenA, givenB, givenC, givenAngleA, givenAngleB } = data;
+                
+                // Calcular dimensiones para el diagrama (usar valores aproximados si no se dan todos)
+                const displayA = givenA || 30;
+                const displayB = givenB || 40;
+                
+                const maxSide = Math.max(displayA, displayB);
+                const scale = Math.min((width - 2*margin) / maxSide, (height - 2*margin) / maxSide);
+                
+                const scaledA = displayA * scale;
+                const scaledB = displayB * scale;
+                
+                const p1 = { x: margin, y: height - margin }; // Bottom-left (C)
+                const p2 = { x: margin + scaledB, y: height - margin }; // Bottom-right (B)
+                const p3 = { x: margin, y: height - margin - scaledA }; // Top-left (A)
+                
+                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${height}" fill="#3a3a5a"/>
+                    ${drawBlueprintGrid(width, height)}
+                    <polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}" 
+                             fill="rgba(200, 255, 0, 0.2)" stroke="#c8ff00" stroke-width="2"/>
+                    
+                    <!-- Right angle indicator -->
+                    <path d="M${p1.x + 10},${p1.y} L${p1.x + 10},${p1.y - 10} L${p1.x},${p1.y - 10}" 
+                          fill="none" stroke="#ff6b6b" stroke-width="2"/>
+                    
+                    <!-- Vertex labels -->
+                    <text x="${p1.x - 10}" y="${p1.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">C</text>
+                    <text x="${p2.x + 5}" y="${p2.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">B</text>
+                    <text x="${p3.x - 10}" y="${p3.y - 5}" font-size="14" fill="#f0f0f0" font-weight="bold">A</text>
+                    
+                    <!-- Side labels - Solo valores CONOCIDOS -->
+                    ${givenA !== undefined ? `<text x="${p1.x - 25}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">a = ${givenA}</text>` : 
+                      `<text x="${p1.x - 25}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">a = ?</text>`}
+                    ${givenB !== undefined ? `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">b = ${givenB}</text>` : 
+                      `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">b = ?</text>`}
+                    ${givenC !== undefined ? `<text x="${(p2.x + p3.x) / 2 + 15}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">c = ${givenC}</text>` : 
+                      `<text x="${(p2.x + p3.x) / 2 + 15}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">c = ?</text>`}
+                    
+                    <!-- Angle labels - Solo ángulos CONOCIDOS -->
+                    ${givenAngleA !== undefined ? `<text x="${p3.x + 15}" y="${p3.y + 5}" font-size="11" fill="#c8ff00" font-weight="bold">A = ${givenAngleA}°</text>` : ''}
+                    ${givenAngleB !== undefined ? `<text x="${p2.x - 25}" y="${p2.y - 5}" font-size="11" fill="#c8ff00" font-weight="bold">B = ${givenAngleB}°</text>` : ''}
+                    <text x="${p1.x + 15}" y="${p1.y - 5}" font-size="11" fill="#c8ff00" font-weight="bold">C = 90°</text>
+                </svg>`;
+            };
+
+            // TRIÁNGULO OBLICUO - Solo muestra valores DADOS
+            const svgObliqueTriangle = (data) => {
+                const width = 400;
+                const height = 300;
+                const margin = 40;
+                
+                const { givenA, givenB, givenC, givenAngleA, givenAngleB, givenAngleC } = data;
+                
+                // Usar valores aproximados para dibujar si no todos son conocidos
+                const displayA = givenA || 25;
+                const displayB = givenB || 30;
+                const displayC = givenC || 35;
+                const displayAngleA = givenAngleA || 45;
+                
+                const scale = Math.min((width - 2*margin) / Math.max(displayA, displayB, displayC), (height - 2*margin) / Math.max(displayA, displayB, displayC)) * 0.8;
+                
+                const p1 = { x: margin, y: height - margin }; // C
+                const p2 = { x: margin + displayB * scale, y: height - margin }; // B
+                const p3 = { 
+                    x: margin + displayC * scale * Math.cos(deg2rad(displayAngleA)), 
+                    y: height - margin - displayC * scale * Math.sin(deg2rad(displayAngleA))
+                }; // A
+                
+                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${height}" fill="#3a3a5a"/>
+                    ${drawBlueprintGrid(width, height)}
+                    <polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}" 
+                             fill="rgba(200, 255, 0, 0.2)" stroke="#c8ff00" stroke-width="2"/>
+                    
+                    <!-- Vertex labels -->
+                    <text x="${p1.x - 10}" y="${p1.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">C</text>
+                    <text x="${p2.x + 5}" y="${p2.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">B</text>
+                    <text x="${p3.x}" y="${p3.y - 10}" font-size="14" fill="#f0f0f0" font-weight="bold" text-anchor="middle">A</text>
+                    
+                    <!-- Side labels - Solo valores CONOCIDOS -->
+                    ${givenA !== undefined ? `<text x="${(p2.x + p3.x) / 2 + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">a = ${givenA}</text>` : 
+                      `<text x="${(p2.x + p3.x) / 2 + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">a = ?</text>`}
+                    ${givenB !== undefined ? `<text x="${(p1.x + p3.x) / 2 - 10}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">b = ${givenB}</text>` : 
+                      `<text x="${(p1.x + p3.x) / 2 - 10}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">b = ?</text>`}
+                    ${givenC !== undefined ? `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">c = ${givenC}</text>` : 
+                      `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">c = ?</text>`}
+                    
+                    <!-- Angle arcs y labels - Solo ángulos CONOCIDOS -->
+                    ${givenAngleA !== undefined ? `
+                        <path d="M${p3.x + 20},${p3.y} A20,20 0 0,0 ${p3.x - 15},${p3.y + 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
+                        <text x="${p3.x + 25}" y="${p3.y + 5}" font-size="11" fill="#c8ff00" font-weight="bold">A = ${givenAngleA}°</text>
+                    ` : ''}
+                    ${givenAngleB !== undefined ? `
+                        <path d="M${p2.x - 20},${p2.y} A20,20 0 0,1 ${p2.x - 15},${p2.y - 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
+                        <text x="${p2.x - 35}" y="${p2.y - 10}" font-size="11" fill="#c8ff00" font-weight="bold">B = ${givenAngleB}°</text>
+                    ` : ''}
+                    ${givenAngleC !== undefined ? `
+                        <path d="M${p1.x + 20},${p1.y} A20,20 0 0,0 ${p1.x + 15},${p1.y - 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
+                        <text x="${p1.x + 25}" y="${p1.y - 10}" font-size="11" fill="#c8ff00" font-weight="bold">C = ${givenAngleC}°</text>
+                    ` : ''}
+                </svg>`;
+            };
+
+            // CASO AMBIGUO SSA - Muestra datos dados y altura calculada
+            const svgSSAHeight = (data) => {
+                const width = 400;
+                const height = 300;
+                const margin = 40;
+                
+                const { givenA, givenB, givenAngleA, calculatedH } = data;
+                
+                const scale = Math.min((width - 2*margin) / Math.max(givenA, givenB), (height - 2*margin) / Math.max(givenA, givenB)) * 0.8;
+                
+                const p1 = { x: margin, y: height - margin }; // Base of triangle
+                const p2 = { x: margin + givenB * scale, y: height - margin }; // End of base
+                const p3 = { 
+                    x: margin + givenB * scale * Math.cos(deg2rad(givenAngleA)), 
+                    y: height - margin - givenB * scale * Math.sin(deg2rad(givenAngleA))
+                }; // Top vertex
+                const p4 = { x: p3.x, y: height - margin }; // Height drop point
+                
+                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${height}" fill="#3a3a5a"/>
+                    ${drawBlueprintGrid(width, height)}
+                    
+                    <!-- Base line -->
+                    <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#c8ff00" stroke-width="2"/>
+                    <!-- Given side -->
+                    <line x1="${p1.x}" y1="${p1.y}" x2="${p3.x}" y2="${p3.y}" stroke="#c8ff00" stroke-width="2"/>
+                    <!-- Height line -->
+                    <line x1="${p3.x}" y1="${p3.y}" x2="${p4.x}" y2="${p4.y}" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="3,3"/>
+                    <!-- Arc showing possible triangle -->
+                    <circle cx="${p1.x}" cy="${p1.y}" r="${givenA * scale}" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="5,5" opacity="0.7"/>
+                    
+                    <!-- Labels -->
+                    <text x="${p1.x - 10}" y="${p1.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">C</text>
+                    <text x="${p3.x}" y="${p3.y - 10}" font-size="14" fill="#f0f0f0" font-weight="bold" text-anchor="middle">A</text>
+                    
+                    <!-- Measurements - Solo valores DADOS -->
+                    <text x="${(p1.x + p3.x) / 2 - 10}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold">b = ${givenB}</text>
+                    <text x="${p4.x + 5}" y="${(p3.y + p4.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold">h = ${toFixedTrim(calculatedH)}</text>
+                    <text x="${p1.x + givenA * scale / 2}" y="${p1.y - 10}" font-size="12" fill="#00f0ff" font-weight="bold">a = ${givenA}</text>
+                    <text x="${p3.x + 15}" y="${p3.y + 5}" font-size="11" fill="#c8ff00" font-weight="bold">A = ${givenAngleA}°</text>
+                </svg>`;
+            };
+
+            // PROBLEMAS APLICADOS - Contexto visual específico
+            const svgElevation = (data) => {
+                const width = 400;
+                const heightSvg = 300;
+                const margin = 40;
+                
+                const { givenAngle, givenDistance, givenHeight, askingFor } = data;
+                
+                // Usar valores dados o aproximados para visualización
+                const displayAngle = givenAngle || 30;
+                const displayDistance = givenDistance || 50;
+                const displayHeight = givenHeight || displayDistance * Math.tan(deg2rad(displayAngle));
+                
+                const scale = Math.min((width - 2*margin) / displayDistance, (heightSvg - 2*margin) / displayHeight) * 0.8;
+                
+                const p1 = { x: margin, y: heightSvg - margin }; // Observer
+                const p2 = { x: margin + displayDistance * scale, y: heightSvg - margin }; // Base of object
+                const p3 = { x: margin + displayDistance * scale, y: heightSvg - margin - displayHeight * scale }; // Top of object
+                
+                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${heightSvg}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${heightSvg}" fill="#3a3a5a"/>
+                    ${drawBlueprintGrid(width, heightSvg)}
+                    
+                    <!-- Ground line extended -->
+                    <line x1="0" y1="${p1.y}" x2="${width}" y2="${p1.y}" stroke="#6a6a8a" stroke-width="1"/>
+                    <!-- Building/object -->
+                    <line x1="${p2.x}" y1="${p2.y}" x2="${p3.x}" y2="${p3.y}" stroke="#c8ff00" stroke-width="3"/>
+                    <!-- Distance line -->
+                    <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#c8ff00" stroke-width="2"/>
+                    <!-- Line of sight -->
+                    <line x1="${p1.x}" y1="${p1.y}" x2="${p3.x}" y2="${p3.y}" stroke="#00f0ff" stroke-width="2" stroke-dasharray="3,3"/>
+                    
+                    <!-- Angle arc -->
+                    <path d="M${p1.x + 30},${p1.y} A30,30 0 0,0 ${p1.x + 25},${p1.y - 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
+                    
+                    <!-- Observer icon -->
+                    <circle cx="${p1.x}" cy="${p1.y - 5}" r="3" fill="#f0f0f0"/>
+                    
+                    <!-- Labels -->
+                    <text x="${p1.x}" y="${p1.y + 20}" font-size="12" fill="#f0f0f0" font-weight="bold" text-anchor="middle">Observador</text>
+                    <text x="${p3.x}" y="${p3.y - 10}" font-size="12" fill="#f0f0f0" font-weight="bold" text-anchor="middle">Objeto</text>
+                    
+                    <!-- Measurements - Solo valores DADOS -->
+                    ${givenDistance !== undefined ? `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">Distancia = ${givenDistance}</text>` : 
+                      `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">Distancia = ?</text>`}
+                    ${givenHeight !== undefined ? `<text x="${p2.x + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold">Altura = ${givenHeight}</text>` : 
+                      `<text x="${p2.x + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold">Altura = ?</text>`}
+                    ${givenAngle !== undefined ? `<text x="${p1.x + 35}" y="${p1.y - 20}" font-size="12" fill="#c8ff00" font-weight="bold">θ = ${givenAngle}°</text>` : 
+                      `<text x="${p1.x + 35}" y="${p1.y - 20}" font-size="12" fill="#ff6b6b" font-weight="bold">θ = ?</text>`}
+                </svg>`;
+            };
+
+            const angleInputHTML = (name) => `
+                <div class="input-group">
+                    <label for="${name}">\\(${name}\\):</label>
+                    <input type="text" id="${name}" name="${name}" placeholder="ej: 30.5 o 30°30'0&quot;">
+                    <div class="unit-toggle-group" role="radiogroup" aria-labelledby="${name}-label">
+                        <input type="radio" id="${name}-deg" name="${name}-unit" value="deg" checked>
+                        <label for="${name}-deg">°</label>
+                        <input type="radio" id="${name}-rad" name="${name}-unit" value="rad">
+                        <label for="${name}-rad">rad</label>
+                        <input type="radio" id="${name}-dms" name="${name}-unit" value="dms">
+                        <label for="${name}-dms">DMS</label>
+                    </div>
+                </div>
+            `;
+            
+            const lengthInputHTML = (name) => `
+                <div class="input-group">
+                    <label for="${name}">\\(${name}\\):</label>
+                    <input type="text" id="${name}" name="${name}" placeholder="ej: 50.2 o 7/2">
+                </div>
+            `;
+
+            // Question Bank Generators - CORREGIDOS para coherencia total
+            const questionGenerators = {
+                rightTriangle: () => {
+                    const a = toFixedTrim(Math.random() * 30 + 10);
+                    const b = toFixedTrim(Math.random() * 30 + 10);
+                    const c = toFixedTrim(Math.sqrt(a*a + b*b));
+                    const A = toFixedTrim(rad2deg(Math.atan(a/b)));
+                    const B = toFixedTrim(90 - A);
+                    
+                    // Soluciones reales (en radianes para ángulos)
+                    const solutions = { 
+                        a, b, c, 
+                        A: deg2rad(A), 
+                        B: deg2rad(B), 
+                        C: deg2rad(90) 
+                    };
+                    
+                    const types = [
+                        { 
+                            fields: ['c'], 
+                            givens: { a, B: toFixedTrim(B) }, 
+                            text: `Dado a = ${a} y B = ${toFixedTrim(B)}°, halla el lado c.`,
+                            svgData: { givenA: a, givenAngleB: toFixedTrim(B) }
+                        },
+                        { 
+                            fields: ['A'], 
+                            givens: { b, c }, 
+                            text: `Dado b = ${b} y c = ${toFixedTrim(c)}, halla el ángulo A.`,
+                            svgData: { givenB: b, givenC: toFixedTrim(c) }
+                        },
+                        { 
+                            fields: ['a'], 
+                            givens: { c: toFixedTrim(c), A: toFixedTrim(A) }, 
+                            text: `Dado c = ${toFixedTrim(c)} y A = ${toFixedTrim(A)}°, halla el lado a.`,
+                            svgData: { givenC: toFixedTrim(c), givenAngleA: toFixedTrim(A) }
+                        },
+                    ];
+                    const type = types[Math.floor(Math.random() * types.length)];
+
+                    return {
+                        id: generateUUID(), 
+                        category: 'Triángulos Rectángulos',
+                        enunciadoTeX: type.text, 
+                        tipo: 'normal',
+                        campos: type.fields.map(f => ({ clave: f, tipo: f.length === 1 ? 'angulo' : 'lado'})),
+                        solucionCanonica: solutions,
+                        pista: 'Usa SOH-CAH-TOA (seno, coseno, tangente).',
+                        svg: svgRightTriangle(type.svgData)
+                    };
+                },
+                
+                lawOfSines: () => {
+                    const A = toFixedTrim(Math.random() * 40 + 30);
+                    const C = toFixedTrim(Math.random() * 40 + 30);
+                    const B = toFixedTrim(180 - A - C);
+                    const c = toFixedTrim(Math.random() * 30 + 10);
+                    const a = toFixedTrim(c * Math.sin(deg2rad(A)) / Math.sin(deg2rad(C)));
+                    const b = toFixedTrim(c * Math.sin(deg2rad(B)) / Math.sin(deg2rad(C)));
+                    
+                    const solutions = { 
+                        a, b, c, 
+                        A: deg2rad(A), 
+                        B: deg2rad(B), 
+                        C: deg2rad(C) 
+                    };
+
+                    const types = [
+                        { 
+                            fields: ['a'], 
+                            givens: { A, C, c }, 
+                            text: `Encuentra el lado a si A = ${A}°, C = ${C}° y c = ${c}.`,
+                            svgData: { givenAngleA: A, givenAngleC: C, givenC: c }
+                        },
+                        { 
+                            fields: ['B'], 
+                            givens: { A, a, b }, 
+                            text: `Halla el ángulo B si A = ${A}°, a = ${a} y b = ${b}.`,
+                            svgData: { givenAngleA: A, givenA: a, givenB: b }
+                        },
+                        { 
+                            fields: ['c'], 
+                            givens: { B, C, b }, 
+                            text: `Halla c si B = ${B}°, C = ${C}° y b = ${b}.`,
+                            svgData: { givenAngleB: B, givenAngleC: C, givenB: b }
+                        },
+                    ];
+                    const type = types[Math.floor(Math.random() * types.length)];
+                    
+                    return {
+                        id: generateUUID(), 
+                        category: 'Ley de Senos (AAS/ASA)',
+                        enunciadoTeX: type.text, 
+                        tipo: 'normal',
+                        campos: type.fields.map(f => ({ clave: f, tipo: f.length === 1 ? 'angulo' : 'lado'})),
+                        solucionCanonica: solutions,
+                        pista: 'La Ley de Senos relaciona lados y ángulos opuestos: a/sin(A) = b/sin(B) = c/sin(C).',
+                        svg: svgObliqueTriangle(type.svgData)
+                    };
+                },
+                
+                lawOfCosinesSAS: () => {
+                    const a = toFixedTrim(Math.random() * 30 + 10);
+                    const b = toFixedTrim(Math.random() * 30 + 10);
+                    const C = toFixedTrim(Math.random() * 80 + 40);
+                    const c = toFixedTrim(Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(deg2rad(C))));
+                    const A = toFixedTrim(rad2deg(Math.acos((b * b + c * c - a * a) / (2 * b * c))));
+                    const B = toFixedTrim(180 - A - C);
+                    
+                    const solutions = { 
+                        a, b, c, 
+                        A: deg2rad(A), 
+                        B: deg2rad(B), 
+                        C: deg2rad(C) 
+                    };
+                    
+                    const types = [
+                        { 
+                            fields: ['c'], 
+                            text: `Encuentra el lado c si a = ${a}, b = ${b} y el ángulo C = ${C}°.`,
+                            svgData: { givenA: a, givenB: b, givenAngleC: C }
+                        },
+                        { 
+                            fields: ['A'], 
+                            text: `Halla el ángulo A si a = ${a}, b = ${b} y el ángulo C = ${C}°.`,
+                            svgData: { givenA: a, givenB: b, givenAngleC: C }
+                        },
+                    ];
+                    const type = types[Math.floor(Math.random() * types.length)];
+                    
+                    return {
+                        id: generateUUID(), 
+                        category: 'Ley de Cosenos (SAS)',
+                        enunciadoTeX: type.text, 
+                        tipo: 'normal',
+                        campos: type.fields.map(f => ({ clave: f, tipo: f.length === 1 ? 'angulo' : 'lado'})),
+                        solucionCanonica: solutions,
+                        pista: 'Usa la Ley de Cosenos: c² = a² + b² - 2ab·cos(C).',
+                        svg: svgObliqueTriangle(type.svgData)
+                    };
+                },
+                
+                lawOfCosinesSSS: () => {
+                    let a, b, c;
+                    // Generate valid triangle (triangle inequality)
+                    do {
+                        a = toFixedTrim(Math.random() * 25 + 15);
+                        b = toFixedTrim(Math.random() * 25 + 15);
+                        c = toFixedTrim(Math.random() * 25 + 15);
+                    } while (a + b <= c || a + c <= b || b + c <= a);
+
+                    const A = toFixedTrim(rad2deg(Math.acos((b * b + c * c - a * a) / (2 * b * c))));
+                    const B = toFixedTrim(rad2deg(Math.acos((a * a + c * c - b * b) / (2 * a * c))));
+                    const C = toFixedTrim(180 - A - B);
+                    
+                    const solutions = { 
+                        a, b, c, 
+                        A: deg2rad(A), 
+                        B: deg2rad(B), 
+                        C: deg2rad(C) 
+                    };
+                    
+                    const fieldsToFind = ['A', 'B', 'C'][Math.floor(Math.random() * 3)];
+                    const text = `Halla el ángulo ${fieldsToFind} si los lados del triángulo son a = ${a}, b = ${b} y c = ${c}.`;
+                    
+                    return {
+                        id: generateUUID(), 
+                        category: 'Ley de Cosenos (SSS)',
+                        enunciadoTeX: text, 
+                        tipo: 'normal',
+                        campos: [{ clave: fieldsToFind, tipo: 'angulo' }],
+                        solucionCanonica: solutions,
+                        pista: 'Usa la Ley de Cosenos para encontrar un ángulo: cos(A) = (b² + c² - a²)/(2bc).',
+                        svg: svgObliqueTriangle({ givenA: a, givenB: b, givenC: c })
+                    };
+                },
+                
+                ambiguousCase: () => {
+                    const b = toFixedTrim(Math.random() * 30 + 15);
+                    const A = toFixedTrim(Math.random() * 60 + 20);
+                    const h = toFixedTrim(b * Math.sin(deg2rad(A)));
+                    let a, solutionCount, hint;
+
+                    const caseType = Math.floor(Math.random() * 3);
+                    
+                    switch(caseType) {
+                        case 0: // No solution
+                            a = toFixedTrim(Math.random() * (h * 0.8) + 1);
+                            solutionCount = '0';
+                            hint = `Compara el lado opuesto 'a' con la altura 'h = ${h}'. Si a < h, no hay solución.`;
+                            break;
+                        case 1: // One solution
+                            if (Math.random() < 0.5) {
+                                a = toFixedTrim(h); // Exactly height
+                            } else {
+                                a = toFixedTrim(Math.random() * 10 + Math.max(b, h) + 2); // Greater than both
+                            }
+                            solutionCount = '1';
+                            hint = `Si a = h o a > b y a > h, hay una solución única.`;
+                            break;
+                        case 2: // Two solutions
+                            a = toFixedTrim(Math.random() * (b - h) + h + 1);
+                            solutionCount = '2';
+                            hint = `Si h < a < b hay dos soluciones posibles para el ángulo opuesto a 'b'.`;
+                            break;
+                    }
+                    
+                    const text = `Halla el número de soluciones si a = ${a}, b = ${b} y A = ${A}°.`;
+                    
+                    return {
+                        id: generateUUID(), 
+                        category: 'Caso Ambiguo (SSA)',
+                        enunciadoTeX: text, 
+                        tipo: 'clasificacion',
+                        campos: [{ clave: 'solutions', tipo: 'clasificacion' }],
+                        solucionCanonica: solutionCount,
+                        pista: hint,
+                        svg: svgSSAHeight({ givenA: a, givenB: b, givenAngleA: A, calculatedH: h })
+                    };
+                },
+                
+                applied: () => {
+                    const problemTypes = [
+                        {
+                            givenAngle: toFixedTrim(Math.random() * 60 + 15),
+                            givenDistance: toFixedTrim(Math.random() * 80 + 20),
+                            calcHeight: function() { return toFixedTrim(this.givenDistance * Math.tan(deg2rad(this.givenAngle))); },
+                            askField: 'a',
+                            text: function() { 
+                                return `Desde un punto en el suelo a ${this.givenDistance} metros de un edificio, el ángulo de elevación a la cima es de ${this.givenAngle}°. ¿Cuál es la altura del edificio?`; 
+                            },
+                            svgData: function() { 
+                                return { givenAngle: this.givenAngle, givenDistance: this.givenDistance }; 
+                            }
+                        },
+                        {
+                            givenDistance: toFixedTrim(Math.random() * 80 + 20),
+                            givenHeight: toFixedTrim(Math.random() * 60 + 20),
+                            calcAngle: function() { return toFixedTrim(rad2deg(Math.atan(this.givenHeight / this.givenDistance))); },
+                            askField: 'A',
+                            text: function() { 
+                                return `Una escalera se apoya contra una pared. Si la base de la escalera está a ${this.givenDistance} metros de la pared y alcanza una altura de ${this.givenHeight} metros, ¿cuál es el ángulo de elevación?`; 
+                            },
+                            svgData: function() { 
+                                return { givenDistance: this.givenDistance, givenHeight: this.givenHeight }; 
+                            }
+                        },
+                        {
+                            givenHeight: toFixedTrim(Math.random() * 60 + 30),
+                            givenAngle: toFixedTrim(Math.random() * 60 + 15),
+                            calcDistance: function() { return toFixedTrim(this.givenHeight / Math.tan(deg2rad(this.givenAngle))); },
+                            askField: 'b',
+                            text: function() { 
+                                return `Un avión vuela a una altura de ${this.givenHeight} metros. Si el ángulo de depresión desde el avión a un aeropuerto es de ${this.givenAngle}°, ¿cuál es la distancia horizontal al aeropuerto?`; 
+                            },
+                            svgData: function() { 
+                                return { givenHeight: this.givenHeight, givenAngle: this.givenAngle }; 
+                            }
+                        }
+                    ];
+                    
+                    const problemType = problemTypes[Math.floor(Math.random() * problemTypes.length)];
+                    
+                    // Calculate all values for solutions
+                    const angle = problemType.givenAngle || problemType.calcAngle();
+                    const distance = problemType.givenDistance || problemType.calcDistance();
+                    const height = problemType.givenHeight || problemType.calcHeight();
+                    
+                    const solutions = { 
+                        a: height,           // height is side 'a' 
+                        b: distance,         // distance is side 'b'
+                        A: deg2rad(angle),   // angle in radians
+                        angle: deg2rad(angle),
+                        distance: distance,
+                        height: height
+                    };
+
+                    return {
+                        id: generateUUID(), 
+                        category: 'Problemas Aplicados',
+                        enunciadoTeX: problemType.text(), 
+                        tipo: 'normal',
+                        campos: [{ clave: problemType.askField, tipo: problemType.askField.length === 1 ? 'angulo' : 'lado'}],
+                        solucionCanonica: solutions,
+                        pista: 'Dibuja el triángulo rectángulo y aplica SOH-CAH-TOA.',
+                        svg: svgElevation(problemType.svgData())
+                    };
+                }
+            };
+
+            const allQuestionCategories = Object.keys(questionGenerators);
+            
+            const generateQuiz = () => {
+                const quiz = [];
+                const itemsPerCategory = Math.floor(12 / allQuestionCategories.length);
+                let remaining = 12 - itemsPerCategory * allQuestionCategories.length;
+                
+                const shuffledCategories = allQuestionCategories.sort(() => 0.5 - Math.random());
+                
+                shuffledCategories.forEach(category => {
+                    const count = itemsPerCategory + (remaining-- > 0 ? 1 : 0);
+                    for (let i = 0; i < count; i++) {
+                        quiz.push(questionGenerators[category]());
+                    }
+                });
+
+                state.quiz = quiz.sort(() => 0.5 - Math.random());
+                renderQuiz();
+            };
+
+            const renderQuiz = () => {
+                selectors.quizContainer.innerHTML = '';
+                state.quiz.forEach((q, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'question-card';
+                    card.dataset.id = q.id;
+                    card.innerHTML = `
+                        <div class="question-header">
+                            <h3>Pregunta ${index + 1}</h3>
+                            <small>${q.category}</small>
+                        </div>
+                        <p class="question-enunciado">${q.enunciadoTeX}</p>
+                        <div class="svg-container">${q.svg}</div>
+                        <div class="question-inputs">
+                            ${q.campos.map(f => {
+                                if (f.tipo === 'angulo') {
+                                    return angleInputHTML(f.clave);
+                                } else if (f.tipo === 'lado') {
+                                    return lengthInputHTML(f.clave);
+                                } else if (f.tipo === 'clasificacion') {
+                                    return `
+                                        <div class="input-group">
+                                            <label for="${f.clave}">Clasificación:</label>
+                                            <select id="${f.clave}" name="${f.clave}">
+                                                <option value="">Seleccione</option>
+                                                <option value="0">0 soluciones</option>
+                                                <option value="1">1 solución</option>
+                                                <option value="2">2 soluciones</option>
+                                            </select>
+                                        </div>
+                                    `;
+                                }
+                            }).join('')}
+                        </div>
+                        <div class="question-feedback" id="feedback-${q.id}" aria-live="polite"></div>
+                    `;
+                    selectors.quizContainer.appendChild(card);
+                });
+                updateQuizStatus();
+                
+                // Re-render MathJax
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    window.MathJax.typesetPromise();
+                }
+            };
+
+            const updateQuizStatus = () => {
+                const answeredCount = state.quiz.filter(q => q.answered).length;
+                selectors.quizStatus.textContent = `Preguntas respondidas: ${answeredCount}/${state.quiz.length}`;
+            };
+            
+            const evaluateQuiz = () => {
+                let correctCount = 0;
+                let totalCount = 0;
+                
+                state.quiz.forEach(q => {
+                    const feedbackEl = document.getElementById(`feedback-${q.id}`);
+                    feedbackEl.innerHTML = '';
+                    let isCorrect = true;
+                    
+                    q.campos.forEach(campo => {
+                        const inputElement = document.getElementById(campo.clave);
+                        let userValue;
+                        
+                        if (campo.tipo === 'angulo') {
+                            const unitElement = document.querySelector(`input[name="${campo.clave}-unit"]:checked`);
+                            userValue = { value: inputElement.value.trim(), unit: unitElement.value };
+                            if (!evaluateAngle(userValue, q.solucionCanonica[campo.clave])) { 
+                                isCorrect = false; 
+                            }
+                        } else if (campo.tipo === 'lado') {
+                            userValue = inputElement.value.trim();
+                            if (!evaluateLength(userValue, q.solucionCanonica[campo.clave])) { 
+                                isCorrect = false; 
+                            }
+                        } else if (campo.tipo === 'clasificacion') {
+                            userValue = inputElement.value;
+                            if (!evaluateClassification(userValue, q.solucionCanonica)) { 
+                                isCorrect = false; 
+                            }
+                        }
+                    });
+
+                    q.answered = true;
+                    q.isCorrect = isCorrect;
+                    
+                    feedbackEl.className = `question-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                    feedbackEl.innerHTML = `
+                        <strong>Respuesta:</strong> ${isCorrect ? 'Correcta ✓' : 'Incorrecta ✗'}
+                        <br>
+                        <strong>Pista:</strong> ${q.pista}
+                    `;
+                    
+                    if (isCorrect) correctCount++;
+                    totalCount++;
+                });
+
+                state.score = { correct: correctCount, total: totalCount };
+                
+                const attempt = {
+                    id: generateUUID(),
+                    timestamp: new Date().toLocaleString('es-PR', { timeZone: 'America/Puerto_Rico' }),
+                    duration_sec: Math.floor((Date.now() - state.startTime) / 1000),
+                    total: state.score.total,
+                    correctas: state.score.correct,
+                    incorrectas: state.score.total - state.score.correct,
+                    porcentaje: toFixedTrim((state.score.correct / state.score.total) * 100),
+                    detalle: state.quiz.map(q => ({ 
+                        id: q.id, 
+                        categoria: q.category, 
+                        estado: q.isCorrect ? 'Correcta' : 'Incorrecta', 
+                        pista: q.pista 
+                    })),
+                    studentName: state.studentName
+                };
+
+                state.quizHistory.unshift(attempt);
+                if (state.quizHistory.length > 10) {
+                    state.quizHistory.pop();
+                }
+                localStorage.setItem('examen_triangulos_historial', JSON.stringify(state.quizHistory));
+
+                renderResults();
+                showTab('results');
+                updateQuizStatus();
+            };
+
+            const renderResults = () => {
+                const latestAttempt = state.quizHistory[0];
+                if (!latestAttempt) {
+                    selectors.resultsSummary.textContent = 'No hay intentos registrados.';
+                    selectors.resultsTable.innerHTML = '';
+                    return;
+                }
+                
+                const resumenHTML = `
+                    <h3>Resumen del último intento</h3>
+                    <p><strong>Nombre:</strong> ${latestAttempt.studentName || 'Anónimo'}</p>
+                    <p><strong>Fecha y hora:</strong> ${latestAttempt.timestamp}</p>
+                    <p><strong>Duración:</strong> ${formatDuration(latestAttempt.duration_sec)}</p>
+                    <p><strong>Resultados:</strong> ${latestAttempt.correctas}/${latestAttempt.total} preguntas correctas.</p>
+                    <p><strong>Porcentaje:</strong> ${latestAttempt.porcentaje}%</p>
+                `;
+                selectors.resultsSummary.innerHTML = resumenHTML;
+                
+                const tableHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Categoría</th>
+                                <th>Estado</th>
+                                <th>Pista</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${latestAttempt.detalle.map((d, i) => `
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td>${d.categoria}</td>
+                                    <td>
+                                        <span class="${d.estado === 'Correcta' ? 'correct-icon' : 'incorrect-icon'}">
+                                            ${d.estado === 'Correcta' ? '✓' : '✗'}
+                                        </span>
+                                        ${d.estado}
+                                    </td>
+                                    <td>${d.pista}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                selectors.resultsTable.innerHTML = tableHTML;
+                renderHistory();
+            };
+
+            const renderHistory = () => {
+                selectors.historyList.innerHTML = state.quizHistory.map(attempt => `
+                    <li class="history-item">
+                        <strong>Intento:</strong> ${attempt.timestamp}
+                        <br>
+                        <strong>Resultados:</strong> ${attempt.correctas}/${attempt.total} (${attempt.porcentaje}%)
+                        <br>
+                        <strong>Duración:</strong> ${formatDuration(attempt.duration_sec)}
+                    </li>
+                `).join('');
+            };
+
+            const showTab = (tabId) => {
+                selectors.panels.forEach(p => p.classList.remove('active'));
+                selectors.tabs.forEach(b => b.classList.remove('active'));
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+                document.querySelector(`.tab-button[onclick="app.showTab('${tabId}')"]`).classList.add('active');
+                state.activeTab = tabId;
+            };
+
+            const startQuiz = () => {
+                state.studentName = selectors.studentNameInput.value.trim();
+                state.startTime = Date.now();
+                generateQuiz();
+                showTab('quiz');
+            };
+
+            const exportCSV = () => {
+                const latestAttempt = state.quizHistory[0];
+                if (!latestAttempt) return;
+                
+                const header = `timestamp,intento,total,correctas,incorrectas,porcentaje,duracion_seg,detalle_por_pregunta`;
+                const details = latestAttempt.detalle.map(d => `${d.categoria}: ${d.estado}`).join(' | ');
+                const row = `"${latestAttempt.timestamp}",1,${latestAttempt.total},${latestAttempt.correctas},${latestAttempt.incorrectas},${latestAttempt.porcentaje},${latestAttempt.duration_sec},"${details}"`;
+                const csvContent = `data:text/csv;charset=utf-8,${encodeURIComponent(header + '\n' + row)}`;
+                
+                const link = document.createElement('a');
+                link.setAttribute('href', csvContent);
+                link.setAttribute('download', `examen-triangulos-${Date.now()}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const exportJSON = () => {
+                const latestAttempt = state.quizHistory[0];
+                if (!latestAttempt) return;
+                
+                const jsonContent = `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(latestAttempt, null, 2))}`;
+                const link = document.createElement('a');
+                link.setAttribute('href', jsonContent);
+                link.setAttribute('download', `examen-triangulos-${Date.now()}.json`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            const exportPDF = () => {
+                const printView = document.getElementById('print-view');
+                const latestAttempt = state.quizHistory[0];
+                if (!latestAttempt) return;
+                
+                printView.innerHTML = `
+                    <div style="font-family: sans-serif;">
+                        <h2>Examen de Resolución de Triángulos</h2>
+                        <p><strong>Estudiante:</strong> ${latestAttempt.studentName || 'Anónimo'}</p>
+                        <p><strong>Fecha:</strong> ${latestAttempt.timestamp}</p>
+                        <hr>
+                        <h3>Resumen</h3>
+                        <p><strong>Resultados:</strong> ${latestAttempt.correctas}/${latestAttempt.total} (${latestAttempt.porcentaje}%)</p>
+                        <p><strong>Duración:</strong> ${formatDuration(latestAttempt.duration_sec)}</p>
+                        <hr>
+                        <h3>Detalle por Pregunta</h3>
+                        ${state.quiz.map((q, i) => `
+                            <div class="question-card">
+                                <div class="question-header">
+                                    <h4>Pregunta ${i + 1}</h4>
+                                    <small>${q.category}</small>
+                                </div>
+                                <p>${q.enunciadoTeX}</p>
+                                <div class="svg-container">${q.svg}</div>
+                                <div class="question-feedback ${q.isCorrect ? 'correct' : 'incorrect'}">
+                                    <strong>Estado:</strong> ${q.isCorrect ? 'Correcta ✓' : 'Incorrecta ✗'}
+                                    <br>
+                                    <strong>Pista:</strong> ${q.pista}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                window.print();
+            };
+            
+            const copySummary = () => {
+                const latestAttempt = state.quizHistory[0];
+                if (!latestAttempt) return;
+                
+                const summaryText = `Resumen del Examen de Triángulos:\nNombre: ${latestAttempt.studentName || 'Anónimo'}\nFecha: ${latestAttempt.timestamp}\nResultados: ${latestAttempt.correctas}/${latestAttempt.total} (${latestAttempt.porcentaje}%)\nDuración: ${formatDuration(latestAttempt.duration_sec)}`;
+                
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(summaryText)
+                        .then(() => alert('Resumen copiado al portapapeles.'))
+                        .catch(err => console.error('Failed to copy text: ', err));
+                } else {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = summaryText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        alert('Resumen copiado al portapapeles.');
+                    } catch (err) {
+                        console.error('Fallback: Oops, unable to copy', err);
+                        alert('No se pudo copiar. Por favor, selecciona manualmente el texto.');
+                    }
+                    document.body.removeChild(textArea);
+                }
+            };
+
+            const init = () => {
+                const storedHistory = localStorage.getItem('examen_triangulos_historial');
+                if (storedHistory) {
+                    try {
+                        state.quizHistory = JSON.parse(storedHistory);
+                    } catch (e) {
+                        console.error('Error parsing stored history:', e);
+                        state.quizHistory = [];
+                    }
+                }
+                renderHistory();
+                
+                selectors.studentNameInput.addEventListener('input', (e) => {
+                    state.studentName = e.target.value.trim();
+                });
+            };
+
+            return { 
+                showTab, 
+                startQuiz, 
+                evaluateQuiz, 
+                exportCSV, 
+                exportJSON, 
+                exportPDF, 
+                copySummary, 
+                init 
+            };
+
+        })();
+
+        // Initialize app when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', app.init);
+        } else {
+            app.init();
+        }
     </script>
 </body>
 </html>
