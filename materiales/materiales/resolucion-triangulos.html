@@ -6,21 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         :root {
-            --color-bg: #1a1a2e;
-            --color-grid: #2c365a;
-            --color-cyan: #00f0ff;
-            --color-lima: #c8ff00;
-            --color-coral: #ff6b6b;
-            --color-text: #f0f0f0;
-            --color-panel: #2a2a4a;
-            --color-border: #3b3b5b;
-            --color-drawing-bg: #4b4b6b;
-            --shadow-subtle: 0 4px 10px rgba(0, 0, 0, 0.4);
+            --color-bg: #121212;
+            --color-panel: #1f1f1f;
+            --color-text: #e0e0e0;
+            --color-accent-cyan: #64ffda;
+            --color-accent-green: #ccff90;
+            --color-accent-red: #ff8a80;
+            --color-border: #333333;
+            --color-drawing-bg: #f5f5f5;
+            --color-drawing-lines: #212121;
+            --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.4);
             --radius: 0.75rem;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: var(--color-bg);
             color: var(--color-text);
             margin: 0;
@@ -29,11 +29,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-image:
-                linear-gradient(to right, var(--color-grid) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--color-grid) 1px, transparent 1px);
-            background-size: 2.5rem 2.5rem;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .container {
@@ -58,7 +53,7 @@
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1.5rem;
-            background-color: var(--color-bg);
+            background-color: var(--color-panel);
             padding: 0.5rem;
             border-radius: var(--radius);
         }
@@ -80,15 +75,15 @@
         }
 
         .tab-button.active {
-            background-color: var(--color-cyan);
-            color: var(--color-bg);
+            background-color: var(--color-accent-cyan);
+            color: var(--color-panel);
             font-weight: bold;
-            box-shadow: 0 0 15px var(--color-cyan);
+            box-shadow: 0 0 15px var(--color-accent-cyan);
         }
 
         h1, h2 {
             text-align: center;
-            color: var(--color-cyan);
+            color: var(--color-accent-cyan);
             font-weight: 300;
         }
         
@@ -112,8 +107,8 @@
         
         input:focus, select:focus, button:focus, .unit-toggle-group:focus-within {
             outline: none;
-            border-color: var(--color-cyan);
-            box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.5);
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.5);
         }
         
         .question-card {
@@ -134,7 +129,7 @@
 
         .question-header h3 {
             margin: 0;
-            color: var(--color-lima);
+            color: var(--color-accent-green);
         }
 
         .question-feedback {
@@ -146,14 +141,14 @@
         }
 
         .question-feedback.correct {
-            background-color: rgba(200, 255, 0, 0.1);
-            border-color: var(--color-lima);
-            color: var(--color-lima);
+            background-color: rgba(204, 255, 144, 0.1);
+            border-color: var(--color-accent-green);
+            color: var(--color-accent-green);
         }
         .question-feedback.incorrect {
-            background-color: rgba(255, 107, 107, 0.1);
-            border-color: var(--color-coral);
-            color: var(--color-coral);
+            background-color: rgba(255, 138, 128, 0.1);
+            border-color: var(--color-accent-red);
+            color: var(--color-accent-red);
         }
 
         .quiz-controls {
@@ -175,30 +170,30 @@
         }
 
         .button-primary {
-            background-color: var(--color-cyan);
-            color: var(--color-bg);
+            background-color: var(--color-accent-cyan);
+            color: var(--color-panel);
         }
 
         .button-primary:hover {
-            background-color: #00c0ff;
+            background-color: #40c0b8;
         }
 
         .button-secondary {
-            background-color: var(--color-lima);
-            color: var(--color-bg);
+            background-color: var(--color-accent-green);
+            color: var(--color-panel);
         }
         
         .button-secondary:hover {
-            background-color: #adcf00;
+            background-color: #a5d378;
         }
         
         .button-coral {
-            background-color: var(--color-coral);
-            color: var(--color-bg);
+            background-color: var(--color-accent-red);
+            color: var(--color-panel);
         }
 
         .button-coral:hover {
-            background-color: #d15c5c;
+            background-color: #d1756d;
         }
         
         .results-section {
@@ -208,7 +203,7 @@
         }
 
         .results-summary {
-            background-color: var(--color-bg);
+            background-color: var(--color-panel);
             border: 1px solid var(--color-border);
             padding: 1rem;
             border-radius: var(--radius);
@@ -240,17 +235,25 @@
         
         .svg-container {
             width: 100%;
-            max-width: 600px;
-            margin: 1rem auto;
+            max-width: 500px;
+            height: 350px;
+            margin: 1.5rem auto;
             border: 1px solid var(--color-border);
             border-radius: var(--radius);
             background-color: var(--color-drawing-bg);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-            position: relative;
-            min-height: 200px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .svg-container svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
         }
 
         .input-group {
@@ -293,18 +296,18 @@
         }
         
         .unit-toggle-group input[type="radio"]:checked + label {
-            background-color: var(--color-cyan);
-            color: var(--color-bg);
+            background-color: var(--color-accent-cyan);
+            color: var(--color-panel);
         }
 
         .question-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 1.5rem;
         }
 
-        .correct-icon { color: var(--color-lima); }
-        .incorrect-icon { color: var(--color-coral); }
+        .correct-icon { color: var(--color-accent-green); }
+        .incorrect-icon { color: var(--color-accent-red); }
 
         table {
             width: 100%;
@@ -312,26 +315,23 @@
             margin: 1rem 0;
         }
 
-        th, td {
-            border: 1px solid var(--color-border);
+        table th, table td {
             padding: 0.75rem;
             text-align: left;
+            border-bottom: 1px solid var(--color-border);
         }
 
-        th {
+        table th {
             background-color: var(--color-bg);
-            color: var(--color-cyan);
             font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: rgba(0, 0, 0, 0.1);
+            color: var(--color-accent-cyan);
         }
 
         @media screen and (max-width: 600px) {
             body { padding: 1rem; }
             .tab-buttons, .quiz-controls, .results-controls { flex-direction: column; }
             .question-grid { grid-template-columns: 1fr; }
+            .svg-container { height: 300px; }
         }
 
         @media print {
@@ -384,16 +384,20 @@
                 inlineMath: [['\\(', '\\)']],
                 displayMath: [['\\[', '\\]']]
             },
-            svg: { fontCache: 'global' },
+            svg: { 
+                fontCache: 'global',
+                scale: 1.2
+            },
             startup: {
                 ready: () => {
                     MathJax.startup.defaultReady();
+                    console.log('MathJax ready');
                     window.dispatchEvent(new CustomEvent('mathjax-ready'));
                 }
             }
         };
     </script>
-    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 <body>
     <div class="container" id="main-app">
@@ -482,6 +486,7 @@
 
             const DEG_TO_RAD = Math.PI / 180;
             const RAD_TO_DEG = 180 / Math.PI;
+            const clamp = (val, min, max) => Math.max(min, Math.min(val, max));
 
             // Utility functions
             const deg2rad = (deg) => deg * DEG_TO_RAD;
@@ -556,7 +561,7 @@
                 return userVal === correctVal;
             };
             
-            // SVG Generators - CORREGIDOS para mostrar SOLO datos conocidos
+            // SVG Generators - Fixed for proper centering
             const drawBlueprintGrid = (width, height) => {
                 let gridSvg = '';
                 const gridColor = '#6a6a8a';
@@ -571,211 +576,228 @@
                 return gridSvg;
             };
             
-            // TRIÁNGULO RECTÁNGULO - Solo muestra valores DADOS
-            const svgRightTriangle = (data) => {
+            const svgRightTriangle = ({ a, b, c, A, B, C }) => {
                 const width = 400;
                 const height = 300;
-                const margin = 40;
+                const margin = 60;
                 
-                // Usar valores dados, no todos los calculados
-                const { givenA, givenB, givenC, givenAngleA, givenAngleB } = data;
-                
-                // Calcular dimensiones para el diagrama (usar valores aproximados si no se dan todos)
-                const displayA = givenA || 30;
-                const displayB = givenB || 40;
-                
-                const maxSide = Math.max(displayA, displayB);
+                // Scale factor to fit triangle in viewport
+                const maxSide = Math.max(a, b);
                 const scale = Math.min((width - 2*margin) / maxSide, (height - 2*margin) / maxSide);
                 
-                const scaledA = displayA * scale;
-                const scaledB = displayB * scale;
+                // Position vertices
+                const scaledA = a * scale;
+                const scaledB = b * scale;
                 
                 const p1 = { x: margin, y: height - margin }; // Bottom-left (C)
                 const p2 = { x: margin + scaledB, y: height - margin }; // Bottom-right (B)
                 const p3 = { x: margin, y: height - margin - scaledA }; // Top-left (A)
                 
-                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0" y="0" width="${width}" height="${height}" fill="#3a3a5a"/>
-                    ${drawBlueprintGrid(width, height)}
+                return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${height}" fill="var(--color-drawing-bg)"/>
                     <polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}" 
-                             fill="rgba(200, 255, 0, 0.2)" stroke="#c8ff00" stroke-width="2"/>
+                             fill="#b3e5fc" stroke="var(--color-drawing-lines)" stroke-width="2"/>
                     
                     <!-- Right angle indicator -->
-                    <path d="M${p1.x + 10},${p1.y} L${p1.x + 10},${p1.y - 10} L${p1.x},${p1.y - 10}" 
-                          fill="none" stroke="#ff6b6b" stroke-width="2"/>
+                    <path d="M${p1.x + 15},${p1.y} L${p1.x + 15},${p1.y - 15} L${p1.x},${p1.y - 15}" 
+                          fill="none" stroke="#f44336" stroke-width="2"/>
                     
                     <!-- Vertex labels -->
-                    <text x="${p1.x - 10}" y="${p1.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">C</text>
-                    <text x="${p2.x + 5}" y="${p2.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">B</text>
-                    <text x="${p3.x - 10}" y="${p3.y - 5}" font-size="14" fill="#f0f0f0" font-weight="bold">A</text>
+                    <text x="${p1.x - 15}" y="${p1.y + 20}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold">C</text>
+                    <text x="${p2.x + 10}" y="${p2.y + 20}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold">B</text>
+                    <text x="${p3.x - 15}" y="${p3.y - 5}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold">A</text>
                     
-                    <!-- Side labels - Solo valores CONOCIDOS -->
-                    ${givenA !== undefined ? `<text x="${p1.x - 25}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">a = ${givenA}</text>` : 
-                      `<text x="${p1.x - 25}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">a = ?</text>`}
-                    ${givenB !== undefined ? `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">b = ${givenB}</text>` : 
-                      `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">b = ?</text>`}
-                    ${givenC !== undefined ? `<text x="${(p2.x + p3.x) / 2 + 15}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">c = ${givenC}</text>` : 
-                      `<text x="${(p2.x + p3.x) / 2 + 15}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">c = ?</text>`}
-                    
-                    <!-- Angle labels - Solo ángulos CONOCIDOS -->
-                    ${givenAngleA !== undefined ? `<text x="${p3.x + 15}" y="${p3.y + 5}" font-size="11" fill="#c8ff00" font-weight="bold">A = ${givenAngleA}°</text>` : ''}
-                    ${givenAngleB !== undefined ? `<text x="${p2.x - 25}" y="${p2.y - 5}" font-size="11" fill="#c8ff00" font-weight="bold">B = ${givenAngleB}°</text>` : ''}
-                    <text x="${p1.x + 15}" y="${p1.y - 5}" font-size="11" fill="#c8ff00" font-weight="bold">C = 90°</text>
+                    <!-- Side labels -->
+                    <text x="${(p1.x + p2.x) / 2}" y="${p1.y + 25}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">b</text>
+                    <text x="${p1.x - 30}" y="${(p1.y + p3.y) / 2}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">a</text>
+                    <text x="${(p2.x + p3.x) / 2 + 20}" y="${(p2.y + p3.y) / 2}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">c</text>
                 </svg>`;
             };
 
-            // TRIÁNGULO OBLICUO - Solo muestra valores DADOS
-            const svgObliqueTriangle = (data) => {
+            const svgObliqueTriangle = ({ a, b, c, A, B, C, highlightA, highlightB, highlightC, highlightArcA, highlightArcB, highlightArcC }) => {
                 const width = 400;
                 const height = 300;
-                const margin = 40;
+                const margin = 60;
                 
-                const { givenA, givenB, givenC, givenAngleA, givenAngleB, givenAngleC } = data;
-                
-                // Usar valores aproximados para dibujar si no todos son conocidos
-                const displayA = givenA || 25;
-                const displayB = givenB || 30;
-                const displayC = givenC || 35;
-                const displayAngleA = givenAngleA || 45;
-                
-                const scale = Math.min((width - 2*margin) / Math.max(displayA, displayB, displayC), (height - 2*margin) / Math.max(displayA, displayB, displayC)) * 0.8;
+                // Calculate proper triangle placement
+                const scale = Math.min((width - 2*margin) / Math.max(a, b, c), (height - 2*margin) / Math.max(a, b, c)) * 0.8;
                 
                 const p1 = { x: margin, y: height - margin }; // C
-                const p2 = { x: margin + displayB * scale, y: height - margin }; // B
+                const p2 = { x: margin + b * scale, y: height - margin }; // B
                 const p3 = { 
-                    x: margin + displayC * scale * Math.cos(deg2rad(displayAngleA)), 
-                    y: height - margin - displayC * scale * Math.sin(deg2rad(displayAngleA))
+                    x: margin + c * scale * Math.cos(deg2rad(A)), 
+                    y: height - margin - c * scale * Math.sin(deg2rad(A))
                 }; // A
                 
-                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0" y="0" width="${width}" height="${height}" fill="#3a3a5a"/>
-                    ${drawBlueprintGrid(width, height)}
+                return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${height}" fill="var(--color-drawing-bg)"/>
                     <polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}" 
-                             fill="rgba(200, 255, 0, 0.2)" stroke="#c8ff00" stroke-width="2"/>
+                             fill="#b3e5fc" stroke="var(--color-drawing-lines)" stroke-width="2"/>
                     
                     <!-- Vertex labels -->
-                    <text x="${p1.x - 10}" y="${p1.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">C</text>
-                    <text x="${p2.x + 5}" y="${p2.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">B</text>
-                    <text x="${p3.x}" y="${p3.y - 10}" font-size="14" fill="#f0f0f0" font-weight="bold" text-anchor="middle">A</text>
+                    <text x="${p1.x - 15}" y="${p1.y + 20}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold">C</text>
+                    <text x="${p2.x + 10}" y="${p2.y + 20}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold">B</text>
+                    <text x="${p3.x}" y="${p3.y - 10}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold" text-anchor="middle">A</text>
                     
-                    <!-- Side labels - Solo valores CONOCIDOS -->
-                    ${givenA !== undefined ? `<text x="${(p2.x + p3.x) / 2 + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">a = ${givenA}</text>` : 
-                      `<text x="${(p2.x + p3.x) / 2 + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">a = ?</text>`}
-                    ${givenB !== undefined ? `<text x="${(p1.x + p3.x) / 2 - 10}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">b = ${givenB}</text>` : 
-                      `<text x="${(p1.x + p3.x) / 2 - 10}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">b = ?</text>`}
-                    ${givenC !== undefined ? `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">c = ${givenC}</text>` : 
-                      `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">c = ?</text>`}
+                    <!-- Side labels -->
+                    <text x="${(p1.x + p2.x) / 2}" y="${p1.y + 25}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">c</text>
+                    <text x="${(p2.x + p3.x) / 2 + 15}" y="${(p2.y + p3.y) / 2}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">a</text>
+                    <text x="${(p1.x + p3.x) / 2 - 15}" y="${(p1.y + p3.y) / 2}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">b</text>
                     
-                    <!-- Angle arcs y labels - Solo ángulos CONOCIDOS -->
-                    ${givenAngleA !== undefined ? `
-                        <path d="M${p3.x + 20},${p3.y} A20,20 0 0,0 ${p3.x - 15},${p3.y + 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
-                        <text x="${p3.x + 25}" y="${p3.y + 5}" font-size="11" fill="#c8ff00" font-weight="bold">A = ${givenAngleA}°</text>
-                    ` : ''}
-                    ${givenAngleB !== undefined ? `
-                        <path d="M${p2.x - 20},${p2.y} A20,20 0 0,1 ${p2.x - 15},${p2.y - 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
-                        <text x="${p2.x - 35}" y="${p2.y - 10}" font-size="11" fill="#c8ff00" font-weight="bold">B = ${givenAngleB}°</text>
-                    ` : ''}
-                    ${givenAngleC !== undefined ? `
-                        <path d="M${p1.x + 20},${p1.y} A20,20 0 0,0 ${p1.x + 15},${p1.y - 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
-                        <text x="${p1.x + 25}" y="${p1.y - 10}" font-size="11" fill="#c8ff00" font-weight="bold">C = ${givenAngleC}°</text>
-                    ` : ''}
+                    <!-- Angle arcs -->
+                    ${highlightArcA ? `<path d="M${p3.x+25},${p3.y} A25,25 0 0,0 ${p3.x - 18},${p3.y + 18}" fill="none" stroke="#f44336" stroke-width="2"/>` : ''}
+                    ${highlightArcB ? `<path d="M${p2.x-25},${p2.y} A25,25 0 0,1 ${p2.x - 18},${p2.y - 18}" fill="none" stroke="#f44336" stroke-width="2"/>` : ''}
+                    ${highlightArcC ? `<path d="M${p1.x+25},${p1.y} A25,25 0 0,0 ${p1.x + 18},${p1.y - 18}" fill="none" stroke="#f44336" stroke-width="2"/>` : ''}
                 </svg>`;
             };
 
-            // CASO AMBIGUO SSA - Muestra datos dados y altura calculada
-            const svgSSAHeight = (data) => {
-                const width = 400;
-                const height = 300;
-                const margin = 40;
-                
-                const { givenA, givenB, givenAngleA, calculatedH } = data;
-                
-                const scale = Math.min((width - 2*margin) / Math.max(givenA, givenB), (height - 2*margin) / Math.max(givenA, givenB)) * 0.8;
-                
-                const p1 = { x: margin, y: height - margin }; // Base of triangle
-                const p2 = { x: margin + givenB * scale, y: height - margin }; // End of base
-                const p3 = { 
-                    x: margin + givenB * scale * Math.cos(deg2rad(givenAngleA)), 
-                    y: height - margin - givenB * scale * Math.sin(deg2rad(givenAngleA))
-                }; // Top vertex
-                const p4 = { x: p3.x, y: height - margin }; // Height drop point
-                
-                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0" y="0" width="${width}" height="${height}" fill="#3a3a5a"/>
-                    ${drawBlueprintGrid(width, height)}
-                    
-                    <!-- Base line -->
-                    <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#c8ff00" stroke-width="2"/>
-                    <!-- Given side -->
-                    <line x1="${p1.x}" y1="${p1.y}" x2="${p3.x}" y2="${p3.y}" stroke="#c8ff00" stroke-width="2"/>
-                    <!-- Height line -->
-                    <line x1="${p3.x}" y1="${p3.y}" x2="${p4.x}" y2="${p4.y}" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="3,3"/>
-                    <!-- Arc showing possible triangle -->
-                    <circle cx="${p1.x}" cy="${p1.y}" r="${givenA * scale}" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="5,5" opacity="0.7"/>
-                    
-                    <!-- Labels -->
-                    <text x="${p1.x - 10}" y="${p1.y + 15}" font-size="14" fill="#f0f0f0" font-weight="bold">C</text>
-                    <text x="${p3.x}" y="${p3.y - 10}" font-size="14" fill="#f0f0f0" font-weight="bold" text-anchor="middle">A</text>
-                    
-                    <!-- Measurements - Solo valores DADOS -->
-                    <text x="${(p1.x + p3.x) / 2 - 10}" y="${(p1.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold">b = ${givenB}</text>
-                    <text x="${p4.x + 5}" y="${(p3.y + p4.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold">h = ${toFixedTrim(calculatedH)}</text>
-                    <text x="${p1.x + givenA * scale / 2}" y="${p1.y - 10}" font-size="12" fill="#00f0ff" font-weight="bold">a = ${givenA}</text>
-                    <text x="${p3.x + 15}" y="${p3.y + 5}" font-size="11" fill="#c8ff00" font-weight="bold">A = ${givenAngleA}°</text>
-                </svg>`;
-            };
-
-            // PROBLEMAS APLICADOS - Contexto visual específico
-            const svgElevation = (data) => {
+            const svgSSAHeight = ({ a, b, A, h }) => {
                 const width = 400;
                 const heightSvg = 300;
-                const margin = 40;
+                const margin = 60;
                 
-                const { givenAngle, givenDistance, givenHeight, askingFor } = data;
+                const scale = Math.min((width - 2*margin) / Math.max(b, h), (heightSvg - 2*margin) / Math.max(b, h)) * 0.7;
                 
-                // Usar valores dados o aproximados para visualización
-                const displayAngle = givenAngle || 30;
-                const displayDistance = givenDistance || 50;
-                const displayHeight = givenHeight || displayDistance * Math.tan(deg2rad(displayAngle));
+                const p1 = { x: margin, y: heightSvg - margin }; // Vertex C
+                const p2 = { x: p1.x + b * scale, y: p1.y }; // Vertex B (on line)
+                const p3 = { 
+                    x: p1.x + b * scale * Math.cos(deg2rad(A)), 
+                    y: p1.y - b * scale * Math.sin(deg2rad(A))
+                }; // Vertex A
+                const p4 = { x: p3.x, y: p1.y }; // Base of height
                 
-                const scale = Math.min((width - 2*margin) / displayDistance, (heightSvg - 2*margin) / displayHeight) * 0.8;
-                
-                const p1 = { x: margin, y: heightSvg - margin }; // Observer
-                const p2 = { x: margin + displayDistance * scale, y: heightSvg - margin }; // Base of object
-                const p3 = { x: margin + displayDistance * scale, y: heightSvg - margin - displayHeight * scale }; // Top of object
-                
-                return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${heightSvg}" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0" y="0" width="${width}" height="${heightSvg}" fill="#3a3a5a"/>
-                    ${drawBlueprintGrid(width, heightSvg)}
+                return `<svg width="${width}" height="${heightSvg}" viewBox="0 0 ${width} ${heightSvg}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${heightSvg}" fill="var(--color-drawing-bg)"/>
                     
-                    <!-- Ground line extended -->
-                    <line x1="0" y1="${p1.y}" x2="${width}" y2="${p1.y}" stroke="#6a6a8a" stroke-width="1"/>
-                    <!-- Building/object -->
-                    <line x1="${p2.x}" y1="${p2.y}" x2="${p3.x}" y2="${p3.y}" stroke="#c8ff00" stroke-width="3"/>
-                    <!-- Distance line -->
-                    <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#c8ff00" stroke-width="2"/>
-                    <!-- Line of sight -->
-                    <line x1="${p1.x}" y1="${p1.y}" x2="${p3.x}" y2="${p3.y}" stroke="#00f0ff" stroke-width="2" stroke-dasharray="3,3"/>
+                    <!-- Base line extended -->
+                    <line x1="${margin - 20}" y1="${p1.y}" x2="${width - margin + 20}" y2="${p1.y}" stroke="#4caf50" stroke-width="2"/>
                     
-                    <!-- Angle arc -->
-                    <path d="M${p1.x + 30},${p1.y} A30,30 0 0,0 ${p1.x + 25},${p1.y - 15}" fill="none" stroke="#ff6b6b" stroke-width="2"/>
+                    <!-- Known sides -->
+                    <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="var(--color-drawing-lines)" stroke-width="2"/>
+                    <line x1="${p1.x}" y1="${p1.y}" x2="${p3.x}" y2="${p3.y}" stroke="#2196f3" stroke-width="3"/>
                     
-                    <!-- Observer icon -->
-                    <circle cx="${p1.x}" cy="${p1.y - 5}" r="3" fill="#f0f0f0"/>
+                    <!-- Height line -->
+                    <line x1="${p3.x}" y1="${p3.y}" x2="${p4.x}" y2="${p4.y}" stroke="#f44336" stroke-width="2" stroke-dasharray="3,3"/>
+                    
+                    <!-- Arc showing possible triangle positions -->
+                    <circle cx="${p1.x}" cy="${p1.y}" r="${a * scale}" fill="none" stroke="#ff9800" stroke-width="2" stroke-dasharray="5,5" opacity="0.8"/>
+                    
+                    <!-- Angle arc at C -->
+                    <path d="M${p1.x + 20},${p1.y} A20,20 0 0,0 ${p1.x + 14},${p1.y - 14}" fill="none" stroke="#2196f3" stroke-width="2"/>
+                    
+                    <!-- Right angle indicator for height -->
+                    <path d="M${p4.x - 10},${p4.y} L${p4.x - 10},${p4.y - 10} L${p4.x},${p4.y - 10}" fill="none" stroke="#f44336" stroke-width="2"/>
                     
                     <!-- Labels -->
-                    <text x="${p1.x}" y="${p1.y + 20}" font-size="12" fill="#f0f0f0" font-weight="bold" text-anchor="middle">Observador</text>
-                    <text x="${p3.x}" y="${p3.y - 10}" font-size="12" fill="#f0f0f0" font-weight="bold" text-anchor="middle">Objeto</text>
+                    <text x="${p1.x - 15}" y="${p1.y + 20}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold">C</text>
+                    <text x="${p2.x + 10}" y="${p2.y + 20}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold">B</text>
+                    <text x="${p3.x}" y="${p3.y - 10}" font-size="16" fill="var(--color-drawing-lines)" font-weight="bold" text-anchor="middle">A</text>
                     
-                    <!-- Measurements - Solo valores DADOS -->
-                    ${givenDistance !== undefined ? `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#c8ff00" font-weight="bold" text-anchor="middle">Distancia = ${givenDistance}</text>` : 
-                      `<text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="12" fill="#ff6b6b" font-weight="bold" text-anchor="middle">Distancia = ?</text>`}
-                    ${givenHeight !== undefined ? `<text x="${p2.x + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#c8ff00" font-weight="bold">Altura = ${givenHeight}</text>` : 
-                      `<text x="${p2.x + 10}" y="${(p2.y + p3.y) / 2}" font-size="12" fill="#ff6b6b" font-weight="bold">Altura = ?</text>`}
-                    ${givenAngle !== undefined ? `<text x="${p1.x + 35}" y="${p1.y - 20}" font-size="12" fill="#c8ff00" font-weight="bold">θ = ${givenAngle}°</text>` : 
-                      `<text x="${p1.x + 35}" y="${p1.y - 20}" font-size="12" fill="#ff6b6b" font-weight="bold">θ = ?</text>`}
+                    <!-- Measurements -->
+                    <text x="${(p1.x + p3.x) / 2 - 15}" y="${(p1.y + p3.y) / 2}" font-size="14" fill="#2196f3" font-weight="bold">b = ${b}</text>
+                    <text x="${p4.x + 10}" y="${(p3.y + p4.y) / 2}" font-size="14" fill="#f44336" font-weight="bold">h = ${h}</text>
+                    
+                    <!-- Arc label -->
+                    <text x="${p1.x + a * scale * 0.7}" y="${p1.y - 15}" font-size="14" fill="#ff9800" font-weight="bold">a = ${a}</text>
+                    
+                    <!-- Angle label -->
+                    <text x="${p1.x + 25}" y="${p1.y - 5}" font-size="14" fill="#2196f3" font-weight="bold">A = ${A}°</text>
+                    
+                    <!-- Instruction text -->
+                    <text x="${width/2}" y="${margin/2}" font-size="12" fill="#666" text-anchor="middle" font-style="italic">
+                        Comparar: a vs h determina el número de soluciones
+                    </text>
                 </svg>`;
             };
+
+            const svgElevation = ({ a, b, A, problemType = 'depression' }) => {
+                const width = 400;
+                const heightSvg = 300;
+                const margin = 60;
+                
+                // Scale factor to fit the drawing
+                const maxDim = Math.max(a || b, b);
+                const scale = Math.min((width - 2*margin) / maxDim, (heightSvg - 2*margin) / maxDim) * 0.7;
+                
+                let p1, p2, p3, angleDirection;
+                
+                if (problemType === 'ladder') {
+                    // Ladder against wall problem
+                    p1 = { x: margin, y: heightSvg - margin }; // Base of ladder
+                    p2 = { x: margin + b * scale, y: heightSvg - margin }; // Base of wall
+                    p3 = { x: margin + b * scale, y: heightSvg - margin - a * scale }; // Top of ladder against wall
+                    angleDirection = 1; // elevation
+                } else {
+                    // Airplane depression problem
+                    p1 = { x: margin, y: heightSvg - margin - a * scale }; // Airplane
+                    p2 = { x: margin, y: heightSvg - margin }; // Ground point below airplane
+                    p3 = { x: margin + b * scale, y: heightSvg - margin }; // Airport
+                    angleDirection = -1; // depression
+                }
+                
+                return `<svg width="${width}" height="${heightSvg}" viewBox="0 0 ${width} ${heightSvg}" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="${width}" height="${heightSvg}" fill="var(--color-drawing-bg)"/>
+                    
+                    ${problemType === 'ladder' ? `
+                        <!-- Wall -->
+                        <rect x="${p2.x}" y="${margin}" width="8" height="${heightSvg - 2*margin}" fill="#8d6e63" stroke="var(--color-drawing-lines)" stroke-width="1"/>
+                        
+                        <!-- Ladder -->
+                        <line x1="${p1.x}" y1="${p1.y}" x2="${p3.x}" y2="${p3.y}" stroke="#ff9800" stroke-width="4"/>
+                        
+                        <!-- Ground -->
+                        <line x1="${margin - 20}" y1="${p1.y}" x2="${p2.x + 20}" y2="${p1.y}" stroke="var(--color-drawing-lines)" stroke-width="2"/>
+                        
+                        <!-- Right angle at wall base -->
+                        <path d="M${p2.x - 15},${p2.y} L${p2.x - 15},${p2.y - 15} L${p2.x},${p2.y - 15}" fill="none" stroke="#f44336" stroke-width="2"/>
+                        
+                        <!-- Angle at ladder base -->
+                        <path d="M${p1.x + 25},${p1.y} A25,25 0 0,0 ${p1.x + 18},${p1.y - 18}" fill="none" stroke="#f44336" stroke-width="2"/>
+                        
+                        <!-- Labels -->
+                        <text x="${(p1.x + p3.x) / 2 - 15}" y="${(p1.y + p3.y) / 2 - 5}" font-size="14" fill="#ff9800" font-weight="bold" transform="rotate(${-Math.atan2(a * scale, b * scale) * 180 / Math.PI} ${(p1.x + p3.x) / 2} ${(p1.y + p3.y) / 2})">escalera</text>
+                        <text x="${(p1.x + p2.x) / 2}" y="${p1.y + 20}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">${toFixedTrim(b)}m</text>
+                        <text x="${p2.x + 15}" y="${(p2.y + p3.y) / 2}" font-size="14" fill="#2e7d32" font-weight="bold">altura</text>
+                        <text x="${p1.x + 30}" y="${p1.y - 10}" font-size="14" fill="#f44336" font-weight="bold">θ</text>
+                    ` : `
+                        <!-- Ground line -->
+                        <line x1="${margin - 20}" y1="${p2.y}" x2="${width - margin + 20}" y2="${p2.y}" stroke="#4caf50" stroke-width="3"/>
+                        
+                        <!-- Airplane -->
+                        <polygon points="${p1.x-8},${p1.y-3} ${p1.x+8},${p1.y-3} ${p1.x+5},${p1.y+3} ${p1.x-5},${p1.y+3}" fill="#2196f3" stroke="var(--color-drawing-lines)" stroke-width="1"/>
+                        
+                        <!-- Airport (tower) -->
+                        <rect x="${p3.x-5}" y="${p3.y-20}" width="10" height="20" fill="#ff5722" stroke="var(--color-drawing-lines)" stroke-width="1"/>
+                        
+                        <!-- Vertical altitude line -->
+                        <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="#9c27b0" stroke-width="2" stroke-dasharray="3,3"/>
+                        
+                        <!-- Horizontal distance line -->
+                        <line x1="${p2.x}" y1="${p2.y}" x2="${p3.x}" y2="${p3.y}" stroke="#2e7d32" stroke-width="2"/>
+                        
+                        <!-- Line of sight -->
+                        <line x1="${p1.x}" y1="${p1.y}" x2="${p3.x}" y2="${p3.y}" stroke="#f44336" stroke-width="2" stroke-dasharray="5,5"/>
+                        
+                        <!-- Horizontal reference line for angle -->
+                        <line x1="${p1.x}" y1="${p1.y}" x2="${p1.x + 40}" y2="${p1.y}" stroke="var(--color-drawing-lines)" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Angle arc for depression -->
+                        <path d="M${p1.x + 25},${p1.y} A25,25 0 0,1 ${p1.x + 18},${p1.y + 18}" fill="none" stroke="#f44336" stroke-width="2"/>
+                        
+                        <!-- Right angle indicators -->
+                        <path d="M${p2.x - 10},${p2.y} L${p2.x - 10},${p2.y - 10} L${p2.x},${p2.y - 10}" fill="none" stroke="#9c27b0" stroke-width="1"/>
+                        <path d="M${p3.x - 10},${p3.y} L${p3.x - 10},${p3.y - 10} L${p3.x},${p3.y - 10}" fill="none" stroke="#2e7d32" stroke-width="1"/>
+                        
+                        <!-- Labels -->
+                        <text x="${p1.x}" y="${p1.y - 15}" font-size="12" fill="#2196f3" font-weight="bold" text-anchor="middle">Avión</text>
+                        <text x="${p3.x}" y="${p3.y + 35}" font-size="12" fill="#ff5722" font-weight="bold" text-anchor="middle">Aeropuerto</text>
+                        <text x="${p2.x - 25}" y="${(p1.y + p2.y) / 2}" font-size="14" fill="#9c27b0" font-weight="bold">${toFixedTrim(a)}m</text>
+                        <text x="${(p2.x + p3.x) / 2}" y="${p2.y + 20}" font-size="14" fill="#2e7d32" font-weight="bold" text-anchor="middle">${toFixedTrim(b)}m</text>
+                        <text x="${p1.x + 30}" y="${p1.y + 15}" font-size="14" fill="#f44336" font-weight="bold">θ</text>
+                    `}
+                </svg>`;
+            };
+
 
             const angleInputHTML = (name) => `
                 <div class="input-group">
@@ -799,291 +821,202 @@
                 </div>
             `;
 
-            // Question Bank Generators - CORREGIDOS para coherencia total
+            // Question Bank Generators
             const questionGenerators = {
                 rightTriangle: () => {
-                    const a = toFixedTrim(Math.random() * 30 + 10);
-                    const b = toFixedTrim(Math.random() * 30 + 10);
-                    const c = toFixedTrim(Math.sqrt(a*a + b*b));
-                    const A = toFixedTrim(rad2deg(Math.atan(a/b)));
-                    const B = toFixedTrim(90 - A);
-                    
-                    // Soluciones reales (en radianes para ángulos)
-                    const solutions = { 
-                        a, b, c, 
-                        A: deg2rad(A), 
-                        B: deg2rad(B), 
-                        C: deg2rad(90) 
-                    };
+                    const a = toFixedTrim(Math.random() * 50 + 5);
+                    const b = toFixedTrim(Math.random() * 50 + 5);
+                    const A = rad2deg(Math.atan(a/b));
+                    const B = 90 - A;
+                    const c = Math.sqrt(a*a + b*b);
+                    const solutions = { a, b, c, A: deg2rad(A), B: deg2rad(B), C: deg2rad(90) };
                     
                     const types = [
-                        { 
-                            fields: ['c'], 
-                            givens: { a, B: toFixedTrim(B) }, 
-                            text: `Dado a = ${a} y B = ${toFixedTrim(B)}°, halla el lado c.`,
-                            svgData: { givenA: a, givenAngleB: toFixedTrim(B) }
-                        },
-                        { 
-                            fields: ['A'], 
-                            givens: { b, c }, 
-                            text: `Dado b = ${b} y c = ${toFixedTrim(c)}, halla el ángulo A.`,
-                            svgData: { givenB: b, givenC: toFixedTrim(c) }
-                        },
-                        { 
-                            fields: ['a'], 
-                            givens: { c: toFixedTrim(c), A: toFixedTrim(A) }, 
-                            text: `Dado c = ${toFixedTrim(c)} y A = ${toFixedTrim(A)}°, halla el lado a.`,
-                            svgData: { givenC: toFixedTrim(c), givenAngleA: toFixedTrim(A) }
-                        },
+                        { fields: ['c'], given: { a, B }, text: `Dado \\(a=${a}\\) y \\(B=${toFixedTrim(B)}°\\), halla el lado \\(c\\).`},
+                        { fields: ['A'], given: { b, c }, text: `Dado \\(b=${b}\\) y \\(c=${toFixedTrim(c)}\\), halla el ángulo \\(A\\).`},
+                        { fields: ['a'], given: { c, A }, text: `Dado \\(c=${toFixedTrim(c)}\\) y \\(A=${toFixedTrim(A)}°\\), halla el lado \\(a\\).`},
                     ];
                     const type = types[Math.floor(Math.random() * types.length)];
 
                     return {
-                        id: generateUUID(), 
-                        category: 'Triángulos Rectángulos',
-                        enunciadoTeX: type.text, 
-                        tipo: 'normal',
+                        id: generateUUID(), category: 'Triángulos Rectángulos',
+                        enunciadoTeX: type.text, tipo: 'normal',
                         campos: type.fields.map(f => ({ clave: f, tipo: f.length === 1 ? 'angulo' : 'lado'})),
                         solucionCanonica: solutions,
-                        pista: 'Usa SOH-CAH-TOA (seno, coseno, tangente).',
-                        svg: svgRightTriangle(type.svgData)
+                        pista: 'Usa SOH-CAH-TOA.',
+                        svg: svgRightTriangle({ a: a, b: b, c: c, A: A, B: B, C: 90, ...type.given })
                     };
                 },
-                
                 lawOfSines: () => {
-                    const A = toFixedTrim(Math.random() * 40 + 30);
-                    const C = toFixedTrim(Math.random() * 40 + 30);
-                    const B = toFixedTrim(180 - A - C);
-                    const c = toFixedTrim(Math.random() * 30 + 10);
-                    const a = toFixedTrim(c * Math.sin(deg2rad(A)) / Math.sin(deg2rad(C)));
-                    const b = toFixedTrim(c * Math.sin(deg2rad(B)) / Math.sin(deg2rad(C)));
-                    
-                    const solutions = { 
-                        a, b, c, 
-                        A: deg2rad(A), 
-                        B: deg2rad(B), 
-                        C: deg2rad(C) 
-                    };
+                    const A_deg = toFixedTrim(Math.random() * 40 + 20);
+                    const C_deg = toFixedTrim(Math.random() * 40 + 20);
+                    const B_deg = 180 - A_deg - C_deg;
+                    const A_rad = deg2rad(A_deg);
+                    const C_rad = deg2rad(C_deg);
+                    const B_rad = deg2rad(B_deg);
+                    const c = toFixedTrim(Math.random() * 50 + 10);
+                    const a = c * Math.sin(A_rad) / Math.sin(C_rad);
+                    const b = c * Math.sin(B_rad) / Math.sin(C_rad);
+                    const solutions = { a, b, c, A: A_rad, B: B_rad, C: C_rad };
 
                     const types = [
-                        { 
-                            fields: ['a'], 
-                            givens: { A, C, c }, 
-                            text: `Encuentra el lado a si A = ${A}°, C = ${C}° y c = ${c}.`,
-                            svgData: { givenAngleA: A, givenAngleC: C, givenC: c }
-                        },
-                        { 
-                            fields: ['B'], 
-                            givens: { A, a, b }, 
-                            text: `Halla el ángulo B si A = ${A}°, a = ${a} y b = ${b}.`,
-                            svgData: { givenAngleA: A, givenA: a, givenB: b }
-                        },
-                        { 
-                            fields: ['c'], 
-                            givens: { B, C, b }, 
-                            text: `Halla c si B = ${B}°, C = ${C}° y b = ${b}.`,
-                            svgData: { givenAngleB: B, givenAngleC: C, givenB: b }
-                        },
+                        { fields: ['a'], given: { A: A_deg, C: C_deg, c }, text: `Encuentra el lado \\(a\\) si \\(A=${toFixedTrim(A_deg)}°\\), \\(C=${toFixedTrim(C_deg)}°\\) y \\(c=${c}\\).`},
+                        { fields: ['B'], given: { A: A_deg, a, b }, text: `Halla el ángulo \\(B\\) si \\(A=${toFixedTrim(A_deg)}°\\), \\(a=${toFixedTrim(a)}\\) y \\(b=${toFixedTrim(b)}\\).`},
+                        { fields: ['c'], given: { B: B_deg, C: C_deg, b }, text: `Halla \\(c\\) si \\(B=${toFixedTrim(B_deg)}°\\), \\(C=${toFixedTrim(C_deg)}°\\) y \\(b=${toFixedTrim(b)}\\).`},
                     ];
                     const type = types[Math.floor(Math.random() * types.length)];
-                    
                     return {
-                        id: generateUUID(), 
-                        category: 'Ley de Senos (AAS/ASA)',
-                        enunciadoTeX: type.text, 
-                        tipo: 'normal',
+                        id: generateUUID(), category: 'Ley de Senos (AAS/ASA)',
+                        enunciadoTeX: type.text, tipo: 'normal',
                         campos: type.fields.map(f => ({ clave: f, tipo: f.length === 1 ? 'angulo' : 'lado'})),
                         solucionCanonica: solutions,
-                        pista: 'La Ley de Senos relaciona lados y ángulos opuestos: a/sin(A) = b/sin(B) = c/sin(C).',
-                        svg: svgObliqueTriangle(type.svgData)
+                        pista: 'La Ley de Senos relaciona lados y ángulos opuestos: \\(\\frac{a}{\\sin A} = \\frac{b}{\\sin B}\\).',
+                        svg: svgObliqueTriangle({ a, b, c, A: A_deg, B: B_deg, C: C_deg, highlightArcA: type.given.A !== undefined, highlightArcB: type.given.B !== undefined, highlightArcC: type.given.C !== undefined })
                     };
                 },
-                
                 lawOfCosinesSAS: () => {
-                    const a = toFixedTrim(Math.random() * 30 + 10);
-                    const b = toFixedTrim(Math.random() * 30 + 10);
-                    const C = toFixedTrim(Math.random() * 80 + 40);
-                    const c = toFixedTrim(Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(deg2rad(C))));
-                    const A = toFixedTrim(rad2deg(Math.acos((b * b + c * c - a * a) / (2 * b * c))));
-                    const B = toFixedTrim(180 - A - C);
-                    
-                    const solutions = { 
-                        a, b, c, 
-                        A: deg2rad(A), 
-                        B: deg2rad(B), 
-                        C: deg2rad(C) 
-                    };
+                    const a = toFixedTrim(Math.random() * 50 + 10);
+                    const b = toFixedTrim(Math.random() * 50 + 10);
+                    const C_deg = toFixedTrim(Math.random() * 80 + 20);
+                    const C_rad = deg2rad(C_deg);
+                    const c = Math.sqrt(a * a + b * b - 2 * a * b * Math.cos(C_rad));
+                    const A_rad = Math.acos(clamp((b * b + c * c - a * a) / (2 * b * c), -1, 1));
+                    const B_rad = Math.acos(clamp((a * a + c * c - b * b) / (2 * a * c), -1, 1));
+                    const solutions = { a, b, c, A: A_rad, B: B_rad, C: C_rad };
                     
                     const types = [
-                        { 
-                            fields: ['c'], 
-                            text: `Encuentra el lado c si a = ${a}, b = ${b} y el ángulo C = ${C}°.`,
-                            svgData: { givenA: a, givenB: b, givenAngleC: C }
-                        },
-                        { 
-                            fields: ['A'], 
-                            text: `Halla el ángulo A si a = ${a}, b = ${b} y el ángulo C = ${C}°.`,
-                            svgData: { givenA: a, givenB: b, givenAngleC: C }
-                        },
+                        { fields: ['c'], text: `Encuentra el lado \\(c\\) si \\(a=${a}\\), \\(b=${b}\\) y el ángulo \\(C=${C_deg}°\\).`},
+                        { fields: ['B'], text: `Halla el ángulo \\(B\\) si \\(a=${a}\\), \\(b=${b}\\) y el ángulo \\(C=${C_deg}°\\).`},
                     ];
                     const type = types[Math.floor(Math.random() * types.length)];
                     
                     return {
-                        id: generateUUID(), 
-                        category: 'Ley de Cosenos (SAS)',
-                        enunciadoTeX: type.text, 
-                        tipo: 'normal',
+                        id: generateUUID(), category: 'Ley de Cosenos (SAS)',
+                        enunciadoTeX: type.text, tipo: 'normal',
                         campos: type.fields.map(f => ({ clave: f, tipo: f.length === 1 ? 'angulo' : 'lado'})),
                         solucionCanonica: solutions,
-                        pista: 'Usa la Ley de Cosenos: c² = a² + b² - 2ab·cos(C).',
-                        svg: svgObliqueTriangle(type.svgData)
+                        pista: 'Usa la Ley de Cosenos para el lado faltante, luego Ley de Senos o Cosenos para los ángulos.',
+                        svg: svgObliqueTriangle({ a, b, c, A: rad2deg(A_rad), B: rad2deg(B_rad), C: C_deg, highlightArcC: true })
                     };
                 },
-                
                 lawOfCosinesSSS: () => {
                     let a, b, c;
-                    // Generate valid triangle (triangle inequality)
                     do {
-                        a = toFixedTrim(Math.random() * 25 + 15);
-                        b = toFixedTrim(Math.random() * 25 + 15);
-                        c = toFixedTrim(Math.random() * 25 + 15);
+                        a = toFixedTrim(Math.random() * 40 + 20);
+                        b = toFixedTrim(Math.random() * 40 + 20);
+                        c = toFixedTrim(Math.random() * 40 + 20);
                     } while (a + b <= c || a + c <= b || b + c <= a);
 
-                    const A = toFixedTrim(rad2deg(Math.acos((b * b + c * c - a * a) / (2 * b * c))));
-                    const B = toFixedTrim(rad2deg(Math.acos((a * a + c * c - b * b) / (2 * a * c))));
-                    const C = toFixedTrim(180 - A - B);
-                    
-                    const solutions = { 
-                        a, b, c, 
-                        A: deg2rad(A), 
-                        B: deg2rad(B), 
-                        C: deg2rad(C) 
-                    };
+                    const A_rad = Math.acos(clamp((b * b + c * c - a * a) / (2 * b * c), -1, 1));
+                    const B_rad = Math.acos(clamp((a * a + c * c - b * b) / (2 * a * c), -1, 1));
+                    const C_rad = Math.PI - A_rad - B_rad;
+                    const solutions = { a, b, c, A: A_rad, B: B_rad, C: C_rad };
                     
                     const fieldsToFind = ['A', 'B', 'C'][Math.floor(Math.random() * 3)];
-                    const text = `Halla el ángulo ${fieldsToFind} si los lados del triángulo son a = ${a}, b = ${b} y c = ${c}.`;
+                    const text = `Halla el ángulo \\(${fieldsToFind}\\) si los lados del triángulo son \\(a=${a}\\), \\(b=${b}\\) y \\(c=${c}\\).`;
                     
                     return {
-                        id: generateUUID(), 
-                        category: 'Ley de Cosenos (SSS)',
-                        enunciadoTeX: text, 
-                        tipo: 'normal',
+                        id: generateUUID(), category: 'Ley de Cosenos (SSS)',
+                        enunciadoTeX: text, tipo: 'normal',
                         campos: [{ clave: fieldsToFind, tipo: 'angulo' }],
                         solucionCanonica: solutions,
-                        pista: 'Usa la Ley de Cosenos para encontrar un ángulo: cos(A) = (b² + c² - a²)/(2bc).',
-                        svg: svgObliqueTriangle({ givenA: a, givenB: b, givenC: c })
+                        pista: 'Usa la Ley de Cosenos para encontrar un ángulo.',
+                        svg: svgObliqueTriangle({ a, b, c, A: rad2deg(A_rad), B: rad2deg(B_rad), C: rad2deg(C_rad) })
                     };
                 },
-                
                 ambiguousCase: () => {
-                    const b = toFixedTrim(Math.random() * 30 + 15);
-                    const A = toFixedTrim(Math.random() * 60 + 20);
-                    const h = toFixedTrim(b * Math.sin(deg2rad(A)));
-                    let a, solutionCount, hint;
+                    const b = toFixedTrim(Math.random() * 40 + 20, 2);
+                    const A_deg = toFixedTrim(Math.random() * 60 + 15, 2);
+                    const A_rad = deg2rad(A_deg);
+                    const h = b * Math.sin(A_rad);
+                    let a, solutionType;
 
-                    const caseType = Math.floor(Math.random() * 3);
-                    
-                    switch(caseType) {
-                        case 0: // No solution
-                            a = toFixedTrim(Math.random() * (h * 0.8) + 1);
-                            solutionCount = '0';
-                            hint = `Compara el lado opuesto 'a' con la altura 'h = ${h}'. Si a < h, no hay solución.`;
-                            break;
-                        case 1: // One solution
-                            if (Math.random() < 0.5) {
-                                a = toFixedTrim(h); // Exactly height
-                            } else {
-                                a = toFixedTrim(Math.random() * 10 + Math.max(b, h) + 2); // Greater than both
-                            }
-                            solutionCount = '1';
-                            hint = `Si a = h o a > b y a > h, hay una solución única.`;
-                            break;
-                        case 2: // Two solutions
-                            a = toFixedTrim(Math.random() * (b - h) + h + 1);
-                            solutionCount = '2';
-                            hint = `Si h < a < b hay dos soluciones posibles para el ángulo opuesto a 'b'.`;
-                            break;
+                    // Determine solution type first, then set 'a' accordingly
+                    const rand = Math.random();
+                    if (rand < 0.33) {
+                        // 0 solutions: a < h
+                        solutionType = '0';
+                        a = toFixedTrim(Math.random() * (h * 0.8) + h * 0.1, 2);
+                    } else if (rand < 0.66) {
+                        // 1 solution: a = h or a >= b
+                        solutionType = '1';
+                        if (Math.random() < 0.5) {
+                            a = toFixedTrim(h, 2);
+                        } else {
+                            a = toFixedTrim(Math.random() * 15 + b + 2, 2);
+                        }
+                    } else {
+                        // 2 solutions: h < a < b
+                        solutionType = '2';
+                        const range = b - h;
+                        if (range > 1) {
+                            a = toFixedTrim(h + Math.random() * (range * 0.8) + range * 0.1, 2);
+                        } else {
+                            // Fallback if range is too small
+                            a = toFixedTrim(h + 0.5, 2);
+                        }
                     }
                     
-                    const text = `Halla el número de soluciones si a = ${a}, b = ${b} y A = ${A}°.`;
+                    const text = `Halla el número de soluciones si \\(a=${a}\\), \\(b=${b}\\) y \\(A=${A_deg}°\\).`;
+                    
+                    let hint;
+                    if (solutionType === '0') {
+                        hint = 'Compara el lado opuesto \'a\' con la altura \'h\'. Si \\(a < h\\), no hay solución.';
+                    } else if (solutionType === '1') {
+                        hint = 'Si \\(a = h\\) o \\(a \\ge b\\) y \\(a > h\\), hay una solución única.';
+                    } else {
+                        hint = 'Si \\(h < a < b\\) hay dos soluciones posibles para el ángulo opuesto a \'b\'.';
+                    }
                     
                     return {
-                        id: generateUUID(), 
-                        category: 'Caso Ambiguo (SSA)',
-                        enunciadoTeX: text, 
-                        tipo: 'clasificacion',
+                        id: generateUUID(), category: 'Caso Ambiguo (SSA)',
+                        enunciadoTeX: text, tipo: 'clasificacion',
                         campos: [{ clave: 'solutions', tipo: 'clasificacion' }],
-                        solucionCanonica: solutionCount,
+                        solucionCanonica: solutionType,
                         pista: hint,
-                        svg: svgSSAHeight({ givenA: a, givenB: b, givenAngleA: A, calculatedH: h })
+                        svg: svgSSAHeight({ a, b, A: A_deg, h: toFixedTrim(h, 2) })
                     };
                 },
-                
                 applied: () => {
+                    const A_deg = toFixedTrim(Math.random() * 60 + 15, 1);
+                    const A_rad = deg2rad(A_deg);
+                    const b = toFixedTrim(Math.random() * 80 + 30, 1); // More realistic distances
+                    const a = toFixedTrim(b * Math.tan(A_rad), 1);
+                    const c = toFixedTrim(b / Math.cos(A_rad), 1);
+                    const solutions = { a, b, c, A: A_rad };
+                    
                     const problemTypes = [
-                        {
-                            givenAngle: toFixedTrim(Math.random() * 60 + 15),
-                            givenDistance: toFixedTrim(Math.random() * 80 + 20),
-                            calcHeight: function() { return toFixedTrim(this.givenDistance * Math.tan(deg2rad(this.givenAngle))); },
-                            askField: 'a',
-                            text: function() { 
-                                return `Desde un punto en el suelo a ${this.givenDistance} metros de un edificio, el ángulo de elevación a la cima es de ${this.givenAngle}°. ¿Cuál es la altura del edificio?`; 
-                            },
-                            svgData: function() { 
-                                return { givenAngle: this.givenAngle, givenDistance: this.givenDistance }; 
-                            }
+                        { 
+                            fields: ['a'], 
+                            text: `Desde un punto en el suelo a \\(${b}\\) metros de un edificio, el ángulo de elevación a la cima es de \\(${A_deg}°\\). ¿Cuál es la altura del edificio?`,
+                            svgType: 'building'
                         },
-                        {
-                            givenDistance: toFixedTrim(Math.random() * 80 + 20),
-                            givenHeight: toFixedTrim(Math.random() * 60 + 20),
-                            calcAngle: function() { return toFixedTrim(rad2deg(Math.atan(this.givenHeight / this.givenDistance))); },
-                            askField: 'A',
-                            text: function() { 
-                                return `Una escalera se apoya contra una pared. Si la base de la escalera está a ${this.givenDistance} metros de la pared y alcanza una altura de ${this.givenHeight} metros, ¿cuál es el ángulo de elevación?`; 
-                            },
-                            svgData: function() { 
-                                return { givenDistance: this.givenDistance, givenHeight: this.givenHeight }; 
-                            }
+                        { 
+                            fields: ['A'], 
+                            text: `Una escalera de \\(${c}\\) metros de largo se apoya contra una pared. Si la base de la escalera está a \\(${b}\\) metros de la pared, ¿cuál es el ángulo de elevación?`,
+                            svgType: 'ladder'
                         },
-                        {
-                            givenHeight: toFixedTrim(Math.random() * 60 + 30),
-                            givenAngle: toFixedTrim(Math.random() * 60 + 15),
-                            calcDistance: function() { return toFixedTrim(this.givenHeight / Math.tan(deg2rad(this.givenAngle))); },
-                            askField: 'b',
-                            text: function() { 
-                                return `Un avión vuela a una altura de ${this.givenHeight} metros. Si el ángulo de depresión desde el avión a un aeropuerto es de ${this.givenAngle}°, ¿cuál es la distancia horizontal al aeropuerto?`; 
-                            },
-                            svgData: function() { 
-                                return { givenHeight: this.givenHeight, givenAngle: this.givenAngle }; 
-                            }
+                        { 
+                            fields: ['A'], 
+                            text: `Un avión vuela a una altura de \\(${a}\\) metros. Si la distancia horizontal a un aeropuerto es de \\(${b}\\) metros, ¿cuál es el ángulo de depresión desde el avión al aeropuerto?`,
+                            svgType: 'depression'
                         }
                     ];
                     
-                    const problemType = problemTypes[Math.floor(Math.random() * problemTypes.length)];
-                    
-                    // Calculate all values for solutions
-                    const angle = problemType.givenAngle || problemType.calcAngle();
-                    const distance = problemType.givenDistance || problemType.calcDistance();
-                    const height = problemType.givenHeight || problemType.calcHeight();
-                    
-                    const solutions = { 
-                        a: height,           // height is side 'a' 
-                        b: distance,         // distance is side 'b'
-                        A: deg2rad(angle),   // angle in radians
-                        angle: deg2rad(angle),
-                        distance: distance,
-                        height: height
-                    };
+                    const type = problemTypes[Math.floor(Math.random() * problemTypes.length)];
 
                     return {
-                        id: generateUUID(), 
-                        category: 'Problemas Aplicados',
-                        enunciadoTeX: problemType.text(), 
-                        tipo: 'normal',
-                        campos: [{ clave: problemType.askField, tipo: problemType.askField.length === 1 ? 'angulo' : 'lado'}],
+                        id: generateUUID(), category: 'Problemas Aplicados',
+                        enunciadoTeX: type.text, tipo: 'normal',
+                        campos: type.fields.map(f => ({ clave: f, tipo: f.length === 1 ? 'angulo' : 'lado'})),
                         solucionCanonica: solutions,
                         pista: 'Dibuja el triángulo rectángulo y aplica SOH-CAH-TOA.',
-                        svg: svgElevation(problemType.svgData())
+                        svg: svgElevation({ 
+                            a: a, 
+                            b: b, 
+                            A: A_deg, 
+                            problemType: type.svgType === 'ladder' ? 'ladder' : 'airplane'
+                        })
                     };
                 }
             };
@@ -1148,9 +1081,9 @@
                 });
                 updateQuizStatus();
                 
-                // Re-render MathJax
+                // Render MathJax after DOM is updated
                 if (window.MathJax && window.MathJax.typesetPromise) {
-                    window.MathJax.typesetPromise();
+                    window.MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
                 }
             };
 
@@ -1171,23 +1104,16 @@
                     q.campos.forEach(campo => {
                         const inputElement = document.getElementById(campo.clave);
                         let userValue;
-                        
                         if (campo.tipo === 'angulo') {
                             const unitElement = document.querySelector(`input[name="${campo.clave}-unit"]:checked`);
-                            userValue = { value: inputElement.value.trim(), unit: unitElement.value };
-                            if (!evaluateAngle(userValue, q.solucionCanonica[campo.clave])) { 
-                                isCorrect = false; 
-                            }
+                            userValue = { value: inputElement.value, unit: unitElement.value };
+                            if (!evaluateAngle(userValue, q.solucionCanonica[campo.clave])) { isCorrect = false; }
                         } else if (campo.tipo === 'lado') {
-                            userValue = inputElement.value.trim();
-                            if (!evaluateLength(userValue, q.solucionCanonica[campo.clave])) { 
-                                isCorrect = false; 
-                            }
+                            userValue = inputElement.value;
+                            if (!evaluateLength(userValue, q.solucionCanonica[campo.clave])) { isCorrect = false; }
                         } else if (campo.tipo === 'clasificacion') {
                             userValue = inputElement.value;
-                            if (!evaluateClassification(userValue, q.solucionCanonica)) { 
-                                isCorrect = false; 
-                            }
+                            if (!evaluateClassification(userValue, q.solucionCanonica)) { isCorrect = false; }
                         }
                     });
 
@@ -1196,7 +1122,7 @@
                     
                     feedbackEl.className = `question-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
                     feedbackEl.innerHTML = `
-                        <strong>Respuesta:</strong> ${isCorrect ? 'Correcta ✓' : 'Incorrecta ✗'}
+                        <strong>Respuesta:</strong> ${isCorrect ? 'Correcta' : 'Incorrecta'}.
                         <br>
                         <strong>Pista:</strong> ${q.pista}
                     `;
@@ -1215,17 +1141,12 @@
                     correctas: state.score.correct,
                     incorrectas: state.score.total - state.score.correct,
                     porcentaje: toFixedTrim((state.score.correct / state.score.total) * 100),
-                    detalle: state.quiz.map(q => ({ 
-                        id: q.id, 
-                        categoria: q.category, 
-                        estado: q.isCorrect ? 'Correcta' : 'Incorrecta', 
-                        pista: q.pista 
-                    })),
+                    detalle: state.quiz.map(q => ({ id: q.id, categoria: q.category, estado: q.isCorrect ? 'Correcta' : 'Incorrecta', pista: q.pista })),
                     studentName: state.studentName
                 };
 
                 state.quizHistory.unshift(attempt);
-                if (state.quizHistory.length > 10) {
+                if (state.quizHistory.length > 5) {
                     state.quizHistory.pop();
                 }
                 localStorage.setItem('examen_triangulos_historial', JSON.stringify(state.quizHistory));
@@ -1301,7 +1222,6 @@
                 selectors.tabs.forEach(b => b.classList.remove('active'));
                 document.getElementById(`${tabId}-tab`).classList.add('active');
                 document.querySelector(`.tab-button[onclick="app.showTab('${tabId}')"]`).classList.add('active');
-                state.activeTab = tabId;
             };
 
             const startQuiz = () => {
@@ -1314,15 +1234,13 @@
             const exportCSV = () => {
                 const latestAttempt = state.quizHistory[0];
                 if (!latestAttempt) return;
-                
-                const header = `timestamp,intento,total,correctas,incorrectas,porcentaje,duracion_seg,detalle_por_pregunta`;
+                const header = `timestamp;intento;total;correctas;incorrectas;porcentaje;duracion_seg;detalle_por_pregunta`;
                 const details = latestAttempt.detalle.map(d => `${d.categoria}: ${d.estado}`).join(' | ');
-                const row = `"${latestAttempt.timestamp}",1,${latestAttempt.total},${latestAttempt.correctas},${latestAttempt.incorrectas},${latestAttempt.porcentaje},${latestAttempt.duration_sec},"${details}"`;
+                const row = `${latestAttempt.timestamp};1;${latestAttempt.total};${latestAttempt.correctas};${latestAttempt.incorrectas};${latestAttempt.porcentaje};${latestAttempt.duration_sec};"${details}"`;
                 const csvContent = `data:text/csv;charset=utf-8,${encodeURIComponent(header + '\n' + row)}`;
-                
                 const link = document.createElement('a');
                 link.setAttribute('href', csvContent);
-                link.setAttribute('download', `examen-triangulos-${Date.now()}.csv`);
+                link.setAttribute('download', `examen-resultados-${Date.now()}.csv`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -1331,11 +1249,10 @@
             const exportJSON = () => {
                 const latestAttempt = state.quizHistory[0];
                 if (!latestAttempt) return;
-                
                 const jsonContent = `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify(latestAttempt, null, 2))}`;
                 const link = document.createElement('a');
                 link.setAttribute('href', jsonContent);
-                link.setAttribute('download', `examen-triangulos-${Date.now()}.json`);
+                link.setAttribute('download', `examen-resultados-${Date.now()}.json`);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -1366,7 +1283,7 @@
                                 <p>${q.enunciadoTeX}</p>
                                 <div class="svg-container">${q.svg}</div>
                                 <div class="question-feedback ${q.isCorrect ? 'correct' : 'incorrect'}">
-                                    <strong>Estado:</strong> ${q.isCorrect ? 'Correcta ✓' : 'Incorrecta ✗'}
+                                    <strong>Estado:</strong> ${q.isCorrect ? 'Correcta' : 'Incorrecta'}.
                                     <br>
                                     <strong>Pista:</strong> ${q.pista}
                                 </div>
@@ -1380,66 +1297,28 @@
             const copySummary = () => {
                 const latestAttempt = state.quizHistory[0];
                 if (!latestAttempt) return;
-                
                 const summaryText = `Resumen del Examen de Triángulos:\nNombre: ${latestAttempt.studentName || 'Anónimo'}\nFecha: ${latestAttempt.timestamp}\nResultados: ${latestAttempt.correctas}/${latestAttempt.total} (${latestAttempt.porcentaje}%)\nDuración: ${formatDuration(latestAttempt.duration_sec)}`;
-                
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(summaryText)
-                        .then(() => alert('Resumen copiado al portapapeles.'))
-                        .catch(err => console.error('Failed to copy text: ', err));
-                } else {
-                    // Fallback for older browsers
-                    const textArea = document.createElement('textarea');
-                    textArea.value = summaryText;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        alert('Resumen copiado al portapapeles.');
-                    } catch (err) {
-                        console.error('Fallback: Oops, unable to copy', err);
-                        alert('No se pudo copiar. Por favor, selecciona manualmente el texto.');
-                    }
-                    document.body.removeChild(textArea);
-                }
+                navigator.clipboard.writeText(summaryText)
+                    .then(() => alert('Resumen copiado al portapapeles.'))
+                    .catch(err => console.error('Failed to copy text: ', err));
             };
 
             const init = () => {
                 const storedHistory = localStorage.getItem('examen_triangulos_historial');
                 if (storedHistory) {
-                    try {
-                        state.quizHistory = JSON.parse(storedHistory);
-                    } catch (e) {
-                        console.error('Error parsing stored history:', e);
-                        state.quizHistory = [];
-                    }
+                    state.quizHistory = JSON.parse(storedHistory);
                 }
                 renderHistory();
-                
                 selectors.studentNameInput.addEventListener('input', (e) => {
-                    state.studentName = e.target.value.trim();
+                    state.studentName = e.target.value;
                 });
             };
 
-            return { 
-                showTab, 
-                startQuiz, 
-                evaluateQuiz, 
-                exportCSV, 
-                exportJSON, 
-                exportPDF, 
-                copySummary, 
-                init 
-            };
+            return { showTab, startQuiz, evaluateQuiz, exportCSV, exportJSON, exportPDF, copySummary, init };
 
         })();
 
-        // Initialize app when DOM is loaded
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', app.init);
-        } else {
-            app.init();
-        }
+        window.onload = app.init;
     </script>
 </body>
 </html>
