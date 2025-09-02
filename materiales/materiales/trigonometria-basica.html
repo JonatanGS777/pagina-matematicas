@@ -198,12 +198,19 @@
         }
         .question-svg {
             flex-shrink: 0;
-            width: 250px;
-            height: 250px;
-            background: rgba(255,255,255,0.6);
+            width: 280px;
+            height: 280px;
+            background: rgba(255,255,255,0.8);
             border-radius: 8px;
             border: 1px solid var(--dot-color);
             padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .question-svg svg {
+            max-width: 100%;
+            max-height: 100%;
         }
         .question-body {
             flex-grow: 1;
@@ -565,7 +572,7 @@
                 '-1/2': -0.5,
                 'sqrt(3)': Math.sqrt(3), '√3': Math.sqrt(3),
                 '-sqrt(3)': -Math.sqrt(3), '-√3': -Math.sqrt(3),
-                 '1': 1, '0': 0, '-1': -1,
+                '1': 1, '0': 0, '-1': -1,
             };
 
             function mapExactTrig(str) {
@@ -654,7 +661,7 @@
                 }
             }
             
-            // --- SVG GENERATORS ---
+            // --- SVG GENERATORS (MEJORADOS) ---
             const svgNS = "http://www.w3.org/2000/svg";
 
             const createSVGElement = (tag, attrs) => {
@@ -670,8 +677,8 @@
                 return serializer.serializeToString(svgNode);
             };
 
-            function svgUnitCircle({ angleRad = 0, highlightQuadrant = 0, showProjections = false, labels = [] }) {
-                const svg = createSVGElement('svg', { viewBox: "-1.2 -1.2 2.4 2.4", preserveAspectRatio: "xMidYMid meet" });
+            function svgUnitCircle({ angleRad = 0, highlightQuadrant = 0, showProjections = false, labels = [], showAngleArc = true }) {
+                const svg = createSVGElement('svg', { viewBox: "-1.3 -1.3 2.6 2.6", preserveAspectRatio: "xMidYMid meet" });
                 const r = 1;
                 const cx = 0, cy = 0;
                 const x = r * Math.cos(angleRad);
@@ -679,47 +686,129 @@
                 
                 // Quadrant highlight
                 if (highlightQuadrant > 0) {
+                    const quadColors = ['', '#f97316', '#3b82f6', '#ef4444', '#10b981'];
+                    const quadAngles = [0, -90, -180, -270];
+                    const startAngle = quadAngles[highlightQuadrant - 1];
                     const path = createSVGElement('path', {
-                        d: `M 0 0 L 1.1 0 A 1.1 1.1 0 0 1 ${1.1*Math.cos(Math.PI/2)} ${-1.1*Math.sin(Math.PI/2)} Z`,
-                        fill: 'var(--accent-orange)',
-                        'fill-opacity': '0.1',
-                        transform: `rotate(${-90 * (highlightQuadrant - 1)})`
+                        d: `M 0 0 L 1.2 0 A 1.2 1.2 0 0 1 ${1.2*Math.cos(degToRad(startAngle + 90))} ${-1.2*Math.sin(degToRad(startAngle + 90))} Z`,
+                        fill: quadColors[highlightQuadrant],
+                        'fill-opacity': '0.15',
+                        transform: `rotate(${startAngle})`
                     });
                     svg.appendChild(path);
                 }
 
-                // Axes
-                svg.appendChild(createSVGElement('line', { x1: -1.1, y1: 0, x2: 1.1, y2: 0, stroke: 'var(--dot-color)', 'stroke-width': 0.02 }));
-                svg.appendChild(createSVGElement('line', { x1: 0, y1: -1.1, x2: 0, y2: 1.1, stroke: 'var(--dot-color)', 'stroke-width': 0.02 }));
+                // Grid lines
+                for (let i = -1; i <= 1; i += 0.5) {
+                    if (i !== 0) {
+                        svg.appendChild(createSVGElement('line', { 
+                            x1: -1.2, y1: i, x2: 1.2, y2: i, 
+                            stroke: 'var(--dot-color)', 'stroke-width': 0.01, 'opacity': 0.3 
+                        }));
+                        svg.appendChild(createSVGElement('line', { 
+                            x1: i, y1: -1.2, x2: i, y2: 1.2, 
+                            stroke: 'var(--dot-color)', 'stroke-width': 0.01, 'opacity': 0.3 
+                        }));
+                    }
+                }
+
+                // Main axes
+                svg.appendChild(createSVGElement('line', { x1: -1.2, y1: 0, x2: 1.2, y2: 0, stroke: '#666', 'stroke-width': 0.02 }));
+                svg.appendChild(createSVGElement('line', { x1: 0, y1: -1.2, x2: 0, y2: 1.2, stroke: '#666', 'stroke-width': 0.02 }));
                 
                 // Circle
                 svg.appendChild(createSVGElement('circle', { cx, cy, r, fill: 'none', stroke: 'var(--text-color)', 'stroke-width': 0.03 }));
 
-                // Angle arc
-                const largeArcFlag = angleRad > Math.PI ? 1 : 0;
-                const arcPath = `M ${r} 0 A ${r/3} ${r/3} 0 ${largeArcFlag} 1 ${r/3 * Math.cos(angleRad)} ${-r/3 * Math.sin(angleRad)}`;
-                svg.appendChild(createSVGElement('path', { d: arcPath, fill: 'none', stroke: 'var(--accent-blue)', 'stroke-width': 0.03 }));
+                // Angle arc (mejorado)
+                if (showAngleArc && angleRad !== 0) {
+                    const arcRadius = 0.3;
+                    const largeArcFlag = Math.abs(angleRad) > Math.PI ? 1 : 0;
+                    const sweepFlag = angleRad > 0 ? 0 : 1; // Para que vaya en sentido horario
+                    const arcEndX = arcRadius * Math.cos(angleRad);
+                    const arcEndY = -arcRadius * Math.sin(angleRad);
+                    const arcPath = `M ${arcRadius} 0 A ${arcRadius} ${arcRadius} 0 ${largeArcFlag} ${sweepFlag} ${arcEndX} ${arcEndY}`;
+                    svg.appendChild(createSVGElement('path', { 
+                        d: arcPath, 
+                        fill: 'none', 
+                        stroke: 'var(--accent-blue)', 
+                        'stroke-width': 0.025,
+                        'marker-end': 'url(#arrowhead)'
+                    }));
+                }
+
+                // Arrow marker definition
+                const defs = createSVGElement('defs', {});
+                const marker = createSVGElement('marker', {
+                    id: 'arrowhead',
+                    markerWidth: '10',
+                    markerHeight: '7',
+                    refX: '9',
+                    refY: '3.5',
+                    orient: 'auto'
+                });
+                const polygon = createSVGElement('polygon', {
+                    points: '0 0, 10 3.5, 0 7',
+                    fill: 'var(--accent-blue)'
+                });
+                marker.appendChild(polygon);
+                defs.appendChild(marker);
+                svg.appendChild(defs);
+
+                // Point on circle
+                svg.appendChild(createSVGElement('circle', { 
+                    cx: x, cy: y, r: 0.04, 
+                    fill: 'var(--accent-orange)', 
+                    stroke: 'white', 
+                    'stroke-width': 0.01 
+                }));
 
                 // Radius line
-                svg.appendChild(createSVGElement('line', { x1: cx, y1: cy, x2: x, y2: y, stroke: 'var(--accent-orange)', 'stroke-width': 0.03 }));
+                svg.appendChild(createSVGElement('line', { 
+                    x1: cx, y1: cy, x2: x, y2: y, 
+                    stroke: 'var(--accent-orange)', 
+                    'stroke-width': 0.025 
+                }));
 
                 if (showProjections) {
-                    // Triangle
-                    svg.appendChild(createSVGElement('path', { 
-                        d: `M 0 0 L ${x} 0 L ${x} ${y} Z`, 
-                        fill: 'var(--accent-green)', 
-                        'fill-opacity': 0.2, 
+                    // Projection lines (mejoradas)
+                    svg.appendChild(createSVGElement('line', { 
+                        x1: x, y1: 0, x2: x, y2: y, 
                         stroke: 'var(--accent-green)', 
-                        'stroke-width': 0.02 
+                        'stroke-width': 0.02, 
+                        'stroke-dasharray': '0.05,0.05' 
+                    }));
+                    svg.appendChild(createSVGElement('line', { 
+                        x1: 0, y1: y, x2: x, y2: y, 
+                        stroke: 'var(--accent-green)', 
+                        'stroke-width': 0.02, 
+                        'stroke-dasharray': '0.05,0.05' 
+                    }));
+                    
+                    // Right angle marker
+                    svg.appendChild(createSVGElement('path', { 
+                        d: `M ${x-0.05} ${y} L ${x-0.05} ${y-0.05} L ${x} ${y-0.05}`, 
+                        fill: 'none', 
+                        stroke: 'var(--accent-green)', 
+                        'stroke-width': 0.015 
                     }));
                 }
                 
+                // Axis labels
+                svg.appendChild(createSVGElement('text', { 
+                    x: 1.1, y: 0.05, 'font-size': '0.08px', 'text-anchor': 'middle', 
+                    fill: 'var(--text-color)', 'font-weight': 'bold' 
+                })).textContent = 'x';
+                svg.appendChild(createSVGElement('text', { 
+                    x: 0.05, y: -1.1, 'font-size': '0.08px', 'text-anchor': 'middle', 
+                    fill: 'var(--text-color)', 'font-weight': 'bold' 
+                })).textContent = 'y';
+
                 labels.forEach(label => {
                     const text = createSVGElement('text', {
                         x: label.x, y: label.y,
-                        'font-size': '0.15px',
+                        'font-size': '0.09px',
                         'text-anchor': 'middle',
-                        fill: 'var(--text-color)',
+                        fill: 'var(--accent-blue)',
                         'font-weight': 'bold',
                     });
                     text.textContent = label.text;
@@ -730,61 +819,78 @@
             }
 
             function svgWave({ func = "sin", A = 1, B = 1, C = 0, D = 0, xRange = [-2 * Math.PI, 2 * Math.PI], highlights = {} }) {
-                const svg = createSVGElement('svg', { viewBox: "-100 -60 200 120", preserveAspectRatio: "xMidYMid meet" });
-                const [xMin, xMax] = [-90, 90];
-                const [yMin, yMax] = [-55, 55];
+                const svg = createSVGElement('svg', { viewBox: "-120 -80 240 160", preserveAspectRatio: "xMidYMid meet" });
+                const [xMin, xMax] = [-110, 110];
+                const [yMin, yMax] = [-70, 70];
                 const xScale = (xMax - xMin) / (xRange[1] - xRange[0]);
                 
-                // More robust yScale that adds vertical padding and handles A=0
-                const yWaveHeight = 2 * Math.abs(A) || 1;
-                const yScale = (yMax - yMin) / (yWaveHeight * 1.2);
+                // Mejor escalado para Y
+                const maxY = Math.abs(A) + Math.abs(D);
+                const yScale = Math.min(60 / (maxY * 1.2), 30);
 
                 const mapX = (x) => (x - xRange[0]) * xScale + xMin;
-                // New mapY function correctly centers the wave based on the vertical shift D
                 const mapY = (y) => -((y - D) * yScale);
 
-                // Axes
-                // The midline is correctly drawn at svg y=0, which corresponds to the function's y=D
-                svg.appendChild(createSVGElement('line', { x1: xMin, y1: mapY(D), x2: xMax, y2: mapY(D), stroke: 'var(--dot-color)', 'stroke-width': 1 }));
-                // Draw Y-axis at x=0 if in view, otherwise at the phase shift C
-                let yAxisX = 0;
-                if (xRange[0] > 0 || xRange[1] < 0) yAxisX = C;
-                svg.appendChild(createSVGElement('line', { x1: mapX(yAxisX), y1: yMin, x2: mapX(yAxisX), y2: yMax, stroke: 'var(--dot-color)', 'stroke-width': 1 }));
+                // Grid (mejorado)
+                for (let x = Math.ceil(xRange[0]); x <= Math.floor(xRange[1]); x++) {
+                    if (x !== 0) {
+                        svg.appendChild(createSVGElement('line', { 
+                            x1: mapX(x), y1: yMin, x2: mapX(x), y2: yMax, 
+                            stroke: '#e5e5e5', 'stroke-width': 0.5, 'opacity': 0.5 
+                        }));
+                    }
+                }
+
+                // Main axes
+                const yAxisX = xRange[0] <= 0 && xRange[1] >= 0 ? 0 : C;
+                svg.appendChild(createSVGElement('line', { 
+                    x1: xMin, y1: mapY(D), x2: xMax, y2: mapY(D), 
+                    stroke: '#666', 'stroke-width': 1.5 
+                }));
+                svg.appendChild(createSVGElement('line', { 
+                    x1: mapX(yAxisX), y1: yMin, x2: mapX(yAxisX), y2: yMax, 
+                    stroke: '#666', 'stroke-width': 1.5 
+                }));
                 
-                // Ticks
+                // Ticks mejorados
                 const period = (func === 'tan' ? Math.PI : 2 * Math.PI) / Math.abs(B);
                 for (let i = -8; i <= 8; i++) {
                     const xTick = C + i * period / 4;
                     if (xTick >= xRange[0] && xTick <= xRange[1]) {
-                        svg.appendChild(createSVGElement('line', { x1: mapX(xTick), y1: mapY(D) - 3, x2: mapX(xTick), y2: mapY(D) + 3, stroke: 'var(--text-color)', 'stroke-width': 0.5}));
+                        svg.appendChild(createSVGElement('line', { 
+                            x1: mapX(xTick), y1: mapY(D) - 4, x2: mapX(xTick), y2: mapY(D) + 4, 
+                            stroke: 'var(--text-color)', 'stroke-width': 1
+                        }));
                     }
                 }
 
-                // Wave drawing with special handling for tan function to avoid connecting across asymptotes
-                const steps = 200;
+                // Wave drawing (mejorado para tangente)
+                const steps = 300;
                 if (func === 'tan') {
-                    let lastY = NaN;
-                    let points = '';
-                    const yThreshold = (yMax - yMin) * 2; 
-
-                    for (let i = 0; i <= steps; i++) {
-                        const x = xRange[0] + i * (xRange[1] - xRange[0]) / steps;
-                        let y = A * Math.tan(B * (x - C)) + D;
-
-                        if (isFinite(lastY) && Math.abs(y - lastY) > yThreshold) {
-                            if (points.length > 2) {
-                                svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
-                            }
-                            points = '';
-                        }
+                    const asymptoteSpacing = Math.PI / Math.abs(B);
+                    for (let n = Math.floor(xRange[0] / asymptoteSpacing) - 1; n <= Math.ceil(xRange[1] / asymptoteSpacing) + 1; n++) {
+                        const start = Math.max(xRange[0], C + n * asymptoteSpacing + 0.01);
+                        const end = Math.min(xRange[1], C + (n + 1) * asymptoteSpacing - 0.01);
                         
-                        if (isFinite(y)) {
-                             points += `${mapX(x)},${mapY(y)} `;
+                        if (start < end) {
+                            let points = '';
+                            const segmentSteps = Math.ceil(steps * (end - start) / (xRange[1] - xRange[0]));
+                            for (let i = 0; i <= segmentSteps; i++) {
+                                const x = start + i * (end - start) / segmentSteps;
+                                const y = A * Math.tan(B * (x - C)) + D;
+                                if (isFinite(y) && Math.abs(y - D) < 100) {
+                                    points += `${mapX(x)},${mapY(y)} `;
+                                }
+                            }
+                            if (points.length > 2) {
+                                svg.appendChild(createSVGElement('polyline', { 
+                                    points, 
+                                    fill: 'none', 
+                                    stroke: 'var(--accent-orange)', 
+                                    'stroke-width': 2.5 
+                                }));
+                            }
                         }
-                        lastY = y;
-                    }
-                    if (points.length > 2) {
-                        svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
                     }
                 } else {
                     let points = '';
@@ -797,24 +903,54 @@
                         }
                         points += `${mapX(x)},${mapY(y)} `;
                     }
-                    svg.appendChild(createSVGElement('polyline', { points, fill: 'none', stroke: 'var(--accent-orange)', 'stroke-width': 1.5 }));
+                    svg.appendChild(createSVGElement('polyline', { 
+                        points, 
+                        fill: 'none', 
+                        stroke: 'var(--accent-orange)', 
+                        'stroke-width': 2.5 
+                    }));
                 }
                 
-                // Highlights
-                if(highlights.amplitude) {
+                // Highlights (mejorados)
+                if(highlights.amplitude && func !== 'tan') {
                     const peakX = func === 'sin' ? C + period / 4 : C;
-                    svg.appendChild(createSVGElement('line', { x1: mapX(peakX), y1: mapY(D), x2: mapX(peakX), y2: mapY(D+A), stroke: 'var(--accent-blue)', 'stroke-width': 1, 'stroke-dasharray': '2,2'}));
-                    const text = createSVGElement('text', { x: mapX(peakX)+3, y: mapY(D+A/2), 'font-size': '6px' });
-                    text.textContent = `A = ${Math.abs(A)}`;
-                    svg.appendChild(text);
+                    if (peakX >= xRange[0] && peakX <= xRange[1]) {
+                        svg.appendChild(createSVGElement('line', { 
+                            x1: mapX(peakX), y1: mapY(D), x2: mapX(peakX), y2: mapY(D+A), 
+                            stroke: 'var(--accent-blue)', 'stroke-width': 2, 'stroke-dasharray': '4,4'
+                        }));
+                        const text = createSVGElement('text', { 
+                            x: mapX(peakX)+5, y: mapY(D+A/2), 'font-size': '8px', 
+                            fill: 'var(--accent-blue)', 'font-weight': 'bold' 
+                        });
+                        text.textContent = `A = ${Math.abs(A)}`;
+                        svg.appendChild(text);
+                    }
                 }
                 if(highlights.period) {
                     const startX = C;
                     const endX = C + period;
-                    svg.appendChild(createSVGElement('line', { x1: mapX(startX), y1: mapY(D)-10, x2: mapX(endX), y2: mapY(D)-10, stroke: 'var(--accent-green)', 'stroke-width': 1}));
-                    const text = createSVGElement('text', { x: mapX(startX + period/2), y: mapY(D)-13, 'font-size': '6px', 'text-anchor':'middle' });
-                    text.textContent = `Período = ${highlights.periodLabel}`;
-                    svg.appendChild(text);
+                    if (startX >= xRange[0] && endX <= xRange[1]) {
+                        svg.appendChild(createSVGElement('line', { 
+                            x1: mapX(startX), y1: mapY(D)-15, x2: mapX(endX), y2: mapY(D)-15, 
+                            stroke: 'var(--accent-green)', 'stroke-width': 2
+                        }));
+                        // Flechas en los extremos
+                        svg.appendChild(createSVGElement('polygon', {
+                            points: `${mapX(startX)},${mapY(D)-15} ${mapX(startX)+3},${mapY(D)-12} ${mapX(startX)+3},${mapY(D)-18}`,
+                            fill: 'var(--accent-green)'
+                        }));
+                        svg.appendChild(createSVGElement('polygon', {
+                            points: `${mapX(endX)},${mapY(D)-15} ${mapX(endX)-3},${mapY(D)-12} ${mapX(endX)-3},${mapY(D)-18}`,
+                            fill: 'var(--accent-green)'
+                        }));
+                        const text = createSVGElement('text', { 
+                            x: mapX(startX + period/2), y: mapY(D)-20, 'font-size': '8px', 
+                            'text-anchor':'middle', fill: 'var(--accent-green)', 'font-weight': 'bold'
+                        });
+                        text.textContent = `Período = ${highlights.periodLabel}`;
+                        svg.appendChild(text);
+                    }
                 }
 
                 return svgToString(svg);
@@ -826,47 +962,78 @@
                 if (!a) a = Math.sqrt(c*c - b*b);
                 if (!b) b = Math.sqrt(c*c - a*a);
                 
-                const scale = 100 / Math.max(a, b, c/1.4);
-                const width = b * scale + 20;
-                const height = a * scale + 20;
+                const scale = 120 / Math.max(a, b, c/1.4);
+                const width = b * scale + 40;
+                const height = a * scale + 40;
 
                 const svg = createSVGElement('svg', { viewBox: `0 0 ${width} ${height}`, preserveAspectRatio: "xMidYMid meet" });
                 
-                const p1 = {x: 10, y: 10};
-                const p2 = {x: 10, y: 10 + a*scale};
-                const p3 = {x: 10 + b*scale, y: 10 + a*scale};
+                const p1 = {x: 20, y: 20};
+                const p2 = {x: 20, y: 20 + a*scale};
+                const p3 = {x: 20 + b*scale, y: 20 + a*scale};
                 
+                // Triangle (mejorado)
                 svg.appendChild(createSVGElement('polygon', {
                     points: `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`,
                     fill: 'var(--accent-green)',
-                    'fill-opacity': 0.1,
+                    'fill-opacity': 0.15,
                     stroke: 'var(--text-color)',
-                    'stroke-width': 2
+                    'stroke-width': 2.5
                 }));
 
-                // Right angle marker
-                svg.appendChild(createSVGElement('path', { d: `M ${p2.x} ${p2.y-10} L ${p2.x+10} ${p2.y-10} L ${p2.x+10} ${p2.y}`, fill: 'none', stroke: 'var(--text-color)', 'stroke-width': 1 }));
+                // Right angle marker (mejorado)
+                const markerSize = Math.min(15, Math.min(a, b) * scale * 0.2);
+                svg.appendChild(createSVGElement('path', { 
+                    d: `M ${p2.x} ${p2.y-markerSize} L ${p2.x+markerSize} ${p2.y-markerSize} L ${p2.x+markerSize} ${p2.y}`, 
+                    fill: 'none', 
+                    stroke: 'var(--accent-blue)', 
+                    'stroke-width': 2 
+                }));
                 
-                // Labels
-                const textA = createSVGElement('text', { x: p2.x + 5, y: (p1.y + p2.y)/2, 'font-size': '12px', 'text-anchor':'start' });
-                textA.textContent = labels.a;
-                svg.appendChild(textA);
+                // Labels (mejorados con mejor posicionamiento)
+                if (labels.a) {
+                    const textA = createSVGElement('text', { 
+                        x: p2.x - 15, y: (p1.y + p2.y)/2 + 3, 
+                        'font-size': '14px', 'text-anchor':'middle', 
+                        fill: 'var(--accent-orange)', 'font-weight': 'bold' 
+                    });
+                    textA.textContent = labels.a;
+                    svg.appendChild(textA);
+                }
 
-                const textB = createSVGElement('text', { x: (p2.x + p3.x)/2, y: p2.y + 15, 'font-size': '12px', 'text-anchor':'middle' });
-                textB.textContent = labels.b;
-                svg.appendChild(textB);
+                if (labels.b) {
+                    const textB = createSVGElement('text', { 
+                        x: (p2.x + p3.x)/2, y: p2.y + 20, 
+                        'font-size': '14px', 'text-anchor':'middle', 
+                        fill: 'var(--accent-orange)', 'font-weight': 'bold' 
+                    });
+                    textB.textContent = labels.b;
+                    svg.appendChild(textB);
+                }
                 
-                const textC = createSVGElement('text', { x: (p1.x + p3.x)/2 + 5, y: (p1.y + p3.y)/2 - 5, 'font-size': '12px', 'text-anchor':'middle' });
-                textC.textContent = labels.c;
-                svg.appendChild(textC);
+                if (labels.c) {
+                    const textC = createSVGElement('text', { 
+                        x: (p1.x + p3.x)/2 + 10, y: (p1.y + p3.y)/2 - 5, 
+                        'font-size': '14px', 'text-anchor':'middle', 
+                        fill: 'var(--accent-blue)', 'font-weight': 'bold' 
+                    });
+                    textC.textContent = labels.c;
+                    svg.appendChild(textC);
+                }
 
                 if (labels.angleA) {
-                    const textAngleA = createSVGElement('text', { x: p1.x+5, y: p1.y+15, 'font-size': '10px' });
+                    const textAngleA = createSVGElement('text', { 
+                        x: p1.x+10, y: p1.y+18, 'font-size': '12px', 
+                        fill: 'var(--accent-green)', 'font-weight': 'bold' 
+                    });
                     textAngleA.textContent = labels.angleA;
                     svg.appendChild(textAngleA);
                 }
                 if (labels.angleB) {
-                    const textAngleB = createSVGElement('text', { x: p3.x-20, y: p3.y-5, 'font-size': '10px' });
+                    const textAngleB = createSVGElement('text', { 
+                        x: p3.x-25, y: p3.y-8, 'font-size': '12px', 
+                        fill: 'var(--accent-green)', 'font-weight': 'bold' 
+                    });
                     textAngleB.textContent = labels.angleB;
                     svg.appendChild(textAngleB);
                 }
@@ -874,73 +1041,57 @@
                 return svgToString(svg);
             }
 
-            // --- QUESTION BANK ---
+            // --- QUESTION BANK MEJORADA ---
             const questionBank = [
-                // Category 1: Unit Circle Values
-                { id: 'uc1', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(60°)\\).', solution: 0.5, hint: 'El coseno corresponde a la coordenada x en la circunferencia unitaria.', svg: () => svgUnitCircle({ angleRad: degToRad(60), showProjections: true, labels: [{text:'cos(60°)', x:0.25, y: -0.1}] }) },
-                { id: 'uc2', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(\\pi/6)\\).', solution: 0.5, hint: 'El seno corresponde a la coordenada y.', svg: () => svgUnitCircle({ angleRad: Math.PI/6, showProjections: true, labels: [{text:'sin(π/6)', x:0.6, y:-0.25}] }) },
-                { id: 'uc3', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\tan(\\pi/4)\\).', solution: 1, hint: 'Recuerda que tan(θ) = sin(θ)/cos(θ).', svg: () => svgUnitCircle({ angleRad: Math.PI/4, showProjections: true }) },
-                { id: 'uc4', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(150°)\\).', solution: 0.5, hint: '150° está en el segundo cuadrante, donde el seno es positivo.', svg: () => svgUnitCircle({ angleRad: degToRad(150), highlightQuadrant: 2, showProjections: true }) },
-                { id: 'uc5', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(3\\pi/4)\\).', solution: -Math.sqrt(2)/2, hint: '3π/4 está en el segundo cuadrante, donde el coseno es negativo.', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/4, highlightQuadrant: 2, showProjections: true }) },
-                { id: 'uc6', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\tan(225°)\\).', solution: 1, hint: '225° está en el tercer cuadrante. ¿Cómo son los signos de seno y coseno allí?', svg: () => svgUnitCircle({ angleRad: degToRad(225), highlightQuadrant: 3, showProjections: true }) },
-                { id: 'uc7', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(\\pi)\\).', solution: -1, hint: 'El ángulo π (180°) apunta directamente a la izquierda en el eje x.', svg: () => svgUnitCircle({ angleRad: Math.PI }) },
-                { id: 'uc8', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(3\\pi/2)\\).', solution: -1, hint: 'El ángulo 3π/2 (270°) apunta directamente hacia abajo en el eje y.', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/2 }) },
-                { id: 'uc9', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(330°)\\).', solution: Math.sqrt(3)/2, hint: '330° está en el cuarto cuadrante. El coseno es positivo allí.', svg: () => svgUnitCircle({ angleRad: degToRad(330), highlightQuadrant: 4, showProjections: true }) },
+                // Category 1: Unit Circle Values (mejoradas)
+                { id: 'uc1', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(60°)\\).', solution: 0.5, hint: 'El coseno de 60° corresponde a la coordenada x en la circunferencia unitaria.', svg: () => svgUnitCircle({ angleRad: degToRad(60), showProjections: true, labels: [{text:'cos(60°) = 1/2', x:0.5, y: -0.25}] }) },
+                { id: 'uc2', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(\\pi/6)\\).', solution: 0.5, hint: 'π/6 radianes = 30°. El seno corresponde a la coordenada y.', svg: () => svgUnitCircle({ angleRad: Math.PI/6, showProjections: true, labels: [{text:'π/6', x:0.35, y:-0.15}, {text:'sin(π/6) = 1/2', x:0.7, y:-0.3}] }) },
+                { id: 'uc3', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\tan(\\pi/4)\\).', solution: 1, hint: 'tan(θ) = sin(θ)/cos(θ). En π/4, seno y coseno son iguales.', svg: () => svgUnitCircle({ angleRad: Math.PI/4, showProjections: true, labels: [{text:'π/4', x:0.35, y:-0.15}, {text:'tan(π/4) = 1', x:0.6, y:-0.6}] }) },
+                { id: 'uc4', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(150°)\\).', solution: 0.5, hint: '150° está en el segundo cuadrante, donde el seno es positivo.', svg: () => svgUnitCircle({ angleRad: degToRad(150), highlightQuadrant: 2, showProjections: true, labels: [{text:'150°', x:-0.4, y:-0.15}] }) },
+                { id: 'uc5', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(3\\pi/4)\\).', solution: -Math.sqrt(2)/2, hint: '3π/4 está en el segundo cuadrante, donde el coseno es negativo.', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/4, highlightQuadrant: 2, showProjections: true, labels: [{text:'3π/4', x:-0.4, y:-0.15}] }) },
+                { id: 'uc6', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\tan(225°)\\).', solution: 1, hint: '225° está en el tercer cuadrante. Ambos seno y coseno son negativos, por lo que su razón es positiva.', svg: () => svgUnitCircle({ angleRad: degToRad(225), highlightQuadrant: 3, showProjections: true, labels: [{text:'225°', x:-0.4, y:0.3}] }) },
+                { id: 'uc7', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\cos(\\pi)\\).', solution: -1, hint: 'El ángulo π (180°) apunta directamente a la izquierda en el eje x.', svg: () => svgUnitCircle({ angleRad: Math.PI, labels: [{text:'π', x:-0.4, y:-0.1}, {text:'cos(π) = -1', x:-0.7, y:-0.3}] }) },
+                { id: 'uc8', category: 'Circunferencia Unitaria', type: 'numeric', enunciadoTeX: 'Calcula el valor de \\(\\sin(3\\pi/2)\\).', solution: -1, hint: 'El ángulo 3π/2 (270°) apunta directamente hacia abajo en el eje y.', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/2, labels: [{text:'3π/2', x:0.2, y:0.3}, {text:'sin(3π/2) = -1', x:0.6, y:0.4}] }) },
 
-                // Category 2: Identify function by graph
-                { id: 'graph1', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica?', solution: 'sin', hint: 'La función pasa por el origen (0,0) y sube.', svg: () => svgWave({ func: 'sin' }) },
-                { id: 'graph2', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica?', solution: 'cos', hint: 'La función alcanza su máximo en x=0.', svg: () => svgWave({ func: 'cos' }) },
-                { id: 'graph3', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica?', solution: 'tan', hint: 'Observa las asíntotas verticales y el comportamiento creciente.', svg: () => svgWave({ func: 'tan', A: 0.5, B:0.5, xRange: [-Math.PI, Math.PI] }) },
-                { id: 'graph4', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa esta gráfica reflejada?', solution: 'cos', hint: 'Es una función reflejada sobre el eje x. ¿Cuál es su forma base?', svg: () => svgWave({ func: 'cos', A: -1 }) },
-                { id: 'graph5', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa esta gráfica con desfase?', solution: 'sin', hint: 'Parece una función seno, pero desplazada horizontalmente.', svg: () => svgWave({ func: 'sin', C: Math.PI/2 }) },
-                { id: 'graph6', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa la gráfica?', solution: 'sin', hint: 'Esta es una reflexión sobre el eje x. ¿Cuál es la función original?', svg: () => svgWave({ func: 'sin', A: -1 }) },
-                { id: 'graph7', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función está desplazada hacia arriba?', solution: 'cos', hint: 'La línea media de la onda no está en y=0.', svg: () => svgWave({ func: 'cos', D: 1 }) },
-                { id: 'graph8', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función tiene un período más corto?', solution: 'sin', hint: 'La onda se repite más frecuentemente que una función seno base.', svg: () => svgWave({ func: 'sin', B: 2 }) },
-                { id: 'graph9', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función representa la gráfica?', solution: 'cos', hint: 'Observa el valor en x=0. ¿Corresponde a seno o coseno?', svg: () => svgWave({ func: 'cos', C: Math.PI/4 }) },
+                // Category 2: Identify function by graph (mejoradas)
+                { id: 'graph1', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica mostrada?', solution: 'sin', hint: 'La función pasa por el origen (0,0) y comienza subiendo.', svg: () => svgWave({ func: 'sin', xRange: [-Math.PI, 2*Math.PI] }) },
+                { id: 'graph2', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica mostrada?', solution: 'cos', hint: 'La función alcanza su máximo en x=0.', svg: () => svgWave({ func: 'cos', xRange: [-Math.PI, 2*Math.PI] }) },
+                { id: 'graph3', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función trigonométrica representa la gráfica mostrada?', solution: 'tan', hint: 'Observa las asíntotas verticales y el comportamiento creciente continuo.', svg: () => svgWave({ func: 'tan', A: 1, B: 1, xRange: [-3*Math.PI/2, 3*Math.PI/2] }) },
+                { id: 'graph4', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Cuál es la función base de esta gráfica reflejada verticalmente?', solution: 'sin', hint: 'Es una función seno reflejada sobre el eje x (y = -sin(x)).', svg: () => svgWave({ func: 'sin', A: -1, xRange: [-Math.PI, 2*Math.PI] }) },
+                { id: 'graph5', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función base representa esta gráfica desplazada horizontalmente?', solution: 'cos', hint: 'Es una función coseno desplazada hacia la derecha.', svg: () => svgWave({ func: 'cos', C: Math.PI/2, xRange: [-Math.PI/2, 5*Math.PI/2] }) },
+                { id: 'graph6', category: 'Identificar Gráfica', type: 'text', enunciadoTeX: '¿Qué función base está desplazada verticalmente?', solution: 'sin', hint: 'La línea media de la onda no está en y=0, pero mantiene la forma del seno.', svg: () => svgWave({ func: 'sin', D: 2, xRange: [-Math.PI, 2*Math.PI] }) },
 
-                // Category 3: Parameters A, B, C, D
-                { id: 'param1', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Dada la gráfica de \\(y = A\\sin(Bx)\\), determina el valor de la amplitud \\(A\\).', solution: 2, hint: 'La amplitud es la distancia máxima desde la línea central a un pico.', svg: () => svgWave({ func: 'sin', A: 2, B: 1, highlights: { amplitude: true } }) },
-                { id: 'param2', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Dada la gráfica de \\(y = \\cos(Bx)\\), determina el período. (Ingresa la respuesta en términos de \\(\\pi\\), p. ej. `4pi`).', solution: 4*Math.PI, hint: 'El período es la longitud de un ciclo completo de la onda.', svg: () => svgWave({ func: 'cos', A: 1, B: 0.5, highlights: { period: true, periodLabel: '4π' } }) },
-                { id: 'param3', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'La gráfica es de la forma \\(y = \\sin(x) + D\\). ¿Cuál es el valor del desplazamiento vertical \\(D\\)?', solution: 1.5, hint: 'El desplazamiento vertical es el valor de la línea central de la onda.', svg: () => svgWave({ func: 'sin', D: 1.5 }) },
-                { id: 'param4', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'La gráfica es de la forma \\(y = \\cos(x - C)\\). ¿Cuál es el desfase \\(C\\)?', solution: Math.PI/2, hint: 'El desfase es el desplazamiento horizontal. ¿Dónde empieza el ciclo del coseno?', svg: () => svgWave({ func: 'cos', C: Math.PI/2 }) },
-                { id: 'param5', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Determina la amplitud \\(A\\) de la función en la gráfica.', solution: 0.5, hint: 'La amplitud es la mitad de la diferencia entre el valor máximo y mínimo.', svg: () => svgWave({ func: 'sin', A: 0.5, B: 2, highlights: { amplitude: true } }) },
-                { id: 'param6', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Determina el período de la función en la gráfica.', solution: Math.PI, hint: 'El período se calcula como 2π/B. Observa cuántos ciclos hay en 2π.', svg: () => svgWave({ func: 'cos', B: 2, highlights: { period: true, periodLabel: 'π' } }) },
-                { id: 'param7', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Determina el desplazamiento vertical \\(D\\) de la función.', solution: -1, hint: 'La línea central está en y = D.', svg: () => svgWave({ func: 'sin', A: 2, D: -1 }) },
-                { id: 'param8', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Para la función \\(y = A\\cos(B(x-C))+D\\), ¿cuál es el valor de \\(A\\)?', solution: 3, hint: 'Mira la distancia del centro a la cresta.', svg: () => svgWave({ func: 'cos', A: 3 }) },
-                { id: 'param9', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Determina el período de la función.', solution: 2*Math.PI, hint: 'La función completa un ciclo en 2π unidades.', svg: () => svgWave({ func: 'sin', B: 1, highlights: {period: true, periodLabel: '2π' } }) },
+                // Category 3: Parameters A, B, C, D (mejoradas)
+                { id: 'param1', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Dada la gráfica de \\(y = A\\sin(x)\\), determina el valor de la amplitud \\(A\\).', solution: 3, hint: 'La amplitud es la distancia máxima desde la línea central hasta un pico.', svg: () => svgWave({ func: 'sin', A: 3, B: 1, xRange: [-Math.PI, 2*Math.PI], highlights: { amplitude: true } }) },
+                { id: 'param2', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Dada la gráfica de \\(y = \\cos(Bx)\\), determina el período. (Ingresa en términos de π, ej. `pi` o `2pi`)', solution: 4*Math.PI, hint: 'El período es la longitud de un ciclo completo. Período = 2π/B.', svg: () => svgWave({ func: 'cos', A: 1, B: 0.5, xRange: [-Math.PI, 5*Math.PI], highlights: { period: true, periodLabel: '4π' } }) },
+                { id: 'param3', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'La gráfica es de la forma \\(y = \\sin(x) + D\\). ¿Cuál es el valor del desplazamiento vertical \\(D\\)?', solution: -1, hint: 'El desplazamiento vertical es el valor de la línea central (media) de la onda.', svg: () => svgWave({ func: 'sin', D: -1, xRange: [-Math.PI, 2*Math.PI] }) },
+                { id: 'param4', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'La gráfica es de la forma \\(y = \\cos(x - C)\\). ¿Cuál es el desfase horizontal \\(C\\)? (Ingresa en términos de π)', solution: Math.PI/2, hint: 'El desfase es el desplazamiento horizontal. Observa dónde comienza el primer máximo del coseno.', svg: () => svgWave({ func: 'cos', C: Math.PI/2, xRange: [-Math.PI/2, 5*Math.PI/2] }) },
+                { id: 'param5', category: 'Parámetros de Onda', type: 'numeric', enunciadoTeX: 'Para la función \\(y = A\\sin(2x)\\), determina la amplitud \\(A\\).', solution: 2.5, hint: 'La amplitud es la mitad de la diferencia entre el valor máximo y mínimo.', svg: () => svgWave({ func: 'sin', A: 2.5, B: 2, xRange: [-Math.PI, 2*Math.PI], highlights: { amplitude: true } }) },
+                { id: 'param6', category: 'Parámetros de Onda', type: 'pi', enunciadoTeX: 'Determina el período de la función mostrada.', solution: Math.PI, hint: 'Cuenta la distancia horizontal entre dos picos consecutivos.', svg: () => svgWave({ func: 'sin', B: 2, xRange: [-Math.PI, 2*Math.PI], highlights: { period: true, periodLabel: 'π' } }) },
 
-                // Category 4: Basic Equations
-                { id: 'eq1', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\sin(x) = 1/2\\) en el intervalo \\([0, \\pi)\\).', solution: [Math.PI/6, 5*Math.PI/6], hint: 'El seno es positivo en los cuadrantes I y II.', svg: () => svgUnitCircle({ angleRad: Math.PI/6, highlightQuadrant: 1 }) },
-                { id: 'eq2', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\cos(x) = -1\\) en el intervalo \\([0, 2\\pi)\\).', solution: Math.PI, hint: '¿En qué ángulo la coordenada x es -1?', svg: () => svgUnitCircle({ angleRad: Math.PI }) },
-                { id: 'eq3', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\tan(x) = 1\\) en el intervalo \\([0, \\pi)\\).', solution: Math.PI/4, hint: 'La tangente es 1 cuando seno y coseno son iguales.', svg: () => svgUnitCircle({ angleRad: Math.PI/4, showProjections: true }) },
-                { id: 'eq4', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\cos(x) = \\sqrt{2}/2\\) en el intervalo \\([0, \\pi/2)\\).', solution: Math.PI/4, hint: 'Busca un ángulo notable en el primer cuadrante.', svg: () => svgUnitCircle({ angleRad: Math.PI/4, highlightQuadrant: 1 }) },
-                { id: 'eq5', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\sin(x) = -1\\) en el intervalo \\([0, 2\\pi)\\).', solution: 3*Math.PI/2, hint: '¿En qué ángulo la coordenada y es -1?', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/2 }) },
-                { id: 'eq6', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\cos(x)=0\\) en \\([0, \\pi]\\).', solution: Math.PI/2, hint: 'El coseno es cero en el eje y.', svg: () => svgUnitCircle({ angleRad: Math.PI/2 }) },
-                { id: 'eq7', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\sin(x)=-1/2\\) en \\([\\pi, 2\\pi)\\).', solution: [7*Math.PI/6, 11*Math.PI/6], hint: 'El seno es negativo en los cuadrantes III y IV.', svg: () => svgUnitCircle({ angleRad: 7*Math.PI/6, highlightQuadrant: 3 }) },
-                { id: 'eq8', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\tan(x) = -\\sqrt{3}\\) en \\([\\pi/2, 3\\pi/2]\\).', solution: 2*Math.PI/3, hint: 'La tangente es negativa en el cuadrante II.', svg: () => svgUnitCircle({ angleRad: 2*Math.PI/3, highlightQuadrant: 2 }) },
-                { id: 'eq9', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\cos(x)=- \\sqrt{3}/2\\) en \\([0, \\pi]\\).', solution: 5*Math.PI/6, hint: 'El coseno es negativo en el cuadrante II.', svg: () => svgUnitCircle({ angleRad: 5*Math.PI/6, highlightQuadrant: 2 }) },
+                // Category 4: Basic Equations (mejoradas)
+                { id: 'eq1', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la menor solución positiva para \\(\\sin(x) = 1/2\\).', solution: Math.PI/6, hint: 'El seno es 1/2 en π/6 y 5π/6. La menor positiva es π/6.', svg: () => svgUnitCircle({ angleRad: Math.PI/6, highlightQuadrant: 1, labels: [{text:'sin(x) = 1/2', x:0.6, y:-0.5}] }) },
+                { id: 'eq2', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\cos(x) = -1\\) en el intervalo \\([0, 2\\pi)\\).', solution: Math.PI, hint: '¿En qué ángulo la coordenada x es -1?', svg: () => svgUnitCircle({ angleRad: Math.PI, labels: [{text:'cos(x) = -1', x:-0.6, y:-0.3}] }) },
+                { id: 'eq3', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la menor solución positiva para \\(\\tan(x) = 1\\).', solution: Math.PI/4, hint: 'La tangente es 1 cuando seno y coseno son iguales en valor absoluto.', svg: () => svgUnitCircle({ angleRad: Math.PI/4, showProjections: true, labels: [{text:'tan(x) = 1', x:0.5, y:-0.5}] }) },
+                { id: 'eq4', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\cos(x) = \\sqrt{2}/2\\) en \\([0, \\pi/2]\\).', solution: Math.PI/4, hint: 'Busca un ángulo notable en el primer cuadrante donde cos(x) = √2/2.', svg: () => svgUnitCircle({ angleRad: Math.PI/4, highlightQuadrant: 1, showProjections: true }) },
+                { id: 'eq5', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Encuentra la solución para \\(\\sin(x) = -1\\) en \\([0, 2\\pi)\\).', solution: 3*Math.PI/2, hint: '¿En qué ángulo la coordenada y es -1?', svg: () => svgUnitCircle({ angleRad: 3*Math.PI/2, labels: [{text:'sin(x) = -1', x:0.3, y:0.4}] }) },
+                { id: 'eq6', category: 'Ecuaciones Trigonométricas', type: 'pi', enunciadoTeX: 'Resuelve \\(\\cos(x) = 0\\) para la menor solución positiva.', solution: Math.PI/2, hint: 'El coseno es cero cuando el punto está en el eje y.', svg: () => svgUnitCircle({ angleRad: Math.PI/2, labels: [{text:'cos(x) = 0', x:0.3, y:-0.3}] }) },
 
-                // Category 5: Right Triangles (SOH-CAH-TOA)
-                { id: 'tri1', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'En el triángulo, calcula la longitud del lado \\(x\\). Redondea a 2 decimales.', solution: 5.77, hint: 'Usa la tangente: tan(30°) = opuesto/adyacente.', svg: () => svgRightTriangle({ a: 10, b: null, c: null, angleA: 60, angleB: 30, labels: {a: '10', b: 'x', c:'h', angleB: '30°'} }) },
-                { id: 'tri2', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud de la hipotenusa \\(h\\). Redondea a 2 decimales.', solution: 14.14, hint: 'Usa el seno: sin(45°) = opuesto/hipotenusa.', svg: () => svgRightTriangle({ a: 10, b: 10, c: null, labels: {a: '10', c: 'h', angleB: '45°'} }) },
-                { id: 'tri3', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud del lado \\(y\\). Redondea a 2 decimales.', solution: 8.66, hint: 'Usa el coseno: cos(30°) = adyacente/hipotenusa.', svg: () => svgRightTriangle({ a: 5, b: null, c: 10, labels: {b: 'y', c: '10', angleB: '30°'} }) },
-                { id: 'tri4', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\sin(\\theta) = 3/5\\), y el cateto opuesto es 3, ¿cuál es la hipotenusa?', solution: 5, hint: 'SOH: Seno = Opuesto / Hipotenusa.', svg: () => svgRightTriangle({ a: 3, b: 4, c: 5, labels: {a: '3', b: '4', c: '5', angleB: 'θ'} }) },
-                { id: 'tri5', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\cos(\\theta) = 12/13\\), y el cateto adyacente es 12, ¿cuál es la hipotenusa?', solution: 13, hint: 'CAH: Coseno = Adyacente / Hipotenusa.', svg: () => svgRightTriangle({ a: 5, b: 12, c: 13, labels: {a: '5', b: '12', c: '13', angleB: 'θ'} }) },
-                { id: 'tri6', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\tan(\\theta) = 8/15\\), y el opuesto es 8, ¿cuál es el adyacente?', solution: 15, hint: 'TOA: Tangente = Opuesto / Adyacente.', svg: () => svgRightTriangle({ a: 8, b: 15, c: 17, labels: {a: '8', b: '15', c: '17', angleB: 'θ'} }) },
-                { id: 'tri7', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud del lado \\(x\\).', solution: 5, hint: 'Es un triángulo rectángulo especial 30-60-90.', svg: () => svgRightTriangle({ a: 5, b: 5*Math.sqrt(3), c: 10, labels: {a: 'x', c: '10', angleB: '30°'} }) },
-                { id: 'tri8', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud de la hipotenusa \\(h\\).', solution: 7.07, hint: 'Es un triángulo isósceles rectángulo (45-45-90).', svg: () => svgRightTriangle({ a: 5, b: 5, c: 5*Math.sqrt(2), labels: {a: '5', b: '5', c: 'h'} }) },
-                { id: 'tri9', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud del lado \\(y\\).', solution: 6, hint: 'Usa el Teorema de Pitágoras: a² + b² = c²', svg: () => svgRightTriangle({ a: 8, b: 6, c: 10, labels: {a: '8', b: 'y', c: '10'} }) },
+                // Category 5: Right Triangles (mejoradas)
+                { id: 'tri1', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'En el triángulo rectángulo, calcula la longitud del cateto \\(x\\). Redondea a 2 decimales.', solution: 5.77, hint: 'Usa la tangente: tan(30°) = opuesto/adyacente = 10/x.', svg: () => svgRightTriangle({ a: 10, b: 10/Math.tan(degToRad(30)), c: null, labels: {a: '10', b: 'x', c:'h', angleB: '30°'} }) },
+                { id: 'tri2', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud de la hipotenusa \\(h\\). Redondea a 2 decimales.', solution: 14.14, hint: 'Usa el seno: sin(45°) = opuesto/hipotenusa = 10/h.', svg: () => svgRightTriangle({ a: 10, b: 10, c: null, labels: {a: '10', b: '10', c: 'h', angleA: '45°'} }) },
+                { id: 'tri3', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Calcula la longitud del cateto adyacente \\(y\\). Redondea a 2 decimales.', solution: 8.66, hint: 'Usa el coseno: cos(30°) = adyacente/hipotenusa = y/10.', svg: () => svgRightTriangle({ a: 5, b: 10*Math.cos(degToRad(30)), c: 10, labels: {a: '5', b: 'y', c: '10', angleB: '30°'} }) },
+                { id: 'tri4', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'En un triángulo rectángulo, si \\(\\sin(\\theta) = 3/5\\) y el cateto opuesto es 3, ¿cuál es la hipotenusa?', solution: 5, hint: 'SOH: Seno = Opuesto / Hipotenusa. Por lo tanto, 3/5 = 3/h.', svg: () => svgRightTriangle({ a: 3, b: 4, c: 5, labels: {a: '3', b: '4', c: '5', angleB: 'θ'} }) },
+                { id: 'tri5', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\cos(\\theta) = 12/13\\) y el cateto adyacente es 12, ¿cuál es la hipotenusa?', solution: 13, hint: 'CAH: Coseno = Adyacente / Hipotenusa. Por lo tanto, 12/13 = 12/h.', svg: () => svgRightTriangle({ a: 5, b: 12, c: 13, labels: {a: '5', b: '12', c: '13', angleB: 'θ'} }) },
+                { id: 'tri6', category: 'Triángulos Rectángulos', type: 'numeric', enunciadoTeX: 'Si \\(\\tan(\\theta) = 4/3\\) y el cateto opuesto es 8, ¿cuál es el cateto adyacente?', solution: 6, hint: 'TOA: Tangente = Opuesto / Adyacente. Si tan(θ) = 4/3, entonces 8/adyacente = 4/3.', svg: () => svgRightTriangle({ a: 8, b: 6, c: 10, labels: {a: '8', b: '?', c: '10', angleB: 'θ'} }) },
 
-                // Category 6: Applications
-                { id: 'app1', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La gráfica muestra el voltaje de una señal de AC. ¿Cuál es la amplitud (voltaje máximo)?', solution: 5, hint: 'La amplitud es el valor máximo que alcanza la onda.', svg: () => svgWave({ func: 'sin', A: 5, D: 0, xRange: [0, 4], highlights: {amplitude:true} }) },
-                { id: 'app2', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La gráfica muestra el nivel de la marea. ¿Cuál es el período en horas?', solution: 12, hint: 'El período es el tiempo que tarda en completarse un ciclo (de marea alta a marea alta).', svg: () => svgWave({ func: 'cos', B: 2*Math.PI/12, D: 2, xRange: [0, 24], highlights: { period: true, periodLabel: '12h' } }) },
-                { id: 'app3', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'El movimiento de un resorte se describe por la gráfica. ¿Cuál es el desplazamiento vertical (posición de equilibrio)?', solution: 0, hint: 'El desplazamiento vertical es la línea central alrededor de la cual oscila.', svg: () => svgWave({ func: 'cos', A: 10, B: 1, D: 0, xRange: [0, 4*Math.PI] }) },
-                { id: 'app4', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: '¿Cuál es la frecuencia de la señal de voltaje (en Hz), si el período es de 0.5 segundos? \\(f = 1/T\\)', solution: 2, hint: 'Frecuencia es el inverso del período.', svg: () => svgWave({ func: 'sin', B: 2*Math.PI/0.5, xRange: [0, 1], highlights: { period: true, periodLabel: 'T=0.5s' } }) },
-                { id: 'app5', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La altura de una noria se muestra en la gráfica. ¿Cuál es la altura máxima alcanzada?', solution: 20, hint: 'La altura máxima es el punto más alto de la gráfica (D + A).', svg: () => svgWave({ func: 'cos', A: -10, B: 1, D: 10, xRange: [0, 2*Math.PI] }) },
-                { id: 'app6', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La temperatura de un cuarto oscila como se muestra. ¿Cuál es la temperatura promedio?', solution: 22, hint: 'La temperatura promedio corresponde al desplazamiento vertical (línea central).', svg: () => svgWave({ func: 'sin', A: 3, B: 2*Math.PI/24, D: 22, xRange: [0, 48] }) },
-                { id: 'app7', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La gráfica muestra la población de depredadores. ¿Cuál es el tamaño máximo de la población?', solution: 150, hint: 'Busca el valor máximo en el eje vertical.', svg: () => svgWave({ func: 'sin', A: 50, D: 100, xRange: [0, 20] }) },
-                { id: 'app8', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: '¿Cuál es el período del ciclo poblacional en años?', solution: 10, hint: 'Mide la distancia horizontal entre dos picos consecutivos.', svg: () => svgWave({ func: 'sin', A: 50, D: 100, B: 2*Math.PI/10, xRange: [0, 20], highlights: { period: true, periodLabel: '10 años' } }) },
-                { id: 'app9', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: '¿Cuál es el valor mínimo de la onda sonora mostrada?', solution: -2, hint: 'Busca el punto más bajo de la gráfica (D - A).', svg: () => svgWave({ func: 'cos', A: 2, D: 0, xRange: [0, 4] }) },
+                // Category 6: Applications (mejoradas)
+                { id: 'app1', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'El voltaje de una señal de AC se muestra en la gráfica. ¿Cuál es la amplitud máxima (en voltios)?', solution: 12, hint: 'La amplitud es el valor máximo que alcanza la onda desde la línea central.', svg: () => svgWave({ func: 'sin', A: 12, D: 0, xRange: [0, 4*Math.PI], highlights: {amplitude:true} }) },
+                { id: 'app2', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La gráfica muestra el nivel de la marea durante 24 horas. ¿Cuál es el período de la marea (en horas)?', solution: 12, hint: 'El período es el tiempo que tarda en completarse un ciclo completo (de marea alta a marea alta).', svg: () => svgWave({ func: 'cos', B: 2*Math.PI/12, D: 2, xRange: [0, 24], highlights: { period: true, periodLabel: '12h' } }) },
+                { id: 'app3', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'Una rueda de la fortuna de 30 metros de diámetro gira. La altura del asiento se muestra en la gráfica. ¿Cuál es la altura mínima sobre el suelo?', solution: 5, hint: 'La altura mínima es el valor mínimo de la función (D - A).', svg: () => svgWave({ func: 'cos', A: -15, B: 1, D: 20, xRange: [0, 4*Math.PI] }) },
+                { id: 'app4', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'Una función seno modela las ventas estacionales. Si el período es 12 meses y la venta promedio es 5000 unidades, ¿cuál es la venta promedio?', solution: 5000, hint: 'La venta promedio corresponde al desplazamiento vertical D de la función.', svg: () => svgWave({ func: 'sin', A: 1000, B: 2*Math.PI/12, D: 5000, xRange: [0, 24] }) },
+                { id: 'app5', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'La temperatura diaria oscila como se muestra. ¿Cuál es la variación máxima de temperatura (diferencia entre máxima y mínima)?', solution: 16, hint: 'La variación máxima es el doble de la amplitud (2A).', svg: () => svgWave({ func: 'sin', A: 8, B: 2*Math.PI/24, D: 22, xRange: [0, 48] }) },
+                { id: 'app6', category: 'Aplicaciones', type: 'numeric', enunciadoTeX: 'El movimiento de un péndulo se describe por la gráfica. ¿Cuántos ciclos completos hace en 8 segundos?', solution: 4, hint: 'Cuenta cuántos ciclos completos caben en el intervalo de tiempo dado.', svg: () => svgWave({ func: 'cos', A: 10, B: Math.PI, D: 0, xRange: [0, 8], highlights: { period: true, periodLabel: '2s' } }) },
             ];
 
             // --- LOCAL STORAGE ---
@@ -976,7 +1127,7 @@
                             <div class="enunciado">${question.enunciadoTeX}</div>
                             <div class="input-group">
                                 <label for="answer-${index}">Respuesta:</label>
-                                <input type="text" id="answer-${index}" name="answer-${index}" autocomplete="off">
+                                <input type="text" id="answer-${index}" name="answer-${index}" autocomplete="off" placeholder="Ingresa tu respuesta">
                             </div>
                             <div class="feedback" id="feedback-${index}" aria-live="polite"></div>
                         </div>
@@ -1035,9 +1186,9 @@
             function renderGallery() {
                 const galleryContainer = document.getElementById('gallery-container');
                 const baseFunctions = [
-                    { name: '\\(y = \\sin(x)\\)', svg: svgWave({func:'sin'}) },
-                    { name: '\\(y = \\cos(x)\\)', svg: svgWave({func:'cos'}) },
-                    { name: '\\(y = \\tan(x)\\)', svg: svgWave({func:'tan', A: 0.5, B:0.5, xRange: [-Math.PI, Math.PI]}) },
+                    { name: '\\(y = \\sin(x)\\)', svg: svgWave({func:'sin', xRange: [-Math.PI, 2*Math.PI]}) },
+                    { name: '\\(y = \\cos(x)\\)', svg: svgWave({func:'cos', xRange: [-Math.PI, 2*Math.PI]}) },
+                    { name: '\\(y = \\tan(x)\\)', svg: svgWave({func:'tan', A: 1, B: 1, xRange: [-Math.PI, Math.PI]}) },
                 ];
                 galleryContainer.innerHTML = baseFunctions.map(item => `
                     <div class="gallery-item">
@@ -1256,7 +1407,7 @@
                         }
                     }
                 };
-                const mutationObserver = new MutationObserver(observerCallback);
+                const mutationObserver = new MutationObserver(observerConfig);
                 mutationObserver.observe(questionsContainer, observerConfig);
 
                 loadHistory();
@@ -1271,4 +1422,3 @@
     </script>
 </body>
 </html>
-
