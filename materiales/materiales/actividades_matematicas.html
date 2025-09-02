@@ -3,278 +3,775 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actividades Interactivas de Matemáticas</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Actividades interactivas de matemáticas para aprender de forma divertida">
+    <meta name="keywords" content="matemáticas, juegos, educación, interactivo, aprendizaje">
+    <title>Actividades Interactivas de Matemáticas | Aprende Jugando</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
+        /* CSS Custom Properties (Variables) */
         :root {
-            --primary-color: #4CAF50;
-            --secondary-color: #2196F3;
-            --accent-color: #FF4081;
-            --dark-color: #333;
-            --light-color: #fff;
+            /* Color Palette */
+            --primary-hue: 260;
+            --secondary-hue: 200;
+            --accent-hue: 340;
+            
+            --primary-50: hsl(var(--primary-hue), 95%, 95%);
+            --primary-100: hsl(var(--primary-hue), 90%, 88%);
+            --primary-500: hsl(var(--primary-hue), 70%, 60%);
+            --primary-600: hsl(var(--primary-hue), 75%, 55%);
+            --primary-700: hsl(var(--primary-hue), 80%, 45%);
+            
+            --secondary-400: hsl(var(--secondary-hue), 60%, 65%);
+            --secondary-500: hsl(var(--secondary-hue), 70%, 55%);
+            --secondary-600: hsl(var(--secondary-hue), 75%, 45%);
+            
+            --accent-400: hsl(var(--accent-hue), 80%, 65%);
+            --accent-500: hsl(var(--accent-hue), 85%, 60%);
+            --accent-600: hsl(var(--accent-hue), 90%, 50%);
+            
+            --neutral-50: hsl(220, 15%, 97%);
+            --neutral-100: hsl(220, 13%, 92%);
+            --neutral-200: hsl(220, 12%, 85%);
+            --neutral-300: hsl(220, 11%, 75%);
+            --neutral-400: hsl(220, 10%, 60%);
+            --neutral-500: hsl(220, 9%, 46%);
+            --neutral-600: hsl(220, 10%, 35%);
+            --neutral-700: hsl(220, 12%, 25%);
+            --neutral-800: hsl(220, 15%, 15%);
+            --neutral-900: hsl(220, 18%, 8%);
+            
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            
+            --text-xs: clamp(0.75rem, 0.69rem + 0.31vw, 0.875rem);
+            --text-sm: clamp(0.875rem, 0.81rem + 0.31vw, 1rem);
+            --text-base: clamp(1rem, 0.93rem + 0.31vw, 1.125rem);
+            --text-lg: clamp(1.125rem, 1.02rem + 0.47vw, 1.375rem);
+            --text-xl: clamp(1.25rem, 1.11rem + 0.63vw, 1.625rem);
+            --text-2xl: clamp(1.5rem, 1.27rem + 1.09vw, 2.125rem);
+            --text-3xl: clamp(1.875rem, 1.52rem + 1.72vw, 2.875rem);
+            --text-4xl: clamp(2.25rem, 1.77rem + 2.34vw, 3.625rem);
+            
+            /* Spacing */
+            --space-xs: clamp(0.5rem, 0.47rem + 0.16vw, 0.625rem);
+            --space-sm: clamp(0.75rem, 0.70rem + 0.23vw, 0.9375rem);
+            --space-md: clamp(1rem, 0.93rem + 0.31vw, 1.25rem);
+            --space-lg: clamp(1.5rem, 1.40rem + 0.47vw, 1.875rem);
+            --space-xl: clamp(2rem, 1.86rem + 0.63vw, 2.5rem);
+            --space-2xl: clamp(3rem, 2.79rem + 0.94vw, 3.75rem);
+            --space-3xl: clamp(4rem, 3.72rem + 1.25vw, 5rem);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            /* Borders */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Backdrop blur */
+            --backdrop-blur: blur(16px);
+            --backdrop-blur-sm: blur(8px);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
+        
+        /* Modern CSS Reset */
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
         }
-
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            font-size: var(--text-base);
+            line-height: 1.6;
+            color: var(--neutral-800);
+            background: linear-gradient(135deg, var(--primary-700) 0%, var(--secondary-600) 50%, var(--accent-600) 100%);
             min-height: 100vh;
-            color: var(--dark-color);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-
-        header {
-            background: rgba(0, 0, 0, 0.8);
-            color: var(--light-color);
-            padding: 1rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        
+        /* Floating background elements */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            border-radius: var(--radius-full);
+            z-index: -1;
+            animation: float 6s ease-in-out infinite;
         }
-
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 0.5em;
-            animation: slideIn 1s ease-out;
+        
+        body::before {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary-500) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+            animation-delay: -2s;
         }
-
-        .container {
+        
+        body::after {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--accent-400) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            animation-delay: -4s;
+        }
+        
+        /* Header Styles */
+        .site-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: var(--backdrop-blur);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: var(--space-lg) 0;
+        }
+        
+        .header-content {
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+            text-align: center;
         }
-
+        
+        .site-title {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: white;
+            margin: 0 0 var(--space-sm) 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideInFromTop var(--transition-slow) ease-out;
+        }
+        
+        .site-subtitle {
+            font-size: var(--text-lg);
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
+            font-weight: 400;
+            animation: slideInFromTop var(--transition-slow) ease-out 0.2s both;
+        }
+        
+        .header-icon {
+            display: inline-block;
+            margin-right: var(--space-sm);
+            animation: bounce 2s infinite;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-md);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            color: white;
+            margin-bottom: var(--space-xl);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Activities Grid */
         .activities-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            padding: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
         }
-
+        
+        /* Activity Cards */
         .activity-card {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: var(--backdrop-blur-sm);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .activity-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .activity-card i {
-            font-size: 2.5em;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .activity-card h3 {
-            font-size: 1.3em;
-            margin-bottom: 0.5rem;
-            color: var(--dark-color);
-        }
-
-        .activity-card p {
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .btn-play {
-            background: var(--primary-color);
-            color: var(--light-color);
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 5px;
-            margin-top: 1rem;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all var(--transition-medium);
+            box-shadow: var(--shadow-lg);
+            transform-origin: center;
+            animation: fadeInUp var(--transition-slow) ease-out both;
         }
-
-        .btn-play:hover {
-            background: #388e3c;
+        
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-500), var(--secondary-500), var(--accent-500));
+            transform: scaleX(0);
+            transition: transform var(--transition-medium);
+            transform-origin: left;
         }
-
-        @keyframes slideIn {
+        
+        .activity-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .activity-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .activity-card:active {
+            transform: translateY(-4px) scale(0.98);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-lg);
+            color: var(--primary-600);
+            display: block;
+            transition: all var(--transition-medium);
+        }
+        
+        .activity-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--accent-600);
+        }
+        
+        .card-title {
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin: 0 0 var(--space-sm) 0;
+            transition: color var(--transition-fast);
+        }
+        
+        .card-description {
+            font-size: var(--text-sm);
+            color: var(--neutral-600);
+            margin: 0 0 var(--space-lg) 0;
+            line-height: 1.5;
+        }
+        
+        .card-button {
+            background: linear-gradient(135deg, var(--primary-600), var(--secondary-600));
+            color: white;
+            border: none;
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .card-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s;
+        }
+        
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-button:hover::before {
+            left: 100%;
+        }
+        
+        .card-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        .site-footer {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: var(--backdrop-blur);
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            padding: var(--space-xl) var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            margin: 0;
+            font-size: var(--text-sm);
+        }
+        
+        /* Animations */
+        @keyframes slideInFromTop {
             from {
-                transform: translateY(-100%);
                 opacity: 0;
+                transform: translateY(-30px);
             }
             to {
-                transform: translateY(0);
                 opacity: 1;
+                transform: translateY(0);
             }
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
-        .activity-card {
-            animation: fadeIn 0.5s ease-out forwards;
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
         }
-
-        footer {
-            background: rgba(0, 0, 0, 0.8);
-            color: var(--light-color);
-            text-align: center;
-            padding: 1rem;
-            position: relative;
-            margin-top: 2rem;
+        
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                transform: translate3d(0, 0, 0);
+            }
+            40%, 43% {
+                animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+                transform: translate3d(0, -8px, 0);
+            }
+            70% {
+                animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+                transform: translate3d(0, -4px, 0);
+            }
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-left: var(--space-xs);
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .activities-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-md);
+            }
+            
+            .activity-card {
+                padding: var(--space-lg);
+            }
+            
+            .main-content {
+                padding: var(--space-xl) var(--space-md);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .site-header {
+                padding: var(--space-md) 0;
+            }
+            
+            .activity-card {
+                padding: var(--space-md);
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+        
+        /* Focus styles */
+        .activity-card:focus-visible,
+        .card-button:focus-visible {
+            outline: 2px solid var(--accent-500);
+            outline-offset: 2px;
+        }
+        
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .activity-card {
+                border: 2px solid var(--neutral-800);
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1><i class="fas fa-calculator"></i> Actividades Interactivas de Matemáticas</h1>
-        <p>¡Aprende matemáticas de forma divertida!</p>
+    <header class="site-header">
+        <div class="header-content">
+            <h1 class="site-title">
+                <i class="fas fa-calculator header-icon" aria-hidden="true"></i>
+                Actividades Interactivas de Matemáticas
+            </h1>
+            <p class="site-subtitle">¡Aprende matemáticas de forma divertida y moderna!</p>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="activities-grid">
-            <!-- Actividad 1 (Reemplazo) -->
-            <div class="activity-card" onclick="window.open('https://www.brainzilla.com/math-games/')">
-                <i class="fas fa-brain"></i>
-                <h3>Brainzilla Math</h3>
-                <p>Juegos y acertijos matemáticos para entrenar tu mente</p>
-                <button class="btn-play">Entrenar</button>
-            </div>
+    <main class="main-content">
+        <h2 class="section-title">Explora Nuestras Actividades</h2>
+        
+        <section class="activities-grid" role="main">
+            <article class="activity-card" tabindex="0" role="button" aria-label="Brainzilla Math - Entrenar mente">
+                <i class="fas fa-brain card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Brainzilla Math</h3>
+                <p class="card-description">Juegos y acertijos matemáticos para entrenar tu mente con desafíos progresivos</p>
+                <button class="card-button" aria-label="Comenzar Brainzilla Math">
+                    Entrenar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 2 -->
-            <div class="activity-card" onclick="window.open('https://www.ixl.com/math/')">
-                <i class="fas fa-brain"></i>
-                <h3>IXL Math</h3>
-                <p>Práctica adaptativa para todos los niveles</p>
-                <button class="btn-play">Comenzar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="IXL Math - Práctica adaptativa">
+                <i class="fas fa-graduation-cap card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">IXL Math</h3>
+                <p class="card-description">Práctica adaptativa personalizada para todos los niveles educativos</p>
+                <button class="card-button" aria-label="Comenzar IXL Math">
+                    Comenzar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 3 -->
-            <div class="activity-card" onclick="window.open('https://www.mathgames.com/')">
-                <i class="fas fa-gamepad"></i>
-                <h3>Math Games</h3>
-                <p>Juegos matemáticos divertidos y educativos</p>
-                <button class="btn-play">Explorar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Math Games - Juegos educativos">
+                <i class="fas fa-gamepad card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Math Games</h3>
+                <p class="card-description">Juegos matemáticos divertidos y educativos para todas las edades</p>
+                <button class="card-button" aria-label="Explorar Math Games">
+                    Explorar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 4 (Reemplazo) -->
-            <div class="activity-card" onclick="window.open('https://www.puzzle-riddles.com/')">
-                <i class="fas fa-puzzle-piece"></i>
-                <h3>Puzzle Riddles</h3>
-                <p>Acertijos y rompecabezas matemáticos desafiantes</p>
-                <button class="btn-play">Resolver</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Puzzle Riddles - Acertijos matemáticos">
+                <i class="fas fa-puzzle-piece card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Puzzle Riddles</h3>
+                <p class="card-description">Acertijos y rompecabezas matemáticos desafiantes para estimular el pensamiento</p>
+                <button class="card-button" aria-label="Resolver puzzles">
+                    Resolver <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 5 -->
-            <div class="activity-card" onclick="window.open('https://www.prodigygame.com/')">
-                <i class="fas fa-dragon"></i>
-                <h3>Prodigy Math</h3>
-                <p>Aventura matemática en un mundo mágico</p>
-                <button class="btn-play">Aventura</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Prodigy Math - Aventura matemática">
+                <i class="fas fa-dragon card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Prodigy Math</h3>
+                <p class="card-description">Aventura matemática épica en un mundo mágico lleno de desafíos</p>
+                <button class="card-button" aria-label="Iniciar aventura">
+                    Aventura <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 6 -->
-            <div class="activity-card" onclick="window.open('https://www.mathplayground.com/')">
-                <i class="fas fa-puzzle-piece"></i>
-                <h3>Math Playground</h3>
-                <p>Juegos y rompecabezas matemáticos</p>
-                <button class="btn-play">Jugar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Math Playground - Juegos y rompecabezas">
+                <i class="fas fa-shapes card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Math Playground</h3>
+                <p class="card-description">Juegos interactivos y rompecabezas matemáticos para aprender jugando</p>
+                <button class="card-button" aria-label="Jugar en Math Playground">
+                    Jugar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 7 -->
-            <div class="activity-card" onclick="window.open('https://www.coolmathgames.com/')">
-                <i class="fas fa-dice"></i>
-                <h3>Cool Math Games</h3>
-                <p>Juegos de lógica y matemáticas</p>
-                <button class="btn-play">Divertirse</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Cool Math Games - Lógica y matemáticas">
+                <i class="fas fa-dice card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Cool Math Games</h3>
+                <p class="card-description">Juegos de lógica y matemáticas que combinan diversión y aprendizaje</p>
+                <button class="card-button" aria-label="Divertirse con Cool Math">
+                    Divertirse <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 8 -->
-            <div class="activity-card" onclick="window.open('https://www.multiplication.com/')">
-                <i class="fas fa-times"></i>
-                <h3>Multiplication.com</h3>
-                <p>Práctica de multiplicación interactiva</p>
-                <button class="btn-play">Practicar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Multiplication.com - Práctica de multiplicación">
+                <i class="fas fa-times card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Multiplication.com</h3>
+                <p class="card-description">Práctica interactiva de multiplicación con ejercicios progresivos</p>
+                <button class="card-button" aria-label="Practicar multiplicación">
+                    Practicar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 9 -->
-            <div class="activity-card" onclick="window.open('https://www.splashlearn.com/')">
-                <i class="fas fa-water"></i>
-                <h3>SplashLearn</h3>
-                <p>Aprendizaje adaptativo para niños</p>
-                <button class="btn-play">Sumergirse</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="SplashLearn - Aprendizaje adaptativo">
+                <i class="fas fa-water card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">SplashLearn</h3>
+                <p class="card-description">Plataforma de aprendizaje adaptativo diseñada especialmente para niños</p>
+                <button class="card-button" aria-label="Sumergirse en SplashLearn">
+                    Sumergirse <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 10 -->
-            <div class="activity-card" onclick="window.open('https://www.mathsisfun.com/')">
-                <i class="fas fa-smile-beam"></i>
-                <h3>Maths is Fun</h3>
-                <p>Explicaciones y juegos matemáticos</p>
-                <button class="btn-play">Descubrir</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Maths is Fun - Explicaciones y juegos">
+                <i class="fas fa-smile-beam card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Maths is Fun</h3>
+                <p class="card-description">Explicaciones claras y juegos matemáticos que hacen el aprendizaje divertido</p>
+                <button class="card-button" aria-label="Descubrir Maths is Fun">
+                    Descubrir <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 11 (Reemplazo) -->
-            <div class="activity-card" onclick="window.open('https://www.mathsisfun.com/puzzles/')">
-                <i class="fas fa-cogs"></i>
-                <h3>Math Puzzles</h3>
-                <p>Colección de acertijos y problemas matemáticos divertidos</p>
-                <button class="btn-play">Descubrir</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Math Puzzles - Acertijos matemáticos">
+                <i class="fas fa-cogs card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Math Puzzles</h3>
+                <p class="card-description">Colección extensa de acertijos y problemas matemáticos estimulantes</p>
+                <button class="card-button" aria-label="Descubrir puzzles">
+                    Descubrir <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 12 -->
-            <div class="activity-card" onclick="window.open('https://www.education.com/games/math/')">
-                <i class="fas fa-school"></i>
-                <h3>Education.com</h3>
-                <p>Juegos educativos de matemáticas</p>
-                <button class="btn-play">Educar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Education.com - Juegos educativos">
+                <i class="fas fa-school card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Education.com</h3>
+                <p class="card-description">Amplia variedad de juegos educativos de matemáticas por nivel</p>
+                <button class="card-button" aria-label="Educar con Education.com">
+                    Educar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 13 (Reemplazo) -->
-            <div class="activity-card" onclick="window.open('https://www.puzzles-to-puzzle.com/')">
-                <i class="fas fa-lightbulb"></i>
-                <h3>Puzzles to Puzzle</h3>
-                <p>Enigmas matemáticos y acertijos lógicos</p>
-                <button class="btn-play">Explorar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="Puzzles to Puzzle - Enigmas lógicos">
+                <i class="fas fa-lightbulb card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">Puzzles to Puzzle</h3>
+                <p class="card-description">Enigmas matemáticos y acertijos lógicos para desarrollar el razonamiento</p>
+                <button class="card-button" aria-label="Explorar enigmas">
+                    Explorar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 14 -->
-            <div class="activity-card" onclick="window.open('https://www.adaptedmind.com/Math.html')">
-                <i class="fas fa-lightbulb"></i>
-                <h3>AdaptedMind</h3>
-                <p>Matemáticas personalizadas</p>
-                <button class="btn-play">Personalizar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="AdaptedMind - Matemáticas personalizadas">
+                <i class="fas fa-user-cog card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">AdaptedMind</h3>
+                <p class="card-description">Sistema de matemáticas personalizado que se adapta a tu ritmo de aprendizaje</p>
+                <button class="card-button" aria-label="Personalizar aprendizaje">
+                    Personalizar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
 
-            <!-- Actividad 15 -->
-            <div class="activity-card" onclick="window.open('https://www.abcya.com/grades/k/numbers')">
-                <i class="fas fa-star"></i>
-                <h3>ABCya Math</h3>
-                <p>Juegos matemáticos por grado</p>
-                <button class="btn-play">Empezar</button>
-            </div>
+            <article class="activity-card" tabindex="0" role="button" aria-label="ABCya Math - Juegos por grado">
+                <i class="fas fa-star card-icon" aria-hidden="true"></i>
+                <h3 class="card-title">ABCya Math</h3>
+                <p class="card-description">Juegos matemáticos cuidadosamente organizados por grado escolar</p>
+                <button class="card-button" aria-label="Empezar ABCya Math">
+                    Empezar <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p class="footer-text">
+                &copy; 2025 Yonatan Guerrero Soriano - Página Moderna de Matemáticas
+                <br>
+                <small>Diseñado con ❤️ para hacer las matemáticas más divertidas</small>
+            </p>
         </div>
-    </div>
-
-    <footer>
-        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
     </footer>
 
     <script>
-        // Animación de aparición gradual de las tarjetas
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.activity-card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
+        // Modern JavaScript for enhanced interactivity
+        class MathActivitiesApp {
+            constructor() {
+                this.cards = document.querySelectorAll('.activity-card');
+                this.init();
+            }
+
+            init() {
+                this.setupAnimations();
+                this.setupCardInteractions();
+                this.setupKeyboardNavigation();
+                this.setupIntersectionObserver();
+            }
+
+            setupAnimations() {
+                // Staggered animation delays for cards
+                this.cards.forEach((card, index) => {
+                    card.style.animationDelay = `${index * 0.1}s`;
+                });
+            }
+
+            setupCardInteractions() {
+                // Activity links mapping
+                const activityLinks = {
+                    'Brainzilla Math': 'https://www.brainzilla.com/math-games/',
+                    'IXL Math': 'https://www.ixl.com/math/',
+                    'Math Games': 'https://www.mathgames.com/',
+                    'Puzzle Riddles': 'https://www.puzzle-riddles.com/',
+                    'Prodigy Math': 'https://www.prodigygame.com/',
+                    'Math Playground': 'https://www.mathplayground.com/',
+                    'Cool Math Games': 'https://www.coolmathgames.com/',
+                    'Multiplication.com': 'https://www.multiplication.com/',
+                    'SplashLearn': 'https://www.splashlearn.com/',
+                    'Maths is Fun': 'https://www.mathsisfun.com/',
+                    'Math Puzzles': 'https://www.mathsisfun.com/puzzles/',
+                    'Education.com': 'https://www.education.com/games/math/',
+                    'Puzzles to Puzzle': 'https://www.puzzles-to-puzzle.com/',
+                    'AdaptedMind': 'https://www.adaptedmind.com/Math.html',
+                    'ABCya Math': 'https://www.abcya.com/grades/k/numbers'
+                };
+
+                this.cards.forEach(card => {
+                    const title = card.querySelector('.card-title').textContent;
+                    const button = card.querySelector('.card-button');
+                    const url = activityLinks[title];
+
+                    // Add loading state on click
+                    const handleClick = (event) => {
+                        if (url) {
+                            event.preventDefault();
+                            this.showLoadingState(button);
+                            
+                            // Simulate loading and open link
+                            setTimeout(() => {
+                                window.open(url, '_blank', 'noopener,noreferrer');
+                                this.hideLoadingState(button);
+                            }, 800);
+                        }
+                    };
+
+                    // Handle both card click and button click
+                    card.addEventListener('click', handleClick);
+                    button.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        handleClick(e);
+                    });
+
+                    // Add hover sound effect (visual feedback)
+                    card.addEventListener('mouseenter', () => {
+                        card.style.setProperty('--hover-scale', '1.02');
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        card.style.setProperty('--hover-scale', '1');
+                    });
+                });
+            }
+
+            setupKeyboardNavigation() {
+                this.cards.forEach(card => {
+                    card.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            card.click();
+                        }
+                    });
+                });
+            }
+
+            setupIntersectionObserver() {
+                // Enhanced animation on scroll
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('animate-in');
+                            }
+                        });
+                    },
+                    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+                );
+
+                this.cards.forEach(card => observer.observe(card));
+            }
+
+            showLoadingState(button) {
+                const originalText = button.innerHTML;
+                button.dataset.originalText = originalText;
+                button.innerHTML = 'Cargando... <div class="loading-spinner"></div>';
+                button.disabled = true;
+            }
+
+            hideLoadingState(button) {
+                button.innerHTML = button.dataset.originalText;
+                button.disabled = false;
+            }
+        }
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new MathActivitiesApp();
+        });
+
+        // Add smooth scroll behavior for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         });
+
+        // Add performance monitoring
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                console.log('🎯 Página de Matemáticas cargada y optimizada');
+            });
+        }
     </script>
 </body>
 </html>
