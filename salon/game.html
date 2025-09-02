@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Masters</title>
+    <title>Math Masters - Expanded Edition</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -105,10 +105,42 @@
             appearance: none;
             margin: 0;
         }
-        input[type=number] {
+        input[type=number], input[type=text] {
             -webkit-appearance: textfield;
             -moz-appearance: textfield;
             appearance: textfield;
+        }
+
+        /* Mejorar visibilidad del input */
+        #answer-input {
+            color: var(--foreground) !important;
+            background-color: var(--background) !important;
+            border: 2px solid var(--secondary) !important;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        #answer-input:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+        #answer-input:disabled {
+            opacity: 0.7;
+        }
+
+        /* Topic buttons grid enhancement */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .topic-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
@@ -125,7 +157,7 @@
         </button>
     </header>
 
-    <main class="w-full max-w-2xl mx-auto">
+    <main class="w-full max-w-4xl mx-auto">
         <!-- Start Screen -->
         <section id="start-screen" class="text-center space-y-8">
             <h1 class="text-5xl font-extrabold tracking-tight" style="color: var(--accent);">Math Masters</h1>
@@ -142,7 +174,7 @@
             </div>
             <div class="pt-4">
                 <h3 id="topic-title" class="text-xl font-semibold mb-4">O elige un tema para practicar:</h3>
-                <div id="topic-selection" class="flex flex-wrap justify-center gap-3"></div>
+                <div id="topic-selection" class="topic-grid"></div>
             </div>
         </section>
 
@@ -166,7 +198,7 @@
 
     <!-- End Game Modal -->
     <div id="end-game-modal" class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center opacity-0 invisible transition-opacity duration-300 z-50">
-        <div id="end-modal-content" class="bg-card p-8 rounded-lg shadow-xl text-center space-y-6 transform scale-90 transition-transform duration-300">
+        <div id="end-modal-content" class="bg-card p-8 rounded-lg shadow-xl text-center space-y-6 transform scale-90 transition-transform duration-300 max-w-md w-full mx-4">
             <h1 id="end-title" class="text-4xl font-bold">¡Juego Terminado!</h1>
             <div>
                 <p id="end-score-label" class="text-xl">Tu puntuación final es:</p>
@@ -250,12 +282,24 @@
                 topic_geometria: "Geometría",
                 topic_fracciones: "Fracciones",
                 topic_funciones: "Funciones",
+                topic_estadistica: "Estadística",
+                topic_trigonometria: "Trigonometría",
+                topic_calculo: "Cálculo",
+                topic_combinatoria: "Combinatoria",
                 q_aritmetica_div: (a, b) => `¿Cuánto es $${a} \\div ${b}$?`,
                 q_aritmetica_op: (a, b, op) => `¿Cuánto es $${a} ${op} ${b}$?`,
                 q_algebra_solve: (a, b, c) => `Resuelve para $x$: $${a}x + ${b} = ${c}$`,
                 q_geometria_hipo: `Calcula la longitud de la hipotenusa (?) del siguiente triángulo rectángulo:`,
                 q_fracciones_sum: (n1, d1, n2, d2) => `Calcula: $\\frac{${n1}}{${d1}} + \\frac{${n2}}{${d2}}$`,
                 q_funciones_eval: (a, sign, absB, x) => `Si $f(x) = ${a}x ${sign} ${absB}$, calcula $f(${x})$`,
+                q_estadistica_prob: (favorable, total) => `Si lanzas un dado de ${total} caras, ¿cuál es la probabilidad de obtener un número ${favorable <= total/2 ? 'menor o igual' : 'mayor'} que ${favorable}?`,
+                q_estadistica_mean: (nums) => `¿Cuál es la media aritmética de los siguientes números: ${nums.join(', ')}?`,
+                q_trigonometria_basic: (angle, func) => `¿Cuánto es $\\${func}(${angle}°)$?`,
+                q_trigonometria_identity: () => `¿Cuál es el valor de $\\sin^2(x) + \\cos^2(x)$?`,
+                q_calculo_derivative: (a, n) => `¿Cuál es la derivada de $f(x) = ${a}x^${n}$?`,
+                q_calculo_integral: (a, n) => `¿Cuál es la integral indefinida de $f(x) = ${a}x^${n}$?`,
+                q_combinatoria_perm: (n, r) => `¿De cuántas maneras se pueden ordenar ${r} objetos de un total de ${n}?`,
+                q_combinatoria_comb: (n, r) => `¿De cuántas maneras se pueden elegir ${r} objetos de un total de ${n}?`,
             },
             en: {
                 start_subtitle: "Choose a game mode to start practicing.",
@@ -283,12 +327,24 @@
                 topic_geometria: "Geometry",
                 topic_fracciones: "Fractions",
                 topic_funciones: "Functions",
+                topic_estadistica: "Statistics",
+                topic_trigonometria: "Trigonometry",
+                topic_calculo: "Calculus",
+                topic_combinatoria: "Combinatorics",
                 q_aritmetica_div: (a, b) => `What is $${a} \\div ${b}$?`,
                 q_aritmetica_op: (a, b, op) => `What is $${a} ${op} ${b}$?`,
                 q_algebra_solve: (a, b, c) => `Solve for $x$: $${a}x + ${b} = ${c}$`,
                 q_geometria_hipo: `Calculate the length of the hypotenuse (?) of the following right triangle:`,
                 q_fracciones_sum: (n1, d1, n2, d2) => `Calculate: $\\frac{${n1}}{${d1}} + \\frac{${n2}}{${d2}}$`,
                 q_funciones_eval: (a, sign, absB, x) => `If $f(x) = ${a}x ${sign} ${absB}$, calculate $f(${x})$`,
+                q_estadistica_prob: (favorable, total) => `If you roll a ${total}-sided die, what's the probability of getting a number ${favorable <= total/2 ? 'less than or equal to' : 'greater than'} ${favorable}?`,
+                q_estadistica_mean: (nums) => `What is the arithmetic mean of the following numbers: ${nums.join(', ')}?`,
+                q_trigonometria_basic: (angle, func) => `What is $\\${func}(${angle}°)$?`,
+                q_trigonometria_identity: () => `What is the value of $\\sin^2(x) + \\cos^2(x)$?`,
+                q_calculo_derivative: (a, n) => `What is the derivative of $f(x) = ${a}x^${n}$?`,
+                q_calculo_integral: (a, n) => `What is the indefinite integral of $f(x) = ${a}x^${n}$?`,
+                q_combinatoria_perm: (n, r) => `In how many ways can you arrange ${r} objects from a total of ${n}?`,
+                q_combinatoria_comb: (n, r) => `In how many ways can you choose ${r} objects from a total of ${n}?`,
             }
         };
         let currentLang = 'es';
@@ -352,12 +408,26 @@
 
         const questionGenerator = {
             randInt: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+            randFloat: (min, max, decimals = 1) => parseFloat((Math.random() * (max - min) + min).toFixed(decimals)),
             gcd: (a, b) => b === 0 ? a : questionGenerator.gcd(b, a % b),
+            factorial: (n) => n <= 1 ? 1 : n * questionGenerator.factorial(n - 1),
+            combination: (n, r) => questionGenerator.factorial(n) / (questionGenerator.factorial(r) * questionGenerator.factorial(n - r)),
+            permutation: (n, r) => questionGenerator.factorial(n) / questionGenerator.factorial(n - r),
 
             aritmetica: (difficulty = 1) => {
+                const operations = ['+', '-', '*'];
+                const op = operations[questionGenerator.randInt(0, operations.length - 1)];
                 const a = questionGenerator.randInt(1 * difficulty, 10 * difficulty);
                 const b = questionGenerator.randInt(1 * difficulty, 10 * difficulty);
-                const question = { text: t('q_aritmetica_op', a, b, '+'), answer: a + b, signature: `${a}+${b}` };
+                
+                let answer;
+                switch(op) {
+                    case '+': answer = a + b; break;
+                    case '-': answer = a - b; break;
+                    case '*': answer = a * b; break;
+                }
+                
+                const question = { text: t('q_aritmetica_op', a, b, op), answer, signature: `${a}${op}${b}` };
                 return questionGenerator.generateInputQuestion(question);
             },
 
@@ -433,6 +503,174 @@
                 return questionGenerator.generateInputQuestion(question);
             },
 
+            // NEW TOPICS START HERE
+            estadistica: (difficulty = 1) => {
+                if (Math.random() < 0.5) {
+                    // Probability questions
+                    const sides = [6, 8, 10, 12][questionGenerator.randInt(0, 3)];
+                    const favorable = questionGenerator.randInt(1, sides);
+                    const probability = favorable <= sides/2 ? favorable/sides : (sides - favorable + 1)/sides;
+                    const question = { 
+                        text: t('q_estadistica_prob', favorable, sides), 
+                        answer: parseFloat(probability.toFixed(3)), 
+                        signature: `prob-${sides}-${favorable}` 
+                    };
+                    
+                    const options = new Set([probability.toFixed(3)]);
+                    while(options.size < 4) {
+                        const distractor = (questionGenerator.randInt(1, sides) / sides).toFixed(3);
+                        options.add(distractor);
+                    }
+                    return { ...question, options: Array.from(options).sort(() => Math.random() - 0.5), type: 'mc' };
+                } else {
+                    // Mean calculation
+                    const count = questionGenerator.randInt(3, 5);
+                    const nums = Array.from({length: count}, () => questionGenerator.randInt(1 * difficulty, 20 * difficulty));
+                    const mean = nums.reduce((a, b) => a + b, 0) / count;
+                    const question = { 
+                        text: t('q_estadistica_mean', nums), 
+                        answer: parseFloat(mean.toFixed(1)), 
+                        signature: `mean-${nums.join('-')}` 
+                    };
+                    return questionGenerator.generateInputQuestion(question);
+                }
+            },
+
+            trigonometria: (difficulty = 1) => {
+                if (Math.random() < 0.3) {
+                    // Identity questions
+                    const question = { 
+                        text: t('q_trigonometria_identity'), 
+                        answer: '1', 
+                        signature: 'identity-sin2cos2' 
+                    };
+                    const options = ['0', '1', '2', 'π'];
+                    return { ...question, options, type: 'mc' };
+                } else {
+                    // Basic trigonometric values
+                    const angles = [0, 30, 45, 60, 90];
+                    const funcs = ['sin', 'cos', 'tan'];
+                    const angle = angles[questionGenerator.randInt(0, angles.length - 1)];
+                    const func = funcs[questionGenerator.randInt(0, funcs.length - 1)];
+                    
+                    let answer;
+                    const rad = angle * Math.PI / 180;
+                    
+                    if (func === 'sin') answer = Math.sin(rad);
+                    else if (func === 'cos') answer = Math.cos(rad);
+                    else answer = angle === 90 ? '∞' : Math.tan(rad);
+                    
+                    if (typeof answer === 'number') {
+                        answer = Math.abs(answer) < 0.001 ? '0' : 
+                                Math.abs(answer - 1) < 0.001 ? '1' :
+                                Math.abs(answer - 0.5) < 0.001 ? '1/2' :
+                                Math.abs(answer - Math.sqrt(2)/2) < 0.001 ? '√2/2' :
+                                Math.abs(answer - Math.sqrt(3)/2) < 0.001 ? '√3/2' :
+                                Math.abs(answer - Math.sqrt(3)) < 0.001 ? '√3' :
+                                answer.toFixed(3);
+                    }
+                    
+                    const question = { 
+                        text: t('q_trigonometria_basic', angle, func), 
+                        answer, 
+                        signature: `${func}-${angle}` 
+                    };
+                    
+                    const commonAnswers = ['0', '1/2', '√2/2', '√3/2', '1', '√3', '∞'];
+                    const options = new Set([answer]);
+                    while(options.size < 4) {
+                        const opt = commonAnswers[questionGenerator.randInt(0, commonAnswers.length - 1)];
+                        options.add(opt);
+                    }
+                    return { ...question, options: Array.from(options), type: 'mc' };
+                }
+            },
+
+            calculo: (difficulty = 1) => {
+                if (Math.random() < 0.5) {
+                    // Derivatives
+                    const a = questionGenerator.randInt(1, 10);
+                    const n = questionGenerator.randInt(2, 4 + difficulty);
+                    const answer = n === 1 ? `${a}` : `${a * n}x^${n - 1}`;
+                    const question = { 
+                        text: t('q_calculo_derivative', a, n), 
+                        answer, 
+                        signature: `der-${a}-${n}` 
+                    };
+                    
+                    const options = [
+                        answer,
+                        `${a}x^${n - 1}`,
+                        `${a * n}x^${n}`,
+                        `${a}x^${n + 1}`
+                    ];
+                    return { ...question, options: options.sort(() => Math.random() - 0.5), type: 'mc' };
+                } else {
+                    // Integrals
+                    const a = questionGenerator.randInt(1, 10);
+                    const n = questionGenerator.randInt(1, 3 + difficulty);
+                    const newExp = n + 1;
+                    const coeff = a / newExp;
+                    const answer = coeff === 1 ? `x^${newExp} + C` : 
+                                  Number.isInteger(coeff) ? `${coeff}x^${newExp} + C` :
+                                  `\\frac{${a}}{${newExp}}x^${newExp} + C`;
+                    
+                    const question = { 
+                        text: t('q_calculo_integral', a, n), 
+                        answer, 
+                        signature: `int-${a}-${n}` 
+                    };
+                    
+                    const options = [
+                        answer,
+                        `${a}x^${n + 1} + C`,
+                        `\\frac{${a}}{${n}}x^${n - 1} + C`,
+                        `${a * (n + 1)}x^${n} + C`
+                    ];
+                    return { ...question, options: options.sort(() => Math.random() - 0.5), type: 'mc' };
+                }
+            },
+
+            combinatoria: (difficulty = 1) => {
+                const maxN = 5 + difficulty * 2;
+                const n = questionGenerator.randInt(3, maxN);
+                const r = questionGenerator.randInt(2, n - 1);
+                
+                if (Math.random() < 0.5) {
+                    // Permutations
+                    const answer = questionGenerator.permutation(n, r);
+                    const question = { 
+                        text: t('q_combinatoria_perm', n, r), 
+                        answer, 
+                        signature: `perm-${n}-${r}` 
+                    };
+                    
+                    const options = new Set([answer]);
+                    options.add(questionGenerator.combination(n, r)); // Common mistake
+                    options.add(Math.pow(n, r)); // Another common mistake
+                    while(options.size < 4) {
+                        options.add(questionGenerator.randInt(answer - 50, answer + 50));
+                    }
+                    return { ...question, options: Array.from(options).sort(() => Math.random() - 0.5), type: 'mc' };
+                } else {
+                    // Combinations
+                    const answer = questionGenerator.combination(n, r);
+                    const question = { 
+                        text: t('q_combinatoria_comb', n, r), 
+                        answer, 
+                        signature: `comb-${n}-${r}` 
+                    };
+                    
+                    const options = new Set([answer]);
+                    options.add(questionGenerator.permutation(n, r)); // Common mistake
+                    options.add(n * r); // Another common mistake
+                    while(options.size < 4) {
+                        options.add(questionGenerator.randInt(Math.max(1, answer - 20), answer + 20));
+                    }
+                    return { ...question, options: Array.from(options).sort(() => Math.random() - 0.5), type: 'mc' };
+                }
+            },
+
             generateMultipleChoice: (question, distractorFn) => {
                 const options = new Set([question.answer]);
                 while (options.size < 4) {
@@ -453,6 +691,10 @@
             'geometria': { generator: questionGenerator.geometria },
             'fracciones': { generator: questionGenerator.fracciones },
             'funciones': { generator: questionGenerator.funciones },
+            'estadistica': { generator: questionGenerator.estadistica },
+            'trigonometria': { generator: questionGenerator.trigonometria },
+            'calculo': { generator: questionGenerator.calculo },
+            'combinatoria': { generator: questionGenerator.combinatoria },
         };
 
         function init() {
@@ -477,7 +719,7 @@
         
         function renderTopicButtons() {
             buttons.topicSelection.innerHTML = Object.keys(topics).map(key => 
-                `<button data-mode="topic" data-topic="${key}" class="game-mode-btn px-4 py-2 rounded-lg bg-secondary text-secondary-foreground font-semibold hover:bg-primary/20 transition-colors">${t(`topic_${key}`)}</button>`
+                `<button data-mode="topic" data-topic="${key}" class="game-mode-btn px-3 py-2 text-sm rounded-lg bg-secondary text-secondary-foreground font-semibold hover:bg-primary/20 transition-colors text-center">${t(`topic_${key}`)}</button>`
             ).join('');
             
             document.querySelectorAll('.game-mode-btn').forEach(btn => {
@@ -514,10 +756,13 @@
         function setupHUD() {
             hud.score.textContent = 0;
             hud.streak.textContent = '0🔥';
+            
+            // Show lives for survival mode and any mode that uses lives system
             if (gameState.mode === 'survival') {
                 hud.livesContainer.classList.remove('hidden');
                 hud.lives.textContent = '❤️❤️❤️';
             } else {
+                // For other modes, lives are still tracked but not displayed prominently
                 hud.livesContainer.classList.add('hidden');
             }
         }
@@ -565,7 +810,17 @@
                     question.options.forEach(option => {
                         const button = document.createElement('button');
                         button.className = "p-4 text-lg rounded-lg bg-secondary text-secondary-foreground hover:bg-primary/20 transition-all duration-200 transform hover:scale-105";
-                        button.innerHTML = option.toString().includes('/') ? `$\\frac{${option.split('/')[0]}}{${option.split('/')[1]}}$` : option;
+                        
+                        // Handle LaTeX in options
+                        if (option.toString().includes('\\frac') || option.toString().includes('^') || option.toString().includes('√')) {
+                            button.innerHTML = `$${option}$`;
+                        } else if (option.toString().includes('/') && !option.toString().includes('\\')) {
+                            const parts = option.split('/');
+                            button.innerHTML = `$\\frac{${parts[0]}}{${parts[1]}}$`;
+                        } else {
+                            button.innerHTML = option;
+                        }
+                        
                         button.dataset.answer = option;
                         button.onclick = () => handleAnswer(button.dataset.answer, button);
                         questionElements.options.appendChild(button);
@@ -576,8 +831,14 @@
                     const form = document.createElement('form');
                     form.className = 'flex gap-2 justify-center';
                     form.innerHTML = `
-                        <input type="number" id="answer-input" class="flex-grow max-w-xs p-3 text-lg border-2 border-secondary bg-background text-slate-950 dark:text-slate-50 rounded-lg text-center outline-none focus:border-primary" autocomplete="off" required>
-                        <button type="submit" class="px-6 py-3 font-semibold rounded-lg bg-accent text-white hover:opacity-90 transition-opacity">${t('submit_btn')}</button>
+                        <input type="text" id="answer-input" class="flex-grow max-w-xs p-3 text-xl border-2 border-secondary rounded-lg text-center outline-none focus:border-primary" 
+                               autocomplete="off" 
+                               autocorrect="off" 
+                               autocapitalize="off" 
+                               spellcheck="false"
+                               placeholder="Tu respuesta..." 
+                               required>
+                        <button type="submit" class="px-6 py-3 font-semibold rounded-lg bg-accent text-white hover:opacity-90 transition-opacity whitespace-nowrap">${t('submit_btn')}</button>
                     `;
                     form.onsubmit = (e) => {
                         e.preventDefault();
@@ -585,8 +846,25 @@
                         handleAnswer(input.value, form);
                         input.disabled = true;
                     };
+                    
                     questionElements.options.appendChild(form);
-                    setTimeout(() => form.querySelector('#answer-input').focus(), 100);
+                    
+                    // Focus and add live feedback
+                    setTimeout(() => {
+                        const input = form.querySelector('#answer-input');
+                        input.focus();
+                        
+                        // Add visual feedback while typing
+                        input.addEventListener('input', function() {
+                            if (this.value.trim()) {
+                                this.style.borderColor = 'var(--primary)';
+                                this.style.fontWeight = '700';
+                            } else {
+                                this.style.borderColor = 'var(--secondary)';
+                                this.style.fontWeight = '600';
+                            }
+                        });
+                    }, 100);
                 }
                 
                 resetTimer();
@@ -598,7 +876,25 @@
 
         function handleAnswer(selectedAnswer, element) {
             clearInterval(timerInterval);
-            const isCorrect = selectedAnswer == gameState.currentQuestion.answer;
+            
+            // More flexible answer checking
+            let isCorrect = false;
+            const correctAnswer = gameState.currentQuestion.answer.toString();
+            const userAnswer = selectedAnswer ? selectedAnswer.toString().trim() : '';
+            
+            // Direct match
+            if (userAnswer === correctAnswer) {
+                isCorrect = true;
+            }
+            // Numeric comparison with tolerance
+            else if (!isNaN(parseFloat(userAnswer)) && !isNaN(parseFloat(correctAnswer))) {
+                isCorrect = Math.abs(parseFloat(userAnswer) - parseFloat(correctAnswer)) < 0.001;
+            }
+            // Handle common mathematical expressions
+            else if (userAnswer.replace(/\s/g, '') === correctAnswer.replace(/\s/g, '')) {
+                isCorrect = true;
+            }
+            
             const topic = gameState.currentQuestion.topic;
             
             const feedbackElement = gameState.currentQuestion.type === 'mc' ? element : element.querySelector('button');
@@ -619,13 +915,33 @@
                 gameState.stats.topicPerformance[topic].incorrect++;
                 if (gameState.stats.incorrect > 0 && gameState.stats.incorrect % 2 === 0 && gameState.difficulty > 1) gameState.difficulty--;
                 
-                if (gameState.mode === 'survival') {
+                // Handle lives system for ALL game modes, not just survival
+                if (gameState.mode === 'survival' || gameState.lives !== undefined) {
                     gameState.lives--;
                     updateLives();
                     if (gameState.lives <= 0) {
-                        setTimeout(endGame, 1200);
+                        // Show correct answer before ending game
+                        if (gameState.currentQuestion.type === 'input') {
+                            const input = element.querySelector('#answer-input');
+                            if (input) {
+                                input.value = `Respuesta: ${correctAnswer}`;
+                                input.style.color = 'var(--correct)';
+                            }
+                        }
+                        setTimeout(endGame, 2000); // Give more time to see the correct answer
                         return;
                     }
+                }
+            }
+
+            // Show correct answer for wrong answers in input mode
+            if (!isCorrect && gameState.currentQuestion.type === 'input') {
+                const input = element.querySelector('#answer-input');
+                if (input) {
+                    setTimeout(() => {
+                        input.value = `✗ Correcto: ${correctAnswer}`;
+                        input.style.color = 'var(--correct)';
+                    }, 300);
                 }
             }
 
@@ -640,6 +956,29 @@
         
         function updateLives() {
             hud.lives.textContent = '❤️'.repeat(gameState.lives) + '🖤'.repeat(3 - gameState.lives);
+            
+            // Show life lost notification
+            if (gameState.lives < 3) {
+                showLifeLostNotification();
+            }
+        }
+        
+        function showLifeLostNotification() {
+            // Create temporary notification
+            const notification = document.createElement('div');
+            notification.textContent = gameState.lives > 0 ? 
+                (currentLang === 'es' ? `💔 Vida perdida! Quedan ${gameState.lives}` : `💔 Life lost! ${gameState.lives} remaining`) : 
+                (currentLang === 'es' ? '💀 Sin vidas restantes!' : '💀 No lives remaining!');
+            notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg font-bold shadow-lg z-50 animate-bounce';
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 2 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 2000);
         }
 
         function resetTimer() {
