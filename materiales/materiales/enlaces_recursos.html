@@ -3,198 +3,1377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursos Matemáticos</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Biblioteca completa de recursos matemáticos en inglés - Enlaces organizados por categorías">
+    <meta name="keywords" content="recursos, matemáticas, inglés, educación, enlaces, herramientas">
+    <title>Biblioteca de Recursos Matemáticos | Enlaces Educativos</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
-        * {
+        /* Modern CSS Custom Properties */
+        :root {
+            /* Color System matching previous page */
+            --primary-hue: 160;
+            --secondary-hue: 200;
+            --accent-hue: 45;
+            --orange-hue: 25;
+            
+            /* Green Theme Colors */
+            --emerald-50: hsl(var(--primary-hue), 85%, 95%);
+            --emerald-100: hsl(var(--primary-hue), 80%, 88%);
+            --emerald-200: hsl(var(--primary-hue), 75%, 78%);
+            --emerald-300: hsl(var(--primary-hue), 70%, 65%);
+            --emerald-400: hsl(var(--primary-hue), 65%, 55%);
+            --emerald-500: hsl(var(--primary-hue), 60%, 45%);
+            --emerald-600: hsl(var(--primary-hue), 65%, 35%);
+            --emerald-700: hsl(var(--primary-hue), 70%, 25%);
+            --emerald-800: hsl(var(--primary-hue), 75%, 18%);
+            --emerald-900: hsl(var(--primary-hue), 80%, 12%);
+            
+            /* Orange Theme Colors */
+            --orange-400: hsl(var(--orange-hue), 80%, 65%);
+            --orange-500: hsl(var(--orange-hue), 85%, 55%);
+            --orange-600: hsl(var(--orange-hue), 90%, 45%);
+            
+            /* Blue Accent Colors */
+            --blue-400: hsl(var(--secondary-hue), 70%, 65%);
+            --blue-500: hsl(var(--secondary-hue), 75%, 55%);
+            --blue-600: hsl(var(--secondary-hue), 80%, 45%);
+            
+            /* Purple Accent */
+            --purple-400: hsl(270, 70%, 65%);
+            --purple-500: hsl(270, 75%, 55%);
+            --purple-600: hsl(270, 80%, 45%);
+            
+            /* Yellow Accent */
+            --yellow-400: hsl(var(--accent-hue), 85%, 65%);
+            --yellow-500: hsl(var(--accent-hue), 90%, 55%);
+            
+            /* Neutrals */
+            --gray-50: hsl(220, 15%, 97%);
+            --gray-100: hsl(220, 13%, 92%);
+            --gray-200: hsl(220, 12%, 85%);
+            --gray-300: hsl(220, 11%, 75%);
+            --gray-400: hsl(220, 10%, 60%);
+            --gray-500: hsl(220, 9%, 46%);
+            --gray-600: hsl(220, 10%, 35%);
+            --gray-700: hsl(220, 12%, 25%);
+            --gray-800: hsl(220, 15%, 15%);
+            --gray-900: hsl(220, 18%, 8%);
+            
+            /* Typography */
+            --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            --font-mono: 'Fira Code', 'JetBrains Mono', monospace;
+            
+            /* Fluid Typography */
+            --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+            --text-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+            --text-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.3125rem);
+            --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+            --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+            --text-3xl: clamp(1.875rem, 1.65rem + 1.125vw, 2.25rem);
+            --text-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 2.8125rem);
+            --text-5xl: clamp(2.5rem, 2.15rem + 1.75vw, 3.125rem);
+            
+            /* Fluid Spacing */
+            --space-xs: clamp(0.5rem, 0.475rem + 0.125vw, 0.5625rem);
+            --space-sm: clamp(0.75rem, 0.725rem + 0.125vw, 0.8125rem);
+            --space-md: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+            --space-lg: clamp(1.5rem, 1.425rem + 0.375vw, 1.6875rem);
+            --space-xl: clamp(2rem, 1.9rem + 0.5vw, 2.25rem);
+            --space-2xl: clamp(3rem, 2.85rem + 0.75vw, 3.375rem);
+            --space-3xl: clamp(4rem, 3.8rem + 1vw, 4.5rem);
+            
+            /* Effects */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --shadow-colored: 0 10px 30px -5px rgba(16, 185, 129, 0.3);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            
+            /* Backdrop Effects */
+            --backdrop-blur: blur(20px);
+            --backdrop-blur-sm: blur(10px);
+            --backdrop-blur-lg: blur(40px);
+        }
+        
+        /* Modern CSS Reset */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            text-rendering: optimizeLegibility;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            color: #ffffff;
+            font-family: var(--font-primary);
+            font-size: var(--text-base);
+            line-height: 1.6;
+            color: var(--gray-50);
             background: url('fondo9.png') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
-            padding: 2rem;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-
+        
+        /* Enhanced Background Overlay */
         body::before {
-            content: "";
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(230, 126, 34, 0.8) 0%, rgba(142, 68, 173, 0.9) 100%);
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(230, 126, 34, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(142, 68, 173, 0.4) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(230, 126, 34, 0.7) 0%, rgba(142, 68, 173, 0.8) 50%, rgba(16, 185, 129, 0.6) 100%);
             z-index: -1;
+            animation: gradientPulse 25s ease-in-out infinite;
         }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        
+        @keyframes gradientPulse {
+            0%, 100% { 
+                filter: brightness(1) saturate(1);
+                transform: scale(1) rotate(0deg);
+            }
+            25% { 
+                filter: brightness(1.1) saturate(1.2);
+                transform: scale(1.02) rotate(1deg);
+            }
+            50% { 
+                filter: brightness(0.9) saturate(0.8);
+                transform: scale(0.98) rotate(-0.5deg);
+            }
+            75% { 
+                filter: brightness(1.05) saturate(1.1);
+                transform: scale(1.01) rotate(0.5deg);
+            }
         }
-
-        h1 {
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 2rem;
-            color: #ffffff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        
+        /* Page Layout */
+        .page-container {
+            min-height: 100vh;
+            padding: var(--space-lg);
             position: relative;
-            padding-bottom: 1rem;
         }
-
-        h1::after {
+        
+        /* Header Section */
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+            animation: slideInFromTop var(--transition-slow) ease-out;
+        }
+        
+        .page-title {
+            font-size: var(--text-4xl);
+            font-weight: 800;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(135deg, #ffffff 0%, var(--emerald-200) 50%, var(--orange-400) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .page-title::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, #e67e22, #9b59b6);
-            border-radius: 2px;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--orange-500), var(--purple-500), var(--emerald-500));
+            border-radius: var(--radius-full);
+            animation: shimmer 2s ease-in-out infinite;
         }
-
-        .resource-list {
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .page-subtitle {
+            font-size: var(--text-lg);
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Filter/Search Section */
+        .controls-section {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: var(--backdrop-blur);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+            animation: fadeInUp var(--transition-slow) ease-out 0.3s both;
+        }
+        
+        .search-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: var(--space-md) var(--space-lg);
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeIn 1s ease-out;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            color: white;
+            font-size: var(--text-base);
+            font-family: var(--font-primary);
+            backdrop-filter: var(--backdrop-blur-sm);
+            transition: all var(--transition-medium);
         }
-
-        ul {
-            list-style-type: none;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            padding: 1rem;
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
-
-        li {
-            transform: translateY(0);
-            transition: all 0.3s ease;
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--emerald-400);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
         }
-
-        li:hover {
-            transform: translateY(-5px);
+        
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            justify-content: center;
         }
-
-        a {
-            text-decoration: none;
-            color: #ffffff;
+        
+        .filter-btn {
+            padding: var(--space-sm) var(--space-lg);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-full);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: var(--text-sm);
             font-weight: 500;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            backdrop-filter: var(--backdrop-blur-sm);
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--emerald-600);
+            border-color: var(--emerald-500);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Resources Container */
+        .resources-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Resources Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+        
+        /* Resource Card */
+        .resource-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: var(--backdrop-blur);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-medium);
+            animation: fadeInUp var(--transition-slow) ease-out both;
+        }
+        
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-colored);
+        }
+        
+        .resource-card:hover::before {
+            left: 100%;
+        }
+        
+        .card-header {
             display: flex;
             align-items: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
         }
-
-        a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-400));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--text-xl);
+            color: white;
+            flex-shrink: 0;
+            transition: all var(--transition-medium);
         }
-
-        a::before {
-            content: '\f1eb';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            margin-right: 10px;
-            color: #e67e22;
-            font-size: 1.2em;
+        
+        .resource-card:hover .card-icon {
+            transform: rotate(10deg) scale(1.1);
         }
-
-        @keyframes fadeIn {
+        
+        .card-content {
+            flex: 1;
+        }
+        
+        .card-title {
+            font-size: var(--text-lg);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: var(--space-xs);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-url {
+            font-size: var(--text-sm);
+            color: rgba(255, 255, 255, 0.7);
+            font-family: var(--font-mono);
+            word-break: break-all;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-category {
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--emerald-600);
+            color: white;
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm) var(--space-md);
+            background: linear-gradient(135deg, var(--orange-600), var(--orange-500));
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 600;
+            transition: all var(--transition-medium);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .card-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--orange-500), var(--orange-400));
+        }
+        
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            bottom: var(--space-xl);
+            left: var(--space-xl);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg) var(--space-xl);
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-full);
+            font-size: var(--text-base);
+            font-weight: 600;
+            box-shadow: var(--shadow-colored);
+            transition: all var(--transition-medium);
+            z-index: 1000;
+            backdrop-filter: var(--backdrop-blur-sm);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+        }
+        
+        .back-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: var(--backdrop-blur);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: var(--text-3xl);
+            font-weight: 800;
+            color: var(--emerald-400);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+        
+        .stat-label {
+            font-size: var(--text-sm);
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Animations */
+        @keyframes slideInFromTop {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(-30px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
         @media (max-width: 768px) {
-            body {
-                padding: 1rem;
+            .page-container {
+                padding: var(--space-md);
             }
-
-            h1 {
-                font-size: 2em;
+            
+            .page-title {
+                font-size: var(--text-3xl);
             }
-
-            ul {
+            
+            .resources-grid {
                 grid-template-columns: 1fr;
+                gap: var(--space-md);
             }
-
-            .resource-list {
-                padding: 1rem;
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+            
+            .back-button {
+                bottom: var(--space-md);
+                left: var(--space-md);
+                padding: var(--space-md) var(--space-lg);
             }
         }
-
-        .back-button {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: linear-gradient(45deg, #e67e22, #d35400);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
-            transition: all 0.3s ease;
+        
+        @media (max-width: 480px) {
+            .controls-section,
+            .stats-section {
+                padding: var(--space-lg);
+            }
+            
+            .resource-card {
+                padding: var(--space-md);
+            }
+            
+            .card-header {
+                flex-direction: column;
+                text-align: center;
+            }
         }
-
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* Focus styles */
+        .resource-card:focus-visible,
+        .filter-btn:focus-visible,
+        .card-link:focus-visible,
+        .back-button:focus-visible,
+        .search-input:focus-visible {
+            outline: 2px solid var(--yellow-400);
+            outline-offset: 2px;
+        }
+        
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .resource-card,
+            .controls-section,
+            .stats-section {
+                border: 2px solid white;
+                background: rgba(0, 0, 0, 0.9);
+            }
+        }
+        
+        /* Animation delays for staggered effects */
+        .resource-card:nth-child(1) { animation-delay: 0.1s; }
+        .resource-card:nth-child(2) { animation-delay: 0.15s; }
+        .resource-card:nth-child(3) { animation-delay: 0.2s; }
+        .resource-card:nth-child(4) { animation-delay: 0.25s; }
+        .resource-card:nth-child(5) { animation-delay: 0.3s; }
+        .resource-card:nth-child(6) { animation-delay: 0.35s; }
+        .resource-card:nth-child(7) { animation-delay: 0.4s; }
+        .resource-card:nth-child(8) { animation-delay: 0.45s; }
+        .resource-card:nth-child(9) { animation-delay: 0.5s; }
+        .resource-card:nth-child(10) { animation-delay: 0.55s; }
+        
+        /* Hidden class for filtering */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Recursos Didácticos Matemáticas en Inglés</h1>
-        <div class="resource-list">
-            <ul>
-                <li><a href="https://www.cuemath.com" target="_blank">Cuemath</a></li>
-                <li><a href="https://www.purplemath.com" target="_blank">Purple Math</a></li>
-                <li><a href="https://www.mathsisfun.com" target="_blank">Math is Fun</a></li>
-                <li><a href="https://www.brilliant.org" target="_blank">Brilliant</a></li>
-                <li><a href="https://www.mathplanet.com" target="_blank">Math Planet</a></li>
-                <li><a href="https://www.ck12.org" target="_blank">CK-12 Foundation</a></li>
-                <li><a href="https://www.ixl.com" target="_blank">IXL Math</a></li>
-                <li><a href="https://www.coolmathgames.com" target="_blank">Cool Math Games</a></li>
-                <li><a href="https://www.prodigygame.com" target="_blank">Prodigy Math Game</a></li>
-                <li><a href="https://www.nrich.maths.org" target="_blank">NRICH</a></li>
-                <li><a href="https://www.openstax.org" target="_blank">OpenStax Math</a></li>
-                <li><a href="https://www.math-drills.com" target="_blank">Math Drills</a></li>
-                <li><a href="https://www.mathantics.com" target="_blank">Math Antics</a></li>
-                <li><a href="https://www.splashlearn.com" target="_blank">SplashLearn</a></li>
-                <li><a href="https://www.numberphile.com" target="_blank">Numberphile</a></li>
-                <li><a href="https://www.thatquiz.org" target="_blank">ThatQuiz</a></li>
-                <li><a href="https://www.weareteachers.com" target="_blank">We Are Teachers</a></li>
-                <li><a href="https://www.topmarks.co.uk" target="_blank">Top Marks</a></li>
-                <li><a href="https://www.illustrativemathematics.org" target="_blank">Illustrative Mathematics</a></li>
-                <li><a href="https://www.k5learning.com" target="_blank">K5 Learning</a></li>
-            </ul>
-        </div>
+    <div class="page-container">
+        <!-- Header Section -->
+        <header class="page-header">
+            <h1 class="page-title">Biblioteca de Recursos Matemáticos</h1>
+            <p class="page-subtitle">
+                Colección curada de recursos didácticos en inglés para potenciar tu aprendizaje matemático
+            </p>
+        </header>
+
+        <!-- Controls Section -->
+        <section class="controls-section">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="search-input"
+                    placeholder="Buscar recursos por nombre..."
+                    aria-label="Buscar recursos matemáticos"
+                >
+            </div>
+            
+            <div class="category-filters" role="group" aria-label="Filtros por categoría">
+                <button class="filter-btn active" data-category="all">Todos</button>
+                <button class="filter-btn" data-category="interactive">Interactivo</button>
+                <button class="filter-btn" data-category="learning">Aprendizaje</button>
+                <button class="filter-btn" data-category="games">Juegos</button>
+                <button class="filter-btn" data-category="tools">Herramientas</button>
+                <button class="filter-btn" data-category="advanced">Avanzado</button>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section" aria-label="Estadísticas de recursos">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number" id="total-resources">20</span>
+                    <span class="stat-label">Recursos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="visible-resources">20</span>
+                    <span class="stat-label">Visibles</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Categorías</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Gratis</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Container -->
+        <main class="resources-container">
+            <div class="resources-grid" id="resources-grid">
+                <!-- Interactive Resources -->
+                <article class="resource-card" data-category="interactive">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-brain" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Cuemath</h3>
+                            <p class="card-url">www.cuemath.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Interactive</span>
+                        <a href="https://www.cuemath.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-book-open" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Purple Math</h3>
+                            <p class="card-url">www.purplemath.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.purplemath.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-smile-beam" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Math is Fun</h3>
+                            <p class="card-url">www.mathsisfun.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.mathsisfun.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="advanced">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Brilliant</h3>
+                            <p class="card-url">www.brilliant.org</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Advanced</span>
+                        <a href="https://www.brilliant.org" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-globe" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Math Planet</h3>
+                            <p class="card-url">www.mathplanet.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.mathplanet.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">CK-12 Foundation</h3>
+                            <p class="card-url">www.ck12.org</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.ck12.org" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="interactive">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">IXL Math</h3>
+                            <p class="card-url">www.ixl.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Interactive</span>
+                        <a href="https://www.ixl.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="games">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-gamepad" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Cool Math Games</h3>
+                            <p class="card-url">www.coolmathgames.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Games</span>
+                        <a href="https://www.coolmathgames.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="games">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-dragon" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Prodigy Math Game</h3>
+                            <p class="card-url">www.prodigygame.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Games</span>
+                        <a href="https://www.prodigygame.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="advanced">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">NRICH</h3>
+                            <p class="card-url">www.nrich.maths.org</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Advanced</span>
+                        <a href="https://www.nrich.maths.org" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-university" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">OpenStax Math</h3>
+                            <p class="card-url">www.openstax.org</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.openstax.org" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="tools">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Math Drills</h3>
+                            <p class="card-url">www.math-drills.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Tools</span>
+                        <a href="https://www.math-drills.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-video" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Math Antics</h3>
+                            <p class="card-url">www.mathantics.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.mathantics.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="interactive">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-water" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">SplashLearn</h3>
+                            <p class="card-url">www.splashlearn.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Interactive</span>
+                        <a href="https://www.splashlearn.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="advanced">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-infinity" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Numberphile</h3>
+                            <p class="card-url">www.numberphile.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Advanced</span>
+                        <a href="https://www.numberphile.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="tools">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-question-circle" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">ThatQuiz</h3>
+                            <p class="card-url">www.thatquiz.org</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Tools</span>
+                        <a href="https://www.thatquiz.org" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">We Are Teachers</h3>
+                            <p class="card-url">www.weareteachers.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.weareteachers.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="games">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-star" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Top Marks</h3>
+                            <p class="card-url">www.topmarks.co.uk</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Games</span>
+                        <a href="https://www.topmarks.co.uk" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="learning">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-bar" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Illustrative Mathematics</h3>
+                            <p class="card-url">www.illustrativemathematics.org</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Learning</span>
+                        <a href="https://www.illustrativemathematics.org" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="resource-card" data-category="interactive">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-child" aria-hidden="true"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">K5 Learning</h3>
+                            <p class="card-url">www.k5learning.com</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-category">Interactive</span>
+                        <a href="https://www.k5learning.com" target="_blank" class="card-link" rel="noopener noreferrer">
+                            <span>Visitar</span>
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </main>
     </div>
 
-    <a href="recursos_didacticos.html" class="back-button">
-        <i class="fas fa-arrow-left"></i> Volver
+    <!-- Back Button -->
+    <a href="recursos_didacticos.html" class="back-button" aria-label="Volver a la página de recursos didácticos" id="back-button">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        <span>Volver a Recursos</span>
     </a>
+
+    <script>
+        // Modern JavaScript Application
+        class RecursosLibraryApp {
+            constructor() {
+                this.searchInput = document.getElementById('search-input');
+                this.filterButtons = document.querySelectorAll('.filter-btn');
+                this.resourceCards = document.querySelectorAll('.resource-card');
+                this.totalResourcesEl = document.getElementById('total-resources');
+                this.visibleResourcesEl = document.getElementById('visible-resources');
+                this.currentFilter = 'all';
+                this.currentSearch = '';
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.setupAnimations();
+                this.updateStats();
+                this.handleUrlParameters();
+            }
+
+            handleUrlParameters() {
+                // Check for category filter from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const categoryParam = urlParams.get('category');
+                
+                if (categoryParam && categoryParam !== 'all') {
+                    // Find and activate the corresponding filter button
+                    const targetButton = Array.from(this.filterButtons)
+                        .find(btn => btn.dataset.category === categoryParam);
+                    
+                    if (targetButton) {
+                        this.setActiveFilter(targetButton);
+                        this.currentFilter = categoryParam;
+                        this.filterResources();
+                        
+                        // Smooth scroll to resources section
+                        setTimeout(() => {
+                            document.getElementById('resources-grid').scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }, 500);
+                        
+                        // Show notification
+                        this.showCategoryNotification(categoryParam);
+                    }
+                }
+            }
+
+            showCategoryNotification(category) {
+                const categoryNames = {
+                    'interactive': 'Recursos Interactivos',
+                    'learning': 'Material de Estudio',
+                    'advanced': 'Videos Educativos', 
+                    'tools': 'Herramientas Online',
+                    'games': 'Juegos Educativos'
+                };
+                
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--emerald-600);
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: var(--radius-lg);
+                    box-shadow: var(--shadow-lg);
+                    z-index: 1000;
+                    opacity: 0;
+                    transform: translateX(100%);
+                    transition: all 0.3s ease;
+                `;
+                notification.textContent = `Mostrando: ${categoryNames[category] || category}`;
+                
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+                
+                // Animate out
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+
+            setupEventListeners() {
+                // Search functionality
+                this.searchInput.addEventListener('input', (e) => {
+                    this.currentSearch = e.target.value.toLowerCase().trim();
+                    this.filterResources();
+                });
+
+                // Category filtering
+                this.filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        this.setActiveFilter(button);
+                        this.currentFilter = button.dataset.category;
+                        this.filterResources();
+                        
+                        // Update URL without page reload
+                        const newUrl = new URL(window.location);
+                        if (this.currentFilter === 'all') {
+                            newUrl.searchParams.delete('category');
+                        } else {
+                            newUrl.searchParams.set('category', this.currentFilter);
+                        }
+                        window.history.replaceState({}, '', newUrl);
+                    });
+                });
+
+                // Enhanced card interactions
+                this.resourceCards.forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        this.animateCardHover(card, true);
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        this.animateCardHover(card, false);
+                    });
+                });
+
+                // Back button enhancement
+                const backButton = document.getElementById('back-button');
+                backButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleBackNavigation();
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.clearSearch();
+                    }
+                    if (e.ctrlKey && e.key === 'k') {
+                        e.preventDefault();
+                        this.searchInput.focus();
+                    }
+                });
+            }
+
+            handleBackNavigation() {
+                // Add transition effect
+                document.body.style.filter = 'blur(2px)';
+                document.body.style.transition = 'filter 0.3s ease';
+                
+                setTimeout(() => {
+                    window.location.href = 'recursos_didacticos.html';
+                }, 200);
+            }
+
+            setActiveFilter(activeButton) {
+                this.filterButtons.forEach(btn => btn.classList.remove('active'));
+                activeButton.classList.add('active');
+            }
+
+            filterResources() {
+                let visibleCount = 0;
+
+                this.resourceCards.forEach(card => {
+                    const matchesCategory = this.currentFilter === 'all' || 
+                                          card.dataset.category === this.currentFilter;
+                    
+                    const cardTitle = card.querySelector('.card-title').textContent.toLowerCase();
+                    const cardUrl = card.querySelector('.card-url').textContent.toLowerCase();
+                    const matchesSearch = this.currentSearch === '' || 
+                                        cardTitle.includes(this.currentSearch) ||
+                                        cardUrl.includes(this.currentSearch);
+
+                    if (matchesCategory && matchesSearch) {
+                        card.classList.remove('hidden');
+                        card.style.animationDelay = `${visibleCount * 0.05}s`;
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                this.updateVisibleCount(visibleCount);
+                this.animateFilterResults();
+            }
+
+            updateVisibleCount(count) {
+                this.visibleResourcesEl.textContent = count;
+                
+                // Add visual feedback
+                this.visibleResourcesEl.style.transform = 'scale(1.2)';
+                this.visibleResourcesEl.style.color = 'var(--emerald-300)';
+                
+                setTimeout(() => {
+                    this.visibleResourcesEl.style.transform = 'scale(1)';
+                    this.visibleResourcesEl.style.color = 'var(--emerald-400)';
+                }, 200);
+            }
+
+            animateFilterResults() {
+                const visibleCards = document.querySelectorAll('.resource-card:not(.hidden)');
+                visibleCards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 50);
+                });
+            }
+
+            animateCardHover(card, isHovering) {
+                const icon = card.querySelector('.card-icon');
+                const category = card.querySelector('.card-category');
+                const link = card.querySelector('.card-link');
+                
+                if (isHovering) {
+                    icon.style.transform = 'rotate(10deg) scale(1.1)';
+                    category.style.transform = 'scale(1.05)';
+                    link.style.transform = 'translateY(-2px)';
+                } else {
+                    icon.style.transform = '';
+                    category.style.transform = '';
+                    link.style.transform = '';
+                }
+            }
+
+            clearSearch() {
+                this.searchInput.value = '';
+                this.currentSearch = '';
+                this.filterResources();
+                this.searchInput.blur();
+            }
+
+            setupAnimations() {
+                // Intersection Observer for scroll animations
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                }, observerOptions);
+
+                // Observe elements for animation
+                this.resourceCards.forEach(card => {
+                    observer.observe(card);
+                });
+            }
+
+            updateStats() {
+                const categories = {};
+                this.resourceCards.forEach(card => {
+                    const category = card.dataset.category;
+                    categories[category] = (categories[category] || 0) + 1;
+                });
+
+                // Could display category breakdown if needed
+                console.log('📊 Recursos por categoría:', categories);
+            }
+
+            // Performance monitoring
+            monitorPerformance() {
+                if ('performance' in window) {
+                    window.addEventListener('load', () => {
+                        const navigation = performance.getEntriesByType('navigation')[0];
+                        console.log('⚡ Biblioteca cargada en:', 
+                                  Math.round(navigation.loadEventEnd - navigation.fetchStart), 'ms');
+                    });
+                }
+            }
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => {
+            const app = new RecursosLibraryApp();
+            app.monitorPerformance();
+        });
+
+        // Add keyboard shortcuts info
+        console.log(`
+🔍 Atajos de teclado:
+• Ctrl+K: Enfocar búsqueda
+• Escape: Limpiar búsqueda
+• Tab: Navegar elementos
+
+📚 ${document.querySelectorAll('.resource-card').length} recursos cargados
+        `);
+    </script>
 </body>
 </html>

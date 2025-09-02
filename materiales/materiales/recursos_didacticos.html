@@ -3,204 +3,971 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recursos Didácticos</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Descubre recursos didácticos en inglés para complementar tu aprendizaje matemático">
+    <meta name="keywords" content="recursos, didácticos, matemáticas, inglés, educación">
+    <title>Recursos Didácticos Modernos | Matemáticas en Inglés</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
     <style>
-        * {
+        /* Modern CSS Custom Properties */
+        :root {
+            /* Color System */
+            --primary-hue: 160;
+            --secondary-hue: 200;
+            --accent-hue: 45;
+            --success-hue: 120;
+            
+            /* Green Theme Colors */
+            --emerald-50: hsl(var(--primary-hue), 85%, 95%);
+            --emerald-100: hsl(var(--primary-hue), 80%, 88%);
+            --emerald-200: hsl(var(--primary-hue), 75%, 78%);
+            --emerald-300: hsl(var(--primary-hue), 70%, 65%);
+            --emerald-400: hsl(var(--primary-hue), 65%, 55%);
+            --emerald-500: hsl(var(--primary-hue), 60%, 45%);
+            --emerald-600: hsl(var(--primary-hue), 65%, 35%);
+            --emerald-700: hsl(var(--primary-hue), 70%, 25%);
+            --emerald-800: hsl(var(--primary-hue), 75%, 18%);
+            --emerald-900: hsl(var(--primary-hue), 80%, 12%);
+            
+            /* Blue Accent Colors */
+            --blue-400: hsl(var(--secondary-hue), 70%, 65%);
+            --blue-500: hsl(var(--secondary-hue), 75%, 55%);
+            --blue-600: hsl(var(--secondary-hue), 80%, 45%);
+            
+            /* Yellow Accent */
+            --yellow-400: hsl(var(--accent-hue), 85%, 65%);
+            --yellow-500: hsl(var(--accent-hue), 90%, 55%);
+            
+            /* Neutrals */
+            --gray-50: hsl(220, 15%, 97%);
+            --gray-100: hsl(220, 13%, 92%);
+            --gray-200: hsl(220, 12%, 85%);
+            --gray-300: hsl(220, 11%, 75%);
+            --gray-400: hsl(220, 10%, 60%);
+            --gray-500: hsl(220, 9%, 46%);
+            --gray-600: hsl(220, 10%, 35%);
+            --gray-700: hsl(220, 12%, 25%);
+            --gray-800: hsl(220, 15%, 15%);
+            --gray-900: hsl(220, 18%, 8%);
+            
+            /* Typography */
+            --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            --font-mono: 'Fira Code', 'JetBrains Mono', monospace;
+            
+            /* Fluid Typography */
+            --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+            --text-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+            --text-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.3125rem);
+            --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+            --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+            --text-3xl: clamp(1.875rem, 1.65rem + 1.125vw, 2.25rem);
+            --text-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 2.8125rem);
+            --text-5xl: clamp(2.5rem, 2.15rem + 1.75vw, 3.125rem);
+            --text-6xl: clamp(3rem, 2.55rem + 2.25vw, 3.75rem);
+            
+            /* Fluid Spacing */
+            --space-xs: clamp(0.5rem, 0.475rem + 0.125vw, 0.5625rem);
+            --space-sm: clamp(0.75rem, 0.725rem + 0.125vw, 0.8125rem);
+            --space-md: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+            --space-lg: clamp(1.5rem, 1.425rem + 0.375vw, 1.6875rem);
+            --space-xl: clamp(2rem, 1.9rem + 0.5vw, 2.25rem);
+            --space-2xl: clamp(3rem, 2.85rem + 0.75vw, 3.375rem);
+            --space-3xl: clamp(4rem, 3.8rem + 1vw, 4.5rem);
+            --space-4xl: clamp(6rem, 5.7rem + 1.5vw, 6.75rem);
+            
+            /* Effects */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --shadow-colored: 0 10px 30px -5px rgba(16, 185, 129, 0.3);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            
+            /* Backdrop Effects */
+            --backdrop-blur: blur(20px);
+            --backdrop-blur-sm: blur(10px);
+            --backdrop-blur-lg: blur(40px);
+        }
+        
+        /* Modern CSS Reset */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+            text-rendering: optimizeLegibility;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            color: #ffffff;
+            font-family: var(--font-primary);
+            font-size: var(--text-base);
+            line-height: 1.7;
+            color: var(--gray-50);
             background: url('fondo9.png') no-repeat center center fixed;
             background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             min-height: 100vh;
-            position: relative;
             overflow-x: hidden;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-
+        
+        /* Enhanced Background Overlay */
         body::before {
-            content: "";
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(22, 160, 133, 0.8) 0%, rgba(20, 83, 45, 0.9) 100%);
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, rgba(5, 150, 105, 0.7) 0%, rgba(6, 95, 70, 0.8) 50%, rgba(4, 120, 87, 0.9) 100%);
             z-index: -1;
-            animation: gradientShift 15s infinite alternate;
+            animation: gradientFlow 20s ease-in-out infinite;
         }
-
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
+        
+        @keyframes gradientFlow {
+            0%, 100% { 
+                filter: hue-rotate(0deg) brightness(1);
+                transform: scale(1);
             }
-            100% {
-                background-position: 100% 50%;
+            33% { 
+                filter: hue-rotate(30deg) brightness(1.1);
+                transform: scale(1.05);
+            }
+            66% { 
+                filter: hue-rotate(-30deg) brightness(0.95);
+                transform: scale(0.98);
             }
         }
-
-        header {
-            text-align: center;
-            padding: 3rem 1rem;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        
+        /* Page Layout */
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             position: relative;
-            overflow: hidden;
         }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        
+        /* Modern Header */
+        .site-header {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: var(--backdrop-blur);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: var(--space-xl) 0;
+            animation: slideDown var(--transition-slow) ease-out;
         }
-
-        header h1 {
-            font-size: 3em;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #fff, #10b981);
-            -webkit-background-clip: text;
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+            text-align: center;
+        }
+        
+        .site-title {
+            font-size: var(--text-5xl);
+            font-weight: 800;
+            margin-bottom: var(--space-lg);
+            background: linear-gradient(135deg, #ffffff 0%, var(--emerald-200) 50%, var(--blue-400) 100%);
             background-clip: text;
-            color: transparent;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             position: relative;
             display: inline-block;
-            animation: titleFloat 1s ease-out;
         }
-
-        header h1::before {
-            content: '\f518'; /* Ícono de graduación */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 0.8em;
-            margin-right: 15px;
-            vertical-align: middle;
-            opacity: 0.9;
+        
+        .title-icon {
+            display: inline-block;
+            margin-right: var(--space-sm);
+            color: var(--emerald-400);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            animation: bounce 2s infinite;
         }
-
-        header p {
-            font-size: 1.2em;
-            font-weight: 300;
-            color: #e0e0e0;
-            max-width: 800px;
+        
+        .site-description {
+            font-size: var(--text-lg);
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
-            animation: fadeIn 1s ease-out 0.5s both;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
-
-        main {
-            padding: 3rem 2rem;
-            max-width: 800px;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            margin: 2rem auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: floatUp 1s ease-out;
+        
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: var(--space-4xl) var(--space-md);
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
         }
-
-        .btn-recursos {
-            display: inline-flex;
-            align-items: center;
-            padding: 1.2rem 2.5rem;
-            background: linear-gradient(45deg, #16a085, #059669);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
+        
+        .content-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        /* Resource Categories Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-3xl);
+        }
+        
+        .resource-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: var(--backdrop-blur);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
             cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all var(--transition-medium);
+            animation: fadeInUp var(--transition-slow) ease-out both;
+        }
+        
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s ease;
+            z-index: 1;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-colored);
+        }
+        
+        .resource-card:hover::before {
+            transform: rotate(45deg) translateX(100%);
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-icon {
+            font-size: var(--text-4xl);
+            color: var(--emerald-400);
+            margin-bottom: var(--space-lg);
+            display: block;
+            transition: all var(--transition-medium);
+        }
+        
+        .resource-card:hover .card-icon {
+            color: var(--yellow-400);
+            transform: scale(1.1) rotate(10deg);
+        }
+        
+        .card-title {
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: var(--space-md);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-description {
+            font-size: var(--text-sm);
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .card-badge {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--emerald-600);
+            color: white;
+            border-radius: var(--radius-full);
+            font-size: var(--text-xs);
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(22, 160, 133, 0.3);
+            letter-spacing: 0.5px;
+        }
+        
+        /* Central CTA Section */
+        .cta-section {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: var(--backdrop-blur);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-3xl);
             position: relative;
             overflow: hidden;
         }
-
-        .btn-recursos:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(22, 160, 133, 0.4);
-            background: linear-gradient(45deg, #059669, #047857);
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--emerald-500), var(--blue-500), var(--yellow-500));
+            animation: shimmer 2s ease-in-out infinite;
         }
-
-        .btn-recursos::before {
-            content: '\f07c'; /* Ícono de carpeta */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            margin-right: 12px;
-            font-size: 1.1em;
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
-
-        @keyframes titleFloat {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
+        
+        .cta-title {
+            font-size: var(--text-3xl);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: var(--space-lg);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cta-subtitle {
+            font-size: var(--text-lg);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.6;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg) var(--space-2xl);
+            background: linear-gradient(135deg, var(--emerald-600), var(--emerald-500));
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: var(--text-lg);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-colored);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-400));
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        .button-icon {
+            font-size: 1.2em;
+            transition: transform var(--transition-medium);
+        }
+        
+        .cta-button:hover .button-icon {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        /* Floating Elements */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            font-size: 3rem;
+            color: var(--emerald-400);
+            animation-delay: 0s;
+        }
+        
+        .floating-shape:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            font-size: 2rem;
+            color: var(--blue-400);
+            animation-delay: -2s;
+        }
+        
+        .floating-shape:nth-child(3) {
+            bottom: 30%;
+            left: 20%;
+            font-size: 2.5rem;
+            color: var(--yellow-400);
+            animation-delay: -4s;
+        }
+        
+        .floating-shape:nth-child(4) {
+            bottom: 20%;
+            right: 10%;
+            font-size: 2.8rem;
+            color: var(--emerald-300);
+            animation-delay: -1s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
             }
-            100% {
+            33% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+            66% {
+                transform: translateY(-5px) rotate(-3deg);
+            }
+        }
+        
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes floatUp {
-            0% {
+        
+        @keyframes fadeInUp {
+            from {
                 opacity: 0;
                 transform: translateY(30px);
             }
-            100% {
+            to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2.5em;
+        
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+                transform: translate3d(0, 0, 0);
             }
-            
-            main {
-                width: 95%;
-                padding: 2rem 1.5rem;
+            40%, 43% {
+                animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+                transform: translate3d(0, -10px, 0);
             }
-            
-            .btn-recursos {
-                padding: 1rem 2rem;
-                font-size: 1em;
+            70% {
+                animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+                transform: translate3d(0, -5px, 0);
+            }
+            90% {
+                transform: translate3d(0, -2px, 0);
             }
         }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: var(--text-4xl);
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+            
+            .main-content {
+                padding: var(--space-2xl) var(--space-sm);
+            }
+            
+            .cta-section {
+                padding: var(--space-2xl);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .resource-card {
+                padding: var(--space-lg);
+            }
+            
+            .cta-button {
+                padding: var(--space-md) var(--space-xl);
+                font-size: var(--text-base);
+            }
+        }
+        
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .floating-shapes {
+                display: none;
+            }
+        }
+        
+        /* Focus styles */
+        .resource-card:focus-visible,
+        .cta-button:focus-visible {
+            outline: 2px solid var(--yellow-400);
+            outline-offset: 4px;
+        }
+        
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .resource-card,
+            .cta-section {
+                border: 2px solid white;
+                background: rgba(0, 0, 0, 0.9);
+            }
+        }
+        
+        /* Animation delays for staggered effects */
+        .resource-card:nth-child(1) { animation-delay: 0.1s; }
+        .resource-card:nth-child(2) { animation-delay: 0.2s; }
+        .resource-card:nth-child(3) { animation-delay: 0.3s; }
+        .resource-card:nth-child(4) { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Recursos Didácticos en Inglés</h1>
-        <p>Descubre material adicional que complementa tus conocimientos y ayuda a reforzar tus habilidades en matemáticas.</p>
-    </header>
-    <main>
-        <button class="btn-recursos" onclick="window.location.href='enlaces_recursos.html'">Explorar Recursos</button>
-    </main>
+    <!-- Floating Educational Shapes -->
+    <div class="floating-shapes" aria-hidden="true">
+        <div class="floating-shape">📚</div>
+        <div class="floating-shape">📊</div>
+        <div class="floating-shape">🧮</div>
+        <div class="floating-shape">📐</div>
+    </div>
+
+    <div class="page-wrapper">
+        <header class="site-header">
+            <div class="header-content">
+                <h1 class="site-title">
+                    <i class="fas fa-graduation-cap title-icon" aria-hidden="true"></i>
+                    Recursos Didácticos en Inglés
+                </h1>
+                <p class="site-description">
+                    Descubre material adicional que complementa tus conocimientos y ayuda a reforzar 
+                    tus habilidades en matemáticas con recursos internacionales de calidad.
+                </p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="content-container">
+                <!-- Resource Categories -->
+                <section class="resources-grid" aria-label="Categorías de recursos">
+                    <article class="resource-card" tabindex="0" role="button" aria-label="Recursos interactivos">
+                        <div class="card-content">
+                            <i class="fas fa-gamepad card-icon" aria-hidden="true"></i>
+                            <h3 class="card-title">Recursos Interactivos</h3>
+                            <p class="card-description">
+                                Juegos, simulaciones y actividades digitales que hacen el aprendizaje más dinámico y entretenido.
+                            </p>
+                            <span class="card-badge">Interactive</span>
+                        </div>
+                    </article>
+
+                    <article class="resource-card" tabindex="0" role="button" aria-label="Material de estudio">
+                        <div class="card-content">
+                            <i class="fas fa-book-open card-icon" aria-hidden="true"></i>
+                            <h3 class="card-title">Material de Estudio</h3>
+                            <p class="card-description">
+                                Libros digitales, guías de referencia y documentos educativos de instituciones reconocidas.
+                            </p>
+                            <span class="card-badge">Study</span>
+                        </div>
+                    </article>
+
+                    <article class="resource-card" tabindex="0" role="button" aria-label="Videos educativos">
+                        <div class="card-content">
+                            <i class="fas fa-play-circle card-icon" aria-hidden="true"></i>
+                            <h3 class="card-title">Videos Educativos</h3>
+                            <p class="card-description">
+                                Conferencias, tutoriales y explicaciones visuales de conceptos matemáticos complejos.
+                            </p>
+                            <span class="card-badge">Video</span>
+                        </div>
+                    </article>
+
+                    <article class="resource-card" tabindex="0" role="button" aria-label="Herramientas online">
+                        <div class="card-content">
+                            <i class="fas fa-calculator card-icon" aria-hidden="true"></i>
+                            <h3 class="card-title">Herramientas Online</h3>
+                            <p class="card-description">
+                                Calculadoras avanzadas, graficadores y software especializado para resolver problemas matemáticos.
+                            </p>
+                            <span class="card-badge">Tools</span>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- Main CTA Section -->
+                <section class="cta-section">
+                    <h2 class="cta-title">¡Explora Todos los Recursos!</h2>
+                    <p class="cta-subtitle">
+                        Accede a una biblioteca completa de materiales educativos cuidadosamente seleccionados 
+                        para potenciar tu aprendizaje matemático en inglés.
+                    </p>
+                    <a href="enlaces_recursos.html" 
+                       class="cta-button" 
+                       id="explore-btn"
+                       aria-describedby="cta-description">
+                        <i class="fas fa-rocket button-icon" aria-hidden="true"></i>
+                        <span>Explorar Recursos</span>
+                    </a>
+                    <div id="cta-description" class="sr-only">
+                        Navegar a la página de enlaces y recursos educativos
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Screen reader only content -->
+    <div class="sr-only">
+        <style>
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+        </style>
+    </div>
+
+    <script>
+        // Modern JavaScript Application
+        class RecursosDidacticosApp {
+            constructor() {
+                this.resourceCards = document.querySelectorAll('.resource-card');
+                this.ctaButton = document.getElementById('explore-btn');
+                this.isLoading = false;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.setupAnimations();
+                this.setupAccessibility();
+                this.setupPerformanceOptimizations();
+            }
+
+            setupEventListeners() {
+                // Resource cards interaction
+                this.resourceCards.forEach((card, index) => {
+                    card.addEventListener('click', () => {
+                        this.handleResourceCardClick(index);
+                    });
+
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            this.handleResourceCardClick(index);
+                        }
+                    });
+
+                    // Enhanced hover effects
+                    card.addEventListener('mouseenter', () => {
+                        this.animateCardHover(card, true);
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        this.animateCardHover(card, false);
+                    });
+                });
+
+                // Main CTA button
+                this.ctaButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleCtaClick();
+                });
+
+                this.ctaButton.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.handleCtaClick();
+                    }
+                });
+            }
+
+            handleResourceCardClick(index) {
+                const cardTitles = [
+                    'Recursos Interactivos',
+                    'Material de Estudio', 
+                    'Videos Educativos',
+                    'Herramientas Online'
+                ];
+
+                // Add visual feedback
+                const card = this.resourceCards[index];
+                card.style.transform = 'translateY(-8px) scale(0.98)';
+                
+                setTimeout(() => {
+                    card.style.transform = '';
+                    // Could navigate to specific resource category
+                    this.showNotification(`Explorando: ${cardTitles[index]}`);
+                }, 150);
+            }
+
+            handleCtaClick() {
+                if (this.isLoading) return;
+
+                this.isLoading = true;
+                this.showLoadingState();
+
+                // Add page transition effect
+                document.body.style.filter = 'blur(2px)';
+                document.body.style.transition = 'filter 0.3s ease';
+
+                setTimeout(() => {
+                    window.location.href = 'enlaces_recursos.html';
+                }, 800);
+            }
+
+            showLoadingState() {
+                const originalContent = this.ctaButton.innerHTML;
+                this.ctaButton.dataset.originalContent = originalContent;
+                
+                this.ctaButton.innerHTML = `
+                    <div style="width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <span>Cargando recursos...</span>
+                `;
+                
+                this.ctaButton.style.pointerEvents = 'none';
+            }
+
+            animateCardHover(card, isHovering) {
+                const icon = card.querySelector('.card-icon');
+                const badge = card.querySelector('.card-badge');
+                
+                if (isHovering) {
+                    icon.style.transform = 'scale(1.1) rotate(10deg)';
+                    badge.style.transform = 'scale(1.05)';
+                } else {
+                    icon.style.transform = '';
+                    badge.style.transform = '';
+                }
+            }
+
+            setupAnimations() {
+                // Intersection Observer for scroll animations
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                }, observerOptions);
+
+                // Observe elements for animation
+                this.resourceCards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    observer.observe(card);
+                });
+
+                // Parallax effect for floating shapes
+                this.setupParallaxEffect();
+            }
+
+            setupParallaxEffect() {
+                const floatingShapes = document.querySelectorAll('.floating-shape');
+                
+                window.addEventListener('scroll', () => {
+                    const scrolled = window.pageYOffset;
+                    const rate = scrolled * -0.5;
+                    
+                    floatingShapes.forEach((shape, index) => {
+                        const speed = 0.2 + (index * 0.1);
+                        shape.style.transform = `translateY(${rate * speed}px)`;
+                    });
+                });
+            }
+
+            setupAccessibility() {
+                // Keyboard navigation enhancement
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        document.body.classList.add('keyboard-navigation');
+                    }
+                });
+
+                document.addEventListener('mousedown', () => {
+                    document.body.classList.remove('keyboard-navigation');
+                });
+
+                // Add ARIA live region for dynamic content
+                const liveRegion = document.createElement('div');
+                liveRegion.setAttribute('aria-live', 'polite');
+                liveRegion.setAttribute('aria-atomic', 'true');
+                liveRegion.className = 'sr-only';
+                liveRegion.id = 'announcements';
+                document.body.appendChild(liveRegion);
+            }
+
+            setupPerformanceOptimizations() {
+                // Preload critical resources
+                this.preloadResources();
+
+                // Lazy load non-critical animations
+                this.setupLazyAnimations();
+
+                // Monitor performance
+                this.monitorPerformance();
+            }
+
+            preloadResources() {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = 'enlaces_recursos.html';
+                document.head.appendChild(link);
+            }
+
+            setupLazyAnimations() {
+                // Only enable complex animations on capable devices
+                const hasReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+                
+                if (hasReducedMotion || isLowEndDevice) {
+                    document.documentElement.style.setProperty('--animation-speed', '0.1s');
+                }
+            }
+
+            monitorPerformance() {
+                if ('performance' in window && 'observer' in window.PerformanceObserver.prototype) {
+                    // Monitor layout shifts
+                    const observer = new PerformanceObserver((list) => {
+                        for (const entry of list.getEntries()) {
+                            if (entry.entryType === 'layout-shift' && !entry.hadRecentInput) {
+                                console.log('Layout shift detected:', entry.value);
+                            }
+                        }
+                    });
+                    
+                    observer.observe({entryTypes: ['layout-shift']});
+                }
+            }
+
+            showNotification(message) {
+                const announcement = document.getElementById('announcements');
+                if (announcement) {
+                    announcement.textContent = message;
+                }
+            }
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => {
+            new RecursosDidacticosApp();
+        });
+
+        // Service worker registration for progressive enhancement
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                console.log('🎓 Recursos Didácticos - Listo para PWA');
+            });
+        }
+
+        // Add CSS animation for spin
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .keyboard-navigation *:focus-visible {
+                outline: 2px solid #fbbf24;
+                outline-offset: 2px;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
