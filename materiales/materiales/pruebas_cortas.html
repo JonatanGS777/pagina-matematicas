@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pruebas Cortas</title>
+    <meta name="description" content="Pruebas cortas de matemáticas para autoevaluación y medición de comprensión">
+    <meta name="author" content="Yonatan Guerrero Soriano">
+    <title>Pruebas Cortas - Matemáticas Interactivas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Estilos generales */
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #f59e0b;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-light: #ffffff;
+            --background-light: #f8fafc;
+            --background-dark: #0f172a;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,195 +41,606 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            color: #ffffff;
-            background: url('fondo.png') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            overflow-x: hidden;
         }
 
-        /* Efecto de fondo oscuro */
-        body::before {
-            content: "";
-            position: absolute;
+        /* Animated background particles */
+        .particles {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); /* Oscurece el fondo */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        .particle:nth-child(1) { width: 20px; height: 20px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 15px; height: 15px; left: 20%; animation-delay: -5s; }
+        .particle:nth-child(3) { width: 25px; height: 25px; left: 30%; animation-delay: -10s; }
+        .particle:nth-child(4) { width: 18px; height: 18px; left: 40%; animation-delay: -15s; }
+        .particle:nth-child(5) { width: 22px; height: 22px; left: 50%; animation-delay: -2s; }
+        .particle:nth-child(6) { width: 16px; height: 16px; left: 60%; animation-delay: -8s; }
+        .particle:nth-child(7) { width: 24px; height: 24px; left: 70%; animation-delay: -12s; }
+        .particle:nth-child(8) { width: 19px; height: 19px; left: 80%; animation-delay: -18s; }
+        .particle:nth-child(9) { width: 21px; height: 21px; left: 90%; animation-delay: -7s; }
+
+        /* Glass morphism backdrop */
+        .glass-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+        }
+
+        /* Header modernizado */
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 2rem 1rem;
+            text-align: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        .title-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .title-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            border-radius: var(--radius-xl);
+            opacity: 0.1;
             z-index: -1;
         }
 
-        /* Encabezado */
-        header {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            width: 100%;
-            border-bottom: 1px solid #555;
-        }
-
         header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #e2e8f0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
         }
 
-        header p {
-            font-size: 1.1em;
-            font-weight: 300;
-        }
-
-        /* Main */
-        main {
-            padding: 40px;
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
-            color: #ddd;
-        }
-
-        main p {
-            font-size: 1.2em;
+        .subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
             line-height: 1.6;
         }
 
-        /* Mejora en el botón para iniciar prueba */
+        /* Main content */
+        main {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .content-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+            animation: slideInFromBottom 1s ease-out 0.3s both;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: var(--transition);
+        }
+
+        .content-card:hover::before {
+            left: 100%;
+        }
+
+        .content-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        /* Botón modernizado */
+        .btn-container {
+            position: relative;
+        }
+
         .btn-iniciar-prueba {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 15px 30px;
-            background-color: #e74c3c;
-            color: #fff;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: none;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border: none;
-            border-radius: 4px;
+            border-radius: var(--radius-xl);
             cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            box-shadow: 
+                0 10px 25px rgba(99, 102, 241, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transform: translateY(0);
+        }
+
+        .btn-iniciar-prueba::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            opacity: 0;
+            transition: var(--transition);
         }
 
         .btn-iniciar-prueba:hover {
-            background-color: #c0392b;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 15px 35px rgba(99, 102, 241, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-iniciar-prueba:hover::before {
+            opacity: 1;
         }
 
         .btn-iniciar-prueba:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(0) scale(0.98);
         }
 
-        /* Footer */
+        .btn-icon {
+            font-size: 1.2em;
+            transition: var(--transition);
+        }
+
+        .btn-iniciar-prueba:hover .btn-icon {
+            transform: translateX(4px);
+        }
+
+        /* Footer modernizado */
         footer {
-            margin-top: auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            width: 100%;
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
             text-align: center;
-            font-size: 0.9em;
-            border-top: 1px solid #555;
+            box-shadow: var(--shadow-lg);
+            animation: slideInFromBottom 1s ease-out 0.6s both;
         }
 
-        /* Animación de entrada mejorada */
-        @keyframes fadeIn {
-            from { 
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
         }
 
-        header {
-            animation: fadeIn 1s ease-out;
-        }
-
-        main {
-            animation: fadeIn 1.5s ease-out 0.2s backwards;
-        }
-
-        footer {
-            animation: fadeIn 1.5s ease-out 0.4s backwards;
-        }
-
-        /* Añadido: Efecto de loading */
-        .loading {
+        /* Loading modernizado */
+        .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            opacity: 0;
+            transition: var(--transition);
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #e74c3c;
+        .loading-overlay.active {
+            opacity: 1;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .modern-spinner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .modern-spinner::before,
+        .modern-spinner::after {
+            content: '';
+            position: absolute;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: modernSpinner 2s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .modern-spinner::before {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), transparent, var(--secondary-color));
+            animation: modernSpinner 1.5s linear infinite;
+        }
+
+        .modern-spinner::after {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            background: linear-gradient(45deg, var(--accent-color), transparent, var(--danger-color));
+            animation: modernSpinner 1s linear infinite reverse;
+        }
+
+        .loading-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        /* Animaciones */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes modernSpinner {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            .content-card {
+                padding: 2rem 1.5rem;
+                margin: 0 1rem;
+            }
+
+            .btn-iniciar-prueba {
+                padding: 0.875rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 2rem 1rem;
+            }
+
+            .content-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .btn-iniciar-prueba {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        /* Prefers reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            body {
+                background: linear-gradient(-45deg, #667eea, #764ba2);
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-light: #ffffff;
+                --glass-bg: rgba(0, 0, 0, 0.8);
+                --glass-border: rgba(255, 255, 255, 0.5);
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Pruebas Cortas</h1>
-        <p>Utiliza estas pruebas cortas para autoevaluarte y medir tu comprensión de los temas estudiados.</p>
-    </header>
-    
-    <main>
-        <p>Resuelve estas pruebas para identificar tus fortalezas y áreas de mejora en matemáticas.</p>
-        <button onclick="iniciarPrueba()" class="btn-iniciar-prueba">Iniciar Prueba</button>
-    </main>
-    
-    <footer>
-        <p>&copy; 2024 Yonatan Guerrero Soriano - Página de Matemáticas</p>
-    </footer>
-
-    <!-- Añadido: Div para el efecto de loading -->
-    <div class="loading">
-        <div class="loading-spinner"></div>
+    <!-- Particles background -->
+    <div class="particles" aria-hidden="true">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
 
-    <!-- JavaScript mejorado -->
-    <script>
-        function iniciarPrueba() {
-            // Mostrar efecto de loading
-            const loading = document.querySelector('.loading');
-            loading.style.display = 'flex';
+    <!-- Glass backdrop -->
+    <div class="glass-backdrop" aria-hidden="true"></div>
+    
+    <header role="banner">
+        <div class="header-content">
+            <div class="title-wrapper">
+                <h1>Pruebas Cortas</h1>
+            </div>
+            <p class="subtitle">
+                Utiliza estas pruebas interactivas para autoevaluarte y medir tu comprensión de los temas estudiados
+            </p>
+        </div>
+    </header>
+    
+    <main role="main">
+        <article class="content-card">
+            <p class="content-text">
+                Descubre tus fortalezas y áreas de mejora en matemáticas a través de nuestras pruebas dinámicas y personalizadas.
+            </p>
+            <div class="btn-container">
+                <button 
+                    type="button" 
+                    onclick="iniciarPrueba()" 
+                    class="btn-iniciar-prueba"
+                    aria-describedby="btn-description"
+                >
+                    Iniciar Prueba
+                    <span class="btn-icon" aria-hidden="true">→</span>
+                </button>
+                <div id="btn-description" class="sr-only">
+                    Iniciar una nueva prueba de matemáticas interactiva
+                </div>
+            </div>
+        </article>
+    </main>
+    
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <p>&copy; 2025 Yonatan Guerrero Soriano - Matemáticas Interactivas</p>
+        </div>
+    </footer>
 
-            // Simular un pequeño retraso para la transición
+    <!-- Loading overlay modernizado -->
+    <div class="loading-overlay" role="dialog" aria-labelledby="loading-title" aria-hidden="true">
+        <div class="loading-content">
+            <div class="modern-spinner" aria-hidden="true"></div>
+            <p id="loading-title" class="loading-text">Cargando prueba...</p>
+        </div>
+    </div>
+
+    <!-- Screen reader only styles -->
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+
+    <script>
+        // Función mejorada para iniciar prueba
+        function iniciarPrueba() {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            const button = document.querySelector('.btn-iniciar-prueba');
+            
+            // Deshabilitar botón para evitar múltiples clicks
+            button.disabled = true;
+            button.style.opacity = '0.7';
+            
+            // Mostrar loading con animación
+            loadingOverlay.style.display = 'flex';
+            loadingOverlay.setAttribute('aria-hidden', 'false');
+            
+            // Forzar reflow para activar transición
+            loadingOverlay.offsetHeight;
+            loadingOverlay.classList.add('active');
+            
+            // Simular carga y redireccionar
             setTimeout(() => {
-                // Redirigir a la página de pruebas
+                // En producción, aquí iría la redirección real
                 window.location.href = 'quiz.html';
-            }, 500);
+                
+                // Fallback en caso de que la redirección falle
+                setTimeout(() => {
+                    loadingOverlay.classList.remove('active');
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                        loadingOverlay.setAttribute('aria-hidden', 'true');
+                        button.disabled = false;
+                        button.style.opacity = '1';
+                    }, 300);
+                }, 300);
+            }, 800);
         }
 
-        // Asegurarse de que todas las imágenes y recursos estén cargados
-        window.addEventListener('load', function() {
-            document.body.style.opacity = '1';
+        // Mejorar la carga inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar clase para animaciones una vez que el DOM esté listo
+            document.body.classList.add('loaded');
+            
+            // Precargar recursos críticos
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = 'quiz.html';
+            document.head.appendChild(link);
         });
+
+        // Manejo de errores y accesibilidad
+        window.addEventListener('load', function() {
+            // Todas las imágenes y recursos están cargados
+            console.log('Página completamente cargada');
+            
+            // Agregar listeners para mejorar la experiencia del usuario
+            const button = document.querySelector('.btn-iniciar-prueba');
+            
+            button.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    iniciarPrueba();
+                }
+            });
+        });
+
+        // Soporte para gestos táctiles en dispositivos móviles
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                // Swipe detectado - podría usarse para navegación futura
+                console.log(diff > 0 ? 'Swipe up' : 'Swipe down');
+            }
+        }
+
+        // Manejo de cambios de orientación
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 500);
+        });
+
+        // Performance monitoring (opcional)
+        if ('performance' in window) {
+            window.addEventListener('load', function() {
+                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                console.log(`Tiempo de carga: ${loadTime}ms`);
+            });
+        }
     </script>
 </body>
 </html>
