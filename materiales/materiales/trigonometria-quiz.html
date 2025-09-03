@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de Trigonometría</title>
+    <title>Prueba de Trigonometría Moderna</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f39c12;
-            --background-color: #1a1a2e;
-            --text-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --primary-light: #8b5cf6;
+            --secondary: #f59e0b;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.25);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
         }
 
         * {
@@ -22,146 +34,441 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--background-color);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
             padding: 2rem;
         }
 
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        /* Header moderno */
         .quiz-header {
             text-align: center;
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: var(--card-bg);
-            border-radius: 10px;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .quiz-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Barra de progreso mejorada */
+        .progress-container {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-counter {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
         }
 
         .progress-bar {
-            width: 100%;
-            height: 10px;
+            height: 8px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin: 1rem 0;
+            border-radius: 4px;
             overflow: hidden;
+            position: relative;
         }
 
         .progress {
-            width: 0%;
             height: 100%;
-            background: var(--primary-color);
-            transition: width 0.3s ease;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Tarjeta de pregunta moderna */
         .question-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            padding: 2rem;
+            background: var(--gradient-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
         }
 
-        .question-title {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
         }
 
-        .options {
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        /* Opciones modernas */
+        .options-grid {
             display: grid;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
         }
 
         .option {
             background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 5px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1.25rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
         }
 
         .option:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateX(10px);
+            border-color: var(--primary);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+        }
+
+        /* Input moderno */
+        .input-group {
+            position: relative;
+            margin-top: 2rem;
         }
 
         .input-answer {
             width: 100%;
-            padding: 0.8rem;
+            padding: 1rem 1.5rem;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            color: var(--text-color);
-            margin-top: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Botones modernos */
         .button {
-            background: var(--primary-color);
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
         }
 
         .button:hover {
-            background: #357abd;
             transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
         }
 
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button-secondary {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .button-secondary:hover {
+            background: var(--card);
+            box-shadow: 0 10px 25px var(--shadow);
+        }
+
+        /* Feedback mejorado */
         .feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 5px;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border-radius: 12px;
             display: none;
+            position: relative;
+            animation: slideInUp 0.4s ease-out;
         }
 
-        .correct {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
+        .feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-left: 4px solid var(--success);
         }
 
-        .incorrect {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
         }
 
-        .graph-container {
-            width: 100%;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 5px;
-            margin: 1rem 0;
+        /* Resultados finales */
+        .results-card {
+            text-align: center;
+            animation: zoomIn 0.6s ease-out;
+        }
+
+        .results-score {
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 2rem 0;
+        }
+
+        .results-message {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Animaciones */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .question-card {
+                padding: 1.5rem;
+            }
+
+            .results-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <h1>Prueba de Trigonometría</h1>
+    <div class="container">
+        <header class="quiz-header">
+            <h1 class="quiz-title">Prueba de Trigonometría</h1>
+            <p class="quiz-subtitle">Pon a prueba tus conocimientos matemáticos</p>
+        </header>
+
+        <section class="progress-container">
+            <div class="progress-info">
+                <div class="question-counter">
+                    <i class="fas fa-question-circle"></i>
+                    Pregunta <span id="current-question">1</span> de <span id="total-questions">10</span>
+                </div>
+                <div class="score-display">
+                    <i class="fas fa-star"></i>
+                    <span id="current-score">0</span> puntos
+                </div>
+            </div>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
-            <p>Pregunta <span id="current-question">1</span> de 10</p>
+        </section>
+
+        <main id="questions"></main>
+
+        <div class="quiz-controls">
+            <button class="button" id="next-button" onclick="nextQuestion()">
+                <span>Siguiente Pregunta</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-
-        <div id="questions"></div>
-
-        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
     </div>
 
     <script>
         const questions = [
             {
                 category: "Funciones Trigonométricas",
+                icon: "fa-calculator",
                 question: "Calcule el valor de sen(30°)",
                 type: "input",
                 answer: "0.5",
@@ -169,6 +476,7 @@
             },
             {
                 category: "Identidades Trigonométricas",
+                icon: "fa-equals",
                 question: "¿Cuál es la identidad fundamental trigonométrica?",
                 type: "multiple",
                 options: [
@@ -181,6 +489,7 @@
             },
             {
                 category: "Conversión de Unidades",
+                icon: "fa-exchange-alt",
                 question: "Convertir 45° a radianes",
                 type: "input",
                 answer: "0.785398",
@@ -188,6 +497,7 @@
             },
             {
                 category: "Triángulos",
+                icon: "fa-shapes",
                 question: "En un triángulo rectángulo, si uno de sus ángulos es 30° y la hipotenusa mide 10 unidades, ¿cuál es la longitud del cateto opuesto?",
                 type: "input",
                 answer: "5",
@@ -195,6 +505,7 @@
             },
             {
                 category: "Ley de Senos",
+                icon: "fa-ruler-triangle",
                 question: "En un triángulo ABC, si A = 30°, B = 45°, y a = 10 unidades, ¿cuál es el valor de b?",
                 type: "input",
                 answer: "12.47",
@@ -202,6 +513,7 @@
             },
             {
                 category: "Ley de Cosenos",
+                icon: "fa-ruler-triangle",
                 question: "En un triángulo con lados a = 6, b = 8 y c = 10, ¿cuál es el valor del ángulo A en grados?",
                 type: "input",
                 answer: "36.87",
@@ -209,6 +521,7 @@
             },
             {
                 category: "Gráficas",
+                icon: "fa-chart-line",
                 question: "¿Cuál es el periodo de la función y = sen(2x)?",
                 type: "multiple",
                 options: ["π", "2π", "π/2", "4π"],
@@ -216,6 +529,7 @@
             },
             {
                 category: "Problemas Verbales",
+                icon: "fa-question",
                 question: "Una escalera de 10 metros está apoyada contra una pared formando un ángulo de 60° con el suelo. ¿A qué altura de la pared llega la escalera?",
                 type: "input",
                 answer: "8.66",
@@ -223,6 +537,7 @@
             },
             {
                 category: "Grados Decimales",
+                icon: "fa-clock",
                 question: "Convertir 30.5° a grados, minutos y segundos",
                 type: "input",
                 answer: "30°30'00\"",
@@ -230,6 +545,7 @@
             },
             {
                 category: "Funciones Inversas",
+                icon: "fa-undo",
                 question: "Si sen(θ) = 0.5, ¿cuál es el valor de θ en el primer cuadrante (en grados)?",
                 type: "input",
                 answer: "30",
@@ -239,95 +555,272 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let userAnswers = [];
+        let startTime = new Date();
 
         function loadQuestion() {
             const questionDiv = document.getElementById('questions');
             const question = questions[currentQuestion];
 
             let html = `
-                <div class="question-card">
-                    <div class="question-title">
-                        <span class="category">${question.category}</span>
-                        <h2>${question.question}</h2>
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas ${question.icon}"></i>
+                        ${question.category}
                     </div>
+                    <h2 class="question-text">${question.question}</h2>
             `;
 
             if (question.type === 'multiple') {
-                html += `<div class="options">`;
+                html += `<div class="options-grid">`;
                 question.options.forEach((option, index) => {
                     html += `
-                        <div class="option" onclick="checkAnswer(${index})">
+                        <div class="option" onclick="selectOption(${index})" id="option-${index}">
+                            <span class="option-letter">${String.fromCharCode(65 + index)})</span>
                             ${option}
                         </div>
                     `;
                 });
                 html += `</div>`;
+                html += `<button class="button" onclick="checkAnswer()" id="check-btn" style="display:none;">
+                    <i class="fas fa-check"></i> Verificar Respuesta
+                </button>`;
             } else {
                 html += `
-                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
-                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                    <div class="input-group">
+                        <input type="text" class="input-answer" id="user-answer" 
+                               placeholder="Ingresa tu respuesta aquí..." autocomplete="off">
+                    </div>
+                    <button class="button" onclick="checkAnswer()">
+                        <i class="fas fa-check"></i> Verificar Respuesta
+                    </button>
                 `;
             }
 
-            html += `<div class="feedback" id="feedback"></div>`;
+            html += `<div class="feedback" id="feedback"></div></article>`;
             questionDiv.innerHTML = html;
 
-            // Actualizar progreso
+            // Actualizar elementos de UI
             document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('total-questions').textContent = questions.length;
+            document.getElementById('current-score').textContent = score;
             document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
 
             // Renderizar fórmulas matemáticas
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (window.MathJax) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+
+            // Agregar event listener para Enter en inputs
+            const input = document.getElementById('user-answer');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkAnswer();
+                    }
+                });
+                input.focus();
+            }
+        }
+
+        let selectedOptionIndex = null;
+
+        function selectOption(index) {
+            // Limpiar selecciones previas
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleccionar nueva opción
+            document.getElementById(`option-${index}`).classList.add('selected');
+            selectedOptionIndex = index;
+            
+            // Mostrar botón de verificación
+            document.getElementById('check-btn').style.display = 'inline-flex';
         }
 
         function checkAnswer(selectedOption = null) {
             const question = questions[currentQuestion];
             const feedback = document.getElementById('feedback');
             let isCorrect = false;
+            let userAnswer = '';
 
             if (question.type === 'multiple') {
-                isCorrect = selectedOption === question.correct;
+                userAnswer = selectedOptionIndex !== null ? question.options[selectedOptionIndex] : '';
+                isCorrect = selectedOptionIndex === question.correct;
             } else {
-                const userAnswer = document.getElementById('user-answer').value.trim();
-                isCorrect = Math.abs(parseFloat(userAnswer) - parseFloat(question.answer)) < 0.1;
+                userAnswer = document.getElementById('user-answer').value.trim();
+                // Mejorar la tolerancia para diferentes formatos de respuesta
+                if (question.answer.includes('°')) {
+                    isCorrect = userAnswer.toLowerCase().includes(question.answer.toLowerCase());
+                } else {
+                    isCorrect = Math.abs(parseFloat(userAnswer) - parseFloat(question.answer)) < 0.1;
+                }
             }
+
+            // Guardar respuesta del usuario
+            userAnswers.push({
+                question: question.question,
+                userAnswer: userAnswer,
+                correctAnswer: question.type === 'multiple' ? question.options[question.correct] : question.answer,
+                isCorrect: isCorrect,
+                category: question.category
+            });
 
             feedback.style.display = 'block';
             feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.innerHTML = isCorrect ? 
-                '¡Correcto!' : 
-                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+            
+            if (isCorrect) {
+                score++;
+                feedback.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <strong>¡Excelente!</strong> Respuesta correcta.
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Incorrecto.</strong> 
+                    ${question.hint ? `<br><em>Pista: ${question.hint}</em>` : ''}
+                    <br>Respuesta correcta: <strong>${question.type === 'multiple' ? question.options[question.correct] : question.answer}</strong>
+                `;
+            }
 
-            if (isCorrect) score++;
+            // Deshabilitar interacciones después de responder
+            document.querySelectorAll('.option').forEach(opt => opt.style.pointerEvents = 'none');
+            const input = document.getElementById('user-answer');
+            if (input) input.disabled = true;
         }
 
         function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
+                selectedOptionIndex = null;
                 loadQuestion();
             } else {
                 showResults();
             }
         }
 
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(20);
+            doc.text('Resultados de la Prueba de Trigonometría', 20, 30);
+            
+            // Información general
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            const percentage = (score / questions.length * 100).toFixed(1);
+            
+            doc.setFontSize(14);
+            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
+            doc.text(`Duración: ${duration} minutos`, 20, 60);
+            doc.text(`Puntuación: ${score} de ${questions.length} (${percentage}%)`, 20, 70);
+            
+            // Resultados por categoría
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            doc.setFontSize(16);
+            doc.text('Resultados por Categoría:', 20, 90);
+            
+            let yPosition = 105;
+            doc.setFontSize(12);
+            Object.entries(categories).forEach(([category, stats]) => {
+                const categoryPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                doc.text(`${category}: ${stats.correct}/${stats.total} (${categoryPercentage}%)`, 25, yPosition);
+                yPosition += 10;
+            });
+            
+            // Respuestas detalladas
+            yPosition += 15;
+            doc.setFontSize(16);
+            doc.text('Respuestas Detalladas:', 20, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(10);
+            userAnswers.forEach((answer, index) => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+                
+                doc.text(`${index + 1}. ${answer.question.substring(0, 60)}...`, 20, yPosition);
+                yPosition += 7;
+                doc.text(`Tu respuesta: ${answer.userAnswer}`, 25, yPosition);
+                yPosition += 7;
+                doc.text(`Respuesta correcta: ${answer.correctAnswer}`, 25, yPosition);
+                yPosition += 7;
+                doc.text(`Estado: ${answer.isCorrect ? 'CORRECTA' : 'INCORRECTA'}`, 25, yPosition);
+                yPosition += 15;
+            });
+            
+            // Descargar PDF
+            doc.save(`resultados-trigonometria-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
         function showResults() {
             const questionDiv = document.getElementById('questions');
             const percentage = (score / questions.length) * 100;
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            
+            let message = '';
+            if (percentage >= 90) message = '¡Excelente dominio de la trigonometría!';
+            else if (percentage >= 80) message = '¡Muy buen trabajo! Sigue practicando.';
+            else if (percentage >= 70) message = 'Buen esfuerzo. Hay áreas por mejorar.';
+            else message = 'Necesitas repasar más los conceptos básicos.';
             
             questionDiv.innerHTML = `
-                <div class="question-card">
-                    <h2>Resultados Finales</h2>
-                    <p>Has completado la prueba de trigonometría.</p>
-                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
-                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
-                </div>
+                <article class="question-card results-card">
+                    <div class="category-badge">
+                        <i class="fas fa-trophy"></i>
+                        Resultados Finales
+                    </div>
+                    
+                    <div class="results-score">${percentage.toFixed(1)}%</div>
+                    
+                    <div class="results-message">
+                        <p><strong>${message}</strong></p>
+                        <p>Has respondido correctamente ${score} de ${questions.length} preguntas.</p>
+                        <p>Tiempo empleado: ${duration} minutos.</p>
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="button" onclick="location.reload()">
+                            <i class="fas fa-redo"></i>
+                            Intentar de Nuevo
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-download"></i>
+                            Descargar PDF
+                        </button>
+                    </div>
+                </article>
             `;
 
             document.getElementById('next-button').style.display = 'none';
+            document.getElementById('current-score').textContent = score;
         }
 
-        // Iniciar prueba
-        loadQuestion();
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            startTime = new Date();
+            loadQuestion();
+        });
+
+        // Prevenir el envío del formulario por defecto
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
