@@ -3,16 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de Álgebra</title>
+    <title>Prueba de Álgebra Moderna</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6c5ce7;
-            --secondary-color: #a8e6cf;
-            --background-color: #1a1a2e;
-            --text-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.1);
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --card: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --border: #475569;
+            --shadow: rgba(0, 0, 0, 0.25);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
         }
 
         * {
@@ -22,174 +35,515 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--background-color);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(167, 139, 250, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 10%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
             padding: 2rem;
         }
 
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        /* Header moderno */
         .quiz-header {
             text-align: center;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+            position: relative;
         }
 
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .quiz-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Barra de progreso mejorada */
         .progress-container {
-            margin: 1rem 0;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            transition: width 0.3s ease;
-        }
-
-        .question-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .question-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .category-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: var(--primary-color);
-            border-radius: 20px;
-            font-size: 0.9rem;
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 1rem;
         }
 
-        .question-title {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: var(--secondary-color);
+        .question-counter {
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .options {
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--gradient-secondary);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Tarjeta de pregunta moderna */
+        .question-card {
+            background: var(--gradient-card);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-secondary);
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        /* Opciones modernas */
+        .options-grid {
             display: grid;
             gap: 1rem;
+            margin-top: 2rem;
         }
 
         .option {
             background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 1.25rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option-letter {
+            background: var(--gradient-primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
         }
 
         .option:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateX(10px);
+            border-color: var(--primary);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--primary);
+        }
+
+        /* Input moderno */
+        .input-group {
+            position: relative;
+            margin-top: 2rem;
         }
 
         .input-answer {
             width: 100%;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--text-color);
-            margin-top: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-primary);
             font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
         }
 
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .input-answer::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Botones modernos */
         .button {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background: var(--gradient-primary);
             color: white;
             border: none;
             padding: 1rem 2rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-weight: 600;
             font-size: 1rem;
-            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
         }
 
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
         }
 
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button-secondary {
+            background: var(--gradient-secondary);
+        }
+
+        .button-secondary:hover {
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+        }
+
+        .button-outline {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .button-outline:hover {
+            background: var(--card);
+            box-shadow: 0 10px 25px var(--shadow);
+        }
+
+        /* Feedback mejorado */
         .feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border-radius: 12px;
             display: none;
-            animation: fadeIn 0.3s ease;
+            position: relative;
+            animation: slideInUp 0.4s ease-out;
         }
 
-        .correct {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
+        .feedback.correct {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border-left: 4px solid var(--success);
         }
 
-        .incorrect {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Resultados finales */
+        .results-card {
+            text-align: center;
+            animation: zoomIn 0.6s ease-out;
         }
 
-        .graph-container {
-            width: 100%;
-            height: 300px;
+        .results-score {
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 2rem 0;
+        }
+
+        .results-message {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .results-breakdown {
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            margin: 1rem 0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Animaciones */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .question-card {
+                padding: 1.5rem;
+            }
+
+            .results-actions {
+                flex-direction: column;
+            }
+
+            .option {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .option-letter {
+                order: -1;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Estilos para fórmulas matemáticas */
+        .math-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
             padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <h1>Prueba de Álgebra</h1>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress" id="progress"></div>
+    <div class="container">
+        <header class="quiz-header">
+            <h1 class="quiz-title">Prueba de Álgebra</h1>
+            <p class="quiz-subtitle">Demuestra tu dominio de las ecuaciones y funciones</p>
+        </header>
+
+        <section class="progress-container">
+            <div class="progress-info">
+                <div class="question-counter">
+                    <i class="fas fa-question-circle"></i>
+                    Pregunta <span id="current-question">1</span> de <span id="total-questions">12</span>
                 </div>
-                <p>Pregunta <span id="current-question">1</span> de 12</p>
+                <div class="score-display">
+                    <i class="fas fa-star"></i>
+                    <span id="current-score">0</span> puntos
+                </div>
             </div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </section>
+
+        <main id="questions"></main>
+
+        <div class="quiz-controls">
+            <button class="button" id="next-button" onclick="nextQuestion()">
+                <span>Siguiente Pregunta</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-
-        <div id="questions"></div>
-
-        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
     </div>
 
     <script>
         const questions = [
             {
                 category: "Ecuaciones Lineales",
+                icon: "fa-equals",
                 question: "Resuelve la ecuación: 3x + 7 = 22",
                 type: "input",
                 answer: "5",
@@ -197,6 +551,7 @@
             },
             {
                 category: "Ecuaciones Lineales",
+                icon: "fa-equals",
                 question: "Si 2(x - 3) = 4x - 14, ¿cuál es el valor de x?",
                 type: "input",
                 answer: "4",
@@ -204,6 +559,7 @@
             },
             {
                 category: "Funciones Cuadráticas",
+                icon: "fa-project-diagram",
                 question: "¿Cuál es el vértice de la parábola y = x² - 6x + 5?",
                 type: "input",
                 answer: "(3,-4)",
@@ -211,6 +567,7 @@
             },
             {
                 category: "Fórmula Cuadrática",
+                icon: "fa-square-root-alt",
                 question: "Resuelve x² + 5x + 6 = 0",
                 type: "multiple",
                 options: [
@@ -223,6 +580,7 @@
             },
             {
                 category: "Sistema de Ecuaciones",
+                icon: "fa-network-wired",
                 question: "Resuelve:\n2x + y = 5\nx - y = 1",
                 type: "input",
                 answer: "(2,1)",
@@ -230,6 +588,7 @@
             },
             {
                 category: "Gráficas",
+                icon: "fa-chart-line",
                 question: "¿Cuál es la pendiente de la recta que pasa por los puntos (2,3) y (4,7)?",
                 type: "input",
                 answer: "2",
@@ -237,6 +596,7 @@
             },
             {
                 category: "Polinomios",
+                icon: "fa-function",
                 question: "Factoriza: x³ - x²",
                 type: "multiple",
                 options: [
@@ -249,6 +609,7 @@
             },
             {
                 category: "Términos Semejantes",
+                icon: "fa-plus-minus",
                 question: "Simplifica: 3x² + 2xy - 5x² + 3xy",
                 type: "input",
                 answer: "-2x²+5xy",
@@ -256,6 +617,7 @@
             },
             {
                 category: "Funciones Cuadráticas",
+                icon: "fa-project-diagram",
                 question: "¿Cuáles son las raíces de x² - x - 6?",
                 type: "input",
                 answer: "(-2,3)",
@@ -263,6 +625,7 @@
             },
             {
                 category: "Sistema de Ecuaciones",
+                icon: "fa-network-wired",
                 question: "En un sistema de ecuaciones, si las rectas son paralelas, ¿cuántas soluciones hay?",
                 type: "multiple",
                 options: [
@@ -275,6 +638,7 @@
             },
             {
                 category: "Polinomios",
+                icon: "fa-function",
                 question: "¿Cuál es el grado del polinomio: 3x⁴ - 2x³ + 5x - 1?",
                 type: "input",
                 answer: "4",
@@ -282,6 +646,7 @@
             },
             {
                 category: "Términos Semejantes",
+                icon: "fa-plus-minus",
                 question: "Simplifica: (3x + 2)² - (x - 1)²",
                 type: "multiple",
                 options: [
@@ -296,96 +661,377 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let userAnswers = [];
+        let startTime = new Date();
 
         function loadQuestion() {
             const questionDiv = document.getElementById('questions');
             const question = questions[currentQuestion];
 
             let html = `
-                <div class="question-card">
-                    <div class="category-tag">${question.category}</div>
-                    <div class="question-title">
-                        <h2>${question.question}</h2>
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas ${question.icon}"></i>
+                        ${question.category}
                     </div>
+                    <h2 class="question-text">${question.question}</h2>
             `;
 
             if (question.type === 'multiple') {
-                html += `<div class="options">`;
+                html += `<div class="options-grid">`;
                 question.options.forEach((option, index) => {
                     html += `
-                        <div class="option" onclick="checkAnswer(${index})">
-                            ${option}
+                        <div class="option" onclick="selectOption(${index})" id="option-${index}">
+                            <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                            <span>${option}</span>
                         </div>
                     `;
                 });
                 html += `</div>`;
+                html += `<button class="button" onclick="checkAnswer()" id="check-btn" style="display:none;">
+                    <i class="fas fa-check"></i> Verificar Respuesta
+                </button>`;
             } else {
                 html += `
-                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
-                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                    <div class="input-group">
+                        <input type="text" class="input-answer" id="user-answer" 
+                               placeholder="Ejemplo: x = 5 o (2,3)" autocomplete="off">
+                    </div>
+                    <button class="button" onclick="checkAnswer()">
+                        <i class="fas fa-check"></i> Verificar Respuesta
+                    </button>
                 `;
             }
 
-            html += `<div class="feedback" id="feedback"></div>`;
+            html += `<div class="feedback" id="feedback"></div></article>`;
             questionDiv.innerHTML = html;
 
-            // Actualizar progreso
+            // Actualizar elementos de UI
             document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('total-questions').textContent = questions.length;
+            document.getElementById('current-score').textContent = score;
             document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
 
             // Renderizar fórmulas matemáticas
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (window.MathJax) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+
+            // Agregar event listener para Enter en inputs
+            const input = document.getElementById('user-answer');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkAnswer();
+                    }
+                });
+                input.focus();
+            }
+        }
+
+        let selectedOptionIndex = null;
+
+        function selectOption(index) {
+            // Limpiar selecciones previas
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleccionar nueva opción
+            document.getElementById(`option-${index}`).classList.add('selected');
+            selectedOptionIndex = index;
+            
+            // Mostrar botón de verificación
+            document.getElementById('check-btn').style.display = 'inline-flex';
         }
 
         function checkAnswer(selectedOption = null) {
             const question = questions[currentQuestion];
             const feedback = document.getElementById('feedback');
             let isCorrect = false;
+            let userAnswer = '';
 
             if (question.type === 'multiple') {
-                isCorrect = selectedOption === question.correct;
+                userAnswer = selectedOptionIndex !== null ? question.options[selectedOptionIndex] : '';
+                isCorrect = selectedOptionIndex === question.correct;
             } else {
-                const userAnswer = document.getElementById('user-answer').value.trim().toLowerCase();
-                const correctAnswer = question.answer.toLowerCase();
-                isCorrect = userAnswer === correctAnswer;
+                userAnswer = document.getElementById('user-answer').value.trim();
+                // Normalizar respuestas para comparación más flexible
+                const normalizedUser = userAnswer.toLowerCase().replace(/\s/g, '');
+                const normalizedCorrect = question.answer.toLowerCase().replace(/\s/g, '');
+                
+                // Verificar diferentes formatos de respuesta
+                if (normalizedCorrect.includes('(') && normalizedCorrect.includes(',')) {
+                    // Para coordenadas como (3,-4) o (-2,3)
+                    isCorrect = normalizedUser === normalizedCorrect || 
+                               normalizedUser === normalizedCorrect.replace('(', '').replace(')', '');
+                } else if (normalizedCorrect.includes('²') || normalizedCorrect.includes('^')) {
+                    // Para expresiones algebraicas
+                    isCorrect = normalizedUser === normalizedCorrect || 
+                               normalizedUser === normalizedCorrect.replace('²', '^2');
+                } else {
+                    // Para números simples
+                    const userNum = parseFloat(userAnswer);
+                    const correctNum = parseFloat(question.answer);
+                    if (!isNaN(userNum) && !isNaN(correctNum)) {
+                        isCorrect = Math.abs(userNum - correctNum) < 0.1;
+                    } else {
+                        isCorrect = normalizedUser === normalizedCorrect;
+                    }
+                }
             }
+
+            // Guardar respuesta del usuario
+            userAnswers.push({
+                question: question.question,
+                userAnswer: userAnswer,
+                correctAnswer: question.type === 'multiple' ? question.options[question.correct] : question.answer,
+                isCorrect: isCorrect,
+                category: question.category
+            });
 
             feedback.style.display = 'block';
             feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.innerHTML = isCorrect ? 
-                '¡Correcto! 🎉' : 
-                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+            
+            if (isCorrect) {
+                score++;
+                feedback.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <strong>¡Excelente!</strong> Tu razonamiento algebraico es correcto.
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Incorrecto.</strong> 
+                    ${question.hint ? `<br><em>Pista: ${question.hint}</em>` : ''}
+                    <br>Respuesta correcta: <strong>${question.type === 'multiple' ? question.options[question.correct] : question.answer}</strong>
+                `;
+            }
 
-            if (isCorrect) score++;
+            // Deshabilitar interacciones después de responder
+            document.querySelectorAll('.option').forEach(opt => opt.style.pointerEvents = 'none');
+            const input = document.getElementById('user-answer');
+            if (input) input.disabled = true;
         }
 
         function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
+                selectedOptionIndex = null;
                 loadQuestion();
             } else {
                 showResults();
             }
         }
 
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(20);
+            doc.text('Resultados de la Prueba de Algebra', 20, 30);
+            
+            // Información general
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            const percentage = (score / questions.length * 100).toFixed(1);
+            
+            doc.setFontSize(14);
+            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
+            doc.text(`Duracion: ${duration} minutos`, 20, 60);
+            doc.text(`Puntuacion: ${score} de ${questions.length} (${percentage}%)`, 20, 70);
+            
+            // Resultados por categoría
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            doc.setFontSize(16);
+            doc.text('Resultados por Categoria:', 20, 90);
+            
+            let yPosition = 105;
+            doc.setFontSize(12);
+            Object.entries(categories).forEach(([category, stats]) => {
+                const categoryPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                doc.text(`${category}: ${stats.correct}/${stats.total} (${categoryPercentage}%)`, 25, yPosition);
+                yPosition += 10;
+            });
+            
+            // Respuestas detalladas
+            yPosition += 15;
+            doc.setFontSize(16);
+            doc.text('Respuestas Detalladas:', 20, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(10);
+            userAnswers.forEach((answer, index) => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+                
+                doc.text(`${index + 1}. ${answer.question.substring(0, 60)}...`, 20, yPosition);
+                yPosition += 7;
+                doc.text(`Tu respuesta: ${answer.userAnswer}`, 25, yPosition);
+                yPosition += 7;
+                doc.text(`Respuesta correcta: ${answer.correctAnswer}`, 25, yPosition);
+                yPosition += 7;
+                doc.text(`Estado: ${answer.isCorrect ? 'CORRECTA' : 'INCORRECTA'}`, 25, yPosition);
+                yPosition += 15;
+            });
+            
+            // Descargar PDF
+            doc.save(`resultados-algebra-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
         function showResults() {
             const questionDiv = document.getElementById('questions');
             const percentage = (score / questions.length) * 100;
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            
+            // Calcular estadísticas por categoría
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            let message = '';
+            let emoji = '';
+            if (percentage >= 90) {
+                message = '¡Eres un maestro del álgebra! Dominio excepcional.';
+                emoji = '🏆';
+            } else if (percentage >= 80) {
+                message = '¡Muy buen trabajo! Tienes una base sólida en álgebra.';
+                emoji = '🎯';
+            } else if (percentage >= 70) {
+                message = 'Buen esfuerzo. Con más práctica alcanzarás la excelencia.';
+                emoji = '📈';
+            } else if (percentage >= 60) {
+                message = 'Progreso aceptable. Repasa los conceptos fundamentales.';
+                emoji = '📚';
+            } else {
+                message = 'Necesitas fortalecer tus bases algebraicas. ¡No te rindas!';
+                emoji = '💪';
+            }
+
+            let categoryBreakdown = '';
+            Object.entries(categories).forEach(([category, stats]) => {
+                const catPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                categoryBreakdown += `
+                    <div class="breakdown-item">
+                        <span>${category}</span>
+                        <span><strong>${stats.correct}/${stats.total} (${catPercentage}%)</strong></span>
+                    </div>
+                `;
+            });
             
             questionDiv.innerHTML = `
-                <div class="question-card">
-                    <h2>Resultados Finales</h2>
-                    <p>Has completado la prueba de álgebra.</p>
-                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
-                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
-                </div>
+                <article class="question-card results-card">
+                    <div class="category-badge">
+                        <i class="fas fa-trophy"></i>
+                        Resultados Finales
+                    </div>
+                    
+                    <div class="results-score">${percentage.toFixed(1)}%</div>
+                    
+                    <div class="results-message">
+                        <p><strong>${emoji} ${message}</strong></p>
+                        <p>Has respondido correctamente ${score} de ${questions.length} preguntas.</p>
+                        <p>Tiempo empleado: ${duration} minutos.</p>
+                    </div>
+
+                    <div class="results-breakdown">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary);">
+                            <i class="fas fa-chart-bar"></i> Desempeño por Categoría
+                        </h3>
+                        ${categoryBreakdown}
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="button" onclick="location.reload()">
+                            <i class="fas fa-redo"></i>
+                            Intentar de Nuevo
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-download"></i>
+                            Descargar PDF
+                        </button>
+                        <button class="button button-outline" onclick="showDetailedReview()">
+                            <i class="fas fa-eye"></i>
+                            Ver Revisión Detallada
+                        </button>
+                    </div>
+                </article>
             `;
 
             document.getElementById('next-button').style.display = 'none';
+            document.getElementById('current-score').textContent = score;
         }
 
-        // Iniciar prueba
-        loadQuestion();
+        function showDetailedReview() {
+            const questionDiv = document.getElementById('questions');
+            
+            let reviewHtml = `
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas fa-clipboard-list"></i>
+                        Revisión Detallada
+                    </div>
+                    <h2 class="question-text">Repaso de tus respuestas</h2>
+            `;
+
+            userAnswers.forEach((answer, index) => {
+                const statusIcon = answer.isCorrect ? 'fas fa-check-circle' : 'fas fa-times-circle';
+                const statusColor = answer.isCorrect ? 'var(--success)' : 'var(--danger)';
+                
+                reviewHtml += `
+                    <div style="background: rgba(255,255,255,0.03); border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <i class="${statusIcon}" style="color: ${statusColor};"></i>
+                            <strong>Pregunta ${index + 1}</strong>
+                        </div>
+                        <p style="margin-bottom: 0.5rem; color: var(--text-secondary);">${answer.question}</p>
+                        <p><strong>Tu respuesta:</strong> ${answer.userAnswer || 'Sin respuesta'}</p>
+                        <p><strong>Respuesta correcta:</strong> ${answer.correctAnswer}</p>
+                        <small style="color: var(--text-secondary);">Categoría: ${answer.category}</small>
+                    </div>
+                `;
+            });
+
+            reviewHtml += `
+                    <div class="results-actions" style="margin-top: 2rem;">
+                        <button class="button" onclick="showResults()">
+                            <i class="fas fa-arrow-left"></i>
+                            Volver a Resultados
+                        </button>
+                    </div>
+                </article>
+            `;
+
+            questionDiv.innerHTML = reviewHtml;
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            startTime = new Date();
+            loadQuestion();
+        });
+
+        // Prevenir el envío del formulario por defecto
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>

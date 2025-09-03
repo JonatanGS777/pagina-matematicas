@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de Aritmética</title>
+    <title>Prueba de Aritmética Moderna</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #e74c3c;
-            --secondary-color: #f1c40f;
-            --background-color: #1a1a2e;
-            --text-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.1);
+            --primary: #22c55e;
+            --primary-light: #4ade80;
+            --secondary: #84cc16;
+            --accent: #eab308;
+            --tertiary: #f97316;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #0a0a0a;
+            --surface: #141414;
+            --card: #1f1f1f;
+            --text-primary: #fafafa;
+            --text-secondary: #d4d4d4;
+            --border: #525252;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            --gradient-card: linear-gradient(135deg, rgba(34,197,94,0.1) 0%, rgba(132,204,22,0.05) 100%);
+            --gradient-fresh: linear-gradient(135deg, #22c55e 0%, #84cc16 50%, #eab308 100%);
         }
 
         * {
@@ -21,267 +38,728 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--background-color);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(132, 204, 22, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(234, 179, 8, 0.1) 0%, transparent 50%);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 2rem;
         }
 
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        /* Header con tema de números fundamentales */
         .quiz-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 2.5rem;
+            background: rgba(34, 197, 94, 0.05);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .quiz-header::before {
+            content: '+ - × ÷';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 400;
+            letter-spacing: 1.5rem;
+        }
+
+        .quiz-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: var(--gradient-fresh);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Barra de progreso con tema de números */
+        .progress-container {
+            background: var(--surface);
+            border-radius: 16px;
             padding: 1.5rem;
-            background: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            position: relative;
+        }
+
+        .progress-container::before {
+            content: '1+1=2';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            opacity: 0.6;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .question-counter {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .progress-bar {
-            width: 100%;
             height: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
-            margin: 1rem 0;
+            overflow: hidden;
+            position: relative;
         }
 
         .progress {
-            width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            transition: width 0.3s ease;
+            background: var(--gradient-fresh);
+            border-radius: 5px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Tarjeta de pregunta con estilo de números básicos */
         .question-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
+            background: var(--gradient-card);
+            backdrop-filter: blur(25px);
+            border-radius: 24px;
+            padding: 3rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            box-shadow: 0 25px 50px var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
         }
 
-        .category-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: var(--primary-color);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-fresh);
+        }
+
+        .question-card::after {
+            content: '123';
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 1.5rem;
+            color: rgba(34, 197, 94, 0.1);
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
         }
 
-        .options {
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        /* Opciones modernas */
+        .options-grid {
             display: grid;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
         }
 
         .option {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .option-letter {
+            background: var(--gradient-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(34,197,94,0.1), transparent);
+            transition: left 0.5s ease;
         }
 
         .option:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(10px);
+            background: rgba(34, 197, 94, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.2);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+        }
+
+        /* Input aritmético moderno */
+        .input-group {
+            position: relative;
+            margin-top: 2rem;
         }
 
         .input-answer {
             width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--text-color);
-            margin-top: 1rem;
+            padding: 1.2rem 1.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
         }
 
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(34, 197, 94, 0.05);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+        }
+
+        .input-answer::placeholder {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Botones con tema numérico */
         .button {
-            background: var(--primary-color);
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 10px;
+            padding: 1.2rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.4);
         }
 
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button-secondary {
+            background: var(--gradient-secondary);
+        }
+
+        .button-secondary:hover {
+            box-shadow: 0 20px 40px rgba(132, 204, 22, 0.4);
+        }
+
+        .button-outline {
+            background: var(--surface);
+            border: 2px solid var(--border);
+        }
+
+        .button-outline:hover {
+            background: var(--card);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px var(--shadow);
+        }
+
+        /* Feedback con estilo aritmético */
         .feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 16px;
             display: none;
-            animation: fadeIn 0.3s ease;
+            position: relative;
+            animation: slideInUp 0.4s ease-out;
+            font-weight: 500;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-left: 4px solid var(--success);
         }
 
-        .correct {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
+        .feedback.correct::before {
+            content: '✓ =';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        .incorrect {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        .feedback.incorrect::before {
+            content: '✗ ≠';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Resultados finales con estilo numérico */
+        .results-card {
+            text-align: center;
+            animation: zoomIn 0.6s ease-out;
+            position: relative;
+        }
+
+        .results-card::before {
+            content: '1️⃣ 2️⃣ 3️⃣';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            opacity: 0.3;
+            letter-spacing: 1rem;
+        }
+
+        .results-score {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: var(--gradient-fresh);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .results-message {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .results-breakdown {
+            background: rgba(34, 197, 94, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+            border: 1px solid rgba(34, 197, 94, 0.1);
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.1);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-category {
+            font-weight: 500;
+        }
+
+        .breakdown-score {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Elementos decorativos numéricos */
+        .number-decoration {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            opacity: 0.05;
+            pointer-events: none;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Animaciones */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .question-card {
+                padding: 2rem;
+            }
+
+            .quiz-title {
+                font-size: 2.5rem;
+            }
+
+            .results-actions {
+                flex-direction: column;
+            }
+
+            .option {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .progress-info {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(34,197,94,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <h1>Prueba de Aritmética</h1>
+    <div class="container">
+        <header class="quiz-header">
+            <h1 class="quiz-title">Prueba de Aritmética</h1>
+            <p class="quiz-subtitle">Los fundamentos de las matemáticas en acción</p>
+        </header>
+
+        <section class="progress-container">
+            <div class="progress-info">
+                <div class="question-counter">
+                    <i class="fas fa-calculator"></i>
+                    Pregunta <span id="current-question">1</span> de <span id="total-questions">15</span>
+                </div>
+                <div class="score-display">
+                    <i class="fas fa-plus"></i>
+                    <span id="current-score">0</span> puntos
+                </div>
+            </div>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
-            <p>Pregunta <span id="current-question">1</span> de 15</p>
+        </section>
+
+        <main id="questions"></main>
+
+        <div class="quiz-controls">
+            <button class="button" id="next-button" onclick="nextQuestion()">
+                <span>Siguiente Pregunta</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-
-        <div id="questions"></div>
-
-        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
     </div>
 
     <script>
         const questions = [
-            // Secuencias
             {
                 category: "Secuencias",
+                icon: "fa-list-ol",
                 question: "Encuentra el siguiente número en la secuencia: 2, 6, 12, 20, 30, __",
                 type: "input",
                 answer: "42",
                 hint: "Observa cuánto aumenta la diferencia entre números consecutivos"
             },
-            // Acertijos Matemáticos
             {
                 category: "Acertijos Matemáticos",
+                icon: "fa-puzzle-piece",
                 question: "Si un ladrillo pesa 1 kg más medio ladrillo, ¿cuánto pesa un ladrillo?",
                 type: "input",
                 answer: "2",
                 hint: "Plantea una ecuación. Si x es el peso del ladrillo: x = 1 + x/2"
             },
-            // Reglas de Divisibilidad
             {
                 category: "Reglas de Divisibilidad",
+                icon: "fa-divide",
                 question: "¿Cuál es el menor número que es divisible por 2, 3 y 4?",
                 type: "input",
                 answer: "12",
                 hint: "Busca el mínimo común múltiplo"
             },
-            // Orden de Operaciones
             {
                 category: "Orden de Operaciones",
+                icon: "fa-sort-numeric-down",
                 question: "Resuelve: 24 ÷ (3 + 5) × 2 - 4",
                 type: "input",
                 answer: "2",
                 hint: "Recuerda PEMDAS: Paréntesis, Exponentes, Multiplicación/División, Suma/Resta"
             },
-            // Fracciones
             {
                 category: "Fracciones",
+                icon: "fa-fraction",
                 question: "Simplifica la fracción: 48/64",
                 type: "input",
                 answer: "3/4",
                 hint: "Divide tanto el numerador como el denominador por su máximo común divisor"
             },
-            // Decimales
             {
                 category: "Decimales",
+                icon: "fa-percentage",
                 question: "Convierte 0.375 a fracción",
                 type: "input",
                 answer: "3/8",
                 hint: "Multiplica por potencias de 10 hasta obtener un número entero"
             },
-            // Porcentajes
             {
                 category: "Porcentajes",
+                icon: "fa-percent",
                 question: "¿Qué número es el 25% de 80?",
                 type: "input",
                 answer: "20",
                 hint: "Multiplica 80 por 0.25"
             },
-            // Problemas Verbales
             {
                 category: "Problemas Verbales",
+                icon: "fa-comment-dollar",
                 question: "Un vendedor gana $50 por día más 5% de sus ventas. Si en un día vendió $1000, ¿cuánto ganó en total?",
                 type: "input",
                 answer: "100",
                 hint: "Calcula el 5% de 1000 y suma 50"
             },
-            // Proporciones
             {
                 category: "Proporciones",
+                icon: "fa-balance-scale",
                 question: "Si 3 litros de pintura cubren 9 metros cuadrados, ¿cuántos litros se necesitan para 15 metros cuadrados?",
                 type: "input",
                 answer: "5",
                 hint: "Usa regla de tres: 3/9 = x/15"
             },
-            // Secuencias Avanzadas
             {
                 category: "Secuencias",
+                icon: "fa-seedling",
                 question: "En una secuencia Fibonacci, si los dos primeros números son 3 y 5, ¿cuál es el quinto número?",
                 type: "input",
                 answer: "21",
                 hint: "Cada número es la suma de los dos anteriores"
             },
-            // Fracciones Complejas
             {
                 category: "Fracciones",
+                icon: "fa-plus-circle",
                 question: "Resuelve: 2/3 + 3/4",
                 type: "input",
                 answer: "17/12",
                 hint: "Busca un denominador común multiplicando 3 × 4"
             },
-            // Problemas de Porcentajes
             {
                 category: "Porcentajes",
+                icon: "fa-tags",
                 question: "Una camisa costaba $80 y se rebajó un 20%. Luego se volvió a rebajar un 25%. ¿Cuál es el precio final?",
                 type: "input",
                 answer: "48",
                 hint: "Aplica los descuentos uno después del otro"
             },
-            // Acertijos Lógicos
             {
                 category: "Acertijos Matemáticos",
+                icon: "fa-trophy",
                 question: "En una carrera, Juan adelantó al segundo. ¿En qué posición quedó Juan?",
                 type: "input",
                 answer: "2",
                 hint: "Piensa: si adelantas al segundo, tomas su lugar"
             },
-            // Proporciones Compuestas
             {
                 category: "Proporciones",
+                icon: "fa-users",
                 question: "Si 4 personas pintan una casa en 6 días, ¿cuántos días tardarán 6 personas?",
                 type: "input",
                 answer: "4",
                 hint: "A más personas, menos días. Usa proporción inversa"
             },
-            // Decimales y Porcentajes
             {
                 category: "Decimales",
+                icon: "fa-chart-line",
                 question: "Expresa 0.85 como porcentaje",
                 type: "input",
                 answer: "85",
@@ -291,93 +769,507 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let userAnswers = [];
+        let startTime = new Date();
 
         function loadQuestion() {
             const questionDiv = document.getElementById('questions');
             const question = questions[currentQuestion];
 
             let html = `
-                <div class="question-card">
-                    <div class="category-tag">${question.category}</div>
-                    <p>${question.question}</p>
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas ${question.icon}"></i>
+                        ${question.category}
+                    </div>
+                    <h2 class="question-text">${question.question}</h2>
             `;
 
             if (question.type === 'multiple') {
-                html += `<div class="options">`;
+                html += `<div class="options-grid">`;
                 question.options.forEach((option, index) => {
                     html += `
-                        <div class="option" onclick="checkAnswer(${index})">
-                            ${option}
+                        <div class="option" onclick="selectOption(${index})" id="option-${index}">
+                            <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                            <span class="option-content">${option}</span>
                         </div>
                     `;
                 });
                 html += `</div>`;
+                html += `<button class="button" onclick="checkAnswer()" id="check-btn" style="display:none;">
+                    <i class="fas fa-check"></i> Verificar Respuesta
+                </button>`;
             } else {
                 html += `
-                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
-                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                    <div class="input-group">
+                        <input type="text" class="input-answer" id="user-answer" 
+                               placeholder="Ejemplo: 42, 3/4, 0.85, 20%" autocomplete="off">
+                    </div>
+                    <button class="button" onclick="checkAnswer()">
+                        <i class="fas fa-equals"></i> Verificar Respuesta
+                    </button>
                 `;
             }
 
-            html += `<div class="feedback" id="feedback"></div>`;
+            html += `<div class="feedback" id="feedback"></div></article>`;
             questionDiv.innerHTML = html;
 
-            // Actualizar progreso
+            // Actualizar elementos de UI
             document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('total-questions').textContent = questions.length;
+            document.getElementById('current-score').textContent = score;
             document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
 
             // Renderizar fórmulas matemáticas
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (window.MathJax) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+
+            // Agregar event listener para Enter en inputs
+            const input = document.getElementById('user-answer');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkAnswer();
+                    }
+                });
+                input.focus();
+            }
+        }
+
+        let selectedOptionIndex = null;
+
+        function selectOption(index) {
+            // Limpiar selecciones previas
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleccionar nueva opción
+            document.getElementById(`option-${index}`).classList.add('selected');
+            selectedOptionIndex = index;
+            
+            // Mostrar botón de verificación
+            document.getElementById('check-btn').style.display = 'inline-flex';
+        }
+
+        function normalizeArithmeticAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/%/g, '')
+                .replace(/\$/g, '')
+                .replace(/,/g, '');
         }
 
         function checkAnswer(selectedOption = null) {
             const question = questions[currentQuestion];
             const feedback = document.getElementById('feedback');
             let isCorrect = false;
+            let userAnswer = '';
 
             if (question.type === 'multiple') {
-                isCorrect = selectedOption === question.correct;
+                userAnswer = selectedOptionIndex !== null ? question.options[selectedOptionIndex] : '';
+                isCorrect = selectedOptionIndex === question.correct;
             } else {
-                const userAnswer = document.getElementById('user-answer').value.trim();
-                isCorrect = userAnswer === question.answer;
+                userAnswer = document.getElementById('user-answer').value.trim();
+                
+                // Normalizar respuestas para comparación flexible en aritmética
+                const normalizedUser = normalizeArithmeticAnswer(userAnswer);
+                const normalizedCorrect = normalizeArithmeticAnswer(question.answer);
+                
+                // Verificación para diferentes tipos de respuestas aritméticas
+                if (normalizedCorrect.includes('/')) {
+                    // Para fracciones como 3/4, 17/12
+                    isCorrect = normalizedUser === normalizedCorrect;
+                    
+                    // También verificar equivalencias decimales
+                    if (!isCorrect) {
+                        const fractionParts = normalizedCorrect.split('/');
+                        if (fractionParts.length === 2) {
+                            const fractionValue = parseFloat(fractionParts[0]) / parseFloat(fractionParts[1]);
+                            const userNum = parseFloat(userAnswer);
+                            if (!isNaN(userNum)) {
+                                isCorrect = Math.abs(userNum - fractionValue) < 0.001;
+                            }
+                        }
+                    }
+                } else if (normalizedCorrect.includes('.')) {
+                    // Para decimales como 0.375
+                    const userNum = parseFloat(userAnswer);
+                    const correctNum = parseFloat(question.answer);
+                    if (!isNaN(userNum) && !isNaN(correctNum)) {
+                        isCorrect = Math.abs(userNum - correctNum) < 0.001;
+                    }
+                    
+                    // También verificar equivalencias de fracciones
+                    if (!isCorrect && userAnswer.includes('/')) {
+                        const parts = userAnswer.split('/');
+                        if (parts.length === 2) {
+                            const fractionValue = parseFloat(parts[0]) / parseFloat(parts[1]);
+                            isCorrect = Math.abs(fractionValue - correctNum) < 0.001;
+                        }
+                    }
+                } else {
+                    // Para números enteros y porcentajes
+                    const userNum = parseFloat(userAnswer.replace('%', ''));
+                    const correctNum = parseFloat(question.answer);
+                    if (!isNaN(userNum) && !isNaN(correctNum)) {
+                        isCorrect = Math.abs(userNum - correctNum) < 0.1;
+                    } else {
+                        isCorrect = normalizedUser === normalizedCorrect;
+                    }
+                }
             }
+
+            // Guardar respuesta del usuario
+            userAnswers.push({
+                question: question.question,
+                userAnswer: userAnswer,
+                correctAnswer: question.type === 'multiple' ? question.options[question.correct] : question.answer,
+                isCorrect: isCorrect,
+                category: question.category
+            });
 
             feedback.style.display = 'block';
             feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.innerHTML = isCorrect ? 
-                '¡Correcto! 🎉' : 
-                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+            
+            if (isCorrect) {
+                score++;
+                const encouragement = [
+                    '¡Perfecto! Tu aritmética básica es sólida.',
+                    '¡Correcto! Dominas los fundamentos numéricos.',
+                    '¡Excelente! Tu cálculo mental es preciso.',
+                    '¡Genial! Continúa con esa precisión aritmética.'
+                ];
+                feedback.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <strong>${encouragement[Math.floor(Math.random() * encouragement.length)]}</strong>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Incorrecto.</strong> En aritmética, cada paso cuenta.
+                    ${question.hint ? `<br><em>Pista: ${question.hint}</em>` : ''}
+                    <br>Respuesta correcta: <strong>${question.type === 'multiple' ? question.options[question.correct] : question.answer}</strong>
+                `;
+            }
 
-            if (isCorrect) score++;
+            // Deshabilitar interacciones después de responder
+            document.querySelectorAll('.option').forEach(opt => opt.style.pointerEvents = 'none');
+            const input = document.getElementById('user-answer');
+            if (input) input.disabled = true;
         }
 
         function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
+                selectedOptionIndex = null;
                 loadQuestion();
             } else {
                 showResults();
             }
         }
 
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(20);
+            doc.text('Resultados de la Prueba de Aritmetica', 20, 30);
+            
+            // Información general
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            const percentage = (score / questions.length * 100).toFixed(1);
+            
+            doc.setFontSize(14);
+            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
+            doc.text(`Duracion: ${duration} minutos`, 20, 60);
+            doc.text(`Puntuacion: ${score} de ${questions.length} (${percentage}%)`, 20, 70);
+            
+            // Análisis de habilidades aritméticas
+            let analysisText = '';
+            if (percentage >= 90) analysisText = 'Dominio excepcional de las operaciones aritmeticas fundamentales';
+            else if (percentage >= 80) analysisText = 'Solida comprension de conceptos aritmeticos basicos';
+            else if (percentage >= 70) analysisText = 'Base adecuada, requiere refuerzo en calculo mental';
+            else if (percentage >= 60) analysisText = 'Conocimientos basicos, necesita mas practica con fracciones';
+            else analysisText = 'Requiere estudio intensivo de operaciones fundamentales';
+            
+            doc.setFontSize(12);
+            doc.text(`Analisis: ${analysisText}`, 20, 85);
+            
+            // Resultados por habilidad aritmética
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            doc.setFontSize(16);
+            doc.text('Resultados por Habilidad Aritmetica:', 20, 110);
+            
+            let yPosition = 125;
+            doc.setFontSize(11);
+            Object.entries(categories).forEach(([category, stats]) => {
+                const categoryPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                doc.text(`${category}: ${stats.correct}/${stats.total} (${categoryPercentage}%)`, 25, yPosition);
+                yPosition += 8;
+            });
+            
+            // Recomendaciones específicas
+            yPosition += 15;
+            doc.setFontSize(14);
+            doc.text('Recomendaciones de Estudio:', 20, yPosition);
+            yPosition += 10;
+            
+            doc.setFontSize(10);
+            const recommendations = [];
+            Object.entries(categories).forEach(([category, stats]) => {
+                const percentage = (stats.correct / stats.total * 100);
+                if (percentage < 70) {
+                    let recommendation = '';
+                    switch(category) {
+                        case 'Fracciones': recommendation = 'Practicar operaciones con fracciones y simplificacion'; break;
+                        case 'Decimales': recommendation = 'Reforzar conversion entre decimales y fracciones'; break;
+                        case 'Porcentajes': recommendation = 'Ejercitar calculo de porcentajes y descuentos'; break;
+                        case 'Secuencias': recommendation = 'Desarrollar reconocimiento de patrones numericos'; break;
+                        case 'Proporciones': recommendation = 'Practicar regla de tres y problemas de proporcionalidad'; break;
+                        default: recommendation = `Reforzar: ${category}`;
+                    }
+                    recommendations.push(recommendation);
+                }
+            });
+            
+            if (recommendations.length === 0) {
+                doc.text('Excelente dominio en todas las areas aritmeticas.', 25, yPosition);
+                yPosition += 6;
+                doc.text('Sugerencia: Avanzar a topics de algebra basica.', 25, yPosition);
+            } else {
+                recommendations.forEach(rec => {
+                    doc.text(`• ${rec}`, 25, yPosition);
+                    yPosition += 6;
+                });
+            }
+            
+            // Respuestas detalladas
+            yPosition += 15;
+            doc.setFontSize(16);
+            doc.text('Revision Detallada:', 20, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(9);
+            userAnswers.forEach((answer, index) => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+                
+                doc.text(`${index + 1}. ${answer.question.substring(0, 70)}...`, 20, yPosition);
+                yPosition += 6;
+                doc.text(`Tu respuesta: ${answer.userAnswer || 'Sin respuesta'}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Correcta: ${answer.correctAnswer}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Estado: ${answer.isCorrect ? 'CORRECTA' : 'INCORRECTA'}`, 25, yPosition);
+                yPosition += 12;
+            });
+            
+            // Descargar PDF
+            doc.save(`resultados-aritmetica-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
         function showResults() {
             const questionDiv = document.getElementById('questions');
             const percentage = (score / questions.length) * 100;
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            
+            // Calcular estadísticas por categoría
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            let message = '';
+            let emoji = '';
+            let analysis = '';
+            let arithmeticLevel = '';
+            
+            if (percentage >= 95) {
+                message = '¡Eres un maestro de la aritmética! Cálculo excepcional.';
+                emoji = '🏆';
+                analysis = 'Tienes un dominio completo de las operaciones matemáticas fundamentales.';
+                arithmeticLevel = 'Nivel: Maestro Aritmético';
+            } else if (percentage >= 85) {
+                message = '¡Excelente dominio numérico! Muy sólido.';
+                emoji = '🎯';
+                analysis = 'Demuestras gran habilidad en cálculos y operaciones básicas.';
+                arithmeticLevel = 'Nivel: Calculista Avanzado';
+            } else if (percentage >= 75) {
+                message = '¡Buenas habilidades aritméticas! Base fuerte.';
+                emoji = '📊';
+                analysis = 'Tienes fundamentos sólidos, algunos conceptos necesitan práctica.';
+                arithmeticLevel = 'Nivel: Estudiante Competente';
+            } else if (percentage >= 65) {
+                message = 'Progreso aceptable. Enfócate en operaciones básicas.';
+                emoji = '📝';
+                analysis = 'Necesitas fortalecer el cálculo mental y las operaciones fundamentales.';
+                arithmeticLevel = 'Nivel: Estudiante en Desarrollo';
+            } else {
+                message = 'La aritmética requiere más práctica. ¡Sigue adelante!';
+                emoji = '💪';
+                analysis = 'Es recomendable repasar las operaciones básicas desde el principio.';
+                arithmeticLevel = 'Nivel: Aprendiz de Números';
+            }
+
+            let categoryBreakdown = '';
+            Object.entries(categories).forEach(([category, stats]) => {
+                const catPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                let indicator = '';
+                let indicatorClass = '';
+                
+                if (catPercentage >= 80) {
+                    indicator = '🟢 Dominado';
+                    indicatorClass = 'stat-high';
+                } else if (catPercentage >= 60) {
+                    indicator = '🟡 En proceso';
+                    indicatorClass = 'stat-medium';
+                } else {
+                    indicator = '🔴 Necesita refuerzo';
+                    indicatorClass = 'stat-low';
+                }
+                
+                categoryBreakdown += `
+                    <div class="breakdown-item">
+                        <span class="breakdown-category">${category}</span>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="breakdown-score">${stats.correct}/${stats.total} (${catPercentage}%)</span>
+                            <span style="font-size: 0.8rem; opacity: 0.8;">${indicator}</span>
+                        </div>
+                    </div>
+                `;
+            });
             
             questionDiv.innerHTML = `
-                <div class="question-card">
-                    <h2>Resultados Finales</h2>
-                    <p>Has completado la prueba de aritmética.</p>
-                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
-                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
-                </div>
+                <article class="question-card results-card">
+                    <div class="category-badge">
+                        <i class="fas fa-trophy"></i>
+                        Resultados Aritméticos
+                    </div>
+                    
+                    <div class="results-score">${percentage.toFixed(1)}%</div>
+                    
+                    <div class="results-message">
+                        <p><strong>${emoji} ${message}</strong></p>
+                        <p style="margin: 1rem 0; font-style: italic; color: var(--primary);">${arithmeticLevel}</p>
+                        <p style="margin: 1rem 0;">${analysis}</p>
+                        <p>Has respondido correctamente <strong>${score}</strong> de ${questions.length} preguntas.</p>
+                        <p>Tiempo empleado: <strong>${duration} minutos</strong>.</p>
+                    </div>
+
+                    <div class="results-breakdown">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-calculator"></i> Análisis por Habilidad Aritmética
+                        </h3>
+                        ${categoryBreakdown}
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="button" onclick="location.reload()">
+                            <i class="fas fa-redo"></i>
+                            Nueva Prueba
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-download"></i>
+                            Descargar Reporte
+                        </button>
+                        <button class="button button-outline" onclick="showDetailedReview()">
+                            <i class="fas fa-list-check"></i>
+                            Ver Detalles
+                        </button>
+                    </div>
+                </article>
             `;
 
             document.getElementById('next-button').style.display = 'none';
+            document.getElementById('current-score').textContent = score;
         }
 
-        // Iniciar prueba
-        loadQuestion();
+        function showDetailedReview() {
+            const questionDiv = document.getElementById('questions');
+            
+            let reviewHtml = `
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas fa-clipboard-check"></i>
+                        Revisión Detallada de Respuestas
+                    </div>
+                    <h2 class="question-text">Análisis Completo del Desempeño</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Revisa cada pregunta para identificar fortalezas y oportunidades de mejora en aritmética.
+                    </p>
+            `;
+
+            userAnswers.forEach((answer, index) => {
+                const statusIcon = answer.isCorrect ? 'fas fa-check-circle' : 'fas fa-times-circle';
+                const statusColor = answer.isCorrect ? 'var(--success)' : 'var(--danger)';
+                const bgColor = answer.isCorrect ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)';
+                
+                reviewHtml += `
+                    <div style="background: ${bgColor}; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; border-left: 4px solid ${statusColor};">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                            <i class="${statusIcon}" style="color: ${statusColor}; font-size: 1.2rem;"></i>
+                            <strong style="color: var(--primary);">Pregunta ${index + 1}</strong>
+                            <span style="background: rgba(34,197,94,0.2); padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.75rem; color: var(--primary);">
+                                ${answer.category}
+                            </span>
+                        </div>
+                        <p style="margin-bottom: 0.75rem; color: var(--text-secondary); font-style: italic;">${answer.question}</p>
+                        <div style="display: grid; gap: 0.5rem; font-family: 'JetBrains Mono', monospace;">
+                            <p><strong style="color: var(--text-primary);">Tu respuesta:</strong> 
+                               <span style="color: ${statusColor};">${answer.userAnswer || 'Sin respuesta'}</span></p>
+                            <p><strong style="color: var(--text-primary);">Respuesta correcta:</strong> 
+                               <span style="color: var(--success);">${answer.correctAnswer}</span></p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            reviewHtml += `
+                    <div class="results-actions" style="margin-top: 3rem;">
+                        <button class="button" onclick="showResults()">
+                            <i class="fas fa-arrow-left"></i>
+                            Volver a Resultados
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            Exportar Reporte
+                        </button>
+                    </div>
+                </article>
+            `;
+
+            questionDiv.innerHTML = reviewHtml;
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            startTime = new Date();
+            loadQuestion();
+        });
+
+        // Prevenir el envío del formulario por defecto
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>

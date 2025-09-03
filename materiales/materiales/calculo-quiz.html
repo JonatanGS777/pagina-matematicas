@@ -3,15 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de Cálculo</title>
+    <title>Prueba de Cálculo Moderna</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #8e44ad;
-            --secondary-color: #2ecc71;
-            --background-color: #1a1a2e;
-            --text-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.1);
+            --primary: #f97316;
+            --primary-light: #fb923c;
+            --secondary: #dc2626;
+            --accent: #fbbf24;
+            --tertiary: #7c3aed;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --background: #0c0a09;
+            --surface: #1c1917;
+            --card: #292524;
+            --text-primary: #fafaf9;
+            --text-secondary: #d6d3d1;
+            --border: #57534e;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--accent) 0%, var(--tertiary) 100%);
+            --gradient-card: linear-gradient(135deg, rgba(249,115,22,0.1) 0%, rgba(220,38,38,0.05) 100%);
+            --gradient-warm: linear-gradient(135deg, #f97316 0%, #dc2626 50%, #7c3aed 100%);
         }
 
         * {
@@ -21,149 +37,631 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--background-color);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(249, 115, 22, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(220, 38, 38, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 2rem;
         }
 
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        /* Header moderno con tema de cálculo */
         .quiz-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 2rem;
+            background: rgba(249, 115, 22, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+        }
+
+        .quiz-header::before {
+            content: '∫ ∂ ∞';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 300;
+            letter-spacing: 1rem;
+        }
+
+        .quiz-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: var(--gradient-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Barra de progreso con tema matemático */
+        .progress-container {
+            background: var(--surface);
+            border-radius: 16px;
             padding: 1.5rem;
-            background: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(249, 115, 22, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            position: relative;
+        }
+
+        .progress-container::before {
+            content: 'dx';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            opacity: 0.6;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .question-counter {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .progress-bar {
-            width: 100%;
             height: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
-            margin: 1rem 0;
             overflow: hidden;
+            position: relative;
         }
 
         .progress {
-            width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            transition: width 0.3s ease;
+            background: var(--gradient-warm);
+            border-radius: 5px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+
+        /* Tarjeta de pregunta con estilo matemático */
         .question-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
+            background: var(--gradient-card);
+            backdrop-filter: blur(25px);
+            border-radius: 24px;
+            padding: 3rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            box-shadow: 0 25px 50px var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
         }
 
-        .category-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: var(--primary-color);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-warm);
         }
 
-        .options {
+        .question-card::after {
+            content: '∫';
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            color: rgba(249, 115, 22, 0.1);
+            font-weight: 300;
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        /* Contenedor especial para ecuaciones matemáticas */
+        .math-display {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            text-align: center;
+            position: relative;
+        }
+
+        .math-display::before {
+            content: 'LaTeX';
+            position: absolute;
+            top: -8px;
+            right: 10px;
+            background: var(--surface);
+            padding: 0 8px;
+            font-size: 0.7rem;
+            color: var(--primary);
+            opacity: 0.7;
+        }
+
+        /* Opciones modernas */
+        .options-grid {
             display: grid;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
         }
 
         .option {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .option-letter {
+            background: var(--gradient-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(249,115,22,0.1), transparent);
+            transition: left 0.5s ease;
         }
 
         .option:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(10px);
+            background: rgba(249, 115, 22, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(249, 115, 22, 0.2);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: rgba(249, 115, 22, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+        }
+
+        /* Input matemático moderno */
+        .input-group {
+            position: relative;
+            margin-top: 2rem;
         }
 
         .input-answer {
             width: 100%;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--text-color);
-            margin-top: 1rem;
-            font-size: 1rem;
+            padding: 1.2rem 1.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(249, 115, 22, 0.2);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
         }
 
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(249, 115, 22, 0.05);
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+        }
+
+        .input-answer::placeholder {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Botones con tema matemático */
         .button {
-            background: var(--primary-color);
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 10px;
+            padding: 1.2rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.4);
         }
 
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button-secondary {
+            background: var(--gradient-secondary);
+        }
+
+        .button-secondary:hover {
+            box-shadow: 0 20px 40px rgba(251, 191, 36, 0.4);
+        }
+
+        .button-outline {
+            background: var(--surface);
+            border: 2px solid var(--border);
+        }
+
+        .button-outline:hover {
+            background: var(--card);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px var(--shadow);
+        }
+
+        /* Feedback con estilo matemático */
         .feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 16px;
             display: none;
+            position: relative;
+            animation: slideInUp 0.4s ease-out;
+            font-weight: 500;
         }
 
-        .correct {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
+        .feedback.correct {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border-left: 4px solid var(--success);
         }
 
-        .incorrect {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
+        .feedback.correct::before {
+            content: '∫ ✓';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
         }
 
-        .math {
-            font-size: 1.1em;
-            margin: 1rem 0;
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        .feedback.incorrect::before {
+            content: '∂ ✗';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
+        }
+
+        /* Resultados finales con estilo cálculo */
+        .results-card {
+            text-align: center;
+            animation: zoomIn 0.6s ease-out;
+            position: relative;
+        }
+
+        .results-card::before {
+            content: '∑ ∫ ∂ ∞';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--primary);
+            opacity: 0.3;
+            letter-spacing: 1rem;
+        }
+
+        .results-score {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: var(--gradient-warm);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .results-message {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .results-breakdown {
+            background: rgba(249, 115, 22, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+            border: 1px solid rgba(249, 115, 22, 0.1);
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(249, 115, 22, 0.1);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-category {
+            font-weight: 500;
+        }
+
+        .breakdown-score {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Animaciones */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .question-card {
+                padding: 2rem;
+            }
+
+            .quiz-title {
+                font-size: 2.5rem;
+            }
+
+            .results-actions {
+                flex-direction: column;
+            }
+
+            .option {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .progress-info {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        /* Loading spinner matemático */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(249,115,22,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mejoras para MathJax */
+        .MathJax {
+            color: var(--text-primary) !important;
+        }
+
+        .MathJax_Display {
+            margin: 1rem 0 !important;
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <h1>Prueba de Cálculo</h1>
+    <div class="container">
+        <header class="quiz-header">
+            <h1 class="quiz-title">Prueba de Cálculo</h1>
+            <p class="quiz-subtitle">Explora los límites del análisis matemático</p>
+        </header>
+
+        <section class="progress-container">
+            <div class="progress-info">
+                <div class="question-counter">
+                    <i class="fas fa-function"></i>
+                    Pregunta <span id="current-question">1</span> de <span id="total-questions">15</span>
+                </div>
+                <div class="score-display">
+                    <i class="fas fa-infinity"></i>
+                    <span id="current-score">0</span> puntos
+                </div>
+            </div>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
-            <p>Pregunta <span id="current-question">1</span> de 15</p>
+        </section>
+
+        <main id="questions"></main>
+
+        <div class="quiz-controls">
+            <button class="button" id="next-button" onclick="nextQuestion()">
+                <span>Siguiente Pregunta</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-
-        <div id="questions"></div>
-
-        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
     </div>
 
     <script>
         const questions = [
-            // Conceptos Básicos
             {
                 category: "Límites Básicos",
+                icon: "fa-arrow-right",
                 question: "Calcula el límite: $$\\lim_{x \\to 2} (x^2 + 3x)$$",
                 type: "input",
                 answer: "10",
@@ -171,6 +669,7 @@
             },
             {
                 category: "Continuidad",
+                icon: "fa-wave-square",
                 question: "¿En qué punto la función $$f(x) = \\frac{x^2-4}{x-2}$$ tiene una discontinuidad?",
                 type: "input",
                 answer: "2",
@@ -178,14 +677,15 @@
             },
             {
                 category: "Derivadas Básicas",
+                icon: "fa-chart-line",
                 question: "Encuentra la derivada de $$f(x) = 3x^2 + 2x$$",
                 type: "input",
                 answer: "6x+2",
                 hint: "Aplica las reglas básicas de derivación"
             },
-            // Derivadas Intermedias
             {
                 category: "Regla del Producto",
+                icon: "fa-times",
                 question: "Deriva $$f(x) = x^2\\sin(x)$$",
                 type: "multiple",
                 options: [
@@ -198,14 +698,15 @@
             },
             {
                 category: "Regla de la Cadena",
+                icon: "fa-link",
                 question: "Deriva $$f(x) = \\sin(x^2)$$",
                 type: "input",
                 answer: "2xcos(x^2)",
                 hint: "Aplica la regla de la cadena"
             },
-            // Aplicaciones de Derivadas
             {
                 category: "Optimización",
+                icon: "fa-mountain",
                 question: "Encuentra el punto máximo de $$f(x) = -x^2 + 4x - 1$$",
                 type: "input",
                 answer: "2",
@@ -213,14 +714,15 @@
             },
             {
                 category: "Razón de Cambio",
-                question: "Si $$s(t) = t^3 - 3t^2$$" + " representa la posición de un objeto, ¿cuál es su velocidad cuando t = 2?",
+                icon: "fa-tachometer-alt",
+                question: "Si $$s(t) = t^3 - 3t^2$$ representa la posición de un objeto, ¿cuál es su velocidad cuando t = 2?",
                 type: "input",
                 answer: "6",
                 hint: "La velocidad es la primera derivada"
             },
-            // Integrales Básicas
             {
                 category: "Integrales Básicas",
+                icon: "fa-integral",
                 question: "Calcula $$\\int x^2 dx$$",
                 type: "input",
                 answer: "x^3/3+C",
@@ -228,6 +730,7 @@
             },
             {
                 category: "Integración por Partes",
+                icon: "fa-puzzle-piece",
                 question: "Calcula $$\\int x\\sin(x) dx$$",
                 type: "multiple",
                 options: [
@@ -238,9 +741,9 @@
                 ],
                 correct: 0
             },
-            // Aplicaciones de Integrales
             {
                 category: "Área Bajo la Curva",
+                icon: "fa-chart-area",
                 question: "Calcula el área bajo la curva $$f(x) = x$$ desde x = 0 hasta x = 2",
                 type: "input",
                 answer: "2",
@@ -248,6 +751,7 @@
             },
             {
                 category: "Volumen de Revolución",
+                icon: "fa-globe",
                 question: "Al rotar $$y = \\sqrt{x}$$ alrededor del eje x desde 0 a 1, ¿qué método usarías?",
                 type: "multiple",
                 options: [
@@ -258,9 +762,9 @@
                 ],
                 correct: 0
             },
-            // Temas Avanzados
             {
                 category: "Series",
+                icon: "fa-list-ol",
                 question: "¿Converge la serie $$\\sum_{n=1}^{\\infty} \\frac{1}{n^2}$$?",
                 type: "multiple",
                 options: [
@@ -273,6 +777,7 @@
             },
             {
                 category: "Teorema Fundamental",
+                icon: "fa-crown",
                 question: "Si $$F(x) = \\int_0^x t^2 dt$$, ¿cuál es F'(x)?",
                 type: "input",
                 answer: "x^2",
@@ -280,6 +785,7 @@
             },
             {
                 category: "Límites Avanzados",
+                icon: "fa-infinity",
                 question: "Calcula $$\\lim_{x \\to 0} \\frac{\\sin(x)}{x}$$",
                 type: "input",
                 answer: "1",
@@ -287,6 +793,7 @@
             },
             {
                 category: "Derivadas Parciales",
+                icon: "fa-vector-square",
                 question: "Para $$f(x,y) = x^2y + xy^2$$, calcula $$\\frac{\\partial f}{\\partial x}$$",
                 type: "input",
                 answer: "2xy+y^2",
@@ -296,100 +803,446 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let userAnswers = [];
+        let startTime = new Date();
 
         function loadQuestion() {
             const questionDiv = document.getElementById('questions');
             const question = questions[currentQuestion];
 
             let html = `
-                <div class="question-card">
-                    <div class="category-tag">${question.category}</div>
-                    <div class="math">${question.question}</div>
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas ${question.icon}"></i>
+                        ${question.category}
+                    </div>
+                    <h2 class="question-text">${question.question}</h2>
             `;
 
             if (question.type === 'multiple') {
-                html += `<div class="options">`;
+                html += `<div class="options-grid">`;
                 question.options.forEach((option, index) => {
                     html += `
-                        <div class="option" onclick="checkAnswer(${index})">
-                            ${option}
+                        <div class="option" onclick="selectOption(${index})" id="option-${index}">
+                            <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                            <span class="option-content">${option}</span>
                         </div>
                     `;
                 });
                 html += `</div>`;
+                html += `<button class="button" onclick="checkAnswer()" id="check-btn" style="display:none;">
+                    <i class="fas fa-check"></i> Verificar Respuesta
+                </button>`;
             } else {
                 html += `
-                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
-                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                    <div class="input-group">
+                        <input type="text" class="input-answer" id="user-answer" 
+                               placeholder="Ejemplo: x^2 + C, 2x+3, π²/6" autocomplete="off">
+                    </div>
+                    <button class="button" onclick="checkAnswer()">
+                        <i class="fas fa-calculator"></i> Verificar Respuesta
+                    </button>
                 `;
             }
 
-            html += `<div class="feedback" id="feedback"></div>`;
+            html += `<div class="feedback" id="feedback"></div></article>`;
             questionDiv.innerHTML = html;
 
-            // Actualizar progreso
+            // Actualizar elementos de UI
             document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('total-questions').textContent = questions.length;
+            document.getElementById('current-score').textContent = score;
             document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
 
             // Renderizar fórmulas matemáticas
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (window.MathJax) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+
+            // Agregar event listener para Enter en inputs
+            const input = document.getElementById('user-answer');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkAnswer();
+                    }
+                });
+                input.focus();
+            }
+        }
+
+        let selectedOptionIndex = null;
+
+        function selectOption(index) {
+            // Limpiar selecciones previas
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleccionar nueva opción
+            document.getElementById(`option-${index}`).classList.add('selected');
+            selectedOptionIndex = index;
+            
+            // Mostrar botón de verificación
+            document.getElementById('check-btn').style.display = 'inline-flex';
+        }
+
+        function normalizeAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/[*]/g, '')
+                .replace(/[()]/g, '')
+                .replace(/π/g, 'pi')
+                .replace(/²/g, '^2')
+                .replace(/³/g, '^3')
+                .replace(/sqrt/g, 'sqrt')
+                .replace(/cos/g, 'cos')
+                .replace(/sin/g, 'sin')
+                .replace(/tan/g, 'tan');
         }
 
         function checkAnswer(selectedOption = null) {
             const question = questions[currentQuestion];
             const feedback = document.getElementById('feedback');
             let isCorrect = false;
+            let userAnswer = '';
 
             if (question.type === 'multiple') {
-                isCorrect = selectedOption === question.correct;
+                userAnswer = selectedOptionIndex !== null ? question.options[selectedOptionIndex] : '';
+                isCorrect = selectedOptionIndex === question.correct;
             } else {
-                const userAnswer = document.getElementById('user-answer').value.trim().toLowerCase()
-                    .replace(/\s+/g, '')
-                    .replace(/[*]/g, '')
-                    .replace(/[()]/g, '');
-                const correctAnswer = question.answer.toLowerCase()
-                    .replace(/\s+/g, '')
-                    .replace(/[*]/g, '')
-                    .replace(/[()]/g, '');
-                isCorrect = userAnswer === correctAnswer;
+                userAnswer = document.getElementById('user-answer').value.trim();
+                
+                // Normalizar respuestas para comparación más flexible en cálculo
+                const normalizedUser = normalizeAnswer(userAnswer);
+                const normalizedCorrect = normalizeAnswer(question.answer);
+                
+                // Verificación flexible para diferentes notaciones matemáticas
+                if (normalizedCorrect.includes('+c')) {
+                    // Para integrales con constante
+                    isCorrect = normalizedUser === normalizedCorrect || 
+                               normalizedUser === normalizedCorrect.replace('+c', '') ||
+                               normalizedUser + '+c' === normalizedCorrect;
+                } else if (normalizedCorrect.includes('/')) {
+                    // Para fracciones
+                    isCorrect = normalizedUser === normalizedCorrect;
+                } else if (normalizedCorrect.includes('^')) {
+                    // Para exponentes
+                    isCorrect = normalizedUser === normalizedCorrect ||
+                               normalizedUser === normalizedCorrect.replace('^2', '²').replace('^3', '³');
+                } else {
+                    // Para números simples
+                    const userNum = parseFloat(userAnswer);
+                    const correctNum = parseFloat(question.answer);
+                    if (!isNaN(userNum) && !isNaN(correctNum)) {
+                        isCorrect = Math.abs(userNum - correctNum) < 0.01;
+                    } else {
+                        isCorrect = normalizedUser === normalizedCorrect;
+                    }
+                }
             }
+
+            // Guardar respuesta del usuario
+            userAnswers.push({
+                question: question.question,
+                userAnswer: userAnswer,
+                correctAnswer: question.type === 'multiple' ? question.options[question.correct] : question.answer,
+                isCorrect: isCorrect,
+                category: question.category
+            });
 
             feedback.style.display = 'block';
             feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.innerHTML = isCorrect ? 
-                '¡Correcto!' : 
-                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+            
+            if (isCorrect) {
+                score++;
+                const encouragement = [
+                    '¡Brillante! Tu comprensión del cálculo es impresionante.',
+                    '¡Exacto! Dominas los conceptos fundamentales.',
+                    '¡Perfecto! Tu razonamiento matemático es sólido.',
+                    '¡Excelente! Continúa con esa precisión analítica.'
+                ];
+                feedback.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <strong>${encouragement[Math.floor(Math.random() * encouragement.length)]}</strong>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Incorrecto.</strong> En el cálculo, la precisión es clave.
+                    ${question.hint ? `<br><em>Pista: ${question.hint}</em>` : ''}
+                    <br>Respuesta correcta: <strong>${question.type === 'multiple' ? question.options[question.correct] : question.answer}</strong>
+                `;
+            }
 
-            if (isCorrect) score++;
+            // Deshabilitar interacciones después de responder
+            document.querySelectorAll('.option').forEach(opt => opt.style.pointerEvents = 'none');
+            const input = document.getElementById('user-answer');
+            if (input) input.disabled = true;
         }
 
         function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
+                selectedOptionIndex = null;
                 loadQuestion();
             } else {
                 showResults();
             }
         }
 
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(20);
+            doc.text('Resultados de la Prueba de Calculo', 20, 30);
+            
+            // Información general
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            const percentage = (score / questions.length * 100).toFixed(1);
+            
+            doc.setFontSize(14);
+            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
+            doc.text(`Duracion: ${duration} minutos`, 20, 60);
+            doc.text(`Puntuacion: ${score} de ${questions.length} (${percentage}%)`, 20, 70);
+            
+            // Análisis de fortalezas
+            let analysisText = '';
+            if (percentage >= 90) analysisText = 'Dominio excepcional del calculo diferencial e integral';
+            else if (percentage >= 80) analysisText = 'Solida comprension de los conceptos fundamentales';
+            else if (percentage >= 70) analysisText = 'Base adecuada, requiere refuerzo en algunas areas';
+            else if (percentage >= 60) analysisText = 'Conocimientos basicos, necesita mas practica';
+            else analysisText = 'Requiere estudio intensivo de conceptos fundamentales';
+            
+            doc.setFontSize(12);
+            doc.text(`Analisis: ${analysisText}`, 20, 85);
+            
+            // Resultados por categoría
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            doc.setFontSize(16);
+            doc.text('Resultados por Area de Calculo:', 20, 110);
+            
+            let yPosition = 125;
+            doc.setFontSize(11);
+            Object.entries(categories).forEach(([category, stats]) => {
+                const categoryPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                doc.text(`${category}: ${stats.correct}/${stats.total} (${categoryPercentage}%)`, 25, yPosition);
+                yPosition += 8;
+            });
+            
+            // Respuestas detalladas
+            yPosition += 15;
+            doc.setFontSize(16);
+            doc.text('Revision Detallada:', 20, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(9);
+            userAnswers.forEach((answer, index) => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+                
+                // Limpiar LaTeX de la pregunta para PDF
+                let cleanQuestion = answer.question.replace(/\$\$|\$/g, '').replace(/\\[a-zA-Z]+/g, '').substring(0, 70);
+                
+                doc.text(`${index + 1}. ${cleanQuestion}...`, 20, yPosition);
+                yPosition += 6;
+                doc.text(`Tu respuesta: ${answer.userAnswer || 'Sin respuesta'}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Correcta: ${answer.correctAnswer}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Estado: ${answer.isCorrect ? 'CORRECTA' : 'INCORRECTA'}`, 25, yPosition);
+                yPosition += 12;
+            });
+            
+            // Descargar PDF
+            doc.save(`resultados-calculo-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
         function showResults() {
             const questionDiv = document.getElementById('questions');
             const percentage = (score / questions.length) * 100;
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            
+            // Calcular estadísticas por categoría
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            let message = '';
+            let emoji = '';
+            let analysis = '';
+            
+            if (percentage >= 95) {
+                message = '¡Eres un genio del cálculo! Dominio magistral.';
+                emoji = '🏆';
+                analysis = 'Tienes un entendimiento excepcional tanto del cálculo diferencial como integral.';
+            } else if (percentage >= 85) {
+                message = '¡Excelente dominio! Tu comprensión es muy sólida.';
+                emoji = '🎯';
+                analysis = 'Demuestras gran habilidad en límites, derivadas e integrales.';
+            } else if (percentage >= 75) {
+                message = '¡Buen trabajo! Bases sólidas con área de oportunidad.';
+                emoji = '📈';
+                analysis = 'Tienes fundamentos buenos, pero algunos conceptos necesitan refuerzo.';
+            } else if (percentage >= 65) {
+                message = 'Progreso aceptable. Enfócate en los conceptos fundamentales.';
+                emoji = '📚';
+                analysis = 'Necesitas fortalecer tu comprensión de los principios básicos.';
+            } else {
+                message = 'El cálculo requiere más dedicación. ¡No te desanimes!';
+                emoji = '💪';
+                analysis = 'Es recomendable revisar desde los conceptos más básicos.';
+            }
+
+            let categoryBreakdown = '';
+            Object.entries(categories).forEach(([category, stats]) => {
+                const catPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                let icon = '';
+                if (catPercentage >= 80) icon = '🟢';
+                else if (catPercentage >= 60) icon = '🟡';
+                else icon = '🔴';
+                
+                categoryBreakdown += `
+                    <div class="breakdown-item">
+                        <span class="breakdown-category">${icon} ${category}</span>
+                        <span class="breakdown-score">${stats.correct}/${stats.total} (${catPercentage}%)</span>
+                    </div>
+                `;
+            });
             
             questionDiv.innerHTML = `
-                <div class="question-card">
-                    <h2>Resultados Finales</h2>
-                    <p>Has completado la prueba de cálculo.</p>
-                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
-                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
-                </div>
+                <article class="question-card results-card">
+                    <div class="category-badge">
+                        <i class="fas fa-trophy"></i>
+                        Análisis Final
+                    </div>
+                    
+                    <div class="results-score">${percentage.toFixed(1)}%</div>
+                    
+                    <div class="results-message">
+                        <p><strong>${emoji} ${message}</strong></p>
+                        <p style="margin: 1rem 0; font-style: italic;">${analysis}</p>
+                        <p>Has respondido correctamente <strong>${score}</strong> de ${questions.length} preguntas.</p>
+                        <p>Tiempo empleado: <strong>${duration} minutos</strong>.</p>
+                    </div>
+
+                    <div class="results-breakdown">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-chart-pie"></i> Análisis por Área del Cálculo
+                        </h3>
+                        ${categoryBreakdown}
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="button" onclick="location.reload()">
+                            <i class="fas fa-redo"></i>
+                            Nueva Evaluación
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-download"></i>
+                            Descargar Análisis
+                        </button>
+                        <button class="button button-outline" onclick="showDetailedReview()">
+                            <i class="fas fa-microscope"></i>
+                            Revisión Detallada
+                        </button>
+                    </div>
+                </article>
             `;
 
             document.getElementById('next-button').style.display = 'none';
+            document.getElementById('current-score').textContent = score;
         }
 
-        // Iniciar prueba
-        loadQuestion();
+        function showDetailedReview() {
+            const questionDiv = document.getElementById('questions');
+            
+            let reviewHtml = `
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas fa-search"></i>
+                        Análisis Detallado
+                    </div>
+                    <h2 class="question-text">Revisión Completa de Respuestas</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Analiza cada pregunta para identificar patrones y áreas de mejora.
+                    </p>
+            `;
+
+            userAnswers.forEach((answer, index) => {
+                const statusIcon = answer.isCorrect ? 'fas fa-check-circle' : 'fas fa-times-circle';
+                const statusColor = answer.isCorrect ? 'var(--success)' : 'var(--danger)';
+                const bgColor = answer.isCorrect ? 'rgba(34, 197, 94, 0.05)' : 'rgba(239, 68, 68, 0.05)';
+                
+                // Limpiar LaTeX para mostrar
+                let cleanQuestion = answer.question.replace(/\$\$/g, '').replace(/\$/g, '');
+                
+                reviewHtml += `
+                    <div style="background: ${bgColor}; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; border-left: 4px solid ${statusColor};">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <i class="${statusIcon}" style="color: ${statusColor}; font-size: 1.2rem;"></i>
+                            <strong style="color: var(--primary);">Pregunta ${index + 1}</strong>
+                            <span style="background: rgba(249,115,22,0.2); padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.75rem; color: var(--primary);">
+                                ${answer.category}
+                            </span>
+                        </div>
+                        <p style="margin-bottom: 0.75rem; color: var(--text-secondary); font-style: italic;">${cleanQuestion}</p>
+                        <div style="display: grid; gap: 0.5rem; font-family: 'JetBrains Mono', monospace;">
+                            <p><strong style="color: var(--text-primary);">Tu respuesta:</strong> 
+                               <span style="color: ${statusColor};">${answer.userAnswer || 'Sin respuesta'}</span></p>
+                            <p><strong style="color: var(--text-primary);">Respuesta correcta:</strong> 
+                               <span style="color: var(--success);">${answer.correctAnswer}</span></p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            reviewHtml += `
+                    <div class="results-actions" style="margin-top: 3rem;">
+                        <button class="button" onclick="showResults()">
+                            <i class="fas fa-arrow-left"></i>
+                            Volver a Resultados
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            Exportar Análisis
+                        </button>
+                    </div>
+                </article>
+            `;
+
+            questionDiv.innerHTML = reviewHtml;
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            startTime = new Date();
+            loadQuestion();
+        });
+
+        // Prevenir el envío del formulario por defecto
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>

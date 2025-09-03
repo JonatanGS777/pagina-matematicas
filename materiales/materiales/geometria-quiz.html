@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba de Geometría</title>
+    <title>Prueba de Geometría Moderna</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --background-color: #1a1a2e;
-            --text-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.1);
+            --primary: #0891b2;
+            --primary-light: #0ea5e9;
+            --secondary: #06b6d4;
+            --accent: #67e8f9;
+            --tertiary: #164e63;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #0c0a09;
+            --surface: #1c1917;
+            --card: #292524;
+            --text-primary: #fafaf9;
+            --text-secondary: #d6d3d1;
+            --border: #57534e;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            --gradient-card: linear-gradient(135deg, rgba(8,145,178,0.1) 0%, rgba(6,182,212,0.05) 100%);
+            --gradient-spatial: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #67e8f9 100%);
         }
 
         * {
@@ -21,372 +38,1314 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--background-color);
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(8, 145, 178, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 85% 75%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(103, 232, 249, 0.08) 0%, transparent 50%);
+            color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 2rem;
         }
 
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        /* Header con tema de espacios y formas */
         .quiz-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 2.5rem;
+            background: rgba(8, 145, 178, 0.05);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(8, 145, 178, 0.2);
+        }
+
+        .quiz-header::before {
+            content: '△ ○ □';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 300;
+            letter-spacing: 1.5rem;
+        }
+
+        .quiz-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: var(--gradient-spatial);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .quiz-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Barra de progreso con tema geométrico */
+        .progress-container {
+            background: var(--surface);
+            border-radius: 16px;
             padding: 1.5rem;
-            background: var(--card-bg);
-            border-radius: 15px;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(8, 145, 178, 0.1);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            position: relative;
+        }
+
+        .progress-container::before {
+            content: '∠';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            color: var(--primary);
+            opacity: 0.6;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .question-counter {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 600;
         }
 
         .progress-bar {
-            width: 100%;
             height: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
-            margin: 1rem 0;
+            overflow: hidden;
+            position: relative;
         }
 
         .progress {
-            width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            background: var(--gradient-spatial);
             border-radius: 5px;
-            transition: width 0.3s ease;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Tarjeta de pregunta con estilo espacial */
         .question-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 2rem;
+            background: var(--gradient-card);
+            backdrop-filter: blur(25px);
+            border-radius: 24px;
+            padding: 3rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(8, 145, 178, 0.2);
+            box-shadow: 0 25px 50px var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
         }
 
+        .question-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-spatial);
+        }
+
+        .question-card::after {
+            content: '📐';
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 1.5rem;
+            opacity: 0.1;
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(8, 145, 178, 0.2);
+            color: var(--primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(8, 145, 178, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        /* Contenedor de figuras geométricas mejorado */
         .figure-container {
             width: 100%;
-            max-width: 400px;
-            margin: 1rem auto;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
+            max-width: 450px;
+            margin: 2rem auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(8, 145, 178, 0.2);
+            position: relative;
+        }
+
+        .figure-container::before {
+            content: 'FIGURA GEOMÉTRICA';
+            position: absolute;
+            top: -8px;
+            left: 20px;
+            background: var(--surface);
+            padding: 0 12px;
+            font-size: 0.7rem;
+            color: var(--primary);
+            opacity: 0.7;
+            font-weight: 600;
         }
 
         .figure-container svg {
             width: 100%;
             height: auto;
+            filter: drop-shadow(0 4px 8px rgba(8, 145, 178, 0.3));
         }
 
-        .options {
+        /* Opciones modernas */
+        .options-grid {
             display: grid;
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 2rem;
         }
 
         .option {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .option-letter {
+            background: var(--gradient-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .option-content {
+            flex: 1;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(8,145,178,0.1), transparent);
+            transition: left 0.5s ease;
         }
 
         .option:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(10px);
+            background: rgba(8, 145, 178, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(8, 145, 178, 0.2);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: rgba(8, 145, 178, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.1);
+        }
+
+        /* Input geométrico moderno */
+        .input-group {
+            position: relative;
+            margin-top: 2rem;
         }
 
         .input-answer {
             width: 100%;
-            padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: var(--text-color);
-            margin-top: 1rem;
+            padding: 1.2rem 1.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(8, 145, 178, 0.2);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
         }
 
+        .input-answer:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(8, 145, 178, 0.05);
+            box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.1);
+        }
+
+        .input-answer::placeholder {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Botones con tema espacial */
         .button {
-            background: var(--primary-color);
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            border-radius: 10px;
+            padding: 1.2rem 2.5rem;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .button:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(8, 145, 178, 0.4);
         }
 
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button-secondary {
+            background: var(--gradient-secondary);
+        }
+
+        .button-secondary:hover {
+            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.4);
+        }
+
+        .button-outline {
+            background: var(--surface);
+            border: 2px solid var(--border);
+        }
+
+        .button-outline:hover {
+            background: var(--card);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px var(--shadow);
+        }
+
+        /* Feedback con estilo geométrico */
         .feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 10px;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 16px;
             display: none;
+            position: relative;
+            animation: slideInUp 0.4s ease-out;
+            font-weight: 500;
         }
 
-        .correct {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
+        .feedback.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-left: 4px solid var(--success);
         }
 
-        .incorrect {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
+        .feedback.correct::before {
+            content: '∠ ✓';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
+        }
+
+        .feedback.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-left: 4px solid var(--danger);
+        }
+
+        .feedback.incorrect::before {
+            content: '⧨ ✗';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.2rem;
+        }
+
+        /* Resultados finales con estilo espacial */
+        .results-card {
+            text-align: center;
+            animation: zoomIn 0.6s ease-out;
+            position: relative;
+        }
+
+        .results-card::before {
+            content: '🔺 🔵 🟩';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            opacity: 0.3;
+            letter-spacing: 1rem;
+        }
+
+        .results-score {
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: var(--gradient-spatial);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 2rem 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .results-message {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .results-breakdown {
+            background: rgba(8, 145, 178, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+            border: 1px solid rgba(8, 145, 178, 0.1);
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(8, 145, 178, 0.1);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-category {
+            font-weight: 500;
+        }
+
+        .breakdown-score {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Animaciones */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .question-card {
+                padding: 2rem;
+            }
+
+            .quiz-title {
+                font-size: 2.5rem;
+            }
+
+            .results-actions {
+                flex-direction: column;
+            }
+
+            .option {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .progress-info {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .figure-container {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(8,145,178,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <div class="quiz-header">
-            <h1>Prueba de Geometría</h1>
+    <div class="container">
+        <header class="quiz-header">
+            <h1 class="quiz-title">Prueba de Geometría</h1>
+            <p class="quiz-subtitle">Explora el mundo de las formas y espacios</p>
+        </header>
+
+        <section class="progress-container">
+            <div class="progress-info">
+                <div class="question-counter">
+                    <i class="fas fa-shapes"></i>
+                    Pregunta <span id="current-question">1</span> de <span id="total-questions">10</span>
+                </div>
+                <div class="score-display">
+                    <i class="fas fa-drafting-compass"></i>
+                    <span id="current-score">0</span> puntos
+                </div>
+            </div>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
-            <p>Pregunta <span id="current-question">1</span> de 10</p>
+        </section>
+
+        <main id="questions"></main>
+
+        <div class="quiz-controls">
+            <button class="button" id="next-button" onclick="nextQuestion()">
+                <span>Siguiente Pregunta</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-
-        <div id="questions"></div>
-
-        <button class="button" id="next-button" onclick="nextQuestion()">Siguiente Pregunta</button>
     </div>
 
     <script>
         const questions = [
             {
                 category: "Figuras Básicas",
+                icon: "fa-triangle-exclamation",
                 question: "¿Qué figura geométrica es esta?",
                 type: "multiple",
                 svg: `<svg viewBox="0 0 100 100">
-                    <polygon points="50,10 90,90 10,90" fill="#3498db"/>
+                    <polygon points="50,10 90,90 10,90" fill="#0891b2" stroke="#67e8f9" stroke-width="2"/>
+                    <circle cx="50" cy="10" r="2" fill="#67e8f9"/>
+                    <circle cx="90" cy="90" r="2" fill="#67e8f9"/>
+                    <circle cx="10" cy="90" r="2" fill="#67e8f9"/>
                 </svg>`,
                 options: ["Triángulo", "Cuadrado", "Pentágono", "Rectángulo"],
                 correct: 0
             },
             {
                 category: "Perímetro",
+                icon: "fa-border-all",
                 question: "Calcula el perímetro del rectángulo",
                 type: "input",
                 svg: `<svg viewBox="0 0 120 80">
-                    <rect x="10" y="10" width="100" height="60" fill="#3498db"/>
-                    <text x="60" y="45" font-size="12" fill="white" text-anchor="middle">Base: 10</text>
-                    <text x="30" y="80" font-size="12" fill="white">Altura: 6</text>
+                    <rect x="10" y="10" width="100" height="60" fill="#0891b2" stroke="#67e8f9" stroke-width="2"/>
+                    <text x="60" y="45" font-size="12" fill="white" text-anchor="middle" font-weight="bold">Base: 10</text>
+                    <text x="30" y="80" font-size="12" fill="#67e8f9" font-weight="bold">Altura: 6</text>
+                    <line x1="10" y1="5" x2="110" y2="5" stroke="#67e8f9" stroke-width="1" marker-end="url(#arrowhead)"/>
+                    <line x1="5" y1="10" x2="5" y2="70" stroke="#67e8f9" stroke-width="1" marker-end="url(#arrowhead)"/>
                 </svg>`,
                 answer: "32",
                 hint: "Perímetro = 2(base + altura)"
             },
             {
                 category: "Círculo",
+                icon: "fa-circle",
                 question: "¿Cuál es el radio del círculo si el diámetro es 8 unidades?",
                 type: "input",
                 svg: `<svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" fill="#3498db"/>
-                    <line x1="10" y1="50" x2="90" y2="50" stroke="white" stroke-width="1"/>
-                    <text x="50" y="45" font-size="10" fill="white" text-anchor="middle">D = 8</text>
+                    <circle cx="50" cy="50" r="40" fill="#0891b2" stroke="#67e8f9" stroke-width="3" fill-opacity="0.3"/>
+                    <line x1="10" y1="50" x2="90" y2="50" stroke="#67e8f9" stroke-width="2"/>
+                    <circle cx="10" cy="50" r="2" fill="#67e8f9"/>
+                    <circle cx="90" cy="50" r="2" fill="#67e8f9"/>
+                    <circle cx="50" cy="50" r="2" fill="#67e8f9"/>
+                    <text x="50" y="35" font-size="10" fill="#67e8f9" text-anchor="middle" font-weight="bold">D = 8</text>
                 </svg>`,
                 answer: "4",
                 hint: "Radio = Diámetro/2"
             },
-			{
-			    category: "Figuras Tridimensionales",
-			    question: "¿Cuántas caras tiene este cubo?",
-			    type: "input",
-			    svg: `<svg viewBox="0 0 100 100">
-			        <!-- Cara frontal -->
-			        <path d="M20,20 L20,80 L80,80 L80,20 Z" fill="#3498db" stroke="white"/>
-        
-			        <!-- Cara superior -->
-			        <path d="M20,20 L35,5 L95,5 L80,20 Z" fill="#2980b9" stroke="white"/>
-        
-			        <!-- Cara lateral -->
-			        <path d="M80,20 L95,5 L95,65 L80,80 Z" fill="#1f618d" stroke="white"/>
-        
-			        <!-- Líneas ocultas (punteadas) -->
-			        <path d="M35,5 L35,65 L95,65" stroke="white" stroke-dasharray="2,2" fill="none"/>
-        
-			        <!-- Aristas principales -->
-			        <path d="M20,20 L80,20 L80,80 L20,80 Z" stroke="white" fill="none"/>
-        
-			        <!-- Etiquetas -->
-			        <text x="50" y="50" fill="white" text-anchor="middle" font-size="8">CUBO</text>
-			    </svg>`,
-			    answer: "6",
-			    hint: "Cuenta todas las caras, incluyendo las no visibles"
-			},
+            {
+                category: "Figuras Tridimensionales",
+                icon: "fa-cube",
+                question: "¿Cuántas caras tiene este cubo?",
+                type: "input",
+                svg: `<svg viewBox="0 0 100 100">
+                    <!-- Cara frontal -->
+                    <path d="M20,20 L20,80 L80,80 L80,20 Z" fill="#0891b2" stroke="#67e8f9" stroke-width="2"/>
+                    
+                    <!-- Cara superior -->
+                    <path d="M20,20 L35,5 L95,5 L80,20 Z" fill="#06b6d4" stroke="#67e8f9" stroke-width="2"/>
+                    
+                    <!-- Cara lateral -->
+                    <path d="M80,20 L95,5 L95,65 L80,80 Z" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+                    
+                    <!-- Líneas ocultas (punteadas) -->
+                    <path d="M35,5 L35,65 L95,65" stroke="#67e8f9" stroke-dasharray="3,3" fill="none" stroke-width="1"/>
+                    
+                    <!-- Vértices -->
+                    <circle cx="20" cy="20" r="2" fill="#67e8f9"/>
+                    <circle cx="80" cy="20" r="2" fill="#67e8f9"/>
+                    <circle cx="80" cy="80" r="2" fill="#67e8f9"/>
+                    <circle cx="20" cy="80" r="2" fill="#67e8f9"/>
+                    <circle cx="35" cy="5" r="2" fill="#67e8f9"/>
+                    <circle cx="95" cy="5" r="2" fill="#67e8f9"/>
+                    <circle cx="95" cy="65" r="2" fill="#67e8f9"/>
+                    
+                    <!-- Etiqueta -->
+                    <text x="50" y="50" fill="#67e8f9" text-anchor="middle" font-size="8" font-weight="bold">CUBO</text>
+                </svg>`,
+                answer: "6",
+                hint: "Cuenta todas las caras, incluyendo las no visibles"
+            },
             {
                 category: "Teorema de Pitágoras",
+                icon: "fa-square-root-alt",
                 question: "En un triángulo rectángulo, si los catetos miden 3 y 4 unidades, ¿cuánto mide la hipotenusa?",
                 type: "input",
                 svg: `<svg viewBox="0 0 100 100">
-                    <path d="M10,90 L10,40 L60,90 Z" fill="#3498db"/>
-                    <text x="5" y="65" font-size="10" fill="white">3</text>
-                    <text x="35" y="95" font-size="10" fill="white">4</text>
-                    <text x="40" y="60" font-size="10" fill="white">?</text>
+                    <path d="M10,90 L10,40 L60,90 Z" fill="#0891b2" stroke="#67e8f9" stroke-width="2" fill-opacity="0.3"/>
+                    <path d="M10,90 L10,40" stroke="#67e8f9" stroke-width="3"/>
+                    <path d="M10,90 L60,90" stroke="#67e8f9" stroke-width="3"/>
+                    <path d="M10,40 L60,90" stroke="#06b6d4" stroke-width="3"/>
+                    <circle cx="10" cy="90" r="2" fill="#67e8f9"/>
+                    <circle cx="10" cy="40" r="2" fill="#67e8f9"/>
+                    <circle cx="60" cy="90" r="2" fill="#67e8f9"/>
+                    <!-- Ángulo recto -->
+                    <path d="M10,80 L20,80 L20,90" stroke="#67e8f9" stroke-width="1" fill="none"/>
+                    <text x="5" y="65" font-size="10" fill="#67e8f9" font-weight="bold">3</text>
+                    <text x="35" y="95" font-size="10" fill="#67e8f9" font-weight="bold">4</text>
+                    <text x="40" y="60" font-size="10" fill="#06b6d4" font-weight="bold">?</text>
                 </svg>`,
                 answer: "5",
                 hint: "a² + b² = c²"
             },
             {
                 category: "Ángulos",
+                icon: "fa-angle-right",
                 question: "¿Cuál es el ángulo complementario de 35°?",
                 type: "input",
                 svg: `<svg viewBox="0 0 100 100">
-                    <path d="M10,90 L10,10 L90,90" fill="none" stroke="#3498db" stroke-width="2"/>
-                    <path d="M10,90 A 80 80 0 0 1 10 35" fill="#3498db" fill-opacity="0.3"/>
-                    <text x="30" y="70" font-size="12" fill="white">35°</text>
+                    <path d="M10,90 L10,10 L90,90" fill="none" stroke="#67e8f9" stroke-width="3"/>
+                    <path d="M10,90 A 25 25 0 0 1 10 65" fill="#0891b2" fill-opacity="0.4" stroke="#67e8f9"/>
+                    <circle cx="10" cy="90" r="2" fill="#67e8f9"/>
+                    <circle cx="10" cy="10" r="2" fill="#67e8f9"/>
+                    <circle cx="90" cy="90" r="2" fill="#67e8f9"/>
+                    <text x="25" y="70" font-size="12" fill="#67e8f9" font-weight="bold">35°</text>
+                    <text x="5" y="100" font-size="8" fill="#67e8f9">A</text>
+                    <text x="5" y="8" font-size="8" fill="#67e8f9">B</text>
+                    <text x="92" y="95" font-size="8" fill="#67e8f9">C</text>
                 </svg>`,
                 answer: "55",
                 hint: "Los ángulos complementarios suman 90°"
             },
             {
                 category: "Figuras Básicas",
+                icon: "fa-stop",
                 question: "¿Cuántos lados tiene este polígono?",
                 type: "input",
                 svg: `<svg viewBox="0 0 100 100">
-                    <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" fill="#3498db"/>
+                    <polygon points="50,10 85,30 85,70 50,90 15,70 15,30" fill="#0891b2" stroke="#67e8f9" stroke-width="2" fill-opacity="0.3"/>
+                    <circle cx="50" cy="10" r="2" fill="#67e8f9"/>
+                    <circle cx="85" cy="30" r="2" fill="#67e8f9"/>
+                    <circle cx="85" cy="70" r="2" fill="#67e8f9"/>
+                    <circle cx="50" cy="90" r="2" fill="#67e8f9"/>
+                    <circle cx="15" cy="70" r="2" fill="#67e8f9"/>
+                    <circle cx="15" cy="30" r="2" fill="#67e8f9"/>
+                    <text x="50" y="50" font-size="10" fill="#67e8f9" text-anchor="middle" font-weight="bold">HEXÁGONO</text>
                 </svg>`,
                 answer: "6",
                 hint: "Cuenta los vértices o lados"
             },
             {
                 category: "Círculo",
+                icon: "fa-chart-pie",
                 question: "Identifica la parte sombreada del círculo",
                 type: "multiple",
                 svg: `<svg viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="#3498db" stroke-width="2"/>
-                    <path d="M50,50 L90,50 A 40 40 0 0 1 50,90 Z" fill="#3498db"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#67e8f9" stroke-width="3"/>
+                    <path d="M50,50 L90,50 A 40 40 0 0 1 50,90 Z" fill="#0891b2" stroke="#67e8f9" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="2" fill="#67e8f9"/>
+                    <circle cx="90" cy="50" r="2" fill="#67e8f9"/>
+                    <circle cx="50" cy="90" r="2" fill="#67e8f9"/>
+                    <text x="70" y="75" font-size="8" fill="#67e8f9" font-weight="bold">SECTOR</text>
                 </svg>`,
                 options: ["Sector circular", "Segmento circular", "Arco", "Radio"],
                 correct: 0
             },
             {
                 category: "Ángulos",
+                icon: "fa-expand-arrows-alt",
                 question: "¿Cuál es el ángulo suplementario de 120°?",
                 type: "input",
                 svg: `<svg viewBox="0 0 100 100">
-                    <path d="M10,90 L90,90 L90,10" fill="none" stroke="#3498db" stroke-width="2"/>
-                    <path d="M90,90 A 80 80 0 0 0 30 90" fill="#3498db" fill-opacity="0.3"/>
-                    <text x="60" y="70" font-size="12" fill="white">120°</text>
+                    <path d="M10,90 L90,90 L90,10" fill="none" stroke="#67e8f9" stroke-width="3"/>
+                    <path d="M90,90 A 30 30 0 0 0 60 90" fill="#0891b2" fill-opacity="0.4" stroke="#67e8f9"/>
+                    <circle cx="10" cy="90" r="2" fill="#67e8f9"/>
+                    <circle cx="90" cy="90" r="2" fill="#67e8f9"/>
+                    <circle cx="90" cy="10" r="2" fill="#67e8f9"/>
+                    <text x="65" y="75" font-size="12" fill="#67e8f9" font-weight="bold">120°</text>
+                    <text x="5" y="95" font-size="8" fill="#67e8f9">A</text>
+                    <text x="92" y="95" font-size="8" fill="#67e8f9">B</text>
+                    <text x="92" y="8" font-size="8" fill="#67e8f9">C</text>
                 </svg>`,
                 answer: "60",
                 hint: "Los ángulos suplementarios suman 180°"
             },
-			{
-			    category: "Figuras Tridimensionales",
-			    question: "¿Cuántas aristas tiene una pirámide cuadrangular?",
-			    type: "input",
-			    svg: `<svg viewBox="0 0 100 100">
-			        <!-- Base -->
-			        <path d="M20,80 L80,80 L80,20 L20,20 Z" fill="#3498db" stroke="white"/>
-        
-			        <!-- Caras laterales -->
-			        <path d="M20,20 L50,5 L80,20" fill="#2980b9" stroke="white"/>
-			        <path d="M50,5 L80,20 L80,80" fill="#1f618d" stroke="white"/>
-			        <path d="M50,5 L20,20 L20,80" fill="#2980b9" stroke="white" stroke-dasharray="2,2"/>
-        
-			        <!-- Aristas -->
-			        <path d="M50,5 L50,80" stroke="white" stroke-dasharray="2,2" fill="none"/>
-        
-			        <!-- Etiquetas -->
-			        <text x="50" y="50" fill="white" text-anchor="middle" font-size="8">PIRÁMIDE</text>
-			    </svg>`,
-			    answer: "8",
-			    hint: "Suma las aristas de la base (4) y las que van al vértice superior (4)"
-			}
+            {
+                category: "Figuras Tridimensionales",
+                icon: "fa-mountain",
+                question: "¿Cuántas aristas tiene una pirámide cuadrangular?",
+                type: "input",
+                svg: `<svg viewBox="0 0 100 100">
+                    <!-- Base -->
+                    <path d="M20,80 L80,80 L80,20 L20,20 Z" fill="#0891b2" stroke="#67e8f9" stroke-width="2" fill-opacity="0.4"/>
+                    
+                    <!-- Caras laterales -->
+                    <path d="M20,20 L50,5 L80,20" fill="#06b6d4" stroke="#67e8f9" stroke-width="2" fill-opacity="0.6"/>
+                    <path d="M50,5 L80,20 L80,80" fill="#164e63" stroke="#67e8f9" stroke-width="2" fill-opacity="0.8"/>
+                    <path d="M50,5 L20,20 L20,80" fill="#06b6d4" stroke="#67e8f9" stroke-width="1" stroke-dasharray="3,3"/>
+                    
+                    <!-- Aristas de la base (ocultas) -->
+                    <path d="M20,80 L80,80" stroke="#67e8f9" stroke-dasharray="2,2" stroke-width="1"/>
+                    <path d="M80,80 L50,5" stroke="#67e8f9" stroke-dasharray="2,2" stroke-width="1"/>
+                    
+                    <!-- Vértices -->
+                    <circle cx="50" cy="5" r="2" fill="#67e8f9"/>
+                    <circle cx="20" cy="20" r="2" fill="#67e8f9"/>
+                    <circle cx="80" cy="20" r="2" fill="#67e8f9"/>
+                    <circle cx="20" cy="80" r="2" fill="#67e8f9"/>
+                    <circle cx="80" cy="80" r="2" fill="#67e8f9"/>
+                    
+                    <!-- Etiqueta -->
+                    <text x="50" y="50" fill="#67e8f9" text-anchor="middle" font-size="7" font-weight="bold">PIRÁMIDE</text>
+                    <text x="50" y="58" fill="#67e8f9" text-anchor="middle" font-size="7" font-weight="bold">CUADRANGULAR</text>
+                </svg>`,
+                answer: "8",
+                hint: "Suma las aristas de la base (4) y las que van al vértice superior (4)"
+            }
         ];
 
         let currentQuestion = 0;
         let score = 0;
+        let userAnswers = [];
+        let startTime = new Date();
 
         function loadQuestion() {
             const questionDiv = document.getElementById('questions');
             const question = questions[currentQuestion];
 
             let html = `
-                <div class="question-card">
-                    <h2>${question.category}</h2>
-                    <p>${question.question}</p>
-                    ${question.svg ? `<div class="figure-container">${question.svg}</div>` : ''}
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas ${question.icon}"></i>
+                        ${question.category}
+                    </div>
+                    <h2 class="question-text">${question.question}</h2>
             `;
 
+            if (question.svg) {
+                html += `<div class="figure-container">${question.svg}</div>`;
+            }
+
             if (question.type === 'multiple') {
-                html += `<div class="options">`;
+                html += `<div class="options-grid">`;
                 question.options.forEach((option, index) => {
                     html += `
-                        <div class="option" onclick="checkAnswer(${index})">
-                            ${option}
+                        <div class="option" onclick="selectOption(${index})" id="option-${index}">
+                            <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                            <span class="option-content">${option}</span>
                         </div>
                     `;
                 });
                 html += `</div>`;
+                html += `<button class="button" onclick="checkAnswer()" id="check-btn" style="display:none;">
+                    <i class="fas fa-check"></i> Verificar Respuesta
+                </button>`;
             } else {
                 html += `
-                    <input type="text" class="input-answer" id="user-answer" placeholder="Tu respuesta">
-                    <button class="button" onclick="checkAnswer()">Verificar</button>
+                    <div class="input-group">
+                        <input type="text" class="input-answer" id="user-answer" 
+                               placeholder="Ejemplo: 32, 4, 90°, 8" autocomplete="off">
+                    </div>
+                    <button class="button" onclick="checkAnswer()">
+                        <i class="fas fa-ruler-combined"></i> Verificar Respuesta
+                    </button>
                 `;
             }
 
-            html += `<div class="feedback" id="feedback"></div>`;
+            html += `<div class="feedback" id="feedback"></div></article>`;
             questionDiv.innerHTML = html;
 
-            // Actualizar progreso
+            // Actualizar elementos de UI
             document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('total-questions').textContent = questions.length;
+            document.getElementById('current-score').textContent = score;
             document.getElementById('progress').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Renderizar fórmulas matemáticas
+            if (window.MathJax) {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+
+            // Agregar event listener para Enter en inputs
+            const input = document.getElementById('user-answer');
+            if (input) {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkAnswer();
+                    }
+                });
+                input.focus();
+            }
+        }
+
+        let selectedOptionIndex = null;
+
+        function selectOption(index) {
+            // Limpiar selecciones previas
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Seleccionar nueva opción
+            document.getElementById(`option-${index}`).classList.add('selected');
+            selectedOptionIndex = index;
+            
+            // Mostrar botón de verificación
+            document.getElementById('check-btn').style.display = 'inline-flex';
+        }
+
+        function normalizeGeometryAnswer(answer) {
+            return answer.toLowerCase()
+                .replace(/\s+/g, '')
+                .replace(/°/g, '')
+                .replace(/grados/g, '');
         }
 
         function checkAnswer(selectedOption = null) {
             const question = questions[currentQuestion];
             const feedback = document.getElementById('feedback');
             let isCorrect = false;
+            let userAnswer = '';
 
             if (question.type === 'multiple') {
-                isCorrect = selectedOption === question.correct;
+                userAnswer = selectedOptionIndex !== null ? question.options[selectedOptionIndex] : '';
+                isCorrect = selectedOptionIndex === question.correct;
             } else {
-                const userAnswer = document.getElementById('user-answer').value.trim();
-                isCorrect = userAnswer === question.answer;
+                userAnswer = document.getElementById('user-answer').value.trim();
+                
+                // Normalizar respuestas para comparación flexible en geometría
+                const normalizedUser = normalizeGeometryAnswer(userAnswer);
+                const normalizedCorrect = normalizeGeometryAnswer(question.answer);
+                
+                // Verificación para diferentes tipos de respuestas geométricas
+                if (normalizedCorrect.includes('°') || question.category.includes('Ángulos')) {
+                    // Para ángulos
+                    const userNum = parseFloat(userAnswer.replace('°', ''));
+                    const correctNum = parseFloat(question.answer);
+                    if (!isNaN(userNum) && !isNaN(correctNum)) {
+                        isCorrect = Math.abs(userNum - correctNum) < 0.1;
+                    } else {
+                        isCorrect = normalizedUser === normalizedCorrect;
+                    }
+                } else {
+                    // Para números enteros (perímetros, áreas, cantidades)
+                    const userNum = parseFloat(userAnswer);
+                    const correctNum = parseFloat(question.answer);
+                    if (!isNaN(userNum) && !isNaN(correctNum)) {
+                        isCorrect = Math.abs(userNum - correctNum) < 0.01;
+                    } else {
+                        isCorrect = normalizedUser === normalizedCorrect;
+                    }
+                }
             }
+
+            // Guardar respuesta del usuario
+            userAnswers.push({
+                question: question.question,
+                userAnswer: userAnswer,
+                correctAnswer: question.type === 'multiple' ? question.options[question.correct] : question.answer,
+                isCorrect: isCorrect,
+                category: question.category
+            });
 
             feedback.style.display = 'block';
             feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.innerHTML = isCorrect ? 
-                '¡Correcto!' : 
-                `Incorrecto. ${question.hint ? 'Pista: ' + question.hint : ''}`;
+            
+            if (isCorrect) {
+                score++;
+                const encouragement = [
+                    '¡Excelente! Tu visión espacial es impresionante.',
+                    '¡Perfecto! Dominas las relaciones geométricas.',
+                    '¡Genial! Tu razonamiento espacial es sólido.',
+                    '¡Brillante! Continúa explorando las formas.'
+                ];
+                feedback.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <strong>${encouragement[Math.floor(Math.random() * encouragement.length)]}</strong>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <i class="fas fa-times-circle"></i>
+                    <strong>Incorrecto.</strong> En geometría, cada medida cuenta.
+                    ${question.hint ? `<br><em>Pista: ${question.hint}</em>` : ''}
+                    <br>Respuesta correcta: <strong>${question.type === 'multiple' ? question.options[question.correct] : question.answer}</strong>
+                `;
+            }
 
-            if (isCorrect) score++;
+            // Deshabilitar interacciones después de responder
+            document.querySelectorAll('.option').forEach(opt => opt.style.pointerEvents = 'none');
+            const input = document.getElementById('user-answer');
+            if (input) input.disabled = true;
         }
 
         function nextQuestion() {
             if (currentQuestion < questions.length - 1) {
                 currentQuestion++;
+                selectedOptionIndex = null;
                 loadQuestion();
             } else {
                 showResults();
             }
         }
 
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Título
+            doc.setFontSize(20);
+            doc.text('Resultados de la Prueba de Geometria', 20, 30);
+            
+            // Información general
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            const percentage = (score / questions.length * 100).toFixed(1);
+            
+            doc.setFontSize(14);
+            doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 50);
+            doc.text(`Duracion: ${duration} minutos`, 20, 60);
+            doc.text(`Puntuacion: ${score} de ${questions.length} (${percentage}%)`, 20, 70);
+            
+            // Análisis de habilidades espaciales
+            let analysisText = '';
+            if (percentage >= 90) analysisText = 'Dominio excepcional de conceptos geometricos y razonamiento espacial';
+            else if (percentage >= 80) analysisText = 'Solida comprension de formas, medidas y relaciones espaciales';
+            else if (percentage >= 70) analysisText = 'Base adecuada, requiere refuerzo en visualizacion espacial';
+            else if (percentage >= 60) analysisText = 'Conocimientos basicos, necesita mas practica con figuras 3D';
+            else analysisText = 'Requiere estudio intensivo de conceptos geometricos fundamentales';
+            
+            doc.setFontSize(12);
+            doc.text(`Analisis: ${analysisText}`, 20, 85);
+            
+            // Resultados por área geométrica
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            doc.setFontSize(16);
+            doc.text('Resultados por Area Geometrica:', 20, 110);
+            
+            let yPosition = 125;
+            doc.setFontSize(11);
+            Object.entries(categories).forEach(([category, stats]) => {
+                const categoryPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                doc.text(`${category}: ${stats.correct}/${stats.total} (${categoryPercentage}%)`, 25, yPosition);
+                yPosition += 8;
+            });
+            
+            // Recomendaciones específicas
+            yPosition += 15;
+            doc.setFontSize(14);
+            doc.text('Recomendaciones de Estudio:', 20, yPosition);
+            yPosition += 10;
+            
+            doc.setFontSize(10);
+            const recommendations = [];
+            Object.entries(categories).forEach(([category, stats]) => {
+                const percentage = (stats.correct / stats.total * 100);
+                if (percentage < 70) {
+                    let recommendation = '';
+                    switch(category) {
+                        case 'Figuras Básicas': recommendation = 'Practicar identificacion y propiedades de poligonos'; break;
+                        case 'Círculo': recommendation = 'Reforzar conceptos de radio, diametro y sector circular'; break;
+                        case 'Ángulos': recommendation = 'Ejercitar calculo de angulos complementarios y suplementarios'; break;
+                        case 'Perímetro': recommendation = 'Practicar formulas de perimetro para diferentes figuras'; break;
+                        case 'Figuras Tridimensionales': recommendation = 'Desarrollar visualizacion espacial de cuerpos 3D'; break;
+                        case 'Teorema de Pitágoras': recommendation = 'Reforzar aplicacion del teorema en triangulos rectangulos'; break;
+                        default: recommendation = `Reforzar: ${category}`;
+                    }
+                    recommendations.push(recommendation);
+                }
+            });
+            
+            if (recommendations.length === 0) {
+                doc.text('Excelente dominio en todas las areas geometricas.', 25, yPosition);
+                yPosition += 6;
+                doc.text('Sugerencia: Explorar geometria analitica y trigonometria.', 25, yPosition);
+            } else {
+                recommendations.forEach(rec => {
+                    doc.text(`• ${rec}`, 25, yPosition);
+                    yPosition += 6;
+                });
+            }
+            
+            // Respuestas detalladas
+            yPosition += 15;
+            doc.setFontSize(16);
+            doc.text('Revision Detallada:', 20, yPosition);
+            yPosition += 15;
+            
+            doc.setFontSize(9);
+            userAnswers.forEach((answer, index) => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 30;
+                }
+                
+                doc.text(`${index + 1}. ${answer.question.substring(0, 70)}...`, 20, yPosition);
+                yPosition += 6;
+                doc.text(`Tu respuesta: ${answer.userAnswer || 'Sin respuesta'}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Correcta: ${answer.correctAnswer}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Estado: ${answer.isCorrect ? 'CORRECTA' : 'INCORRECTA'}`, 25, yPosition);
+                yPosition += 12;
+            });
+            
+            // Descargar PDF
+            doc.save(`resultados-geometria-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
         function showResults() {
             const questionDiv = document.getElementById('questions');
             const percentage = (score / questions.length) * 100;
+            const endTime = new Date();
+            const duration = Math.round((endTime - startTime) / 1000 / 60);
+            
+            // Calcular estadísticas por categoría
+            const categories = {};
+            userAnswers.forEach(answer => {
+                if (!categories[answer.category]) {
+                    categories[answer.category] = { correct: 0, total: 0 };
+                }
+                categories[answer.category].total++;
+                if (answer.isCorrect) categories[answer.category].correct++;
+            });
+            
+            let message = '';
+            let emoji = '';
+            let analysis = '';
+            let spatialLevel = '';
+            
+            if (percentage >= 95) {
+                message = '¡Eres un maestro de la geometría! Visión espacial excepcional.';
+                emoji = '🏛️';
+                analysis = 'Tienes un dominio completo de formas, espacios y relaciones geométricas.';
+                spatialLevel = 'Nivel: Arquitecto Espacial';
+            } else if (percentage >= 85) {
+                message = '¡Excelente razonamiento espacial! Muy sólido.';
+                emoji = '📐';
+                analysis = 'Demuestras gran habilidad en visualización y cálculos geométricos.';
+                spatialLevel = 'Nivel: Geómetra Avanzado';
+            } else if (percentage >= 75) {
+                message = '¡Buena comprensión geométrica! Base fuerte.';
+                emoji = '📏';
+                analysis = 'Tienes fundamentos sólidos, algunos conceptos espaciales necesitan práctica.';
+                spatialLevel = 'Nivel: Dibujante Técnico';
+            } else if (percentage >= 65) {
+                message = 'Progreso aceptable. Enfócate en visualización espacial.';
+                emoji = '🔺';
+                analysis = 'Necesitas fortalecer la comprensión de formas tridimensionales.';
+                spatialLevel = 'Nivel: Estudiante de Formas';
+            } else {
+                message = 'La geometría requiere más práctica visual. ¡Persiste!';
+                emoji = '📚';
+                analysis = 'Es recomendable repasar conceptos básicos de figuras y medidas.';
+                spatialLevel = 'Nivel: Explorador de Espacios';
+            }
+
+            let categoryBreakdown = '';
+            Object.entries(categories).forEach(([category, stats]) => {
+                const catPercentage = (stats.correct / stats.total * 100).toFixed(1);
+                let indicator = '';
+                let indicatorClass = '';
+                
+                if (catPercentage >= 80) {
+                    indicator = '🟢 Dominado';
+                    indicatorClass = 'stat-high';
+                } else if (catPercentage >= 60) {
+                    indicator = '🟡 En desarrollo';
+                    indicatorClass = 'stat-medium';
+                } else {
+                    indicator = '🔴 Necesita práctica';
+                    indicatorClass = 'stat-low';
+                }
+                
+                categoryBreakdown += `
+                    <div class="breakdown-item">
+                        <span class="breakdown-category">${category}</span>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span class="breakdown-score">${stats.correct}/${stats.total} (${catPercentage}%)</span>
+                            <span style="font-size: 0.8rem; opacity: 0.8;">${indicator}</span>
+                        </div>
+                    </div>
+                `;
+            });
             
             questionDiv.innerHTML = `
-                <div class="question-card">
-                    <h2>Resultados Finales</h2>
-                    <p>Has completado la prueba de geometría.</p>
-                    <p>Puntuación: ${score} de ${questions.length} (${percentage.toFixed(1)}%)</p>
-                    <button class="button" onclick="location.reload()">Intentar de nuevo</button>
-                </div>
+                <article class="question-card results-card">
+                    <div class="category-badge">
+                        <i class="fas fa-trophy"></i>
+                        Análisis Geométrico Final
+                    </div>
+                    
+                    <div class="results-score">${percentage.toFixed(1)}%</div>
+                    
+                    <div class="results-message">
+                        <p><strong>${emoji} ${message}</strong></p>
+                        <p style="margin: 1rem 0; font-style: italic; color: var(--primary);">${spatialLevel}</p>
+                        <p style="margin: 1rem 0;">${analysis}</p>
+                        <p>Has respondido correctamente <strong>${score}</strong> de ${questions.length} preguntas.</p>
+                        <p>Tiempo empleado: <strong>${duration} minutos</strong>.</p>
+                    </div>
+
+                    <div class="results-breakdown">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-shapes"></i> Análisis por Área Geométrica
+                        </h3>
+                        ${categoryBreakdown}
+                    </div>
+                    
+                    <div class="results-actions">
+                        <button class="button" onclick="location.reload()">
+                            <i class="fas fa-redo"></i>
+                            Nueva Exploración
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-download"></i>
+                            Descargar Análisis
+                        </button>
+                        <button class="button button-outline" onclick="showDetailedReview()">
+                            <i class="fas fa-eye"></i>
+                            Revisión Visual
+                        </button>
+                    </div>
+                </article>
             `;
 
             document.getElementById('next-button').style.display = 'none';
+            document.getElementById('current-score').textContent = score;
         }
 
-        // Iniciar prueba
-        loadQuestion();
+        function showDetailedReview() {
+            const questionDiv = document.getElementById('questions');
+            
+            let reviewHtml = `
+                <article class="question-card">
+                    <div class="category-badge">
+                        <i class="fas fa-search-plus"></i>
+                        Revisión Visual Detallada
+                    </div>
+                    <h2 class="question-text">Análisis Completo de Formas y Espacios</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        Revisa cada pregunta visual para fortalecer tu comprensión geométrica.
+                    </p>
+            `;
+
+            userAnswers.forEach((answer, index) => {
+                const statusIcon = answer.isCorrect ? 'fas fa-check-circle' : 'fas fa-times-circle';
+                const statusColor = answer.isCorrect ? 'var(--success)' : 'var(--danger)';
+                const bgColor = answer.isCorrect ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)';
+                
+                reviewHtml += `
+                    <div style="background: ${bgColor}; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; border-left: 4px solid ${statusColor};">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                            <i class="${statusIcon}" style="color: ${statusColor}; font-size: 1.2rem;"></i>
+                            <strong style="color: var(--primary);">Pregunta ${index + 1}</strong>
+                            <span style="background: rgba(8,145,178,0.2); padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.75rem; color: var(--primary);">
+                                ${answer.category}
+                            </span>
+                        </div>
+                        <p style="margin-bottom: 0.75rem; color: var(--text-secondary); font-style: italic;">${answer.question}</p>
+                        <div style="display: grid; gap: 0.5rem; font-family: 'JetBrains Mono', monospace;">
+                            <p><strong style="color: var(--text-primary);">Tu respuesta:</strong> 
+                               <span style="color: ${statusColor};">${answer.userAnswer || 'Sin respuesta'}</span></p>
+                            <p><strong style="color: var(--text-primary);">Respuesta correcta:</strong> 
+                               <span style="color: var(--success);">${answer.correctAnswer}</span></p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            reviewHtml += `
+                    <div class="results-actions" style="margin-top: 3rem;">
+                        <button class="button" onclick="showResults()">
+                            <i class="fas fa-arrow-left"></i>
+                            Volver a Resultados
+                        </button>
+                        <button class="button button-secondary" onclick="generatePDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            Exportar Análisis
+                        </button>
+                    </div>
+                </article>
+            `;
+
+            questionDiv.innerHTML = reviewHtml;
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            startTime = new Date();
+            loadQuestion();
+        });
+
+        // Prevenir el envío del formulario por defecto
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
+</html>
