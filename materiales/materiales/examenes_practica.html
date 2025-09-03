@@ -3,183 +3,483 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exámenes de Práctica</title>
+    <title>Exámenes de Práctica - Matemáticas Interactivas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* Estilos generales */
+        :root {
+            --primary-color: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --background-overlay: rgba(15, 23, 42, 0.85);
+            --card-background: rgba(30, 41, 59, 0.7);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: rgba(148, 163, 184, 0.2);
+            --shadow-primary: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-hover: 0 35px 60px -12px rgba(103, 126, 234, 0.25);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            color: #ffffff;
-            background: url('fondo.png') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        html {
+            scroll-behavior: smooth;
         }
 
-        /* Efecto de fondo oscuro */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            position: relative;
+            overflow-x: hidden;
+        }
+
         body::before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                var(--background-overlay);
             z-index: -1;
         }
 
-        /* Encabezado */
+        /* Header */
         header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(30, 41, 59, 0.8);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 1rem;
             text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
-            border-bottom: 1px solid #555;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(103, 126, 234, 0.3);
         }
 
         header p {
-            font-size: 1.1em;
-            font-weight: 300;
-        }
-
-        /* Main */
-        main {
-            padding: 40px;
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-top: 20px;
-            color: #ddd;
-            text-align: center;
-        }
-
-        main p {
-            font-size: 1.2em;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
             line-height: 1.6;
-            margin-bottom: 20px;
         }
 
-        /* Contenedor de botones */
-        .buttons-container {
+        /* Main Content */
+        main {
+            padding: 2rem 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
             display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
+            flex-direction: column;
+            gap: 2rem;
         }
 
-        /* Botones */
-        .btn {
-            display: inline-block;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            text-decoration: none;
+        .exam-card {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-primary);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+
+        .exam-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(103, 126, 234, 0.4);
+        }
+
+        .exam-description {
             text-align: center;
         }
 
-        .btn-iniciar {
-            background-color: #4a90e2;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        .exam-description h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
         }
 
-        .btn-iniciar:hover {
-            background-color: #357abd;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+        .exam-description h2::before {
+            content: "📚";
+            font-size: 2rem;
+        }
+
+        .exam-description > p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .exam-features {
+            display: grid;
+            gap: 1rem;
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(103, 126, 234, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(103, 126, 234, 0.2);
+            transition: var(--transition);
+        }
+
+        .feature-item:hover {
+            background: rgba(103, 126, 234, 0.15);
+            border-color: rgba(103, 126, 234, 0.3);
+            transform: translateX(8px);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(103, 126, 234, 0.3);
+        }
+
+        .feature-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Action Button */
+        .action-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(103, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(103, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
         /* Footer */
         footer {
-            margin-top: auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            width: 100%;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(30, 41, 59, 0.8);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1rem;
             text-align: center;
-            font-size: 0.9em;
-            border-top: 1px solid #555;
+            color: var(--text-muted);
+            margin-top: auto;
         }
 
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        footer p {
+            font-size: 0.9rem;
         }
 
-        header, main, footer {
-            animation: fadeIn 1.5s ease-in;
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* Nuevo estilo para la descripción de exámenes */
-        .exam-description {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
+        .exam-card {
+            animation: fadeInUp 0.8s ease-out;
         }
 
-        .exam-features {
-            text-align: left;
-            margin: 20px auto;
-            max-width: 600px;
+        header {
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .exam-features li {
-            margin: 10px 0;
-            padding-left: 20px;
-            position: relative;
+        footer {
+            animation: fadeInUp 1s ease-out;
         }
 
-        .exam-features li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #4a90e2;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            :root {
+                --border-radius: 12px;
+            }
+
+            header, main, footer {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .exam-card {
+                padding: 1.5rem;
+            }
+
+            .feature-item {
+                padding: 0.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .btn-primary {
+                padding: 0.875rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus states */
+        .btn-primary:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Exámenes de Práctica</h1>
-        <p>Accede a exámenes de práctica para evaluar tus conocimientos y prepararte para las pruebas.</p>
+        <p>Fortalece tus conocimientos matemáticos con nuestros exámenes interactivos diseñados para tu éxito académico</p>
     </header>
+
     <main>
-        <div class="exam-description">
-            <p>Bienvenido a nuestra sección de exámenes de práctica. Aquí encontrarás una colección completa de ejercicios 
-            diseñados para fortalecer tus conocimientos en matemáticas.</p>
-            
+        <section class="exam-card">
+            <div class="exam-description">
+                <h2>Módulos de Matemáticas</h2>
+                <p>Accede a nuestra completa colección de exámenes de práctica, diseñados específicamente para evaluar y fortalecer tus conocimientos matemáticos a través de ejercicios interactivos y evaluaciones personalizadas.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">6+</span>
+                        <div class="stat-label">Examenes Disponibles</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">Evaluación</span>
+                        <div class="stat-label">Mide tu conocimiento en tiempo real</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">100%</span>
+                        <div class="stat-label">Gratuito</div>
+                    </div>
+                </div>
+            </div>
+
             <ul class="exam-features">
-                <li>Ejercicios de Trigonometría con diferentes niveles de dificultad</li>
-                <li>Problemas de Álgebra para practicar y mejorar tus habilidades</li>
-                <li>Evaluación instantánea de tus respuestas</li>
-                <li>Interfaz intuitiva y fácil de usar</li>
+                <li class="feature-item">
+                    <div class="feature-icon">📐</div>
+                    <span class="feature-text">Ejercicios de Trigonometría con múltiples niveles de dificultad progresiva</span>
+                </li>
+                <li class="feature-item">
+                    <div class="feature-icon">🔢</div>
+                    <span class="feature-text">Problemas de Álgebra para desarrollar y perfeccionar tus habilidades</span>
+                </li>
+                <li class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <span class="feature-text">Sistema de evaluación instantánea con retroalimentación detallada</span>
+                </li>
+                <li class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <span class="feature-text">Interfaz moderna, intuitiva y optimizada para todos los dispositivos</span>
+                </li>
             </ul>
-        </div>
-        
-        <div class="buttons-container">
-            <a href="examenes.html" class="btn btn-iniciar">Comenzar Exámenes</a>
-        </div>
+
+            <div class="action-container">
+                <a href="examenes.html" class="btn-primary">
+                    <span>🚀</span>
+                    Comenzar Exámenes
+                </a>
+            </div>
+        </section>
     </main>
+
     <footer>
-        <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+        <p>&copy; 2025 Yonatan Guerrero Soriano - Plataforma de Matemáticas Interactivas</p>
     </footer>
 </body>
 </html>

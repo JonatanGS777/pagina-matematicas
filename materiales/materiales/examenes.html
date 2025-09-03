@@ -3,17 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exámenes de Matemáticas</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Exámenes de Matemáticas - Plataforma Interactiva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --background-light: #f8f9fa;
-            --text-dark: #2b2d42;
-            --success-color: #4cc9f0;
-            --card-shadow: 0 10px 20px rgba(67, 97, 238, 0.15);
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            
+            --primary-color: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary-color: #764ba2;
+            --accent-color: #4facfe;
+            --success-color: #43e97b;
+            
+            --background-overlay: rgba(15, 23, 42, 0.85);
+            --card-background: rgba(255, 255, 255, 0.95);
+            --card-background-dark: rgba(30, 41, 59, 0.8);
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-light: #f7fafc;
+            --text-muted: #718096;
+            
+            --border-color: rgba(226, 232, 240, 0.8);
+            --border-hover: rgba(103, 126, 234, 0.3);
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 25px rgba(103, 126, 234, 0.15);
+            --shadow-lg: 0 25px 50px rgba(103, 126, 234, 0.25);
+            --shadow-hover: 0 20px 40px rgba(103, 126, 234, 0.3);
+            
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -22,164 +48,380 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4361ee 0%, #4895ef 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-gradient);
             min-height: 100vh;
-            color: var(--text-dark);
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(240, 147, 251, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(79, 172, 254, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(103, 126, 234, 0.2) 0%, transparent 50%),
+                var(--background-overlay);
+            z-index: -1;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2rem 1rem;
         }
 
+        /* Header Styles */
         .header {
             text-align: center;
-            color: white;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
+            color: var(--text-light);
+            margin-bottom: 4rem;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, #f093fb, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 8px 32px rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
         }
 
         .header p {
-            font-size: 1.2rem;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
             opacity: 0.9;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 300;
         }
 
+        .header i {
+            margin-right: 1rem;
+            font-size: 0.9em;
+            filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.2));
+        }
+
+        /* Exam Sections Grid */
         .exam-sections {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
         }
 
         .exam-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--card-shadow);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exam-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .exam-card::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(103, 126, 234, 0.05) 0%, transparent 70%);
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
         }
 
         .exam-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.25);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-hover);
         }
 
+        .exam-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Exam Title */
         .exam-title {
-            color: var(--text-dark);
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .exam-title i {
+            font-size: 2rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(103, 126, 234, 0.2));
+        }
+
+        /* Exam List */
+        .exam-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .exam-item {
+            background: linear-gradient(135deg, #f8fafc, #edf2f7);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .exam-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(103, 126, 234, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .exam-item i {
+            font-size: 1.4rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: var(--transition);
+        }
+
+        .exam-item:hover {
+            background: linear-gradient(135deg, #ffffff, #f7fafc);
+            box-shadow: var(--shadow-md);
+            transform: translateX(8px) scale(1.02);
+            border-color: var(--border-hover);
+        }
+
+        .exam-item:hover::before {
+            left: 100%;
+        }
+
+        .exam-item:hover i {
+            transform: scale(1.1);
+            filter: drop-shadow(0 4px 8px rgba(103, 126, 234, 0.3));
+        }
+
+        /* Tooltip Styles */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            padding: 0.75rem 1rem;
+            background: var(--text-primary);
+            color: var(--text-light);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            transition: var(--transition-fast);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tooltip::before {
+            content: "";
+            position: absolute;
+            bottom: calc(100% + 4px);
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid var(--text-primary);
+            opacity: 0;
+            transition: var(--transition-fast);
+        }
+
+        .tooltip:hover::after,
+        .tooltip:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* Quote Section */
+        .quote-section {
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-light);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: var(--card-background-dark);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .quote-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--secondary-gradient);
+        }
+
+        .quote-section:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .quote-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 4px 12px rgba(79, 172, 254, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .quote-text {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 300;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            font-style: italic;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quote-author {
+            font-size: 1.25rem;
+            font-weight: 500;
+            opacity: 0.9;
+            color: var(--text-light);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
         }
 
-        .exam-title i {
-            color: var(--primary-color);
+        .quote-author i {
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .exam-list {
-            list-style: none;
-        }
-
-        .exam-item {
-            background: var(--background-light);
-            margin: 1rem 0;
-            padding: 1.2rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* Progress Indicators */
+        .progress-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
             display: flex;
             align-items: center;
-            gap: 1rem;
-            text-decoration: none;
-            color: var(--text-dark);
-        }
-
-        .exam-item i {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        .exam-item:hover {
-            background: white;
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.15);
-            transform: translateX(10px);
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip:hover::before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0.5rem 1rem;
-            background: var(--text-dark);
-            color: white;
-            border-radius: 5px;
+            justify-content: center;
             font-size: 0.875rem;
-            white-space: nowrap;
-            z-index: 1;
-        }
-
-        .quote-section {
-            margin-top: 4rem;
-            padding: 2rem;
-            text-align: center;
+            font-weight: 600;
             color: white;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transform: translateY(0);
-            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-sm);
         }
 
-        .quote-section:hover {
-            transform: translateY(-5px);
-        }
-
-        .quote-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .quote-text {
-            font-size: 2rem;
-            font-weight: 300;
-            line-height: 1.4;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .quote-author {
-            font-size: 1.2rem;
-            font-style: italic;
-            opacity: 0.9;
-        }
-
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -187,8 +429,126 @@
             }
         }
 
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         .animate-fade-in {
-            animation: fadeInUp 1s ease-out;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .exam-card:nth-child(1) {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .exam-card:nth-child(2) {
+            animation: slideInLeft 0.8s ease-out 0.2s both;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .exam-sections {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .exam-card {
+                padding: 2rem;
+            }
+
+            .header {
+                padding: 2rem 0;
+                margin-bottom: 3rem;
+            }
+
+            .quote-section {
+                padding: 2rem 1.5rem;
+                margin-top: 3rem;
+            }
+
+            .exam-item {
+                padding: 1.25rem;
+            }
+
+            .tooltip::after {
+                font-size: 0.8rem;
+                padding: 0.5rem 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .exam-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .exam-card {
+                padding: 1.5rem;
+            }
+
+            .exam-title {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .exam-item {
+                padding: 1rem;
+                gap: 0.75rem;
+            }
+
+            .quote-text {
+                font-size: 1.5rem;
+            }
+
+            .quote-author {
+                font-size: 1rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus States */
+        .exam-item:focus-visible {
+            outline: 3px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-gradient);
         }
     </style>
 </head>
@@ -196,62 +556,64 @@
     <div class="container">
         <header class="header">
             <h1><i class="fas fa-graduation-cap"></i> Exámenes de Matemáticas</h1>
-            <p>Selecciona una sección para comenzar tu práctica</p>
+            <p>Explora nuestras secciones especializadas y fortalece tus conocimientos matemáticos</p>
         </header>
 
         <div class="exam-sections">
             <div class="exam-card">
+                <div class="progress-indicator">6</div>
                 <h2 class="exam-title">
                     <i class="fas fa-calculator"></i>
                     Trigonometría
                 </h2>
                 <ul class="exam-list">
-                    <a href="trigonometria-basica.html" class="exam-item tooltip" data-tooltip="Duración: 30 min">
+                    <a href="trigonometria-basica.html" class="exam-item tooltip" data-tooltip="⏱️ Duración: 30 minutos • 🎯 Nivel: Básico">
                         <i class="fas fa-wave-square"></i>
                         Funciones Trigonométricas Básicas
                     </a>
-                    <a href="identidades-trigonometricas.html" class="exam-item tooltip" data-tooltip="Duración: 45 min">
+                    <a href="identidades-trigonometricas.html" class="exam-item tooltip" data-tooltip="⏱️ Duración: 45 minutos • 🎯 Nivel: Intermedio">
                         <i class="fas fa-square-root-alt"></i>
                         Identidades Trigonométricas
                     </a>
-                    <a href="resolucion-triangulos.html" class="exam-item tooltip" data-tooltip="Duración: 40 min">
-                        <i class="fas fa-shapes"></i>
+                    <a href="resolucion-triangulos.html" class="exam-item tooltip" data-tooltip="⏱️ Duración: 40 minutos • 🎯 Nivel: Avanzado">
+                        <i class="fas fa-draw-polygon"></i>
                         Resolución de Triángulos
                     </a>
                 </ul>
             </div>
 
             <div class="exam-card">
+                <div class="progress-indicator">9</div>
                 <h2 class="exam-title">
                     <i class="fas fa-superscript"></i>
                     Álgebra
                 </h2>
                 <ul class="exam-list">
-                    <a href="ecuaciones-lineales.html" class="exam-item tooltip" data-tooltip="Duración: 25 min">
+                    <a href="ecuaciones-lineales.html" class="exam-item tooltip" data-tooltip="⏱️ Duración: 25 minutos • 🎯 Nivel: Básico">
                         <i class="fas fa-equals"></i>
                         Ecuaciones Lineales
                     </a>
-                    <a href="ecuaciones-cuadraticas.html" class="exam-item tooltip" data-tooltip="Duración: 35 min">
-                        <i class="fas fa-function"></i>
+                    <a href="ecuaciones-cuadraticas.html" class="exam-item tooltip" data-tooltip="⏱️ Duración: 35 minutos • 🎯 Nivel: Intermedio">
+                        <i class="fas fa-square"></i>
                         Ecuaciones Cuadráticas
                     </a>
-                    <a href="sistemas-ecuaciones.html" class="exam-item tooltip" data-tooltip="Duración: 45 min">
-                        <i class="fas fa-infinity"></i>
+                    <a href="sistemas-ecuaciones.html" class="exam-item tooltip" data-tooltip="⏱️ Duración: 45 minutos • 🎯 Nivel: Avanzado">
+                        <i class="fas fa-project-diagram"></i>
                         Sistemas de Ecuaciones
                     </a>
                 </ul>
             </div>
         </div>
 
-        <div class="quote-section animate-fade-in">
+        <section class="quote-section animate-fade-in">
             <i class="fas fa-quote-right quote-icon"></i>
             <p class="quote-text">
                 "La matemática es el alfabeto con el cual Dios ha escrito el universo"
             </p>
             <p class="quote-author">
-                - Galileo Galilei <i class="fas fa-telescope" style="margin-left: 0.5rem;"></i>
+                — Galileo Galilei <i class="fas fa-telescope"></i>
             </p>
-        </div>
+        </section>
     </div>
 </body>
 </html>
