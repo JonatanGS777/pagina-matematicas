@@ -2173,8 +2173,14 @@
         // Iniciar cronómetro (solo Profesor) — Supabase
         async function startCompetitionTimer() {
             const mgr = window.competitionManager;
-            if (!mgr || !mgr.currentCompetition) {
-                alert('⚠️ Carga la página antes de iniciar el cronómetro.');
+            if (!mgr) return;
+
+            // Si aún no se cargó la competencia, intentar ahora
+            if (!mgr.currentCompetition) {
+                await mgr.loadCompetitionState();
+            }
+            if (!mgr.currentCompetition) {
+                alert('⚠️ No se pudo conectar con Supabase. Revisa tu conexión y recarga la página.');
                 return;
             }
 
