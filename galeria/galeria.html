@@ -131,8 +131,10 @@
             position: fixed;
             top: 0;
             width: 100%;
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
             background: var(--glass);
+            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
             border-bottom: 1px solid var(--glass-border);
             padding: 1rem 0;
             z-index: 1000;
@@ -140,8 +142,9 @@
         }
 
         .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(240, 238, 248, 0.92);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
         }
 
         .nav-container {
@@ -257,9 +260,10 @@
         }
 
         .hero h1 {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Syne', sans-serif;
             font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: -0.03em;
             color: var(--white);
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
