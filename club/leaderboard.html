@@ -910,6 +910,7 @@
                 this.timeRemaining   = 7200;
                 this.timerInterval   = null;
                 this.realtimeChannel = null;
+                this.recentActivity  = [];
                 this.areas = ['algebra', 'geometry', 'calculus', 'trigonometry', 'mental-calc', 'puzzles'];
                 this.areaNames = {
                     'algebra': 'Álgebra', 'geometry': 'Geometría', 'calculus': 'Cálculo',
@@ -1132,8 +1133,8 @@
                         <div class="participant-score-section">
                             <div class="participant-total-score">${participant.totalScore}</div>
                             <div class="score-breakdown">
-                                ${this.areas.map(area => 
-                                    `<span class="area-score ${area}">${participant.scores[area] || 0}</span>`
+                                ${this.areas.map(area =>
+                                    `<span class="area-score ${area}">${(participant.scores || {})[area] || 0}</span>`
                                 ).join('')}
                             </div>
                         </div>
@@ -1222,7 +1223,7 @@
 
                 this.areas.forEach(area => {
                     const areaScores = this.participants
-                        .map(p => p.scores[area] || 0)
+                        .map(p => (p.scores || {})[area] || 0)
                         .filter(score => score > 0);
                     
                     const average = areaScores.length > 0 ? 
