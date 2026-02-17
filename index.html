@@ -2562,8 +2562,8 @@
 class SupabaseAnalytics {
     constructor() {
         // ✅ CREDENCIALES CONFIGURADAS
-        this.SUPABASE_URL = 'https://klufipkufdsgxgoxexoo.supabase.co';
-        this.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtsdWZpcGt1ZmRzZ3hnb3hleG9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ5NDk1MzYsImV4cCI6MjA3MDUyNTUzNn0.4KZK2y1qo1IhYzvgF5pPF0y-WgfYqE6bla3m3p3DqLs';
+        this.SUPABASE_URL = 'https://mywwtkpcswisdwrfqzch.supabase.co';
+        this.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3d0a3Bjc3dpc2R3cmZxemNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyOTQzOTgsImV4cCI6MjA4Njg3MDM5OH0.XEzvjC7PmDG6uEhiYzo8HgK564WXKUi94LNHaS6jkQs';
         
         this.supabase = null;
         this.visitorId = null;
@@ -2749,7 +2749,7 @@ class SupabaseAnalytics {
                 .from('analytics')
                 .select('*')
                 .eq('page_slug', this.currentPage) // 🔄 DINÁMICO
-                .single();
+                .maybeSingle(); // ✅ maybeSingle: no lanza error si no existe fila
 
             if (analyticsError) throw analyticsError;
 
@@ -2760,7 +2760,7 @@ class SupabaseAnalytics {
                 .select('*')
                 .eq('date', today)
                 .eq('page_slug', this.currentPage) // 🔄 DINÁMICO
-                .single();
+                .maybeSingle(); // ✅ maybeSingle: no lanza error si no existe fila hoy
 
             // Usuarios activos (últimos 15 minutos)
             const { data: activeUsers, error: activeError } = await this.supabase
@@ -2802,7 +2802,7 @@ class SupabaseAnalytics {
             this.animateCounter('totalVisitors', newData.visitor_count);
             this.animateCounter('pageViews', newData.page_views);
             this.animateCounter('activeNow', newData.active_users);
-            this.animateCounter('avgSession', parseFloat(newData.avg_session_time).toFixed(1));
+            this.animateCounter('avgSession', parseFloat(newData.avg_session_time || 0).toFixed(1));
             
             // 🆕 AGREGAR VISITAS HOY desde daily_visits
             if (newData.daily_visits !== undefined) {
@@ -3046,14 +3046,14 @@ class SupabaseAnalytics {
     }
 
     updateUI(data) {
-        this.animateCounter('totalVisitors', data.totalVisitors);
-        this.animateCounter('activeNow', data.activeNow);
-        this.animateCounter('visitsToday', data.visitsToday);
-        this.animateCounter('pageViews', data.pageViews);
-        this.animateCounter('avgSession', data.avgSession.toFixed(1));
-        
-        document.getElementById('dailyGrowth').textContent = data.dailyGrowth.toFixed(1);
-        document.getElementById('todayChange').textContent = `+${data.todayChange}`;
+        this.animateCounter('totalVisitors', data.totalVisitors || 0);
+        this.animateCounter('activeNow', data.activeNow || 0);
+        this.animateCounter('visitsToday', data.visitsToday || 0);
+        this.animateCounter('pageViews', data.pageViews || 0);
+        this.animateCounter('avgSession', parseFloat(data.avgSession || 0).toFixed(1));
+
+        document.getElementById('dailyGrowth').textContent = parseFloat(data.dailyGrowth || 0).toFixed(1);
+        document.getElementById('todayChange').textContent = `+${data.todayChange || 0}`;
         
         this.updateLastUpdateTime();
         this.updateProgressBar();
