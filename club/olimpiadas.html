@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ==================== CSS Variables ==================== */
         :root {
@@ -1239,6 +1240,332 @@
                 scroll-behavior: auto !important;
             }
         }
+
+        /* ==================== Modal de Registro Olimpiada ==================== */
+        .olimpiad-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9000;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4);
+        }
+
+        .olimpiad-modal-overlay.active {
+            display: flex;
+        }
+
+        .olimpiad-modal {
+            background: var(--color-white);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-8);
+            max-width: 520px;
+            width: 100%;
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .olimpiad-modal__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
+
+        .olimpiad-modal__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            background: var(--gradient-olympic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .olimpiad-modal__close {
+            background: var(--color-gray-100);
+            border: none;
+            border-radius: var(--radius-full);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--color-gray-600);
+            font-size: var(--font-size-lg);
+            transition: var(--transition-base);
+        }
+
+        .olimpiad-modal__close:hover {
+            background: var(--color-gray-200);
+        }
+
+        .olimpiad-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-5);
+        }
+
+        .olimpiad-form__group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .olimpiad-form__label {
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            color: var(--color-gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .olimpiad-form__input,
+        .olimpiad-form__select {
+            padding: var(--space-3) var(--space-4);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-xl);
+            font-family: inherit;
+            font-size: var(--font-size-base);
+            color: var(--color-gray-900);
+            background: var(--color-white);
+            transition: var(--transition-base);
+            outline: none;
+            width: 100%;
+        }
+
+        .olimpiad-form__input:focus,
+        .olimpiad-form__select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .olimpiad-form__actions {
+            display: flex;
+            gap: var(--space-4);
+            margin-top: var(--space-2);
+        }
+
+        .olimpiad-form__btn {
+            flex: 1;
+            padding: var(--space-4);
+            border: none;
+            border-radius: var(--radius-full);
+            font-family: inherit;
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .olimpiad-form__btn--cancel {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+        }
+
+        .olimpiad-form__btn--cancel:hover {
+            background: var(--color-gray-200);
+        }
+
+        .olimpiad-form__btn--submit {
+            background: var(--gradient-olympic);
+            color: var(--color-white);
+        }
+
+        .olimpiad-form__btn--submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .olimpiad-form__btn--submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .olimpiad-form__message {
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-xl);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            display: none;
+        }
+
+        .olimpiad-form__message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: block;
+        }
+
+        .olimpiad-form__message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--color-danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            display: block;
+        }
+
+        /* ==================== Sección de Inscritos ==================== */
+        .inscritos-section {
+            padding: var(--space-20) 0;
+            background: var(--color-white);
+        }
+
+        .inscritos-counters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--space-6);
+            margin-bottom: var(--space-12);
+        }
+
+        .inscritos-counter {
+            background: var(--color-gray-50);
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6) var(--space-8);
+            text-align: center;
+            min-width: 140px;
+            transition: var(--transition-base);
+        }
+
+        .inscritos-counter--total    { border-color: var(--color-primary);   background: rgba(37,99,235,0.05); }
+        .inscritos-counter--novato   { border-color: var(--color-success);   background: rgba(16,185,129,0.05); }
+        .inscritos-counter--intermedia { border-color: var(--color-accent);  background: rgba(245,158,11,0.05); }
+        .inscritos-counter--avanzada { border-color: var(--color-secondary); background: rgba(124,58,237,0.05); }
+
+        .inscritos-counter__number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: var(--space-2);
+        }
+
+        .inscritos-counter--total    .inscritos-counter__number { color: var(--color-primary); }
+        .inscritos-counter--novato   .inscritos-counter__number { color: var(--color-success); }
+        .inscritos-counter--intermedia .inscritos-counter__number { color: var(--color-accent); }
+        .inscritos-counter--avanzada .inscritos-counter__number { color: var(--color-secondary); }
+
+        .inscritos-counter__label {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .inscritos-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-8);
+        }
+
+        .inscritos-category {
+            background: var(--color-gray-50);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            border: 1px solid var(--color-gray-200);
+        }
+
+        .inscritos-category__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-4);
+            border-bottom: 2px solid var(--color-gray-200);
+        }
+
+        .inscritos-category__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .inscritos-category--novato    .inscritos-category__title { color: var(--color-success); }
+        .inscritos-category--intermedia .inscritos-category__title { color: var(--color-accent); }
+        .inscritos-category--avanzada  .inscritos-category__title { color: var(--color-secondary); }
+
+        .inscritos-category__count {
+            background: var(--color-gray-200);
+            color: var(--color-gray-700);
+            border-radius: var(--radius-full);
+            padding: var(--space-1) var(--space-3);
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+        }
+
+        .inscritos-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .inscrito-card {
+            background: var(--color-white);
+            border-radius: var(--radius-xl);
+            padding: var(--space-4);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-gray-100);
+            transition: var(--transition-base);
+        }
+
+        .inscrito-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(4px);
+        }
+
+        .inscrito-card__name {
+            font-weight: 700;
+            color: var(--color-gray-900);
+            margin-bottom: var(--space-1);
+        }
+
+        .inscrito-card__details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-3);
+            font-size: var(--font-size-xs);
+            color: var(--color-gray-500);
+        }
+
+        .inscrito-card__detail {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .inscritos-empty {
+            text-align: center;
+            padding: var(--space-8);
+            color: var(--color-gray-400);
+            font-style: italic;
+        }
+
+        .inscritos-loading {
+            text-align: center;
+            padding: var(--space-12);
+            color: var(--color-gray-500);
+        }
+
+        @media (max-width: 768px) {
+            .inscritos-counters { gap: var(--space-4); }
+            .inscritos-counter { min-width: 120px; padding: var(--space-4) var(--space-5); }
+            .inscritos-counter__number { font-size: var(--font-size-3xl); }
+            .olimpiad-form__actions { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -1609,15 +1936,144 @@
                             Únete oficialmente a nuestro Club de Matemáticas y registra tu participación en las olimpiadas. 
                             Completa tu registro para formar parte de nuestra comunidad matemática.
                         </p>
-                        <a href="registro.html" class="cta__button">
+                        <button onclick="olimpiadasRegistro.openModal()" class="cta__button" style="border:none;">
                             <i class="fas fa-user-plus"></i>
                             <span>Registrarse Ahora</span>
-                        </a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Inscritos Section -->
+        <section class="inscritos-section" id="inscritosSection">
+            <div class="container">
+                <div class="section__header">
+                    <h2 class="section__title fade-in">Participantes Inscritos</h2>
+                    <p class="section__subtitle fade-in">Lista en tiempo real de estudiantes registrados por categoría.</p>
+                </div>
+
+                <!-- Contadores -->
+                <div class="inscritos-counters" id="inscritosCounters">
+                    <div class="inscritos-counter inscritos-counter--total">
+                        <div class="inscritos-counter__number" id="countTotal">0</div>
+                        <div class="inscritos-counter__label">Total</div>
+                    </div>
+                    <div class="inscritos-counter inscritos-counter--novato">
+                        <div class="inscritos-counter__number" id="countNovato">0</div>
+                        <div class="inscritos-counter__label">Novato</div>
+                    </div>
+                    <div class="inscritos-counter inscritos-counter--intermedia">
+                        <div class="inscritos-counter__number" id="countIntermedia">0</div>
+                        <div class="inscritos-counter__label">Intermedia</div>
+                    </div>
+                    <div class="inscritos-counter inscritos-counter--avanzada">
+                        <div class="inscritos-counter__number" id="countAvanzada">0</div>
+                        <div class="inscritos-counter__label">Avanzada</div>
+                    </div>
+                </div>
+
+                <!-- Listas por categoría -->
+                <div class="inscritos-categories" id="inscritosCategories">
+                    <div class="inscritos-category inscritos-category--novato">
+                        <div class="inscritos-category__header">
+                            <h3 class="inscritos-category__title">🌟 Novato</h3>
+                            <span class="inscritos-category__count" id="badgeNovato">0</span>
+                        </div>
+                        <div class="inscritos-list" id="listNovato">
+                            <div class="inscritos-empty">Cargando...</div>
+                        </div>
+                    </div>
+
+                    <div class="inscritos-category inscritos-category--intermedia">
+                        <div class="inscritos-category__header">
+                            <h3 class="inscritos-category__title">🚀 Intermedia</h3>
+                            <span class="inscritos-category__count" id="badgeIntermedia">0</span>
+                        </div>
+                        <div class="inscritos-list" id="listIntermedia">
+                            <div class="inscritos-empty">Cargando...</div>
+                        </div>
+                    </div>
+
+                    <div class="inscritos-category inscritos-category--avanzada">
+                        <div class="inscritos-category__header">
+                            <h3 class="inscritos-category__title">💎 Avanzada</h3>
+                            <span class="inscritos-category__count" id="badgeAvanzada">0</span>
+                        </div>
+                        <div class="inscritos-list" id="listAvanzada">
+                            <div class="inscritos-empty">Cargando...</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Modal de Registro Olimpiada -->
+    <div class="olimpiad-modal-overlay" id="olimpiadModalOverlay">
+        <div class="olimpiad-modal" role="dialog" aria-modal="true" aria-labelledby="olimpiadModalTitle">
+            <div class="olimpiad-modal__header">
+                <h2 class="olimpiad-modal__title" id="olimpiadModalTitle">
+                    <i class="fas fa-trophy"></i> Inscribirse a las Olimpiadas
+                </h2>
+                <button class="olimpiad-modal__close" onclick="olimpiadasRegistro.closeModal()" aria-label="Cerrar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="olimpiadFormMessage" class="olimpiad-form__message"></div>
+
+            <form class="olimpiad-form" id="olimpiadForm" onsubmit="olimpiadasRegistro.submitRegistration(event)">
+                <div class="olimpiad-form__group">
+                    <label class="olimpiad-form__label" for="fieldName">Nombre completo</label>
+                    <input class="olimpiad-form__input" type="text" id="fieldName" required
+                           placeholder="Tu nombre y apellido" autocomplete="name">
+                </div>
+
+                <div class="olimpiad-form__group">
+                    <label class="olimpiad-form__label" for="fieldSchool">Escuela</label>
+                    <input class="olimpiad-form__input" type="text" id="fieldSchool" required
+                           placeholder="Nombre de tu escuela" autocomplete="organization">
+                </div>
+
+                <div class="olimpiad-form__group">
+                    <label class="olimpiad-form__label" for="fieldCategory">Categoría</label>
+                    <select class="olimpiad-form__select" id="fieldCategory" required>
+                        <option value="">Selecciona tu categoría</option>
+                        <option value="novato">🌟 Novato — Para nuevos integrantes del club</option>
+                        <option value="intermedia">🚀 Intermedia — Para miembros con experiencia</option>
+                        <option value="avanzada">💎 Avanzada — Para veteranos del club</option>
+                    </select>
+                </div>
+
+                <div class="olimpiad-form__group">
+                    <label class="olimpiad-form__label" for="fieldGrade">Grado escolar</label>
+                    <select class="olimpiad-form__select" id="fieldGrade" required>
+                        <option value="">Selecciona tu grado</option>
+                        <option value="9no">9no grado</option>
+                        <option value="10mo">10mo grado</option>
+                        <option value="11mo">11mo grado</option>
+                        <option value="12mo">12mo grado</option>
+                    </select>
+                </div>
+
+                <div class="olimpiad-form__group">
+                    <label class="olimpiad-form__label" for="fieldStudentNumber">Número de estudiante</label>
+                    <input class="olimpiad-form__input" type="text" id="fieldStudentNumber" required
+                           placeholder="Tu número de estudiante">
+                </div>
+
+                <div class="olimpiad-form__actions">
+                    <button type="button" class="olimpiad-form__btn olimpiad-form__btn--cancel"
+                            onclick="olimpiadasRegistro.closeModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="olimpiad-form__btn olimpiad-form__btn--submit" id="submitBtn">
+                        <i class="fas fa-user-plus"></i> Inscribirse
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -1918,6 +2374,260 @@
             } else {
                 document.documentElement.style.setProperty('--animation-play-state', 'running');
             }
+        });
+
+        // ============================================================
+        // Olimpiadas Registration System
+        // ============================================================
+        class OlimpiadasRegistro {
+            constructor() {
+                this.SUPABASE_URL      = 'https://mywwtkpcswisdwrfqzch.supabase.co';
+                this.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3d0a3Bjc3dpc2R3cmZxemNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyOTQzOTgsImV4cCI6MjA4Njg3MDM5OH0.XEzvjC7PmDG6uEhiYzo8HgK564WXKUi94LNHaS6jkQs';
+                this.supabase   = null;
+                this.eventId    = null;
+                this.realtimeChannel = null;
+                this.participants = [];
+                this.visitorId  = this.getOrCreateVisitorId();
+            }
+
+            getOrCreateVisitorId() {
+                let id = localStorage.getItem('visitor_id');
+                if (!id) {
+                    id = 'visitor_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+                    localStorage.setItem('visitor_id', id);
+                }
+                return id;
+            }
+
+            async init() {
+                if (!window.supabase) {
+                    console.error('Supabase SDK not loaded');
+                    return;
+                }
+                this.supabase = window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_ANON_KEY);
+                await this.loadEventData();
+                await this.loadParticipants();
+                this.setupRealtime();
+            }
+
+            async loadEventData() {
+                try {
+                    const { data, error } = await this.supabase.rpc('get_active_olimpiad');
+                    if (error) throw error;
+                    if (data && data.length > 0) {
+                        this.eventId = data[0].id;
+                        this.updateCounters({
+                            total:      data[0].total_count,
+                            novato:     data[0].novato_count,
+                            intermedia: data[0].intermedia_count,
+                            avanzada:   data[0].avanzada_count
+                        });
+                    }
+                } catch (err) {
+                    console.error('Error loading event data:', err);
+                }
+            }
+
+            async loadParticipants() {
+                if (!this.eventId) return;
+                try {
+                    const { data, error } = await this.supabase
+                        .from('olimpiad_registrations')
+                        .select('*')
+                        .eq('event_id', this.eventId)
+                        .eq('is_active', true)
+                        .order('registered_at', { ascending: true });
+
+                    if (error) throw error;
+                    this.participants = data || [];
+                    this.renderParticipants();
+                } catch (err) {
+                    console.error('Error loading participants:', err);
+                }
+            }
+
+            setupRealtime() {
+                if (!this.eventId) return;
+
+                this.realtimeChannel = this.supabase
+                    .channel('olimpiad_realtime')
+                    .on('postgres_changes', {
+                        event: '*',
+                        schema: 'public',
+                        table: 'olimpiad_registrations',
+                        filter: `event_id=eq.${this.eventId}`
+                    }, () => {
+                        this.loadParticipants();
+                        this.loadEventData();
+                    })
+                    .subscribe();
+            }
+
+            openModal() {
+                const overlay = document.getElementById('olimpiadModalOverlay');
+                if (overlay) {
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    this.clearFormMessage();
+                }
+            }
+
+            closeModal() {
+                const overlay = document.getElementById('olimpiadModalOverlay');
+                if (overlay) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            clearFormMessage() {
+                const msg = document.getElementById('olimpiadFormMessage');
+                if (msg) { msg.className = 'olimpiad-form__message'; msg.textContent = ''; }
+            }
+
+            showFormMessage(type, text) {
+                const msg = document.getElementById('olimpiadFormMessage');
+                if (msg) { msg.className = `olimpiad-form__message ${type}`; msg.textContent = text; }
+            }
+
+            async submitRegistration(event) {
+                event.preventDefault();
+
+                const name          = document.getElementById('fieldName').value.trim();
+                const school        = document.getElementById('fieldSchool').value.trim();
+                const category      = document.getElementById('fieldCategory').value;
+                const grade         = document.getElementById('fieldGrade').value;
+                const studentNumber = document.getElementById('fieldStudentNumber').value.trim();
+
+                if (!name || !school || !category || !grade || !studentNumber) {
+                    this.showFormMessage('error', 'Por favor completa todos los campos.');
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+                this.clearFormMessage();
+
+                try {
+                    const { data, error } = await this.supabase.rpc('register_for_olimpiad', {
+                        p_visitor_id:     this.visitorId,
+                        p_name:           name,
+                        p_school:         school,
+                        p_category:       category,
+                        p_grade:          grade,
+                        p_student_number: studentNumber
+                    });
+
+                    if (error) throw error;
+
+                    if (data && data.success) {
+                        this.showFormMessage('success', '¡Registro exitoso! Ya apareces en la lista de participantes.');
+                        document.getElementById('olimpiadForm').reset();
+                        setTimeout(() => this.closeModal(), 2000);
+                    } else {
+                        this.showFormMessage('error', data?.error || 'Error al registrarse. Intenta nuevamente.');
+                    }
+                } catch (err) {
+                    console.error('Registration error:', err);
+                    this.showFormMessage('error', 'Error de conexión. Verifica tu internet e intenta de nuevo.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Inscribirse';
+                }
+            }
+
+            updateCounters(counts) {
+                const set = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = val ?? 0;
+                };
+                set('countTotal',      counts.total);
+                set('countNovato',     counts.novato);
+                set('countIntermedia', counts.intermedia);
+                set('countAvanzada',   counts.avanzada);
+            }
+
+            renderParticipants() {
+                const groups = { novato: [], intermedia: [], avanzada: [] };
+                this.participants.forEach(p => {
+                    if (groups[p.category]) groups[p.category].push(p);
+                });
+
+                const total = this.participants.length;
+                this.updateCounters({
+                    total,
+                    novato:     groups.novato.length,
+                    intermedia: groups.intermedia.length,
+                    avanzada:   groups.avanzada.length
+                });
+
+                // Update badges
+                ['novato', 'intermedia', 'avanzada'].forEach(cat => {
+                    const badge = document.getElementById('badge' + cat.charAt(0).toUpperCase() + cat.slice(1));
+                    if (badge) badge.textContent = groups[cat].length;
+                });
+
+                // Render each list
+                this.renderList('listNovato',     groups.novato);
+                this.renderList('listIntermedia', groups.intermedia);
+                this.renderList('listAvanzada',   groups.avanzada);
+            }
+
+            renderList(containerId, participants) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                if (participants.length === 0) {
+                    container.innerHTML = '<div class="inscritos-empty">Ningún inscrito aún en esta categoría</div>';
+                    return;
+                }
+
+                container.innerHTML = participants.map(p => {
+                    const date = new Date(p.registered_at).toLocaleDateString('es-PR', {
+                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+                    const isMe = p.visitor_id === this.visitorId;
+                    return `
+                        <div class="inscrito-card" ${isMe ? 'style="border-color:var(--color-primary);border-width:2px;"' : ''}>
+                            <div class="inscrito-card__name">
+                                ${this.escapeHtml(p.name)} ${isMe ? '<span style="font-size:0.7rem;color:var(--color-primary);font-weight:600;">(tú)</span>' : ''}
+                            </div>
+                            <div class="inscrito-card__details">
+                                <span class="inscrito-card__detail"><i class="fas fa-school"></i> ${this.escapeHtml(p.school)}</span>
+                                <span class="inscrito-card__detail"><i class="fas fa-graduation-cap"></i> ${this.escapeHtml(p.grade)}</span>
+                                <span class="inscrito-card__detail"><i class="fas fa-id-card"></i> #${this.escapeHtml(p.student_number)}</span>
+                                <span class="inscrito-card__detail"><i class="fas fa-clock"></i> ${date}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            escapeHtml(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+        }
+
+        // Initialize on DOM ready
+        let olimpiadasRegistro;
+        document.addEventListener('DOMContentLoaded', () => {
+            olimpiadasRegistro = new OlimpiadasRegistro();
+            olimpiadasRegistro.init();
+
+            // Close modal on overlay click
+            document.getElementById('olimpiadModalOverlay')?.addEventListener('click', (e) => {
+                if (e.target.id === 'olimpiadModalOverlay') olimpiadasRegistro.closeModal();
+            });
+
+            // Close modal on ESC key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') olimpiadasRegistro.closeModal();
+            });
         });
     </script>
 </body>
