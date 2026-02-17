@@ -1628,15 +1628,6 @@
                 this.visitorId = this.getOrCreateVisitorId();
                 this.init();
             }
-                this.currentScore = 0;
-                this.timeRemaining = 7200; // 2 horas en segundos
-                this.timerInterval = null;
-                this.participantCount = 0;
-                this.currentParticipant = null;
-                this.areas = ['algebra', 'geometry', 'calculus', 'trigonometry', 'mental-calc', 'puzzles'];
-                
-                this.init();
-            }
 
             getOrCreateVisitorId() {
                 let id = localStorage.getItem('visitor_id');
