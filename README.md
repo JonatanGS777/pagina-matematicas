@@ -1,256 +1,174 @@
-# Sistema de Registro para Olimpiadas Matemáticas
+# Matemáticas Digitales
 
-Este sistema permite a los estudiantes registrarse para las olimpiadas matemáticas y mantiene una lista actualizada de participantes con estadísticas en tiempo real.
+Plataforma educativa de matemáticas con recursos interactivos, competencias en tiempo real, módulos STEM y laboratorio virtual. Desarrollada por el Prof. Yonatan Guerrero Soriano para el Departamento de Educación de Puerto Rico.
 
-## 🏗️ Arquitectura del Sistema
+## Tecnologías
 
-### Frontend
-- **registro.html**: Página de registro con formulario interactivo y lista de participantes
-- **olimpiadas.html**: Página principal de olimpiadas con CTA actualizado
+| Capa | Tecnología |
+|---|---|
+| Frontend | HTML, CSS, JavaScript vanilla |
+| Base de datos | Supabase (PostgreSQL) |
+| Tiempo real | Supabase Realtime (`postgres_changes`) |
+| Deploy | Vercel (auto-deploy desde GitHub) |
+| MathBattle | Node.js + Express + Socket.IO |
 
-### Backend APIs
-- **api/register.js**: Maneja el registro de nuevos participantes
-- **api/participants.js**: Obtiene la lista de participantes registrados
-- **api/stats.js**: Gestiona estadísticas globales y votaciones de roles
+## Estructura del proyecto
 
-### Base de Datos
-- **Vercel KV**: Base de datos Redis para almacenamiento en la nube
-- **Fallback LocalStorage**: Respaldo local cuando la API no está disponible
+```
+pagina-matematicas/
+├── index.html                        # Página principal con analytics en vivo
+│
+├── club/                             # Club de Matemáticas
+│   ├── competencias.html             # Competencias matemáticas (Supabase real-time)
+│   ├── leaderboard.html              # Tabla de posiciones en vivo
+│   ├── admin.html                    # Panel de administración
+│   ├── olimpiadas.html               # Olimpiadas matemáticas
+│   ├── investigacion.html            # Investigación matemática
+│   ├── proyectos-creativos.html      # Proyectos creativos
+│   ├── registro.html                 # Registro de miembros
+│   └── modulos/                      # Módulos interactivos por área
+│       ├── algebra.html
+│       ├── calculus.html
+│       ├── geometry.html
+│       ├── trigonometry.html
+│       ├── puzzles.html
+│       └── statistics.html
+│
+├── materiales/materiales/            # Materiales de estudio
+│   ├── biblioteca.html
+│   ├── examenes.html
+│   ├── ejercicios_matematicas.html
+│   ├── algebra-quiz.html
+│   ├── geometria-quiz.html
+│   ├── calculo-quiz.html
+│   ├── trigonometria-quiz.html
+│   ├── rubricas.html
+│   ├── guias_estudio.html
+│   └── presentaciones.html
+│
+├── lab/                              # Laboratorio virtual interactivo
+│   ├── experimentos.html
+│   ├── simulaciones.html
+│   ├── juegos.html
+│   ├── figuras.html
+│   ├── proyectiles.html
+│   └── modulos/ (datos, física, geométrico, optimización)
+│
+├── salon/                            # Salón de clases virtual
+│   ├── algebra.html
+│   ├── geometria.html
+│   ├── estadisticas.html
+│   ├── finanzas.html
+│   └── game.html
+│
+├── stem/                             # Sección STEM
+│   ├── programacion.html
+│   ├── robotica.html
+│   ├── ingenieria.html
+│   ├── ciencia-datos.html
+│   └── Ebook STEM/
+│
+├── contexto/                         # Historia de las Matemáticas
+│   ├── historiamath.html
+│   ├── historiamath-examen.html
+│   └── profesor-dashboard.html
+│
+├── galeria/                          # Galería de trabajos estudiantiles
+├── links/                            # Recursos y enlaces externos
+│
+├── MathBattle/                       # Juego multijugador (Socket.IO)
+│
+├── supabase-setup.sql                # Schema de analytics
+├── supabase-competition-setup.sql    # Schema del sistema de competencias
+└── vercel.json                       # Configuración de Vercel
+```
 
-## 🚀 Configuración
+## Base de datos Supabase
 
-### 1. Configurar Vercel KV
+### Analytics — `supabase-setup.sql`
+
+| Tabla | Descripción |
+|---|---|
+| `analytics` | Estadísticas globales por página (visitas, usuarios activos) |
+| `unique_visitors` | Visitantes únicos identificados por `visitor_id` |
+| `daily_stats` | Estadísticas por día y página |
+| `realtime_activity` | Feed de actividad en tiempo real (últimas 24h) |
+
+### Competencias — `supabase-competition-setup.sql`
+
+| Tabla | Descripción |
+|---|---|
+| `competitions` | Una competencia activa a la vez, con códigos y timer |
+| `competition_participants` | Participantes con puntajes por área matemática |
+
+#### RPCs disponibles
+
+| Función | Descripción |
+|---|---|
+| `get_active_competition()` | Obtiene o crea la competencia activa |
+| `join_competition(code, visitor_id, name, school)` | Valida código e inscribe participante |
+| `start_competition_timer(prof_code, competition_id)` | Profesor inicia el cronómetro |
+| `reset_competition(prof_code)` | Termina la actual y crea una nueva |
+| `update_competition_score(participant_id, area, points, difficulty)` | Actualiza puntaje de un área |
+
+## Sistema de competencias
+
+### Códigos de acceso
+
+**Estudiantes** (cualquiera de estos):
+- `MATH24`
+- `COMP25`
+- `STEM2024`
+
+**Profesor** (para iniciar timer y administrar):
+- `PROF2024`
+- `RESET123`
+- `TEACHER01`
+
+### Áreas matemáticas
+Álgebra · Geometría · Cálculo · Trigonometría · Cálculo Mental · Acertijos
+
+### Flujo de la competencia
+
+1. Estudiantes ingresan código → nombre → escuela → entran al dashboard
+2. Profesor abre la **Tabla de Posiciones** o el dashboard → **Iniciar Timer** → ingresa código de profesor
+3. El cronómetro arranca simultáneamente en **todos** los dispositivos via Supabase Realtime
+4. Los puntajes se actualizan en tiempo real en la tabla de posiciones
+5. Al terminar: **Admin** → `reset_competition` crea una nueva sesión limpia
+
+## Configuración de Supabase
+
+1. Crear proyecto en [supabase.com](https://supabase.com)
+2. Ir a **SQL Editor → New query**
+3. Ejecutar `supabase-setup.sql` (analytics)
+4. Ejecutar `supabase-competition-setup.sql` (competencias)
+5. Actualizar credenciales en `index.html` y `club/competencias.html`:
+
+```js
+this.SUPABASE_URL      = 'https://TU_REF.supabase.co';
+this.SUPABASE_ANON_KEY = 'TU_ANON_KEY';
+```
+
+## Deploy en Vercel
+
+El proyecto se despliega automáticamente al hacer push a `main`:
 
 ```bash
-# Instalar Vercel CLI
-npm i -g vercel
-
-# Crear una base de datos KV
-vercel kv create olimpiadas-db
-
-# Vincular el proyecto
-vercel link
+git add .
+git commit -m "descripción"
+git push origin main
 ```
 
-### 2. Variables de Entorno
+## MathBattle (local)
 
-Agregar a tu proyecto de Vercel:
-
-```env
-KV_REST_API_URL=your_kv_rest_api_url
-KV_REST_API_TOKEN=your_kv_rest_api_token
-```
-
-### 3. Estructura de Archivos
-
-```
-proyecto/
-├── index.html
-├── club/
-│   ├── olimpiadas.html
-│   └── registro.html
-├── api/
-│   ├── register.js
-│   ├── participants.js
-│   └── stats.js
-├── package.json
-├── vercel.json
-└── README.md
-```
-
-### 4. Despliegue
+Juego multijugador matemático con Socket.IO:
 
 ```bash
-# Desplegar a Vercel
-vercel deploy
-
-# Desplegar a producción
-vercel --prod
+cd MathBattle
+npm install
+npm start
 ```
 
-## 📊 Estructura de Datos
+## Licencia
 
-### Participante
-```json
-{
-  "id": "participant_1234567890_abc123",
-  "fullName": "María González López",
-  "email": "maria@email.com",
-  "age": 16,
-  "grade": "10mo",
-  "school": "Escuela Superior María Teresa Piñeiro",
-  "category": "intermedio",
-  "experience": "moderada",
-  "motivation": "Me encantan los desafíos matemáticos",
-  "role": "estudiante",
-  "registrationDate": "2025-01-01T10:00:00.000Z",
-  "status": "active"
-}
-```
-
-### Estadísticas
-```json
-{
-  "visitantes": 1250,
-  "estudiantes": 45,
-  "maestros": 8,
-  "padres": 23,
-  "otros": 12,
-  "participantesOlimpiadas": 45,
-  "registrosHoy": 3,
-  "lastUpdated": "2025-01-01T10:00:00.000Z"
-}
-```
-
-## 🔑 Claves de Redis (Vercel KV)
-
-### Participantes
-- `participant:{email}` - Datos del participante por email
-- `participant:id:{id}` - Datos del participante por ID
-- `participants:list` - Lista de IDs de participantes
-
-### Estadísticas
-- `site:statistics` - Estadísticas generales del sitio
-- `stats:daily:{YYYY-MM-DD}` - Estadísticas diarias
-- `visitors:total` - Total de visitantes
-- `visitors:daily:{YYYY-MM-DD}` - Visitantes por día
-- `role:votes:{role}` - Votaciones por rol
-
-## 🔧 Funcionalidades
-
-### Registro de Participantes
-- ✅ Formulario con validación en tiempo real
-- ✅ Verificación de emails duplicados
-- ✅ Categorización automática por experiencia
-- ✅ Almacenamiento seguro en Vercel KV
-- ✅ Fallback a localStorage sin conexión
-
-### Lista de Participantes
-- ✅ Vista en tiempo real de registrados
-- ✅ Estadísticas dinámicas
-- ✅ Ordenamiento y filtrado
-- ✅ Protección de datos sensibles
-- ✅ Paginación para grandes listas
-
-### Estadísticas Globales
-- ✅ Contadores en tiempo real
-- ✅ Integración con página principal
-- ✅ Votaciones de roles
-- ✅ Métricas de visitantes
-- ✅ Análisis diarios y semanales
-
-## 🛡️ Seguridad y Privacidad
-
-### Validación de Datos
-- Validación en frontend y backend
-- Sanitización de entradas
-- Límites de edad y formato de email
-- Prevención de registros duplicados
-
-### Protección de Datos
-- Los emails no se muestran públicamente
-- Límites de tasa para APIs
-- Expiración automática de datos temporales
-- Solo se almacenan datos necesarios
-
-## 📱 Diseño Responsive
-
-### Características
-- ✅ Diseño mobile-first
-- ✅ Grid responsive para estadísticas
-- ✅ Formulario adaptativo
-- ✅ Navegación optimizada para móviles
-- ✅ Tipografía escalable
-
-### Breakpoints
-- Mobile: < 768px
-- Tablet: 768px - 1024px
-- Desktop: > 1024px
-
-## 🎨 Sistema de Diseño
-
-### Colores
-- Primario: `#2563eb` (Azul)
-- Secundario: `#7c3aed` (Púrpura)
-- Acento: `#f59e0b` (Ámbar)
-- Éxito: `#10b981` (Verde)
-- Peligro: `#ef4444` (Rojo)
-
-### Tipografía
-- Principal: 'Inter' (San-serif)
-- Títulos: 'Space Grotesk' (Sans-serif)
-- Tamaños: Sistema modular escalable
-
-## 🚦 Estados de la Aplicación
-
-### Estados de Carga
-- Skeleton loaders para participantes
-- Spinners para formularios
-- Mensajes de estado informativos
-
-### Estados de Error
-- Manejo graceful de errores de API
-- Fallbacks automáticos a localStorage
-- Mensajes de error user-friendly
-
-### Estados Vacíos
-- Mensajes motivacionales
-- CTAs para primeros registros
-- Iconografía apropiada
-
-## 📈 Monitoreo y Analytics
-
-### Métricas Rastreadas
-- Registros por día/semana/mes
-- Distribución por categorías
-- Distribución por grados
-- Tasa de conversión de visitantes
-
-### Logs
-- Errores de API en consola
-- Registros exitosos
-- Estadísticas de performance
-- Uso de fallbacks
-
-## 🔄 Actualización de Datos
-
-### Sincronización
-- Auto-actualización cada 30 segundos
-- Refresh manual disponible
-- Sincronización entre pestañas
-- Indicadores visuales de estado
-
-### Cache
-- Cache de participantes en memoria
-- Invalidación inteligente
-- Estrategias de retry para APIs fallidas
-
-## 🎯 Próximas Mejoras
-
-### Funcionalidades Planeadas
-- [ ] Notificaciones push para nuevos registros
-- [ ] Exportación de listas a CSV/Excel
-- [ ] Dashboard administrativo
-- [ ] Sistema de categorización automática
-- [ ] Integración con calendar para eventos
-- [ ] Notificaciones por email
-- [ ] Certificados automáticos de participación
-
-### Optimizaciones Técnicas
-- [ ] Implementar Service Workers
-- [ ] Optimizar consultas de base de datos
-- [ ] Añadir índices para búsquedas rápidas
-- [ ] Implementar rate limiting más granular
-- [ ] Añadir tests automatizados
-
-## 📞 Soporte
-
-Para problemas técnicos o preguntas sobre el sistema:
-- Revisar logs en Vercel Dashboard
-- Verificar configuración de Vercel KV
-- Comprobar variables de entorno
-- Validar estructura de datos en Redis
-
-## 📄 Licencia
-
-Este proyecto es parte del sistema educativo del Prof. Yonatan Guerrero Soriano y está destinado para uso académico en el Departamento de Educación de Puerto Rico.
+Proyecto educativo del Prof. Yonatan Guerrero Soriano — uso académico en el Departamento de Educación de Puerto Rico.
