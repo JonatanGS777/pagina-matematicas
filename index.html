@@ -1372,6 +1372,15 @@
             box-shadow: 0 16px 48px rgba(91, 76, 245, 0.3);
         }
 
+        .profile-name-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        .profile-name-link:hover .profile-name {
+            color: var(--primary);
+        }
+
         .profile-name {
             font-family: 'Syne', sans-serif;
             font-size: 1.4rem;
@@ -1379,6 +1388,7 @@
             letter-spacing: -0.02em;
             color: var(--text-primary);
             margin-bottom: 0.4rem;
+            transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .profile-title {
@@ -2139,13 +2149,10 @@
             <div class="about-container">
                 <div class="profile-card slide-in-left">
                     <img src="imagenes/mi_foto.jpg" alt="Prof. Yonatan Guerrero Soriano" class="profile-img">
-                    <h3 class="profile-name">Yonatan Guerrero Soriano EdD</h3>
-                    <p class="profile-title">Profesor de Matemáticas</p>
-                    <div class="credentials">
-                        <span class="credential-item">Bachillerato en Biomatemáticas</span>
-                        <span class="credential-item">Maestría en Educación Matemáticas</span>
-                        <span class="credential-item">Doctorado en Currículo en Tecnología Educativa</span>
-                    </div>
+                    <a href="perfil-investigador/index.html" class="profile-name-link">
+                        <h3 class="profile-name">Yonatan Guerrero Soriano EdD</h3>
+                    </a>
+                    <p class="profile-title">Doctor en Educación</p>
                 </div>
                 
                 <div class="about-text slide-in-right">
