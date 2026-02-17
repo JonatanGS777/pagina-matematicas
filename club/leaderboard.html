@@ -6,6 +6,7 @@
     <title>Tabla de Posiciones en Vivo - Competencias Matemáticas</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #667eea;
@@ -897,120 +898,130 @@
     </main>
 
     <script>
-        // Live Leaderboard Management System
+        // Live Leaderboard — Supabase Real-Time
         class LiveLeaderboard {
             constructor() {
-                this.participants = [];
+                this.SUPABASE_URL     = 'https://mywwtkpcswisdwrfqzch.supabase.co';
+                this.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3d0a3Bjc3dpc2R3cmZxemNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyOTQzOTgsImV4cCI6MjA4Njg3MDM5OH0.XEzvjC7PmDG6uEhiYzo8HgK564WXKUi94LNHaS6jkQs';
+                this.supabase        = null;
+                this.participants    = [];
+                this.competition     = null;
+                this.timerActive     = false;
+                this.timeRemaining   = 7200;
+                this.timerInterval   = null;
+                this.realtimeChannel = null;
                 this.areas = ['algebra', 'geometry', 'calculus', 'trigonometry', 'mental-calc', 'puzzles'];
                 this.areaNames = {
-                    'algebra': 'Álgebra',
-                    'geometry': 'Geometría',
-                    'calculus': 'Cálculo',
-                    'trigonometry': 'Trigonometría',
-                    'mental-calc': 'Cálculo Mental',
-                    'puzzles': 'Acertijos'
+                    'algebra': 'Álgebra', 'geometry': 'Geometría', 'calculus': 'Cálculo',
+                    'trigonometry': 'Trigonometría', 'mental-calc': 'Cálculo Mental', 'puzzles': 'Acertijos'
                 };
                 this.areaIcons = {
-                    'algebra': 'fas fa-square-root-alt',
-                    'geometry': 'fas fa-shapes',
-                    'calculus': 'fas fa-infinity',
-                    'trigonometry': 'fas fa-wave-square',
-                    'mental-calc': 'fas fa-brain',
-                    'puzzles': 'fas fa-puzzle-piece'
+                    'algebra': 'fas fa-square-root-alt', 'geometry': 'fas fa-shapes',
+                    'calculus': 'fas fa-infinity', 'trigonometry': 'fas fa-wave-square',
+                    'mental-calc': 'fas fa-brain', 'puzzles': 'fas fa-puzzle-piece'
                 };
-                this.recentActivity = [];
-                this.competitionData = null;
-                this.timeRemaining = 7200; // Default 2 hours
-                this.timerActive = false; // Timer starts in standby mode
-                this.updateInterval = null;
-                this.activityInterval = null;
-                
                 this.init();
             }
 
-            init() {
-                this.loadRealParticipants();
-                this.loadRealActivity();
-                this.loadCompetitionTimer();
-                this.updateLeaderboard();
-                this.updateRecentActivity();
+            async init() {
+                this.supabase = window.supabase.createClient(this.SUPABASE_URL, this.SUPABASE_ANON_KEY);
+                await this.loadData();
+                this.setupRealtime();
                 this.startTimer();
-                this.startAutoUpdate();
+                // Fallback: actualizar cada 30 segundos
+                setInterval(() => this.loadData(), 30000);
+            }
+
+            async loadData() {
+                // Cargar competencia activa
+                const { data: compData } = await this.supabase.rpc('get_active_competition');
+                if (compData && compData.length > 0) {
+                    this.competition = compData[0];
+                }
+
+                if (!this.competition) {
+                    this.participants = [];
+                    this.updateLeaderboard();
+                    return;
+                }
+
+                // Cargar participantes
+                const { data: parts } = await this.supabase
+                    .from('competition_participants')
+                    .select('*')
+                    .eq('competition_id', this.competition.id)
+                    .eq('is_active', true)
+                    .order('total_score', { ascending: false });
+
+                this.participants = (parts || []).map((p, i) => ({
+                    ...p,
+                    currentRank:    i + 1,
+                    previousRank:   i + 1,
+                    // Aliases para compatibilidad con métodos de UI
+                    totalScore:     p.total_score,
+                    problemsSolved: p.problems_solved,
+                    lastActivity:   new Date(p.last_activity).getTime()
+                }));
+
+                // Actividad reciente: últimos participantes activos
+                this.recentActivity = [...this.participants]
+                    .sort((a, b) => b.lastActivity - a.lastActivity)
+                    .slice(0, 6)
+                    .map(p => ({
+                        participant: p.name,
+                        area: Object.entries(p.scores || {})
+                            .sort((a, b) => b[1] - a[1])[0]?.[0] || 'algebra',
+                        points: p.total_score,
+                        time: p.lastActivity
+                    }));
+
+                this.updateTimerState();
+                this.updateLeaderboard();
                 this.updateAreaPerformance();
                 this.updateRecords();
-                this.setupStorageListener();
+                this.updateRecentActivity();
             }
 
-            loadCompetitionTimer() {
-                // Load real competition timer data
-                const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"duration":7200}');
-                this.competitionData = competitionData;
-                
-                if (competitionData.timerStarted && competitionData.startTime) {
-                    // Competition timer has been started by professor
-                    const elapsed = Math.floor((Date.now() - competitionData.startTime) / 1000);
-                    this.timeRemaining = Math.max(0, competitionData.duration - elapsed);
+            setupRealtime() {
+                if (!this.competition) return;
+
+                this.realtimeChannel = this.supabase
+                    .channel('leaderboard_realtime')
+                    .on('postgres_changes', {
+                        event: '*', schema: 'public', table: 'competition_participants',
+                        filter: `competition_id=eq.${this.competition.id}`
+                    }, () => this.loadData())
+                    .on('postgres_changes', {
+                        event: '*', schema: 'public', table: 'competitions',
+                        filter: `id=eq.${this.competition.id}`
+                    }, (payload) => {
+                        const comp = payload.new;
+                        this.competition = { ...this.competition, ...comp };
+                        this.updateTimerState();
+                        if (comp.status === 'ended') {
+                            localStorage.removeItem('currentParticipant');
+                            location.reload();
+                        }
+                    })
+                    .subscribe();
+            }
+
+            updateTimerState() {
+                if (!this.competition) return;
+                if (this.competition.timer_started && this.competition.start_time) {
+                    const elapsed = Math.floor((Date.now() - new Date(this.competition.start_time).getTime()) / 1000);
+                    this.timeRemaining = Math.max(0, (this.competition.duration || 7200) - elapsed);
                     this.timerActive = true;
                 } else {
-                    // Competition hasn't started yet - timer in standby
-                    this.timeRemaining = competitionData.duration || 7200;
+                    this.timeRemaining = this.competition.duration || 7200;
                     this.timerActive = false;
                 }
-                
-                // Update timer button state
-                this.updateTimerButtonState();
-            }
-
-            updateTimerButtonState() {
-                // Update start timer button based on competition state
                 const startButton = document.querySelector('[onclick="startCompetitionTimer()"]');
-                if (startButton) {
-                    if (this.competitionData.timerStarted) {
-                        startButton.innerHTML = '<i class="fas fa-check"></i> Timer Iniciado';
-                        startButton.style.background = 'var(--success)';
-                        startButton.disabled = true;
-                    } else {
-                        startButton.innerHTML = '<i class="fas fa-play"></i> Iniciar Timer';
-                        startButton.style.background = 'var(--primary)';
-                        startButton.disabled = false;
-                    }
+                if (startButton && this.competition.timer_started) {
+                    startButton.innerHTML = '<i class="fas fa-check"></i> Timer Iniciado';
+                    startButton.style.background = 'var(--success)';
+                    startButton.disabled = true;
                 }
-            }
-
-            loadRealParticipants() {
-                // Load real competition data from localStorage
-                const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
-                this.competitionData = competitionData;
-                
-                if (competitionData.participants && competitionData.participants.length > 0) {
-                    // Use real participants
-                    this.participants = competitionData.participants
-                        .filter(p => p.isActive && p.totalScore >= 0)
-                        .map((participant, index) => ({
-                            ...participant,
-                            previousRank: participant.currentRank || index + 1,
-                            currentRank: index + 1,
-                            streak: participant.streak || 0
-                        }));
-                    
-                    // Sort by total score
-                    this.participants.sort((a, b) => b.totalScore - a.totalScore);
-                    
-                    // Update current ranks
-                    this.participants.forEach((participant, index) => {
-                        participant.currentRank = index + 1;
-                    });
-                } else {
-                    // No real participants yet, show message
-                    this.participants = [];
-                    this.showNoParticipantsMessage();
-                }
-            }
-
-            loadRealActivity() {
-                // Load real recent activity from localStorage
-                const recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
-                this.recentActivity = recentActivities.slice(0, 10); // Get last 10 activities
             }
 
             showNoParticipantsMessage() {
@@ -1025,35 +1036,6 @@
                 `;
             }
 
-            setupStorageListener() {
-                // Listen for changes in localStorage (from other tabs/windows)
-                window.addEventListener('storage', (e) => {
-                    if (e.key === 'mathCompetitionData' || e.key === 'recentActivities') {
-                        this.loadRealParticipants();
-                        this.loadRealActivity();
-                        this.loadCompetitionTimer();
-                        this.updateLeaderboard();
-                        this.updateAreaPerformance();
-                        this.updateRecords();
-                    }
-                });
-
-                // Listen for competition update events from other pages
-                window.addEventListener('competitionUpdate', () => {
-                    this.loadRealParticipants();
-                    this.loadRealActivity();
-                    this.loadCompetitionTimer();
-                    this.updateLeaderboard();
-                    this.updateAreaPerformance();
-                    this.updateRecords();
-                });
-
-                // Listen for competition reset events
-                window.addEventListener('competitionReset', () => {
-                    // Another page has reset the competition, reload this page
-                    location.reload();
-                });
-            }
 
             updateLeaderboard() {
                 this.updateHeroStats();
@@ -1294,211 +1276,110 @@
             }
 
             startTimer() {
-                // Update timer display immediately
                 this.updateTimerDisplay();
-                
-                setInterval(() => {
-                    // Recalculate time based on competition data
-                    if (this.competitionData && this.competitionData.timerStarted && this.competitionData.startTime) {
-                        const elapsed = Math.floor((Date.now() - this.competitionData.startTime) / 1000);
-                        this.timeRemaining = Math.max(0, this.competitionData.duration - elapsed);
-                        this.timerActive = true;
-                    } else {
-                        // Timer not started yet by professor
-                        this.timerActive = false;
-                        // Keep showing full time
-                        this.timeRemaining = this.competitionData ? this.competitionData.duration : 7200;
+                this.timerInterval = setInterval(() => {
+                    if (this.timerActive && this.timeRemaining > 0) {
+                        this.timeRemaining--;
                     }
-                    
                     this.updateTimerDisplay();
-                    
-                    if (this.timerActive && this.timeRemaining <= 0) {
-                        alert('¡Competencia finalizada!');
-                    }
                 }, 1000);
             }
 
             updateTimerDisplay() {
-                const hours = Math.floor(this.timeRemaining / 3600);
+                const hours   = Math.floor(this.timeRemaining / 3600);
                 const minutes = Math.floor((this.timeRemaining % 3600) / 60);
                 const seconds = this.timeRemaining % 60;
-                
-                const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                const timerElement = document.getElementById('timeRemaining');
-                
-                if (timerElement) {
-                    if (!this.timerActive && !this.competitionData.timerStarted) {
-                        // Timer not started yet - show waiting state
-                        timerElement.textContent = '⏳ ' + display;
-                        timerElement.style.color = '#ffa726';
-                        timerElement.style.animation = 'waitingPulse 2s infinite';
-                    } else {
-                        // Timer is active
-                        timerElement.textContent = display;
-                        timerElement.style.animation = 'none';
-                        timerElement.style.color = '#4ecdc4';
-                    }
+                const display = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+                const el = document.getElementById('timeRemaining');
+                if (!el) return;
+                if (!this.timerActive) {
+                    el.textContent = '⏳ ' + display;
+                    el.style.color = '#ffa726';
+                    el.style.animation = 'waitingPulse 2s infinite';
+                } else {
+                    el.textContent = display;
+                    el.style.animation = 'none';
+                    el.style.color = '#4ecdc4';
                 }
             }
 
-            startAutoUpdate() {
-                // Update every 5 seconds with real data
-                this.updateInterval = setInterval(() => {
-                    this.loadRealParticipants();
-                    this.loadRealActivity();
-                    this.loadCompetitionTimer();
-                    this.updateLeaderboard();
-                    this.updateAreaPerformance();
-                    this.updateRecords();
-                    this.updateRecentActivity();
-                }, 5000);
-            }
-
-            refreshLeaderboard() {
-                const refreshBtn = document.getElementById('refreshText');
+            async refreshLeaderboard() {
+                const refreshBtn  = document.getElementById('refreshText');
                 const loadingIcon = document.getElementById('refreshLoading');
-                
-                refreshBtn.style.display = 'none';
-                loadingIcon.style.display = 'inline-block';
-                
-                setTimeout(() => {
-                    // Reload real data
-                    this.loadRealParticipants();
-                    this.loadRealActivity();
-                    this.loadCompetitionTimer();
-                    this.updateLeaderboard();
-                    this.updateAreaPerformance();
-                    this.updateRecords();
-                    this.updateRecentActivity();
-                    
-                    refreshBtn.style.display = 'inline';
-                    loadingIcon.style.display = 'none';
-                }, 800);
+                refreshBtn.style.display    = 'none';
+                loadingIcon.style.display   = 'inline-block';
+                await this.loadData();
+                refreshBtn.style.display    = 'inline';
+                loadingIcon.style.display   = 'none';
             }
         }
 
         // Initialize the live leaderboard
         const liveLeaderboard = new LiveLeaderboard();
 
-        // Global functions
         function refreshLeaderboard() {
             liveLeaderboard.refreshLeaderboard();
         }
 
-        // Start competition timer (Professor only)
-        function startCompetitionTimer() {
-            // Professor access code verification
-            const accessCode = prompt(
-                '🎯 INICIAR CRONÓMETRO - SOLO PROFESOR 🎯\n\n' +
-                'Ingresa el código de acceso del profesor para iniciar el timer:'
-            );
-            
-            // Professor codes
-            const validProfessorCodes = ['PROF2024', 'RESET123', 'TEACHER01'];
-            
-            if (!accessCode || !validProfessorCodes.includes(accessCode.toUpperCase())) {
-                alert('❌ Código incorrecto.\n\nSolo el profesor puede iniciar el cronómetro.');
+        // Iniciar cronómetro — Supabase
+        async function startCompetitionTimer() {
+            const lb = liveLeaderboard;
+            if (!lb.competition) {
+                await lb.loadData();
+            }
+            if (!lb.competition) {
+                alert('⚠️ No se pudo conectar. Recarga la página.');
                 return;
             }
-            
-            // Check if there are participants
-            const competitionData = JSON.parse(localStorage.getItem('mathCompetitionData') || '{"participants":[]}');
-            const activeParticipants = competitionData.participants.filter(p => p.isActive).length;
-            
-            if (activeParticipants === 0) {
-                alert('⚠️ No hay participantes registrados.\n\nEspera a que al menos un estudiante ingrese antes de iniciar el timer.');
+
+            const accessCode = prompt('🎯 INICIAR CRONÓMETRO — SOLO PROFESOR 🎯\n\nIngresa el código del profesor:');
+            if (!accessCode) return;
+
+            const partCount = lb.participants.length;
+            if (partCount === 0) {
+                alert('⚠️ No hay participantes aún.\n\nEspera a que al menos un estudiante ingrese.');
                 return;
             }
-            
-            const confirmStart = confirm(
-                `🚀 INICIAR COMPETENCIA 🚀\n\n` +
-                `Participantes listos: ${activeParticipants}\n` +
-                `Duración: 2 horas\n\n` +
-                `¿Iniciar el cronómetro ahora?\n\n` +
-                `⚠️ Una vez iniciado, el tiempo no se puede pausar.`
-            );
-            
-            if (confirmStart) {
-                // Start the competition timer
-                competitionData.timerStarted = true;
-                competitionData.startTime = Date.now();
-                competitionData.endTime = Date.now() + (competitionData.duration * 1000);
-                competitionData.isActive = true;
-                competitionData.lastUpdate = Date.now();
-                
-                localStorage.setItem('mathCompetitionData', JSON.stringify(competitionData));
-                
-                // Update leaderboard instance
-                liveLeaderboard.competitionData = competitionData;
-                liveLeaderboard.timerActive = true;
-                liveLeaderboard.updateTimerButtonState();
-                
-                // Trigger update event for all pages
-                window.dispatchEvent(new CustomEvent('competitionUpdate', {
-                    detail: competitionData
-                }));
-                
-                alert('✅ ¡Cronómetro iniciado!\n\nLa competencia ha comenzado oficialmente.\nTodos los participantes han sido notificados.');
+
+            if (!confirm(`🚀 INICIAR COMPETENCIA\n\nParticipantes: ${partCount}\nDuración: 2 horas\n\n¿Iniciar ahora?`)) return;
+
+            const { data, error } = await lb.supabase.rpc('start_competition_timer', {
+                p_prof_code:      accessCode.toUpperCase(),
+                p_competition_id: lb.competition.id
+            });
+
+            if (error || !data || !data.success) {
+                alert('❌ ' + (data?.error || 'Código incorrecto o error.'));
+                return;
             }
+            alert('✅ ¡Cronómetro iniciado! Todos los participantes han sido notificados.');
         }
 
-        // Reset entire competition
-        function resetCompetition() {
-            // Professor access code verification
-            const accessCode = prompt(
-                '🔒 ACCESO RESTRINGIDO - SOLO PROFESOR 🔒\n\n' +
-                'Ingresa el código de acceso del profesor para reiniciar:'
-            );
-            
-            // Professor codes (you can change these)
-            const validProfessorCodes = ['PROF2024', 'RESET123', 'TEACHER01'];
-            
-            if (!accessCode || !validProfessorCodes.includes(accessCode.toUpperCase())) {
-                alert('❌ Código incorrecto.\n\nSolo el profesor puede reiniciar la competencia.');
+        // Reiniciar competencia — Supabase
+        async function resetCompetition() {
+            const lb = liveLeaderboard;
+            const accessCode = prompt('🔒 ACCESO RESTRINGIDO — SOLO PROFESOR\n\nIngresa el código del profesor:');
+            if (!accessCode) return;
+
+            if (!confirm('⚠️ ADVERTENCIA\n\nEsto eliminará TODOS los datos:\n• Participantes\n• Puntuaciones\n\n¿Continuar?')) return;
+            if (!confirm('🔥 ÚLTIMA CONFIRMACIÓN\n\nEsta acción NO se puede deshacer.\n\n¿Reiniciar completamente?')) return;
+
+            const { data, error } = await lb.supabase.rpc('reset_competition', {
+                p_prof_code: accessCode.toUpperCase()
+            });
+
+            if (error || !data || !data.success) {
+                alert('❌ ' + (data?.error || 'Código incorrecto o error.'));
                 return;
             }
-            
-            const confirmReset = confirm(
-                '⚠️ ADVERTENCIA ⚠️\n\n' +
-                'Esto eliminará TODOS los datos de la competencia:\n' +
-                '• Todos los participantes\n' +
-                '• Todas las puntuaciones\n' +
-                '• Toda la actividad reciente\n\n' +
-                '¿Estás seguro de que quieres REINICIAR la competencia?'
-            );
-            
-            if (confirmReset) {
-                const doubleConfirm = confirm(
-                    '🔥 ÚLTIMA CONFIRMACIÓN 🔥\n\n' +
-                    'Esta acción NO se puede deshacer.\n' +
-                    'Se perderán todos los datos permanentemente.\n\n' +
-                    '¿Continuar con el REINICIO COMPLETO?'
-                );
-                
-                if (doubleConfirm) {
-                    // Clear all competition data
-                    localStorage.removeItem('mathCompetitionData');
-                    localStorage.removeItem('recentActivities');
-                    localStorage.removeItem('currentParticipant');
-                    
-                    // Trigger update event for other pages before reload
-                    window.dispatchEvent(new CustomEvent('competitionReset', {
-                        detail: { action: 'reset', timestamp: Date.now() }
-                    }));
-                    
-                    // Show success message
-                    alert('✅ Competencia reiniciada exitosamente.\n\nTodos los datos han sido eliminados.\nLa página se recargará automáticamente.');
-                    
-                    // Reload page
-                    location.reload();
-                }
-            }
-        }
 
-        // Auto-refresh page every 5 minutes to prevent memory issues
-        setTimeout(() => {
+            localStorage.removeItem('currentParticipant');
+            alert('✅ Competencia reiniciada. La página se recargará.');
             location.reload();
-        }, 300000);
+        }
+
+        // Auto-refresh cada 5 minutos para evitar problemas de memoria
+        setTimeout(() => location.reload(), 300000);
     </script>
 </body>
 </html>
