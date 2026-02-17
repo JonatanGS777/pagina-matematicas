@@ -4,29 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabla de Posiciones en Vivo - Competencias Matemáticas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #f093fb;
-            --success: #4ecdc4;
-            --warning: #ffe066;
-            --danger: #ff6b6b;
+            --primary: #5B4CF5;
+            --secondary: #3D1F8C;
+            --accent: #00E5C3;
+            --success: #00D4AA;
+            --warning: #F5C842;
+            --danger: #FF4D6D;
             --gold: #ffd700;
             --silver: #c0c0c0;
             --bronze: #cd7f32;
-            --dark: #2d3748;
-            --light: #f7fafc;
+            --dark: #0D0E1A;
+            --light: #F0EEF8;
             --white: #ffffff;
-            --text-primary: #2d3748;
-            --text-secondary: #718096;
+            --text-primary: #1A1B2E;
+            --text-secondary: #5C5F78;
             --glass: rgba(255, 255, 255, 0.25);
             --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            --shadow-hover: 0 15px 35px rgba(31, 38, 135, 0.2);
+            --shadow-soft: 0 8px 40px 0 rgba(91, 76, 245, 0.28);
+            --shadow-hover: 0 20px 50px rgba(91, 76, 245, 0.32);
             --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
             --gradient-silver: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
@@ -40,8 +40,8 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Syne', sans-serif;
+            background: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
             color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
@@ -57,7 +57,7 @@
             height: 100%;
             z-index: -1;
             background: 
-                linear-gradient(-45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8), rgba(240, 147, 251, 0.8), rgba(78, 205, 196, 0.8));
+                linear-gradient(-45deg, rgba(91, 76, 245, 0.88), rgba(61, 31, 140, 0.92), rgba(0, 229, 195, 0.55), rgba(91, 76, 245, 0.82));
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
         }
@@ -74,9 +74,11 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            background: rgba(240, 238, 248, 0.92);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid rgba(91, 76, 245, 0.1);
+            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
             z-index: 1000;
             padding: 0;
         }
@@ -91,14 +93,16 @@
         }
 
         .logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
             background: var(--gradient-main);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
+            transition: opacity 0.2s ease;
         }
 
         .nav-controls {
@@ -114,14 +118,16 @@
             background: var(--gradient-main);
             color: var(--white);
             text-decoration: none;
-            border-radius: 25px;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            font-family: 'Syne', sans-serif;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-back:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(91, 76, 245, 0.4);
         }
 
         .refresh-btn {
@@ -382,7 +388,7 @@
         }
 
         .ranking-item.highlight {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
+            background: linear-gradient(135deg, rgba(91, 76, 245, 0.1), rgba(240, 147, 251, 0.1));
             border-left: 4px solid var(--primary);
         }
 
@@ -478,7 +484,7 @@
 
         .area-score.algebra { background: rgba(255, 107, 107, 0.2); color: #e53e3e; }
         .area-score.geometry { background: rgba(78, 205, 196, 0.2); color: #319795; }
-        .area-score.calculus { background: rgba(102, 126, 234, 0.2); color: #5a67d8; }
+        .area-score.calculus { background: rgba(91, 76, 245, 0.2); color: #5a67d8; }
         .area-score.trigonometry { background: rgba(240, 147, 251, 0.2); color: #d53f8c; }
         .area-score.mental-calc { background: rgba(168, 85, 247, 0.2); color: #805ad5; }
         .area-score.puzzles { background: rgba(245, 158, 11, 0.2); color: #d69e2e; }
@@ -683,7 +689,7 @@
 
         @keyframes positionHighlight {
             0%, 100% { background: transparent; }
-            50% { background: linear-gradient(135deg, rgba(78, 205, 196, 0.3), rgba(102, 126, 234, 0.3)); }
+            50% { background: linear-gradient(135deg, rgba(78, 205, 196, 0.3), rgba(91, 76, 245, 0.35)); }
         }
 
         /* New record alert */

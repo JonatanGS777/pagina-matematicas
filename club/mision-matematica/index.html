@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <meta name="description" content="Club de Matemáticas Misión Matemática — Escuela Superior María Teresa Piñeiro, Sabana Seca, Toa Baja, Puerto Rico. Fomenta la excelencia matemática y el pensamiento crítico.">
+    <meta property="og:title" content="Misión Matemática - Club de Matemáticas EMTP">
+    <meta property="og:description" content="Fomentar la excelencia matemática y el pensamiento crítico entre los estudiantes de décimo grado.">
+    <meta property="og:type" content="website">
+    <title>Misión Matemática - Club de Matemáticas EMTP</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body>
+    <!-- Loader Screen -->
+    <div id="loader" role="status" aria-label="Cargando">
+        <div class="loader-inner">
+            <div class="loader-symbol">∑</div>
+            <div class="loader-dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
+            <p class="loader-text">Iniciando Misión...</p>
+        </div>
+    </div>
+
+    <!-- Scroll Progress Bar -->
+    <div id="progress-bar" role="progressbar" aria-label="Progreso de lectura"></div>
+
+    <!-- Canvas para partículas -->
+    <canvas id="stars-canvas" aria-hidden="true"></canvas>
+
+    <!-- Navegación -->
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i data-lucide="layers" class="nav-logo-icon" aria-hidden="true"></i>
+                Misión Matemática
+            </div>
+            <ul class="nav-menu" role="menubar">
+                <li role="none"><a href="#inicio" role="menuitem">Inicio</a></li>
+                <li role="none"><a href="#mision" role="menuitem">Nuestra Misión</a></li>
+                <li role="none"><a href="#actividades" role="menuitem">Actividades</a></li>
+                <li role="none"><a href="#competencias" role="menuitem">Objetivos</a></li>
+                <li role="none"><a href="#galeria" role="menuitem">Galería</a></li>
+                <li role="none"><a href="#recursos" role="menuitem">Recursos</a></li>
+                <li role="none"><a href="#contacto" role="menuitem">Contacto</a></li>
+            </ul>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
+                <i data-lucide="sun" class="theme-icon" aria-hidden="true"></i>
+            </button>
+            <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <div class="logo-container">
+                <img src="logo.png" alt="Misión Matemática — Club de Matemáticas EMTP" class="hero-logo" loading="eager">
+            </div>
+            <h1 class="hero-title">Bienvenidos a la Aventura Matemática</h1>
+            <p class="hero-subtitle" id="typewriter-target">Fomentar la excelencia matemática y el pensamiento crítico</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-target="100">0</span>
+                    <span class="stat-label">Estudiantes</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-target="3">0</span>
+                    <span class="stat-label">Competencias/Año</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-target="15">0</span>
+                    <span class="stat-label">% Meta Mejora</span>
+                </div>
+            </div>
+            <a href="#mision" class="cta-button">Comenzar la Misión</a>
+        </div>
+        <div class="scroll-indicator" aria-hidden="true">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- Sección Misión y Visión -->
+    <section id="mision" class="mission-section">
+        <div class="container">
+            <h2 class="section-title">Misión y Visión</h2>
+
+            <div class="mission-vision-container">
+                <div class="mission-statement">
+                    <div class="statement-icon">
+                        <i data-lucide="target" stroke-width="1.5" aria-hidden="true"></i>
+                    </div>
+                    <h3>Nuestra Misión</h3>
+                    <p>Fomentar la excelencia matemática y el pensamiento crítico entre los estudiantes de décimo grado mediante experiencias educativas enriquecedoras que trasciendan el currículo tradicional. Nuestro club se compromete a cultivar una comunidad de aprendizaje colaborativo donde cada estudiante desarrolle confianza en sus habilidades matemáticas, descubra aplicaciones prácticas de las matemáticas en la vida cotidiana, y se prepare para competir exitosamente en olimpiadas y concursos académicos a nivel local, regional y nacional.</p>
+                </div>
+
+                <div class="mission-statement vision">
+                    <div class="statement-icon">
+                        <i data-lucide="telescope" stroke-width="1.5" aria-hidden="true"></i>
+                    </div>
+                    <h3>Nuestra Visión</h3>
+                    <p>Ser reconocidos como el club de matemáticas líder en nuestra región, donde los estudiantes no solo dominan conceptos matemáticos avanzados, sino que también desarrollan pasión por la investigación matemática y la resolución creativa de problemas. Aspiramos a formar futuros profesionales en carreras STEM que contribuyan significativamente al desarrollo científico y tecnológico de Puerto Rico, manteniendo siempre los valores de integridad académica, trabajo en equipo y perseverancia.</p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Nuestros Propósitos</h3>
+            <div class="mission-grid">
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i data-lucide="book-open" stroke-width="1.5" aria-hidden="true"></i>
+                    </div>
+                    <h3>Complementar</h3>
+                    <p>Enriquecer la educación matemática formal con actividades extracurriculares que desafíen y motiven a los estudiantes</p>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i data-lucide="trophy" stroke-width="1.5" aria-hidden="true"></i>
+                    </div>
+                    <h3>Competir</h3>
+                    <p>Preparar a los estudiantes para participar en competencias matemáticas regionales, nacionales e internacionales</p>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i data-lucide="flask-conical" stroke-width="1.5" aria-hidden="true"></i>
+                    </div>
+                    <h3>Investigar</h3>
+                    <p>Desarrollar habilidades de investigación matemática y metodología científica en el análisis de problemas complejos</p>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i data-lucide="users" stroke-width="1.5" aria-hidden="true"></i>
+                    </div>
+                    <h3>Colaborar</h3>
+                    <p>Promover el aprendizaje colaborativo y el intercambio de estrategias de resolución de problemas entre pares</p>
+                </div>
+                <div class="mission-card">
+                    <div class="mission-icon">
+                        <i data-lucide="zap" stroke-width="1.5" aria-hidden="true"></i>
+                    </div>
+                    <h3>Fortalecer</h3>
+                    <p>Desarrollar autoconfianza y motivación de los estudiantes hacia las matemáticas y las ciencias</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Actividades -->
+    <section id="actividades" class="activities-section">
+        <div class="container">
+            <h2 class="section-title">Plan de Actividades 2024-2025</h2>
+
+            <h3 class="section-subtitle">Actividades Semanales Regulares</h3>
+            <div class="weekly-activities">
+                <div class="weekly-card">
+                    <div class="weekly-day">Martes</div>
+                    <div class="weekly-time">2:30 - 4:00 PM</div>
+                    <h4>Sesiones de Resolución de Problemas</h4>
+                    <p>Práctica intensiva con problemas de olimpiadas matemáticas, estrategias heurísticas y técnicas de demostración</p>
+                </div>
+                <div class="weekly-card">
+                    <div class="weekly-day">Jueves</div>
+                    <div class="weekly-time">2:30 - 4:00 PM</div>
+                    <h4>Talleres de Investigación</h4>
+                    <p>Desarrollo de proyectos de investigación, análisis de datos, uso de software matemático (GeoGebra, Desmos) y preparación de presentaciones científicas</p>
+                </div>
+                <div class="weekly-card">
+                    <div class="weekly-day">Viernes Alternos</div>
+                    <div class="weekly-time">2:30 - 4:00 PM</div>
+                    <h4>Círculos Matemáticos</h4>
+                    <p>Exploración de temas matemáticos avanzados, paradojas, historia de las matemáticas y aplicaciones contemporáneas</p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Calendario Anual de Eventos</h3>
+            <div class="activities-timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="file-text" aria-hidden="true"></i></div>
+                        <h3>Agosto-Septiembre: Inducción</h3>
+                        <p>Sesión de bienvenida e inscripción. Talleres introductorios de estrategias de resolución de problemas y metodología de investigación matemática</p>
+                        <span class="timeline-time">Formación Inicial</span>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="medal" aria-hidden="true"></i></div>
+                        <h3>Octubre: Primera Competencia</h3>
+                        <p>Competencia interna de resolución de problemas. Sesiones intensivas de preparación y simulacros de exámenes competitivos</p>
+                        <span class="timeline-time">Competencia</span>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="graduation-cap" aria-hidden="true"></i></div>
+                        <h3>Noviembre: Gira Educativa</h3>
+                        <p>Visita a la Universidad de Puerto Rico, Recinto de Río Piedras. Interacción con profesores del Departamento de Matemáticas. Charlas sobre carreras STEM</p>
+                        <span class="timeline-time">Experiencia Universitaria</span>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="gift" aria-hidden="true"></i></div>
+                        <h3>Diciembre: Cierre Primer Semestre</h3>
+                        <p>Presentación de proyectos de investigación del primer semestre. Evaluación y retroalimentación de actividades. Reconocimientos a participantes destacados</p>
+                        <span class="timeline-time">Evaluación y Reconocimientos</span>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="microscope" aria-hidden="true"></i></div>
+                        <h3>Enero-Febrero: Investigación Avanzada</h3>
+                        <p>Inicio de proyectos de investigación del segundo semestre. Mentoría en metodología científica. Desarrollo de hipótesis y diseño experimental</p>
+                        <span class="timeline-time">Proyectos de Investigación</span>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="party-popper" aria-hidden="true"></i></div>
+                        <h3>Marzo: Semana de las Matemáticas</h3>
+                        <p>Celebración especial con actividades diarias: juegos matemáticos, exposiciones, charlas de matemáticos invitados, competencia escolar 'Reto Matemático', día de π (3/14), y feria de proyectos</p>
+                        <span class="timeline-time">Evento Especial</span>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="star" aria-hidden="true"></i></div>
+                        <h3>Abril: Segunda Competencia</h3>
+                        <p>Participación en competencia regional de matemáticas. Preparación intensiva y simulacros. Análisis post-competencia y áreas de mejora</p>
+                        <span class="timeline-time">Competencia Regional</span>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-marker"><i data-lucide="award" aria-hidden="true"></i></div>
+                        <h3>Mayo: Cierre Año Escolar</h3>
+                        <p>Simposio final de investigaciones. Ceremonia de reconocimientos y certificados. Evaluación del impacto del club y planificación para el próximo año</p>
+                        <span class="timeline-time">Culminación</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Competencias -->
+    <section id="competencias" class="competitions-section">
+        <div class="container">
+            <h2 class="section-title">Objetivos del Club</h2>
+
+            <div class="objectives-intro">
+                <h3>Nuestras Metas para 2024-2025</h3>
+                <div class="main-objectives">
+                    <div class="main-objective">
+                        <div class="objective-number">15%</div>
+                        <p>Incrementar el rendimiento académico en matemáticas de los estudiantes participantes</p>
+                    </div>
+                    <div class="main-objective">
+                        <div class="objective-number">3+</div>
+                        <p>Participar en al menos tres competencias matemáticas durante el año escolar</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Objetivos Específicos</h3>
+            <div class="competitions-grid">
+                <div class="competition-card">
+                    <div class="competition-header">
+                        <h3>Sesiones de Práctica</h3>
+                        <span class="competition-badge">Semanal</span>
+                    </div>
+                    <div class="competition-body">
+                        <p>Resolver problemas no rutinarios y desarrollar estrategias heurísticas</p>
+                        <ul class="competition-features">
+                            <li>Problemas de olimpiadas</li>
+                            <li>Técnicas de demostración</li>
+                            <li>Razonamiento lógico</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="competition-card featured">
+                    <div class="featured-badge">⭐ Principal</div>
+                    <div class="competition-header">
+                        <h3>Competencias Matemáticas</h3>
+                        <span class="competition-badge">3 al año</span>
+                    </div>
+                    <div class="competition-body">
+                        <p>Preparación intensiva para competir exitosamente</p>
+                        <ul class="competition-features">
+                            <li>Competencia interna (Octubre)</li>
+                            <li>Competencia regional (Abril)</li>
+                            <li>Simulacros continuos</li>
+                            <li>Análisis de estrategias</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="competition-card">
+                    <div class="competition-header">
+                        <h3>Investigación Matemática</h3>
+                        <span class="competition-badge">Semestral</span>
+                    </div>
+                    <div class="competition-body">
+                        <p>Proyectos que conectan teoría con aplicaciones del mundo real</p>
+                        <ul class="competition-features">
+                            <li>Metodología científica</li>
+                            <li>Software matemático</li>
+                            <li>Presentaciones científicas</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="competition-card">
+                    <div class="competition-header">
+                        <h3>Giras Educativas</h3>
+                        <span class="competition-badge">Anual</span>
+                    </div>
+                    <div class="competition-body">
+                        <p>Exposición a carreras STEM y ambiente universitario</p>
+                        <ul class="competition-features">
+                            <li>Visita a UPR Río Piedras</li>
+                            <li>Charlas con profesores</li>
+                            <li>Orientación de carreras</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="competition-card">
+                    <div class="competition-header">
+                        <h3>Semana de las Matemáticas</h3>
+                        <span class="competition-badge">Marzo</span>
+                    </div>
+                    <div class="competition-body">
+                        <p>Celebración especial con múltiples actividades</p>
+                        <ul class="competition-features">
+                            <li>Juegos matemáticos</li>
+                            <li>Reto Matemático escolar</li>
+                            <li>Día de π (3/14)</li>
+                            <li>Feria de proyectos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Galería -->
+    <section id="galeria" class="gallery-section">
+        <div class="container">
+            <h2 class="section-title">Galería de Momentos</h2>
+            <p class="gallery-intro">Capturando los mejores momentos de nuestras actividades matemáticas</p>
+
+            <div class="gallery-grid">
+                <div class="gallery-item" data-symbol="∑">
+                    <div class="gallery-placeholder">
+                        <div class="placeholder-icon"><i data-lucide="camera" aria-hidden="true"></i></div>
+                        <p>Competencia Interna</p>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3>Competencia de Octubre</h3>
+                        <p>Estudiantes demostrando sus habilidades de resolución de problemas</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-symbol="π">
+                    <div class="gallery-placeholder">
+                        <div class="placeholder-icon"><i data-lucide="camera" aria-hidden="true"></i></div>
+                        <p>Gira UPR</p>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3>Visita a Universidad de PR</h3>
+                        <p>Explorando carreras STEM y conociendo profesores</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-symbol="∞">
+                    <div class="gallery-placeholder">
+                        <div class="placeholder-icon"><i data-lucide="camera" aria-hidden="true"></i></div>
+                        <p>Semana de Matemáticas</p>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3>Celebración de π (3/14)</h3>
+                        <p>Actividades especiales y juegos matemáticos</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-symbol="√">
+                    <div class="gallery-placeholder">
+                        <div class="placeholder-icon"><i data-lucide="camera" aria-hidden="true"></i></div>
+                        <p>Talleres</p>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3>Sesiones de Práctica</h3>
+                        <p>Trabajo colaborativo en problemas desafiantes</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-symbol="Δ">
+                    <div class="gallery-placeholder">
+                        <div class="placeholder-icon"><i data-lucide="camera" aria-hidden="true"></i></div>
+                        <p>Proyectos de Investigación</p>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3>Presentaciones Científicas</h3>
+                        <p>Estudiantes mostrando sus investigaciones matemáticas</p>
+                    </div>
+                </div>
+
+                <div class="gallery-item" data-symbol="∫">
+                    <div class="gallery-placeholder">
+                        <div class="placeholder-icon"><i data-lucide="camera" aria-hidden="true"></i></div>
+                        <p>Reconocimientos</p>
+                    </div>
+                    <div class="gallery-overlay">
+                        <h3>Ceremonia de Premios</h3>
+                        <p>Celebrando los logros de nuestros participantes</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-note">
+                <p><i data-lucide="info" class="note-icon" aria-hidden="true"></i> <strong>Nota:</strong> Las fotos de nuestras actividades se actualizarán regularmente a medida que avanza el año escolar. ¡Síguenos en nuestras redes sociales para ver más momentos!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Recursos -->
+    <section id="recursos" class="resources-section">
+        <div class="container">
+            <h2 class="section-title">Recursos Educativos</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon"><i data-lucide="library" aria-hidden="true"></i></div>
+                    <h3>Biblioteca Virtual</h3>
+                    <p>Acceso a libros, artículos y material didáctico de matemáticas</p>
+                    <a href="#" class="resource-link">Acceder →</a>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i data-lucide="monitor" aria-hidden="true"></i></div>
+                    <h3>Laboratorios Interactivos</h3>
+                    <p>Herramientas digitales para visualización y experimentación matemática</p>
+                    <a href="#" class="resource-link">Explorar →</a>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i data-lucide="video" aria-hidden="true"></i></div>
+                    <h3>Videoconferencias</h3>
+                    <p>Grabaciones de talleres, conferencias y sesiones especiales</p>
+                    <a href="#" class="resource-link">Ver →</a>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i data-lucide="file-text" aria-hidden="true"></i></div>
+                    <h3>Banco de Problemas</h3>
+                    <p>Colección curada de problemas por nivel y tema matemático</p>
+                    <a href="#" class="resource-link">Practicar →</a>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i data-lucide="calculator" aria-hidden="true"></i></div>
+                    <h3>Calculadoras y Simuladores</h3>
+                    <p>Herramientas computacionales para cálculos complejos</p>
+                    <a href="#" class="resource-link">Usar →</a>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon"><i data-lucide="message-circle" aria-hidden="true"></i></div>
+                    <h3>Foro de Discusión</h3>
+                    <p>Espacio para compartir dudas, soluciones y descubrimientos</p>
+                    <a href="#" class="resource-link">Unirse →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Contacto -->
+    <section id="contacto" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Contáctanos</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>¿Listo para Unirte?</h3>
+                    <p>El Club de Matemáticas Misión Matemática está abierto a todos los estudiantes de décimo grado apasionados por los números y el razonamiento lógico. No importa tu nivel actual, ¡lo que cuenta es tu curiosidad y determinación!</p>
+
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <span class="contact-icon"><i data-lucide="school" aria-hidden="true"></i></span>
+                            <div>
+                                <h4>Ubicación</h4>
+                                <p>Escuela Superior María Teresa Piñeiro<br>Sabana Seca, Toa Baja, PR</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon"><i data-lucide="user" aria-hidden="true"></i></span>
+                            <div>
+                                <h4>Coordinador</h4>
+                                <p>Prof. Yonatan Guerrero Soriano</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon"><i data-lucide="clock" aria-hidden="true"></i></span>
+                            <div>
+                                <h4>Horario</h4>
+                                <p>Martes y Jueves: 2:30 - 4:00 PM<br>Viernes alternos: 2:30 - 4:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon"><i data-lucide="calendar" aria-hidden="true"></i></span>
+                            <div>
+                                <h4>Año Escolar</h4>
+                                <p>2024-2025</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <i data-lucide="facebook" class="social-icon" aria-hidden="true"></i> Facebook
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i data-lucide="instagram" class="social-icon" aria-hidden="true"></i> Instagram
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i data-lucide="twitter" class="social-icon" aria-hidden="true"></i> Twitter
+                        </a>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h3>Envíanos un Mensaje</h3>
+                    <form id="contact-form" novalidate>
+                        <div class="form-group floating">
+                            <input type="text" id="name" name="name" required placeholder=" ">
+                            <label for="name">Nombre Completo</label>
+                        </div>
+                        <div class="form-group floating">
+                            <input type="email" id="email" name="email" required placeholder=" ">
+                            <label for="email">Correo Electrónico</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="grade">Grado Escolar</label>
+                            <select id="grade" name="grade" required>
+                                <option value="">Selecciona tu grado</option>
+                                <option value="7">Séptimo</option>
+                                <option value="8">Octavo</option>
+                                <option value="9">Noveno</option>
+                                <option value="10">Décimo</option>
+                                <option value="11">Undécimo</option>
+                                <option value="12">Duodécimo</option>
+                            </select>
+                        </div>
+                        <div class="form-group floating">
+                            <textarea id="message" name="message" rows="5" required placeholder=" "></textarea>
+                            <label for="message">Mensaje</label>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span>Enviar Mensaje</span>
+                            <i data-lucide="send" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Misión Matemática</h4>
+                    <p>Club de Matemáticas<br>Escuela Superior María Teresa Piñeiro<br>Año Escolar 2024-2025</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Coordinador</h4>
+                    <p>Prof. Yonatan Guerrero Soriano</p>
+                    <p>Horario:<br>Mar-Jue: 2:30-4:00 PM<br>Vie (alternos): 2:30-4:00 PM</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#mision">Misión</a></li>
+                        <li><a href="#actividades">Actividades</a></li>
+                        <li><a href="#galeria">Galería</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Síguenos</h4>
+                    <div class="footer-social">
+                        <a href="#">Facebook</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Misión Matemática — Todos los derechos reservados</p>
+                <p>Diseñado con ❤️ para el aprendizaje matemático</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
