@@ -787,7 +787,9 @@ function toast(msg, type='i', ms=3000) {
 
 /* ─── SOCKET SETUP ─── */
 function connect() {
-    const url = 'http://localhost:3002';
+    const url = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3002'
+        : 'https://math-battle-server.onrender.com';
     G.socket   = io(url, { transports:['websocket','polling'] });
 
     G.socket.on('connect',       () => { G.myId = G.socket.id; setConn('connected'); });
