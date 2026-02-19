@@ -694,7 +694,8 @@ const G = {
     raf        : null,
     tLeft      : 15,
     tMax       : 15,
-    ovTimer    : null,
+    ovTimer     : null,
+    lastRanking : null,
 };
 
 /* ─── PANTALLAS ─── */
@@ -974,7 +975,7 @@ function renderQuestion(data) {
     sl.textContent = 'Selecciona una respuesta · usa teclas A B C D';
     sl.className   = 'status-line';
 
-    renderLiveScoreboard();
+    renderLiveScoreboard(G.lastRanking);
 
     const secs = timeLimit || 15;
     G.tMax = secs;
@@ -1098,6 +1099,7 @@ function processRound(data) {
     }
 
     updateMyLives(lostLife ? 'break' : null);
+    G.lastRanking = data.overallRanking;
     renderLiveScoreboard(data.overallRanking);
     showRoundOverlay(isCorrect, pts, data.correctAnswer, lostLife);
 }
