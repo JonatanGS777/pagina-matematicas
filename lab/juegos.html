@@ -836,21 +836,29 @@ function connect() {
         updateMyLives();
         document.getElementById('q-tot').textContent = G.qTotal;
         sfx.start();
-        // Mostrar pantalla de juego de inmediato con mensaje de espera
-        show('game');
-        document.getElementById('q-text').textContent  = '¡El juego comienza!';
-        document.getElementById('ans-grid').innerHTML  = '';
-        document.getElementById('status-line').textContent = 'Prepárate… la primera pregunta llega en instantes';
+        // Mostrar mensaje de espera en el lobby sin cambiar de pantalla todavía
+        const msg = document.getElementById('lobby-msg');
+        if (msg) { msg.textContent = '¡Prepárate! La primera pregunta llega en instantes…'; msg.style.color = 'var(--cyan)'; }
     });
 
     G.socket.on('new-question', d => {
         document.getElementById('round-overlay').classList.remove('on');
         clearInterval(G.ovTimer);
-        G.qNum       = d.questionNumber;
+        G.qNum        = d.questionNumber;
         G.hasAnswered = false;
         stopTimer();
         renderQuestion(d);
         show('game');
+
+        // Si el jugador está eliminado (0 vidas), bloquear respuestas y auto-enviar vacío
+        if (G.myLives <= 0) {
+            G.hasAnswered = true;
+            document.querySelectorAll('.ans-btn').forEach(b => b.disabled = true);
+            const sl = document.getElementById('status-line');
+            sl.textContent = '💀 ELIMINADO — observando la ronda';
+            sl.className   = 'status-line';
+            G.socket.emit('submit-answer', { roomCode: G.roomCode, answer: '', timeRemaining: 0 });
+        }
     });
 
     G.socket.on('answer-result', d => {
