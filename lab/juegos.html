@@ -836,6 +836,11 @@ function connect() {
         updateMyLives();
         document.getElementById('q-tot').textContent = G.qTotal;
         sfx.start();
+        // Mostrar pantalla de juego de inmediato con mensaje de espera
+        show('game');
+        document.getElementById('q-text').textContent  = '¡El juego comienza!';
+        document.getElementById('ans-grid').innerHTML  = '';
+        document.getElementById('status-line').textContent = 'Prepárate… la primera pregunta llega en instantes';
     });
 
     G.socket.on('new-question', d => {
@@ -1269,6 +1274,15 @@ function doStart() {
     if (!G.isHost) return;
     if ((G.pCount || G.players.length) < 2) { toast('Necesitas al menos 2 jugadores','e'); return; }
     sfx.click();
+
+    // Deshabilitar botón para evitar múltiples inicios
+    const btn = document.getElementById('btn-start');
+    const msg = document.getElementById('lobby-msg');
+    btn.disabled = true;
+    btn.textContent = '⏳ INICIANDO…';
+    msg.textContent = '¡EL JUEGO COMIENZA EN 3 SEGUNDOS!';
+    msg.style.color = 'var(--yellow)';
+
     G.socket.emit('start-game', { roomCode:G.roomCode });
 }
 
