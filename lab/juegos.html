@@ -987,7 +987,7 @@ function startTimer(secs) {
     G.tLeft = secs;
     const ring = document.getElementById('t-ring');
     const num  = document.getElementById('t-num');
-    ring.className = 't-ring';
+    ring.setAttribute('class', 't-ring');
     num.style.color = 'var(--text-bright)';
 
     let last    = performance.now();
@@ -1004,15 +1004,15 @@ function startTimer(secs) {
         num.textContent = Math.ceil(G.tLeft);
 
         if (ratio <= 0.25) {
-            ring.className = 't-ring crit'; num.style.color = 'var(--pink)';
+            ring.setAttribute('class', 't-ring crit'); num.style.color = 'var(--pink)';
             if (!ticked && G.tLeft < 5) {
                 sfx.tick(); ticked = true;
                 setTimeout(() => { ticked = false; }, 950);
             }
         } else if (ratio <= 0.5) {
-            ring.className = 't-ring warn'; num.style.color = 'var(--yellow)';
+            ring.setAttribute('class', 't-ring warn'); num.style.color = 'var(--yellow)';
         } else {
-            ring.className = 't-ring'; num.style.color = 'var(--text-bright)';
+            ring.setAttribute('class', 't-ring'); num.style.color = 'var(--text-bright)';
         }
 
         if (G.tLeft <= 0) {
