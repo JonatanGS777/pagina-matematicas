@@ -7,14 +7,16 @@
     "dev": "vercel dev",
     "deploy": "vercel --prod"
   },
-  "dependencies": {},
   "keywords": [
     "olimpiadas",
-    "matematicas", 
+    "matematicas",
     "supabase",
     "puerto-rico",
     "educacion"
   ],
   "author": "Tu Nombre",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "puppeteer": "^24.37.4"
+  }
 }
