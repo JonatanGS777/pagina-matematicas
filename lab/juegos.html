@@ -430,6 +430,33 @@
     .rk-pt { font-family:var(--font-m); font-size:.78rem; color:var(--text-mid); }
     .rk-lv { font-size:.72rem; }
 
+    /* ══════════ TOGGLE HOST JUEGA ══════════ */
+    .host-mode-group { display:grid; grid-template-columns:1fr 1fr; gap:.45rem; width:100%; }
+    .host-mode-btn {
+        font-family:var(--font-d); font-size:.58rem; letter-spacing:.1em;
+        padding:.7rem .3rem; border-radius:3px;
+        border:1px solid rgba(255,255,255,.1); background:var(--bg-surface);
+        color:var(--text-mid); cursor:pointer; text-align:center; text-transform:uppercase;
+        transition:all .2s;
+    }
+    .host-mode-btn:hover { border-color:var(--green); color:var(--green); }
+    .host-mode-btn.active[data-mode="play"] {
+        border-color:var(--green); color:var(--green);
+        background:rgba(0,255,136,.08); box-shadow:var(--glow-g);
+    }
+    .host-mode-btn.active[data-mode="watch"] {
+        border-color:var(--yellow); color:var(--yellow);
+        background:rgba(255,230,0,.08); box-shadow:var(--glow-y);
+    }
+
+    /* Badge de moderador en pantalla de juego */
+    .mod-badge {
+        font-family:var(--font-d); font-size:.62rem; letter-spacing:.18em;
+        color:var(--yellow); background:rgba(255,230,0,.1);
+        border:1px solid rgba(255,230,0,.35); border-radius:100px;
+        padding:.3rem .9rem; text-align:center;
+    }
+
     /* ══════════ RESPONSIVE ══════════ */
     @media (max-width:768px) {
         #scr-game.on { flex-direction:column; padding:.5rem; }
@@ -497,6 +524,15 @@
                     <button class="diff-btn"        data-diff="medium">🔵 Medio</button>
                     <button class="diff-btn"        data-diff="hard">🟠 Difícil</button>
                     <button class="diff-btn"        data-diff="expert">🔴 Experto</button>
+                </div>
+            </div>
+
+            <!-- Modo host (sólo aplica al crear sala) -->
+            <div>
+                <p class="label" style="margin-bottom:.5rem;">¿El host juega? <span style="color:var(--text-dim);font-size:.5rem;">(solo al crear sala)</span></p>
+                <div class="host-mode-group">
+                    <button class="host-mode-btn active" data-mode="play">🎮 Sí, juego</button>
+                    <button class="host-mode-btn"        data-mode="watch">👁 Solo modero</button>
                 </div>
             </div>
 
@@ -679,25 +715,29 @@ const DIFF_SETTINGS = {
 
 /* ─── ESTADO ─── */
 const G = {
-    socket     : null,
-    myId       : '',
-    myName     : '',
-    roomCode   : '',
-    isHost     : false,
-    difficulty : 'easy',
-    players    : [],
-    pCount     : 0,
-    lives      : {},    // { playerName: 0-3 }
-    myLives    : 3,
-    score      : 0,
-    qNum       : 0,
-    qTotal     : 15,
-    hasAnswered: false,
-    raf        : null,
-    tLeft      : 15,
-    tMax       : 15,
+    socket      : null,
+    myId        : '',
+    myName      : '',
+    roomCode    : '',
+    isHost      : false,
+    difficulty  : 'easy',
+    players     : [],
+    pCount      : 0,
+    lives       : {},    // { playerName: 0-3 }
+    myLives     : 3,
+    score       : 0,
+    qNum        : 0,
+    qTotal      : 15,
+    hasAnswered : false,
+    raf         : null,
+    tLeft       : 15,
+    tMax        : 15,
+    tPaused     : false,   // Page Visibility API
     ovTimer     : null,
     lastRanking : null,
+    stuckTimer  : null,    // Detector de freeze entre preguntas
+    inGame      : false,   // Está en pantalla de juego activo
+    hostPlays   : true,    // El host participa como jugador
 };
 
 /* ─── PANTALLAS ─── */
@@ -728,11 +768,23 @@ function setConn(status) {
     t.textContent = { connected:'EN LÍNEA', disconnected:'DESCONECTADO', connecting:'CONECTANDO' }[status];
 }
 
+/* ─── PAGE VISIBILITY API ─── */
+// Pausa el timer cuando el móvil apaga la pantalla o el usuario cambia de app
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        G.tPaused = true;
+    } else {
+        G.tPaused = false;
+    }
+});
+
 /* ─── PARTÍCULAS ─── */
 function initParticles() {
-    const box  = document.getElementById('particles');
-    const cols = ['#00f5ff','#ff006e','#ffe600','#00ff88'];
-    for (let i = 0; i < 42; i++) {
+    const box   = document.getElementById('particles');
+    const cols  = ['#00f5ff','#ff006e','#ffe600','#00ff88'];
+    // Menos partículas en móvil para mejor rendimiento
+    const count = window.matchMedia('(max-width: 768px)').matches ? 14 : 42;
+    for (let i = 0; i < count; i++) {
         const p  = document.createElement('div');
         p.className = 'ptcl';
         const sz = 1 + Math.random() * 2.5;
@@ -795,8 +847,21 @@ function connect() {
         : 'https://mathbattle-backend-6dqw.onrender.com';
     G.socket   = io(url, { transports:['websocket','polling'] });
 
-    G.socket.on('connect',       () => { G.myId = G.socket.id; setConn('connected'); });
-    G.socket.on('disconnect',    () => setConn('disconnected'));
+    G.socket.on('connect', () => {
+        G.myId = G.socket.id;
+        setConn('connected');
+    });
+    G.socket.on('disconnect', () => {
+        setConn('disconnected');
+        if (G.inGame) {
+            toast('⚠️ Conexión perdida. Reconectando…', 'e', 5000);
+            stopTimer();
+        }
+    });
+    G.socket.on('reconnect', () => {
+        setConn('connected');
+        if (G.inGame) toast('✓ Reconectado. Esperando la siguiente pregunta…', 's', 4000);
+    });
     G.socket.on('connect_error', () => setConn('disconnected'));
 
     /* ── Sala ── */
@@ -849,11 +914,29 @@ function connect() {
     G.socket.on('new-question', d => {
         document.getElementById('round-overlay').classList.remove('on');
         clearInterval(G.ovTimer);
+        clearTimeout(G.stuckTimer);   // Cancelar detector de freeze
+        G.inGame      = true;
         G.qNum        = d.questionNumber;
         G.hasAnswered = false;
         stopTimer();
         renderQuestion(d);
         show('game');
+
+        // Host en modo moderador: auto-envía vacío y oculta controles de juego
+        if (G.isHost && !G.hostPlays) {
+            G.hasAnswered = true;
+            document.getElementById('ans-grid').style.display    = 'none';
+            document.querySelector('.my-lives-box').style.display = 'none';
+            const sl = document.getElementById('status-line');
+            sl.innerHTML  = '<span class="mod-badge">👁 MODERADOR — observando</span>';
+            sl.className  = 'status-line';
+            G.socket.emit('submit-answer', { roomCode: G.roomCode, answer: '', timeRemaining: 0 });
+            return;
+        }
+
+        // Restaurar controles si el host decidió jugar
+        document.getElementById('ans-grid').style.display    = '';
+        document.querySelector('.my-lives-box').style.display = '';
 
         // Si el jugador está eliminado (0 vidas), bloquear respuestas y auto-enviar vacío
         if (G.myLives <= 0) {
@@ -877,6 +960,8 @@ function connect() {
 
     G.socket.on('game-finished', d => {
         stopTimer();
+        clearTimeout(G.stuckTimer);
+        G.inGame = false;
         document.getElementById('round-overlay').classList.remove('on');
         clearInterval(G.ovTimer);
         showFinal(d);
@@ -989,7 +1074,8 @@ function renderQuestion(data) {
 ══════════════════════════════════ */
 function startTimer(secs) {
     stopTimer();
-    G.tLeft = secs;
+    G.tLeft   = secs;
+    G.tPaused = false;
     const ring = document.getElementById('t-ring');
     const num  = document.getElementById('t-num');
     ring.setAttribute('class', 't-ring');
@@ -999,7 +1085,12 @@ function startTimer(secs) {
     let ticked  = false;
 
     function tick(now) {
-        const dt = (now - last) / 1000;
+        // Si la página estaba oculta (móvil bloqueado / otra app),
+        // restablece 'last' para no acumular el tiempo perdido.
+        if (G.tPaused) { last = now; G.raf = requestAnimationFrame(tick); return; }
+        const rawDt = (now - last) / 1000;
+        // Limita el delta a 1 segundo para absorber micro-suspensiones del SO
+        const dt = Math.min(rawDt, 1);
         last = now;
         G.tLeft = Math.max(0, G.tLeft - dt);
 
@@ -1125,7 +1216,17 @@ function showRoundOverlay(isCorrect, pts, correctAnswer, lostLife) {
     clearInterval(G.ovTimer);
     G.ovTimer = setInterval(() => {
         cd--; nEl.textContent = Math.max(0, cd);
-        if (cd <= 0) { clearInterval(G.ovTimer); ov.classList.remove('on'); }
+        if (cd <= 0) {
+            clearInterval(G.ovTimer);
+            ov.classList.remove('on');
+            // Inicia detector: si la siguiente pregunta no llega en 10 s, avisa
+            clearTimeout(G.stuckTimer);
+            G.stuckTimer = setTimeout(() => {
+                if (G.inGame && !document.getElementById('round-overlay').classList.contains('on')) {
+                    toast('⏳ Esperando al servidor… Si continúa, recarga la página.', 'i', 8000);
+                }
+            }, 10000);
+        }
     }, 1000);
 }
 
@@ -1253,12 +1354,14 @@ function showFinal(data) {
 function doCreate() {
     const name = document.getElementById('inp-name').value.trim();
     if (!name) { toast('Ingresa tu nombre de combate','e'); return; }
-    G.myName     = name;
+    G.myName    = name;
     G.difficulty = document.querySelector('.diff-btn.active').dataset.diff;
+    G.hostPlays  = document.querySelector('.host-mode-btn.active').dataset.mode === 'play';
     sfx.click();
     const s = DIFF_SETTINGS[G.difficulty];
     G.socket.emit('create-room', {
         playerName  : name,
+        hostPlays   : G.hostPlays,
         gameSettings: {
             maxPlayers    : 30,
             totalQuestions: s.totalQuestions,
@@ -1311,10 +1414,12 @@ function doLeave() {
 function resetState() {
     stopTimer();
     clearInterval(G.ovTimer);
+    clearTimeout(G.stuckTimer);
     Object.assign(G, {
         myName:'', roomCode:'', isHost:false, difficulty:'easy',
         players:[], pCount:0, lives:{},
         myLives:3, score:0, qNum:0, hasAnswered:false,
+        inGame:false, tPaused:false, stuckTimer:null, hostPlays:true,
     });
 }
 
@@ -1362,6 +1467,15 @@ function bindEvents() {
         btn.addEventListener('click', () => {
             sfx.click();
             document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+
+    // Modo host (jugar / solo moderar)
+    document.querySelectorAll('.host-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            sfx.click();
+            document.querySelectorAll('.host-mode-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         });
     });
