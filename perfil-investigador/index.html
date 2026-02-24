@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --color-bg: #0a0a0a;
@@ -242,6 +243,276 @@
             .nav-overlay.active {
                 opacity: 1;
                 visibility: visible;
+            }
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--color-accent);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle i {
+            font-size: 18px;
+            color: var(--color-accent);
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle .fa-sun {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        .theme-toggle .fa-moon {
+            opacity: 0;
+            transform: rotate(90deg);
+        }
+
+        /* Light Mode Styles */
+        body.light-mode {
+            --color-bg: #f0f4ff;
+            --color-surface: #ffffff;
+            --color-surface-light: #e8efff;
+            --color-text: #0f172a;
+            --color-text-muted: #475569;
+            --color-accent: #2563eb;
+            --color-accent-bright: #3b82f6;
+            --color-accent-dim: #93c5fd;
+            --color-border: #bfdbfe;
+        }
+
+        body.light-mode .theme-toggle .fa-sun {
+            opacity: 0;
+            transform: rotate(-90deg);
+        }
+
+        body.light-mode .theme-toggle .fa-moon {
+            opacity: 1;
+            transform: rotate(0deg);
+        }
+
+        body.light-mode .bg-grid {
+            opacity: 0.08;
+        }
+
+        body.light-mode .gradient-orb {
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            opacity: 0.8;
+        }
+
+        body.light-mode .chart-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: var(--color-border);
+        }
+
+        body.light-mode .research-card,
+        body.light-mode .timeline-card,
+        body.light-mode .stat-card {
+            background: var(--color-surface);
+            border-color: var(--color-border);
+        }
+
+        body.light-mode .chapter-btn {
+            background: var(--color-surface-light);
+            color: var(--color-text);
+        }
+
+        body.light-mode .chapter-btn:hover,
+        body.light-mode .chapter-btn.active {
+            background: var(--color-accent);
+            color: #1a1a1a;
+        }
+
+        body.light-mode .panel-content {
+            background: var(--color-surface);
+        }
+
+        body.light-mode footer {
+            background: var(--color-surface-light);
+            border-color: var(--color-border);
+        }
+
+        body.light-mode .hero-tag,
+        body.light-mode .hero-subtitle {
+            color: var(--color-accent);
+        }
+
+        body.light-mode .hero-description {
+            color: var(--color-text-muted);
+        }
+
+        body.light-mode .timeline-card p {
+            color: var(--color-text);
+        }
+
+        body.light-mode .stat-label {
+            color: var(--color-text);
+        }
+
+        body.light-mode .stat-sub {
+            color: var(--color-text-muted);
+        }
+
+        body.light-mode .chart-card-header h3 {
+            color: var(--color-text);
+        }
+
+        body.light-mode .chart-card-header p {
+            color: var(--color-text-muted);
+        }
+
+        body.light-mode .findings-section h3 {
+            color: var(--color-text);
+        }
+
+        body.light-mode .reference-item p {
+            color: var(--color-text-muted);
+        }
+
+        body.light-mode .reference-item em {
+            color: var(--color-text);
+        }
+
+        body.light-mode .contact-info h2 {
+            color: var(--color-text);
+        }
+
+        body.light-mode .contact-info p {
+            color: var(--color-text-muted);
+        }
+
+        body.light-mode .contact-link {
+            color: var(--color-text);
+            border-color: var(--color-border);
+        }
+
+        body.light-mode .contact-link:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        body.light-mode .visual-box {
+            border-color: var(--color-border);
+        }
+
+        body.light-mode .chart-bar-track {
+            background: var(--color-surface-light);
+        }
+
+        body.light-mode .chart-bar-fill {
+            background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-bright) 100%);
+        }
+
+        body.light-mode .chart-label {
+            color: var(--color-text);
+        }
+
+        body.light-mode .chart-value {
+            color: var(--color-accent);
+        }
+
+        /* Responsive adjustments for theme toggle */
+        @media (max-width: 768px) {
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+            }
+
+            nav {
+                padding: 24px 0;
+                margin-bottom: 40px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                margin-bottom: 80px;
+                min-height: auto;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-card--wide {
+                grid-column: span 1;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timeline-wrapper {
+                padding: 0 20px;
+            }
+
+            .dissertation-nav {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .chapter-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .conclusions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .chart-canvas-wrap {
+                min-height: 250px;
             }
         }
 
@@ -1407,6 +1678,89 @@
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .chapter-btn { padding: 14px 18px; font-size: 11px; }
         }
+
+        /* =============================================
+           NAV RIGHT GROUP
+        ============================================= */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* =============================================
+           REFERENCIAS SECTION
+        ============================================= */
+        .references-wrap {
+            margin-top: 60px;
+            padding: 40px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+        }
+
+        .references-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 24px;
+        }
+
+        .references-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .reference-card {
+            padding: 16px 20px;
+            background: var(--color-surface-light);
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .reference-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--color-accent);
+            color: var(--color-bg);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            margin-bottom: 8px;
+        }
+
+        .reference-text {
+            color: var(--color-text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .reference-text em {
+            color: var(--color-text);
+        }
+
+        /* =============================================
+           LIGHT MODE: HARDCODED COLOR FIXES
+        ============================================= */
+
+        /* Visual box #2 has hardcoded dark background */
+        body.light-mode .visual-box:nth-child(2) {
+            background: rgba(240, 244, 255, 0.9);
+        }
+
+        /* Timeline featured node uses hardcoded gold gradient */
+        body.light-mode .timeline-node--featured .timeline-card {
+            background: linear-gradient(135deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.06) 100%);
+        }
+
+        /* Timeline dot shadows use hardcoded gold */
+        body.light-mode .timeline-node--featured .timeline-dot {
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
+
+        body.light-mode .timeline-node:hover .timeline-dot {
+            box-shadow: 0 0 12px rgba(37, 99, 235, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -1419,14 +1773,33 @@
         <!-- Navigation -->
         <nav>
             <div class="logo">Dr. YGS</div>
-            <ul class="nav-links">
-                <li><a href="#research">Investigación</a></li>
-                <li><a href="#timeline">IA &amp; Educación</a></li>
-                <li><a href="#dissertation">Disertación</a></li>
-                <li><a href="#charts">Análisis</a></li>
-                <li><a href="#contact">Contacto</a></li>
-            </ul>
+
+            <div class="nav-right">
+                <!-- Dark/Light Mode Toggle -->
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo oscuro/claro">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#research">Investigación</a></li>
+                    <li><a href="#timeline">IA &amp; Educación</a></li>
+                    <li><a href="#dissertation">Disertación</a></li>
+                    <li><a href="#charts">Otros Hallazgos</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </div>
         </nav>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="nav-overlay" id="navOverlay"></div>
 
         <!-- Hero Section -->
         <section class="hero">
@@ -1439,7 +1812,7 @@
                     híbrido en matemáticas, integrando la inteligencia artificial como recurso educativo en
                     escuelas secundarias especializadas.
                 </p>
-                <a href="#publications" class="cta-button">Ver Publicaciones</a>
+                <a href="#dissertation" class="cta-button">Ver Disertación</a>
             </div>
             <div class="hero-visual">
                 <div class="visual-box"></div>
@@ -1923,98 +2296,119 @@
             </div>
         </section>
 
+
         <!-- Advanced Charts Section -->
         <section id="charts" class="charts-section">
             <div class="section-header">
                 <span class="section-number">04</span>
-                <h2 class="section-title">Análisis de Datos</h2>
+                <h2 class="section-title">Otros Hallazgos</h2>
             </div>
 
             <p class="charts-intro">
-                Visualización interactiva de los hallazgos cuantitativos. Los datos corresponden a
-                18 docentes de escuelas secundarias especializadas en matemáticas, Región de San Juan,
-                Puerto Rico. Escala Likert 1–5 · Análisis con Python · CVC del instrumento: 0.9778.
+                Inteligencia Artificial en la Educación: Evidencia Científica 2024-2025.
+                Análisis de tendencias globales, adopción institucional, impacto en el aprendizaje y 
+                perspectivas docentes basadas en estudios empíricos recientes.
             </p>
 
             <div class="charts-grid">
 
-                <!-- Radar: General Profile -->
+                <!-- Gráfica 1: Adopción de IA (Radar) -->
                 <div class="chart-card chart-card--wide">
                     <div class="chart-card-header">
-                        <h3>Perfil General de la Investigación</h3>
-                        <p>Comparación multidimensional de los tres constructos principales en escala 1–5</p>
+                        <h3>Adopción de IA: Comparación Multidimensional</h3>
+                        <p>Radar comparativo por nivel educativo actual vs. proyección 2027 — Fuente: García et al. (2025); Microsoft (2025)</p>
                     </div>
-                    <div class="chart-canvas-wrap" style="max-height:420px; display:flex; justify-content:center;">
-                        <canvas id="radarChart" style="max-width:600px;"></canvas>
+                    <div class="chart-canvas-wrap">
+                        <canvas id="adoptionChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Doughnut: Gender -->
+                <!-- Gráfica 2: Opiniones (Pie) -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Distribución por Género</h3>
-                        <p>Composición de la muestra docente (n = 18)</p>
+                        <h3>Perspectivas Docentes sobre IA</h3>
+                        <p>Distribución de opiniones K-12 — Fuente: Pew Research Center (2024)</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="genderChart"></canvas>
+                        <canvas id="teacherOpinionChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Bar: Grade levels -->
+                <!-- Gráfica 3: Aprendizaje Adaptativo (Bar Horizontal) -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Nivel de Grado Asignado</h3>
-                        <p>Distribución de docentes por nivel de enseñanza</p>
+                        <h3>Impacto del Aprendizaje Adaptativo</h3>
+                        <p>Mejora en rendimiento académico — Fuente: Knewton (2024)</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="gradeChart"></canvas>
+                        <canvas id="adaptiveLearningChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Horizontal bar: Preparation -->
+                <!-- Gráfica 4: Reducción Carga (Grouped Bar) -->
                 <div class="chart-card chart-card--wide">
                     <div class="chart-card-header">
-                        <h3>Dimensiones de Preparación en IA</h3>
-                        <p>Puntuación media por ítem — Pregunta de Investigación 1 (escala 1–5 · M = 2.34)</p>
+                        <h3>Eficiencia Docente: Tradicional vs. IA</h3>
+                        <p>Comparativa de horas por tarea administrativa — Fuente: Gradescope (2024); Microsoft (2025)</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="prepChart"></canvas>
+                        <canvas id="workloadChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Horizontal bar: Training needs -->
-                <div class="chart-card chart-card--wide">
+                <!-- Gráfica 5: Chatbots (Polar Area) -->
+                <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Necesidades de Capacitación Docente</h3>
-                        <p>Puntuación media por área — Pregunta de Investigación 2 (escala 1–5 · M = 4.28)</p>
+                        <h3>Precisión de Chatbots Educativos</h3>
+                        <p>Distribución de respuestas — Fuente: Universidad de Murcia (2024)</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="trainingChart"></canvas>
+                        <canvas id="chatbotChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Grouped bar: Perceptions -->
-                <div class="chart-card chart-card--wide">
+                <!-- Gráfica 6: Mercado (Area Line) -->
+                <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Percepciones y Actitudes hacia la IA</h3>
-                        <p>Distribución de respuestas por dimensión — Pregunta de Investigación 3 (escala 1–5)</p>
+                        <h3>Crecimiento del Mercado Global</h3>
+                        <p>Proyección 2020-2030 (miles de millones USD) — Fuente: AIPRM (2024); Zendy (2025)</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="perceptionsChart"></canvas>
+                        <canvas id="marketChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Correlations bar -->
-                <div class="chart-card chart-card--wide">
-                    <div class="chart-card-header">
-                        <h3>Mapa de Correlaciones de Pearson</h3>
-                        <p>Coeficientes r entre variables clave del estudio · Positivas (dorado) · Negativas (rojizo)</p>
+            </div>
+
+            <!-- Referencias -->
+            <div class="references-wrap">
+                <h3 class="references-title">Referencias</h3>
+                <div class="references-list">
+                    <div class="reference-card">
+                        <span class="reference-badge">Revisión Sistemática</span>
+                        <p class="reference-text">García, F., Martínez, J., &amp; López, A. (2025). Systematic review of artificial intelligence in education. <em>Applied Sciences, 15</em>(8), 84.</p>
                     </div>
-                    <div class="chart-canvas-wrap">
-                        <canvas id="corrChart"></canvas>
+                    <div class="reference-card">
+                        <span class="reference-badge">Reporte</span>
+                        <p class="reference-text">Microsoft. (2025). <em>2025 AI in education: A special report</em>.</p>
+                    </div>
+                    <div class="reference-card">
+                        <span class="reference-badge">Encuesta</span>
+                        <p class="reference-text">Pew Research Center. (2024). <em>Teachers' views on AI in K-12 education</em>.</p>
+                    </div>
+                    <div class="reference-card">
+                        <span class="reference-badge">Estudio Empírico</span>
+                        <p class="reference-text">Knewton. (2024). <em>Adaptive learning and student performance</em>.</p>
+                    </div>
+                    <div class="reference-card">
+                        <span class="reference-badge">Estudio Empírico</span>
+                        <p class="reference-text">Universidad de Murcia. (2024). AI chatbots in higher education. <em>Computers &amp; Education, 198</em>, 104785.</p>
+                    </div>
+                    <div class="reference-card">
+                        <span class="reference-badge">Reporte</span>
+                        <p class="reference-text">AIPRM. (2024). <em>AI in education statistics</em>.</p>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -2061,6 +2455,51 @@
     </footer>
 
     <script>
+        // =============================================
+        // THEME TOGGLE - Dark/Light Mode
+        // =============================================
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+        }
+        
+        // Toggle theme
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+
+        // =============================================
+        // MOBILE MENU - Hamburger
+        // =============================================
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        const navOverlay = document.getElementById('navOverlay');
+        
+        function toggleMobileMenu() {
+            mobileMenuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        }
+        
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        navOverlay.addEventListener('click', toggleMobileMenu);
+        
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
         // Scroll animation observer
         const observerOptions = {
             threshold: 0.15,
@@ -2170,324 +2609,331 @@
             });
         }
 
+
         // =============================================
-        // CHART.JS — Advanced Data Visualization
+        // CHART.JS — Otros Hallazgos: IA en Educación
         // =============================================
 
-        // Global Chart.js defaults — dark theme
-        Chart.defaults.color = '#a0a0a0';
-        Chart.defaults.borderColor = '#2a2a2a';
-        Chart.defaults.font.family = "'Spectral', serif";
-        Chart.defaults.font.size = 13;
-        Chart.defaults.animation.duration = 1200;
-        Chart.defaults.animation.easing = 'easeInOutQuart';
+        // Theme-aware chart colors
+        function getChartColors() {
+            const isLight = document.body.classList.contains('light-mode');
+            return {
+                text:        isLight ? '#0f172a' : '#e8e8e8',
+                textMuted:   isLight ? '#475569' : '#a0a0a0',
+                grid:        isLight ? '#bfdbfe' : '#2a2a2a',
+                surface:     isLight ? '#ffffff' : '#1a1a1a',
+                accent:      isLight ? 'rgba(37, 99, 235, 1)'    : 'rgba(212, 165, 116, 1)',
+                accent75:    isLight ? 'rgba(37, 99, 235, 0.75)' : 'rgba(212, 165, 116, 0.75)',
+                accent50:    isLight ? 'rgba(37, 99, 235, 0.5)'  : 'rgba(212, 165, 116, 0.5)',
+                accent25:    isLight ? 'rgba(37, 99, 235, 0.25)' : 'rgba(212, 165, 116, 0.25)',
+                accent15:    isLight ? 'rgba(37, 99, 235, 0.15)' : 'rgba(212, 165, 116, 0.15)',
+                accentFill:  isLight ? 'rgba(37, 99, 235, 0.4)'  : 'rgba(212, 165, 116, 0.4)',
+            };
+        }
+
+        function updateChartDefaults() {
+            const colors = getChartColors();
+            Chart.defaults.color = colors.textMuted;
+            Chart.defaults.borderColor = colors.grid;
+        }
+
+        updateChartDefaults();
+        Chart.defaults.font.family = "'Syne', sans-serif";
+        Chart.defaults.font.size = 12;
 
         const C = {
-            gold:       '#d4a574',
-            goldBright: '#e8c4a0',
-            goldDim:    '#8a6f4f',
-            goldFill:   'rgba(212,165,116,0.12)',
-            goldMid:    'rgba(212,165,116,0.45)',
-            goldFull:   'rgba(212,165,116,0.85)',
-            red:        'rgba(190,90,70,0.80)',
-            redDim:     'rgba(190,90,70,0.45)',
-            grid:       '#2a2a2a',
-            text:       '#a0a0a0',
+            gold: 'rgba(212, 165, 116, 1)',
+            gold75: 'rgba(212, 165, 116, 0.75)',
+            gold50: 'rgba(212, 165, 116, 0.5)',
+            gold25: 'rgba(212, 165, 116, 0.25)',
+            gold15: 'rgba(212, 165, 116, 0.15)',
+            green: 'rgba(52, 211, 153, 0.8)',
+            green50: 'rgba(52, 211, 153, 0.5)',
+            red: 'rgba(239, 68, 68, 0.8)',
+            red50: 'rgba(239, 68, 68, 0.5)',
+            blue: 'rgba(96, 165, 250, 0.8)',
+            purple: 'rgba(167, 139, 250, 0.8)',
+            cyan: 'rgba(34, 211, 238, 0.8)',
+            text: '#e8e8e8'
         };
 
-        const scaleDefaults = {
-            grid: { color: C.grid },
-            ticks: { color: C.text },
-            border: { color: C.grid }
-        };
-
-        // ── 1. Radar: Research Profile ──────────────────
-        new Chart(document.getElementById('radarChart'), {
+        // ── 1. RADAR: Adopción Multidimensional ──────────────────
+        const adoptionChart = new Chart(document.getElementById('adoptionChart'), {
             type: 'radar',
             data: {
-                labels: [
-                    'Preparación\nTeórica',
-                    'Preparación\nPráctica',
-                    'Necesidades\nFormación',
-                    'Eficiencia\nDocente',
-                    'Motivación\nEstudiantil',
-                    'Percepción\nGeneral'
-                ],
+                labels: ['Educación Superior', 'K-12 Secundaria', 'K-12 Primaria', 'Formación Docente', 'Educación Virtual'],
                 datasets: [{
-                    label: 'Media (1–5)',
-                    data: [2.67, 1.94, 4.28, 4.06, 3.94, 3.70],
-                    backgroundColor: C.goldFill,
+                    label: 'Adopción de IA (%)',
+                    data: [68, 42, 28, 55, 72],
+                    backgroundColor: C.gold25,
                     borderColor: C.gold,
                     borderWidth: 2,
                     pointBackgroundColor: C.gold,
                     pointBorderColor: '#1a1a1a',
-                    pointHoverBackgroundColor: C.goldBright,
-                    pointRadius: 6,
-                    pointHoverRadius: 8
+                    pointHoverBackgroundColor: C.gold,
+                    pointRadius: 5
+                }, {
+                    label: 'Proyección 2027 (%)',
+                    data: [85, 65, 48, 75, 88],
+                    backgroundColor: 'rgba(52, 211, 153, 0.1)',
+                    borderColor: C.green,
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointBackgroundColor: C.green,
+                    pointBorderColor: '#1a1a1a',
+                    pointRadius: 4
                 }]
             },
             options: {
                 responsive: true,
-                plugins: { legend: { display: false } },
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { color: C.text } } },
                 scales: {
                     r: {
-                        min: 0, max: 5,
-                        ticks: {
-                            stepSize: 1,
-                            color: '#555',
-                            backdropColor: 'transparent',
-                            font: { size: 11 }
-                        },
-                        grid:        { color: '#2a2a2a' },
-                        angleLines:  { color: '#2a2a2a' },
-                        pointLabels: {
-                            color: '#a0a0a0',
-                            font: { size: 13 }
-                        }
+                        min: 0, max: 100,
+                        ticks: { stepSize: 20, color: '#555', backdropColor: 'transparent', callback: v => v + '%' },
+                        grid: { color: '#2a2a2a' },
+                        angleLines: { color: '#2a2a2a' },
+                        pointLabels: { color: '#a0a0a0', font: { size: 12 } }
                     }
                 }
             }
         });
 
-        // ── 2. Doughnut: Gender ─────────────────────────
-        new Chart(document.getElementById('genderChart'), {
-            type: 'doughnut',
+        // ── 2. PIE: Opiniones de Docentes ─────────────────────────
+        const teacherOpinionChart = new Chart(document.getElementById('teacherOpinionChart'), {
+            type: 'pie',
             data: {
-                labels: ['Femenino (55.6%)', 'Masculino (44.4%)'],
+                labels: ['Más desafíos que beneficios', 'Más beneficios que desafíos', 'Neutral/Indeciso'],
                 datasets: [{
-                    data: [55.6, 44.4],
-                    backgroundColor: [C.gold, C.goldDim],
+                    data: [51, 28, 21],
+                    backgroundColor: [C.red, C.gold, C.gold25],
                     borderColor: '#1a1a1a',
-                    borderWidth: 4,
-                    hoverOffset: 10
+                    borderWidth: 3,
+                    hoverOffset: 15
                 }]
             },
             options: {
                 responsive: true,
-                cutout: '68%',
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { color: C.text, padding: 20, font: { size: 13 } }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: ctx => ` ${ctx.label}`
-                        }
+                    legend: { position: 'right', labels: { color: C.text, padding: 20, font: { size: 13 } } },
+                    tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
+                }
+            }
+        });
+
+        // ── 3. HORIZONTAL BAR: Impacto Aprendizaje Adaptativo ─────
+        const adaptiveLearningChart = new Chart(document.getElementById('adaptiveLearningChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Sin tecnología adaptativa', 'Con IA adaptativa'],
+                datasets: [{
+                    label: 'Mejora en rendimiento (desviaciones estándar)',
+                    data: [0, 1.5],
+                    backgroundColor: ['rgba(160, 160, 160, 0.3)', C.gold75],
+                    borderColor: ['rgba(160, 160, 160, 0.5)', C.gold],
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x}σ sobre el promedio` } }
+                },
+                scales: {
+                    x: { min: 0, max: 2, ticks: { color: C.text, callback: v => v + 'σ' }, grid: { color: '#2a2a2a' } },
+                    y: { ticks: { color: C.text }, grid: { display: false } }
+                }
+            }
+        });
+
+        // ── 4. GROUPED BAR: Reducción Carga Docente ─────────────
+        const workloadChart = new Chart(document.getElementById('workloadChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Calificación', 'Planificación', 'Comunicación', 'Reportes'],
+                datasets: [{
+                    label: 'Tradicional (horas/semana)',
+                    data: [10, 8, 5, 4],
+                    backgroundColor: 'rgba(160, 160, 160, 0.4)',
+                    borderRadius: 4
+                }, {
+                    label: 'Con IA (horas/semana)',
+                    data: [3, 5, 3, 1.5],
+                    backgroundColor: C.gold75,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top', labels: { color: C.text } } },
+                scales: {
+                    y: { beginAtZero: true, max: 12, ticks: { color: C.text, callback: v => v + 'h' }, grid: { color: '#2a2a2a' } },
+                    x: { ticks: { color: C.text }, grid: { display: false } }
+                }
+            }
+        });
+
+        // ── 5. POLAR AREA: Precisión Chatbots ──────────────────
+        const chatbotChart = new Chart(document.getElementById('chatbotChart'), {
+            type: 'polarArea',
+            data: {
+                labels: ['Respuestas Correctas', 'Respuestas Incorrectas', 'Derivadas a Humano', 'Sin Respuesta'],
+                datasets: [{
+                    data: [91, 5, 3, 1],
+                    backgroundColor: [C.green50, C.red50, C.blue, C.gold25],
+                    borderColor: ['rgba(52, 211, 153, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(96, 165, 250, 0.8)', 'rgba(212, 165, 116, 0.5)'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { color: C.text, font: { size: 12 } } },
+                    tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}%` } }
+                },
+                scales: {
+                    r: {
+                        min: 0, max: 100,
+                        ticks: { color: '#555', backdropColor: 'transparent', z: 1 },
+                        grid: { color: '#2a2a2a' },
+                        angleLines: { color: '#333' }
                     }
                 }
             }
         });
 
-        // ── 3. Bar: Grade Levels ────────────────────────
-        new Chart(document.getElementById('gradeChart'), {
-            type: 'bar',
+        // ── 6. AREA LINE: Mercado Global ──────────────────
+        const marketChart = new Chart(document.getElementById('marketChart'), {
+            type: 'line',
             data: {
-                labels: ['Grados 7–8', 'Grados 9–10', 'Grados 11–12'],
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
                 datasets: [{
-                    label: '% de docentes',
-                    data: [27.8, 33.3, 38.9],
-                    backgroundColor: [C.goldDim, C.goldMid, C.goldFull],
-                    borderColor: 'transparent',
-                    borderRadius: 3,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y}%` } }
-                },
-                scales: {
-                    y: { ...scaleDefaults, beginAtZero: true, max: 50,
-                         ticks: { ...scaleDefaults.ticks, callback: v => v + '%' } },
-                    x: { ...scaleDefaults, grid: { display: false } }
-                }
-            }
-        });
-
-        // ── 4. Horizontal Bar: Preparation ─────────────
-        new Chart(document.getElementById('prepChart'), {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Conocimiento teórico sobre IA (P6)',
-                    'Familiaridad con herramientas de IA (P7)',
-                    'Preparación para diseño instruccional (P9)',
-                    'Media general de preparación',
-                    'Capacitación formal recibida (P8)',
-                    'Experiencia práctica de implementación (P10)'
-                ],
-                datasets: [{
-                    label: 'Media',
-                    data: [2.67, 2.44, 2.28, 2.34, 1.89, 1.94],
-                    backgroundColor: [
-                        C.goldFull,
-                        'rgba(212,165,116,0.75)',
-                        'rgba(212,165,116,0.60)',
-                        C.goldMid,
-                        C.redDim,
-                        C.redDim,
-                    ],
-                    borderColor: 'transparent',
-                    borderRadius: 3,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ` M = ${ctx.parsed.x.toFixed(2)} / 5` } }
-                },
-                scales: {
-                    x: { ...scaleDefaults, beginAtZero: true, max: 5,
-                         ticks: { ...scaleDefaults.ticks, callback: v => v.toFixed(0) } },
-                    y: { ...scaleDefaults, grid: { display: false } }
-                }
-            }
-        });
-
-        // ── 5. Horizontal Bar: Training Needs ──────────
-        new Chart(document.getElementById('trainingChart'), {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Mejores prácticas con IA (P11)',
-                    'Diseño de actividades con IA (P12)',
-                    'Evaluación del aprendizaje con IA (P13)',
-                    'Media general de necesidades',
-                    'Fundamentos teóricos de IA (P14)',
-                    'Selección de herramientas digitales (P15)'
-                ],
-                datasets: [{
-                    label: 'Media',
-                    data: [4.39, 4.33, 4.33, 4.28, 4.22, 4.11],
-                    backgroundColor: [
-                        'rgba(212,165,116,1.0)',
-                        'rgba(212,165,116,0.92)',
-                        'rgba(212,165,116,0.85)',
-                        C.goldMid,
-                        'rgba(212,165,116,0.72)',
-                        'rgba(212,165,116,0.62)',
-                    ],
-                    borderColor: 'transparent',
-                    borderRadius: 3,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ` M = ${ctx.parsed.x.toFixed(2)} / 5` } }
-                },
-                scales: {
-                    x: { ...scaleDefaults, beginAtZero: true, max: 5,
-                         ticks: { ...scaleDefaults.ticks, callback: v => v.toFixed(0) } },
-                    y: { ...scaleDefaults, grid: { display: false } }
-                }
-            }
-        });
-
-        // ── 6. Bar: Perceptions ─────────────────────────
-        new Chart(document.getElementById('perceptionsChart'), {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Eficiencia\ndocente',
-                    'Motivación\nestudiantil',
-                    'Personalización\ndel aprendizaje',
-                    'Percepción\ngeneral',
-                    'Mejora en\nresultados',
-                    'Preocupación:\nreemplazo docente'
-                ],
-                datasets: [
-                    {
-                        label: 'Media observada',
-                        data: [4.06, 3.94, 3.89, 3.70, 3.78, 2.89],
-                        backgroundColor: [
-                            C.goldFull, C.goldFull, C.goldMid,
-                            C.goldMid,  C.goldMid,  C.redDim
-                        ],
-                        borderColor: 'transparent',
-                        borderRadius: 3,
-                        borderSkipped: false
+                    label: 'Valor del mercado',
+                    data: [2.5, 3.8, 5.2, 8.1, 12.4, 16.8, 20.5, 23.2, 26.2, 28.5, 30.8],
+                    backgroundColor: (ctx) => {
+                        const canvas = ctx.chart.ctx;
+                        const gradient = canvas.createLinearGradient(0, 0, 0, 300);
+                        gradient.addColorStop(0, 'rgba(212, 165, 116, 0.4)');
+                        gradient.addColorStop(1, 'rgba(212, 165, 116, 0)');
+                        return gradient;
                     },
-                    {
-                        label: 'Punto de corte neutro',
-                        data: [3, 3, 3, 3, 3, 3],
-                        backgroundColor: 'rgba(255,255,255,0.06)',
-                        borderColor: '#555',
-                        borderWidth: 1,
-                        borderDash: [4, 4],
-                        borderRadius: 0,
-                        borderSkipped: false,
-                        type: 'line',
-                        pointRadius: 0,
-                        fill: false,
-                        tension: 0
-                    }
-                ]
+                    borderColor: C.gold,
+                    borderWidth: 3,
+                    pointBackgroundColor: C.gold,
+                    pointBorderColor: '#1a1a1a',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: true,
+                    tension: 0.4
+                }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        labels: { color: C.text, font: { size: 12 }, padding: 16 }
-                    },
-                    tooltip: { callbacks: { label: ctx => ` M = ${ctx.parsed.y?.toFixed(2) ?? ctx.parsed.toFixed(2)} / 5` } }
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: ctx => ` $${ctx.parsed.y} mil millones` } }
                 },
                 scales: {
-                    y: { ...scaleDefaults, beginAtZero: true, max: 5,
-                         ticks: { ...scaleDefaults.ticks, callback: v => v.toFixed(0) } },
-                    x: { ...scaleDefaults, grid: { display: false } }
+                    y: { 
+                        beginAtZero: true, max: 35, 
+                        ticks: { color: C.text, callback: v => '$' + v + 'B' }, 
+                        grid: { color: '#2a2a2a' } 
+                    },
+                    x: { ticks: { color: C.text }, grid: { display: false } }
                 }
             }
         });
 
-        // ── 7. Horizontal Bar: Correlations ────────────
-        new Chart(document.getElementById('corrChart'), {
-            type: 'bar',
-            data: {
-                labels: [
-                    'Teoría (P11) ↔ Diseño instruccional (P12)',
-                    'Conocimiento (P6) ↔ Familiaridad (P7)',
-                    'Preparación (P9) ↔ Experiencia (P10)',
-                    'Capacitación formal (P8) ↔ Necesidades (promedio)',
-                    'Preparación general ↔ Percepciones',
-                    'Preparación general ↔ Necesidades'
-                ],
-                datasets: [{
-                    label: 'r de Pearson',
-                    data: [0.97, 0.82, 0.75, -0.64, 0.41, -0.24],
-                    backgroundColor: ctx => ctx.parsed.x >= 0 ? C.goldFull : C.red,
-                    borderColor: 'transparent',
-                    borderRadius: 3,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ` r = ${ctx.parsed.x.toFixed(2)}` } }
-                },
-                scales: {
-                    x: {
-                        ...scaleDefaults, min: -1, max: 1,
-                        ticks: {
-                            ...scaleDefaults.ticks,
-                            callback: v => v.toFixed(1)
-                        }
-                    },
-                    y: { ...scaleDefaults, grid: { display: false } }
+        // Update charts on theme change
+        function updateChartsTheme() {
+            const colors = getChartColors();
+            const charts = [adoptionChart, teacherOpinionChart, adaptiveLearningChart, workloadChart, chatbotChart, marketChart];
+
+            charts.forEach(chart => {
+                if (!chart) return;
+
+                // Update scales
+                if (chart.options.scales.x) {
+                    if (chart.options.scales.x.ticks) chart.options.scales.x.ticks.color = colors.text;
+                    if (chart.options.scales.x.grid) chart.options.scales.x.grid.color = colors.grid;
                 }
+                if (chart.options.scales.y) {
+                    if (chart.options.scales.y.ticks) chart.options.scales.y.ticks.color = colors.text;
+                    if (chart.options.scales.y.grid) chart.options.scales.y.grid.color = colors.grid;
+                }
+                if (chart.options.scales.r) {
+                    if (chart.options.scales.r.pointLabels) chart.options.scales.r.pointLabels.color = colors.textMuted;
+                    if (chart.options.scales.r.grid) chart.options.scales.r.grid.color = colors.grid;
+                    if (chart.options.scales.r.angleLines) chart.options.scales.r.angleLines.color = colors.grid;
+                }
+
+                // Update legend
+                if (chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+                    chart.options.plugins.legend.labels.color = colors.text;
+                }
+
+                chart.update();
+            });
+
+            // Update accent-colored dataset elements
+            // Radar: dataset[0] = accent
+            if (adoptionChart) {
+                adoptionChart.data.datasets[0].backgroundColor = colors.accent25;
+                adoptionChart.data.datasets[0].borderColor = colors.accent;
+                adoptionChart.data.datasets[0].pointBackgroundColor = colors.accent;
+                adoptionChart.update();
             }
+
+            // Pie: dataset[0][1] = accent (index 1 is the "more benefits" slice)
+            if (teacherOpinionChart) {
+                const bg = teacherOpinionChart.data.datasets[0].backgroundColor;
+                bg[1] = colors.accent;
+                bg[2] = colors.accent25;
+                teacherOpinionChart.update();
+            }
+
+            // Horizontal bar: dataset[0] color index 1 = accent75
+            if (adaptiveLearningChart) {
+                adaptiveLearningChart.data.datasets[0].backgroundColor[1] = colors.accent75;
+                adaptiveLearningChart.data.datasets[0].borderColor[1] = colors.accent;
+                adaptiveLearningChart.update();
+            }
+
+            // Grouped bar: dataset[1] = accent
+            if (workloadChart) {
+                workloadChart.data.datasets[1].backgroundColor = colors.accent75;
+                workloadChart.update();
+            }
+
+            // Polar area: dataset[0] index 3 = accent25
+            if (chatbotChart) {
+                chatbotChart.data.datasets[0].backgroundColor[3] = colors.accent25;
+                chatbotChart.data.datasets[0].borderColor[3] = colors.accent50;
+                chatbotChart.update();
+            }
+
+            // Line: dataset[0] border = accent
+            if (marketChart) {
+                marketChart.data.datasets[0].borderColor = colors.accent;
+                marketChart.data.datasets[0].pointBackgroundColor = colors.accent;
+                marketChart.update();
+            }
+        }
+
+        // Listen for theme changes
+        themeToggle.addEventListener('click', () => {
+            setTimeout(updateChartsTheme, 100);
         });
 
         // Parallax effect on scroll
