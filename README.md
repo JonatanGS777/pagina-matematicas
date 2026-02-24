@@ -169,6 +169,42 @@ npm install
 npm start
 ```
 
+## Perfil de Investigador (`perfil-investigador/index.html`)
+
+Página de perfil académico del Dr. Yonatan Guerrero Soriano con diseño editorial de una sola página.
+
+### Características
+- Modo oscuro / modo claro con tema azul (`#2563eb`) en claro y dorado (`#d4a574`) en oscuro
+- Toggle de tema persistente en `localStorage`
+- Menú hamburguesa responsive
+- Timeline horizontal interactivo con drag-to-scroll (IA en la Educación 1950–2025)
+- Sección de disertación doctoral con navegación por capítulos (I–V)
+- 6 gráficas con Chart.js (Radar, Pie, Barras horizontales, Barras agrupadas, Área polar, Línea de área)
+- Colores de gráficas que se actualizan al cambiar el tema
+- Animaciones de entrada con IntersectionObserver
+- Animación de contadores y barras en la sección de Resultados
+
+### Correcciones aplicadas (feb 2026)
+- Variables CSS de modo claro completamente redefinidas con paleta azul
+- Colores hardcodeados (orbs, `visual-box`, timeline featured, sombras de dots) corregidos para respetar el tema
+- Sección de Referencias convertida de estilos inline a clases CSS (`references-wrap`, `reference-card`, `reference-badge`, `reference-text`)
+- Nav reordenada: toggle + links agrupados en `.nav-right` para correcta alineación en desktop
+- Link roto `href="#publications"` corregido a `href="#dissertation"`
+- Errores de sintaxis en comentarios CSS (`-->` → `*/`) corregidos
+- Footer simplificado: solo muestra el copyright; color azul en modo claro, dorado en modo oscuro
+- `Chart.js`: `getChartColors()` y `updateChartsTheme()` actualizados para cambiar el color de acento de los datasets al alternar tema
+
+---
+
+## Correcciones generales (feb 2026)
+
+### `index.html` — Sección Análisis en Tiempo Real
+- **Botones dispositivos (Móvil / Tablet / Escritorio):** corregido doble bug:
+  1. `setupEventListeners()` no se llamaba en el modo fallback de Supabase
+  2. El pseudo-elemento `::before` de `.stat-card` (`position: absolute; inset: 0`) bloqueaba los clics en los botones al apilarse encima del contenido estático — solucionado con `pointer-events: none`
+
+---
+
 ## Licencia
 
 Proyecto educativo del Prof. Yonatan Guerrero Soriano — uso académico en el Departamento de Educación de Puerto Rico.
