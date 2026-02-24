@@ -92,6 +92,101 @@
             color: white;
         }
 
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            z-index: 1002;
+        }
+
+        .mobile-menu-btn span {
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(240, 238, 248, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 80px 30px 30px;
+                gap: 20px;
+                transition: right 0.3s ease;
+                z-index: 1001;
+                border-left: 1px solid var(--border);
+                box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.1rem;
+                padding: 12px 16px;
+                border-radius: 8px;
+            }
+
+            .nav-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .nav-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo i {
+                margin-right: 8px;
+            }
+        }
+
         /* Hero Section */
         .hero {
             background: var(--gradient-main);
@@ -695,14 +790,25 @@
             <a href="../index.html" class="logo">
                 <i class="fas fa-chart-bar"></i> Laboratorio de Ciencia de Datos
             </a>
-            <ul class="nav-links">
-                <li><a href="../index.html">Inicio</a></li>
-                <li><a href="#" onclick="showTab('dashboard')">Dashboard</a></li>
-                <li><a href="#" onclick="showTab('tools')">Herramientas</a></li>
-                <li><a href="#" onclick="showTab('exercises')">Ejercicios</a></li>
-                <li><a href="#" onclick="showTab('calculators')">Calculadoras</a></li>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="../index.html" onclick="closeMobileMenu()">Inicio</a></li>
+                <li><a href="#" onclick="showTab('dashboard'); closeMobileMenu();">Dashboard</a></li>
+                <li><a href="#" onclick="showTab('tools'); closeMobileMenu();">Herramientas</a></li>
+                <li><a href="#" onclick="showTab('exercises'); closeMobileMenu();">Ejercicios</a></li>
+                <li><a href="#" onclick="showTab('calculators'); closeMobileMenu();">Calculadoras</a></li>
             </ul>
         </nav>
+        
+        <!-- Mobile Menu Overlay -->
+        <div class="nav-overlay" id="navOverlay"></div>
     </header>
 
     <!-- Hero Section -->
@@ -2129,6 +2235,53 @@ WHERE nota > 90</pre>
             setTimeout(() => {
                 showMessage('¡Bienvenido al Laboratorio de Ciencia de Datos! Comienza explorando el Dashboard.', 'success');
             }, 1000);
+            
+            // Mobile Menu Functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            const navOverlay = document.getElementById('navOverlay');
+            
+            function openMobileMenu() {
+                mobileMenuBtn.classList.add('active');
+                navLinks.classList.add('active');
+                navOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            window.closeMobileMenu = function() {
+                mobileMenuBtn.classList.remove('active');
+                navLinks.classList.remove('active');
+                navOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    if (navLinks.classList.contains('active')) {
+                        closeMobileMenu();
+                    } else {
+                        openMobileMenu();
+                    }
+                });
+            }
+            
+            if (navOverlay) {
+                navOverlay.addEventListener('click', closeMobileMenu);
+            }
+            
+            // Close menu on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
+            
+            // Close menu on resize to desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
         });
     </script>
 </body>
