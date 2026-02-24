@@ -3530,7 +3530,8 @@ class SupabaseAnalytics {
 
     fallbackToSimulatedData() {
         console.log('🔄 Modo FALLBACK: Supabase no configurado - Usando datos simulados');
-        
+
+        this.setupEventListeners();
         this.lockCounterElements();
         
         const initialData = {
