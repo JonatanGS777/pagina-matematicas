@@ -551,9 +551,11 @@
             font-size: clamp(1.8rem, 4.8vw, 3.4rem);
             font-weight: 800;
             letter-spacing: -0.04em;
-            color: var(--white);
+            background: var(--gradient-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 0.85rem;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.25);
             position: relative;
             z-index: 2;
             min-height: 1.2em;
