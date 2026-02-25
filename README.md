@@ -203,6 +203,31 @@ Página de perfil académico del Dr. Yonatan Guerrero Soriano con diseño editor
   1. `setupEventListeners()` no se llamaba en el modo fallback de Supabase
   2. El pseudo-elemento `::before` de `.stat-card` (`position: absolute; inset: 0`) bloqueaba los clics en los botones al apilarse encima del contenido estático — solucionado con `pointer-events: none`
 
+### `index.html` — Mejoras de UI/UX
+- Eliminada sección "Insights de IA" y aviso de privacidad
+- Sección "Trabajos de los Estudiantes" rediseñada con estilo moderno (fecha narrativa, clases `project-description-lead/body`)
+- Footer muestra año actual dinámico con JavaScript
+- Título del hero ("Matemáticas Digitales") con tamaño responsive (`clamp`) y gradiente del header
+- Tarjeta "Tiempo Promedio" reemplazada por encuesta de profesión (localStorage, sin Supabase)
+- Corregida inicialización de Supabase Analytics tras eliminar el elemento `avgSession`
+
+### `stem/ciencia-datos.html`
+- Header simplificado: eliminados links duplicados del nav, solo logo + botón Inicio + toggle
+
+### `club/competencias.html` — Sistema de competencias
+- Logo corregido a `../index.html`
+- Botón "Iniciar Timer" restaurado en el navbar
+- Todas las tarjetas de área navegan con `window.location.href` directamente a los módulos
+- `selectArea()` mantiene comportamiento original (alerta PRÓXIMAMENTE para áreas sin módulo)
+
+### `club/modulos/` — Módulos interactivos (todos los 6)
+- Integración con Supabase: al resolver un problema, `syncScoreToSupabase()` llama `update_competition_score` y actualiza el puntaje en tiempo real en la tabla de posiciones
+- Antes los puntajes solo se guardaban en `localStorage`; ahora se sincronizan a Supabase
+
+### `js/dark-mode.js`
+- Opacidad del gradiente reducida (0.85 → 0.65) para que `fondo2.jpg` sea visible en modo oscuro
+- Añadidos estilos dark mode para `.poll-card`, `.project-description-lead/body`, `.insight-card`, chatbot
+
 ---
 
 ## Licencia
