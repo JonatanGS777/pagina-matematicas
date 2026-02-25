@@ -52,9 +52,13 @@ class DarkModeSystem {
             
             /* Dark mode specific adjustments */
             .dark-mode .animated-bg {
-                background: 
-                    linear-gradient(-45deg, rgba(139, 156, 247, 0.8), rgba(164, 130, 212, 0.8), rgba(244, 166, 255, 0.8), rgba(110, 231, 222, 0.8)),
-                    linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 50%, #2a2f3e 100%);
+                background:
+                    linear-gradient(-45deg, rgba(10, 14, 26, 0.65), rgba(26, 31, 46, 0.72), rgba(42, 47, 62, 0.65), rgba(10, 14, 26, 0.70)),
+                    url('imagenes/fondo2.jpg');
+                background-size: 400% 400%, cover;
+                background-position: 0% 50%, center;
+                background-repeat: no-repeat;
+                animation: gradientShift 18s ease infinite;
             }
             
             /* Header base styles */
@@ -268,6 +272,303 @@ class DarkModeSystem {
             
             .dark-mode .modal {
                 background: rgba(10, 14, 26, 0.95);
+            }
+            
+            /* ========== ANÁLISIS EN TIEMPO REAL - DARK MODE ========== */
+            .dark-mode .stat-card {
+                background: rgba(42, 47, 62, 0.95);
+                border: 1px solid rgba(139, 156, 247, 0.15);
+                box-shadow: 0 8px 32px rgba(10, 14, 26, 0.4);
+            }
+            
+            .dark-mode .stat-card:hover {
+                box-shadow: 0 16px 48px rgba(10, 14, 26, 0.5);
+                border-color: rgba(139, 156, 247, 0.25);
+            }
+            
+            .dark-mode .stat-card .card-title,
+            .dark-mode .stat-card .stat-label,
+            .dark-mode .stat-card .country-name {
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .stat-card .stat-value {
+                color: var(--primary);
+            }
+            
+            .dark-mode .stat-card .stat-sublabel,
+            .dark-mode .stat-card .country-percentage,
+            .dark-mode .stat-card .device-name,
+            .dark-mode .stat-card .page-name {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .stat-card .trend {
+                color: var(--success);
+            }
+            
+            .dark-mode .stat-card .trend.down {
+                color: #ff8a8a;
+            }
+            
+            .dark-mode .progress-bar {
+                background: rgba(139, 156, 247, 0.15);
+            }
+            
+            .dark-mode .country-bar {
+                background: rgba(139, 156, 247, 0.2);
+            }
+            
+            .dark-mode .country-item:hover .country-name {
+                color: var(--primary);
+            }
+            
+            .dark-mode .device-item:hover,
+            .dark-mode .page-item:hover {
+                background: rgba(139, 156, 247, 0.1);
+            }
+            
+            .dark-mode .insights-section {
+                background: rgba(42, 47, 62, 0.6);
+                border: 1px solid rgba(139, 156, 247, 0.1);
+            }
+
+            .dark-mode .insights-title {
+                color: var(--text-primary);
+            }
+
+            .dark-mode .insights-list li {
+                color: var(--text-secondary);
+            }
+
+            .dark-mode .insights-list li::before {
+                color: var(--primary);
+            }
+
+            /* Insight cards */
+            .dark-mode .insight-card {
+                background: rgba(42, 47, 62, 0.85);
+            }
+
+            .dark-mode .insight-card.positive {
+                background: rgba(0, 212, 170, 0.12);
+            }
+
+            .dark-mode .insight-card.info {
+                background: rgba(139, 156, 247, 0.1);
+            }
+
+            .dark-mode .insight-card.neutral {
+                background: rgba(255, 230, 102, 0.1);
+            }
+
+            .dark-mode .insight-content p {
+                color: var(--text-secondary);
+            }
+            
+            /* ========== CHATBOT - DARK MODE ========== */
+            .dark-mode .chatbot-window {
+                background: var(--white);
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            }
+            
+            .dark-mode .chatbot-messages {
+                background: linear-gradient(to bottom, #1a1f2e, #2a2f3e);
+            }
+            
+            .dark-mode .chatbot-container .message.bot .message-bubble {
+                background: rgba(42, 47, 62, 0.95);
+                border: 1px solid rgba(139, 156, 247, 0.2);
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .message-card {
+                background: rgba(26, 31, 46, 0.8);
+                border: 1px solid rgba(139, 156, 247, 0.15);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            }
+            
+            .dark-mode .chatbot-container .message-card-title {
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .quick-action-chip {
+                background: rgba(42, 47, 62, 0.8);
+                border: 1px solid rgba(139, 156, 247, 0.3);
+                color: var(--primary);
+            }
+            
+            .dark-mode .chatbot-container .quick-action-chip:hover {
+                background: rgba(139, 156, 247, 0.15);
+                color: #a4b3ff;
+            }
+            
+            .dark-mode .chatbot-container .period-card {
+                background: linear-gradient(135deg, #1a1f2e, #2a2f3e);
+                border: 1px solid rgba(139, 156, 247, 0.2);
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .period-card:hover {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            }
+            
+            .dark-mode .chatbot-container .nav-link {
+                background: rgba(42, 47, 62, 0.8);
+                border: 1px solid rgba(139, 156, 247, 0.15);
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .nav-link:hover {
+                background: rgba(139, 156, 247, 0.1);
+                border-color: rgba(139, 156, 247, 0.3);
+            }
+            
+            .dark-mode .chatbot-container .nav-link-title {
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .nav-link-desc {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .chatbot-input-container {
+                background: var(--white);
+                border-top: 1px solid rgba(139, 156, 247, 0.15);
+            }
+            
+            .dark-mode .chatbot-input {
+                background: rgba(26, 31, 46, 0.8);
+                border: 1px solid rgba(139, 156, 247, 0.2);
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-input::placeholder {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .chatbot-input:focus {
+                border-color: rgba(139, 156, 247, 0.5);
+                background: rgba(26, 31, 46, 0.95);
+            }
+            
+            .dark-mode .chatbot-container .typing-indicator {
+                background: rgba(42, 47, 62, 0.95);
+                border: 1px solid rgba(139, 156, 247, 0.2);
+            }
+            
+            .dark-mode .typing-dot {
+                background: var(--primary);
+            }
+            
+            .dark-mode .chatbot-container .welcome-title {
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .welcome-subtitle {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .chatbot-container .category-title {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .chatbot-header {
+                background: linear-gradient(135deg, #5a6fd6 0%, #6a4fa8 100%);
+            }
+            
+            /* Chatbot - elementos faltantes */
+            .dark-mode .search-input {
+                background: rgba(26, 31, 46, 0.8);
+                border: 1px solid rgba(139, 156, 247, 0.2);
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .search-input::placeholder {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .search-input:focus {
+                border-color: rgba(139, 156, 247, 0.5);
+                background: rgba(26, 31, 46, 0.95);
+            }
+            
+            .dark-mode .search-result {
+                background: rgba(42, 47, 62, 0.9);
+                border-left: 3px solid var(--primary);
+            }
+            
+            .dark-mode .search-result-period {
+                color: var(--primary);
+            }
+            
+            .dark-mode .search-result-text {
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .form-label {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .chatbot-container .form-input,
+            .dark-mode .chatbot-container .form-select,
+            .dark-mode .chatbot-container .form-textarea {
+                background: rgba(26, 31, 46, 0.8);
+                border: 1px solid rgba(139, 156, 247, 0.2);
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .form-input:focus,
+            .dark-mode .chatbot-container .form-select:focus,
+            .dark-mode .chatbot-container .form-textarea:focus {
+                border-color: rgba(139, 156, 247, 0.5);
+                background: rgba(26, 31, 46, 0.95);
+            }
+            
+            .dark-mode .chatbot-container .form-input::placeholder,
+            .dark-mode .chatbot-container .form-textarea::placeholder {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .tip-card {
+                background: linear-gradient(135deg, rgba(120, 53, 15, 0.3), rgba(180, 83, 9, 0.2));
+                border: 1px solid rgba(251, 191, 36, 0.3);
+            }
+            
+            .dark-mode .tip-card-text {
+                color: #fcd34d;
+            }
+            
+            .dark-mode .chatbot-container .message-text {
+                color: var(--text-primary);
+            }
+            
+            .dark-mode .chatbot-container .stat-value {
+                color: var(--primary);
+            }
+            
+            .dark-mode .chatbot-container .stat-label {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .chatbot-container .stat-item {
+                background: rgba(42, 47, 62, 0.6);
+                border: 1px solid rgba(139, 156, 247, 0.1);
+            }
+            
+            .dark-mode .chatbot-messages::-webkit-scrollbar-thumb {
+                background: rgba(139, 156, 247, 0.3);
+            }
+            
+            .dark-mode .chatbot-container .quick-actions-title,
+            .dark-mode .chatbot-container .section-title {
+                color: var(--text-secondary);
+            }
+            
+            .dark-mode .favorites-indicator {
+                border-color: var(--white);
             }
             
             /* Mobile adjustments */
