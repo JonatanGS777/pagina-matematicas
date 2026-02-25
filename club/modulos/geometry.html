@@ -6,6 +6,8 @@
     <title>Módulo de Geometría - Competencias Matemáticas</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- MathJax Configuration -->
     <script>
@@ -1847,6 +1849,7 @@
                 }
                 
                 this.showScoreAnimation(points);
+                this.syncScoreToSupabase(points, this.currentDifficulty);
                 this.updateParticipantData(points);
                 this.saveProgress();
                 this.updateStats();
@@ -1893,6 +1896,27 @@
                         floatingPoints.parentNode.removeChild(floatingPoints);
                     }
                 }, 2000);
+            }
+
+            async syncScoreToSupabase(points, difficulty) {
+                try {
+                    const saved = localStorage.getItem('currentParticipant');
+                    if (!saved) return;
+                    const participant = JSON.parse(saved);
+                    if (!participant.id) return;
+                    const supabase = window.supabase.createClient(
+                        'https://mywwtkpcswisdwrfqzch.supabase.co',
+                        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3d0a3Bjc3dpc2R3cmZxemNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyOTQzOTgsImV4cCI6MjA4Njg3MDM5OH0.XEzvjC7PmDG6uEhiYzo8HgK564WXKUi94LNHaS6jkQs'
+                    );
+                    await supabase.rpc('update_competition_score', {
+                        p_participant_id: participant.id,
+                        p_area: 'geometry',
+                        p_points: points,
+                        p_difficulty: difficulty
+                    });
+                } catch (e) {
+                    console.warn('Supabase sync error:', e);
+                }
             }
 
             updateParticipantData(points) {
