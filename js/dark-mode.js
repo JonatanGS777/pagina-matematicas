@@ -394,28 +394,9 @@ class DarkModeSystem {
                 color: var(--text-primary);
             }
 
-            .dark-mode .poll-result-label {
-                color: var(--text-secondary);
-            }
-
-            .dark-mode .poll-result-item.my-vote .poll-result-label {
-                color: var(--primary);
-            }
-
-            .dark-mode .poll-result-bar-wrap {
+            .dark-mode .poll-voted-choice {
                 background: rgba(139, 156, 247, 0.1);
-            }
-
-            .dark-mode .poll-result-pct {
-                color: var(--text-secondary);
-            }
-
-            .dark-mode .poll-result-item.my-vote .poll-result-pct {
-                color: var(--primary);
-            }
-
-            .dark-mode .my-vote-tag {
-                background: rgba(139, 156, 247, 0.15);
+                border-color: rgba(139, 156, 247, 0.2);
                 color: var(--primary);
             }
 
