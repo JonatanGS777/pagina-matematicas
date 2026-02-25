@@ -1480,7 +1480,7 @@
                     </h3>
                     
                     <div class="areas-grid">
-                        <div class="area-card algebra" onclick="selectArea('algebra')"
+                        <div class="area-card algebra" onclick="window.location.href='modulos/algebra.html'">
                             <div class="area-icon">
                                 <i class="fas fa-square-root-alt"></i>
                             </div>
@@ -1497,8 +1497,7 @@
                             </div>
                         </div>
 
-                        <div class="area-card geometry" onclick="selectArea('geometry')"
-
+                        <div class="area-card geometry" onclick="selectArea('geometry')">
                             <div class="area-icon">
                                 <i class="fas fa-shapes"></i>
                             </div>
@@ -1515,7 +1514,7 @@
                             </div>
                         </div>
 
-                        <div class="area-card calculus" onclick="selectArea('calculus')"
+                        <div class="area-card calculus" onclick="selectArea('calculus')">
                             <div class="area-icon">
                                 <i class="fas fa-infinity"></i>
                             </div>
@@ -1532,7 +1531,7 @@
                             </div>
                         </div>
 
-                        <div class="area-card trigonometry" onclick="selectArea('trigonometry')"
+                        <div class="area-card trigonometry" onclick="selectArea('trigonometry')">
                             <div class="area-icon">
                                 <i class="fas fa-wave-square"></i>
                             </div>
@@ -1549,7 +1548,7 @@
                             </div>
                         </div>
 
-                            <div class="area-card statistics" onclick="selectArea('statistics')"
+                            <div class="area-card statistics" onclick="selectArea('statistics')">
                             <div class="area-icon">
                                 <i class="fas fa-chart-bar"></i>
                             </div>
@@ -1567,7 +1566,7 @@
                         </div>
 
 
-                        <div class="area-card puzzles" onclick="selectArea('puzzles')"
+                        <div class="area-card puzzles" onclick="selectArea('puzzles')">
                             <div class="area-icon">
                                 <i class="fas fa-puzzle-piece"></i>
                             </div>
@@ -2100,22 +2099,16 @@
 
             selectArea(area) {
                 if (!this.currentParticipant) {
-                    alert('⚠️ Primero debes ingresar tu código de acceso para acceder a un módulo.');
+                    alert('Error: No hay participante registrado.');
                     return;
                 }
-
-                const moduleMap = {
-                    'algebra':       'modulos/algebra.html',
-                    'geometry':      'modulos/geometry.html',
-                    'calculus':      'modulos/calculus.html',
-                    'trigonometry':  'modulos/trigonometry.html',
-                    'statistics':    'modulos/statistics.html',
-                    'puzzles':       'modulos/puzzles.html'
+                const areaNames = {
+                    'algebra': 'Álgebra', 'geometry': 'Geometría',
+                    'calculus': 'Cálculo', 'trigonometry': 'Trigonometría',
+                    'mental-calc': 'Cálculo Mental', 'puzzles': 'Acertijos',
+                    'statistics': 'Estadísticas'
                 };
-
-                if (moduleMap[area]) {
-                    window.location.href = moduleMap[area];
-                }
+                alert(`📚 Área de ${areaNames[area]}\n\n🚧 PRÓXIMAMENTE 🚧\n\nLos ejercicios para esta área se habilitarán en la siguiente fase.\n\nPor ahora puedes:\n• Ver la tabla de posiciones\n• Esperar a que se abran los módulos de ejercicios`);
             }
 
             createCompetitionParticles() {
