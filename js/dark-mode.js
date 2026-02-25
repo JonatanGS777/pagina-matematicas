@@ -373,6 +373,33 @@ class DarkModeSystem {
                 color: var(--primary);
             }
 
+            /* Poll card */
+            .dark-mode .poll-option {
+                background: rgba(139, 156, 247, 0.06);
+                border-color: rgba(139, 156, 247, 0.2);
+                color: var(--text-secondary);
+            }
+
+            .dark-mode .poll-option:hover {
+                background: rgba(139, 156, 247, 0.15);
+                border-color: var(--primary);
+                color: var(--primary);
+            }
+
+            .dark-mode .poll-title {
+                color: var(--text-primary);
+            }
+
+            .dark-mode .poll-voted-text {
+                color: var(--text-primary);
+            }
+
+            .dark-mode .poll-voted-choice {
+                background: rgba(139, 156, 247, 0.1);
+                border-color: rgba(139, 156, 247, 0.2);
+                color: var(--primary);
+            }
+
             /* Insight cards */
             .dark-mode .insight-card {
                 background: rgba(42, 47, 62, 0.85);

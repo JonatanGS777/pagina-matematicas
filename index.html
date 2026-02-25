@@ -969,6 +969,85 @@
 
         .stat-card:hover::before { opacity: 1; }
 
+        /* Poll Card */
+        .poll-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .poll-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .poll-option {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 10px;
+            border: 1.5px solid rgba(91, 76, 245, 0.15);
+            background: rgba(91, 76, 245, 0.04);
+            color: var(--text-secondary);
+            font-family: 'Syne', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .poll-option:hover {
+            background: rgba(91, 76, 245, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .poll-option i {
+            font-size: 0.85rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .poll-voted {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        .poll-voted-icon {
+            font-size: 2.2rem;
+            color: var(--success);
+        }
+
+        .poll-voted-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .poll-voted-choice {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--primary);
+            background: rgba(91, 76, 245, 0.08);
+            border: 1px solid rgba(91, 76, 245, 0.15);
+            padding: 0.3rem 0.9rem;
+            border-radius: 99px;
+        }
+
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -2336,23 +2415,43 @@
                     </div>
 
                     <!-- Tiempo de Sesión -->
-                    <div class="stat-card session">
+                    <div class="stat-card poll-card">
                         <div class="card-header">
                             <div class="stat-icon">
-                                <i class="fas fa-clock"></i>
+                                <i class="fas fa-poll"></i>
                             </div>
                             <div class="quality-badge">
-                                <i class="fas fa-star"></i>
-                                EXCELENTE
+                                <i class="fas fa-users"></i>
+                                ENCUESTA
                             </div>
                         </div>
-                        <div class="stat-number">
-                            <span class="counter" id="avgSession">0</span><span class="unit">min</span>
+                        <div class="poll-title">¿Cuál es tu profesión?</div>
+
+                        <div class="poll-options" id="pollOptions">
+                            <button class="poll-option" data-value="educacion" onclick="voteProfession(this)">
+                                <i class="fas fa-school"></i> Educación
+                            </button>
+                            <button class="poll-option" data-value="ingenieria" onclick="voteProfession(this)">
+                                <i class="fas fa-cog"></i> Ingeniería
+                            </button>
+                            <button class="poll-option" data-value="ciencias" onclick="voteProfession(this)">
+                                <i class="fas fa-flask"></i> Ciencias
+                            </button>
+                            <button class="poll-option" data-value="empresario" onclick="voteProfession(this)">
+                                <i class="fas fa-briefcase"></i> Empresario
+                            </button>
+                            <button class="poll-option" data-value="estudiante" onclick="voteProfession(this)">
+                                <i class="fas fa-graduation-cap"></i> Estudiante
+                            </button>
+                            <button class="poll-option" data-value="maestro" onclick="voteProfession(this)">
+                                <i class="fas fa-chalkboard-teacher"></i> Maestro
+                            </button>
                         </div>
-                        <div class="stat-label">Tiempo Promedio</div>
-                        <div class="stat-subtitle">Por sesión</div>
-                        <div class="engagement-bar">
-                            <div class="engagement-level excellent" style="width: 0%"></div>
+
+                        <div class="poll-voted" id="pollVoted">
+                            <div class="poll-voted-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="poll-voted-text">¡Gracias por votar!</div>
+                            <div class="poll-voted-choice" id="pollVotedChoice"></div>
                         </div>
                     </div>
 
@@ -3690,6 +3789,31 @@ window.addEventListener('beforeunload', () => {
         if (window.DarkMode) {
             window.DarkMode.initDarkMode();
         }
+
+        // Poll de profesión
+        const POLL_LABELS = {
+            educacion: 'Educación', ingenieria: 'Ingeniería', ciencias: 'Ciencias',
+            empresario: 'Empresario', estudiante: 'Estudiante', maestro: 'Maestro'
+        };
+
+        function voteProfession(btn) {
+            if (localStorage.getItem('professionVote')) return;
+            const value = btn.getAttribute('data-value');
+            localStorage.setItem('professionVote', value);
+            showPollResult(value);
+        }
+
+        function showPollResult(value) {
+            document.getElementById('pollOptions').style.display = 'none';
+            document.getElementById('pollVotedChoice').textContent = POLL_LABELS[value] || value;
+            document.getElementById('pollVoted').style.display = 'flex';
+        }
+
+        // Restaurar voto si ya votó
+        (function() {
+            const saved = localStorage.getItem('professionVote');
+            if (saved) showPollResult(saved);
+        })();
         
         if (window.IconAnimations) {
             window.IconAnimations.initIconAnimations();
