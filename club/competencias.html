@@ -1363,7 +1363,7 @@
 <body>
     <header class="header">
     <nav class="navbar">
-        <a href="#" class="logo">
+        <a href="../index.html" class="logo">
             <i class="fas fa-trophy"></i>
             Competencias Matemáticas
         </a>
@@ -1381,11 +1381,17 @@
                 <span class="btn-text">Ver Tabla de Posiciones</span>
             </a>
             
+            <button class="nav-back timer-btn" onclick="startCompetitionTimer()">
+                <i class="fas fa-play-circle"></i>
+                <span class="btn-text">Iniciar Timer</span>
+                <span class="timer-status-indicator"></span>
+            </button>
+
             <button class="nav-back admin-btn" onclick="resetCompetition()">
                 <i class="fas fa-cog"></i>
                 <span class="btn-text">Admin</span>
             </button>
-            
+
             <a href="../index.html" class="nav-back home-btn">
                 <i class="fas fa-arrow-left"></i>
                 <span class="btn-text">Volver al Inicio</span>
@@ -1474,7 +1480,7 @@
                     </h3>
                     
                     <div class="areas-grid">
-                        <div class="area-card algebra" onclick="window.location.href='modulos/algebra.html'">
+                        <div class="area-card algebra" onclick="selectArea('algebra')"
                             <div class="area-icon">
                                 <i class="fas fa-square-root-alt"></i>
                             </div>
@@ -1491,7 +1497,7 @@
                             </div>
                         </div>
 
-                        <div class="area-card geometry" onclick="window.location.href='modulos/geometry.html'">
+                        <div class="area-card geometry" onclick="selectArea('geometry')"
 
                             <div class="area-icon">
                                 <i class="fas fa-shapes"></i>
@@ -1509,7 +1515,7 @@
                             </div>
                         </div>
 
-                        <div class="area-card calculus" onclick="window.location.href='modulos/calculus.html'">
+                        <div class="area-card calculus" onclick="selectArea('calculus')"
                             <div class="area-icon">
                                 <i class="fas fa-infinity"></i>
                             </div>
@@ -1526,7 +1532,7 @@
                             </div>
                         </div>
 
-                        <div class="area-card trigonometry" onclick="window.location.href='modulos/trigonometry.html'">
+                        <div class="area-card trigonometry" onclick="selectArea('trigonometry')"
                             <div class="area-icon">
                                 <i class="fas fa-wave-square"></i>
                             </div>
@@ -1543,7 +1549,7 @@
                             </div>
                         </div>
 
-                            <div class="area-card statistics" onclick="window.location.href='modulos/statistics.html'">
+                            <div class="area-card statistics" onclick="selectArea('statistics')"
                             <div class="area-icon">
                                 <i class="fas fa-chart-bar"></i>
                             </div>
@@ -1561,7 +1567,7 @@
                         </div>
 
 
-                        <div class="area-card puzzles" onclick="window.location.href='modulos/puzzles.html'">
+                        <div class="area-card puzzles" onclick="selectArea('puzzles')"
                             <div class="area-icon">
                                 <i class="fas fa-puzzle-piece"></i>
                             </div>
@@ -2094,21 +2100,22 @@
 
             selectArea(area) {
                 if (!this.currentParticipant) {
-                    alert('Error: No hay participante registrado.');
+                    alert('⚠️ Primero debes ingresar tu código de acceso para acceder a un módulo.');
                     return;
                 }
 
-                const areaNames = {
-                    'algebra': 'Álgebra',
-                    'geometry': 'Geometría', 
-                    'calculus': 'Cálculo',
-                    'trigonometry': 'Trigonometría',
-                    'mental-calc': 'Cálculo Mental',
-                    'puzzles': 'Acertijos'
+                const moduleMap = {
+                    'algebra':       'modulos/algebra.html',
+                    'geometry':      'modulos/geometry.html',
+                    'calculus':      'modulos/calculus.html',
+                    'trigonometry':  'modulos/trigonometry.html',
+                    'statistics':    'modulos/statistics.html',
+                    'puzzles':       'modulos/puzzles.html'
                 };
-                
-                // Show coming soon message
-                alert(`📚 Área de ${areaNames[area]}\n\n🚧 PRÓXIMAMENTE 🚧\n\nLos ejercicios para esta área se habilitarán en la siguiente fase.\n\nPor ahora puedes:\n• Ver la tabla de posiciones\n• Esperar a que se abran los módulos de ejercicios`);
+
+                if (moduleMap[area]) {
+                    window.location.href = moduleMap[area];
+                }
             }
 
             createCompetitionParticles() {
