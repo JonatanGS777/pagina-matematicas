@@ -2489,7 +2489,8 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
+            <p>&copy; <span id="footer-year"></span> Yonatan Guerrero Soriano - Página de Matemáticas</p>
+            <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
             <p>Inspirando el aprendizaje matemático a través de la tecnología</p>
             
             <div class="social-links">
