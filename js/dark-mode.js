@@ -260,6 +260,34 @@ class DarkModeSystem {
                 background: var(--white);
                 border: 1px solid rgba(139, 156, 247, 0.1);
             }
+
+            .dark-mode .project-description::after {
+                color: rgba(139, 156, 247, 0.08);
+            }
+
+            .dark-mode .project-meta-tag {
+                background: rgba(139, 156, 247, 0.1);
+                color: var(--primary);
+                border-color: rgba(139, 156, 247, 0.2);
+            }
+
+            .dark-mode .project-meta-tag.accent {
+                background: rgba(110, 231, 222, 0.1);
+                color: var(--success);
+                border-color: rgba(110, 231, 222, 0.2);
+            }
+
+            .dark-mode .project-description-lead {
+                color: var(--text-primary);
+            }
+
+            .dark-mode .project-description-body {
+                color: var(--text-secondary);
+            }
+
+            .dark-mode .project-description-body strong {
+                color: var(--primary);
+            }
             
             .dark-mode .hero-content {
                 background: rgba(42, 47, 62, 0.25);

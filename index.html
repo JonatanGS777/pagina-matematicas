@@ -1450,18 +1450,83 @@
 
         .project-description {
             background: var(--white);
-            border-radius: 25px;
-            padding: 2.5rem;
+            border-radius: 28px;
+            padding: 3rem 3.5rem;
             margin-bottom: 3rem;
             box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(91, 76, 245, 0.08);
+            position: relative;
+            overflow: hidden;
         }
 
-        .project-description p {
-            font-size: 1.1rem;
-            line-height: 1.8;
+        .project-description::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--accent-warm));
+        }
+
+        .project-description::after {
+            content: '"';
+            position: absolute;
+            top: 1.5rem;
+            right: 2.5rem;
+            font-size: 8rem;
+            line-height: 1;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            color: rgba(91, 76, 245, 0.06);
+            pointer-events: none;
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-meta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(91, 76, 245, 0.07);
+            color: var(--primary);
+            border: 1px solid rgba(91, 76, 245, 0.15);
+            padding: 0.35rem 0.9rem;
+            border-radius: 99px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+
+        .project-meta-tag.accent {
+            background: rgba(0, 229, 195, 0.08);
+            color: var(--accent);
+            border-color: rgba(0, 229, 195, 0.2);
+        }
+
+        .project-description-lead {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
             color: var(--text-primary);
-            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .project-description-body {
+            font-size: 1.05rem;
+            line-height: 1.85;
+            color: var(--text-secondary);
+        }
+
+        .project-description-body strong {
+            color: var(--primary);
+            font-weight: 600;
         }
 
         .project-date {
@@ -2390,7 +2455,14 @@
             <h2 class="section-title fade-in">Trabajos de los Estudiantes</h2>
             
             <div class="project-description fade-in">
-                <p>El 22 de octubre de 2024, los estudiantes presentaron un innovador parque temático circular como culminación de su proyecto práctico — una demostración brillante de cómo la matemática cobra vida. Aplicando conceptos de longitud de arco y área del sector circular, diseñaron cada zona temática con precisión y creatividad, integrando fórmulas reales en decisiones de diseño concretas. El resultado: un trabajo que fusionó rigor teórico, colaboración en equipo e imaginación en igual medida.</p>
+                <div class="project-meta">
+                    <span class="project-meta-tag"><i class="fas fa-calendar-alt"></i> 22 oct 2024</span>
+                    <span class="project-meta-tag accent"><i class="fas fa-shapes"></i> Geometría Circular</span>
+                </div>
+                <p class="project-description-lead">Un parque temático diseñado con matemáticas reales.</p>
+                <p class="project-description-body">
+                    Los estudiantes aplicaron <strong>longitud de arco y área del sector circular</strong> para dar forma a cada zona temática, convirtiendo fórmulas abstractas en decisiones de diseño concretas. El proceso fomentó el trabajo en equipo, la creatividad y el pensamiento crítico — demostrando que la matemática no solo se aprende, se construye.
+                </p>
             </div>
 
             <div class="gallery-grid">
