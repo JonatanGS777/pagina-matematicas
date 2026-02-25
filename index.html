@@ -1037,15 +1037,100 @@
             color: var(--text-primary);
         }
 
-        .poll-voted-choice {
-            font-family: 'DM Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 500;
+        .poll-voted-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .poll-voted-header i {
+            font-size: 1.1rem;
+            color: var(--success);
+        }
+
+        .poll-results {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .poll-loading {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            padding: 0.5rem 0;
+        }
+
+        .poll-result-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .poll-result-label {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            min-width: 95px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-family: 'Syne', sans-serif;
+        }
+
+        .poll-result-item.my-vote .poll-result-label {
             color: var(--primary);
+        }
+
+        .poll-result-label i {
+            font-size: 0.7rem;
+            color: var(--primary);
+            opacity: 0.7;
+        }
+
+        .my-vote-tag {
+            font-size: 0.6rem;
+            font-family: 'DM Mono', monospace;
+            background: rgba(91, 76, 245, 0.1);
+            color: var(--primary);
+            border-radius: 4px;
+            padding: 0.1rem 0.3rem;
+        }
+
+        .poll-result-bar-wrap {
+            flex: 1;
+            height: 6px;
             background: rgba(91, 76, 245, 0.08);
-            border: 1px solid rgba(91, 76, 245, 0.15);
-            padding: 0.3rem 0.9rem;
             border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .poll-result-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 99px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .poll-result-item.my-vote .poll-result-bar {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            box-shadow: 0 0 6px rgba(91, 76, 245, 0.4);
+        }
+
+        .poll-result-pct {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .poll-result-item.my-vote .poll-result-pct {
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .card-header {
@@ -2449,9 +2534,13 @@
                         </div>
 
                         <div class="poll-voted" id="pollVoted">
-                            <div class="poll-voted-icon"><i class="fas fa-check-circle"></i></div>
-                            <div class="poll-voted-text">¡Gracias por votar!</div>
-                            <div class="poll-voted-choice" id="pollVotedChoice"></div>
+                            <div class="poll-voted-header">
+                                <i class="fas fa-check-circle"></i>
+                                <span class="poll-voted-text">¡Gracias por votar!</span>
+                            </div>
+                            <div class="poll-results" id="pollResults">
+                                <div class="poll-loading"><i class="fas fa-spinner fa-spin"></i> Cargando...</div>
+                            </div>
                         </div>
                     </div>
 
@@ -3790,29 +3879,108 @@ window.addEventListener('beforeunload', () => {
             window.DarkMode.initDarkMode();
         }
 
-        // Poll de profesión
+        // ===== POLL DE PROFESIÓN CON SUPABASE =====
+        const POLL_SUPABASE_URL = 'https://mywwtkpcswisdwrfqzch.supabase.co';
+        const POLL_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3d0a3Bjc3dpc2R3cmZxemNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyOTQzOTgsImV4cCI6MjA4Njg3MDM5OH0.XEzvjC7PmDG6uEhiYzo8HgK564WXKUi94LNHaS6jkQs';
+
         const POLL_LABELS = {
             educacion: 'Educación', ingenieria: 'Ingeniería', ciencias: 'Ciencias',
             empresario: 'Empresario', estudiante: 'Estudiante', maestro: 'Maestro'
         };
 
-        function voteProfession(btn) {
-            if (localStorage.getItem('professionVote')) return;
-            const value = btn.getAttribute('data-value');
-            localStorage.setItem('professionVote', value);
-            showPollResult(value);
+        const POLL_ICONS = {
+            educacion: 'fas fa-school', ingenieria: 'fas fa-cog', ciencias: 'fas fa-flask',
+            empresario: 'fas fa-briefcase', estudiante: 'fas fa-graduation-cap', maestro: 'fas fa-chalkboard-teacher'
+        };
+
+        function getPollClient() {
+            return window.supabase.createClient(POLL_SUPABASE_URL, POLL_SUPABASE_KEY);
         }
 
-        function showPollResult(value) {
+        function getPollVisitorId() {
+            return localStorage.getItem('visitor_id') ||
+                   (() => {
+                       const id = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                       localStorage.setItem('visitor_id', id);
+                       return id;
+                   })();
+        }
+
+        async function voteProfession(btn) {
+            if (localStorage.getItem('professionVote')) return;
+            const value = btn.getAttribute('data-value');
+            document.querySelectorAll('.poll-option').forEach(b => b.disabled = true);
+            localStorage.setItem('professionVote', value);
+
+            try {
+                await getPollClient()
+                    .from('profession_votes')
+                    .upsert({ visitor_id: getPollVisitorId(), profession: value }, { onConflict: 'visitor_id' });
+            } catch(e) {
+                console.warn('Poll: error guardando voto', e);
+            }
+
+            showPollVotedUI(value);
+            loadPollResults(value);
+        }
+
+        function showPollVotedUI(myVote) {
             document.getElementById('pollOptions').style.display = 'none';
-            document.getElementById('pollVotedChoice').textContent = POLL_LABELS[value] || value;
             document.getElementById('pollVoted').style.display = 'flex';
         }
 
-        // Restaurar voto si ya votó
+        async function loadPollResults(myVote) {
+            const resultsDiv = document.getElementById('pollResults');
+            try {
+                const { data, error } = await getPollClient()
+                    .from('profession_votes')
+                    .select('profession');
+
+                if (error) throw error;
+
+                const counts = {};
+                Object.keys(POLL_LABELS).forEach(k => counts[k] = 0);
+                data.forEach(row => { if (counts[row.profession] !== undefined) counts[row.profession]++; });
+
+                const total = data.length || 1;
+
+                resultsDiv.innerHTML = Object.entries(POLL_LABELS).map(([key, label]) => {
+                    const pct = Math.round((counts[key] / total) * 100);
+                    const isMe = key === myVote;
+                    return `
+                        <div class="poll-result-item ${isMe ? 'my-vote' : ''}">
+                            <div class="poll-result-label">
+                                <i class="${POLL_ICONS[key]}"></i>${label}
+                                ${isMe ? '<span class="my-vote-tag">tú</span>' : ''}
+                            </div>
+                            <div class="poll-result-bar-wrap">
+                                <div class="poll-result-bar" style="width:0%"
+                                     data-target="${pct}%"></div>
+                            </div>
+                            <span class="poll-result-pct">${pct}%</span>
+                        </div>`;
+                }).join('');
+
+                // Animar barras
+                requestAnimationFrame(() => {
+                    resultsDiv.querySelectorAll('.poll-result-bar').forEach(bar => {
+                        bar.style.width = bar.dataset.target;
+                    });
+                });
+
+            } catch(e) {
+                console.warn('Poll: error cargando resultados', e);
+                resultsDiv.innerHTML = `<div class="poll-loading">Tu voto fue registrado ✓</div>`;
+            }
+        }
+
+        // Restaurar estado si ya votó
         (function() {
             const saved = localStorage.getItem('professionVote');
-            if (saved) showPollResult(saved);
+            if (saved) {
+                showPollVotedUI(saved);
+                loadPollResults(saved);
+            }
         })();
         
         if (window.IconAnimations) {
