@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -2308,112 +2308,131 @@
         <section id="charts" class="charts-section">
             <div class="section-header">
                 <span class="section-number">04</span>
-                <h2 class="section-title">Otros Hallazgos</h2>
+                <h2 class="section-title">Síntesis de la Literatura</h2>
             </div>
 
             <p class="charts-intro">
-                Inteligencia Artificial en la Educación: Evidencia Científica 2024-2025.
-                Análisis de tendencias globales, adopción institucional, impacto en el aprendizaje y 
-                perspectivas docentes basadas en estudios empíricos recientes.
+                Síntesis cuantitativa de estudios indexados en Scopus · Web of Science · ERIC · PubMed
+                del periodo 2023–2025. Meta-análisis, encuestas globales y ensayos controlados aleatorios
+                sobre inteligencia artificial en contextos educativos.
             </p>
 
             <div class="charts-grid">
 
-                <!-- Gráfica 1: Adopción de IA (Radar) -->
+                <!-- 1. Forest Plot — Wide -->
                 <div class="chart-card chart-card--wide">
                     <div class="chart-card-header">
-                        <h3>Adopción de IA: Comparación Multidimensional</h3>
-                        <p>Radar comparativo por nivel educativo actual vs. proyección 2027 — Fuente: García et al. (2025); Microsoft (2025)</p>
+                        <h3>Tamaño del Efecto de IA en Logro Académico</h3>
+                        <p>Forest plot · Hedges's g · Meta-análisis indexados 2023–2025 · Línea punteada = umbral moderado (g = 0.5)</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="adoptionChart"></canvas>
+                        <div id="forestChart" style="width:100%;height:400px;"></div>
                     </div>
                 </div>
 
-                <!-- Gráfica 2: Opiniones (Pie) -->
+                <!-- 2. Adoption by Population -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Perspectivas Docentes sobre IA</h3>
-                        <p>Distribución de opiniones K-12 — Fuente: Pew Research Center (2024)</p>
+                        <h3>Adopción de IA por Grupo Poblacional</h3>
+                        <p>Tasas de adopción comparadas · Fuentes: HEPI, DEC, Gallup, RAND · 2024–2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="teacherOpinionChart"></canvas>
+                        <div id="adoptionChart" style="width:100%;height:340px;"></div>
                     </div>
                 </div>
 
-                <!-- Gráfica 3: Aprendizaje Adaptativo (Bar Horizontal) -->
+                <!-- 3. Growth Timeline -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Impacto del Aprendizaje Adaptativo</h3>
-                        <p>Mejora en rendimiento académico — Fuente: Knewton (2024)</p>
+                        <h3>Crecimiento Explosivo en Adopción</h3>
+                        <p>Estudiantes del Reino Unido · HEPI / Kortext · n = 1,041 · 2024 → 2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="adaptiveLearningChart"></canvas>
+                        <div id="growthChart" style="width:100%;height:340px;"></div>
                     </div>
                 </div>
 
-                <!-- Gráfica 4: Reducción Carga (Grouped Bar) -->
+                <!-- 4. Teacher Benefits — Wide -->
                 <div class="chart-card chart-card--wide">
                     <div class="chart-card-header">
-                        <h3>Eficiencia Docente: Tradicional vs. IA</h3>
-                        <p>Comparativa de horas por tarea administrativa — Fuente: Gradescope (2024); Microsoft (2025)</p>
+                        <h3>Beneficios Reportados por Docentes al Usar IA</h3>
+                        <p>% que reporta mejora por área · Gallup / Walton Family Foundation · n = 2,232 docentes K-12 EE.UU. · 2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="workloadChart"></canvas>
+                        <div id="teacherBenefitsChart" style="width:100%;height:360px;"></div>
                     </div>
                 </div>
 
-                <!-- Gráfica 5: Chatbots (Polar Area) -->
+                <!-- 5. Student Usage Purposes -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Precisión de Chatbots Educativos</h3>
-                        <p>Distribución de respuestas — Fuente: Universidad de Murcia (2024)</p>
+                        <h3>Propósitos de Uso de IA por Estudiantes</h3>
+                        <p>HEPI / Kortext Student GenAI Survey · n = 1,041 · Reino Unido · 2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="chatbotChart"></canvas>
+                        <div id="purposeChart" style="width:100%;height:340px;"></div>
                     </div>
                 </div>
 
-                <!-- Gráfica 6: Mercado (Area Line) -->
+                <!-- 6. Gap Analysis -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Crecimiento del Mercado Global</h3>
-                        <p>Proyección 2020-2030 (miles de millones USD) — Fuente: AIPRM (2024); Zendy (2025)</p>
+                        <h3>Brecha: Uso Estudiantil vs. Preparación Institucional</h3>
+                        <p>Digital Education Council Global Survey · n = 3,839 · 16 países · 2024</p>
                     </div>
                     <div class="chart-canvas-wrap">
-                        <canvas id="marketChart"></canvas>
+                        <div id="gapChart" style="width:100%;height:340px;"></div>
+                    </div>
+                </div>
+
+                <!-- 7. RCT Results — Wide -->
+                <div class="chart-card chart-card--wide">
+                    <div class="chart-card-header">
+                        <h3>Tutoría IA vs. Aprendizaje Activo — Ensayo Controlado Aleatorio</h3>
+                        <p>Kestin et al. (2025) · Harvard University · Física universitaria · n = 194 · Scientific Reports (Nature)</p>
+                    </div>
+                    <div class="chart-canvas-wrap">
+                        <div id="rctChart" style="width:100%;height:380px;"></div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Referencias -->
+            <!-- Referencias actualizadas -->
             <div class="references-wrap">
                 <h3 class="references-title">Referencias</h3>
                 <div class="references-list">
                     <div class="reference-card">
-                        <span class="reference-badge">Revisión Sistemática</span>
-                        <p class="reference-text">García, F., Martínez, J., &amp; López, A. (2025). Systematic review of artificial intelligence in education. <em>Applied Sciences, 15</em>(8), 84.</p>
+                        <span class="reference-badge">RCT · Nature</span>
+                        <p class="reference-text">Kestin, G., et al. (2025). AI tutoring outperforms in-class active learning: An RCT. <em>Scientific Reports</em>. DOI: 10.1038/s41598-025-97652-6</p>
                     </div>
                     <div class="reference-card">
-                        <span class="reference-badge">Reporte</span>
-                        <p class="reference-text">Microsoft. (2025). <em>2025 AI in education: A special report</em>.</p>
+                        <span class="reference-badge">Meta-análisis · Scopus/WoS</span>
+                        <p class="reference-text">Tlili, A., Saqer, K., Salha, S., &amp; Huang, R. (2025). Investigating the effect of AIEd on learning achievement. <em>Information Development, 41</em>(3), 825-842.</p>
                     </div>
                     <div class="reference-card">
-                        <span class="reference-badge">Encuesta</span>
-                        <p class="reference-text">Pew Research Center. (2024). <em>Teachers' views on AI in K-12 education</em>.</p>
+                        <span class="reference-badge">Meta-análisis · ERIC/Scopus</span>
+                        <p class="reference-text">Liu, X., Guo, B., He, W., &amp; Hu, X. (2025). Effects of generative AI on K-12 and higher education outcomes. <em>Journal of Educational Computing Research, 63</em>, 1249-1291.</p>
                     </div>
                     <div class="reference-card">
-                        <span class="reference-badge">Estudio Empírico</span>
-                        <p class="reference-text">Knewton. (2024). <em>Adaptive learning and student performance</em>.</p>
+                        <span class="reference-badge">Meta-análisis · SSCI</span>
+                        <p class="reference-text">Sun, L., &amp; Zhou, L. (2024). Does generative AI improve academic achievement? A meta-analysis. <em>Journal of Educational Computing Research, 62</em>(7). DOI: 10.1177/07356331241277937</p>
                     </div>
                     <div class="reference-card">
-                        <span class="reference-badge">Estudio Empírico</span>
-                        <p class="reference-text">Universidad de Murcia. (2024). AI chatbots in higher education. <em>Computers &amp; Education, 198</em>, 104785.</p>
+                        <span class="reference-badge">Encuesta · n = 2,232</span>
+                        <p class="reference-text">Gallup / Walton Family Foundation. (2025). <em>Three in 10 teachers use AI weekly, saving six weeks a year</em>. American Educator Panels.</p>
                     </div>
                     <div class="reference-card">
-                        <span class="reference-badge">Reporte</span>
-                        <p class="reference-text">AIPRM. (2024). <em>AI in education statistics</em>.</p>
+                        <span class="reference-badge">Encuesta · n = 1,041</span>
+                        <p class="reference-text">HEPI / Kortext. (2025). <em>Student generative AI survey 2025</em>. Higher Education Policy Institute.</p>
+                    </div>
+                    <div class="reference-card">
+                        <span class="reference-badge">Encuesta · n = 3,839</span>
+                        <p class="reference-text">Digital Education Council. (2024). <em>Global AI student survey 2024</em>. 16 países.</p>
+                    </div>
+                    <div class="reference-card">
+                        <span class="reference-badge">Informe · ERIC ED672957</span>
+                        <p class="reference-text">Kaufman, J.H., et al. (2024). <em>Uneven adoption of AI tools among U.S. teachers</em>. RAND Corporation.</p>
                     </div>
                 </div>
             </div>
@@ -2611,329 +2630,268 @@
 
 
         // =============================================
-        // CHART.JS — Otros Hallazgos: IA en Educación
+        // PLOTLY.JS — Síntesis de Literatura Indexada
+        // Fuentes: Scopus · WoS · ERIC · PubMed · 2023–2025
         // =============================================
 
-        // Theme-aware chart colors
-        function getChartColors() {
+        function getPlotlyTheme() {
             const isLight = document.body.classList.contains('light-mode');
             return {
-                text:        isLight ? '#0f172a' : '#e8e8e8',
-                textMuted:   isLight ? '#475569' : '#a0a0a0',
-                grid:        isLight ? '#bfdbfe' : '#2a2a2a',
-                surface:     isLight ? '#ffffff' : '#1a1a1a',
-                accent:      isLight ? 'rgba(37, 99, 235, 1)'    : 'rgba(212, 165, 116, 1)',
-                accent75:    isLight ? 'rgba(37, 99, 235, 0.75)' : 'rgba(212, 165, 116, 0.75)',
-                accent50:    isLight ? 'rgba(37, 99, 235, 0.5)'  : 'rgba(212, 165, 116, 0.5)',
-                accent25:    isLight ? 'rgba(37, 99, 235, 0.25)' : 'rgba(212, 165, 116, 0.25)',
-                accent15:    isLight ? 'rgba(37, 99, 235, 0.15)' : 'rgba(212, 165, 116, 0.15)',
-                accentFill:  isLight ? 'rgba(37, 99, 235, 0.4)'  : 'rgba(212, 165, 116, 0.4)',
+                paper:   isLight ? '#f8faff' : '#0a0a0a',
+                bg:      isLight ? '#ffffff' : '#1a1a1a',
+                grid:    isLight ? '#bfdbfe' : '#2a2a2a',
+                text:    isLight ? '#475569' : '#a0a0a0',
+                zero:    isLight ? '#93c5fd' : '#3a3a3a',
+                gold:       '#d4a574',
+                goldBright: '#e8c4a0',
+                goldDim:    '#8a6f4f',
+                goldMid:    'rgba(212,165,116,0.50)',
+                goldFull:   'rgba(212,165,116,0.90)',
+                red:        'rgba(190,90,70,0.80)',
+                font:    "'Syne', sans-serif"
             };
         }
 
-        function updateChartDefaults() {
-            const colors = getChartColors();
-            Chart.defaults.color = colors.textMuted;
-            Chart.defaults.borderColor = colors.grid;
+        function pLayout(overrides) {
+            const T = getPlotlyTheme();
+            return Object.assign({
+                paper_bgcolor: T.paper,
+                plot_bgcolor:  T.bg,
+                font: { family: T.font, color: T.text, size: 12 },
+                margin: { l: 20, r: 30, t: 20, b: 30 },
+                xaxis: { gridcolor: T.grid, zerolinecolor: T.zero, tickcolor: T.text, linecolor: T.grid },
+                yaxis: { gridcolor: T.grid, zerolinecolor: T.zero, tickcolor: T.text, linecolor: T.grid },
+                showlegend: false,
+                hoverlabel: {
+                    bgcolor: '#252525',
+                    bordercolor: T.gold,
+                    font: { family: T.font, color: '#e8e8e8', size: 13 }
+                }
+            }, overrides);
         }
 
-        updateChartDefaults();
-        Chart.defaults.font.family = "'Syne', sans-serif";
-        Chart.defaults.font.size = 12;
+        const pConfig = { responsive: true, displayModeBar: false };
+        const CHART_IDS = ['forestChart','adoptionChart','growthChart','teacherBenefitsChart','purposeChart','gapChart','rctChart'];
 
-        const C = {
-            gold: 'rgba(212, 165, 116, 1)',
-            gold75: 'rgba(212, 165, 116, 0.75)',
-            gold50: 'rgba(212, 165, 116, 0.5)',
-            gold25: 'rgba(212, 165, 116, 0.25)',
-            gold15: 'rgba(212, 165, 116, 0.15)',
-            green: 'rgba(52, 211, 153, 0.8)',
-            green50: 'rgba(52, 211, 153, 0.5)',
-            red: 'rgba(239, 68, 68, 0.8)',
-            red50: 'rgba(239, 68, 68, 0.5)',
-            blue: 'rgba(96, 165, 250, 0.8)',
-            purple: 'rgba(167, 139, 250, 0.8)',
-            cyan: 'rgba(34, 211, 238, 0.8)',
-            text: '#e8e8e8'
-        };
+        // ── Render all 7 Plotly charts ────────────────────────────
+        function renderAllCharts() {
+            const T = getPlotlyTheme();
 
-        // ── 1. RADAR: Adopción Multidimensional ──────────────────
-        const adoptionChart = new Chart(document.getElementById('adoptionChart'), {
-            type: 'radar',
-            data: {
-                labels: ['Educación Superior', 'K-12 Secundaria', 'K-12 Primaria', 'Formación Docente', 'Educación Virtual'],
-                datasets: [{
-                    label: 'Adopción de IA (%)',
-                    data: [68, 42, 28, 55, 72],
-                    backgroundColor: C.gold25,
-                    borderColor: C.gold,
-                    borderWidth: 2,
-                    pointBackgroundColor: C.gold,
-                    pointBorderColor: '#1a1a1a',
-                    pointHoverBackgroundColor: C.gold,
-                    pointRadius: 5
-                }, {
-                    label: 'Proyección 2027 (%)',
-                    data: [85, 65, 48, 75, 88],
-                    backgroundColor: 'rgba(52, 211, 153, 0.1)',
-                    borderColor: C.green,
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    pointBackgroundColor: C.green,
-                    pointBorderColor: '#1a1a1a',
-                    pointRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { color: C.text } } },
-                scales: {
-                    r: {
-                        min: 0, max: 100,
-                        ticks: { stepSize: 20, color: '#555', backdropColor: 'transparent', callback: v => v + '%' },
-                        grid: { color: '#2a2a2a' },
-                        angleLines: { color: '#2a2a2a' },
-                        pointLabels: { color: '#a0a0a0', font: { size: 12 } }
-                    }
-                }
-            }
-        });
-
-        // ── 2. PIE: Opiniones de Docentes ─────────────────────────
-        const teacherOpinionChart = new Chart(document.getElementById('teacherOpinionChart'), {
-            type: 'pie',
-            data: {
-                labels: ['Más desafíos que beneficios', 'Más beneficios que desafíos', 'Neutral/Indeciso'],
-                datasets: [{
-                    data: [51, 28, 21],
-                    backgroundColor: [C.red, C.gold, C.gold25],
-                    borderColor: '#1a1a1a',
-                    borderWidth: 3,
-                    hoverOffset: 15
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'right', labels: { color: C.text, padding: 20, font: { size: 13 } } },
-                    tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
-                }
-            }
-        });
-
-        // ── 3. HORIZONTAL BAR: Impacto Aprendizaje Adaptativo ─────
-        const adaptiveLearningChart = new Chart(document.getElementById('adaptiveLearningChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Sin tecnología adaptativa', 'Con IA adaptativa'],
-                datasets: [{
-                    label: 'Mejora en rendimiento (desviaciones estándar)',
-                    data: [0, 1.5],
-                    backgroundColor: ['rgba(160, 160, 160, 0.3)', C.gold75],
-                    borderColor: ['rgba(160, 160, 160, 0.5)', C.gold],
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x}σ sobre el promedio` } }
+        // ── 1. Forest Plot: Effect Sizes ─────────────────────────────────────────
+            const studies = [
+                { label: 'Ma et al. (2023)  ITS Clásico · n = 14,321',          g: 0.42,  lo: null,  hi: null  },
+                { label: 'Sun & Zhou (2024)  GenAI Ed. Superior · n = 1,909',    g: 0.533, lo: 0.408, hi: 0.659 },
+                { label: 'Kestin et al. (2025)  RCT Harvard · n = 194',          g: 0.63,  lo: null,  hi: null  },
+                { label: 'Gu & Yan (2025)  GenAI Performance · 19 estudios',     g: 0.683, lo: null,  hi: null  },
+                { label: 'Liu et al. (2025)  GenAI — Motivación · 49 artículos', g: 0.803, lo: null,  hi: null  },
+                { label: 'Liu et al. (2025)  GenAI — Logro · 49 artículos',      g: 0.857, lo: null,  hi: null  },
+                { label: 'ERIC Meta (2024)  IA en Educación · 13 estudios',      g: 0.86,  lo: 0.45,  hi: 1.27  },
+                { label: 'Tlili et al. (2025)  AIEd General · 85 estudios',      g: 1.10,  lo: null,  hi: null  }
+            ];
+            const markerColors = studies.map(s =>
+                s.g >= 0.8 ? T.goldFull : s.g >= 0.5 ? T.goldMid : 'rgba(212,165,116,0.35)'
+            );
+            Plotly.newPlot('forestChart', [{
+                type: 'scatter', mode: 'markers',
+                x: studies.map(s => s.g),
+                y: studies.map(s => s.label),
+                error_x: {
+                    type: 'data', symmetric: false,
+                    array:      studies.map(s => s.hi != null ? +(s.hi - s.g).toFixed(3) : null),
+                    arrayminus: studies.map(s => s.lo != null ? +(s.g  - s.lo).toFixed(3) : null),
+                    color: T.goldDim, thickness: 2, width: 10
                 },
-                scales: {
-                    x: { min: 0, max: 2, ticks: { color: C.text, callback: v => v + 'σ' }, grid: { color: '#2a2a2a' } },
-                    y: { ticks: { color: C.text }, grid: { display: false } }
-                }
-            }
-        });
-
-        // ── 4. GROUPED BAR: Reducción Carga Docente ─────────────
-        const workloadChart = new Chart(document.getElementById('workloadChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Calificación', 'Planificación', 'Comunicación', 'Reportes'],
-                datasets: [{
-                    label: 'Tradicional (horas/semana)',
-                    data: [10, 8, 5, 4],
-                    backgroundColor: 'rgba(160, 160, 160, 0.4)',
-                    borderRadius: 4
-                }, {
-                    label: 'Con IA (horas/semana)',
-                    data: [3, 5, 3, 1.5],
-                    backgroundColor: C.gold75,
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'top', labels: { color: C.text } } },
-                scales: {
-                    y: { beginAtZero: true, max: 12, ticks: { color: C.text, callback: v => v + 'h' }, grid: { color: '#2a2a2a' } },
-                    x: { ticks: { color: C.text }, grid: { display: false } }
-                }
-            }
-        });
-
-        // ── 5. POLAR AREA: Precisión Chatbots ──────────────────
-        const chatbotChart = new Chart(document.getElementById('chatbotChart'), {
-            type: 'polarArea',
-            data: {
-                labels: ['Respuestas Correctas', 'Respuestas Incorrectas', 'Derivadas a Humano', 'Sin Respuesta'],
-                datasets: [{
-                    data: [91, 5, 3, 1],
-                    backgroundColor: [C.green50, C.red50, C.blue, C.gold25],
-                    borderColor: ['rgba(52, 211, 153, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(96, 165, 250, 0.8)', 'rgba(212, 165, 116, 0.5)'],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'right', labels: { color: C.text, font: { size: 12 } } },
-                    tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}%` } }
+                marker: { size: 16, color: markerColors, symbol: 'diamond', line: { color: T.goldDim, width: 1.5 } },
+                hovertemplate: '<b>%{y}</b><br>Hedges\'s g = %{x:.3f}<extra></extra>',
+                name: ''
+            }], pLayout({
+                margin: { l: 310, r: 60, t: 30, b: 50 },
+                xaxis: {
+                    gridcolor: T.grid, range: [0, 1.5],
+                    tickvals: [0, 0.2, 0.5, 0.8, 1.0, 1.2, 1.5],
+                    title: { text: "Hedges's g (tamaño del efecto)", font: { color: T.text, size: 12 } },
+                    tickcolor: T.text, zerolinecolor: T.zero
                 },
-                scales: {
-                    r: {
-                        min: 0, max: 100,
-                        ticks: { color: '#555', backdropColor: 'transparent', z: 1 },
-                        grid: { color: '#2a2a2a' },
-                        angleLines: { color: '#333' }
-                    }
-                }
-            }
-        });
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, autorange: 'reversed' },
+                shapes: [
+                    { type: 'rect', x0: 0,   x1: 0.2, y0: -0.5, y1: 7.5, fillcolor: 'rgba(190,90,70,0.05)',   line: { width: 0 } },
+                    { type: 'rect', x0: 0.2, x1: 0.5, y0: -0.5, y1: 7.5, fillcolor: 'rgba(212,165,116,0.04)', line: { width: 0 } },
+                    { type: 'rect', x0: 0.5, x1: 0.8, y0: -0.5, y1: 7.5, fillcolor: 'rgba(212,165,116,0.07)', line: { width: 0 } },
+                    { type: 'rect', x0: 0.8, x1: 1.5, y0: -0.5, y1: 7.5, fillcolor: 'rgba(212,165,116,0.11)', line: { width: 0 } },
+                    { type: 'line', x0: 0.5, x1: 0.5, y0: -0.5, y1: 7.5, line: { color: T.goldDim, width: 1.5, dash: 'dot' } }
+                ],
+                annotations: [
+                    { x: 0.10, y: 7.8, text: 'Pequeño',    showarrow: false, font: { color: '#666',       size: 10 }, xanchor: 'center' },
+                    { x: 0.35, y: 7.8, text: 'Moderado',   showarrow: false, font: { color: T.text,       size: 10 }, xanchor: 'center' },
+                    { x: 0.65, y: 7.8, text: 'Grande',     showarrow: false, font: { color: T.gold,       size: 10 }, xanchor: 'center' },
+                    { x: 1.15, y: 7.8, text: 'Muy grande', showarrow: false, font: { color: T.goldBright, size: 10 }, xanchor: 'center' }
+                ]
+            }), pConfig);
 
-        // ── 6. AREA LINE: Mercado Global ──────────────────
-        const marketChart = new Chart(document.getElementById('marketChart'), {
-            type: 'line',
-            data: {
-                labels: ['2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'],
-                datasets: [{
-                    label: 'Valor del mercado',
-                    data: [2.5, 3.8, 5.2, 8.1, 12.4, 16.8, 20.5, 23.2, 26.2, 28.5, 30.8],
-                    backgroundColor: (ctx) => {
-                        const canvas = ctx.chart.ctx;
-                        const gradient = canvas.createLinearGradient(0, 0, 0, 300);
-                        gradient.addColorStop(0, 'rgba(212, 165, 116, 0.4)');
-                        gradient.addColorStop(1, 'rgba(212, 165, 116, 0)');
-                        return gradient;
-                    },
-                    borderColor: C.gold,
-                    borderWidth: 3,
-                    pointBackgroundColor: C.gold,
-                    pointBorderColor: '#1a1a1a',
-                    pointBorderWidth: 2,
-                    pointRadius: 5,
-                    pointHoverRadius: 7,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: ctx => ` $${ctx.parsed.y} mil millones` } }
+            // ── 2. Adoption by Population ─────────────────────────────────────────────
+            const adoptionLabels = [
+                'K-12 EE.UU.: uso instruccional (RAND, 2024)',
+                'Docentes Ed. Superior: any IA (DEC, 2025)',
+                'K-12 EE.UU.: cualquier IA (Gallup, 2025)',
+                'Estudiantes: uso semanal (DEC, 2024)',
+                'Estudiantes globales: uso regular (DEC, 2024)',
+                'Estudiantes UK: cualquier IA (HEPI, 2025)'
+            ];
+            const adoptionVals = [25, 61, 60, 54, 86, 92];
+            Plotly.newPlot('adoptionChart', [{
+                type: 'bar', orientation: 'h',
+                x: adoptionVals, y: adoptionLabels,
+                marker: { color: adoptionVals.map(v => v >= 80 ? T.goldFull : v >= 55 ? T.goldMid : 'rgba(212,165,116,0.30)'), line: { width: 0 } },
+                text: adoptionVals.map(v => v + '%'), textposition: 'outside',
+                textfont: { color: T.text, size: 12, family: T.font },
+                cliponaxis: false,
+                hovertemplate: '<b>%{y}</b><br>Adopción: %{x}%<extra></extra>'
+            }], pLayout({
+                margin: { l: 280, r: 55, t: 20, b: 40 },
+                xaxis: { gridcolor: T.grid, range: [0, 112], ticksuffix: '%', tickcolor: T.text, title: { text: '% de adopción', font: { color: T.text } } },
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, autorange: 'reversed' }
+            }), pConfig);
+
+            // ── 3. Growth Timeline ─────────────────────────────────────────────────────
+            const growthCats  = ['Uso general de IA', 'IA en evaluaciones', 'Satisfacción\ncon univ.'];
+            const growth2024  = [66, 53, 18];
+            const growth2025  = [92, 88, 42];
+            Plotly.newPlot('growthChart', [
+                {
+                    type: 'bar', name: '2024', x: growthCats, y: growth2024,
+                    marker: { color: 'rgba(212,165,116,0.30)', line: { width: 0 } },
+                    text: growth2024.map(v => v + '%'), textposition: 'inside',
+                    textfont: { color: '#e8e8e8', size: 11 },
+                    hovertemplate: '2024: %{y}%<extra></extra>'
                 },
-                scales: {
-                    y: { 
-                        beginAtZero: true, max: 35, 
-                        ticks: { color: C.text, callback: v => '$' + v + 'B' }, 
-                        grid: { color: '#2a2a2a' } 
-                    },
-                    x: { ticks: { color: C.text }, grid: { display: false } }
+                {
+                    type: 'bar', name: '2025', x: growthCats, y: growth2025,
+                    marker: { color: T.goldFull, line: { width: 0 } },
+                    text: growth2025.map(v => v + '%'), textposition: 'inside',
+                    textfont: { color: '#0a0a0a', size: 11 },
+                    hovertemplate: '2025: %{y}%<extra></extra>'
                 }
-            }
-        });
+            ], pLayout({
+                barmode: 'group', showlegend: true,
+                legend: { orientation: 'h', y: -0.18, font: { color: T.text, family: T.font }, bgcolor: 'transparent' },
+                margin: { l: 40, r: 30, t: 30, b: 80 },
+                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 } },
+                yaxis: { gridcolor: T.grid, range: [0, 108], ticksuffix: '%', tickcolor: T.text },
+                annotations: growthCats.map((cat, i) => ({
+                    x: cat, y: growth2025[i] + 5,
+                    text: '<b>+' + (growth2025[i] - growth2024[i]) + ' pp</b>',
+                    showarrow: false, font: { color: T.goldBright, size: 11, family: T.font }
+                }))
+            }), pConfig);
 
-        // Update charts on theme change
-        function updateChartsTheme() {
-            const colors = getChartColors();
-            const charts = [adoptionChart, teacherOpinionChart, adaptiveLearningChart, workloadChart, chatbotChart, marketChart];
+            // ── 4. Teacher Benefits ────────────────────────────────────────────────────
+            const benefitLabels = [
+                'Adaptación de materiales',
+                'Creación de actividades / hojas de trabajo',
+                'Preparación de clases',
+                'Calificación y retroalimentación',
+                'Ahorro de tiempo por tarea (promedio)',
+                'Trabajo administrativo'
+            ];
+            const benefitVals = [28, 33, 37, 57, 72, 74];
+            Plotly.newPlot('teacherBenefitsChart', [{
+                type: 'bar', orientation: 'h',
+                x: benefitVals, y: benefitLabels,
+                marker: { color: benefitVals.map(v => 'rgba(212,165,116,' + (0.30 + (v / 100) * 0.60).toFixed(2) + ')'), line: { width: 0 } },
+                text: benefitVals.map(v => v + '%'), textposition: 'outside',
+                textfont: { color: T.text, size: 12, family: T.font },
+                cliponaxis: false,
+                hovertemplate: '<b>%{y}</b><br>Docentes que reportan mejora: %{x}%<extra></extra>'
+            }], pLayout({
+                margin: { l: 265, r: 60, t: 20, b: 50 },
+                xaxis: { gridcolor: T.grid, range: [0, 90], ticksuffix: '%', tickcolor: T.text, title: { text: '% de docentes que reportan mejora o ahorro', font: { color: T.text } } },
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, autorange: 'reversed' },
+                shapes: [{ type: 'line', x0: 50, x1: 50, y0: -0.5, y1: 5.5, line: { color: '#444', width: 1, dash: 'dot' } }]
+            }), pConfig);
 
-            charts.forEach(chart => {
-                if (!chart) return;
+            // ── 5. Student Purposes ────────────────────────────────────────────────────
+            const purposeLabels = [
+                'Incorporar texto IA directamente en tareas',
+                'Mejorar calidad de tareas',
+                'Ahorrar tiempo',
+                'Explicar conceptos',
+                'Evaluaciones / Exámenes'
+            ];
+            const purposeVals = [18, 50, 51, 58, 88];
+            const purposeColors = ['rgba(190,90,70,0.70)', T.goldMid, T.goldMid, 'rgba(212,165,116,0.70)', T.goldFull];
+            Plotly.newPlot('purposeChart', [{
+                type: 'bar', orientation: 'h',
+                x: purposeVals, y: purposeLabels,
+                marker: { color: purposeColors, line: { width: 0 } },
+                text: purposeVals.map(v => v + '%'), textposition: 'outside',
+                textfont: { color: T.text, size: 12, family: T.font },
+                cliponaxis: false,
+                hovertemplate: '<b>%{y}</b><br>%{x}% de estudiantes<extra></extra>'
+            }], pLayout({
+                margin: { l: 240, r: 55, t: 20, b: 40 },
+                xaxis: { gridcolor: T.grid, range: [0, 108], ticksuffix: '%', tickcolor: T.text },
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, autorange: 'reversed' }
+            }), pConfig);
 
-                // Update scales
-                if (chart.options.scales.x) {
-                    if (chart.options.scales.x.ticks) chart.options.scales.x.ticks.color = colors.text;
-                    if (chart.options.scales.x.grid) chart.options.scales.x.grid.color = colors.grid;
+            // ── 6. Gap Analysis ────────────────────────────────────────────────────────
+            const gapCats   = ['Estudiantes usan<br>IA regularmente', 'Estudiantes con<br>habilidades suficientes', 'Estudiantes preparados<br>para trabajo con IA', 'Universidades que<br>cumplen expectativas'];
+            const gapVals   = [86, 42, 52, 20];
+            const gapColors = [T.goldFull, T.goldMid, T.goldMid, 'rgba(190,90,70,0.70)'];
+            Plotly.newPlot('gapChart', [{
+                type: 'bar', x: gapCats, y: gapVals,
+                marker: { color: gapColors, line: { width: 0 } },
+                text: gapVals.map(v => v + '%'), textposition: 'outside',
+                textfont: { color: T.text, size: 12, family: T.font },
+                cliponaxis: false,
+                hovertemplate: '<b>%{x}</b><br>%{y}%<extra></extra>'
+            }], pLayout({
+                margin: { l: 40, r: 30, t: 20, b: 100 },
+                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, tickangle: 0 },
+                yaxis: { gridcolor: T.grid, range: [0, 105], ticksuffix: '%', tickcolor: T.text },
+                shapes: [{ type: 'line', x0: -0.5, x1: 3.5, y0: 50, y1: 50, line: { color: '#444', width: 1, dash: 'dot' } }]
+            }), pConfig);
+
+            // ── 7. RCT: IA vs. Aprendizaje Activo ─────────────────────────────────────
+            const rctMetrics = ['Pre-test', 'Post-test', 'Engagement', 'Motivación'];
+            const rctAI      = [2.75, 4.5,  4.1, 3.4];
+            const rctActive  = [2.75, 3.5,  3.6, 3.1];
+            Plotly.newPlot('rctChart', [
+                {
+                    type: 'bar', name: 'Tutor IA', x: rctMetrics, y: rctAI,
+                    marker: { color: T.goldFull, line: { width: 0 } },
+                    text: rctAI.map(v => v.toFixed(2)), textposition: 'auto',
+                    textfont: { color: '#0a0a0a', size: 11 },
+                    hovertemplate: 'Tutor IA: %{y:.2f} / 5<extra></extra>'
+                },
+                {
+                    type: 'bar', name: 'Aprendizaje Activo', x: rctMetrics, y: rctActive,
+                    marker: { color: 'rgba(150,150,150,0.35)', line: { width: 0 } },
+                    text: rctActive.map(v => v.toFixed(2)), textposition: 'auto',
+                    textfont: { color: '#e8e8e8', size: 11 },
+                    hovertemplate: 'Aprendizaje Activo: %{y:.2f} / 5<extra></extra>'
                 }
-                if (chart.options.scales.y) {
-                    if (chart.options.scales.y.ticks) chart.options.scales.y.ticks.color = colors.text;
-                    if (chart.options.scales.y.grid) chart.options.scales.y.grid.color = colors.grid;
-                }
-                if (chart.options.scales.r) {
-                    if (chart.options.scales.r.pointLabels) chart.options.scales.r.pointLabels.color = colors.textMuted;
-                    if (chart.options.scales.r.grid) chart.options.scales.r.grid.color = colors.grid;
-                    if (chart.options.scales.r.angleLines) chart.options.scales.r.angleLines.color = colors.grid;
-                }
-
-                // Update legend
-                if (chart.options.plugins.legend && chart.options.plugins.legend.labels) {
-                    chart.options.plugins.legend.labels.color = colors.text;
-                }
-
-                chart.update();
-            });
-
-            // Update accent-colored dataset elements
-            // Radar: dataset[0] = accent
-            if (adoptionChart) {
-                adoptionChart.data.datasets[0].backgroundColor = colors.accent25;
-                adoptionChart.data.datasets[0].borderColor = colors.accent;
-                adoptionChart.data.datasets[0].pointBackgroundColor = colors.accent;
-                adoptionChart.update();
-            }
-
-            // Pie: dataset[0][1] = accent (index 1 is the "more benefits" slice)
-            if (teacherOpinionChart) {
-                const bg = teacherOpinionChart.data.datasets[0].backgroundColor;
-                bg[1] = colors.accent;
-                bg[2] = colors.accent25;
-                teacherOpinionChart.update();
-            }
-
-            // Horizontal bar: dataset[0] color index 1 = accent75
-            if (adaptiveLearningChart) {
-                adaptiveLearningChart.data.datasets[0].backgroundColor[1] = colors.accent75;
-                adaptiveLearningChart.data.datasets[0].borderColor[1] = colors.accent;
-                adaptiveLearningChart.update();
-            }
-
-            // Grouped bar: dataset[1] = accent
-            if (workloadChart) {
-                workloadChart.data.datasets[1].backgroundColor = colors.accent75;
-                workloadChart.update();
-            }
-
-            // Polar area: dataset[0] index 3 = accent25
-            if (chatbotChart) {
-                chatbotChart.data.datasets[0].backgroundColor[3] = colors.accent25;
-                chatbotChart.data.datasets[0].borderColor[3] = colors.accent50;
-                chatbotChart.update();
-            }
-
-            // Line: dataset[0] border = accent
-            if (marketChart) {
-                marketChart.data.datasets[0].borderColor = colors.accent;
-                marketChart.data.datasets[0].pointBackgroundColor = colors.accent;
-                marketChart.update();
-            }
+            ], pLayout({
+                barmode: 'group', showlegend: true,
+                legend: { orientation: 'h', y: -0.16, font: { color: T.text, family: T.font }, bgcolor: 'transparent' },
+                margin: { l: 50, r: 40, t: 40, b: 80 },
+                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 12 } },
+                yaxis: { gridcolor: T.grid, range: [0, 5.4], title: { text: 'Puntaje (escala 1–5)', font: { color: T.text } }, tickcolor: T.text },
+                shapes: [{ type: 'line', x0: -0.5, x1: 3.5, y0: 3, y1: 3, line: { color: '#444', width: 1, dash: 'dot' } }],
+                annotations: [{ x: 'Post-test', y: 5.25, text: '★ p &lt; 10⁻⁸', showarrow: false, font: { color: T.goldBright, size: 12, family: T.font } }]
+            }), pConfig);
         }
 
-        // Listen for theme changes
+        renderAllCharts();
+
+        // Listen for theme changes — re-render Plotly with new theme
         themeToggle.addEventListener('click', () => {
-            setTimeout(updateChartsTheme, 100);
+            setTimeout(() => {
+                CHART_IDS.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.data) Plotly.purge(id);
+                });
+                renderAllCharts();
+            }, 80);
         });
 
         // Parallax effect on scroll
