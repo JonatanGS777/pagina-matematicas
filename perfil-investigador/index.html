@@ -1699,51 +1699,88 @@
            REFERENCIAS SECTION
         ============================================= */
         .references-wrap {
-            margin-top: 60px;
-            padding: 40px;
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
+            margin-top: 72px;
+            padding-top: 40px;
+            border-top: 1px solid var(--color-border);
         }
 
         .references-title {
-            font-family: var(--font-display);
-            font-size: 20px;
+            font-size: 11px;
             font-weight: 600;
-            color: var(--color-accent);
-            margin-bottom: 24px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: 36px;
         }
 
         .references-list {
             display: grid;
-            gap: 16px;
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        .reference-card {
-            padding: 16px 20px;
-            background: var(--color-surface-light);
-            border-left: 3px solid var(--color-accent);
+        .reference-item {
+            display: grid;
+            grid-template-columns: 36px 1fr;
+            gap: 0 18px;
+            padding: 20px 32px 20px 0;
+            border-bottom: 1px solid var(--color-border);
+            align-items: start;
         }
 
-        .reference-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: var(--color-accent);
-            color: var(--color-bg);
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            margin-bottom: 8px;
+        .reference-item:nth-child(odd) {
+            border-right: 1px solid var(--color-border);
+        }
+
+        .reference-item:nth-child(even) {
+            padding-left: 32px;
+            padding-right: 0;
+        }
+
+        .reference-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        .reference-num {
+            font-size: 22px;
+            font-weight: 300;
+            color: var(--color-accent-dim);
+            line-height: 1.3;
+            user-select: none;
+            padding-top: 2px;
+        }
+
+        .reference-body {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .reference-type {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--color-accent-dim);
         }
 
         .reference-text {
             color: var(--color-text-muted);
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.68;
             margin: 0;
         }
 
         .reference-text em {
             color: var(--color-text);
+            font-style: italic;
+        }
+
+        @media (max-width: 1024px) {
+            .references-list { grid-template-columns: 1fr; }
+            .reference-item:nth-child(odd) { border-right: none; padding-right: 0; }
+            .reference-item:nth-child(even) { padding-left: 0; }
+            .reference-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--color-border); }
+            .reference-item:last-child { border-bottom: none; }
         }
 
         /* =============================================
@@ -2398,42 +2435,75 @@
 
             </div>
 
-            <!-- Referencias actualizadas -->
+            <!-- Referencias -->
             <div class="references-wrap">
                 <h3 class="references-title">Referencias</h3>
                 <div class="references-list">
-                    <div class="reference-card">
-                        <span class="reference-badge">RCT · Nature</span>
-                        <p class="reference-text">Kestin, G., et al. (2025). AI tutoring outperforms in-class active learning: An RCT. <em>Scientific Reports</em>. DOI: 10.1038/s41598-025-97652-6</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">01</span>
+                        <div class="reference-body">
+                            <span class="reference-type">RCT — Scientific Reports · Nature Publishing Group</span>
+                            <p class="reference-text">Kestin, G., et al. (2025). AI tutoring outperforms in-class active learning: An RCT introducing a novel research-based design. <em>Scientific Reports</em>. DOI: 10.1038/s41598-025-97652-6</p>
+                        </div>
                     </div>
-                    <div class="reference-card">
-                        <span class="reference-badge">Meta-análisis · Scopus/WoS</span>
-                        <p class="reference-text">Tlili, A., Saqer, K., Salha, S., &amp; Huang, R. (2025). Investigating the effect of AIEd on learning achievement. <em>Information Development, 41</em>(3), 825-842.</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">02</span>
+                        <div class="reference-body">
+                            <span class="reference-type">Meta-análisis — Information Development · Scopus · WoS</span>
+                            <p class="reference-text">Tlili, A., Saqer, K., Salha, S., &amp; Huang, R. (2025). Investigating the effect of artificial intelligence in education on learning achievement: A meta-analysis. <em>Information Development, 41</em>(3), 825–842.</p>
+                        </div>
                     </div>
-                    <div class="reference-card">
-                        <span class="reference-badge">Meta-análisis · ERIC/Scopus</span>
-                        <p class="reference-text">Liu, X., Guo, B., He, W., &amp; Hu, X. (2025). Effects of generative AI on K-12 and higher education outcomes. <em>Journal of Educational Computing Research, 63</em>, 1249-1291.</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">03</span>
+                        <div class="reference-body">
+                            <span class="reference-type">Meta-análisis — Journal of Educational Computing Research · ERIC · Scopus</span>
+                            <p class="reference-text">Liu, X., Guo, B., He, W., &amp; Hu, X. (2025). Effects of generative artificial intelligence on K-12 and higher education students' learning outcomes. <em>Journal of Educational Computing Research, 63</em>, 1249–1291.</p>
+                        </div>
                     </div>
-                    <div class="reference-card">
-                        <span class="reference-badge">Meta-análisis · SSCI</span>
-                        <p class="reference-text">Sun, L., &amp; Zhou, L. (2024). Does generative AI improve academic achievement? A meta-analysis. <em>Journal of Educational Computing Research, 62</em>(7). DOI: 10.1177/07356331241277937</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">04</span>
+                        <div class="reference-body">
+                            <span class="reference-type">Meta-análisis — Journal of Educational Computing Research · SSCI</span>
+                            <p class="reference-text">Sun, L., &amp; Zhou, L. (2024). Does generative artificial intelligence improve the academic achievement of college students? A meta-analysis. <em>Journal of Educational Computing Research, 62</em>(7). DOI: 10.1177/07356331241277937</p>
+                        </div>
                     </div>
-                    <div class="reference-card">
-                        <span class="reference-badge">Encuesta · n = 2,232</span>
-                        <p class="reference-text">Gallup / Walton Family Foundation. (2025). <em>Three in 10 teachers use AI weekly, saving six weeks a year</em>. American Educator Panels.</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">05</span>
+                        <div class="reference-body">
+                            <span class="reference-type">Encuesta nacional — Gallup / Walton Family Foundation · n = 2,232</span>
+                            <p class="reference-text">Gallup &amp; Walton Family Foundation. (2025). <em>Three in 10 teachers use AI weekly, saving six weeks a year</em>. American Educator Panels, marzo–abril 2025.</p>
+                        </div>
                     </div>
-                    <div class="reference-card">
-                        <span class="reference-badge">Encuesta · n = 1,041</span>
-                        <p class="reference-text">HEPI / Kortext. (2025). <em>Student generative AI survey 2025</em>. Higher Education Policy Institute.</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">06</span>
+                        <div class="reference-body">
+                            <span class="reference-type">Encuesta nacional — HEPI / Kortext · n = 1,041</span>
+                            <p class="reference-text">Higher Education Policy Institute &amp; Kortext. (2025). <em>Student generative AI survey 2025</em>. HEPI Report. Savanta, diciembre 2024.</p>
+                        </div>
                     </div>
-                    <div class="reference-card">
-                        <span class="reference-badge">Encuesta · n = 3,839</span>
-                        <p class="reference-text">Digital Education Council. (2024). <em>Global AI student survey 2024</em>. 16 países.</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">07</span>
+                        <div class="reference-body">
+                            <span class="reference-type">Encuesta global — Digital Education Council · n = 3,839 · 16 países</span>
+                            <p class="reference-text">Digital Education Council. (2024). <em>Global AI student survey 2024</em>. Muestra de estudiantes de pregrado, maestría y doctorado.</p>
+                        </div>
                     </div>
-                    <div class="reference-card">
-                        <span class="reference-badge">Informe · ERIC ED672957</span>
-                        <p class="reference-text">Kaufman, J.H., et al. (2024). <em>Uneven adoption of AI tools among U.S. teachers</em>. RAND Corporation.</p>
+
+                    <div class="reference-item">
+                        <span class="reference-num">08</span>
+                        <div class="reference-body">
+                            <span class="reference-type">Informe empírico — RAND Corporation · ERIC ED672957</span>
+                            <p class="reference-text">Kaufman, J. H., et al. (2024). <em>Uneven adoption of artificial intelligence tools among U.S. teachers and principals in the 2023–2024 school year</em>. RAND Corporation.</p>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </section>
