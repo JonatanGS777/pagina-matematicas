@@ -496,11 +496,27 @@
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
+
+            .chart-card {
+                padding: 22px 16px;
+            }
+
+            .chart-card-header {
+                margin-bottom: 16px;
+            }
+
+            .chart-card-header h3 {
+                font-size: 17px;
+            }
         }
 
         @media (max-width: 480px) {
             .hero h1 {
                 font-size: 32px;
+            }
+
+            .chart-card {
+                padding: 16px 12px;
             }
 
             .stats-grid {
@@ -1695,6 +1711,43 @@
             gap: 8px;
         }
 
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            overflow: hidden;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+
+        .lang-toggle button {
+            padding: 6px 10px;
+            background: transparent;
+            border: none;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-toggle button.active {
+            background: var(--color-accent);
+            color: #0a0a0a;
+        }
+
+        .lang-toggle button:hover:not(.active) {
+            color: var(--color-text);
+        }
+
+        .lang-divider {
+            width: 1px;
+            height: 18px;
+            background: var(--color-border);
+        }
+
         /* =============================================
            REFERENCIAS SECTION
         ============================================= */
@@ -1819,6 +1872,13 @@
             <div class="logo">Dr. YGS</div>
 
             <div class="nav-right">
+                <!-- Language Toggle -->
+                <div class="lang-toggle" id="langToggle" aria-label="Switch language">
+                    <button id="btnEs" class="active" onclick="setLang('es')">ES</button>
+                    <div class="lang-divider"></div>
+                    <button id="btnEn" onclick="setLang('en')">EN</button>
+                </div>
+
                 <!-- Dark/Light Mode Toggle -->
                 <button class="theme-toggle" id="themeToggle" aria-label="Cambiar modo oscuro/claro">
                     <i class="fas fa-sun"></i>
@@ -1833,11 +1893,11 @@
                 </button>
 
                 <ul class="nav-links" id="navLinks">
-                    <li><a href="#research">Investigación</a></li>
-                    <li><a href="#timeline">IA &amp; Educación</a></li>
-                    <li><a href="#dissertation">Disertación</a></li>
-                    <li><a href="#charts">Otros Hallazgos</a></li>
-                    <li><a href="#contact">Contacto</a></li>
+                    <li><a href="#research" data-i18n="nav.research">Investigación</a></li>
+                    <li><a href="#timeline" data-i18n="nav.ai_edu">IA &amp; Educación</a></li>
+                    <li><a href="#dissertation" data-i18n="nav.dissertation">Disertación</a></li>
+                    <li><a href="#charts" data-i18n="nav.charts">Otros Hallazgos</a></li>
+                    <li><a href="#contact" data-i18n="nav.contact">Contacto</a></li>
                 </ul>
             </div>
         </nav>
@@ -1848,15 +1908,15 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <div class="hero-tag">Investigación · Inteligencia Artificial</div>
+                <div class="hero-tag" data-i18n="hero.tag">Investigación · Inteligencia Artificial</div>
                 <h1>Dr. Yonatan<br>Guerrero Soriano</h1>
-                <p class="hero-subtitle">Especialista en Inteligencia Artificial aplicada a la Educación Matemática</p>
-                <p class="hero-description">
+                <p class="hero-subtitle" data-i18n="hero.subtitle">Especialista en Inteligencia Artificial aplicada a la Educación Matemática</p>
+                <p class="hero-description" data-i18n="hero.description">
                     Investigación doctoral enfocada en estrategias de diseño instruccional para el aprendizaje
                     híbrido en matemáticas, integrando la inteligencia artificial como recurso educativo en
                     escuelas secundarias especializadas.
                 </p>
-                <a href="#dissertation" class="cta-button">Ver Disertación</a>
+                <a href="#dissertation" class="cta-button" data-i18n="hero.cta">Ver Disertación</a>
             </div>
             <div class="hero-visual">
                 <div class="visual-box"></div>
@@ -2345,10 +2405,10 @@
         <section id="charts" class="charts-section">
             <div class="section-header">
                 <span class="section-number">04</span>
-                <h2 class="section-title">Síntesis de la Literatura</h2>
+                <h2 class="section-title" data-i18n="section.charts">Síntesis de la Literatura</h2>
             </div>
 
-            <p class="charts-intro">
+            <p class="charts-intro" data-i18n="charts.intro">
                 Síntesis cuantitativa de estudios indexados en Scopus · Web of Science · ERIC · PubMed
                 del periodo 2023–2025. Meta-análisis, encuestas globales y ensayos controlados aleatorios
                 sobre inteligencia artificial en contextos educativos.
@@ -2359,8 +2419,8 @@
                 <!-- 1. Forest Plot — Wide -->
                 <div class="chart-card chart-card--wide">
                     <div class="chart-card-header">
-                        <h3>Tamaño del Efecto de IA en Logro Académico</h3>
-                        <p>Forest plot · Hedges's g · Meta-análisis indexados 2023–2025 · Línea punteada = umbral moderado (g = 0.5)</p>
+                        <h3 data-i18n="chart1.title">Tamaño del Efecto de IA en Logro Académico</h3>
+                        <p data-i18n="chart1.sub">Forest plot · Hedges's g · Meta-análisis indexados 2023–2025 · Línea punteada = umbral moderado (g = 0.5)</p>
                     </div>
                     <div class="chart-canvas-wrap">
                         <div id="forestChart" style="width:100%;height:400px;"></div>
@@ -2370,8 +2430,8 @@
                 <!-- 2. Adoption by Population -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Adopción de IA por Grupo Poblacional</h3>
-                        <p>Tasas de adopción comparadas · Fuentes: HEPI, DEC, Gallup, RAND · 2024–2025</p>
+                        <h3 data-i18n="chart2.title">Adopción de IA por Grupo Poblacional</h3>
+                        <p data-i18n="chart2.sub">Tasas de adopción comparadas · Fuentes: HEPI, DEC, Gallup, RAND · 2024–2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
                         <div id="adoptionChart" style="width:100%;height:340px;"></div>
@@ -2381,8 +2441,8 @@
                 <!-- 3. Growth Timeline -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Crecimiento Explosivo en Adopción</h3>
-                        <p>Estudiantes del Reino Unido · HEPI / Kortext · n = 1,041 · 2024 → 2025</p>
+                        <h3 data-i18n="chart3.title">Crecimiento Explosivo en Adopción</h3>
+                        <p data-i18n="chart3.sub">Estudiantes del Reino Unido · HEPI / Kortext · n = 1,041 · 2024 → 2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
                         <div id="growthChart" style="width:100%;height:340px;"></div>
@@ -2392,8 +2452,8 @@
                 <!-- 4. Teacher Benefits — Wide -->
                 <div class="chart-card chart-card--wide">
                     <div class="chart-card-header">
-                        <h3>Beneficios Reportados por Docentes al Usar IA</h3>
-                        <p>% que reporta mejora por área · Gallup / Walton Family Foundation · n = 2,232 docentes K-12 EE.UU. · 2025</p>
+                        <h3 data-i18n="chart4.title">Beneficios Reportados por Docentes al Usar IA</h3>
+                        <p data-i18n="chart4.sub">% que reporta mejora por área · Gallup / Walton Family Foundation · n = 2,232 docentes K-12 EE.UU. · 2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
                         <div id="teacherBenefitsChart" style="width:100%;height:360px;"></div>
@@ -2403,8 +2463,8 @@
                 <!-- 5. Student Usage Purposes -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Propósitos de Uso de IA por Estudiantes</h3>
-                        <p>HEPI / Kortext Student GenAI Survey · n = 1,041 · Reino Unido · 2025</p>
+                        <h3 data-i18n="chart5.title">Propósitos de Uso de IA por Estudiantes</h3>
+                        <p data-i18n="chart5.sub">HEPI / Kortext Student GenAI Survey · n = 1,041 · Reino Unido · 2025</p>
                     </div>
                     <div class="chart-canvas-wrap">
                         <div id="purposeChart" style="width:100%;height:340px;"></div>
@@ -2414,8 +2474,8 @@
                 <!-- 6. Gap Analysis -->
                 <div class="chart-card">
                     <div class="chart-card-header">
-                        <h3>Brecha: Uso Estudiantil vs. Preparación Institucional</h3>
-                        <p>Digital Education Council Global Survey · n = 3,839 · 16 países · 2024</p>
+                        <h3 data-i18n="chart6.title">Brecha: Uso Estudiantil vs. Preparación Institucional</h3>
+                        <p data-i18n="chart6.sub">Digital Education Council Global Survey · n = 3,839 · 16 países · 2024</p>
                     </div>
                     <div class="chart-canvas-wrap">
                         <div id="gapChart" style="width:100%;height:340px;"></div>
@@ -2425,8 +2485,8 @@
                 <!-- 7. RCT Results — Wide -->
                 <div class="chart-card chart-card--wide">
                     <div class="chart-card-header">
-                        <h3>Tutoría IA vs. Aprendizaje Activo — Ensayo Controlado Aleatorio</h3>
-                        <p>Kestin et al. (2025) · Harvard University · Física universitaria · n = 194 · Scientific Reports (Nature)</p>
+                        <h3 data-i18n="chart7.title">Tutoría IA vs. Aprendizaje Activo — Ensayo Controlado Aleatorio</h3>
+                        <p data-i18n="chart7.sub">Kestin et al. (2025) · Harvard University · Física universitaria · n = 194 · Scientific Reports (Nature)</p>
                     </div>
                     <div class="chart-canvas-wrap">
                         <div id="rctChart" style="width:100%;height:380px;"></div>
@@ -2743,46 +2803,155 @@
         const pConfig = { responsive: true, displayModeBar: false };
         const CHART_IDS = ['forestChart','adoptionChart','growthChart','teacherBenefitsChart','purposeChart','gapChart','rctChart'];
 
+        // ── Responsive helpers ────────────────────────────────────
+        function isMobile() { return window.innerWidth < 640; }
+        function isTablet() { return window.innerWidth < 1024; }
+        function rH(desktop, mobile) { return isMobile() ? mobile : desktop; }
+        function rL(desktop, tablet, mobile) {
+            if (isMobile()) return mobile;
+            if (isTablet()) return tablet;
+            return desktop;
+        }
+
+        // ── Current language state ────────────────────────────────
+        let currentLang = 'es';
+
+        // ── Chart label data (ES / EN, desktop / mobile) ──────────
+        const LABELS = {
+            forest: {
+                es: {
+                    desktop: [
+                        'Ma et al. (2023)  ITS Clásico · n = 14,321',
+                        'Sun & Zhou (2024)  GenAI Ed. Superior · n = 1,909',
+                        'Kestin et al. (2025)  RCT Harvard · n = 194',
+                        'Gu & Yan (2025)  GenAI Performance · 19 estudios',
+                        'Liu et al. (2025)  GenAI — Motivación · 49 artículos',
+                        'Liu et al. (2025)  GenAI — Logro · 49 artículos',
+                        'ERIC Meta (2024)  IA en Educación · 13 estudios',
+                        'Tlili et al. (2025)  AIEd General · 85 estudios'
+                    ],
+                    mobile: ['Ma et al. (2023)','Sun & Zhou (2024)','Kestin et al. (2025)','Gu & Yan (2025)','Liu (2025) Motiv.','Liu (2025) Logro','ERIC Meta (2024)','Tlili et al. (2025)']
+                },
+                en: {
+                    desktop: [
+                        'Ma et al. (2023)  Classic ITS · n = 14,321',
+                        'Sun & Zhou (2024)  GenAI Higher Ed · n = 1,909',
+                        'Kestin et al. (2025)  RCT Harvard · n = 194',
+                        'Gu & Yan (2025)  GenAI Performance · 19 studies',
+                        'Liu et al. (2025)  GenAI — Motivation · 49 articles',
+                        'Liu et al. (2025)  GenAI — Achievement · 49 articles',
+                        'ERIC Meta (2024)  AI in Education · 13 studies',
+                        'Tlili et al. (2025)  AIEd General · 85 studies'
+                    ],
+                    mobile: ['Ma et al. (2023)','Sun & Zhou (2024)','Kestin et al. (2025)','Gu & Yan (2025)','Liu (2025) Motiv.','Liu (2025) Achiev.','ERIC Meta (2024)','Tlili et al. (2025)']
+                }
+            },
+            adoption: {
+                es: {
+                    desktop: ['K-12 EE.UU.: uso instruccional (RAND, 2024)','Docentes Ed. Superior: any IA (DEC, 2025)','K-12 EE.UU.: cualquier IA (Gallup, 2025)','Estudiantes: uso semanal (DEC, 2024)','Estudiantes globales: uso regular (DEC, 2024)','Estudiantes UK: cualquier IA (HEPI, 2025)'],
+                    mobile: ['K-12 instruccional','Doc. Ed. Superior','K-12 cualquier IA','Estud. semanal','Estud. globales','Estud. UK']
+                },
+                en: {
+                    desktop: ['K-12 U.S.: instructional use (RAND, 2024)','Higher Ed Teachers: any AI (DEC, 2025)','K-12 U.S.: any AI (Gallup, 2025)','Students: weekly use (DEC, 2024)','Global students: regular use (DEC, 2024)','UK Students: any AI (HEPI, 2025)'],
+                    mobile: ['K-12 instructional','Higher Ed teachers','K-12 any AI','Students weekly','Global students','UK students']
+                }
+            },
+            growth: {
+                es: { desktop: ['Uso general de IA', 'IA en evaluaciones', 'Satisfacción\ncon univ.'] },
+                en: { desktop: ['General AI use', 'AI in assessments', 'Univ.\nsatisfaction'] }
+            },
+            teacher: {
+                es: {
+                    desktop: ['Adaptación de materiales','Creación de actividades / hojas de trabajo','Preparación de clases','Calificación y retroalimentación','Ahorro de tiempo por tarea (promedio)','Trabajo administrativo'],
+                    mobile: ['Adapt. materiales','Actividades/hojas','Prep. clases','Calificación','Ahorro tiempo','Adm. trabajo']
+                },
+                en: {
+                    desktop: ['Adapting materials','Creating activities / worksheets','Lesson preparation','Grading and feedback','Time saved per task (average)','Administrative work'],
+                    mobile: ['Adapt. materials','Activities/sheets','Lesson prep','Grading','Time saving','Admin work']
+                }
+            },
+            purpose: {
+                es: {
+                    desktop: ['Incorporar texto IA directamente en tareas','Mejorar calidad de tareas','Ahorrar tiempo','Explicar conceptos','Evaluaciones / Exámenes'],
+                    mobile: ['Texto IA en tareas','Mejor calidad','Ahorrar tiempo','Explicar conceptos','Evaluaciones']
+                },
+                en: {
+                    desktop: ['Include AI text directly in assignments','Improve assignment quality','Save time','Explain concepts','Assessments / Exams'],
+                    mobile: ['AI text in tasks','Better quality','Save time','Explain concepts','Assessments']
+                }
+            },
+            gap: {
+                es: { desktop: ['Estudiantes usan<br>IA regularmente','Estudiantes con<br>habilidades suficientes','Estudiantes preparados<br>para trabajo con IA','Universidades que<br>cumplen expectativas'] },
+                en: { desktop: ['Students use<br>AI regularly','Students with<br>sufficient skills','Students ready<br>for AI work','Universities meeting<br>expectations'] }
+            },
+            rct: {
+                es: { desktop: ['Pre-test','Post-test','Engagement','Motivación'] },
+                en: { desktop: ['Pre-test','Post-test','Engagement','Motivation'] }
+            }
+        };
+
+        function getLabels(key, variant) {
+            const lang = currentLang;
+            const set  = LABELS[key][lang] || LABELS[key]['es'];
+            if (variant === 'mobile' && set.mobile) return set.mobile;
+            return set.desktop;
+        }
+
         // ── Render all 7 Plotly charts ────────────────────────────
         function renderAllCharts() {
-            const T = getPlotlyTheme();
+            const T  = getPlotlyTheme();
+            const mb = isMobile();
 
         // ── 1. Forest Plot: Effect Sizes ─────────────────────────────────────────
             const studies = [
-                { label: 'Ma et al. (2023)  ITS Clásico · n = 14,321',          g: 0.42,  lo: null,  hi: null  },
-                { label: 'Sun & Zhou (2024)  GenAI Ed. Superior · n = 1,909',    g: 0.533, lo: 0.408, hi: 0.659 },
-                { label: 'Kestin et al. (2025)  RCT Harvard · n = 194',          g: 0.63,  lo: null,  hi: null  },
-                { label: 'Gu & Yan (2025)  GenAI Performance · 19 estudios',     g: 0.683, lo: null,  hi: null  },
-                { label: 'Liu et al. (2025)  GenAI — Motivación · 49 artículos', g: 0.803, lo: null,  hi: null  },
-                { label: 'Liu et al. (2025)  GenAI — Logro · 49 artículos',      g: 0.857, lo: null,  hi: null  },
-                { label: 'ERIC Meta (2024)  IA en Educación · 13 estudios',      g: 0.86,  lo: 0.45,  hi: 1.27  },
-                { label: 'Tlili et al. (2025)  AIEd General · 85 estudios',      g: 1.10,  lo: null,  hi: null  }
+                { g: 0.42,  lo: null,  hi: null  },
+                { g: 0.533, lo: 0.408, hi: 0.659 },
+                { g: 0.63,  lo: null,  hi: null  },
+                { g: 0.683, lo: null,  hi: null  },
+                { g: 0.803, lo: null,  hi: null  },
+                { g: 0.857, lo: null,  hi: null  },
+                { g: 0.86,  lo: 0.45,  hi: 1.27  },
+                { g: 1.10,  lo: null,  hi: null  }
             ];
+            const forestLabels = getLabels('forest', mb ? 'mobile' : 'desktop');
             const markerColors = studies.map(s =>
                 s.g >= 0.8 ? T.goldFull : s.g >= 0.5 ? T.goldMid : 'rgba(212,165,116,0.35)'
             );
+            const forestAnnotations = currentLang === 'en'
+                ? [
+                    { x: 0.10, y: 7.8, text: 'Small',     showarrow: false, font: { color: '#666',       size: 10 }, xanchor: 'center' },
+                    { x: 0.35, y: 7.8, text: 'Moderate',  showarrow: false, font: { color: T.text,       size: 10 }, xanchor: 'center' },
+                    { x: 0.65, y: 7.8, text: 'Large',     showarrow: false, font: { color: T.gold,       size: 10 }, xanchor: 'center' },
+                    { x: 1.15, y: 7.8, text: 'Very large',showarrow: false, font: { color: T.goldBright, size: 10 }, xanchor: 'center' }
+                  ]
+                : [
+                    { x: 0.10, y: 7.8, text: 'Pequeño',    showarrow: false, font: { color: '#666',       size: 10 }, xanchor: 'center' },
+                    { x: 0.35, y: 7.8, text: 'Moderado',   showarrow: false, font: { color: T.text,       size: 10 }, xanchor: 'center' },
+                    { x: 0.65, y: 7.8, text: 'Grande',     showarrow: false, font: { color: T.gold,       size: 10 }, xanchor: 'center' },
+                    { x: 1.15, y: 7.8, text: 'Muy grande', showarrow: false, font: { color: T.goldBright, size: 10 }, xanchor: 'center' }
+                  ];
             Plotly.newPlot('forestChart', [{
                 type: 'scatter', mode: 'markers',
                 x: studies.map(s => s.g),
-                y: studies.map(s => s.label),
+                y: forestLabels,
                 error_x: {
                     type: 'data', symmetric: false,
                     array:      studies.map(s => s.hi != null ? +(s.hi - s.g).toFixed(3) : null),
                     arrayminus: studies.map(s => s.lo != null ? +(s.g  - s.lo).toFixed(3) : null),
                     color: T.goldDim, thickness: 2, width: 10
                 },
-                marker: { size: 16, color: markerColors, symbol: 'diamond', line: { color: T.goldDim, width: 1.5 } },
+                marker: { size: mb ? 12 : 16, color: markerColors, symbol: 'diamond', line: { color: T.goldDim, width: 1.5 } },
                 hovertemplate: '<b>%{y}</b><br>Hedges\'s g = %{x:.3f}<extra></extra>',
                 name: ''
             }], pLayout({
-                margin: { l: 310, r: 60, t: 30, b: 50 },
+                margin: { l: rL(310, 200, 10), r: rL(60, 40, 30), t: 30, b: 50 },
                 xaxis: {
                     gridcolor: T.grid, range: [0, 1.5],
                     tickvals: [0, 0.2, 0.5, 0.8, 1.0, 1.2, 1.5],
-                    title: { text: "Hedges's g (tamaño del efecto)", font: { color: T.text, size: 12 } },
+                    title: { text: currentLang === 'en' ? "Hedges's g (effect size)" : "Hedges's g (tamaño del efecto)", font: { color: T.text, size: 12 } },
                     tickcolor: T.text, zerolinecolor: T.zero
                 },
-                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, autorange: 'reversed' },
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: mb ? 9 : 11 }, autorange: 'reversed', automargin: true },
                 shapes: [
                     { type: 'rect', x0: 0,   x1: 0.2, y0: -0.5, y1: 7.5, fillcolor: 'rgba(190,90,70,0.05)',   line: { width: 0 } },
                     { type: 'rect', x0: 0.2, x1: 0.5, y0: -0.5, y1: 7.5, fillcolor: 'rgba(212,165,116,0.04)', line: { width: 0 } },
@@ -2790,40 +2959,28 @@
                     { type: 'rect', x0: 0.8, x1: 1.5, y0: -0.5, y1: 7.5, fillcolor: 'rgba(212,165,116,0.11)', line: { width: 0 } },
                     { type: 'line', x0: 0.5, x1: 0.5, y0: -0.5, y1: 7.5, line: { color: T.goldDim, width: 1.5, dash: 'dot' } }
                 ],
-                annotations: [
-                    { x: 0.10, y: 7.8, text: 'Pequeño',    showarrow: false, font: { color: '#666',       size: 10 }, xanchor: 'center' },
-                    { x: 0.35, y: 7.8, text: 'Moderado',   showarrow: false, font: { color: T.text,       size: 10 }, xanchor: 'center' },
-                    { x: 0.65, y: 7.8, text: 'Grande',     showarrow: false, font: { color: T.gold,       size: 10 }, xanchor: 'center' },
-                    { x: 1.15, y: 7.8, text: 'Muy grande', showarrow: false, font: { color: T.goldBright, size: 10 }, xanchor: 'center' }
-                ]
+                annotations: forestAnnotations
             }), pConfig);
 
             // ── 2. Adoption by Population ─────────────────────────────────────────────
-            const adoptionLabels = [
-                'K-12 EE.UU.: uso instruccional (RAND, 2024)',
-                'Docentes Ed. Superior: any IA (DEC, 2025)',
-                'K-12 EE.UU.: cualquier IA (Gallup, 2025)',
-                'Estudiantes: uso semanal (DEC, 2024)',
-                'Estudiantes globales: uso regular (DEC, 2024)',
-                'Estudiantes UK: cualquier IA (HEPI, 2025)'
-            ];
+            const adoptionLabels = getLabels('adoption', mb ? 'mobile' : 'desktop');
             const adoptionVals = [25, 61, 60, 54, 86, 92];
             Plotly.newPlot('adoptionChart', [{
                 type: 'bar', orientation: 'h',
                 x: adoptionVals, y: adoptionLabels,
                 marker: { color: adoptionVals.map(v => v >= 80 ? T.goldFull : v >= 55 ? T.goldMid : 'rgba(212,165,116,0.30)'), line: { width: 0 } },
                 text: adoptionVals.map(v => v + '%'), textposition: 'outside',
-                textfont: { color: T.text, size: 12, family: T.font },
+                textfont: { color: T.text, size: mb ? 10 : 12, family: T.font },
                 cliponaxis: false,
-                hovertemplate: '<b>%{y}</b><br>Adopción: %{x}%<extra></extra>'
+                hovertemplate: '<b>%{y}</b><br>' + (currentLang === 'en' ? 'Adoption: %{x}%' : 'Adopción: %{x}%') + '<extra></extra>'
             }], pLayout({
-                margin: { l: 280, r: 55, t: 20, b: 40 },
-                xaxis: { gridcolor: T.grid, range: [0, 112], ticksuffix: '%', tickcolor: T.text, title: { text: '% de adopción', font: { color: T.text } } },
-                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, autorange: 'reversed' }
+                margin: { l: rL(280, 180, 10), r: rL(55, 45, 35), t: 20, b: 40 },
+                xaxis: { gridcolor: T.grid, range: [0, 112], ticksuffix: '%', tickcolor: T.text, title: { text: currentLang === 'en' ? '% adoption' : '% de adopción', font: { color: T.text } } },
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: mb ? 9 : 11 }, autorange: 'reversed', automargin: true }
             }), pConfig);
 
             // ── 3. Growth Timeline ─────────────────────────────────────────────────────
-            const growthCats  = ['Uso general de IA', 'IA en evaluaciones', 'Satisfacción\ncon univ.'];
+            const growthCats  = getLabels('growth', 'desktop');
             const growth2024  = [66, 53, 18];
             const growth2025  = [92, 88, 42];
             Plotly.newPlot('growthChart', [
@@ -2844,8 +3001,8 @@
             ], pLayout({
                 barmode: 'group', showlegend: true,
                 legend: { orientation: 'h', y: -0.18, font: { color: T.text, family: T.font }, bgcolor: 'transparent' },
-                margin: { l: 40, r: 30, t: 30, b: 80 },
-                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 } },
+                margin: { l: 40, r: 30, t: 30, b: mb ? 60 : 80 },
+                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: mb ? 10 : 11 } },
                 yaxis: { gridcolor: T.grid, range: [0, 108], ticksuffix: '%', tickcolor: T.text },
                 annotations: growthCats.map((cat, i) => ({
                     x: cat, y: growth2025[i] + 5,
@@ -2855,38 +3012,25 @@
             }), pConfig);
 
             // ── 4. Teacher Benefits ────────────────────────────────────────────────────
-            const benefitLabels = [
-                'Adaptación de materiales',
-                'Creación de actividades / hojas de trabajo',
-                'Preparación de clases',
-                'Calificación y retroalimentación',
-                'Ahorro de tiempo por tarea (promedio)',
-                'Trabajo administrativo'
-            ];
+            const benefitLabels = getLabels('teacher', mb ? 'mobile' : 'desktop');
             const benefitVals = [28, 33, 37, 57, 72, 74];
             Plotly.newPlot('teacherBenefitsChart', [{
                 type: 'bar', orientation: 'h',
                 x: benefitVals, y: benefitLabels,
                 marker: { color: benefitVals.map(v => 'rgba(212,165,116,' + (0.30 + (v / 100) * 0.60).toFixed(2) + ')'), line: { width: 0 } },
                 text: benefitVals.map(v => v + '%'), textposition: 'outside',
-                textfont: { color: T.text, size: 12, family: T.font },
+                textfont: { color: T.text, size: mb ? 10 : 12, family: T.font },
                 cliponaxis: false,
-                hovertemplate: '<b>%{y}</b><br>Docentes que reportan mejora: %{x}%<extra></extra>'
+                hovertemplate: '<b>%{y}</b><br>' + (currentLang === 'en' ? 'Teachers reporting improvement: %{x}%' : 'Docentes que reportan mejora: %{x}%') + '<extra></extra>'
             }], pLayout({
-                margin: { l: 265, r: 60, t: 20, b: 50 },
-                xaxis: { gridcolor: T.grid, range: [0, 90], ticksuffix: '%', tickcolor: T.text, title: { text: '% de docentes que reportan mejora o ahorro', font: { color: T.text } } },
-                yaxis: { gridcolor: 'transparent', tickcolor: T.text, autorange: 'reversed' },
+                margin: { l: rL(265, 160, 10), r: rL(60, 45, 35), t: 20, b: 50 },
+                xaxis: { gridcolor: T.grid, range: [0, 90], ticksuffix: '%', tickcolor: T.text, title: { text: currentLang === 'en' ? '% of teachers reporting improvement or savings' : '% de docentes que reportan mejora o ahorro', font: { color: T.text } } },
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: mb ? 9 : 11 }, autorange: 'reversed', automargin: true },
                 shapes: [{ type: 'line', x0: 50, x1: 50, y0: -0.5, y1: 5.5, line: { color: '#444', width: 1, dash: 'dot' } }]
             }), pConfig);
 
             // ── 5. Student Purposes ────────────────────────────────────────────────────
-            const purposeLabels = [
-                'Incorporar texto IA directamente en tareas',
-                'Mejorar calidad de tareas',
-                'Ahorrar tiempo',
-                'Explicar conceptos',
-                'Evaluaciones / Exámenes'
-            ];
+            const purposeLabels = getLabels('purpose', mb ? 'mobile' : 'desktop');
             const purposeVals = [18, 50, 51, 58, 88];
             const purposeColors = ['rgba(190,90,70,0.70)', T.goldMid, T.goldMid, 'rgba(212,165,116,0.70)', T.goldFull];
             Plotly.newPlot('purposeChart', [{
@@ -2894,64 +3038,79 @@
                 x: purposeVals, y: purposeLabels,
                 marker: { color: purposeColors, line: { width: 0 } },
                 text: purposeVals.map(v => v + '%'), textposition: 'outside',
-                textfont: { color: T.text, size: 12, family: T.font },
+                textfont: { color: T.text, size: mb ? 10 : 12, family: T.font },
                 cliponaxis: false,
-                hovertemplate: '<b>%{y}</b><br>%{x}% de estudiantes<extra></extra>'
+                hovertemplate: '<b>%{y}</b><br>%{x}%' + (currentLang === 'en' ? ' of students' : ' de estudiantes') + '<extra></extra>'
             }], pLayout({
-                margin: { l: 240, r: 55, t: 20, b: 40 },
+                margin: { l: rL(240, 160, 10), r: rL(55, 40, 35), t: 20, b: 40 },
                 xaxis: { gridcolor: T.grid, range: [0, 108], ticksuffix: '%', tickcolor: T.text },
-                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, autorange: 'reversed' }
+                yaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: mb ? 9 : 11 }, autorange: 'reversed', automargin: true }
             }), pConfig);
 
             // ── 6. Gap Analysis ────────────────────────────────────────────────────────
-            const gapCats   = ['Estudiantes usan<br>IA regularmente', 'Estudiantes con<br>habilidades suficientes', 'Estudiantes preparados<br>para trabajo con IA', 'Universidades que<br>cumplen expectativas'];
+            const gapCats   = getLabels('gap', 'desktop');
             const gapVals   = [86, 42, 52, 20];
             const gapColors = [T.goldFull, T.goldMid, T.goldMid, 'rgba(190,90,70,0.70)'];
             Plotly.newPlot('gapChart', [{
                 type: 'bar', x: gapCats, y: gapVals,
                 marker: { color: gapColors, line: { width: 0 } },
                 text: gapVals.map(v => v + '%'), textposition: 'outside',
-                textfont: { color: T.text, size: 12, family: T.font },
+                textfont: { color: T.text, size: mb ? 10 : 12, family: T.font },
                 cliponaxis: false,
                 hovertemplate: '<b>%{x}</b><br>%{y}%<extra></extra>'
             }], pLayout({
-                margin: { l: 40, r: 30, t: 20, b: 100 },
-                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 11 }, tickangle: 0 },
+                margin: { l: 40, r: 30, t: 20, b: mb ? 80 : 100 },
+                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: mb ? 9 : 11 }, tickangle: 0 },
                 yaxis: { gridcolor: T.grid, range: [0, 105], ticksuffix: '%', tickcolor: T.text },
                 shapes: [{ type: 'line', x0: -0.5, x1: 3.5, y0: 50, y1: 50, line: { color: '#444', width: 1, dash: 'dot' } }]
             }), pConfig);
 
             // ── 7. RCT: IA vs. Aprendizaje Activo ─────────────────────────────────────
-            const rctMetrics = ['Pre-test', 'Post-test', 'Engagement', 'Motivación'];
+            const rctMetrics = getLabels('rct', 'desktop');
             const rctAI      = [2.75, 4.5,  4.1, 3.4];
             const rctActive  = [2.75, 3.5,  3.6, 3.1];
+            const rctNameAI     = currentLang === 'en' ? 'AI Tutor'        : 'Tutor IA';
+            const rctNameActive = currentLang === 'en' ? 'Active Learning' : 'Aprendizaje Activo';
             Plotly.newPlot('rctChart', [
                 {
-                    type: 'bar', name: 'Tutor IA', x: rctMetrics, y: rctAI,
+                    type: 'bar', name: rctNameAI, x: rctMetrics, y: rctAI,
                     marker: { color: T.goldFull, line: { width: 0 } },
                     text: rctAI.map(v => v.toFixed(2)), textposition: 'auto',
                     textfont: { color: '#0a0a0a', size: 11 },
-                    hovertemplate: 'Tutor IA: %{y:.2f} / 5<extra></extra>'
+                    hovertemplate: rctNameAI + ': %{y:.2f} / 5<extra></extra>'
                 },
                 {
-                    type: 'bar', name: 'Aprendizaje Activo', x: rctMetrics, y: rctActive,
+                    type: 'bar', name: rctNameActive, x: rctMetrics, y: rctActive,
                     marker: { color: 'rgba(150,150,150,0.35)', line: { width: 0 } },
                     text: rctActive.map(v => v.toFixed(2)), textposition: 'auto',
                     textfont: { color: '#e8e8e8', size: 11 },
-                    hovertemplate: 'Aprendizaje Activo: %{y:.2f} / 5<extra></extra>'
+                    hovertemplate: rctNameActive + ': %{y:.2f} / 5<extra></extra>'
                 }
             ], pLayout({
                 barmode: 'group', showlegend: true,
                 legend: { orientation: 'h', y: -0.16, font: { color: T.text, family: T.font }, bgcolor: 'transparent' },
-                margin: { l: 50, r: 40, t: 40, b: 80 },
-                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: 12 } },
-                yaxis: { gridcolor: T.grid, range: [0, 5.4], title: { text: 'Puntaje (escala 1–5)', font: { color: T.text } }, tickcolor: T.text },
+                margin: { l: 50, r: 40, t: 40, b: mb ? 60 : 80 },
+                xaxis: { gridcolor: 'transparent', tickcolor: T.text, tickfont: { size: mb ? 10 : 12 } },
+                yaxis: { gridcolor: T.grid, range: [0, 5.4], title: { text: currentLang === 'en' ? 'Score (scale 1–5)' : 'Puntaje (escala 1–5)', font: { color: T.text } }, tickcolor: T.text },
                 shapes: [{ type: 'line', x0: -0.5, x1: 3.5, y0: 3, y1: 3, line: { color: '#444', width: 1, dash: 'dot' } }],
                 annotations: [{ x: 'Post-test', y: 5.25, text: '★ p &lt; 10⁻⁸', showarrow: false, font: { color: T.goldBright, size: 12, family: T.font } }]
             }), pConfig);
         }
 
         renderAllCharts();
+
+        // ── Debounced resize → re-render charts responsively ─────
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                CHART_IDS.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.data) Plotly.purge(id);
+                });
+                renderAllCharts();
+            }, 200);
+        });
 
         // Listen for theme changes — re-render Plotly with new theme
         themeToggle.addEventListener('click', () => {
@@ -2963,6 +3122,93 @@
                 renderAllCharts();
             }, 80);
         });
+
+        // =============================================
+        // LANGUAGE SYSTEM
+        // =============================================
+        const translations = {
+            es: {
+                'nav.research':   'Investigación',
+                'nav.ai_edu':     'IA &amp; Educación',
+                'nav.dissertation': 'Disertación',
+                'nav.charts':     'Otros Hallazgos',
+                'nav.contact':    'Contacto',
+                'hero.tag':       'Investigación · Inteligencia Artificial',
+                'hero.subtitle':  'Especialista en Inteligencia Artificial aplicada a la Educación Matemática',
+                'hero.description': 'Investigación doctoral enfocada en estrategias de diseño instruccional para el aprendizaje híbrido en matemáticas, integrando la inteligencia artificial como recurso educativo en escuelas secundarias especializadas.',
+                'hero.cta':       'Ver Disertación',
+                'section.charts': 'Síntesis de la Literatura',
+                'charts.intro':   'Síntesis cuantitativa de estudios indexados en Scopus · Web of Science · ERIC · PubMed del periodo 2023–2025. Meta-análisis, encuestas globales y ensayos controlados aleatorios sobre inteligencia artificial en contextos educativos.',
+                'chart1.title':   'Tamaño del Efecto de IA en Logro Académico',
+                'chart1.sub':     "Forest plot · Hedges's g · Meta-análisis indexados 2023–2025 · Línea punteada = umbral moderado (g = 0.5)",
+                'chart2.title':   'Adopción de IA por Grupo Poblacional',
+                'chart2.sub':     'Tasas de adopción comparadas · Fuentes: HEPI, DEC, Gallup, RAND · 2024–2025',
+                'chart3.title':   'Crecimiento Explosivo en Adopción',
+                'chart3.sub':     'Estudiantes del Reino Unido · HEPI / Kortext · n = 1,041 · 2024 → 2025',
+                'chart4.title':   'Beneficios Reportados por Docentes al Usar IA',
+                'chart4.sub':     '% que reporta mejora por área · Gallup / Walton Family Foundation · n = 2,232 docentes K-12 EE.UU. · 2025',
+                'chart5.title':   'Propósitos de Uso de IA por Estudiantes',
+                'chart5.sub':     'HEPI / Kortext Student GenAI Survey · n = 1,041 · Reino Unido · 2025',
+                'chart6.title':   'Brecha: Uso Estudiantil vs. Preparación Institucional',
+                'chart6.sub':     'Digital Education Council Global Survey · n = 3,839 · 16 países · 2024',
+                'chart7.title':   'Tutoría IA vs. Aprendizaje Activo — Ensayo Controlado Aleatorio',
+                'chart7.sub':     'Kestin et al. (2025) · Harvard University · Física universitaria · n = 194 · Scientific Reports (Nature)'
+            },
+            en: {
+                'nav.research':   'Research',
+                'nav.ai_edu':     'AI &amp; Education',
+                'nav.dissertation': 'Dissertation',
+                'nav.charts':     'Findings',
+                'nav.contact':    'Contact',
+                'hero.tag':       'Research · Artificial Intelligence',
+                'hero.subtitle':  'Specialist in Artificial Intelligence Applied to Mathematics Education',
+                'hero.description': 'Doctoral research focused on instructional design strategies for hybrid mathematics learning, integrating artificial intelligence as an educational resource in specialized secondary schools.',
+                'hero.cta':       'View Dissertation',
+                'section.charts': 'Literature Synthesis',
+                'charts.intro':   'Quantitative synthesis of studies indexed in Scopus · Web of Science · ERIC · PubMed for the 2023–2025 period. Meta-analyses, global surveys, and randomized controlled trials on artificial intelligence in educational contexts.',
+                'chart1.title':   'Effect Size of AI on Academic Achievement',
+                'chart1.sub':     "Forest plot · Hedges's g · Indexed meta-analyses 2023–2025 · Dotted line = moderate threshold (g = 0.5)",
+                'chart2.title':   'AI Adoption by Population Group',
+                'chart2.sub':     'Comparative adoption rates · Sources: HEPI, DEC, Gallup, RAND · 2024–2025',
+                'chart3.title':   'Explosive Growth in AI Adoption',
+                'chart3.sub':     'UK Students · HEPI / Kortext · n = 1,041 · 2024 → 2025',
+                'chart4.title':   'Benefits Reported by Teachers Using AI',
+                'chart4.sub':     '% reporting improvement by area · Gallup / Walton Family Foundation · n = 2,232 K-12 teachers U.S. · 2025',
+                'chart5.title':   'AI Usage Purposes Among Students',
+                'chart5.sub':     'HEPI / Kortext Student GenAI Survey · n = 1,041 · UK · 2025',
+                'chart6.title':   'Gap: Student Use vs. Institutional Readiness',
+                'chart6.sub':     'Digital Education Council Global Survey · n = 3,839 · 16 countries · 2024',
+                'chart7.title':   'AI Tutoring vs. Active Learning — Randomized Controlled Trial',
+                'chart7.sub':     'Kestin et al. (2025) · Harvard University · University Physics · n = 194 · Scientific Reports (Nature)'
+            }
+        };
+
+        function applyLang(lang) {
+            currentLang = lang;
+
+            // Update button states
+            document.getElementById('btnEs').classList.toggle('active', lang === 'es');
+            document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+
+            // Update document lang attribute
+            document.documentElement.lang = lang === 'en' ? 'en' : 'es';
+
+            // Update all data-i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                const text = translations[lang] && translations[lang][key];
+                if (text !== undefined) el.innerHTML = text;
+            });
+
+            // Re-render charts with new language labels
+            CHART_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.data) Plotly.purge(id);
+            });
+            renderAllCharts();
+        }
+
+        function setLang(lang) { applyLang(lang); }
 
         // Parallax effect on scroll
         let lastScrollY = window.scrollY;
