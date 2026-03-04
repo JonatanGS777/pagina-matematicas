@@ -77,6 +77,8 @@ const I18n = (() => {
                 'Creative Projects - Math Club | Prof. Yonatan Guerrero',
             'Registro - Olimpiadas Matemáticas':
                 'Registration - Math Olympics',
+            'Creador de Proyectos - Prof. Yonatan Guerrero (Versión Mejorada)':
+                'Project Creator - Prof. Yonatan Guerrero (Enhanced Version)',
         }
     };
 
@@ -85,7 +87,25 @@ const I18n = (() => {
         en: {
             placeholder: {
                 'Buscar proyectos...': 'Search projects...',
-                'Buscar término...':   'Search term...'
+                'Buscar término...':   'Search term...',
+                // project.html
+                'Ej: Análisis de Patrones Fractales en Sistemas Dinámicos': 'E.g.: Analysis of Fractal Patterns in Dynamic Systems',
+                'Tu nombre completo': 'Your full name',
+                'Nombre de tu escuela o institución': 'Name of your school or institution',
+                'Escribe aquí la introducción de tu proyecto...': 'Write the introduction to your project here...',
+                'Analiza y sintetiza los trabajos previos relacionados con tu investigación...': 'Analyze and synthesize previous work related to your research...',
+                'Describe claramente el problema que vas a investigar...': 'Clearly describe the problem you will research...',
+                'Ej: Analizar los patrones fractales en sistemas dinámicos caóticos...': 'E.g.: Analyze fractal patterns in chaotic dynamic systems...',
+                'Lista los objetivos específicos de tu investigación...': 'List the specific objectives of your research...',
+                'Plantea tu hipótesis de investigación...': 'State your research hypothesis...',
+                'Describe detalladamente la metodología de tu investigación...': 'Describe your research methodology in detail...',
+                'Lista las herramientas, software, equipos o recursos que utilizarás...': 'List the tools, software, equipment or resources you will use...',
+                'Describe y presenta los datos obtenidos en tu investigación...': 'Describe and present the data obtained in your research...',
+                'Título de tu gráfica': 'Title of your chart',
+                'Interpreta los resultados obtenidos y su significado...': 'Interpret the results obtained and their meaning...',
+                'Escribe las conclusiones principales de tu investigación...': 'Write the main conclusions of your research...',
+                'Menciona las limitaciones o restricciones de tu investigación...': 'Mention the limitations or restrictions of your research...',
+                'Sugiere posibles líneas de investigación futuras...': 'Suggest possible future lines of research...'
             }
         }
     };
@@ -701,6 +721,8 @@ const I18n = (() => {
             'Diciembre 2025':                 'December 2025',
             'Feria de Investigación':         'Research Fair',
             '¿Listo para ser un Investigador?': 'Ready to be a Researcher?',
+            'Comenzar Proyecto':              'Start Project',
+            'Más Información':                'More Information',
             'Formando la próxima generación de investigadores matemáticos':
                 'Training the next generation of mathematical researchers',
 
@@ -907,6 +929,89 @@ const I18n = (() => {
             'Solución sin impacto claro': 'Solution without clear impact',
             'Aplicabilidad dudosa': 'Doubtful applicability',
             'Sin beneficio aparente': 'Without apparent benefit',
+            // ── Club — project.html ──────────────────────────────────────
+            'Creador de Proyectos (Mejorado)': 'Project Creator (Enhanced)',
+            'Guardar':                        'Save',
+            'Cargar':                         'Load',
+            'Exportar PDF':                   'Export PDF',
+            '🚀 Pasos del Proyecto':          '🚀 Project Steps',
+            'Información General':            'General Information',
+            'Revisión Literatura':            'Literature Review',
+            'Problema Investigación':         'Research Problem',
+            'Análisis de Datos':              'Data Analysis',
+            'Conclusiones':                   'Conclusions',
+            'Vista Previa':                   'Preview',
+            // Step titles (with emoji)
+            '📋 Información General':         '📋 General Information',
+            '📖 Introducción':                '📖 Introduction',
+            '📚 Revisión de Literatura':      '📚 Literature Review',
+            '❓ Problema de Investigación':   '❓ Research Problem',
+            '🔬 Metodología':                 '🔬 Methodology',
+            '📊 Análisis de Datos':           '📊 Data Analysis',
+            '🎯 Conclusiones':                '🎯 Conclusions',
+            '👁️ Vista Previa':               '👁️ Preview',
+            // Info card headings
+            '💡 Consejo':                     '💡 Tip',
+            '📝 Guía para la Introducción':   '📝 Introduction Guide',
+            '🔍 Gestión de Referencias':      '🔍 Reference Management',
+            '🎯 Formulación del Problema':    '🎯 Problem Formulation',
+            '⚙️ Diseño Metodológico':         '⚙️ Methodological Design',
+            '📈 Análisis de Resultados':      '📈 Results Analysis',
+            '📝 Redacción de Conclusiones':   '📝 Writing Conclusions',
+            // Form labels
+            'Título del Proyecto':            'Project Title',
+            'Autor(es)':                      'Author(s)',
+            'Institución':                    'Institution',
+            'Área de Investigación':          'Research Area',
+            'Fecha':                          'Date',
+            'Análisis de Literatura':         'Literature Analysis',
+            '📖 Referencias':                 '📖 References',
+            'Planteamiento del Problema':     'Problem Statement',
+            'Objetivo General':              'General Objective',
+            'Objetivos Específicos':          'Specific Objectives',
+            'Hipótesis (si aplica)':          'Hypothesis (if applicable)',
+            'Tipo de Investigación':          'Research Type',
+            'Metodología Detallada':          'Detailed Methodology',
+            'Herramientas y Recursos':        'Tools and Resources',
+            'Presentación de Datos':          'Data Presentation',
+            'Tipo de Gráfica':                'Chart Type',
+            'Título de la Gráfica':           'Chart Title',
+            'Datos':                          'Data',
+            'Etiquetas (opcional)':           'Labels (optional)',
+            'Interpretación de Resultados':   'Interpretation of Results',
+            'Conclusiones Principales':       'Main Conclusions',
+            'Limitaciones del Estudio':       'Study Limitations',
+            'Investigaciones Futuras':        'Future Research',
+            // Select options
+            'Selecciona un área':             'Select an area',
+            'Teoría de Números':              'Number Theory',
+            'Matemáticas Aplicadas':          'Applied Mathematics',
+            'Ciencia de Datos':               'Data Science',
+            'Modelado Matemático':            'Mathematical Modeling',
+            'Selecciona el tipo':             'Select type',
+            'Teórica':                        'Theoretical',
+            'Computacional':                  'Computational',
+            'Mixta':                          'Mixed',
+            'Selecciona el tipo de gráfica':  'Select chart type',
+            'Gráfica de Líneas':              'Line Chart',
+            'Gráfica de Barras':              'Bar Chart',
+            'Histograma':                     'Histogram',
+            'Gráfica de Dispersión':          'Scatter Plot',
+            'Gráfica Circular':               'Pie Chart',
+            'Diagrama de Caja':               'Box Plot',
+            // Navigation buttons
+            'Siguiente':                      'Next',
+            'Anterior':                       'Previous',
+            'Nuevo Proyecto':                 'New Project',
+            'Agregar Referencia':             'Add Reference',
+            'Generar Gráfica':                'Generate Chart',
+            'Limpiar Gráficas':              'Clear Charts',
+            'Exportar Datos':                 'Export Data',
+            'Panel Debug':                    'Debug Panel',
+            'Exportar a PDF (Con Imágenes Mejoradas)': 'Export to PDF (With Enhanced Images)',
+            // Progress text (static portion)
+            'Paso 1 de 8':                    'Step 1 of 8',
+
             // ── Club — registro.html ─────────────────────────────────────
             'Volver a Olimpiadas':            'Back to Olympics',
             'Registro para el Club de Matemáticas': 'Registration for the Math Club',
@@ -1042,6 +1147,16 @@ const I18n = (() => {
                 'Welcome to the educational materials section. This collection has been carefully selected and developed to support the mathematics teaching-learning process. Resources are organized into three main categories to facilitate access and use:',
             'Estos materiales se actualizan regularmente para asegurar su relevancia y alineación con los estándares curriculares vigentes. Se recomienda revisar periódicamente esta sección para acceder a los nuevos recursos disponibles.':
                 'These materials are regularly updated to ensure their relevance and alignment with current curricular standards. It is recommended to review this section periodically to access newly available resources.',
+
+            // club/investigacion.html — CTA section
+            'Únete a nuestra comunidad de jóvenes investigadores y transforma tu curiosidad matemática en descubrimientos científicos que impacten al mundo.':
+                'Join our community of young researchers and transform your mathematical curiosity into scientific discoveries that impact the world.',
+
+            // club/project.html — info card descriptions
+            'Elige un título descriptivo y específico que refleje claramente el enfoque de tu investigación.':
+                'Choose a descriptive and specific title that clearly reflects the focus of your research.',
+            'Agrega las fuentes que has consultado. Incluye libros, artículos, papers y recursos web relevantes.':
+                'Add the sources you have consulted. Include books, articles, papers and relevant web resources.',
 
             // club/proyectos-creativos.html — hero and step paragraphs
             'Guía completa para desarrollar proyectos innovadores donde las matemáticas sean las protagonistas. Transforma ideas en realidad aplicando conceptos matemáticos de forma creativa y práctica.':

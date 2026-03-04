@@ -639,6 +639,10 @@
             </a>
             
             <div class="header-actions">
+                <button id="lang-toggle"
+                    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                    🇺🇸 EN
+                </button>
                 <button class="btn btn-secondary" onclick="saveProject()">
                     <i class="fas fa-save"></i>
                     Guardar
@@ -2693,5 +2697,8 @@ else:
             showMessage('📄 PDF exportado exitosamente con mejoras implementadas', 'success');
         }
     </script>
+
+<script src="../js/i18n.js"></script>
+<script>I18n.init();</script>
 </body>
 </html>
