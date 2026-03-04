@@ -682,8 +682,11 @@ const I18n = (() => {
             'Número de estudiante':           'Student number',
 
             // ── Club — investigacion.html ────────────────────────────────
+            '🔬 Investigación Matemática':    '🔬 Mathematical Research',
             'Investigación Matemática':       'Mathematical Research',
             'Descubre, Explora, Innova':      'Discover, Explore, Innovate',
+            'Sumérgete en el fascinante mundo de la investigación matemática donde cada problema es una oportunidad de descubrimiento y cada teorema es un paso hacia la innovación. Únete a nuestra comunidad de jóvenes investigadores y transforma tu curiosidad en conocimiento científico.':
+                'Immerse yourself in the fascinating world of mathematical research where every problem is an opportunity for discovery and every theorem is a step toward innovation. Join our community of young researchers and transform your curiosity into scientific knowledge.',
             'Proyectos Activos':              'Active Projects',
             'Áreas de Investigación':         'Research Areas',
             'Estudiantes Investigadores':     'Student Researchers',
