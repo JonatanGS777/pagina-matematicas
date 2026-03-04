@@ -1322,17 +1322,26 @@ const I18n = (() => {
         const texts = heroTexts[lang];
         if (!texts) return;
 
-        const tryUpdate = () => {
-            const map = { mainTitle: 'mainTitle', subtitle: 'subtitle', professorName: 'professorName', description: 'description' };
-            Object.entries(map).forEach(([key, id]) => {
+        // IDs to translate, in order (each finishes later than the previous)
+        const ids = ['mainTitle', 'subtitle', 'professorName', 'description'];
+        const done = new Set();
+
+        // Only overwrite an element once it has the 'finished' class
+        // (set by the typewriter when the animation completes)
+        const poll = () => {
+            ids.forEach(id => {
+                if (done.has(id) || !texts[id]) return;
                 const el = document.getElementById(id);
-                if (el && el.textContent.trim()) el.textContent = texts[key];
+                if (el && el.classList.contains('finished')) {
+                    el.textContent = texts[id];
+                    done.add(id);
+                }
             });
+            // Keep polling until all elements are translated
+            if (done.size < ids.length) setTimeout(poll, 600);
         };
 
-        tryUpdate();
-        setTimeout(tryUpdate, 4000);
-        setTimeout(tryUpdate, 7000);
+        setTimeout(poll, 600);
     }
 
     // ── Actualiza el botón ─────────────────────────────────────────────────
