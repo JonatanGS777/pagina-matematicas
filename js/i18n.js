@@ -547,6 +547,124 @@ const I18n = (() => {
             'Crecimiento Logístico':          'Logistic Growth',
             'Comparación':                    'Comparison',
 
+            // Ebook — nav & progress bar (missing items)
+            'Objetivos':                      'Objectives',
+            'Contenido':                      'Content',
+
+            // Ebook — hero
+            'Autor:':                         'Author:',
+            'Fecha:':                         'Date:',
+
+            // Ebook — Nivel Educativo
+            'Nivel y Perfil':                 'Level & Profile',
+            'Nivel:':                         'Level:',
+            'Noveno grado de escuela secundaria': 'Ninth grade of secondary school',
+            'Edad:':                          'Age:',
+            '14-15 años':                     '14-15 years old',
+            'Características del grupo:':     'Group characteristics:',
+
+            // Ebook — Objetivos
+            'Principales Objetivos':          'Main Objectives',
+            'Alineación a Estándares':        'Standards Alignment',
+            '- Reconocer situaciones de crecimiento y decrecimiento':
+                '- Recognize growth and decay situations',
+            '- Utilizar modelos matemáticos para explicar dinámicas de poblaciones':
+                '- Use mathematical models to explain population dynamics',
+
+            // Ebook — Contenido
+            'Conceptos a Enseñar':            'Concepts to Teach',
+            'Crecimiento exponencial vs. crecimiento logístico':
+                'Exponential growth vs. logistic growth',
+            'Sin límites de recursos':        'Without resource limits',
+            'Con capacidad de carga (K)':     'With carrying capacity (K)',
+            'Ecuación del modelo logístico:': 'Logistic model equation:',
+            'Donde:':                         'Where:',
+
+            // Ebook — Integración STEAM
+            'Ciencia':                        'Science',
+            'Tecnología':                     'Technology',
+            'Ingeniería':                     'Engineering',
+            'Artes':                          'Arts',
+            'Matemáticas':                    'Mathematics',
+
+            // Ebook — Metodología
+            'Introducción Conceptual':        'Conceptual Introduction',
+            'Programación de la Simulación':  'Simulation Programming',
+            'Análisis de Resultados':         'Results Analysis',
+            'Duración:':                      'Duration:',
+            'Materiales y Recursos':          'Materials & Resources',
+            'Instrucciones paso a paso':      'Step-by-step instructions',
+            'Presentación teórica:':          'Theoretical presentation:',
+            'Explicar el modelo logístico':   'Explain the logistic model',
+            'Demostración:':                  'Demonstration:',
+            'Mostrar un ejemplo de simulación': 'Show a simulation example',
+            'Actividad individual:':          'Individual activity:',
+            'Discusión grupal:':              'Group discussion:',
+            '¿Qué pasó con la población? ¿Cómo afecta cada parámetro?':
+                'What happened to the population? How does each parameter affect it?',
+            'Factores que limitan el crecimiento': 'Factors that limit growth',
+            'Colonia bacteriana real':        'Real bacterial colony',
+
+            // Ebook — Simulación labels
+            'Población Inicial (P₀):':        'Initial Population (P₀):',
+            'Tasa de Crecimiento (r):':       'Growth Rate (r):',
+            'Capacidad de Carga (K):':        'Carrying Capacity (K):',
+            'Exportar':                       'Export',
+
+            // Ebook — Casos Reales
+            'E. coli en Laboratorio':         'E. coli in the Lab',
+            'Parámetros observados:':         'Observed parameters:',
+            'Simular este caso':              'Simulate this case',
+            'Infección Bacteriana Clínica':   'Clinical Bacterial Infection',
+            'Biorremedación Ambiental':       'Environmental Bioremediation',
+
+            // Ebook — Visualización Avanzada
+            'Modelo 1':                       'Model 1',
+            'Modelo 2':                       'Model 2',
+            'Modelo 3':                       'Model 3',
+            'Configuración Modelo 1':         'Model 1 Settings',
+            'Color del modelo:':              'Model color:',
+            'Activar modelo:':                'Activate model:',
+            'Ejecutar Visualización':         'Run Visualization',
+            'Guardar Configuración':          'Save Configuration',
+
+            // Ebook — Laboratorio Virtual
+            'Laboratorio Virtual de Microscopía': 'Virtual Microscopy Lab',
+            'Muestras disponibles':           'Available samples',
+            'Fase de Latencia':               'Lag Phase',
+            'Fase Exponencial':               'Exponential Phase',
+            'Fase Estacionaria':              'Stationary Phase',
+            'Fase de Muerte':                 'Death Phase',
+            '0-2h de crecimiento':            '0-2h of growth',
+            '2-6h de crecimiento':            '2-6h of growth',
+            '8-12h de crecimiento':           '8-12h of growth',
+            '24h+ de crecimiento':            '24h+ of growth',
+            'Observaciones':                  'Observations',
+            'Modelo Correspondiente':         'Corresponding Model',
+            'Observaciones Microscópicas':    'Microscopic Observations',
+            'Análisis Cuantitativo':          'Quantitative Analysis',
+            'Modelo Matemático':              'Mathematical Model',
+
+            // Ebook — Quiz result dynamic text
+            'Has respondido correctamente':   'You have correctly answered',
+            'preguntas.':                     'questions.',
+
+            // Ebook — Adaptaciones
+            'Aumentar Dificultad':            'Increase Difficulty',
+            'Reducir Dificultad':             'Reduce Difficulty',
+
+            // Ebook — Evaluación
+            'Preguntas orientadoras:':        'Guiding questions:',
+
+            // Ebook — Reflexión
+            'Reflexión y Conclusión':         'Reflection & Conclusion',
+            'Visualización 3D':               '3D Visualization',
+
+            // Ebook — Footer
+            'Recursos Adicionales':           'Additional Resources',
+            'Inicio':                         'Home',
+            'Recursos':                       'Resources',
+
             // ── Club — competencias.html ─────────────────────────────────
             'Ver Tabla de Posiciones':        'View Leaderboard',
             'Iniciar Timer':                  'Start Timer',
@@ -1072,6 +1190,128 @@ const I18n = (() => {
             // links.html — Hero description
             'Descubre una colección cuidadosamente seleccionada de herramientas digitales, \n                aplicaciones y plataformas que transformarán tu experiencia de aprendizaje matemático.':
                 'Discover a carefully selected collection of digital tools, applications and platforms that will transform your mathematics learning experience.',
+
+            // Ebook — Introducción hero
+            'Una exploración STEAM para estudiantes de noveno grado sobre el crecimiento poblacional de organismos microscópicos utilizando modelos matemáticos y programación.':
+                'A STEAM exploration for ninth grade students on the population growth of microscopic organisms using mathematical models and programming.',
+
+            // Ebook — Relevancia
+            'El modelado matemático es fundamental en múltiples campos científicos:':
+                'Mathematical modeling is fundamental in multiple scientific fields:',
+            'Investigación biológica para comprender patrones de crecimiento':
+                'Biological research to understand growth patterns',
+            'Desarrollo farmacéutico para predecir efectos de antibióticos':
+                'Pharmaceutical development to predict antibiotic effects',
+            'Control ambiental para gestionar ecosistemas':
+                'Environmental management to manage ecosystems',
+            'Programación de simulaciones como habilidad crítica para futuros científicos e ingenieros':
+                'Simulation programming as a critical skill for future scientists and engineers',
+
+            // Ebook — Nivel Educativo (li items)
+            'Curiosidad natural por el mundo biológico':
+                'Natural curiosity about the biological world',
+            'Iniciación en funciones matemáticas':
+                'Introduction to mathematical functions',
+            'Conocimientos básicos de programación':
+                'Basic programming knowledge',
+            'Necesidad de experiencias prácticas que conecten teoría y aplicaciones reales':
+                'Need for hands-on experiences connecting theory and real-world applications',
+
+            // Ebook — Objetivos (li items)
+            'Modelar el crecimiento de una población bacteriana usando el modelo logístico':
+                'Model the growth of a bacterial population using the logistic model',
+            'Interpretar gráficas de crecimiento poblacional':
+                'Interpret population growth graphs',
+            'Aplicar principios básicos de programación en JavaScript para simular modelos matemáticos':
+                'Apply basic JavaScript programming to simulate mathematical models',
+            'Fomentar el pensamiento crítico al analizar factores que limitan el crecimiento poblacional':
+                'Foster critical thinking by analyzing factors that limit population growth',
+
+            // Ebook — Integración STEAM (p items)
+            'Comprender la reproducción bacteriana y factores limitantes en ecosistemas microbianos':
+                'Understand bacterial reproduction and limiting factors in microbial ecosystems',
+            'Programar simulaciones interactivas utilizando JavaScript y bibliotecas de visualización':
+                'Program interactive simulations using JavaScript and visualization libraries',
+            'Analizar limitaciones de sistemas naturales y diseñar soluciones para problemas complejos':
+                'Analyze limitations of natural systems and design solutions for complex problems',
+            'Diseñar gráficos y visualizaciones atractivas que comuniquen resultados científicos':
+                'Design attractive graphics and visualizations that communicate scientific results',
+            'Usar funciones logísticas para modelar datos y comprender el comportamiento de ecuaciones':
+                'Use logistic functions to model data and understand equation behavior',
+
+            // Ebook — Metodología (li items)
+            'Explicación breve del crecimiento bacteriano':
+                'Brief explanation of bacterial growth',
+            'Presentación del modelo logístico':
+                'Presentation of the logistic model',
+            'Comparación visual entre crecimiento exponencial y logístico':
+                'Visual comparison between exponential and logistic growth',
+            'Código base en JavaScript provisto (plantilla)':
+                'Base JavaScript code provided (template)',
+            'Los estudiantes modificarán parámetros K, r, P₀':
+                'Students will modify parameters K, r, P₀',
+            'Visualización de los cambios en la gráfica':
+                'Visualization of changes in the graph',
+            'Discusión de cómo cambios en los parámetros afectan la población':
+                'Discussion of how parameter changes affect the population',
+            'Conexión a situaciones reales (por ejemplo, infecciones bacterianas, crecimiento de algas, etc.)':
+                'Connection to real situations (e.g., bacterial infections, algae growth, etc.)',
+            'Computadoras con acceso a Internet':
+                'Computers with Internet access',
+            'Editor de código online (ejemplo: repl.it, JSFiddle o Visual Studio Code)':
+                'Online code editor (e.g., repl.it, JSFiddle or Visual Studio Code)',
+            'Plantilla inicial de código JavaScript':
+                'Initial JavaScript code template',
+            'Acceso a gráficos en línea (por ejemplo, Chart.js)':
+                'Access to online charts (e.g., Chart.js)',
+            'Ajustar la tasa de crecimiento r':
+                'Adjust the growth rate r',
+            'Cambiar la capacidad de carga K':
+                'Change the carrying capacity K',
+            'Modificar la población inicial P₀':
+                'Modify the initial population P₀',
+
+            // Ebook — image captions (short p items)
+            'Factores que limitan el crecimiento':
+                'Factors that limit growth',
+            'Colonia bacteriana real':
+                'Real bacterial colony',
+
+            // Ebook — Casos Reales (p items)
+            'Investigadores de la Universidad de Stanford estudiaron el crecimiento de E. coli en diferentes medios de cultivo. Observaron que la capacidad de carga (K) variaba significativamente dependiendo de la concentración de glucosa en el medio.':
+                'Researchers at Stanford University studied the growth of E. coli in different culture media. They observed that the carrying capacity (K) varied significantly depending on the glucose concentration in the medium.',
+            'En un estudio clínico sobre infecciones del tracto urinario, se modeló el crecimiento de bacterias en pacientes con y sin tratamiento antibiótico. El modelo logístico permitió predecir la eficacia de diferentes dosis de antibióticos.':
+                'In a clinical study on urinary tract infections, bacterial growth was modeled in patients with and without antibiotic treatment. The logistic model allowed prediction of the efficacy of different antibiotic doses.',
+            'Investigadores utilizaron bacterias Pseudomonas para degradar contaminantes en un lago. El modelo logístico ayudó a predecir cuánto tiempo tomaría alcanzar niveles seguros de limpieza y la cantidad óptima de bacterias a introducir.':
+                'Researchers used Pseudomonas bacteria to degrade contaminants in a lake. The logistic model helped predict how long it would take to reach safe cleanup levels and the optimal number of bacteria to introduce.',
+
+            // Ebook — Visualización Avanzada
+            'Esta herramienta te permite comparar múltiples escenarios de crecimiento bacteriano simultáneamente. Configura hasta tres modelos diferentes y observa cómo los cambios en los parámetros afectan el crecimiento poblacional.':
+                'This tool lets you compare multiple bacterial growth scenarios simultaneously. Configure up to three different models and observe how parameter changes affect population growth.',
+
+            // Ebook — Laboratorio Virtual
+            'Experimenta con un microscopio virtual para observar colonias bacterianas en diferentes etapas de crecimiento. Esta herramienta te permite conectar los modelos matemáticos con observaciones reales.':
+                'Experiment with a virtual microscope to observe bacterial colonies at different growth stages. This tool lets you connect mathematical models with real observations.',
+            'Selecciona una muestra para ver las observaciones detalladas.':
+                'Select a sample to see the detailed observations.',
+
+            // Ebook — Adaptaciones (li items)
+            'Introducir la variación de r en el tiempo (modelo logístico con tasas variables)':
+                'Introduce the variation of r over time (logistic model with variable rates)',
+            'Hacer que los estudiantes programen desde cero el modelo en JavaScript':
+                'Have students program the model from scratch in JavaScript',
+            'Incluir factores adicionales como depredación o competencia':
+                'Include additional factors such as predation or competition',
+            'Analizar datos reales de crecimiento bacteriano':
+                'Analyze real bacterial growth data',
+            'Dar plantillas completas donde solo cambien valores de parámetros':
+                'Provide complete templates where only parameter values are changed',
+            'Usar simuladores en línea donde no sea necesario programar, solo observar resultados':
+                'Use online simulators where no programming is needed, just observe results',
+            'Trabajar solo con el modelo exponencial primero, y luego introducir el logístico':
+                'Work only with the exponential model first, then introduce the logistic model',
+            'Realizar la actividad en grupos para apoyo mutuo':
+                'Carry out the activity in groups for mutual support',
 
             // Ebook — Glosario (definiciones)
             'Número máximo de individuos que un ambiente puede sostener indefinidamente. Representa el límite superior que la población no puede exceder debido a restricciones de recursos como alimento, espacio o nutrientes.':
