@@ -1499,8 +1499,11 @@ const I18n = (() => {
             NodeFilter.SHOW_TEXT,
             {
                 acceptNode(node) {
-                    const tag = node.parentElement?.tagName;
+                    const tag = node.parentElement?.tagName?.toUpperCase();
                     if (tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
+                    // Protect MathJax-rendered formulas from being modified
+                    if (node.parentElement?.closest('.formula, mjx-container, .MathJax, [class*="MathJax"]'))
+                        return NodeFilter.FILTER_SKIP;
                     return NodeFilter.FILTER_ACCEPT;
                 }
             }

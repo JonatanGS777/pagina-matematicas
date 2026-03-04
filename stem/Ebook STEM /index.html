@@ -266,12 +266,12 @@
                         <p><strong>Crecimiento exponencial vs. crecimiento logístico</strong></p>
                         <div class="grid" style="margin-top: 1rem;">
                             <div>
-                                <img src="images/crecimiento-exponencial.png" alt="Gráfica de crecimiento exponencial" style="width: 100%; border-radius: 8px;" loading="lazy">
+                                <canvas id="contenidoExponentialChart" height="200" style="border-radius: 8px;"></canvas>
                                 <p style="text-align: center; margin-top: 0.5rem;"><strong>Crecimiento Exponencial</strong></p>
                                 <p style="text-align: center; font-size: 0.9rem;">Sin límites de recursos</p>
                             </div>
                             <div>
-                                <img src="images/crecimiento-logistico.png" alt="Gráfica de crecimiento logístico" style="width: 100%; border-radius: 8px;" loading="lazy">
+                                <canvas id="contenidoLogisticChart" height="200" style="border-radius: 8px;"></canvas>
                                 <p style="text-align: center; margin-top: 0.5rem;"><strong>Crecimiento Logístico</strong></p>
                                 <p style="text-align: center; font-size: 0.9rem;">Con capacidad de carga (K)</p>
                             </div>
@@ -1152,6 +1152,82 @@
             }
         }, 2000); // Esperar 2 segundos para asegurarse de que todo esté cargado
     });
+    </script>
+    <!-- Gráficas interactivas: Contenido de la Lección -->
+    <script>
+    (function () {
+        const P0 = 10, r = 0.5, K = 500;
+        const times = Array.from({ length: 26 }, (_, i) => i);
+
+        const expData  = times.map(t => +(P0 * Math.exp(r * t)).toFixed(2));
+        const logData  = times.map(t => +(K / (1 + ((K - P0) / P0) * Math.exp(-r * t))).toFixed(2));
+
+        const baseOptions = {
+            responsive: true,
+            animation: { duration: 800, easing: 'easeInOutQuart' },
+            plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+            scales: {
+                x: {
+                    title: { display: true, text: 't (tiempo)', font: { size: 11 }, color: '#64748b' },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                },
+                y: {
+                    title: { display: true, text: 'P(t)', font: { size: 11 }, color: '#64748b' },
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+            }
+        };
+
+        function initCharts() {
+            const expCtx = document.getElementById('contenidoExponentialChart');
+            const logCtx = document.getElementById('contenidoLogisticChart');
+            if (!expCtx || !logCtx || typeof Chart === 'undefined') return;
+
+            new Chart(expCtx, {
+                type: 'line',
+                data: {
+                    labels: times,
+                    datasets: [{
+                        data: expData,
+                        borderColor: '#5B4CF5',
+                        backgroundColor: 'rgba(91,76,245,0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        borderWidth: 2.5
+                    }]
+                },
+                options: JSON.parse(JSON.stringify(baseOptions))
+            });
+
+            new Chart(logCtx, {
+                type: 'line',
+                data: {
+                    labels: times,
+                    datasets: [{
+                        data: logData,
+                        borderColor: '#00B8A9',
+                        backgroundColor: 'rgba(0,184,169,0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        borderWidth: 2.5
+                    }]
+                },
+                options: (() => {
+                    const o = JSON.parse(JSON.stringify(baseOptions));
+                    o.scales.y.max = Math.ceil(K * 1.12 / 100) * 100;
+                    return o;
+                })()
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initCharts);
+        } else {
+            initCharts();
+        }
+    })();
     </script>
     <script src="../../js/i18n.js"></script>
     <script>I18n.init();</script>
