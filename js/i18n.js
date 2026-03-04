@@ -707,7 +707,206 @@ const I18n = (() => {
             // ── Club — proyectos-creativos.html ─────────────────────────
             'Proyectos Creativos':            'Creative Projects',
             'Guía Paso a Paso':               'Step-by-Step Guide',
-
+            // Step titles
+            'Identificación del Problema':    'Problem Identification',
+            'Investigación y Planificación':  'Research and Planning',
+            'Desarrollo y Aplicación':        'Development and Application',
+            'Documentación y Análisis':       'Documentation and Analysis',
+            'Presentación y Comunicación':    'Presentation and Communication',
+            // Step tips headings
+            'Consejos para encontrar problemas:': 'Tips for finding problems:',
+            'Elementos clave de la investigación:': 'Key elements of research:',
+            'Herramientas recomendadas:':     'Recommended tools:',
+            'Elementos de la documentación:': 'Elements of documentation:',
+            'Consejos para presentar:':       'Presentation tips:',
+            // Step list items
+            'Observa patrones en la naturaleza, arquitectura o arte': 'Observe patterns in nature, architecture or art',
+            'Analiza datos de redes sociales, deportes o música': 'Analyze data from social networks, sports or music',
+            'Investiga problemas ambientales o sociales': 'Research environmental or social problems',
+            'Examina fenómenos físicos cotidianos': 'Examine everyday physical phenomena',
+            'Estudia tendencias económicas o demográficas': 'Study economic or demographic trends',
+            'Revisa fuentes académicas y artículos especializados': 'Review academic sources and specialized articles',
+            'Identifica las herramientas matemáticas necesarias': 'Identify the necessary mathematical tools',
+            'Crea un cronograma realista del proyecto': 'Create a realistic project timeline',
+            'Define objetivos específicos y medibles': 'Define specific and measurable objectives',
+            'Establece metodología y recursos necesarios': 'Establish methodology and necessary resources',
+            'Software de matemáticas: GeoGebra, Desmos, Wolfram Alpha': 'Math software: GeoGebra, Desmos, Wolfram Alpha',
+            'Programación: Python, Scratch, JavaScript': 'Programming: Python, Scratch, JavaScript',
+            'Análisis de datos: Excel, Google Sheets, Tableau': 'Data analysis: Excel, Google Sheets, Tableau',
+            'Diseño: Canva, Adobe Creative Suite': 'Design: Canva, Adobe Creative Suite',
+            'Presentaciones: PowerPoint, Google Slides, Prezi': 'Presentations: PowerPoint, Google Slides, Prezi',
+            'Registro detallado del proceso de investigación': 'Detailed record of the research process',
+            'Explicación clara de las matemáticas utilizadas': 'Clear explanation of the mathematics used',
+            'Interpretación de resultados y conclusiones': 'Interpretation of results and conclusions',
+            'Reflexión sobre limitaciones y mejoras': 'Reflection on limitations and improvements',
+            'Referencias y fuentes consultadas': 'References and sources consulted',
+            'Cuenta una historia con tu proyecto': 'Tell a story with your project',
+            'Usa visualizaciones claras y atractivas': 'Use clear and attractive visualizations',
+            'Practica tu presentación múltiples veces': 'Practice your presentation multiple times',
+            'Prepárate para preguntas y debates': 'Prepare for questions and debates',
+            'Considera diferentes formatos: póster, video, app': 'Consider different formats: poster, video, app',
+            // Section headings
+            'Categorías de Proyectos':        'Project Categories',
+            'Aplicaciones Matemáticas Clave': 'Key Mathematical Applications',
+            'Cronograma Sugerido':            'Suggested Timeline',
+            'Rúbrica de Evaluación':          'Evaluation Rubric',
+            'Escala de Calificación':         'Grading Scale',
+            // Category titles
+            'Arte y Diseño Matemático':       'Mathematical Art and Design',
+            'Tecnología e Innovación':        'Technology and Innovation',
+            'Impacto Social':                 'Social Impact',
+            'Ciencia y Experimentación':      'Science and Experimentation',
+            'Ejemplos de Proyectos:':         'Project Examples:',
+            // Example items
+            'Fractales en la naturaleza y el arte': 'Fractals in nature and art',
+            'Mosaicos y teselaciones matemáticas': 'Mathematical mosaics and tessellations',
+            'Espirales áureas en arquitectura': 'Golden spirals in architecture',
+            'Arte generativo con algoritmos': 'Generative art with algorithms',
+            'App para optimizar rutas urbanas': 'App to optimize urban routes',
+            'Simulador de fenómenos físicos': 'Physical phenomena simulator',
+            'Juego educativo de álgebra': 'Educational algebra game',
+            'Calculadora de huella de carbono': 'Carbon footprint calculator',
+            'Análisis de desigualdad económica': 'Economic inequality analysis',
+            'Modelo de propagación de epidemias': 'Epidemic propagation model',
+            'Optimización del transporte público': 'Public transportation optimization',
+            'Predicción de patrones climáticos': 'Climate pattern prediction',
+            'Estado de péndulos acoplados': 'State of coupled pendulums',
+            'Crecimiento poblacional de bacterias': 'Bacterial population growth',
+            'Análisis de frecuencias musicales': 'Musical frequency analysis',
+            'Modelos de sistemas dinámicos': 'Dynamic systems models',
+            // Math applications cards
+            'Álgebra y Funciones':            'Algebra and Functions',
+            'Trigonometría':                  'Trigonometry',
+            'Estadística':                    'Statistics',
+            'Probabilidad':                   'Probability',
+            'Cálculo':                        'Calculus',
+            // Timeline
+            'Semana 1-2: Exploración e Identificación': 'Weeks 1-2: Exploration and Identification',
+            '14 días':                        '14 days',
+            'Semana 3-4: Planificación Detallada': 'Weeks 3-4: Detailed Planning',
+            'Semana 5-8: Desarrollo y Implementación': 'Weeks 5-8: Development and Implementation',
+            '28 días':                        '28 days',
+            'Semana 9-10: Análisis y Documentación': 'Weeks 9-10: Analysis and Documentation',
+            'Semana 11-12: Presentación Final': 'Weeks 11-12: Final Presentation',
+            // Resources
+            'Software Matemático':            'Mathematical Software',
+            'Diseño y Presentación':          'Design and Presentation',
+            'GeoGebra (geometría y álgebra)': 'GeoGebra (geometry and algebra)',
+            'Desmos (graficación)':           'Desmos (graphing)',
+            'Wolfram Alpha (cálculos)':       'Wolfram Alpha (calculations)',
+            'MATLAB/Octave (análisis)':       'MATLAB/Octave (analysis)',
+            'R/Python (estadística)':         'R/Python (statistics)',
+            'Scratch (principiantes)':        'Scratch (beginners)',
+            'Python (análisis de datos)':     'Python (data analysis)',
+            'Processing (arte generativo)':   'Processing (generative art)',
+            'MIT App Inventor (móvil)':       'MIT App Inventor (mobile)',
+            'Knime (análisis visual)':        'Knime (visual analysis)',
+            'Canva (diseño gráfico)':         'Canva (graphic design)',
+            'Prezi (presentaciones)':         'Prezi (presentations)',
+            'Figma (prototipado)':            'Figma (prototyping)',
+            // Rubric table headers
+            'Criterio de Evaluación':         'Evaluation Criterion',
+            'Puntos':                         'Points',
+            'Excelente':                      'Excellent',
+            'Bueno':                          'Good',
+            'Satisfactorio':                  'Satisfactory',
+            'Necesita Mejorar':               'Needs Improvement',
+            // Rubric criteria
+            'Aplicación Matemática':          'Mathematical Application',
+            'Uso correcto y profundo de conceptos matemáticos': 'Correct and deep use of mathematical concepts',
+            'Creatividad e Innovación':       'Creativity and Innovation',
+            'Originalidad y pensamiento crítico en el enfoque': 'Originality and critical thinking in approach',
+            'Metodología y Proceso':          'Methodology and Process',
+            'Organización, planificación y documentación del trabajo': 'Organization, planning and documentation of work',
+            'Claridad, recursos visuales y capacidad explicativa': 'Clarity, visual resources and explanatory capacity',
+            'Impacto y Relevancia':           'Impact and Relevance',
+            'Relevancia del problema y potencial impacto de la solución': 'Relevance of the problem and potential impact of the solution',
+            'PUNTUACIÓN TOTAL':               'TOTAL SCORE',
+            // Rubric cell items (Aplicación Matemática)
+            'Uso excepcional de conceptos matemáticos avanzados': 'Exceptional use of advanced mathematical concepts',
+            'Cálculos precisos y verificados': 'Precise and verified calculations',
+            'Conexiones profundas entre teoría y aplicación': 'Deep connections between theory and application',
+            'Demuestra comprensión superior': 'Demonstrates superior understanding',
+            'Uso correcto de conceptos matemáticos': 'Correct use of mathematical concepts',
+            'Cálculos mayormente precisos': 'Mostly precise calculations',
+            'Buenas conexiones teórico-prácticas': 'Good theoretical-practical connections',
+            'Comprensión sólida evidente': 'Evident solid understanding',
+            'Uso básico de conceptos matemáticos': 'Basic use of mathematical concepts',
+            'Algunos errores en cálculos': 'Some calculation errors',
+            'Conexiones limitadas': 'Limited connections',
+            'Comprensión adecuada': 'Adequate understanding',
+            'Uso incorrecto o superficial': 'Incorrect or superficial use',
+            'Múltiples errores de cálculo': 'Multiple calculation errors',
+            'Conexiones débiles o inexistentes': 'Weak or nonexistent connections',
+            'Comprensión limitada': 'Limited understanding',
+            // Rubric cell items (Creatividad)
+            'Enfoque altamente original e innovador': 'Highly original and innovative approach',
+            'Soluciones creativas y únicas': 'Creative and unique solutions',
+            'Pensamiento crítico excepcional': 'Exceptional critical thinking',
+            'Perspectiva fresca del problema': 'Fresh perspective on the problem',
+            'Enfoque creativo y bien pensado': 'Creative and well-thought-out approach',
+            'Soluciones interesantes': 'Interesting solutions',
+            'Buen pensamiento crítico': 'Good critical thinking',
+            'Algunas ideas originales': 'Some original ideas',
+            'Enfoque convencional pero válido': 'Conventional but valid approach',
+            'Soluciones estándar': 'Standard solutions',
+            'Pensamiento crítico básico': 'Basic critical thinking',
+            'Poca originalidad': 'Little originality',
+            'Enfoque poco creativo': 'Uncreative approach',
+            'Soluciones obvias o copiadas': 'Obvious or copied solutions',
+            'Falta de pensamiento crítico': 'Lack of critical thinking',
+            'Sin originalidad aparente': 'No apparent originality',
+            // Rubric cell items (Metodología)
+            'Metodología científica rigurosa': 'Rigorous scientific methodology',
+            'Documentación completa y detallada': 'Complete and detailed documentation',
+            'Proceso bien organizado': 'Well-organized process',
+            'Seguimiento sistemático': 'Systematic follow-up',
+            'Metodología apropiada': 'Appropriate methodology',
+            'Buena documentación': 'Good documentation',
+            'Proceso organizado': 'Organized process',
+            'Seguimiento adecuado': 'Adequate follow-up',
+            'Metodología básica': 'Basic methodology',
+            'Documentación incompleta': 'Incomplete documentation',
+            'Organización limitada': 'Limited organization',
+            'Seguimiento irregular': 'Irregular follow-up',
+            'Falta de metodología clara': 'Lack of clear methodology',
+            'Documentación deficiente': 'Deficient documentation',
+            'Proceso desorganizado': 'Disorganized process',
+            'Sin seguimiento sistemático': 'Without systematic follow-up',
+            // Rubric cell items (Presentación)
+            'Presentación excepcional y atractiva': 'Exceptional and attractive presentation',
+            'Comunicación clara y efectiva': 'Clear and effective communication',
+            'Recursos visuales excelentes': 'Excellent visual resources',
+            'Dominio completo del tema': 'Complete mastery of the topic',
+            'Buena presentación': 'Good presentation',
+            'Comunicación clara': 'Clear communication',
+            'Buenos recursos visuales': 'Good visual resources',
+            'Buen dominio del tema': 'Good mastery of the topic',
+            'Presentación adecuada': 'Adequate presentation',
+            'Comunicación básica': 'Basic communication',
+            'Recursos visuales limitados': 'Limited visual resources',
+            'Dominio suficiente': 'Sufficient mastery',
+            'Presentación deficiente': 'Deficient presentation',
+            'Comunicación confusa': 'Confusing communication',
+            'Recursos visuales pobres': 'Poor visual resources',
+            'Dominio limitado': 'Limited mastery',
+            // Rubric cell items (Impacto)
+            'Problema altamente relevante': 'Highly relevant problem',
+            'Solución con gran impacto potencial': 'Solution with great potential impact',
+            'Aplicabilidad real evidente': 'Evident real applicability',
+            'Beneficio social o educativo claro': 'Clear social or educational benefit',
+            'Problema relevante': 'Relevant problem',
+            'Solución con buen impacto': 'Solution with good impact',
+            'Aplicabilidad probable': 'Probable applicability',
+            'Algún beneficio identificable': 'Some identifiable benefit',
+            'Problema moderadamente relevante': 'Moderately relevant problem',
+            'Solución con impacto limitado': 'Solution with limited impact',
+            'Aplicabilidad incierta': 'Uncertain applicability',
+            'Beneficio mínimo': 'Minimum benefit',
+            'Problema poco relevante': 'Barely relevant problem',
+            'Solución sin impacto claro': 'Solution without clear impact',
+            'Aplicabilidad dudosa': 'Doubtful applicability',
+            'Sin beneficio aparente': 'Without apparent benefit',
             // ── Club — registro.html ─────────────────────────────────────
             'Volver a Olimpiadas':            'Back to Olympics',
             'Registro para el Club de Matemáticas': 'Registration for the Math Club',
@@ -843,6 +1042,53 @@ const I18n = (() => {
                 'Welcome to the educational materials section. This collection has been carefully selected and developed to support the mathematics teaching-learning process. Resources are organized into three main categories to facilitate access and use:',
             'Estos materiales se actualizan regularmente para asegurar su relevancia y alineación con los estándares curriculares vigentes. Se recomienda revisar periódicamente esta sección para acceder a los nuevos recursos disponibles.':
                 'These materials are regularly updated to ensure their relevance and alignment with current curricular standards. It is recommended to review this section periodically to access newly available resources.',
+
+            // club/proyectos-creativos.html — hero and step paragraphs
+            'Guía completa para desarrollar proyectos innovadores donde las matemáticas sean las protagonistas. Transforma ideas en realidad aplicando conceptos matemáticos de forma creativa y práctica.':
+                'Complete guide for developing innovative projects where mathematics is the protagonist. Transform ideas into reality by applying mathematical concepts creatively and practically.',
+            'El primer paso es identificar un problema real o una pregunta interesante que pueda ser abordada usando matemáticas. Busca situaciones en tu vida diaria, en tu comunidad o en temas que te apasionen.':
+                'The first step is to identify a real problem or an interesting question that can be addressed using mathematics. Look for situations in your daily life, in your community or in topics you are passionate about.',
+            'Una vez identificado el problema, es hora de investigar qué matemáticas necesitarás y planificar tu enfoque. Esta fase es crucial para el éxito de tu proyecto.':
+                'Once the problem is identified, it is time to research what mathematics you will need and plan your approach. This phase is crucial for the success of your project.',
+            'Aplica las matemáticas para resolver tu problema. Utiliza herramientas tecnológicas, recolecta datos, crea modelos y desarrolla soluciones innovadoras.':
+                'Apply mathematics to solve your problem. Use technological tools, collect data, create models and develop innovative solutions.',
+            'Documenta todo tu proceso, analiza los resultados obtenidos y reflexiona sobre las implicaciones de tus hallazgos. La documentación es tan importante como el resultado final.':
+                'Document your entire process, analyze the results obtained and reflect on the implications of your findings. Documentation is as important as the final result.',
+            'Prepara una presentación impactante que comunique efectivamente tu trabajo. Adapta tu mensaje a diferentes audiencias y utiliza elementos visuales atractivos.':
+                'Prepare an impactful presentation that effectively communicates your work. Adapt your message to different audiences and use attractive visual elements.',
+            // Category descriptions
+            'Explora la belleza de las matemáticas a través del arte, creando obras que revelan patrones, simetrías y estructuras matemáticas fascinantes.':
+                'Explore the beauty of mathematics through art, creating works that reveal fascinating mathematical patterns, symmetries and structures.',
+            'Desarrolla aplicaciones, simulaciones y herramientas tecnológicas que utilicen matemáticas para resolver problemas modernos.':
+                'Develop applications, simulations and technological tools that use mathematics to solve modern problems.',
+            'Utiliza las matemáticas para abordar problemas sociales, económicos o ambientales que afecten a tu comunidad o al mundo.':
+                'Use mathematics to address social, economic or environmental problems that affect your community or the world.',
+            'Diseña experimentos y estudios que utilicen métodos matemáticos para explorar fenómenos científicos y naturales.':
+                'Design experiments and studies that use mathematical methods to explore scientific and natural phenomena.',
+            // Math application card descriptions
+            'Modelado de relaciones, optimización de recursos, análisis de tendencias y predicciones.':
+                'Modeling relationships, resource optimization, trend analysis and predictions.',
+            'Diseño espacial, análisis de formas, cálculo de áreas y volúmenes, perspectiva y simetría.':
+                'Spatial design, shape analysis, area and volume calculation, perspective and symmetry.',
+            'Análisis de ondas, navegación, astronomía, música y fenómenos periódicos.':
+                'Wave analysis, navigation, astronomy, music and periodic phenomena.',
+            'Análisis de datos, investigación de mercados, estudios sociales y toma de decisiones.':
+                'Data analysis, market research, social studies and decision making.',
+            'Análisis de riesgos, juegos, predicciones y modelado de incertidumbre.':
+                'Risk analysis, games, predictions and uncertainty modeling.',
+            'Tasas de cambio, optimización, área bajo curvas y modelado de fenómenos continuos.':
+                'Rates of change, optimization, area under curves and modeling of continuous phenomena.',
+            // Timeline descriptions
+            'Identificar el problema, realizar investigación preliminar y definir objetivos específicos del proyecto.':
+                'Identify the problem, conduct preliminary research and define specific project objectives.',
+            'Desarrollar metodología, crear cronograma detallado y adquirir recursos necesarios.':
+                'Develop methodology, create detailed timeline and acquire necessary resources.',
+            'Aplicar matemáticas, recolectar datos, crear modelos y desarrollar soluciones.':
+                'Apply mathematics, collect data, create models and develop solutions.',
+            'Analizar resultados, documentar proceso y elaborar conclusiones.':
+                'Analyze results, document process and draw conclusions.',
+            'Preparar presentación, crear materiales visuales y practicar exposición.':
+                'Prepare presentation, create visual materials and practice the presentation.',
         }
     };
 
@@ -876,6 +1122,10 @@ const I18n = (() => {
                 'Provides tools for assessing academic progress, allowing students to self-evaluate their understanding of topics.',
             'Ofrece materiales complementarios que enriquecen el aprendizaje a través de diferentes medios y aproximaciones pedagógicas.':
                 'Offers complementary materials that enrich learning through different media and pedagogical approaches.',
+
+            // club/proyectos-creativos.html — rubric intro
+            'Puntuación Total: 300 puntos - Esta rúbrica evalúa integralmente el desarrollo y presentación de proyectos creativos matemáticos.':
+                '<strong>Total Score: 300 points</strong> — This rubric comprehensively evaluates the development and presentation of creative math projects.',
         }
     };
 
