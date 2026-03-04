@@ -1612,6 +1612,11 @@
                         </a>
                     </li>
                 </ul>
+
+                <button id="lang-toggle"
+                    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                    🇺🇸 EN
+                </button>
             </div>
         </nav>
     </header>
@@ -2632,5 +2637,8 @@
             });
         });
     </script>
+
+<script src="../js/i18n.js"></script>
+<script>I18n.init();</script>
 </body>
 </html>

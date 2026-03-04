@@ -467,6 +467,11 @@
                 <i class="fas fa-arrow-left"></i>
                 <span>Volver a Olimpiadas</span>
             </a>
+            <button id="lang-toggle"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')"
+                style="position:absolute; top:1rem; right:1rem;">
+                🇺🇸 EN
+            </button>
             <h1 class="header__title">Registro para el Club de Matemáticas</h1>
             <p class="header__subtitle">
                 Únete oficialmente al Club de Matemáticas y participa en nuestras emocionantes olimpiadas matemáticas
@@ -1047,5 +1052,8 @@
             window.olympicsApp = new OlympicsSupabaseApp();
         });
     </script>
+
+<script src="../js/i18n.js"></script>
+<script>I18n.init();</script>
 </body>
 </html>

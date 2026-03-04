@@ -196,6 +196,91 @@ Página de perfil académico del Dr. Yonatan Guerrero Soriano con diseño editor
 
 ---
 
+## Sistema de internacionalización i18n (ES ↔ EN)
+
+### Archivo principal: `js/i18n.js`
+
+Módulo IIFE que gestiona el cambio de idioma en toda la plataforma. Se carga **sin `defer`** al final del `<body>` de cada página que lo usa, seguido de `I18n.init()`.
+
+```html
+<script src="../../js/i18n.js"></script>
+<script>I18n.init();</script>
+```
+
+#### Cómo funciona
+
+El módulo aplica traducciones en 6 pasos:
+1. **`translateTextNodes`** — recorre el DOM con `TreeWalker` y reemplaza nodos de texto simples
+2. **`translateParagraphs`** — busca `<p>` y `<li>` cuyo `textContent` coincida con el diccionario
+3. **`translateHtmlElements`** — igual que el anterior pero reemplaza `innerHTML` (para etiquetas `<strong>` internas)
+4. **`translateAttributes`** — reemplaza atributos como `placeholder`
+5. **`translateTitle`** — actualiza el `<title>` de la pestaña
+6. **`translateHero`** — actualiza el bloque hero animado (solo `index.html`, con reintentos a 4s y 7s)
+
+#### Cambio de idioma
+
+```js
+// Activar inglés
+I18n.setLanguage('en');
+
+// Volver al español (recarga la página)
+I18n.setLanguage('es');
+
+// Obtener idioma actual
+I18n.getCurrentLang(); // 'es' | 'en'
+```
+
+El idioma se persiste en `localStorage` con la clave `lang`. Si el valor es `'es'` o no existe, la página se muestra en su HTML original; si es `'en'`, se aplican las traducciones al cargar.
+
+#### Botón de toggle
+
+Cada página expone un `<button id="lang-toggle">` que llama al módulo:
+
+```html
+<button id="lang-toggle"
+    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+    🇺🇸 EN
+</button>
+```
+
+El módulo inyecta automáticamente los estilos del botón (pill redondeado, efecto glass) sin necesidad de CSS adicional en cada página.
+
+### Páginas con i18n activo
+
+| Página | Path | Notas |
+|---|---|---|
+| Principal | `index.html` | Hero con typewriter, navbar completo, stats, trabajos |
+| Historia Math | `contexto/historiamath.html` | Timeline, períodos, matemáticos |
+| eBook STEAM | `stem/Ebook STEM /index.html` | Toggle en sidebar-header; path `../../js/i18n.js` |
+| Enlaces | `links/links.html` | Descripciones de herramientas |
+| Materiales | `materiales/materiales.html` | Categorías y descripciones |
+| Galería | `galeria/galeria.html` | Títulos y etiquetas |
+| Competencias | `club/competencias.html` | Dashboard, áreas, timer, leaderboard inline |
+| Tabla de Posiciones | `club/leaderboard.html` | Stats, podio, récords, actividad |
+| Olimpiadas | `club/olimpiadas.html` | Categorías, problemas, calendario, premios |
+| Investigación | `club/investigacion.html` | Áreas, metodología, cronograma |
+| Proyectos Creativos | `club/proyectos-creativos.html` | Guía, nav |
+| Registro | `club/registro.html` | Formulario, participantes |
+
+### Corrección de path en eBook STEAM (mar 2026)
+
+El eBook usaba `../js/i18n.js` (path incorrecto) porque está un nivel más profundo (`stem/Ebook STEM /`). Corregido a `../../js/i18n.js`.
+
+### Modernización del eBook STEAM (mar 2026)
+
+Rediseño completo de `stem/Ebook STEM /styles.css` con dirección estética **"Minimalista Científico"**:
+
+- **Colores**: blanco/gris base (`#f8fafc`, `#f1f5f9`), púrpura acento (`#5B4CF5`), teal (`#00E5C3`)
+- **Sidebar**: fondo blanco, borde derecho sutil, links con pill activo en púrpura pálido
+- **Hero**: borde superior de acento, sin imagen de fondo, gradiente radial decorativo
+- **Cards**: `border-top: 3px solid var(--primary)`, sombra mínima
+- **Progress bar**: gradiente púrpura → teal
+- **Lang toggle**: integrado en `.sidebar-header`, estilo pill `static` (no `fixed`)
+- **Dark mode**: grises oscuros (`#0f172a`, `#1e293b`), no negro puro
+- **Traducciones ebook añadidas**: nav links, secciones h2, hero, badges, panel de accesibilidad, tabs de simulación
+
+---
+
 ## Correcciones generales (feb 2026)
 
 ### `index.html` — Sección Análisis en Tiempo Real

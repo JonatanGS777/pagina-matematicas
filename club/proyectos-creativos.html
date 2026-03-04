@@ -1901,6 +1901,11 @@
                 <i class="fas fa-arrow-left"></i>
                 <span class="btn-text">Volver al Inicio</span>
             </a>
+
+            <button id="lang-toggle"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                🇺🇸 EN
+            </button>
         </div>
         
         <!-- Overlay para cerrar menú móvil -->
@@ -2940,5 +2945,7 @@ window.addEventListener('orientationchange', function() {
 });
 </script>
 
+<script src="../js/i18n.js"></script>
+<script>I18n.init();</script>
 </body>
 </html>
