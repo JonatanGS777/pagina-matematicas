@@ -467,6 +467,18 @@ const I18n = (() => {
             'Versión para imprimir':          'Print version',
             'Animaciones:':                   'Animations:',
 
+            // Ebook quiz — elementos estáticos
+            'Quiz Interactivo':               'Interactive Quiz',
+            'Pon a prueba tu comprensión del modelo logístico de crecimiento bacteriano con este quiz interactivo. Responde correctamente para avanzar a las siguientes preguntas.':
+                'Test your understanding of the logistic model of bacterial growth with this interactive quiz. Answer correctly to advance to the following questions.',
+            'Comenzar Quiz':                  'Start Quiz',
+            'Pregunta':                       'Question',
+            'de':                             'of',
+            'Verificar Respuesta':            'Check Answer',
+            'Siguiente Pregunta':             'Next Question',
+            'Resultados del Quiz':            'Quiz Results',
+            'Intentar Nuevamente':            'Try Again',
+
             // Ebook simulation / tabs
             'Ejecutar Simulación':            'Run Simulation',
             'Simulaciones guardadas':         'Saved simulations',

@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!startQuizBtn) return; // Salir si no existe el componente de quiz
     
-    // Preguntas del quiz
-    const questions = [
+    // Preguntas del quiz — ES
+    const questionsEs = [
         {
             question: "¿Qué representa la capacidad de carga (K) en el modelo logístico?",
             options: [
@@ -124,6 +124,68 @@ document.addEventListener('DOMContentLoaded', function() {
             feedback: "La tasa de crecimiento intrínseca (r) es una característica propia de la especie bacteriana y no afecta directamente la capacidad de carga. La capacidad de carga está determinada por factores ambientales como nutrientes, espacio, temperatura, pH y la acumulación de productos de desecho."
         }
     ];
+
+    // Preguntas del quiz — EN
+    const questionsEn = [
+        {
+            question: "What does the carrying capacity (K) represent in the logistic model?",
+            options: [
+                "The maximum growth rate of the population",
+                "The maximum number of individuals the environment can sustain",
+                "The initial population at time t=0",
+                "The time it takes for the population to double"
+            ],
+            correctAnswer: 1,
+            feedback: "The carrying capacity (K) represents the maximum number of individuals the environment can sustain indefinitely, due to resource limitations such as nutrients, space, or energy."
+        },
+        {
+            question: "In the logistic model, what happens when the population (P) approaches the carrying capacity (K)?",
+            options: [
+                "The growth rate increases exponentially",
+                "The population begins to decline",
+                "The growth rate approaches zero",
+                "The population remains constant regardless of time"
+            ],
+            correctAnswer: 2,
+            feedback: "When the population approaches the carrying capacity, the growth rate decreases progressively and approaches zero. This occurs because available resources become limiting and competition among individuals increases."
+        },
+        {
+            question: "What is the fundamental difference between exponential and logistic growth?",
+            options: [
+                "Exponential growth is faster than logistic growth",
+                "Logistic growth accounts for the carrying capacity of the environment",
+                "Exponential growth only occurs in bacteria",
+                "Logistic growth only occurs in artificial environments"
+            ],
+            correctAnswer: 1,
+            feedback: "The fundamental difference is that the logistic model incorporates the carrying capacity of the environment, while the exponential model assumes unlimited resources. In nature, almost all population growth eventually behaves logistically."
+        },
+        {
+            question: "If you have a bacterial population with a growth rate r = 0.5 h⁻¹, approximately how long would it take for the population to double?",
+            options: [
+                "0.5 hours",
+                "1 hour",
+                "1.4 hours",
+                "2 hours"
+            ],
+            correctAnswer: 2,
+            feedback: "The doubling time is calculated with the formula: t = ln(2)/r. With r = 0.5, then t = ln(2)/0.5 ≈ 1.386 hours, that is, approximately 1.4 hours."
+        },
+        {
+            question: "Which factor does NOT affect the carrying capacity (K) of a bacterial culture?",
+            options: [
+                "The amount of available nutrients",
+                "The pH of the medium",
+                "The intrinsic growth rate (r)",
+                "The accumulation of metabolic waste"
+            ],
+            correctAnswer: 2,
+            feedback: "The intrinsic growth rate (r) is a characteristic of the bacterial species and does not directly affect the carrying capacity. Carrying capacity is determined by environmental factors such as nutrients, space, temperature, pH, and the accumulation of waste products."
+        }
+    ];
+
+    // Elegir idioma según localStorage
+    const questions = localStorage.getItem('lang') === 'en' ? questionsEn : questionsEs;
     
     let currentQuestion = 0;
     let correctAnswers = 0;
@@ -244,20 +306,33 @@ document.addEventListener('DOMContentLoaded', function() {
     function showResults() {
         quizContainer.style.display = 'none';
         quizResults.style.display = 'block';
-        
-        // Actualizar contadores
-        correctAnswersSpan.textContent = correctAnswers;
+
         const percentage = Math.round((correctAnswers / questions.length) * 100);
         scorePercentageSpan.textContent = `${percentage}%`;
-        
-        // Personalizar feedback según puntuación
+
+        // Actualizar texto de resultado según idioma
+        const isEn = localStorage.getItem('lang') === 'en';
+        const resultPara = document.querySelector('.results-score p');
+        if (resultPara) {
+            resultPara.innerHTML = isEn
+                ? `You answered correctly <strong>${correctAnswers}</strong> out of <strong>${questions.length}</strong> questions.`
+                : `Has respondido correctamente <strong>${correctAnswers}</strong> de <strong>${questions.length}</strong> preguntas.`;
+        }
+
+        // Personalizar feedback según puntuación e idioma
         let feedbackMessage = '';
         if (percentage >= 80) {
-            feedbackMessage = '¡Excelente! Tienes un gran dominio del tema. Estás listo para aplicar estos conceptos en situaciones reales.';
+            feedbackMessage = isEn
+                ? 'Excellent! You have a great command of the topic. You are ready to apply these concepts in real situations.'
+                : '¡Excelente! Tienes un gran dominio del tema. Estás listo para aplicar estos conceptos en situaciones reales.';
         } else if (percentage >= 60) {
-            feedbackMessage = 'Buen trabajo. Comprendes los conceptos principales, pero podría ser útil repasar algunos detalles.';
+            feedbackMessage = isEn
+                ? 'Good job. You understand the main concepts, but it might be useful to review some details.'
+                : 'Buen trabajo. Comprendes los conceptos principales, pero podría ser útil repasar algunos detalles.';
         } else {
-            feedbackMessage = 'Sigue practicando. Te recomendamos revisar nuevamente el material sobre modelos de crecimiento poblacional.';
+            feedbackMessage = isEn
+                ? 'Keep practicing. We recommend reviewing the material on population growth models again.'
+                : 'Sigue practicando. Te recomendamos revisar nuevamente el material sobre modelos de crecimiento poblacional.';
         }
         
         quizFeedback.textContent = feedbackMessage;
