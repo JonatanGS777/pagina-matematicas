@@ -279,6 +279,38 @@ Rediseño completo de `stem/Ebook STEM /styles.css` con dirección estética **"
 - **Dark mode**: grises oscuros (`#0f172a`, `#1e293b`), no negro puro
 - **Traducciones ebook añadidas**: nav links, secciones h2, hero, badges, panel de accesibilidad, tabs de simulación
 
+### Traducciones completas del eBook STEAM (mar 2026)
+
+Se añadieron ~240 entradas a `js/i18n.js` cubriendo la totalidad del contenido del eBook:
+
+- `textDict`: nav links (Objetivos, Contenido), labels del hero, headings de Nivel Educativo, Objetivos, Contenido, Integración STEAM y Metodología, labels de simulación, headings de Casos Reales, controles de Visualización Avanzada, secciones del Laboratorio Virtual, texto dinámico del Quiz, Adaptaciones, Reflexión y footer
+- `paraDict`: párrafo intro del hero, ítems de Relevancia, Nivel Educativo, Objetivos, STEAM cards, ítems de Metodología (timeline + instrucciones), párrafos de Casos Reales, intro de Visualización Avanzada, intro del Laboratorio Virtual, ítems de Adaptaciones
+
+### Gráficas interactivas en "Contenido de la Lección" (mar 2026)
+
+Las imágenes estáticas de la sección fueron reemplazadas por gráficas Chart.js en tiempo real:
+
+- **Crecimiento Exponencial** (púrpura `#5B4CF5`): `P(t) = P₀·eʳᵗ` — curva ilimitada
+- **Crecimiento Logístico** (teal `#00B8A9`): `P(t) = K/(1+((K−P₀)/P₀)·e⁻ʳᵗ)` — curva S con asíntota en K
+- Ambas con animación de entrada y tooltip interactivo
+- Código añadido como IIFE inline al final de `stem/Ebook STEM /index.html` antes de `i18n.js`
+
+### Protección de fórmulas MathJax en i18n (mar 2026)
+
+El `TreeWalker` de `translateTextNodes` ahora omite nodos de texto dentro de elementos `.formula`, `mjx-container` y cualquier clase `MathJax`, evitando que el cambio de idioma rompa el formato LaTeX renderizado.
+
+```javascript
+// js/i18n.js — acceptNode filter
+if (node.parentElement?.closest('.formula, mjx-container, .MathJax, [class*="MathJax"]'))
+    return NodeFilter.FILTER_SKIP;
+```
+
+### Traducciones del hero de `club/investigacion.html` (mar 2026)
+
+- `🔬 Investigación Matemática` → clave con emoji añadida a `textDict`
+- Párrafo largo del `<div class="hero-description">` añadido a `textDict` (el TreeWalker procesa nodos de texto en `<div>`)
+- `Descubre, Explora, Innova` ya estaba en `textDict`
+
 ---
 
 ## Correcciones generales (feb 2026)
