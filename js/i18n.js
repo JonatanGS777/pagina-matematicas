@@ -83,7 +83,10 @@ const I18n = (() => {
     // ── Atributos (placeholder, title) ─────────────────────────────────────
     const attrDict = {
         en: {
-            placeholder: { 'Buscar proyectos...': 'Search projects...' }
+            placeholder: {
+                'Buscar proyectos...': 'Search projects...',
+                'Buscar término...':   'Search term...'
+            }
         }
     };
 
@@ -467,7 +470,45 @@ const I18n = (() => {
             'Versión para imprimir':          'Print version',
             'Animaciones:':                   'Animations:',
 
-            // Ebook quiz — elementos estáticos
+            // ── Ebook — Evaluación y Retroalimentación ───────────────────
+            'Evaluación y Retroalimentación':  'Assessment & Feedback',
+            'Evaluación':                      'Assessment',
+            'Retroalimentación':               'Feedback',
+            'Posibles mejoras futuras:':       'Possible future improvements:',
+            'Modelos de competencia':          'Competition models',
+            'Variables ambientales':           'Environmental variables',
+
+            // ── Ebook — Glosario ─────────────────────────────────────────
+            'Glosario de Términos':            'Glossary of Terms',
+            'Capacidad de carga (K)':          'Carrying Capacity (K)',
+            'Crecimiento exponencial':         'Exponential Growth',
+            'Crecimiento logístico':           'Logistic Growth',
+            'Tasa de crecimiento (r)':         'Growth Rate (r)',
+            'Población inicial (P₀)':          'Initial Population (P₀)',
+            'Fase de latencia':                'Lag Phase',
+            'Fase exponencial':                'Exponential Phase',
+            'Fase estacionaria':               'Stationary Phase',
+            'Fase de muerte':                  'Death Phase',
+            'Tiempo de duplicación':           'Doubling Time',
+
+            // ── Ebook — Referencias ──────────────────────────────────────
+            'Referencias y Recursos Adicionales': 'References & Additional Resources',
+            'Publicación histórica':           'Historical publication',
+            'Modelo logístico':                'Logistic model',
+            'Visitar sitio':                   'Visit site',
+            'Ver tutoriales':                  'View tutorials',
+            'Documentación':                   'Documentation',
+            'Visitar MDN':                     'Visit MDN',
+
+            // ── Ebook — Footer ───────────────────────────────────────────
+            'Desarrollado como recurso educativo para estudiantes de noveno grado':
+                'Developed as an educational resource for ninth grade students',
+            'Características Principales':     'Main Features',
+            'Guía del Docente':                'Teacher\'s Guide',
+            'Actividades Complementarias':     'Supplementary Activities',
+            'Formación Docente':               'Teacher Training',
+
+            // ── Ebook quiz — elementos estáticos
             'Quiz Interactivo':               'Interactive Quiz',
             'Pon a prueba tu comprensión del modelo logístico de crecimiento bacteriano con este quiz interactivo. Responde correctamente para avanzar a las siguientes preguntas.':
                 'Test your understanding of the logistic model of bacterial growth with this interactive quiz. Answer correctly to advance to the following questions.',
@@ -725,6 +766,50 @@ const I18n = (() => {
             'Descubre una colección cuidadosamente seleccionada de herramientas digitales, \n                aplicaciones y plataformas que transformarán tu experiencia de aprendizaje matemático.':
                 'Discover a carefully selected collection of digital tools, applications and platforms that will transform your mathematics learning experience.',
 
+            // Ebook — Glosario (definiciones)
+            'Número máximo de individuos que un ambiente puede sostener indefinidamente. Representa el límite superior que la población no puede exceder debido a restricciones de recursos como alimento, espacio o nutrientes.':
+                'Maximum number of individuals that an environment can sustain indefinitely. Represents the upper limit that the population cannot exceed due to resource restrictions such as food, space, or nutrients.',
+            'Patrón de crecimiento donde la tasa de reproducción es proporcional al tamaño actual de la población, resultando en un incremento acelerado sin límites. Se representa mediante la ecuación N(t) = N₀eʳᵗ.':
+                'Growth pattern where the reproduction rate is proportional to the current population size, resulting in unlimited accelerated growth. Represented by the equation N(t) = N₀eʳᵗ.',
+            'Modelo de crecimiento poblacional que incorpora la capacidad de carga del ambiente, resultando en una curva S donde el crecimiento disminuye a medida que la población se acerca a su límite máximo sostenible.':
+                'Population growth model that incorporates the carrying capacity of the environment, resulting in an S-curve where growth decreases as the population approaches its maximum sustainable limit.',
+            'Parámetro que indica la velocidad a la que una población crece por individuo. Representa la diferencia entre la tasa de natalidad y la tasa de mortalidad en condiciones ideales.':
+                'Parameter indicating the rate at which a population grows per individual. Represents the difference between birth rate and death rate under ideal conditions.',
+            'Número de individuos presentes al comienzo de un periodo de observación o modelado. Punto de partida para las ecuaciones de crecimiento poblacional.':
+                'Number of individuals present at the beginning of an observation or modeling period. Starting point for population growth equations.',
+            'Periodo inicial de crecimiento bacteriano en el que las células se adaptan a su nuevo entorno y comienzan a prepararse para dividirse, pero no hay aumento significativo en el número de células.':
+                'Initial period of bacterial growth in which cells adapt to their new environment and begin to prepare to divide, but there is no significant increase in cell numbers.',
+            'Etapa del crecimiento bacteriano donde las células se dividen a una tasa constante y máxima, resultando en un incremento exponencial de la población.':
+                'Stage of bacterial growth where cells divide at a constant and maximum rate, resulting in exponential population growth.',
+            'Etapa del crecimiento microbiano donde la tasa de reproducción iguala a la tasa de muerte, manteniendo un tamaño poblacional constante, generalmente cerca de la capacidad de carga.':
+                'Stage of microbial growth where the reproduction rate equals the death rate, maintaining a constant population size, generally near the carrying capacity.',
+            'Etapa final del crecimiento bacteriano donde la tasa de muerte supera a la tasa de reproducción, resultando en una disminución de la población debido al agotamiento de recursos o acumulación de sustancias tóxicas.':
+                'Final stage of bacterial growth where the death rate exceeds the reproduction rate, resulting in a population decline due to resource depletion or accumulation of toxic substances.',
+            'Tiempo necesario para que una población duplique su tamaño. En crecimiento exponencial, se calcula como ln(2)/r, donde r es la tasa de crecimiento.':
+                'Time required for a population to double in size. In exponential growth, calculated as ln(2)/r, where r is the growth rate.',
+
+            // Ebook — Reflexión
+            'La lección no solo enseña sobre biología o matemáticas, sino que integra la programación como una herramienta para investigar la vida. Ayuda a los estudiantes a visualizar fenómenos invisibles de manera práctica y artística, desarrollando habilidades clave para un mundo dominado por la tecnología y los datos.':
+                'The lesson not only teaches biology or mathematics, but integrates programming as a tool for investigating life. It helps students visualize invisible phenomena in a practical and artistic way, developing key skills for a world driven by technology and data.',
+            'Aplicaciones prácticas del modelado poblacional en ciencia e industria':
+                'Practical applications of population modeling in science and industry',
+            'Ampliar a modelos de competencia entre dos especies que comparten recursos':
+                'Expand to competition models between two species sharing resources',
+            'Añadir variables como temperatura o pH que afecten la tasa de crecimiento r':
+                'Add variables such as temperature or pH that affect the growth rate r',
+            'Crear simulaciones en 3D que muestren la dispersión espacial de las bacterias':
+                'Create 3D simulations showing the spatial dispersion of bacteria',
+
+            // Ebook — Evaluación (items con strong)
+            'Biblioteca JavaScript para crear gráficos interactivos':
+                'JavaScript library for creating interactive charts',
+            'Recursos para aprender JavaScript':
+                'Resources for learning JavaScript',
+            'Bacterial Growth - Recursos educativos sobre crecimiento bacteriano':
+                'Bacterial Growth - Educational resources on bacterial growth',
+            'Growth and Decay Word Problems - Tutoriales sobre problemas de crecimiento y decrecimiento':
+                'Growth and Decay Word Problems - Tutorials on growth and decay problems',
+
             // club/investigacion.html
             'Explora patrones ocultos en grandes conjuntos de datos utilizando herramientas estadísticas avanzadas y técnicas de visualización innovadoras.':
                 'Explore hidden patterns in large datasets using advanced statistical tools and innovative visualization techniques.',
@@ -764,6 +849,22 @@ const I18n = (() => {
     // ── Párrafos con HTML interno ──────────────────────────────────────────
     const htmlParaDict = {
         en: {
+            // Ebook — Evaluación (li con <strong>)
+            'Producto final: Código funcional que modele poblaciones':
+                '<strong>Final product:</strong> Functional code that models populations',
+            'Análisis escrito: Reflexión breve sobre cómo cambió la población al modificar K, r y P₀':
+                '<strong>Written analysis:</strong> Brief reflection on how the population changed when modifying K, r and P₀',
+            'Presentación: Explicación de resultados obtenidos con diferentes parámetros':
+                '<strong>Presentation:</strong> Explanation of results obtained with different parameters',
+            'Comentarios individualizados sobre claridad en el código y comprensión del modelo':
+                'Individualized feedback on code clarity and model understanding',
+            '¿Qué representa la capacidad de carga en la vida real?':
+                'What does the carrying capacity represent in real life?',
+            '¿Por qué el crecimiento no puede ser infinito?':
+                'Why can growth not be infinite?',
+            '¿Cómo se podrían aplicar estos modelos en la industria o medicina?':
+                'How could these models be applied in industry or medicine?',
+
             // index.html — Student Works
             'Los estudiantes aplicaron longitud de arco y área del sector circular para dar forma a cada zona temática, convirtiendo fórmulas abstractas en decisiones de diseño concretas. El proceso fomentó el trabajo en equipo, la creatividad y el pensamiento crítico — demostrando que la matemática no solo se aprende, se construye.':
                 'Students applied <strong>arc length and circular sector area</strong> to shape each thematic zone, turning abstract formulas into concrete design decisions. The process fostered teamwork, creativity, and critical thinking — demonstrating that mathematics is not only learned, it is built.',
