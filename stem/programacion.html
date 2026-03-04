@@ -342,6 +342,10 @@
                     <a href="../club/olimpiadas.html" class="nav-link"><i class="fas fa-trophy"></i> Club Matemáticas</a>
                 </li>
             </ul>
+            <button id="lang-toggle" title="Switch to English"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                🇺🇸 EN
+            </button>
             <div class="mobile-toggle"><span></span><span></span><span></span></div>
         </nav>
     </header>
@@ -1037,6 +1041,8 @@ return new Chart(ctx, {
     </script>
      <!-- Módulos JavaScript -->
    
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
     <script src="../js/dark-mode.js"></script>
     <script>
         

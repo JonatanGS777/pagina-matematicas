@@ -2089,6 +2089,33 @@
         .activity-notification.show {
             transform: translateY(0);
         }
+        /* ── Botón de idioma ES/EN ── */
+        .lang-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.85rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+        .lang-toggle:hover {
+            background: rgba(255,255,255,0.22);
+            box-shadow: 0 0 12px rgba(0,229,195,0.35);
+            transform: translateY(-1px);
+        }
+        .lang-toggle:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -2257,6 +2284,14 @@
                 </li>
             </ul>
             
+            <!-- Botón de idioma ES / EN -->
+            <button
+                id="lang-toggle"
+                class="lang-toggle"
+                title="Switch to English"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')"
+            >🇺🇸 EN</button>
+
             <div class="mobile-toggle" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
@@ -3774,6 +3809,9 @@ window.addEventListener('beforeunload', () => {
 });
     </script>
     
+    <!-- Módulo de traducción ES ↔ EN -->
+    <script src="js/i18n.js"></script>
+
     <!-- Módulos JavaScript (EXCLUYENDO visitor-counter.js que ahora está integrado con Supabase) -->
     <script src="js/chatbot.js"></script>
     <script src="js/dark-mode.js"></script>
@@ -3831,6 +3869,9 @@ window.addEventListener('beforeunload', () => {
         console.log('🔧 Sistema de contadores: Solo Supabase Analytics activo');
         console.log('🛡️ Sistemas antiguos deshabilitados automáticamente');
         console.log('📊 Estado: Listo para Supabase o modo Demo');
+
+        // Inicializar traducción (lee localStorage y aplica si lang=en)
+        I18n.init();
     </script>
 </body>
 </html>

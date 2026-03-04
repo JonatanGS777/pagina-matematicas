@@ -1561,6 +1561,11 @@
                 </li>
             </ul>
             
+            <button id="lang-toggle" title="Switch to English"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                🇺🇸 EN
+            </button>
+
             <div class="mobile-toggle" id="mobileToggle">
                 <span></span>
                 <span></span>
@@ -2338,6 +2343,9 @@
         </a>
     </div>
 
+    <!-- Módulo de traducción ES ↔ EN -->
+    <script src="../js/i18n.js"></script>
+
     <script>
         // Mathematical Symbols Animation
         class MathSymbolsAnimation {
@@ -3113,6 +3121,9 @@
             `;
             document.head.appendChild(style);
         }
+
+        // Inicializar traducción
+        I18n.init();
 
         // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {

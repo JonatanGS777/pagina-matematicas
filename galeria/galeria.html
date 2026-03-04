@@ -740,6 +740,11 @@
                 Matemáticas Digitales
             </a>
             
+            <button id="lang-toggle" title="Switch to English"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                🇺🇸 EN
+            </button>
+
             <button class="mobile-menu-toggle" id="mobileToggle">
                 <i class="fas fa-bars"></i>
             </button>
@@ -819,6 +824,11 @@
         <p>&copy; 2025 Yonatan Guerrero Soriano - Página de Matemáticas</p>
         <p>Inspirando el aprendizaje matemático a través de la tecnología</p>
     </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script>
+        I18n.init();
+    </script>
 
     <script>
         // Gallery configuration

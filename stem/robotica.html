@@ -1101,6 +1101,11 @@
             Robótica Avanzada
         </a>
         
+        <button id="lang-toggle" title="Switch to English"
+            onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+            🇺🇸 EN
+        </button>
+
         <!-- Botón hamburguesa para móvil -->
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
             <span class="hamburger-line"></span>
@@ -1463,6 +1468,9 @@ repetir(3) {
     </main>
 
     
+
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 
     <!-- Include Modules: Environment FIRST, then Physics, then Robot3D -->
     <script src="js/robotEnvironment.js"></script>

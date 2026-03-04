@@ -702,11 +702,15 @@
                 Matemáticas Digitales
             </a>
             
+            <button id="lang-toggle" title="Switch to English"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                🇺🇸 EN
+            </button>
+
             <button class="mobile-menu-toggle" id="mobileToggle">
                 <i class="fas fa-bars"></i>
             </button>
 
-            </ul>
         </div>
     </nav>
 
@@ -861,12 +865,11 @@
         <p>Inspirando el aprendizaje matemático a través de la tecnología</p>
     </footer>
 
+    <script src="../js/i18n.js"></script>
     <script src="../js/dark-mode.js"></script>
     <script>
-        // Inicializar modo oscuro
-        if (window.DarkMode) {
-            window.DarkMode.initDarkMode();
-        }
+        if (window.DarkMode) window.DarkMode.initDarkMode();
+        I18n.init();
     </script>
 
     <script>

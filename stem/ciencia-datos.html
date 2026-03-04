@@ -1023,6 +1023,11 @@
                     <i class="fas fa-arrow-left"></i> Inicio
                 </a>
 
+                <button id="lang-toggle" title="Switch to English"
+                    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                    🇺🇸 EN
+                </button>
+
                 <!-- Dark Mode Toggle -->
                 <button class="dark-toggle" id="darkToggle" aria-label="Cambiar modo oscuro">
                     <div class="toggle-thumb">
@@ -2531,5 +2536,8 @@ WHERE nota > 90</pre>
             });
         });
     </script>
+
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>
