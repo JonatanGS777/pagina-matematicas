@@ -1574,6 +1574,7 @@ const I18n = (() => {
             'Tiempo Actual (t)':              'Current Time (t)',
 
             // ── lab/simulaciones.html ────────────────────────────────────
+            '🐇 Modelo de Reproducción de Conejos': '🐇 Rabbit Reproduction Model',
             'Modelo de Reproducción de Conejos': 'Rabbit Reproduction Model',
             'Sucesión de Fibonacci':          'Fibonacci Sequence',
             // Controls
