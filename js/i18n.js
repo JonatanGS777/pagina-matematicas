@@ -1567,11 +1567,25 @@ const I18n = (() => {
             'Tiro Alto':                      'High Launch',
             'Lunar':                          'Lunar',
             'Restablecer Valores':            'Reset Values',
+            '▶️ Iniciar':                     '▶️ Start',
+            '⏮️ Reiniciar':                   '⏮️ Reset',
             'Resultados Clave':               'Key Results',
             'Altura Máxima (yₘₐₓ)':          'Max Height (yₘₐₓ)',
             'Alcance (R)':                    'Range (R)',
             'Tiempo de Vuelo (T)':            'Flight Time (T)',
             'Tiempo Actual (t)':              'Current Time (t)',
+            // Theory section
+            '📜 Fundamentos Teóricos y Fórmulas': '📜 Theoretical Foundations & Formulas',
+            'Componentes de Velocidad':       'Velocity Components',
+            'Ecuaciones de Posición':         'Position Equations',
+            'Métricas Clave del Vuelo':       'Key Flight Metrics',
+            // Analysis guides
+            '🔬 Análisis y Guías de Estudio': '🔬 Analysis & Study Guides',
+            'Guía 1: El Ángulo Óptimo y los Ángulos Complementarios':
+                'Guide 1: Optimal Angle and Complementary Angles',
+            'Guía 2: Gravedad en Otros Mundos': 'Guide 2: Gravity in Other Worlds',
+            'Guía 3: El Efecto de la Altura Inicial': 'Guide 3: The Effect of Initial Height',
+            'Guía 4: Independencia de Movimientos': 'Guide 4: Independence of Motions',
 
             // ── lab/simulaciones.html ────────────────────────────────────
             '🐇 Modelo de Reproducción de Conejos': '🐇 Rabbit Reproduction Model',
@@ -2476,6 +2490,12 @@ const I18n = (() => {
             '¡Respuestas enviadas exitosamente! El PDF se ha generado y guardado.':
                 'Answers submitted successfully! The PDF has been generated and saved.',
 
+            // ── lab/proyectiles.html — párrafos ──────────────────────────
+            'Usa estas preguntas para explorar los conceptos clave del movimiento de proyectiles con el simulador. ¡Experimenta y descubre!':
+                'Use these questions to explore the key concepts of projectile motion with the simulator. Experiment and discover!',
+            'Desarrollado como una herramienta educativa de código abierto. Licencia MIT.':
+                'Developed as an open-source educational tool. MIT License.',
+
             // ── lab/simulaciones.html — párrafos ─────────────────────────
             'En 1202, Leonardo de Pisa (conocido como Fibonacci) planteó un problema fascinante: \n                ¿Cuántas parejas de conejos se producirían en un año si cada pareja madura da lugar \n                a una nueva pareja cada mes, y las crías tardan un mes en madurar? Este modelo \n                matemático revela uno de los patrones más hermosos de la naturaleza.':
                 'In 1202, Leonardo of Pisa (known as Fibonacci) posed a fascinating problem: How many pairs of rabbits would be produced in a year if each mature pair gives rise to a new pair each month, and the young take a month to mature? This mathematical model reveals one of the most beautiful patterns in nature.',
@@ -2528,6 +2548,28 @@ const I18n = (() => {
             // club/proyectos-creativos.html — rubric intro
             'Puntuación Total: 300 puntos - Esta rúbrica evalúa integralmente el desarrollo y presentación de proyectos creativos matemáticos.':
                 '<strong>Total Score: 300 points</strong> — This rubric comprehensively evaluates the development and presentation of creative math projects.',
+
+            // ── lab/proyectiles.html — párrafos con HTML ──────────────────
+            'El movimiento parabólico se analiza descomponiendo el movimiento en dos ejes independientes: horizontal (eje x) y vertical (eje y).':
+                'Parabolic motion is analyzed by decomposing the motion into two independent axes: <strong>horizontal (x-axis)</strong> and <strong>vertical (y-axis)</strong>.',
+            'Eje Horizontal (x): El movimiento es a velocidad constante (Movimiento Rectilíneo Uniforme, MRU), ya que no hay aceleración horizontal (ignorando la resistencia del aire).':
+                '<strong>Horizontal Axis (x):</strong> Motion is at constant velocity (Uniform Rectilinear Motion, URM), since there is no horizontal acceleration (ignoring air resistance).',
+            'Pregunta: Para una velocidad inicial fija y sin altura inicial, ¿qué ángulo de lanzamiento produce el mayor alcance? ¿Qué sucede si lanzas a 30° y a 60°? ¿Qué observas?':
+                '<strong>Question:</strong> For a fixed initial velocity and no initial height, what launch angle produces the greatest range? What happens if you launch at 30° and 60°? What do you observe?',
+            'Instrucciones: Fija la velocidad en 30 m/s y la altura en 0 m. Prueba ángulos como 15°, 30°, 45°, 60° y 75°. Anota el alcance para cada uno. Compara los resultados de 30° y 60°. ¿Ves un patrón con los ángulos que suman 90°?':
+                '<strong>Instructions:</strong> Set the velocity to 30 m/s and the height to 0 m. Try angles like 15°, 30°, 45°, 60° and 75°. Record the range for each. Compare the results of 30° and 60°. Do you see a pattern with angles that add up to 90°?',
+            'Pregunta: Lanza un proyectil con los mismos parámetros (ej. v₀=20 m/s, θ=45°) en la Tierra (g=9.81 m/s²) y en la Luna (g=1.62 m/s²). ¿Cómo cambian la altura máxima y el alcance?':
+                '<strong>Question:</strong> Launch a projectile with the same parameters (e.g. v₀=20 m/s, θ=45°) on Earth (g=9.81 m/s²) and on the Moon (g=1.62 m/s²). How do the maximum height and range change?',
+            'Instrucciones: Usa la escena "Tiro Clásico" y luego cambia solo el valor de la gravedad a 1.62. Observa cómo se estira la parábola y compara los resultados numéricos.':
+                '<strong>Instructions:</strong> Use the "Classic Launch" scene and then change only the gravity value to 1.62. Observe how the parabola stretches and compare the numerical results.',
+            'Pregunta: ¿Cómo afecta la altura inicial (y₀) al tiempo de vuelo y al alcance? ¿Es el tiempo de subida igual al tiempo de bajada si y₀ > 0?':
+                '<strong>Question:</strong> How does the initial height (y₀) affect flight time and range? Is the rise time equal to the fall time if y₀ > 0?',
+            'Instrucciones: Realiza un lanzamiento desde y₀=0. Anota el tiempo de vuelo. Ahora, aumenta la altura a 5 m y vuelve a lanzar con los mismos v₀ y θ. Compara el nuevo tiempo de vuelo. Observa la forma de la parábola, ¿es simétrica?':
+                '<strong>Instructions:</strong> Launch from y₀=0. Record the flight time. Now increase the height to 5 m and launch again with the same v₀ and θ. Compare the new flight time. Observe the shape of the parabola — is it symmetrical?',
+            'Pregunta: En un tiro horizontal (θ=0°), ¿de qué depende el tiempo que tarda el objeto en caer al suelo? ¿Depende de la velocidad inicial horizontal?':
+                '<strong>Question:</strong> In a horizontal launch (θ=0°), what determines the time it takes the object to hit the ground? Does it depend on the initial horizontal velocity?',
+            'Instrucciones: Usa la escena "Horizontal" (v₀=15 m/s, y₀=5 m). Anota el tiempo de vuelo. Ahora, cambia la velocidad a 30 m/s sin cambiar la altura. ¿Cambia el tiempo de vuelo? ¿Qué concluyes sobre la independencia de los movimientos vertical y horizontal?':
+                '<strong>Instructions:</strong> Use the "Horizontal" scene (v₀=15 m/s, y₀=5 m). Record the flight time. Now change the velocity to 30 m/s without changing the height. Does the flight time change? What do you conclude about the independence of vertical and horizontal motion?',
         }
     };
 
