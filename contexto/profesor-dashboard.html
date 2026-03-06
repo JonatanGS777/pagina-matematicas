@@ -647,6 +647,10 @@
                 </div>
             </div>
             <div class="access-controls">
+                <button id="lang-toggle" aria-label="Switch language"
+                    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                    EN
+                </button>
                 <a href="historiamath.html" class="btn secondary">
                     <i class="fas fa-home"></i>
                     Página Principal
@@ -1304,5 +1308,7 @@
             }
         });
     </script>
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>

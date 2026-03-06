@@ -501,6 +501,10 @@
                 Preguntas de Análisis
             </a>
             
+            <button id="lang-toggle" aria-label="Switch language"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                EN
+            </button>
             <a href="historiamath.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i>
                 Volver
@@ -923,5 +927,7 @@
             new HistoryQuestionsApp();
         });
     </script>
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>

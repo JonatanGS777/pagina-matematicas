@@ -2,7 +2,9 @@
 // Aplica a: index.html, historiamath.html, links.html, materiales.html, galeria.html,
 //           club/competencias.html, club/leaderboard.html, club/olimpiadas.html,
 //           club/investigacion.html, club/proyectos-creativos.html, club/registro.html,
-//           club/mision-matematica/index.html
+//           club/mision-matematica/index.html,
+//           contexto/historiamath-examen.html, contexto/historiamath-preguntas.html,
+//           contexto/profesor-dashboard.html
 
 const I18n = (() => {
 
@@ -82,6 +84,13 @@ const I18n = (() => {
                 'Project Creator - Prof. Yonatan Guerrero (Enhanced Version)',
             'Misión Matemática - Club de Matemáticas EMTP':
                 'Math Mission - EMTP Mathematics Club',
+            // contexto — nuevas páginas
+            'Examen - Historia de las Matemáticas':
+                'Exam - History of Mathematics',
+            'Preguntas de Análisis - Historia de las Matemáticas':
+                'Analysis Questions - History of Mathematics',
+            'Dashboard del Profesor - Historia de las Matemáticas':
+                'Professor Dashboard - History of Mathematics',
         }
     };
 
@@ -112,7 +121,21 @@ const I18n = (() => {
                 // club/mision-matematica — form
                 'Nombre Completo': 'Full Name',
                 'Correo Electrónico': 'Email Address',
-                'Mensaje': 'Message'
+                'Mensaje': 'Message',
+                // historiamath-preguntas
+                'Escribe tu nombre completo': 'Write your full name',
+                'Escribe tu respuesta aquí... Explica con ejemplos específicos y conecta el concepto del cero con desarrollos matemáticos posteriores.':
+                    'Write your answer here... Explain with specific examples and connect the concept of zero with later mathematical developments.',
+                'Compara y contrasta las contribuciones de ambas culturas, mencionando matemáticos específicos y sus aportes.':
+                    'Compare and contrast the contributions of both cultures, mentioning specific mathematicians and their contributions.',
+                'Analiza la importancia histórica y metodológica de los Elementos de Euclides.':
+                    'Analyze the historical and methodological importance of Euclid\'s Elements.',
+                'Describe el impacto del cálculo en las matemáticas y las ciencias.':
+                    'Describe the impact of calculus on mathematics and the sciences.',
+                'Reflexiona sobre la evolución de las matemáticas y su futuro en el siglo XXI.':
+                    'Reflect on the evolution of mathematics and its future in the 21st century.',
+                // profesor-dashboard
+                'Buscar por nombre o grupo...': 'Search by name or group...'
             }
         }
     };
@@ -1402,6 +1425,91 @@ const I18n = (() => {
             'Proyecto Estudiantil':           'Student Project',
             'Trabajo realizado por estudiantes de matemáticas':
                 'Work done by mathematics students',
+
+            // ── historiamath-examen.html ─────────────────────────────────
+            // Lock screen
+            'Examen Bloqueado':               'Exam Locked',
+            'Ingresa la clave de acceso':     'Enter the access code',
+            'Iniciar Examen':                 'Start Exam',
+            'Clave incorrecta. Inténtalo de nuevo.': 'Incorrect code. Please try again.',
+            // Security overlay
+            'ADVERTENCIA':                    'WARNING',
+            // Exam header
+            'Examen: Historia de las Matemáticas': 'Exam: History of Mathematics',
+            'En progreso':                    'In Progress',
+            // Student info
+            'Información del Estudiante':     'Student Information',
+            'Nombre Completo':                'Full Name',
+            'Selecciona tu grupo':            'Select your group',
+            // Submit warning & button
+            'Enviar Examen':                  'Submit Exam',
+            // Results
+            '¡Examen Completado!':            'Exam Completed!',
+            'Calculando resultados...':       'Calculating results...',
+            'Respuestas Correctas':           'Correct Answers',
+            'Total de Preguntas':             'Total Questions',
+            'Tiempo Utilizado':               'Time Used',
+            'Calificación':                   'Grade',
+            'Descargar Resultados':           'Download Results',
+            'Descargar mi Certificado':       'Download My Certificate',
+            'Descarga Profesor (Requiere Clave)': 'Professor Download (Requires Code)',
+            // Acceso Profesor prompt
+            'Ingresa la clave del profesor:': 'Enter the professor\'s code:',
+
+            // ── historiamath-preguntas.html ──────────────────────────────
+            'Preguntas de Análisis':          'Analysis Questions',
+            'Volver':                         'Back',
+            'Preguntas de Análisis Histórico': 'Historical Analysis Questions',
+            'Información del Estudiante':     'Student Information',
+            'Completa tus datos antes de responder las preguntas':
+                'Complete your information before answering the questions',
+            'Nombre Completo':                'Full Name',
+            'Grupo':                          'Group',
+            'Fecha':                          'Date',
+            'Generar PDF y Enviar':           'Generate PDF and Submit',
+            'Generando PDF y guardando respuestas...':
+                'Generating PDF and saving answers...',
+            'caracteres mínimos':             'minimum characters',
+
+            // ── profesor-dashboard.html ──────────────────────────────────
+            // Lock screen
+            'Acceso de Profesor':             'Professor Access',
+            'Ingresa la clave para acceder al dashboard':
+                'Enter the code to access the dashboard',
+            'Clave del profesor':             'Professor code',
+            'Acceder':                        'Access',
+            // Header
+            'Dashboard del Profesor':         'Professor Dashboard',
+            'Prof. Yonatan Guerrero':         'Prof. Yonatan Guerrero',
+            'Página Principal':               'Main Page',
+            'Salir':                          'Logout',
+            // Stats
+            'Exámenes Tomados':               'Exams Taken',
+            'Completados Hoy':                'Completed Today',
+            'Promedio General':               'General Average',
+            'Tiempo Promedio':                'Average Time',
+            // Controls
+            'Todos los grupos':               'All groups',
+            'Todas las calificaciones':       'All grades',
+            'Calificación A':                 'Grade A',
+            'Calificación B':                 'Grade B',
+            'Calificación C':                 'Grade C',
+            'Calificación D':                 'Grade D',
+            'Calificación F':                 'Grade F',
+            'Exportar CSV':                   'Export CSV',
+            'Reporte Grupal':                 'Group Report',
+            'Borrar Todo':                    'Clear All',
+            // Table section
+            'Resultados de Exámenes':         'Exam Results',
+            'Actualizar':                     'Refresh',
+            // Table headers
+            'Estudiante':                     'Student',
+            'Porcentaje':                     'Percentage',
+            'Tiempo':                         'Time',
+            'Seguridad':                      'Security',
+            'Acciones':                       'Actions',
+            // No results
+            'No hay resultados disponibles':  'No results available',
         }
     };
 
@@ -1860,6 +1968,50 @@ const I18n = (() => {
             // Nota galería
             'Las fotos de nuestras actividades se actualizarán regularmente a medida que avanza el año escolar. ¡Síguenos en nuestras redes sociales para ver más momentos!':
                 'Photos from our activities will be updated regularly as the school year progresses. Follow us on social media to see more moments!',
+
+            // ── historiamath-examen.html — párrafos ──────────────────────
+            'Este examen requiere una clave de acceso proporcionada por el profesor. \n                Una vez iniciado, no podrás salir hasta completarlo.':
+                'This exam requires an access code provided by the professor. Once started, you will not be able to leave until you complete it.',
+            'Has intentado salir del examen. Esta acción está prohibida y ha sido registrada.':
+                'You have attempted to leave the exam. This action is prohibited and has been recorded.',
+            'El examen se enviará automáticamente en 10 segundos.':
+                'The exam will be submitted automatically in 10 seconds.',
+            'Una vez enviado el examen, no podrás realizar cambios. \n                    Revisa tus respuestas antes de continuar.':
+                'Once the exam is submitted, you will not be able to make changes. Review your answers before continuing.',
+
+            // ── historiamath-preguntas.html — párrafos ───────────────────
+            'Reflexiona sobre los grandes momentos de la historia matemática y demuestra tu comprensión':
+                'Reflect on the great moments in the history of mathematics and demonstrate your understanding',
+            'Completa tus datos antes de responder las preguntas':
+                'Complete your information before answering the questions',
+            // Question 1
+            '¿Qué impacto tuvo la invención del cero en la historia del cálculo y las matemáticas en general?':
+                'What impact did the invention of zero have on the history of calculus and mathematics in general?',
+            'Considera cómo el concepto de "nada" como número revolucionó \n                        los sistemas de numeración y permitió desarrollos matemáticos posteriores.':
+                'Consider how the concept of "nothing" as a number revolutionized numeration systems and enabled subsequent mathematical developments.',
+            // Question 2
+            'Compara las contribuciones de los matemáticos griegos con las del mundo islámico. \n                        ¿Cómo se complementaron estos dos períodos históricos?':
+                'Compare the contributions of Greek mathematicians with those of the Islamic world. How did these two historical periods complement each other?',
+            'Piensa en las diferencias de enfoque: los griegos se \n                        centraron en la geometría y demostraciones, mientras que los matemáticos islámicos \n                        desarrollaron el álgebra y preservaron conocimientos.':
+                'Think about the differences in approach: the Greeks focused on geometry and proofs, while Islamic mathematicians developed algebra and preserved knowledge.',
+            // Question 3
+            'Explica por qué los "Elementos" de Euclides han sido tan influyentes durante más de 2000 años. \n                        ¿Qué los hace únicos en la historia de las matemáticas?':
+                'Explain why Euclid\'s "Elements" has been so influential for more than 2000 years. What makes it unique in the history of mathematics?',
+            'Considera el método axiomático, la organización sistemática \n                        del conocimiento geométrico y cómo estableció estándares para el razonamiento matemático.':
+                'Consider the axiomatic method, the systematic organization of geometric knowledge and how it established standards for mathematical reasoning.',
+            // Question 4
+            '¿Cómo cambió la revolución científica del siglo XVII (Newton, Leibniz, Descartes) \n                        la naturaleza de las matemáticas? Analiza el desarrollo del cálculo.':
+                'How did the 17th century scientific revolution (Newton, Leibniz, Descartes) change the nature of mathematics? Analyze the development of calculus.',
+            'Reflexiona sobre cómo el cálculo permitió modelar cambio y movimiento, \n                        y conectó las matemáticas con la física de manera sin precedentes.':
+                'Reflect on how calculus enabled modeling of change and motion, and connected mathematics with physics in unprecedented ways.',
+            // Question 5
+            'Las matemáticas han evolucionado de ser una herramienta práctica a una ciencia abstracta. \n                        Analiza esta transformación y reflexiona sobre el futuro de las matemáticas en la era digital.':
+                'Mathematics has evolved from being a practical tool to an abstract science. Analyze this transformation and reflect on the future of mathematics in the digital age.',
+            'Considera la transición desde las matemáticas aplicadas de las \n                        civilizaciones antiguas hasta las matemáticas puras modernas, y cómo la computación está \n                        creando nuevas ramas matemáticas.':
+                'Consider the transition from the applied mathematics of ancient civilizations to modern pure mathematics, and how computing is creating new mathematical branches.',
+            // Submit section
+            '¡Respuestas enviadas exitosamente! El PDF se ha generado y guardado.':
+                'Answers submitted successfully! The PDF has been generated and saved.',
         }
     };
 

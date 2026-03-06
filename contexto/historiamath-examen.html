@@ -639,6 +639,10 @@
                         En progreso
                     </div>
                     <div class="timer" id="timer">45:00</div>
+                    <button id="lang-toggle" aria-label="Switch language"
+                        onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                        EN
+                    </button>
                 </div>
             </div>
         </header>
@@ -1361,5 +1365,7 @@
             new SecureExamSystem();
         });
     </script>
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>
