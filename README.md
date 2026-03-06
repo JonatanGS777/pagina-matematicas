@@ -261,6 +261,8 @@ El módulo inyecta automáticamente los estilos del botón (pill redondeado, efe
 | Investigación | `club/investigacion.html` | Áreas, metodología, cronograma |
 | Proyectos Creativos | `club/proyectos-creativos.html` | Guía, nav |
 | Registro | `club/registro.html` | Formulario, participantes |
+| Perfil Investigador | `perfil-investigador/index.html` | Sistema `data-i18n` attributes (independiente de `js/i18n.js`) |
+| Misión Matemática | `club/mision-matematica/index.html` | Pill button con acento verde, Exo 2; path `../../js/i18n.js` |
 
 ### Corrección de path en eBook STEAM (mar 2026)
 

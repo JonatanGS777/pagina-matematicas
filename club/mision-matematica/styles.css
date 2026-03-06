@@ -383,6 +383,44 @@ body::before {
     color: var(--primary-blue);
 }
 
+/* Lang Toggle */
+.lang-toggle-btn {
+    background: transparent;
+    border: 2px solid var(--accent-green);
+    border-radius: 20px;
+    color: var(--accent-green);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.35rem 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.lang-toggle-btn:hover {
+    background: var(--accent-green);
+    color: var(--primary-blue);
+    box-shadow: 0 0 18px rgba(0, 255, 136, 0.5);
+}
+
+.lang-toggle-btn:focus-visible {
+    outline: 2px solid var(--accent-green);
+    outline-offset: 3px;
+}
+
+[data-theme="dark"] .lang-toggle-btn {
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+[data-theme="dark"] .lang-toggle-btn:hover {
+    background: var(--accent-green);
+    color: var(--primary-blue);
+}
+
 /* Hamburger Nav Toggle */
 .nav-toggle {
     display: none;

@@ -49,6 +49,10 @@
                 <li role="none"><a href="#recursos" role="menuitem">Recursos</a></li>
                 <li role="none"><a href="#contacto" role="menuitem">Contacto</a></li>
             </ul>
+            <button id="lang-toggle" class="lang-toggle-btn" aria-label="Switch language"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                🇺🇸 EN
+            </button>
             <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
                 <i data-lucide="sun" class="theme-icon" aria-hidden="true"></i>
             </button>
@@ -611,5 +615,7 @@
             if (typeof lucide !== 'undefined') lucide.createIcons();
         });
     </script>
+    <script src="../../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>
