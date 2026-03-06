@@ -2495,6 +2495,23 @@ const I18n = (() => {
                 'Use these questions to explore the key concepts of projectile motion with the simulator. Experiment and discover!',
             'Desarrollado como una herramienta educativa de código abierto. Licencia MIT.':
                 'Developed as an open-source educational tool. MIT License.',
+            // Velocity components group
+            'La velocidad inicial $v_0$ con un ángulo $\\theta$ se descompone en:':
+                'The initial velocity $v_0$ at an angle $\\theta$ decomposes into:',
+            'Componente horizontal: $v_{0x} = v_0 \\cos(\\theta)$':
+                'Horizontal component: $v_{0x} = v_0 \\cos(\\theta)$',
+            'Componente vertical: $v_{0y} = v_0 \\sin(\\theta)$':
+                'Vertical component: $v_{0y} = v_0 \\sin(\\theta)$',
+            // Position equations group
+            'La posición $(x, y)$ en cualquier instante de tiempo $t$ es:':
+                'The position $(x, y)$ at any instant of time $t$ is:',
+            'Posición en x: $x(t) = v_{0x} \\cdot t$':
+                'Position in x: $x(t) = v_{0x} \\cdot t$',
+            'Posición en y: $y(t) = y_0 + v_{0y} \\cdot t - \\frac{1}{2} g t^2$':
+                'Position in y: $y(t) = y_0 + v_{0y} \\cdot t - \\frac{1}{2} g t^2$',
+            // Key metrics group (plain text part of MathJax paragraphs)
+            'Para el caso general ($y_0 \\ge 0$), resolvemos $y(t)=0$ usando la fórmula cuadrática:':
+                'For the general case ($y_0 \\ge 0$), we solve $y(t)=0$ using the quadratic formula:',
 
             // ── lab/simulaciones.html — párrafos ─────────────────────────
             'En 1202, Leonardo de Pisa (conocido como Fibonacci) planteó un problema fascinante: \n                ¿Cuántas parejas de conejos se producirían en un año si cada pareja madura da lugar \n                a una nueva pareja cada mes, y las crías tardan un mes en madurar? Este modelo \n                matemático revela uno de los patrones más hermosos de la naturaleza.':
@@ -2554,6 +2571,15 @@ const I18n = (() => {
                 'Parabolic motion is analyzed by decomposing the motion into two independent axes: <strong>horizontal (x-axis)</strong> and <strong>vertical (y-axis)</strong>.',
             'Eje Horizontal (x): El movimiento es a velocidad constante (Movimiento Rectilíneo Uniforme, MRU), ya que no hay aceleración horizontal (ignorando la resistencia del aire).':
                 '<strong>Horizontal Axis (x):</strong> Motion is at constant velocity (Uniform Rectilinear Motion, URM), since there is no horizontal acceleration (ignoring air resistance).',
+            'Eje Vertical (y): El movimiento es uniformemente acelerado (MRUA) debido a la aceleración constante de la gravedad, $g$, que apunta hacia abajo.':
+                '<strong>Vertical Axis (y):</strong> Motion is uniformly accelerated (UAM) due to the constant acceleration of gravity, $g$, pointing downward.',
+            // Metrics paragraphs with <strong> + MathJax
+            'Altura Máxima ($y_{\\text{max}}$): Se alcanza cuando $v_y = 0$.':
+                '<strong>Maximum Height ($y_{\\text{max}}$):</strong> Reached when $v_y = 0$.',
+            'Tiempo de Vuelo ($T$): Tiempo total en el aire. Para el caso simple $y_0 = 0$:':
+                '<strong>Flight Time ($T$):</strong> Total time in the air. For the simple case $y_0 = 0$:',
+            'Alcance ($R$): Distancia horizontal total recorrida.':
+                '<strong>Range ($R$):</strong> Total horizontal distance traveled.',
             'Pregunta: Para una velocidad inicial fija y sin altura inicial, ¿qué ángulo de lanzamiento produce el mayor alcance? ¿Qué sucede si lanzas a 30° y a 60°? ¿Qué observas?':
                 '<strong>Question:</strong> For a fixed initial velocity and no initial height, what launch angle produces the greatest range? What happens if you launch at 30° and 60°? What do you observe?',
             'Instrucciones: Fija la velocidad en 30 m/s y la altura en 0 m. Prueba ángulos como 15°, 30°, 45°, 60° y 75°. Anota el alcance para cada uno. Compara los resultados de 30° y 60°. ¿Ves un patrón con los ángulos que suman 90°?':
