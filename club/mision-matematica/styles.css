@@ -383,42 +383,45 @@ body::before {
     color: var(--primary-blue);
 }
 
-/* Lang Toggle */
-.lang-toggle-btn {
-    background: transparent;
-    border: 2px solid var(--accent-green);
-    border-radius: 20px;
-    color: var(--accent-green);
-    font-family: 'Exo 2', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    padding: 0.35rem 0.85rem;
+/* Lang Toggle — usa ID+clase para ganar en especificidad al estilo inyectado por i18n.js */
+#lang-toggle.lang-toggle-btn {
+    background: transparent !important;
+    border: 2px solid var(--accent-green) !important;
+    border-radius: 20px !important;
+    color: var(--accent-green) !important;
+    font-family: 'Exo 2', sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+    padding: 0.35rem 0.85rem !important;
     cursor: pointer;
     transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
     flex-shrink: 0;
     white-space: nowrap;
+    backdrop-filter: none !important;
+    box-shadow: none;
 }
 
-.lang-toggle-btn:hover {
-    background: var(--accent-green);
-    color: var(--primary-blue);
-    box-shadow: 0 0 18px rgba(0, 255, 136, 0.5);
+#lang-toggle.lang-toggle-btn:hover {
+    background: var(--accent-green) !important;
+    color: var(--primary-blue) !important;
+    box-shadow: 0 0 18px rgba(0, 255, 136, 0.5) !important;
+    transform: none;
 }
 
-.lang-toggle-btn:focus-visible {
+#lang-toggle.lang-toggle-btn:focus-visible {
     outline: 2px solid var(--accent-green);
     outline-offset: 3px;
 }
 
-[data-theme="dark"] .lang-toggle-btn {
-    border-color: var(--accent-green);
-    color: var(--accent-green);
+[data-theme="dark"] #lang-toggle.lang-toggle-btn {
+    border-color: var(--accent-green) !important;
+    color: var(--accent-green) !important;
 }
 
-[data-theme="dark"] .lang-toggle-btn:hover {
-    background: var(--accent-green);
-    color: var(--primary-blue);
+[data-theme="dark"] #lang-toggle.lang-toggle-btn:hover {
+    background: var(--accent-green) !important;
+    color: var(--primary-blue) !important;
 }
 
 /* Hamburger Nav Toggle */
