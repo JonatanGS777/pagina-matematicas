@@ -4,7 +4,9 @@
 //           club/investigacion.html, club/proyectos-creativos.html, club/registro.html,
 //           club/mision-matematica/index.html,
 //           contexto/historiamath-examen.html, contexto/historiamath-preguntas.html,
-//           contexto/profesor-dashboard.html
+//           contexto/profesor-dashboard.html,
+//           salon/algebra.html, salon/estadisticas.html, salon/finanzas.html,
+//           salon/geometria.html
 
 const I18n = (() => {
 
@@ -84,6 +86,15 @@ const I18n = (() => {
                 'Project Creator - Prof. Yonatan Guerrero (Enhanced Version)',
             'Misión Matemática - Club de Matemáticas EMTP':
                 'Math Mission - EMTP Mathematics Club',
+            // salon/
+            'Álgebra Moderna — Funciones, Gráficas y Calculadoras':
+                'Modern Algebra — Functions, Graphs and Calculators',
+            'Estadística Moderna — Una Guía Interactiva':
+                'Modern Statistics — An Interactive Guide',
+            'Finanzas Inteligentes: Tu Guía Interactiva':
+                'Smart Finance: Your Interactive Guide',
+            'Geometría Moderna — Conceptos, Visualizaciones y Calculadoras':
+                'Modern Geometry — Concepts, Visualizations and Calculators',
             // contexto — nuevas páginas
             'Examen - Historia de las Matemáticas':
                 'Exam - History of Mathematics',
@@ -122,6 +133,17 @@ const I18n = (() => {
                 'Nombre Completo': 'Full Name',
                 'Correo Electrónico': 'Email Address',
                 'Mensaje': 'Message',
+                // salon/algebra
+                'Coeficiente a':             'Coefficient a',
+                'Coeficiente b':             'Coefficient b',
+                'Coeficiente c':             'Coefficient c',
+                'Introduce un valor de x':   'Enter a value of x',
+                'El resultado aparecerá aquí...': 'The result will appear here...',
+                // salon/estadisticas
+                'Ej:85, 92, 78, ...':        'E.g.: 85, 92, 78, ...',
+                // salon/finanzas
+                'Ej: Pasajes':               'E.g.: Bus fare',
+                'Ej: 50':                    'E.g.: 50',
                 // historiamath-preguntas
                 'Escribe tu nombre completo': 'Write your full name',
                 'Escribe tu respuesta aquí... Explica con ejemplos específicos y conecta el concepto del cero con desarrollos matemáticos posteriores.':
@@ -1426,6 +1448,169 @@ const I18n = (() => {
             'Trabajo realizado por estudiantes de matemáticas':
                 'Work done by mathematics students',
 
+            // ── salon/algebra.html ───────────────────────────────────────
+            'Álgebra Moderna':                'Modern Algebra',
+            'Fundamentos':                    'Fundamentals',
+            'Funciones':                      'Functions',
+            'FAQ':                            'FAQ',
+            'Comenzar a aprender':            'Start Learning',
+            'Fundamentos del Álgebra':        'Algebra Fundamentals',
+            'Gráficas de Funciones Interactivas': 'Interactive Function Graphs',
+            'Calculadoras Algebraicas':       'Algebraic Calculators',
+            'Tabla de Fórmulas Clave':        'Key Formulas Table',
+            'Preguntas Frecuentes':           'Frequently Asked Questions',
+            'Variable':                       'Variable',
+            'Constante':                      'Constant',
+            'Coeficiente':                    'Coefficient',
+            'Expresión':                      'Expression',
+            'Añadir otra función':            'Add another function',
+            'Resolvente Cuadrática':          'Quadratic Formula',
+            'Evaluador de Función':           'Function Evaluator',
+            'Resolver':                       'Solve',
+            'Concepto':                       'Concept',
+            'Fórmula':                        'Formula',
+            'Forma explícita de la recta':    'Explicit form of the line',
+            'Forma canónica (vértice)':       'Canonical form (vertex)',
+            'Distancia entre dos puntos':     'Distance between two points',
+            'Diferencia de cuadrados':        'Difference of squares',
+            // Tipos de función
+            'Lineal':                         'Linear',
+            'Cuadrática':                     'Quadratic',
+            'Valor Absoluto':                 'Absolute Value',
+            'Raíz Cuadrada':                  'Square Root',
+            'Recíproca':                      'Reciprocal',
+            'Seno':                           'Sine',
+            'Coseno':                         'Cosine',
+            // Parámetros
+            'Pendiente (m)':                  'Slope (m)',
+            'Ordenada (b)':                   'Y-intercept (b)',
+            'Apertura (a)':                   'Opening (a)',
+            'Vértice x (h)':                  'Vertex x (h)',
+            'Vértice y (k)':                  'Vertex y (k)',
+            'Amplitud (A)':                   'Amplitude (A)',
+            'Frecuencia (B)':                 'Frequency (B)',
+            'Fase (C)':                       'Phase (C)',
+            'Vertical (D)':                   'Vertical (D)',
+            // Footer algebra
+            '© 2025 Álgebra Moderna. Creado con fines educativos por Dr. Yonatan Guerrero Soriano.':
+                '© 2025 Modern Algebra. Created for educational purposes by Dr. Yonatan Guerrero Soriano.',
+            'Contenido bajo licencia Creative Commons. Accesibilidad como prioridad.':
+                'Content under Creative Commons license. Accessibility as a priority.',
+
+            // ── salon/estadisticas.html ──────────────────────────────────
+            'Estadística Moderna':            'Modern Statistics',
+            'Descriptiva':                    'Descriptive',
+            'Gráficas':                       'Charts',
+            'Probabilidad':                   'Probability',
+            'Distribuciones':                 'Distributions',
+            'Muestreo':                       'Sampling',
+            'Glosario':                       'Glossary',
+            'Domina el universo de los datos.': 'Master the universe of data.',
+            'Comenzar a explorar':            'Start Exploring',
+            'Ingresa tus Datos':              'Enter Your Data',
+            'Cargar Ejemplo 1D (Notas)':      'Load 1D Example (Grades)',
+            'Cargar Ejemplo 2D (Altura y Peso)': 'Load 2D Example (Height & Weight)',
+            'Cargar .csv':                    'Load .csv',
+            'Cargando resumen de datos...':   'Loading data summary...',
+
+            // ── salon/finanzas.html ──────────────────────────────────────
+            'Finanzas para Estudiantes':      'Finance for Students',
+            'Tu Aventura Financiera Comienza Aquí': 'Your Financial Adventure Starts Here',
+            'Comenzar a Aprender':            'Start Learning',
+            'Crea tu Presupuesto':            'Create Your Budget',
+            'La Regla 50/30/20':              'The 50/30/20 Rule',
+            'Una guía simple para empezar:':  'A simple guide to get started:',
+            'Editor de Presupuesto':          'Budget Editor',
+            'Distribución de Gastos':         'Expense Distribution',
+            'Imprimir Presupuesto':           'Print Budget',
+            'Concepto':                       'Concept',
+            'Monto ($)':                      'Amount ($)',
+            'Categoría':                      'Category',
+            'Necesidades':                    'Needs',
+            'Deseos':                         'Wants',
+            'Ahorro':                         'Savings',
+            'Agregar Partida':                'Add Item',
+            'Monto':                          'Amount',
+            'Interés Simple vs. Compuesto':   'Simple vs. Compound Interest',
+            'Capital Inicial (P)':            'Initial Capital (P)',
+            'Tasa de Interés Anual (r %)':    'Annual Interest Rate (r %)',
+            'Tiempo (t años)':                'Time (t years)',
+            'Capitalización por año (n)':     'Compounding per year (n)',
+            'Anual':                          'Annual',
+            'Semestral':                      'Semi-annual',
+            'Trimestral':                     'Quarterly',
+            'Mensual':                        'Monthly',
+            'Diaria':                         'Daily',
+            'Comparación de Crecimiento':     'Growth Comparison',
+            'Metas de Ahorro':                'Savings Goals',
+            'Calculadora de Metas':           'Goals Calculator',
+            'Meta de Ahorro (M)':             'Savings Goal (M)',
+            'Aporte Mensual (d)':             'Monthly Contribution (d)',
+            'Tasa Anual (r %)':               'Annual Rate (r %)',
+            'Años para Ahorrar (t)':          'Years to Save (t)',
+            'Resultados de Ahorro':           'Savings Results',
+            'Deuda y Crédito':               'Debt and Credit',
+            'Calculadora de Préstamo':        'Loan Calculator',
+            'Monto del Préstamo (P)':         'Loan Amount (P)',
+            'Tasa Anual (APR %)':             'Annual Rate (APR %)',
+            'Plazo (años)':                   'Term (years)',
+            'Tabla de Amortización':          'Amortization Table',
+            'Mes':                            'Month',
+            'Pago':                           'Payment',
+            'Interés':                        'Interest',
+            'Capital':                        'Principal',
+            'Saldo':                          'Balance',
+            'Inflación':                      'Inflation',
+            'Calculadora de Inflación':       'Inflation Calculator',
+            'Monto ($)':                      'Amount ($)',
+            'Tasa de Inflación Anual (π %)':  'Annual Inflation Rate (π %)',
+            'Años (t)':                       'Years (t)',
+            'El Poder Adquisitivo':           'Purchasing Power',
+            'Glosario Financiero':            'Financial Glossary',
+            'Volver Arriba':                  'Back to Top',
+            // Footer finanzas
+            '© 2025 Finanzas Interactivas. Creado con fines educativos por Dr. Yonatan Guerrero Soriano.':
+                '© 2025 Interactive Finance. Created for educational purposes by Dr. Yonatan Guerrero Soriano.',
+
+            // ── salon/geometria.html ─────────────────────────────────────
+            'Geometría Moderna':              'Modern Geometry',
+            'Conceptos':                      'Concepts',
+            'Figuras 2D':                     '2D Figures',
+            'Sólidos 3D':                     '3D Solids',
+            'Conceptos Esenciales':           'Essential Concepts',
+            'Figuras 2D Interactivas':        'Interactive 2D Figures',
+            'Nociones de Sólidos 3D':         '3D Solids Overview',
+            'Calculadoras Geométricas':       'Geometric Calculators',
+            // Concepts
+            'Punto':                          'Point',
+            'Recta':                          'Line',
+            'Plano':                          'Plane',
+            'Ángulo':                         'Angle',
+            'Triángulo':                      'Triangle',
+            'Círculo y Circunferencia':       'Circle and Circumference',
+            'Perímetro':                      'Perimeter',
+            'Área':                           'Area',
+            // 2D figures
+            'Cuadrado':                       'Square',
+            'Rectángulo':                     'Rectangle',
+            'Círculo':                        'Circle',
+            'Paralelogramo':                  'Parallelogram',
+            'Trapecio':                       'Trapezoid',
+            // 3D solids
+            'Cubo':                           'Cube',
+            'Cilindro':                       'Cylinder',
+            'Cono':                           'Cone',
+            'Esfera':                         'Sphere',
+            'Pirámide (base cuadrada)':       'Pyramid (square base)',
+            'Prisma (base triangular)':       'Prism (triangular base)',
+            // Calculators
+            'Selecciona una figura:':         'Select a figure:',
+            'Triángulo (base y altura)':      'Triangle (base and height)',
+            'Cateto a:':                      'Leg a:',
+            'Cateto b:':                      'Leg b:',
+            'Hipotenusa c:':                  'Hypotenuse c:',
+            'Comenzar a explorar':            'Start Exploring',
+
             // ── historiamath-examen.html ─────────────────────────────────
             // Lock screen
             'Examen Bloqueado':               'Exam Locked',
@@ -1968,6 +2153,50 @@ const I18n = (() => {
             // Nota galería
             'Las fotos de nuestras actividades se actualizarán regularmente a medida que avanza el año escolar. ¡Síguenos en nuestras redes sociales para ver más momentos!':
                 'Photos from our activities will be updated regularly as the school year progresses. Follow us on social media to see more moments!',
+
+            // ── salon/algebra.html — párrafos ────────────────────────────
+            'Descubre el poder de las variables y las funciones. Visualiza conceptos, resuelve ecuaciones y domina las herramientas del álgebra de forma interactiva.':
+                'Discover the power of variables and functions. Visualize concepts, solve equations and master algebra tools interactively.',
+            'El lenguaje de las matemáticas. Estos son los bloques de construcción esenciales.':
+                'The language of mathematics. These are the essential building blocks.',
+            'Visualiza cómo los parámetros transforman las funciones. Mueve los deslizadores y observa los cambios en tiempo real.':
+                'Visualize how parameters transform functions. Move the sliders and observe changes in real time.',
+            'Herramientas rápidas para resolver problemas comunes y evaluar funciones.':
+                'Quick tools to solve common problems and evaluate functions.',
+
+            // ── salon/estadisticas.html — párrafos ───────────────────────
+            'Una guía interactiva para explorar, visualizar y entender la estadística de una forma nueva y audaz.':
+                'An interactive guide to explore, visualize and understand statistics in a new and bold way.',
+            'Pega tus datos aquí, carga un archivo CSV o usa los datos de ejemplo. La magia comenzará al instante.':
+                'Paste your data here, load a CSV file or use the sample data. The magic will start instantly.',
+
+            // ── salon/finanzas.html — párrafos ───────────────────────────
+            'Aprende a manejar tu dinero de forma inteligente y divertida. Desde crear tu primer presupuesto hasta entender cómo crece tu ahorro, te guiaremos paso a paso.':
+                'Learn to manage your money in a smart and fun way. From creating your first budget to understanding how your savings grow, we will guide you step by step.',
+            'Un presupuesto es un plan para tu dinero. Te ayuda a saber cuánto ganas, cuánto gastas y a dónde va cada peso. ¡Es el primer paso para tomar el control!':
+                'A budget is a plan for your money. It helps you know how much you earn, how much you spend and where every dollar goes. It is the first step to taking control!',
+            'El interés es el costo de pedir dinero prestado, o la ganancia por prestarlo. ¡Entender la diferencia entre simple y compuesto es clave para que tu dinero crezca!':
+                'Interest is the cost of borrowing money, or the gain from lending it. Understanding the difference between simple and compound is key to making your money grow!',
+            'Ahorrar es guardar una parte de tu dinero para el futuro. Con aportes periódicos y el interés compuesto, puedes alcanzar grandes metas.':
+                'Saving is setting aside part of your money for the future. With regular contributions and compound interest, you can reach great goals.',
+            'El crédito te permite comprar algo ahora y pagarlo después, pero casi siempre con intereses. Entender cómo funciona te ayuda a evitar deudas costosas.':
+                'Credit allows you to buy something now and pay later, but almost always with interest. Understanding how it works helps you avoid costly debt.',
+            'La inflación hace que tu dinero pierda valor con el tiempo. Lo que hoy compras con $100, en el futuro costará más. ¡Es importante que tus ahorros crezcan más rápido que la inflación!':
+                'Inflation causes your money to lose value over time. What you buy today with $100 will cost more in the future. It is important that your savings grow faster than inflation!',
+
+            // ── salon/geometria.html — párrafos ──────────────────────────
+            'Explora el fascinante mundo de las formas, el espacio y las medidas de una manera visual e interactiva. Desde los conceptos más básicos hasta cálculos prácticos.':
+                'Explore the fascinating world of shapes, space and measurements in a visual and interactive way. From the most basic concepts to practical calculations.',
+            'Los pilares sobre los que se construye toda la geometría. Entiende estas ideas fundamentales para dominar el resto.':
+                'The pillars on which all geometry is built. Understand these fundamental ideas to master the rest.',
+            'Pasa el cursor o enfoca las figuras para ver sus componentes clave. La geometría cobra vida.':
+                'Hover or focus the figures to see their key components. Geometry comes to life.',
+            'Una introducción a las figuras tridimensionales. Observa sus caras, aristas y vértices en estas ilustraciones isométricas.':
+                'An introduction to three-dimensional figures. Observe their faces, edges and vertices in these isometric illustrations.',
+            'Pon a prueba tus conocimientos. Introduce los datos y obtén resultados precisos al instante.':
+                'Test your knowledge. Enter the data and get precise results instantly.',
+            'Introduce dos valores para hallar el tercero. Deja en blanco el que quieres calcular.':
+                'Enter two values to find the third. Leave blank the one you want to calculate.',
 
             // ── historiamath-examen.html — párrafos ──────────────────────
             'Este examen requiere una clave de acceso proporcionada por el profesor. \n                Una vez iniciado, no podrás salir hasta completarlo.':
