@@ -1,7 +1,8 @@
 // i18n.js — Módulo de traducción ES ↔ EN
 // Aplica a: index.html, historiamath.html, links.html, materiales.html, galeria.html,
 //           club/competencias.html, club/leaderboard.html, club/olimpiadas.html,
-//           club/investigacion.html, club/proyectos-creativos.html, club/registro.html
+//           club/investigacion.html, club/proyectos-creativos.html, club/registro.html,
+//           club/mision-matematica/index.html
 
 const I18n = (() => {
 
@@ -79,6 +80,8 @@ const I18n = (() => {
                 'Registration - Math Olympics',
             'Creador de Proyectos - Prof. Yonatan Guerrero (Versión Mejorada)':
                 'Project Creator - Prof. Yonatan Guerrero (Enhanced Version)',
+            'Misión Matemática - Club de Matemáticas EMTP':
+                'Math Mission - EMTP Mathematics Club',
         }
     };
 
@@ -105,7 +108,11 @@ const I18n = (() => {
                 'Interpreta los resultados obtenidos y su significado...': 'Interpret the results obtained and their meaning...',
                 'Escribe las conclusiones principales de tu investigación...': 'Write the main conclusions of your research...',
                 'Menciona las limitaciones o restricciones de tu investigación...': 'Mention the limitations or restrictions of your research...',
-                'Sugiere posibles líneas de investigación futuras...': 'Suggest possible future lines of research...'
+                'Sugiere posibles líneas de investigación futuras...': 'Suggest possible future lines of research...',
+                // club/mision-matematica — form
+                'Nombre Completo': 'Full Name',
+                'Correo Electrónico': 'Email Address',
+                'Mensaje': 'Message'
             }
         }
     };
@@ -1158,6 +1165,154 @@ const I18n = (() => {
             'Actualiza SUPABASE_CONFIG con tus credenciales':
                 'Update SUPABASE_CONFIG with your credentials',
 
+            // ── club/mision-matematica/index.html ───────────────────────
+            // Loader
+            'Iniciando Misión...':            'Starting Mission...',
+
+            // Navbar
+            'Nuestra Misión':                 'Our Mission',
+            'Actividades':                    'Activities',
+            'Objetivos':                      'Goals',
+            'Recursos':                       'Resources',
+            'Contacto':                       'Contact',
+
+            // Hero
+            'Bienvenidos a la Aventura Matemática': 'Welcome to the Mathematical Adventure',
+            'Fomentar la excelencia matemática y el pensamiento crítico':
+                'Fostering mathematical excellence and critical thinking',
+            'Competencias/Año':               'Competitions/Year',
+            '% Meta Mejora':                  '% Improvement Goal',
+            'Comenzar la Misión':             'Start the Mission',
+
+            // Misión y Visión
+            'Misión y Visión':                'Mission and Vision',
+            'Nuestra Visión':                 'Our Vision',
+            'Nuestros Propósitos':            'Our Purposes',
+            'Complementar':                   'Complement',
+            'Competir':                       'Compete',
+            'Colaborar':                      'Collaborate',
+            'Fortalecer':                     'Strengthen',
+
+            // Actividades
+            'Plan de Actividades 2024-2025':  'Activity Plan 2024-2025',
+            'Actividades Semanales Regulares':'Regular Weekly Activities',
+            'Martes':                         'Tuesday',
+            'Jueves':                         'Thursday',
+            'Viernes Alternos':               'Alternating Fridays',
+            'Sesiones de Resolución de Problemas': 'Problem-Solving Sessions',
+            'Talleres de Investigación':      'Research Workshops',
+            'Círculos Matemáticos':           'Math Circles',
+            'Calendario Anual de Eventos':    'Annual Calendar of Events',
+
+            // Timeline
+            'Agosto-Septiembre: Inducción':   'August-September: Induction',
+            'Formación Inicial':              'Initial Training',
+            'Octubre: Primera Competencia':   'October: First Competition',
+            'Noviembre: Gira Educativa':      'November: Educational Tour',
+            'Experiencia Universitaria':      'University Experience',
+            'Diciembre: Cierre Primer Semestre': 'December: First Semester Closure',
+            'Evaluación y Reconocimientos':   'Evaluation and Recognition',
+            'Enero-Febrero: Investigación Avanzada': 'January-February: Advanced Research',
+            'Proyectos de Investigación':     'Research Projects',
+            'Marzo: Semana de las Matemáticas': 'March: Mathematics Week',
+            'Evento Especial':                'Special Event',
+            'Abril: Segunda Competencia':     'April: Second Competition',
+            'Competencia Regional':           'Regional Competition',
+            'Mayo: Cierre Año Escolar':       'May: End of School Year',
+            'Culminación':                    'Culmination',
+
+            // Objetivos
+            'Objetivos del Club':             'Club Goals',
+            'Nuestras Metas para 2024-2025':  'Our Goals for 2024-2025',
+            'Objetivos Específicos':          'Specific Goals',
+            'Sesiones de Práctica':           'Practice Sessions',
+            'Semanal':                        'Weekly',
+            'Semestral':                      'Semester',
+            'Anual':                          'Annual',
+            '3 al año':                       '3 per year',
+            '⭐ Principal':                   '⭐ Main',
+            'Competencias Matemáticas':       'Math Competitions',
+            'Giras Educativas':               'Educational Tours',
+            'Semana de las Matemáticas':      'Mathematics Week',
+            'Marzo':                          'March',
+            // Lista de items
+            'Problemas de olimpiadas':        'Olympiad problems',
+            'Técnicas de demostración':       'Proof techniques',
+            'Razonamiento lógico':            'Logical reasoning',
+            'Competencia interna (Octubre)':  'Internal Competition (October)',
+            'Competencia regional (Abril)':   'Regional Competition (April)',
+            'Simulacros continuos':           'Continuous mock exams',
+            'Análisis de estrategias':        'Strategy analysis',
+            'Software matemático':            'Math software',
+            'Presentaciones científicas':     'Scientific presentations',
+            'Visita a UPR Río Piedras':       'Visit to UPR Río Piedras',
+            'Charlas con profesores':         'Talks with professors',
+            'Orientación de carreras':        'Career guidance',
+            'Juegos matemáticos':             'Math games',
+            'Reto Matemático escolar':        'School Math Challenge',
+            'Día de π (3/14)':               'Pi Day (3/14)',
+            'Feria de proyectos':             'Project fair',
+
+            // Galería de Momentos
+            'Galería de Momentos':            'Gallery of Moments',
+            'Competencia Interna':            'Internal Competition',
+            'Competencia de Octubre':         'October Competition',
+            'Gira UPR':                       'UPR Tour',
+            'Visita a Universidad de PR':     'Visit to University of PR',
+            'Celebración de π (3/14)':        'Celebration of π (3/14)',
+            'Talleres':                       'Workshops',
+            'Presentaciones Científicas':     'Scientific Presentations',
+            'Reconocimientos':                'Recognitions',
+            'Ceremonia de Premios':           'Awards Ceremony',
+
+            // Recursos
+            'Recursos Educativos':            'Educational Resources',
+            'Biblioteca Virtual':             'Virtual Library',
+            'Laboratorios Interactivos':      'Interactive Labs',
+            'Videoconferencias':              'Video Conferences',
+            'Banco de Problemas':             'Problem Bank',
+            'Calculadoras y Simuladores':     'Calculators and Simulators',
+            'Foro de Discusión':              'Discussion Forum',
+            'Acceder →':                      'Access →',
+            'Explorar →':                     'Explore →',
+            'Ver →':                          'Watch →',
+            'Practicar →':                    'Practice →',
+            'Usar →':                         'Use →',
+            'Unirse →':                       'Join →',
+
+            // Contacto
+            'Contáctanos':                    'Contact Us',
+            '¿Listo para Unirte?':            'Ready to Join?',
+            'Ubicación':                      'Location',
+            'Coordinador':                    'Coordinator',
+            'Horario':                        'Schedule',
+            'Año Escolar':                    'School Year',
+            'Envíanos un Mensaje':            'Send Us a Message',
+            'Nombre Completo':                'Full Name',
+            'Correo Electrónico':             'Email Address',
+            'Grado Escolar':                  'School Grade',
+            'Selecciona tu grado':            'Select your grade',
+            'Séptimo':                        'Seventh',
+            'Octavo':                         'Eighth',
+            'Noveno':                         'Ninth',
+            'Décimo':                         'Tenth',
+            'Undécimo':                       'Eleventh',
+            'Duodécimo':                      'Twelfth',
+            'Enviar Mensaje':                 'Send Message',
+
+            // Footer
+            'Club de Matemáticas':            'Mathematics Club',
+            'Año Escolar 2024-2025':          'School Year 2024-2025',
+            'Horario:':                       'Schedule:',
+            'Mar-Jue: 2:30-4:00 PM':         'Tue-Thu: 2:30-4:00 PM',
+            'Vie (alternos): 2:30-4:00 PM':  'Fri (alternating): 2:30-4:00 PM',
+            'Enlaces Rápidos':                'Quick Links',
+            'Síguenos':                       'Follow Us',
+            '© 2026 Misión Matemática — Todos los derechos reservados':
+                '© 2026 Math Mission — All rights reserved',
+            'Diseñado con ❤️ para el aprendizaje matemático':
+                'Designed with ❤️ for mathematical learning',
+
             // ── galeria.html ────────────────────────────────────────────
             'Galería de Proyectos':           'Project Gallery',
             'Exposición de los trabajos creativos de nuestros estudiantes':
@@ -1447,6 +1602,106 @@ const I18n = (() => {
                 'Analyze results, document process and draw conclusions.',
             'Preparar presentación, crear materiales visuales y practicar exposición.':
                 'Prepare presentation, create visual materials and practice the presentation.',
+
+            // ── club/mision-matematica/index.html — Párrafos ────────────
+            // Misión y Visión
+            'Fomentar la excelencia matemática y el pensamiento crítico entre los estudiantes de décimo grado mediante experiencias educativas enriquecedoras que trasciendan el currículo tradicional. Nuestro club se compromete a cultivar una comunidad de aprendizaje colaborativo donde cada estudiante desarrolle confianza en sus habilidades matemáticas, descubra aplicaciones prácticas de las matemáticas en la vida cotidiana, y se prepare para competir exitosamente en olimpiadas y concursos académicos a nivel local, regional y nacional.':
+                'To foster mathematical excellence and critical thinking among tenth grade students through enriching educational experiences that transcend the traditional curriculum. Our club is committed to cultivating a collaborative learning community where every student builds confidence in their mathematical abilities, discovers practical applications of mathematics in everyday life, and prepares to compete successfully in olympiads and academic contests at local, regional, and national levels.',
+            'Ser reconocidos como el club de matemáticas líder en nuestra región, donde los estudiantes no solo dominan conceptos matemáticos avanzados, sino que también desarrollan pasión por la investigación matemática y la resolución creativa de problemas. Aspiramos a formar futuros profesionales en carreras STEM que contribuyan significativamente al desarrollo científico y tecnológico de Puerto Rico, manteniendo siempre los valores de integridad académica, trabajo en equipo y perseverancia.':
+                'To be recognized as the leading mathematics club in our region, where students not only master advanced mathematical concepts but also develop a passion for mathematical research and creative problem solving. We aspire to train future professionals in STEM careers who contribute significantly to the scientific and technological development of Puerto Rico, always upholding the values of academic integrity, teamwork, and perseverance.',
+            // Propósitos cards
+            'Enriquecer la educación matemática formal con actividades extracurriculares que desafíen y motiven a los estudiantes':
+                'Enrich formal mathematics education with extracurricular activities that challenge and motivate students',
+            'Preparar a los estudiantes para participar en competencias matemáticas regionales, nacionales e internacionales':
+                'Prepare students to participate in regional, national, and international mathematics competitions',
+            'Desarrollar habilidades de investigación matemática y metodología científica en el análisis de problemas complejos':
+                'Develop mathematical research skills and scientific methodology in the analysis of complex problems',
+            'Promover el aprendizaje colaborativo y el intercambio de estrategias de resolución de problemas entre pares':
+                'Promote collaborative learning and the exchange of problem-solving strategies among peers',
+            'Desarrollar autoconfianza y motivación de los estudiantes hacia las matemáticas y las ciencias':
+                'Develop student self-confidence and motivation toward mathematics and science',
+
+            // Actividades semanales
+            'Práctica intensiva con problemas de olimpiadas matemáticas, estrategias heurísticas y técnicas de demostración':
+                'Intensive practice with mathematical olympiad problems, heuristic strategies, and proof techniques',
+            'Desarrollo de proyectos de investigación, análisis de datos, uso de software matemático (GeoGebra, Desmos) y preparación de presentaciones científicas':
+                'Development of research projects, data analysis, use of mathematical software (GeoGebra, Desmos) and preparation of scientific presentations',
+            'Exploración de temas matemáticos avanzados, paradojas, historia de las matemáticas y aplicaciones contemporáneas':
+                'Exploration of advanced mathematical topics, paradoxes, history of mathematics, and contemporary applications',
+
+            // Timeline de eventos
+            'Sesión de bienvenida e inscripción. Talleres introductorios de estrategias de resolución de problemas y metodología de investigación matemática':
+                'Welcome session and enrollment. Introductory workshops on problem-solving strategies and mathematical research methodology',
+            'Competencia interna de resolución de problemas. Sesiones intensivas de preparación y simulacros de exámenes competitivos':
+                'Internal problem-solving competition. Intensive preparation sessions and competitive exam mock tests',
+            'Visita a la Universidad de Puerto Rico, Recinto de Río Piedras. Interacción con profesores del Departamento de Matemáticas. Charlas sobre carreras STEM':
+                'Visit to the University of Puerto Rico, Río Piedras campus. Interaction with professors from the Department of Mathematics. Talks on STEM careers',
+            'Presentación de proyectos de investigación del primer semestre. Evaluación y retroalimentación de actividades. Reconocimientos a participantes destacados':
+                'Presentation of first semester research projects. Evaluation and feedback on activities. Recognition of outstanding participants',
+            'Inicio de proyectos de investigación del segundo semestre. Mentoría en metodología científica. Desarrollo de hipótesis y diseño experimental':
+                'Start of second semester research projects. Mentoring in scientific methodology. Hypothesis development and experimental design',
+            'Celebración especial con actividades diarias: juegos matemáticos, exposiciones, charlas de matemáticos invitados, competencia escolar \'Reto Matemático\', día de π (3/14), y feria de proyectos':
+                'Special celebration with daily activities: math games, exhibitions, talks by guest mathematicians, school competition \'Math Challenge\', Pi Day (3/14), and project fair',
+            'Participación en competencia regional de matemáticas. Preparación intensiva y simulacros. Análisis post-competencia y áreas de mejora':
+                'Participation in regional mathematics competition. Intensive preparation and mock tests. Post-competition analysis and areas for improvement',
+            'Simposio final de investigaciones. Ceremonia de reconocimientos y certificados. Evaluación del impacto del club y planificación para el próximo año':
+                'Final research symposium. Awards and certificates ceremony. Evaluation of club impact and planning for next year',
+
+            // Objetivos del club
+            'Incrementar el rendimiento académico en matemáticas de los estudiantes participantes':
+                'Increase the academic performance in mathematics of participating students',
+            'Participar en al menos tres competencias matemáticas durante el año escolar':
+                'Participate in at least three mathematics competitions during the school year',
+            'Resolver problemas no rutinarios y desarrollar estrategias heurísticas':
+                'Solve non-routine problems and develop heuristic strategies',
+            'Preparación intensiva para competir exitosamente':
+                'Intensive preparation to compete successfully',
+            'Proyectos que conectan teoría con aplicaciones del mundo real':
+                'Projects connecting theory with real-world applications',
+            'Exposición a carreras STEM y ambiente universitario':
+                'Exposure to STEM careers and university environment',
+            'Celebración especial con múltiples actividades':
+                'Special celebration with multiple activities',
+
+            // Galería
+            'Capturando los mejores momentos de nuestras actividades matemáticas':
+                'Capturing the best moments of our mathematical activities',
+            'Estudiantes demostrando sus habilidades de resolución de problemas':
+                'Students demonstrating their problem-solving skills',
+            'Explorando carreras STEM y conociendo profesores':
+                'Exploring STEM careers and meeting professors',
+            'Actividades especiales y juegos matemáticos':
+                'Special activities and math games',
+            'Trabajo colaborativo en problemas desafiantes':
+                'Collaborative work on challenging problems',
+            'Estudiantes mostrando sus investigaciones matemáticas':
+                'Students showcasing their mathematical research',
+            'Celebrando los logros de nuestros participantes':
+                'Celebrating the achievements of our participants',
+
+            // Recursos
+            'Acceso a libros, artículos y material didáctico de matemáticas':
+                'Access to books, articles and teaching materials on mathematics',
+            'Herramientas digitales para visualización y experimentación matemática':
+                'Digital tools for mathematical visualization and experimentation',
+            'Grabaciones de talleres, conferencias y sesiones especiales':
+                'Recordings of workshops, conferences and special sessions',
+            'Colección curada de problemas por nivel y tema matemático':
+                'Curated collection of problems by level and mathematical topic',
+            'Herramientas computacionales para cálculos complejos':
+                'Computational tools for complex calculations',
+            'Espacio para compartir dudas, soluciones y descubrimientos':
+                'Space to share questions, solutions and discoveries',
+
+            // Contacto
+            'El Club de Matemáticas Misión Matemática está abierto a todos los estudiantes de décimo grado apasionados por los números y el razonamiento lógico. No importa tu nivel actual, ¡lo que cuenta es tu curiosidad y determinación!':
+                'The Misión Matemática Math Club is open to all tenth grade students passionate about numbers and logical reasoning. No matter your current level, what counts is your curiosity and determination!',
+            'Martes y Jueves: 2:30 - 4:00 PM':  'Tuesday and Thursday: 2:30 - 4:00 PM',
+            'Viernes alternos: 2:30 - 4:00 PM': 'Alternating Fridays: 2:30 - 4:00 PM',
+
+            // Nota galería
+            'Las fotos de nuestras actividades se actualizarán regularmente a medida que avanza el año escolar. ¡Síguenos en nuestras redes sociales para ver más momentos!':
+                'Photos from our activities will be updated regularly as the school year progresses. Follow us on social media to see more moments!',
         }
     };
 
