@@ -156,9 +156,9 @@
             <div id="info-content"></div>
             <div id="controls-info">
                 <strong>Controles:</strong>
-                <span>- <b>Arrastrar:</b> Rotar</span><br>
-                <span>- <b>Rueda:</b> Zoom</span><br>
-                <span>- <b>Click derecho:</b> Mover</span>
+                <span>Arrastrar: Rotar</span><br>
+                <span>Rueda: Zoom</span><br>
+                <span>Click derecho: Mover</span>
             </div>
         </div>
         <div id="scene-container"></div>
@@ -314,6 +314,13 @@
             }
         }
         
+        function reapplyI18n() {
+            if (window.I18n && I18n.getCurrentLang() !== 'es') {
+                // Two rAFs: first lets CSS2DRenderer add labels to DOM, second translates them
+                requestAnimationFrame(() => requestAnimationFrame(() => I18n.setLanguage(I18n.getCurrentLang())));
+            }
+        }
+
         function switchCategory(category) {
             clearScene();
             updateInfoPanel(null);
@@ -323,6 +330,7 @@
             isAnimatingCamera = true;
             if (category === 'fractals') createFractal();
             else createFigures(category);
+            reapplyI18n();
         }
 
         function createFigures(category) {
@@ -579,6 +587,7 @@
         }
 
         init();
+        reapplyI18n(); // Translate 3D labels created by deferred module after i18n.init()
     </script>
     <script src="../js/i18n.js"></script>
     <script>I18n.init();</script>
