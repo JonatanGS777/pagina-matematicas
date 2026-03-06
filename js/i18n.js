@@ -1531,11 +1531,70 @@ const I18n = (() => {
             'Selecciona una categoría para explorar las figuras.': 'Select a category to explore the figures.',
             'Poliedros':                      'Polyhedrons',
             'Cuerpos Redondos':               'Round Bodies',
+            'Figuras 2D':                     '2D Figures',
             'Fractales':                      'Fractals',
             'Controles:':                     'Controls:',
             'Arrastrar: Rotar':               'Drag: Rotate',
             'Rueda: Zoom':                    'Scroll: Zoom',
             'Click derecho: Mover':           'Right click: Pan',
+            // Figure names (static labels + dynamic panel h2)
+            'Cubo':                           'Cube',
+            'Tetraedro':                      'Tetrahedron',
+            'Octaedro':                       'Octahedron',
+            'Dodecaedro':                     'Dodecahedron',
+            'Icosaedro':                      'Icosahedron',
+            'Esfera':                         'Sphere',
+            'Cilindro':                       'Cylinder',
+            'Toro (Dona)':                    'Torus (Donut)',
+            'Nudo de Toro':                   'Torus Knot',
+            'Cápsula':                        'Capsule',
+            'Cuadrado':                       'Square',
+            'Círculo':                        'Circle',
+            'Anillo':                         'Ring',
+            'Hexágono':                       'Hexagon',
+            'Estrella':                       'Star',
+            'Fractal de Sierpinski':          'Sierpinski Fractal',
+            // Dynamic panel elements
+            'Sabías que...':                  'Did you know...',
+            'Fórmulas':                       'Formulas',
+            'Explosionar Vista':              'Explode View',
+            'Reconstruir Vista':              'Reconstruct View',
+            'Modo Esqueleto':                 'Wireframe Mode',
+            'Modo Sólido':                    'Solid Mode',
+            'Grosor':                         'Thickness',
+            // Fun facts (text nodes after <b>)
+            'El Cubo de Rubik tiene más de 43 quintillones de permutaciones posibles.':
+                "Rubik's Cube has more than 43 quintillion possible permutations.",
+            'Es la estructura del diamante a nivel molecular.':
+                'It is the structure of diamond at the molecular level.',
+            'Algunos cristales como la fluorita crecen naturalmente en forma de octaedros.':
+                'Some crystals like fluorite grow naturally in the shape of octahedra.',
+            'Platón lo asociaba con el universo o el cosmos.':
+                'Plato associated it with the universe or cosmos.',
+            'Muchos virus, como el del resfriado común, tienen forma de icosaedro.':
+                'Many viruses, like the common cold, are shaped like icosahedra.',
+            'Es la forma que minimiza la superficie para un volumen dado.':
+                'It is the shape that minimizes surface area for a given volume.',
+            'Las latas de refresco son un ejemplo común de cilindros en la vida diaria.':
+                'Soda cans are a common example of cylinders in daily life.',
+            'El universo podría tener forma de un toro tridimensional.':
+                'The universe could be shaped like a three-dimensional torus.',
+            'Se usa a menudo en gráficos por computadora para probar materiales y luces.':
+                'It is often used in computer graphics to test materials and lighting.',
+            'Esta forma es común en píldoras y farmacéuticos por su facilidad para tragar.':
+                'This shape is common in pills and pharmaceuticals for ease of swallowing.',
+            'Es una de las formas más utilizadas en el arte del pixel art.':
+                'It is one of the most widely used shapes in pixel art.',
+            'El número Pi (π) es fundamental para calcular su área y perímetro.':
+                'The number Pi (π) is fundamental for calculating its area and perimeter.',
+            'Los anillos de Saturno están compuestos por miles de millones de anillos más pequeños.':
+                "Saturn's rings are composed of billions of smaller rings.",
+            'Las abejas construyen sus panales con celdas hexagonales, la forma más eficiente de almacenar miel.':
+                'Bees build their honeycombs with hexagonal cells, the most efficient shape for storing honey.',
+            'La estrella de cinco puntas es un símbolo con profundos significados en muchas culturas.':
+                'The five-pointed star is a symbol with deep meaning in many cultures.',
+            'Los fractales se encuentran en la naturaleza, como en los copos de nieve y los helechos.':
+                'Fractals are found in nature, such as in snowflakes and ferns.',
 
             // ── lab/juegos.html ──────────────────────────────────────────
             '⚡ Competencia Matemática en Tiempo Real ⚡': '⚡ Real-Time Math Competition ⚡',
@@ -2512,6 +2571,49 @@ const I18n = (() => {
             // Key metrics group (plain text part of MathJax paragraphs)
             'Para el caso general ($y_0 \\ge 0$), resolvemos $y(t)=0$ usando la fórmula cuadrática:':
                 'For the general case ($y_0 \\ge 0$), we solve $y(t)=0$ using the quadratic formula:',
+
+            // ── lab/figuras.html — párrafos (panel dinámico) ──────────────
+            // Polyhedron descriptions
+            'Un hexaedro regular con 6 caras cuadradas.':
+                'A regular hexahedron with 6 square faces.',
+            'Un poliedro con 4 caras triangulares.':
+                'A polyhedron with 4 triangular faces.',
+            'Un poliedro con 8 caras triangulares.':
+                'A polyhedron with 8 triangular faces.',
+            'Un poliedro con 12 caras pentagonales.':
+                'A polyhedron with 12 pentagonal faces.',
+            'Un poliedro con 20 caras triangulares.':
+                'A polyhedron with 20 triangular faces.',
+            // Round bodies descriptions
+            'Una superficie perfectamente redonda.':
+                'A perfectly round surface.',
+            'Tiene 2 caras circulares planas y una cara curva.':
+                'Has 2 flat circular faces and one curved face.',
+            'Una figura generada al girar un círculo alrededor de un eje.':
+                'A figure generated by rotating a circle around an axis.',
+            'Una forma más compleja de toro anudado.':
+                'A more complex form of knotted torus.',
+            'Un cilindro con dos hemisferios en los extremos.':
+                'A cylinder with two hemispheres at the ends.',
+            // 2D figures descriptions
+            'Figura plana con 4 lados iguales.':
+                'Flat figure with 4 equal sides.',
+            'Una forma redonda sin esquinas ni lados.':
+                'A round shape with no corners or sides.',
+            'El área entre dos círculos concéntricos.':
+                'The area between two concentric circles.',
+            'Un polígono de seis lados y seis vértices.':
+                'A polygon with six sides and six vertices.',
+            'Un polígono con picos que irradian desde un centro.':
+                'A polygon with points radiating from a center.',
+            // Fractal description
+            'Un fractal es un objeto geométrico cuya estructura básica se repite a diferentes escalas.':
+                'A fractal is a geometric object whose basic structure repeats at different scales.',
+            // Plain-text formula entries
+            'Sus fórmulas son muy complejas y se basan en ecuaciones paramétricas.':
+                'Its formulas are very complex and are based on parametric equations.',
+            'El cálculo de su área depende del tipo de estrella.':
+                'The calculation of its area depends on the type of star.',
 
             // ── lab/simulaciones.html — párrafos ─────────────────────────
             'En 1202, Leonardo de Pisa (conocido como Fibonacci) planteó un problema fascinante: \n                ¿Cuántas parejas de conejos se producirían en un año si cada pareja madura da lugar \n                a una nueva pareja cada mes, y las crías tardan un mes en madurar? Este modelo \n                matemático revela uno de los patrones más hermosos de la naturaleza.':

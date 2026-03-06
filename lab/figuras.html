@@ -476,6 +476,10 @@
                     }
                     infoContent.classList.add('visible');
                     addInteractiveListeners(data);
+                    // Re-apply i18n to newly injected content
+                    if (window.I18n && I18n.getCurrentLang() !== 'es') {
+                        I18n.setLanguage(I18n.getCurrentLang());
+                    }
                 } else {
                     infoContent.innerHTML = '';
                 }
@@ -505,14 +509,26 @@
         function toggleExplosion() {
             if (!selectedObject) return;
             isExploded = !isExploded;
-            document.getElementById('explode-btn').textContent = isExploded ? 'Reconstruir Vista' : 'Explosionar Vista';
+            const lang = window.I18n ? I18n.getCurrentLang() : 'es';
+            const labels = {
+                es: { on: 'Reconstruir Vista', off: 'Explosionar Vista' },
+                en: { on: 'Reconstruct View',  off: 'Explode View' }
+            };
+            const t = labels[lang] || labels.es;
+            document.getElementById('explode-btn').textContent = isExploded ? t.on : t.off;
         }
-        
+
         function toggleWireframe() {
             if (!selectedObject) return;
             isWireframe = !isWireframe;
             selectedObject.material = isWireframe ? selectedObject.userData.wireframeMaterial : selectedObject.userData.originalMaterial;
-            document.getElementById('wireframe-btn').textContent = isWireframe ? 'Modo Sólido' : 'Modo Esqueleto';
+            const lang = window.I18n ? I18n.getCurrentLang() : 'es';
+            const labels = {
+                es: { on: 'Modo Sólido',   off: 'Modo Esqueleto' },
+                en: { on: 'Solid Mode',    off: 'Wireframe Mode' }
+            };
+            const t = labels[lang] || labels.es;
+            document.getElementById('wireframe-btn').textContent = isWireframe ? t.on : t.off;
         }
 
         function animate() {
