@@ -1850,10 +1850,10 @@ const I18n = (() => {
         const btn = document.getElementById('lang-toggle');
         if (!btn) return;
         if (lang === 'en') {
-            btn.innerHTML = '🇵🇷 ES';
+            btn.innerHTML = 'ES';
             btn.title = 'Cambiar a Español';
         } else {
-            btn.innerHTML = '🇺🇸 EN';
+            btn.innerHTML = 'EN';
             btn.title = 'Switch to English';
         }
     }
