@@ -1475,9 +1475,56 @@ const I18n = (() => {
             'Laboratorio Experimental':       'Experimental Laboratory',
             'ContextoMath':                   'MathContext',
             'Laboratorio':                    'Laboratory',
+            // Cards
+            'Finanzas Personales':            'Personal Finance',
+            'Balanza Algebraica':             'Algebraic Balance',
+            'Círculo Unitario':               'Unit Circle',
+            'Explorar Módulo':                'Explore Module',
+            // Card features — Finanzas
+            'Gráficas comparativas interactivas': 'Interactive comparative charts',
+            'Tabla de crecimiento año por año': 'Year-by-year growth table',
+            'Fórmulas matemáticas explicadas': 'Explained mathematical formulas',
+            'Simulación en tiempo real':       'Real-time simulation',
+            // Card features — Álgebra
+            'Balanza interactiva visual':      'Visual interactive balance',
+            'Operaciones paso a paso':         'Step-by-step operations',
+            'Bloques para variables y constantes': 'Blocks for variables and constants',
+            'Registro de pasos algebraicos':   'Algebraic steps log',
+            // Card features — Geometría
+            'Círculo unitario interactivo':    'Interactive unit circle',
+            'Valores trigonométricos en tiempo real': 'Real-time trigonometric values',
+            'Visualización de ángulos':        'Angle visualization',
+            'Triángulo rectángulo dinámico':   'Dynamic right triangle',
+            // Modal headers
             'Simulador de Finanzas Personales': 'Personal Finance Simulator',
             'Balanza Algebraica Interactiva': 'Interactive Algebraic Balance',
             'Explorador del Círculo Unitario': 'Unit Circle Explorer',
+            // Finanzas modal controls
+            'Parámetros de Inversión':         'Investment Parameters',
+            'Monto Inicial ($)':               'Initial Amount ($)',
+            'Tasa de Interés Anual (%)':       'Annual Interest Rate (%)',
+            'Tiempo (años)':                   'Time (years)',
+            'Calcular y Comparar':             'Calculate and Compare',
+            'Fórmulas':                        'Formulas',
+            'Comparación Visual':              'Visual Comparison',
+            // Álgebra modal controls
+            'Configurar Ecuación':             'Set Up Equation',
+            'Ecuación (formato: 2x+3=9)':      'Equation (format: 2x+3=9)',
+            'Configurar Balanza':              'Set Up Balance',
+            'Sumar':                           'Add',
+            'Restar':                          'Subtract',
+            'Multiplicar':                     'Multiply',
+            'Dividir':                         'Divide',
+            'Valor para operación':            'Value for operation',
+            'Reiniciar':                       'Reset',
+            'Balanza Visual':                  'Visual Balance',
+            'Pasos de Solución':               'Solution Steps',
+            // Geometría modal controls
+            'Control de Ángulo':               'Angle Control',
+            'Ángulo (grados):':                'Angle (degrees):',
+            'Ángulo exacto (grados)':          'Exact angle (degrees)',
+            'Conversión':                      'Conversion',
+            'Animación Completa':              'Full Animation',
 
             // ── lab/figuras.html ─────────────────────────────────────────
             'Geometría Interactiva':          'Interactive Geometry',
@@ -1529,10 +1576,40 @@ const I18n = (() => {
             // ── lab/simulaciones.html ────────────────────────────────────
             'Modelo de Reproducción de Conejos': 'Rabbit Reproduction Model',
             'Sucesión de Fibonacci':          'Fibonacci Sequence',
-            'Iniciar Simulación':             'Start Simulation',
-            'Pausar Física':                  'Pause Physics',
-            'Meses de Simulación':            'Simulation Months',
+            // Controls
+            'Número de Meses:':               'Number of Months:',
             'Velocidad de Animación':         'Animation Speed',
+            'Iniciar Simulación':             'Start Simulation',
+            'Reiniciar':                      'Reset',
+            'Modo Avanzado':                  'Advanced Mode',
+            // Advanced mode
+            'Parámetros Personalizados':      'Custom Parameters',
+            'Tiempo de Madurez (meses)':      'Maturity Time (months)',
+            'Crías por Pareja':               'Offspring per Pair',
+            'Freq. Reproducción (meses)':     'Reproduction Freq. (months)',
+            // Formula & sections
+            'Fórmula Matemática':             'Mathematical Formula',
+            'Evolución por Meses':            'Monthly Evolution',
+            '💧 Visualización de Burbujas':   '💧 Bubble Visualization',
+            'Visualización de Parejas':       'Pair Visualization',
+            '🌀 Espiral de Fibonacci':        '🌀 Fibonacci Spiral',
+            'Tabla de Datos':                 'Data Table',
+            // Bubble controls
+            'Gravedad:':                      'Gravity:',
+            'Fricción:':                      'Friction:',
+            'Rebote:':                        'Bounce:',
+            'Pausar Física':                  'Pause Physics',
+            // Spiral controls
+            'Espiral Dorada':                 'Golden Spiral',
+            'Mandala':                        'Mandala',
+            'Gráfico Polar':                  'Polar Chart',
+            'Escala:':                        'Scale:',
+            'Rotación:':                      'Rotation:',
+            'Conectar:':                      'Connect:',
+            'Animar Espiral':                 'Animate Spiral',
+            // Export
+            'Descargar CSV':                  'Download CSV',
+            'Descargar JSON':                 'Download JSON',
 
             // ── lab/modulos/ — común ─────────────────────────────────────
             'Volver al Menú':                 'Back to Menu',
@@ -2397,6 +2474,22 @@ const I18n = (() => {
             // Submit section
             '¡Respuestas enviadas exitosamente! El PDF se ha generado y guardado.':
                 'Answers submitted successfully! The PDF has been generated and saved.',
+
+            // ── lab/simulaciones.html — párrafos ─────────────────────────
+            'En 1202, Leonardo de Pisa (conocido como Fibonacci) planteó un problema fascinante: \n                ¿Cuántas parejas de conejos se producirían en un año si cada pareja madura da lugar \n                a una nueva pareja cada mes, y las crías tardan un mes en madurar? Este modelo \n                matemático revela uno de los patrones más hermosos de la naturaleza.':
+                'In 1202, Leonardo of Pisa (known as Fibonacci) posed a fascinating problem: How many pairs of rabbits would be produced in a year if each mature pair gives rise to a new pair each month, and the young take a month to mature? This mathematical model reveals one of the most beautiful patterns in nature.',
+            'Donde F(0) = 0, F(1) = 1, y cada término es la suma de los dos anteriores':
+                'Where F(0) = 0, F(1) = 1, and each term is the sum of the two previous ones',
+
+            // ── lab/experimentos.html — párrafos ──────────────────────────
+            'Explora las matemáticas a través de simulaciones interactivas y experimentos virtuales. Cada módulo está diseñado para hacer tangibles los conceptos abstractos.':
+                'Explore mathematics through interactive simulations and virtual experiments. Each module is designed to make abstract concepts tangible.',
+            'Simulador comparativo de interés simple y compuesto con visualizaciones gráficas interactivas.':
+                'Comparative simulator of simple and compound interest with interactive graphical visualizations.',
+            'Visualización interactiva de ecuaciones algebraicas usando una balanza virtual.':
+                'Interactive visualization of algebraic equations using a virtual balance.',
+            'Explorador interactivo del círculo unitario con funciones trigonométricas dinámicas.':
+                'Interactive explorer of the unit circle with dynamic trigonometric functions.',
         }
     };
 
