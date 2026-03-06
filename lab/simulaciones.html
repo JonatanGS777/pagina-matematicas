@@ -646,6 +646,9 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
+            <button id="lang-toggle" aria-label="Switch language"
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')"
+                style="position:absolute;top:1rem;right:1rem;">EN</button>
             <h1>🐇 Modelo de Reproducción de Conejos</h1>
             <p class="subtitle">Sucesión de Fibonacci</p>
             <p class="description">
@@ -1902,5 +1905,7 @@
             easing: 'easeOutExpo'
         });
     </script>
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>

@@ -1321,6 +1321,8 @@
             Matemáticas Digitales
         </a>
         
+        <button id="lang-toggle" aria-label="Switch language"
+            onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
         <!-- Botón hamburguesa para móvil -->
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
             <span class="hamburger-line"></span>
@@ -2108,5 +2110,7 @@ function enhanceAccessibility() {
 setTimeout(enhanceAccessibility, 500);
 </script>
 
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>

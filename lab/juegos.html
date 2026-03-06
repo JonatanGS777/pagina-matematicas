@@ -502,7 +502,9 @@
 ═══════════════════════════════════════════ -->
 <div id="scr-welcome" class="scr on">
     <div class="welcome-wrap">
-
+        <button id="lang-toggle" aria-label="Switch language"
+            onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')"
+            style="position:absolute;top:1rem;right:1rem;">EN</button>
         <div>
             <h1 class="title-main">MATH<br>ARENA</h1>
             <p class="title-sub">⚡ Competencia Matemática en Tiempo Real ⚡</p>
@@ -1565,5 +1567,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 })();
 </script>
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>

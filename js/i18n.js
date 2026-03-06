@@ -6,7 +6,11 @@
 //           contexto/historiamath-examen.html, contexto/historiamath-preguntas.html,
 //           contexto/profesor-dashboard.html,
 //           salon/algebra.html, salon/estadisticas.html, salon/finanzas.html,
-//           salon/geometria.html
+//           salon/geometria.html,
+//           lab/experimentos.html, lab/figuras.html, lab/juegos.html,
+//           lab/proyectiles.html, lab/simulaciones.html,
+//           lab/modulos/datos.html, lab/modulos/fisica.html,
+//           lab/modulos/geometrico.html, lab/modulos/optimizacion.html
 
 const I18n = (() => {
 
@@ -86,6 +90,25 @@ const I18n = (() => {
                 'Project Creator - Prof. Yonatan Guerrero (Enhanced Version)',
             'Misión Matemática - Club de Matemáticas EMTP':
                 'Math Mission - EMTP Mathematics Club',
+            // lab/
+            'Laboratorio de Experimentos - Matemáticas Digitales':
+                'Experiments Laboratory - Digital Mathematics',
+            'Laboratorio de Geometría 3D Interactivo':
+                'Interactive 3D Geometry Laboratory',
+            'MATH ARENA — Competencia Multijugador':
+                'MATH ARENA — Multiplayer Competition',
+            'Laboratorio de Proyectiles | Física Interactiva':
+                'Projectile Laboratory | Interactive Physics',
+            'Modelo de Reproducción de Conejos - Sucesión de Fibonacci':
+                'Rabbit Reproduction Model - Fibonacci Sequence',
+            'Modelado de Datos Reales - Laboratorio de Matemáticas':
+                'Real Data Modeling - Mathematics Laboratory',
+            'Fenómenos Físicos - Laboratorio de Matemáticas':
+                'Physical Phenomena - Mathematics Laboratory',
+            'Modelado Geométrico - Laboratorio de Matemáticas':
+                'Geometric Modeling - Mathematics Laboratory',
+            'Optimización Matemática - Laboratorio de Matemáticas':
+                'Mathematical Optimization - Mathematics Laboratory',
             // salon/
             'Álgebra Moderna — Funciones, Gráficas y Calculadoras':
                 'Modern Algebra — Functions, Graphs and Calculators',
@@ -1447,6 +1470,139 @@ const I18n = (() => {
             'Proyecto Estudiantil':           'Student Project',
             'Trabajo realizado por estudiantes de matemáticas':
                 'Work done by mathematics students',
+
+            // ── lab/experimentos.html ────────────────────────────────────
+            'Laboratorio Experimental':       'Experimental Laboratory',
+            'ContextoMath':                   'MathContext',
+            'Laboratorio':                    'Laboratory',
+            'Simulador de Finanzas Personales': 'Personal Finance Simulator',
+            'Balanza Algebraica Interactiva': 'Interactive Algebraic Balance',
+            'Explorador del Círculo Unitario': 'Unit Circle Explorer',
+
+            // ── lab/figuras.html ─────────────────────────────────────────
+            'Geometría Interactiva':          'Interactive Geometry',
+            'Selecciona una categoría para explorar las figuras.': 'Select a category to explore the figures.',
+            'Poliedros':                      'Polyhedrons',
+            'Cuerpos Redondos':               'Round Bodies',
+            'Fractales':                      'Fractals',
+            'Controles:':                     'Controls:',
+            'Arrastrar: Rotar':               'Drag: Rotate',
+            'Rueda: Zoom':                    'Scroll: Zoom',
+            'Click derecho: Mover':           'Right click: Pan',
+
+            // ── lab/juegos.html ──────────────────────────────────────────
+            '⚡ Competencia Matemática en Tiempo Real ⚡': '⚡ Real-Time Math Competition ⚡',
+            'INICIAR COMBATE':                'START BATTLE',
+            'UNIRSE CON CÓDIGO':              'JOIN WITH CODE',
+            'CREAR SALA':                     'CREATE ROOM',
+            'EMPEZAR JUEGO':                  'START GAME',
+            'JUGAR DE NUEVO':                 'PLAY AGAIN',
+            'MENÚ':                           'MENU',
+            'ESCANEA PARA ENTRAR':            'SCAN TO JOIN',
+            'CERRAR':                         'CLOSE',
+            'COMBATE TERMINADO':              'BATTLE OVER',
+            'Clasificación final':            'Final Rankings',
+            'ESPERANDO AL HOST…':             'WAITING FOR HOST…',
+            'Scoreboard en vivo':             'Live Scoreboard',
+            'Tus vidas':                      'Your lives',
+            'Selecciona una respuesta · usa A B C D': 'Select an answer · use A B C D',
+
+            // ── lab/proyectiles.html ─────────────────────────────────────
+            'Laboratorio de Proyectiles':     'Projectile Laboratory',
+            'Parámetros de Entrada':          'Input Parameters',
+            'Velocidad inicial (v₀)':         'Initial velocity (v₀)',
+            'Ángulo de lanzamiento (θ)':      'Launch angle (θ)',
+            'Altura inicial (y₀)':            'Initial height (y₀)',
+            'Aceleración de la gravedad (g)': 'Gravitational acceleration (g)',
+            'Escenas Predefinidas':           'Preset Scenes',
+            'Tiro Clásico':                   'Classic Launch',
+            'Horizontal':                     'Horizontal',
+            'Tiro Alto':                      'High Launch',
+            'Lunar':                          'Lunar',
+            'Restablecer Valores':            'Reset Values',
+            'Resultados Clave':               'Key Results',
+            'Altura Máxima (yₘₐₓ)':          'Max Height (yₘₐₓ)',
+            'Alcance (R)':                    'Range (R)',
+            'Tiempo de Vuelo (T)':            'Flight Time (T)',
+            'Tiempo Actual (t)':              'Current Time (t)',
+
+            // ── lab/simulaciones.html ────────────────────────────────────
+            'Modelo de Reproducción de Conejos': 'Rabbit Reproduction Model',
+            'Sucesión de Fibonacci':          'Fibonacci Sequence',
+            'Iniciar Simulación':             'Start Simulation',
+            'Pausar Física':                  'Pause Physics',
+            'Meses de Simulación':            'Simulation Months',
+            'Velocidad de Animación':         'Animation Speed',
+
+            // ── lab/modulos/ — común ─────────────────────────────────────
+            'Volver al Menú':                 'Back to Menu',
+
+            // ── lab/modulos/datos.html ───────────────────────────────────
+            'Modelado de Datos':              'Data Modeling',
+            'Modelado de Datos Reales':       'Real Data Modeling',
+            'Ajusta funciones matemáticas a conjuntos de datos y analiza patrones':
+                'Fit mathematical functions to data sets and analyze patterns',
+            'Regresión y Ajuste de Curvas':   'Regression and Curve Fitting',
+            'Selecciona el Tipo de Función':  'Select Function Type',
+            'Exponencial':                    'Exponential',
+            'Logarítmica':                    'Logarithmic',
+            'Selecciona el Conjunto de Datos': 'Select Data Set',
+            'Temperatura':                    'Temperature',
+            'Población':                      'Population',
+            'Precio':                         'Price',
+            'Velocidad':                      'Speed',
+            'R-cuadrado':                     'R-squared',
+            'Coeficiente de Correlación':     'Correlation Coefficient',
+            'Error Estándar':                 'Standard Error',
+
+            // ── lab/modulos/fisica.html ──────────────────────────────────
+            'Fenómenos Físicos':              'Physical Phenomena',
+            'Simulación de Fenómenos Físicos': 'Simulation of Physical Phenomena',
+            'Modela movimientos y fuerzas del mundo real con matemáticas':
+                'Model real-world movements and forces with mathematics',
+            'Física y Matemáticas en Acción': 'Physics and Mathematics in Action',
+            'Selecciona el Fenómeno Físico':  'Select Physical Phenomenon',
+            'Tiro Parabólico de Proyectil':   'Projectile Parabolic Launch',
+            'Distancia de Frenado':           'Braking Distance',
+            'Péndulo Simple':                 'Simple Pendulum',
+            'Oscilador de Resorte':           'Spring Oscillator',
+            'Altura máxima':                  'Maximum height',
+            'Alcance':                        'Range',
+            'Tiempo de vuelo':                'Flight time',
+            'Velocidad máxima':               'Maximum speed',
+            'Energía total':                  'Total energy',
+
+            // ── lab/modulos/geometrico.html ──────────────────────────────
+            'Modelado Geométrico':            'Geometric Modeling',
+            'Explora volúmenes, áreas y formas geométricas tridimensionales':
+                'Explore volumes, areas and three-dimensional geometric shapes',
+            'Volumen de Sólidos Geométricos': 'Volume of Geometric Solids',
+            'Selecciona el Sólido Geométrico': 'Select Geometric Solid',
+            'Caja (Box)':                     'Box',
+            'Pirámide':                       'Pyramid',
+            'Longitud':                       'Length',
+            'Ancho':                          'Width',
+            'Altura':                         'Height',
+            'Radio':                          'Radius',
+            'Volumen':                        'Volume',
+            'Área Superficial':               'Surface Area',
+            'Diagonal':                       'Diagonal',
+            'Animar Modelo':                  'Animate Model',
+            'Detener Animación':              'Stop Animation',
+
+            // ── lab/modulos/optimizacion.html ────────────────────────────
+            'Optimización Matemática':        'Mathematical Optimization',
+            'Encuentra máximos y mínimos en problemas del mundo real':
+                'Find maxima and minima in real-world problems',
+            'Optimización y Cálculo Aplicado': 'Optimization and Applied Calculus',
+            'Selecciona el Problema de Optimización': 'Select Optimization Problem',
+            'Volumen Máximo de Caja':         'Maximum Box Volume',
+            'Área Máxima de Cerco':           'Maximum Fence Area',
+            'Costo Mínimo de Producción':     'Minimum Production Cost',
+            'Distancia Mínima Entre Puntos':  'Minimum Distance Between Points',
+            'Valor óptimo':                   'Optimal value',
+            'Dimensiones óptimas':            'Optimal dimensions',
+            'Restricciones':                  'Constraints',
 
             // ── salon/algebra.html ───────────────────────────────────────
             'Álgebra Moderna':                'Modern Algebra',
