@@ -271,11 +271,87 @@ const I18n = (() => {
             'Eratóstenes y la Tierra':        'Eratosthenes and the Earth',
             'El Número Cero':                 'The Number Zero',
 
-            // Mathematicians
+            // Mathematicians — eras
             'Era Antigua':                    'Ancient Era',
             'Era Medieval':                   'Medieval Era',
-            'Era Moderna':                    'Modern Era',
+            'Era Islámica Dorada':            'Islamic Golden Age',
+            'Renacimiento y Era Moderna':     'Renaissance and Modern Era',
+            '3000 a.C. - 400 d.C.':         '3000 BC - 400 AD',
+            '800 - 1200 d.C.':              '800 - 1200 AD',
+            '1400 - Presente':               '1400 - Present',
             'Descubrimientos':                'Discoveries',
+
+            // Mathematicians — discovery tags
+            'Padre del Álgebra':              'Father of Algebra',
+            'Método Científico':              'Scientific Method',
+            'Cálculo Diferencial':            'Differential Calculus',
+            'Cálculo Integral':               'Integral Calculus',
+            'Identidad de Euler':             "Euler's Identity",
+            'Príncipe de las Matemáticas':    'Prince of Mathematics',
+
+            // Mathematicians — hover section titles
+            'Descubrimientos Clave:':         'Key Discoveries:',
+            'Legado:':                        'Legacy:',
+            'Innovaciones:':                  'Innovations:',
+            'Revolución Matemática:':         'Mathematical Revolution:',
+            'Contribuciones:':                'Contributions:',
+            'Legado Duradero:':               'Lasting Legacy:',
+            'Revolución Científica:':         'Scientific Revolution:',
+            'Genio Universal:':               'Universal Genius:',
+            'Prolífico Genio:':               'Prolific Genius:',
+            'Genio Supremo:':                 'Supreme Genius:',
+
+            // Mathematicians — hover list items
+            'Relaciones numéricas en música': 'Numerical relationships in music',
+            'Escuela pitagórica':             'Pythagorean school',
+            'Método axiomático':              'Axiomatic method',
+            'Algoritmo de Euclides':          'Euclidean algorithm',
+            'Método de exhaución':            'Method of exhaustion',
+            'Espiral de Arquímedes':          'Archimedean spiral',
+            'Cálculo de π':                  'Calculation of π',
+            'Sistema de numeración decimal':  'Decimal numeration system',
+            'Algoritmos matemáticos':         'Mathematical algorithms',
+            'Problema de Alhazen':            "Alhazen's problem",
+            'Cámara oscura':                  'Camera obscura',
+            'Geometría analítica':            'Analytical geometry',
+            'Proporción áurea':               'Golden ratio',
+            'Espirales en la naturaleza':     'Spirals in nature',
+            'Ley de gravitación universal':   'Law of universal gravitation',
+            'Teorema binomial':               'Binomial theorem',
+            'Sistema binario':                'Binary system',
+            'Máquina de cálculo':             'Calculating machine',
+            'Filosofía matemática':           'Mathematical philosophy',
+            'Más de 800 publicaciones':       'More than 800 publications',
+            'Teoría de grafos':               'Graph theory',
+            'Notación matemática moderna':    'Modern mathematical notation',
+            'Teoría de números':              'Number theory',
+            'Geometría no euclidiana':        'Non-Euclidean geometry',
+            'Estadística y probabilidad':     'Statistics and probability',
+
+            // Discoveries section
+            'Descubrimientos que Cambiaron el Mundo': 'Discoveries that Changed the World',
+            'La Invención del Cero':          'The Invention of Zero',
+            'Siglo V d.C. - India':           '5th Century AD - India',
+            'Impacto Mundial: 100%':          'World Impact: 100%',
+            'El Álgebra':                     'Algebra',
+            'Siglo IX - Al-Khwarizmi':        '9th Century - Al-Khwarizmi',
+            'Impacto Mundial: 95%':           'World Impact: 95%',
+            'El Cálculo':                     'Calculus',
+            'Siglo XVII - Newton & Leibniz':  '17th Century - Newton & Leibniz',
+            'Impacto Mundial: 90%':           'World Impact: 90%',
+            'Geometría Euclidiana':           'Euclidean Geometry',
+            'Siglo III a.C. - Euclides':      '3rd Century BC - Euclid',
+            'Impacto Mundial: 85%':           'World Impact: 85%',
+            'Siglo XX - Turing & Von Neumann':'20th Century - Turing & Von Neumann',
+            'Impacto Mundial: 98%':           'World Impact: 98%',
+            'Estadística Moderna':            'Modern Statistics',
+            'Siglos XVIII-XIX - Gauss & Otros':'18th-19th Centuries - Gauss & Others',
+            'Impacto Mundial: 80%':           'World Impact: 80%',
+
+            // Action buttons
+            'Preguntas de Análisis':          'Analysis Questions',
+            'Tomar Examen':                   'Take Exam',
+            'Volver al Inicio':               'Back to Top',
 
             // ── links.html ──────────────────────────────────────────────
             'Enlaces Útiles':                 'Useful Links',
@@ -1341,6 +1417,88 @@ const I18n = (() => {
             // historiamath.html — Hero description
             'Descubre cómo las matemáticas han evolucionado desde las civilizaciones antiguas hasta nuestros días. \n                Explora los grandes descubrimientos, conoce a los genios matemáticos y entiende cómo cada época \n                contribuyó al desarrollo del conocimiento matemático que usamos hoy.':
                 'Discover how mathematics has evolved from ancient civilizations to the present day. Explore great discoveries, meet mathematical geniuses and understand how each era contributed to the development of the mathematical knowledge we use today.',
+
+            // historiamath.html — Timeline descriptions
+            'Los babilonios desarrollan el sistema sexagesimal (base 60) y crean las primeras tablas matemáticas. Inventan conceptos fundamentales como el valor posicional.':
+                'The Babylonians develop the sexagesimal system (base 60) and create the first mathematical tables. They invent fundamental concepts such as positional value.',
+            'Los egipcios desarrollan un sistema decimal y utilizan matemáticas avanzadas para construir las pirámides. El papiro de Rhind contiene problemas matemáticos complejos.':
+                'The Egyptians develop a decimal system and use advanced mathematics to build the pyramids. The Rhind Papyrus contains complex mathematical problems.',
+            'Pitágoras y sus seguidores establecen las bases de la geometría. Se desarrolla el concepto de demostración matemática rigurosa.':
+                'Pythagoras and his followers establish the foundations of geometry. The concept of rigorous mathematical proof is developed.',
+            'Euclides publica "Los Elementos", una obra fundamental que sistematiza la geometría y establece el método axiomático.':
+                'Euclid publishes "The Elements", a foundational work that systematizes geometry and establishes the axiomatic method.',
+            'Al-Khwarizmi desarrolla el álgebra. Se introducen los números arábigos y se preserva y expande el conocimiento matemático griego.':
+                'Al-Khwarizmi develops algebra. Arabic numerals are introduced and Greek mathematical knowledge is preserved and expanded.',
+            'Fibonacci introduce los números arábigos en Europa. Se desarrollan nuevas técnicas algebraicas y se redescubren textos clásicos.':
+                'Fibonacci introduces Arabic numerals to Europe. New algebraic techniques are developed and classical texts are rediscovered.',
+            'Isaac Newton publica los "Principia Mathematica" y desarrolla el cálculo, revolucionando las matemáticas y la física.':
+                'Isaac Newton publishes the "Principia Mathematica" and develops calculus, revolutionizing mathematics and physics.',
+            'Desarrollo de teorías avanzadas como la relatividad, mecánica cuántica, teoría de conjuntos y matemáticas computacionales.':
+                'Development of advanced theories such as relativity, quantum mechanics, set theory, and computational mathematics.',
+
+            // historiamath.html — Periods descriptions
+            'Las primeras civilizaciones desarrollan sistemas numéricos y técnicas matemáticas básicas para resolver problemas prácticos de comercio, construcción y astronomía.':
+                'The first civilizations develop numerical systems and basic mathematical techniques to solve practical problems of trade, construction, and astronomy.',
+            'Los griegos transforman las matemáticas de una herramienta práctica en una ciencia teórica rigurosa, estableciendo los fundamentos de la demostración matemática.':
+                'The Greeks transform mathematics from a practical tool into a rigorous theoretical science, establishing the foundations of mathematical proof.',
+            'Los matemáticos islámicos preservan, traducen y expanden el conocimiento griego, mientras desarrollan nuevas ramas como el álgebra y mejoran los métodos numéricos.':
+                'Islamic mathematicians preserve, translate, and expand Greek knowledge, while developing new branches such as algebra and improving numerical methods.',
+            'El renacimiento marca el renacimiento de las matemáticas en Europa, con nuevos desarrollos en álgebra, perspectiva y la introducción de simbolos matemáticos modernos.':
+                'The Renaissance marks the rebirth of mathematics in Europe, with new developments in algebra, perspective, and the introduction of modern mathematical symbols.',
+            'Las matemáticas experimentan una explosión de crecimiento con el desarrollo del cálculo, estadística, computación y nuevas ramas abstractas.':
+                'Mathematics experiences an explosion of growth with the development of calculus, statistics, computation, and new abstract branches.',
+
+            // historiamath.html — Fun facts descriptions
+            'El símbolo ∞ fue introducido por el matemático John Wallis en 1655, inspirado en la forma de una serpiente mordiéndose la cola.':
+                'The symbol ∞ was introduced by mathematician John Wallis in 1655, inspired by the shape of a snake biting its own tail.',
+            'Los dígitos de π nunca se repiten ni terminan. Actualmente se conocen más de 31 billones de dígitos de esta constante matemática.':
+                'The digits of π never repeat or end. Currently more than 31 trillion digits of this mathematical constant are known.',
+            'En el 240 a.C., Eratóstenes calculó la circunferencia de la Tierra usando solo geometría y obtuvo un resultado asombrosamente preciso.':
+                'In 240 BC, Eratosthenes calculated the circumference of the Earth using only geometry and obtained an astonishingly accurate result.',
+            'El concepto de cero como número fue desarrollado en la India alrededor del siglo V d.C. y revolucionó las matemáticas para siempre.':
+                'The concept of zero as a number was developed in India around the 5th century AD and revolutionized mathematics forever.',
+
+            // historiamath.html — Mathematician contributions
+            '"En un triángulo rectángulo, el cuadrado de la hipotenusa es igual a la suma de los cuadrados de los catetos."':
+                '"In a right triangle, the square of the hypotenuse equals the sum of the squares of the legs."',
+            'Sistematizó la geometría en 13 libros fundamentales.':
+                'He systematized geometry in 13 fundamental books.',
+            'Pionero del cálculo integral y la hidrostática.':
+                'Pioneer of integral calculus and hydrostatics.',
+            'Desarrolló métodos sistemáticos para resolver ecuaciones lineales y cuadráticas.':
+                'He developed systematic methods for solving linear and quadratic equations.',
+            'Pionero en óptica y método experimental.':
+                'Pioneer in optics and the experimental method.',
+            'Introdujo los números arábigos en Europa y descubrió la famosa secuencia.':
+                'He introduced Arabic numerals to Europe and discovered the famous sequence.',
+            'Co-inventor del cálculo y formulador de las leyes de la física.':
+                'Co-inventor of calculus and formulator of the laws of physics.',
+            'Co-inventor del cálculo con notación moderna.':
+                'Co-inventor of calculus with modern notation.',
+            'El matemático más prolífico de la historia.':
+                'The most prolific mathematician in history.',
+            'Contribuciones fundamentales en casi todas las áreas matemáticas.':
+                'Fundamental contributions to almost all areas of mathematics.',
+
+            // historiamath.html — Discoveries descriptions
+            'Revolucionó las matemáticas al introducir el concepto de "nada" como número, permitiendo el sistema posicional y cálculos complejos.':
+                'It revolutionized mathematics by introducing the concept of "nothing" as a number, enabling the positional system and complex calculations.',
+            'Transformó las matemáticas de aritmética pura a manipulación simbólica, creando un lenguaje universal para resolver problemas.':
+                'It transformed mathematics from pure arithmetic to symbolic manipulation, creating a universal language for solving problems.',
+            'Permitió el análisis de cambio y movimiento, revolucionando la física, ingeniería y ciencias aplicadas.':
+                'It enabled the analysis of change and motion, revolutionizing physics, engineering, and applied sciences.',
+            'Estableció los fundamentos lógicos de la geometría con axiomas y demostraciones rigurosas que perduran hasta hoy.':
+                'It established the logical foundations of geometry with axioms and rigorous proofs that endure to this day.',
+            'Creó las bases teóricas de la computación moderna, transformando cada aspecto de la vida contemporánea.':
+                'It created the theoretical foundations of modern computing, transforming every aspect of contemporary life.',
+            'Revolucionó la toma de decisiones basada en datos, fundamental en ciencia, medicina y economía.':
+                'It revolutionized data-based decision making, fundamental in science, medicine, and economics.',
+
+            // historiamath.html — Footer
+            '© 2025 Prof. Yonatan Guerrero Soriano - Historia de las Matemáticas':
+                '© 2025 Prof. Yonatan Guerrero Soriano - History of Mathematics',
+            'Explorando el fascinante mundo de las matemáticas a través de la historia':
+                'Exploring the fascinating world of mathematics through history',
 
             // links.html — Hero description
             'Descubre una colección cuidadosamente seleccionada de herramientas digitales, \n                aplicaciones y plataformas que transformarán tu experiencia de aprendizaje matemático.':
