@@ -1321,6 +1321,8 @@ const I18n = (() => {
             'Contacto':                       'Contact',
 
             // Hero
+            'Nota:':                                  'Note:',
+            'Las fotos de nuestras actividades se actualizarán regularmente a medida que avanza el año escolar. ¡Síguenos en nuestras redes sociales para ver más momentos!': 'Photos from our activities will be updated regularly as the school year progresses. Follow us on social media to see more moments!',
             'Bienvenidos a la Aventura Matemática': 'Welcome to the Mathematical Adventure',
             'Fomentar la excelencia matemática y el pensamiento crítico':
                 'Fostering mathematical excellence and critical thinking',
@@ -2827,6 +2829,7 @@ const I18n = (() => {
         translateHero(lang);
         updateButton(lang);
         document.documentElement.lang = lang;
+        document.dispatchEvent(new CustomEvent('i18n:langChange', { detail: { lang } }));
     }
 
     function setLanguage(lang) {

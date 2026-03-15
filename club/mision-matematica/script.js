@@ -340,13 +340,26 @@ window.addEventListener('scroll', () => {
     if (!el) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const phrases = [
+    const phrasesES = [
         'Fomentar la excelencia matemática y el pensamiento crítico',
         'Preparando líderes en carreras STEM',
         'Donde los números cobran vida',
         'Tu aventura matemática comienza aquí',
         'Competencias · Investigación · Colaboración',
     ];
+
+    const phrasesEN = [
+        'Fostering mathematical excellence and critical thinking',
+        'Training future STEM leaders',
+        'Where numbers come to life',
+        'Your mathematical adventure starts here',
+        'Competitions · Research · Collaboration',
+    ];
+
+    function getPhrases() {
+        const lang = (typeof I18n !== 'undefined') ? I18n.getCurrentLang() : 'es';
+        return lang === 'en' ? phrasesEN : phrasesES;
+    }
 
     let phraseIdx = 0;
     let charIdx   = 0;
@@ -358,14 +371,14 @@ window.addEventListener('scroll', () => {
     function tick() {
         if (paused) return;
 
-        const current = phrases[phraseIdx];
+        const current = getPhrases()[phraseIdx];
 
         if (deleting) {
             charIdx--;
             el.textContent = current.substring(0, charIdx);
             if (charIdx <= 0) {
                 deleting  = false;
-                phraseIdx = (phraseIdx + 1) % phrases.length;
+                phraseIdx = (phraseIdx + 1) % getPhrases().length;
                 setTimeout(tick, 400);
                 return;
             }
@@ -384,6 +397,17 @@ window.addEventListener('scroll', () => {
 
     // Start after a natural delay
     setTimeout(tick, 2200);
+
+    // Restart typewriter when language changes
+    document.addEventListener('i18n:langChange', () => {
+        paused    = true;
+        el.textContent = '';
+        phraseIdx = 0;
+        charIdx   = 0;
+        deleting  = false;
+        paused    = false;
+        setTimeout(tick, 400);
+    });
 })();
 
 // =====================================================
