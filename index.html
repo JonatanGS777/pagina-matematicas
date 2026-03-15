@@ -321,6 +321,13 @@
             position: relative;
         }
 
+        /* Wrapper for indicator + nav list */
+        .nav-items-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
         .nav-indicator {
             position: absolute;
             height: 34px;
@@ -2171,9 +2178,9 @@
                 Matemáticas Digitales
             </a>
 
+            <div class="nav-items-wrap">
+            <div class="nav-indicator" id="navIndicator"></div>
             <ul class="nav-menu">
-                <!-- Sliding indicator pill -->
-                <div class="nav-indicator" id="navIndicator"></div>
 
                 <!-- Σigma Digital -->
                 <li class="nav-item">
@@ -2404,6 +2411,7 @@
                     </div>
                 </li>
             </ul>
+            </div><!-- /nav-items-wrap -->
 
             <!-- Botón de idioma ES / EN -->
             <button
@@ -2842,22 +2850,18 @@
         }, { passive: true });
 
         // ── Sliding indicator ────────────────────────────────────────
-        const indicator = document.getElementById('navIndicator');
-        const navMenu   = document.querySelector('.nav-menu');
+        const indicator    = document.getElementById('navIndicator');
+        const navItemsWrap = document.querySelector('.nav-items-wrap');
 
-        navMenu.addEventListener('mouseenter', () => {
-            indicator.style.opacity = '1';
-        });
-        navMenu.addEventListener('mouseleave', () => {
-            indicator.style.opacity = '0';
-        });
+        navItemsWrap.addEventListener('mouseenter', () => indicator.style.opacity = '1');
+        navItemsWrap.addEventListener('mouseleave', () => indicator.style.opacity = '0');
 
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('mouseenter', () => {
-                const link = item.querySelector('.nav-link');
-                const menuRect = navMenu.getBoundingClientRect();
+                const link     = item.querySelector('.nav-link');
+                const wrapRect = navItemsWrap.getBoundingClientRect();
                 const linkRect = link.getBoundingClientRect();
-                indicator.style.left  = (linkRect.left - menuRect.left) + 'px';
+                indicator.style.left  = (linkRect.left - wrapRect.left) + 'px';
                 indicator.style.width = linkRect.width + 'px';
             });
         });
@@ -2870,27 +2874,22 @@
             toggle.classList.toggle('active');
         }
 
-        // Mobile dropdown toggle
-        function toggleMobileDropdown(element) {
-            element.closest('.nav-item').classList.toggle('active');
-        }
-
-        // Click on dropdown link → toggle on mobile
+        // Click on dropdown link → toggle accordion on mobile
         document.querySelectorAll('.has-dropdown').forEach(link => {
             link.addEventListener('click', (e) => {
                 if (window.innerWidth <= 768) {
                     e.preventDefault();
-                    toggleMobileDropdown(e.target);
+                    e.stopPropagation();
+                    link.closest('.nav-item').classList.toggle('active');
                 }
             });
         });
 
-        // Close mobile menu when clicking outside
+        // Close mobile menu when clicking outside the header
         document.addEventListener('click', (e) => {
             const menu   = document.querySelector('.nav-menu');
             const toggle = document.querySelector('.mobile-toggle');
-            const navbar = document.querySelector('.navbar');
-            if (!navbar.contains(e.target) && menu.classList.contains('active')) {
+            if (!e.target.closest('.header') && menu.classList.contains('active')) {
                 menu.classList.remove('active');
                 toggle.classList.remove('active');
             }
