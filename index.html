@@ -485,6 +485,16 @@
         .dropdown.games .dropdown-item:hover .item-icon { background: rgba(255,215,64,0.3); }
         .dropdown.games .dropdown-item:hover { background: rgba(255,215,64,0.08); color: #b8860b; }
 
+        /* Overlay for closing mobile menu on outside tap */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 998;
+            background: transparent;
+        }
+        .menu-overlay.active { display: block; }
+
         /* Mobile toggle */
         .mobile-toggle {
             display: none;
@@ -2429,6 +2439,9 @@
         </nav>
     </header>
 
+    <!-- Mobile menu overlay (closes menu on tap outside) -->
+    <div id="menuOverlay" class="menu-overlay"></div>
+
     <!-- Animated Background -->
     <div class="animated-bg"></div>
     
@@ -2866,32 +2879,39 @@
             });
         });
 
-        // ── Mobile menu toggle ───────────────────────────────────────
-        function toggleMobileMenu() {
-            const menu   = document.querySelector('.nav-menu');
-            const toggle = document.querySelector('.mobile-toggle');
-            menu.classList.toggle('active');
-            toggle.classList.toggle('active');
+        // ── Mobile menu ──────────────────────────────────────────────
+        const mobileMenu    = document.querySelector('.nav-menu');
+        const mobileToggle  = document.querySelector('.mobile-toggle');
+        const menuOverlay   = document.getElementById('menuOverlay');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            mobileToggle.classList.add('active');
+            menuOverlay.classList.add('active');
         }
 
-        // Click on dropdown link → toggle accordion on mobile
-        document.querySelectorAll('.has-dropdown').forEach(link => {
-            link.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    link.closest('.nav-item').classList.toggle('active');
-                }
-            });
-        });
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            // collapse all open submenus
+            document.querySelectorAll('.nav-item.active').forEach(i => i.classList.remove('active'));
+        }
 
-        // Close mobile menu when clicking outside the header
-        document.addEventListener('click', (e) => {
-            const menu   = document.querySelector('.nav-menu');
-            const toggle = document.querySelector('.mobile-toggle');
-            if (!e.target.closest('.header') && menu.classList.contains('active')) {
-                menu.classList.remove('active');
-                toggle.classList.remove('active');
+        function toggleMobileMenu() {
+            mobileMenu.classList.contains('active') ? closeMobileMenu() : openMobileMenu();
+        }
+
+        // Overlay tap → close menu
+        menuOverlay.addEventListener('click', closeMobileMenu);
+
+        // Dropdown accordion via event delegation on the nav-menu
+        mobileMenu.addEventListener('click', (e) => {
+            if (window.innerWidth > 768) return;
+            const link = e.target.closest('.has-dropdown');
+            if (link) {
+                e.preventDefault();
+                link.closest('.nav-item').classList.toggle('active');
             }
         });
 
