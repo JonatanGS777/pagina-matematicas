@@ -1874,8 +1874,9 @@
                 left: -100%;
                 width: 100%;
                 height: calc(100vh - 72px);
-                background: rgba(242, 240, 252, 0.99);
-                backdrop-filter: blur(20px);
+                background: rgba(242, 240, 252, 1);
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
                 flex-direction: column;
                 justify-content: flex-start;
                 align-items: stretch;
@@ -1911,9 +1912,11 @@
                 border-radius: 0;
                 border: none;
                 background: rgba(91, 76, 245, 0.04);
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
                 max-height: 0;
                 overflow: hidden;
-                transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: max-height 0.25s ease;
                 min-width: unset;
                 display: block;
                 padding: 0;
