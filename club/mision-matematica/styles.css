@@ -424,6 +424,30 @@ body::before {
     color: var(--primary-blue) !important;
 }
 
+[data-theme="dark"] .footer {
+    background: rgba(220, 228, 240, 0.98);
+    border-top: 1px solid rgba(0, 204, 106, 0.2);
+}
+
+[data-theme="dark"] .footer-bottom {
+    border-top: 1px solid rgba(0, 204, 106, 0.15);
+    color: var(--text-gray);
+}
+
+[data-theme="dark"] .footer-section h4 {
+    color: var(--accent-orange);
+}
+
+[data-theme="dark"] .footer-section p,
+[data-theme="dark"] .footer-section li,
+[data-theme="dark"] .footer-section a {
+    color: #3a4a5c;
+}
+
+[data-theme="dark"] .footer-section a:hover {
+    color: var(--accent-green);
+}
+
 /* Hamburger Nav Toggle */
 .nav-toggle {
     display: none;
