@@ -53,8 +53,8 @@ const I18n = (() => {
     const heroTexts = {
         en: {
             mainTitle:    'Digital Mathematics',
-            subtitle:     'Department of Education',
-            professorName:'Prof. Yonatan Guerrero Soriano',
+            subtitle:     'Mathematics • Science • Technology',
+            professorName:'Yonatan Guerrero Soriano EdD',
             description:  'Welcome to my digital classroom where mathematics come alive through technology, innovation, and interactive learning.'
         }
     };
@@ -193,6 +193,8 @@ const I18n = (() => {
             'Historia Math':                  'Math History',
             'Yonatan Guerrero Soriano - Página de Matemáticas':
                 'Yonatan Guerrero Soriano - Mathematics Page',
+            'Yonatan Guerrero Soriano | Página de Matemáticas':
+                'Yonatan Guerrero Soriano | Mathematics Page',
             '© 2025 Yonatan Guerrero Soriano - Página de Matemáticas':
                 '© 2025 Yonatan Guerrero Soriano - Mathematics Page',
             'Inspirando el aprendizaje matemático a través de la tecnología':
@@ -230,9 +232,62 @@ const I18n = (() => {
             // Games
             'Juegos Matemáticos':             'Math Games',
 
+            // index.html — Dropdown descriptions
+            'Explora el origen y evolución del conocimiento matemático':
+                'Explore the origin and evolution of mathematical knowledge',
+            'Recursos externos cuidadosamente seleccionados':
+                'Carefully selected external resources',
+            'Guías, documentos y recursos descargables':
+                'Guides, documents, and downloadable resources',
+            'Fotos y momentos del salón de clases':
+                'Photos and moments from the classroom',
+            'Análisis, visualización y modelos estadísticos':
+                'Analysis, visualization, and statistical models',
+            'Proyectos de automatización y control':
+                'Automation and control projects',
+            'Código, algoritmos y lógica computacional':
+                'Code, algorithms, and computational logic',
+            'Diseño y resolución de problemas reales':
+                'Design and solving real-world problems',
+            'Guía completa de ciencias e ingeniería':
+                'Complete guide to science and engineering',
+            'Compite a nivel regional y nacional':
+                'Compete at regional and national levels',
+            'Ideas innovadoras con matemáticas aplicadas':
+                'Innovative ideas with applied mathematics',
+            'Torneos y retos matemáticos del club':
+                'Club tournaments and mathematical challenges',
+            'Proyectos de investigación estudiantil':
+                'Student research projects',
+            'El club oficial de matemáticas avanzadas':
+                'The official advanced mathematics club',
+            'Actividades prácticas y descubrimiento':
+                'Hands-on activities and discovery',
+            'Modelos interactivos y visualizaciones':
+                'Interactive models and visualizations',
+            'Física aplicada con matemáticas':
+                'Physics applied with mathematics',
+            'Exploración visual de formas y espacios':
+                'Visual exploration of shapes and spaces',
+            'Figuras, transformaciones y espacio':
+                'Figures, transformations, and space',
+            'Ecuaciones, funciones y estructuras algebraicas':
+                'Equations, functions, and algebraic structures',
+            'Datos, probabilidad y análisis estadístico':
+                'Data, probability, and statistical analysis',
+            'Matemáticas del mundo financiero':
+                'Mathematics of the financial world',
+            'Compite en tiempo real con estudiantes':
+                'Compete in real time with students',
+            'Aprende jugando con retos numéricos':
+                'Learn by playing with numerical challenges',
+            'El juego definitivo de maestros matemáticos':
+                'The ultimate game for math masters',
+
             // ── index.html — About ──────────────────────────────────────
             'Sobre mí':                       'About Me',
             'Doctor en Educación':            'Doctor of Education',
+            'Educación Matemática':           'Mathematics Education',
 
             // ── index.html — Stats ─────────────────────────────────────
             'Análisis en Tiempo Real':        'Real-Time Analytics',
@@ -268,6 +323,8 @@ const I18n = (() => {
             'Un parque temático diseñado con matemáticas reales.':
                 'A theme park designed with real mathematics.',
             'Ver imagen completa':            'View full image',
+            'Ir a la galería':                'Go to gallery',
+            'Ver galería completa':           'View full gallery',
 
             // ── historiamath.html — Navbar ──────────────────────────────
             'Línea del Tiempo':               'Timeline',
@@ -350,6 +407,11 @@ const I18n = (() => {
             'Descubrimientos':                'Discoveries',
 
             // Mathematicians — discovery tags
+            'Pitágoras':                     'Pythagoras',
+            'Euclides':                      'Euclid',
+            'Arquímedes':                    'Archimedes',
+            'Los Elementos':                 'The Elements',
+            'Principio de Arquímedes':       "Archimedes' Principle",
             'Padre del Álgebra':              'Father of Algebra',
             'Método Científico':              'Scientific Method',
             'Cálculo Diferencial':            'Differential Calculus',
@@ -410,11 +472,25 @@ const I18n = (() => {
             'Geometría Euclidiana':           'Euclidean Geometry',
             'Siglo III a.C. - Euclides':      '3rd Century BC - Euclid',
             'Impacto Mundial: 85%':           'World Impact: 85%',
+            'Matemáticas Computacionales':    'Computational Mathematics',
             'Siglo XX - Turing & Von Neumann':'20th Century - Turing & Von Neumann',
             'Impacto Mundial: 98%':           'World Impact: 98%',
             'Estadística Moderna':            'Modern Statistics',
             'Siglos XVIII-XIX - Gauss & Otros':'18th-19th Centuries - Gauss & Others',
             'Impacto Mundial: 80%':           'World Impact: 80%',
+
+            // historiamath.html — modal labels
+            'Logro Principal':                'Main Achievement',
+            'Frase Célebre':                  'Famous Quote',
+            'Dato Curioso':                   'Fun Fact',
+            'Descripción':                    'Description',
+            'Impacto Histórico':              'Historical Impact',
+            'Uso Moderno':                    'Modern Use',
+            '570-495 a.C.':                   '570-495 BC',
+            '325-265 a.C.':                   '325-265 BC',
+            '287-212 a.C.':                   '287-212 BC',
+            '780-850 d.C.':                   '780-850 AD',
+            '965-1040 d.C.':                  '965-1040 AD',
 
             // Action buttons
             'Preguntas de Análisis':          'Analysis Questions',
@@ -755,6 +831,24 @@ const I18n = (() => {
                 'What happened to the population? How does each parameter affect it?',
             'Factores que limitan el crecimiento': 'Factors that limit growth',
             'Colonia bacteriana real':        'Real bacterial colony',
+            'Gráfica de factores limitantes': 'Limiting factors chart',
+            'Impacto relativo (%)':           'Relative impact (%)',
+            'Nutrientes':                     'Nutrients',
+            'Espacio':                        'Space',
+            'Temp.':                          'Temp.',
+            'Desechos':                       'Waste',
+            'Cada barra representa cuánto limita ese factor el crecimiento. Valores más altos implican mayor presión sobre la población.':
+                'Each bar represents how much that factor limits growth. Higher values imply greater pressure on the population.',
+            'Simulación visual de colonia bacteriana': 'Visual simulation of bacterial colony',
+            'Micromundo interactivo':         'Interactive microworld',
+            'Población estimada':             'Estimated population',
+            'Fase de crecimiento':            'Growth phase',
+            'Condiciones de crecimiento':     'Growth conditions',
+            'Nivel de nutrientes':            'Nutrient level',
+            'Pausar':                         'Pause',
+            'Reanudar':                       'Resume',
+            'Latencia':                       'Lag',
+            'Saturación':                     'Saturation',
 
             // Ebook — Simulación labels
             'Población Inicial (P₀):':        'Initial Population (P₀):',
@@ -2011,10 +2105,10 @@ const I18n = (() => {
     const paraDict = {
         en: {
             // index.html — About
-            'Mi nombre es Yonatan Guerrero Soriano, maestro de matemáticas en el Departamento de Educación de Puerto Rico, y tengo el honor de compartir con ustedes mi pasión por las matemáticas. Me especializo en las matemáticas, ciencias y tecnología y con un fuerte enfoque educativo.':
-                'My name is Yonatan Guerrero Soriano, a mathematics teacher at the Department of Education of Puerto Rico, and I have the honor of sharing my passion for mathematics with you. I specialize in mathematics, science, and technology with a strong educational focus.',
-            'El propósito de esta página es ofrecer a mis estudiantes un recurso integral donde puedan acceder a materiales didácticos, videos educativos, enlaces útiles y aplicaciones interactivas que apoyen su aprendizaje en matemáticas. Mi objetivo es facilitar el acceso a herramientas que les ayuden a desarrollar sus habilidades matemáticas y aplicar el conocimiento en su vida diaria.':
-                'The purpose of this page is to offer my students a comprehensive resource where they can access teaching materials, educational videos, useful links, and interactive applications that support their mathematics learning. My goal is to facilitate access to tools that help them develop their mathematical skills and apply knowledge in their daily lives.',
+            'Soy Yonatan Guerrero Soriano, docente de Matemáticas en el Departamento de Educación de Puerto Rico. Mi práctica profesional integra matemáticas, ciencia y tecnología para diseñar experiencias de aprendizaje rigurosas, innovadoras y centradas en el estudiante.':
+                'I am Yonatan Guerrero Soriano, a Mathematics educator at the Puerto Rico Department of Education. My professional practice integrates mathematics, science, and technology to design rigorous, innovative, student focused learning experiences.',
+            'Esta plataforma académica reúne materiales didácticos, videos, enlaces especializados y recursos interactivos que fortalecen el razonamiento matemático. Su propósito es ofrecer a estudiantes y docentes un entorno de apoyo continuo para desarrollar competencias, resolver problemas con criterio y transferir el aprendizaje a contextos reales.':
+                'This academic platform brings together instructional materials, videos, specialized links, and interactive resources that strengthen mathematical reasoning. Its purpose is to provide students and teachers with a continuous support environment to develop competencies, solve problems with sound judgment, and transfer learning to real-world contexts.',
 
             // historiamath.html — Hero description
             'Descubre cómo las matemáticas han evolucionado desde las civilizaciones antiguas hasta nuestros días. \n                Explora los grandes descubrimientos, conoce a los genios matemáticos y entiende cómo cada época \n                contribuyó al desarrollo del conocimiento matemático que usamos hoy.':
@@ -2082,6 +2176,68 @@ const I18n = (() => {
             'Contribuciones fundamentales en casi todas las áreas matemáticas.':
                 'Fundamental contributions to almost all areas of mathematics.',
 
+            // historiamath.html — Mathematician modal quotes and fun facts
+            'Los números gobiernan el universo.':
+                'Numbers rule the universe.',
+            '"Los números gobiernan el universo."':
+                '"Numbers rule the universe."',
+            'Fundó una escuela secreta donde las matemáticas eran consideradas sagradas.':
+                'He founded a secret school where mathematics was considered sacred.',
+            'No hay camino real hacia la geometría.':
+                'There is no royal road to geometry.',
+            '"No hay camino real hacia la geometría."':
+                '"There is no royal road to geometry."',
+            "Sus 'Elementos' es el libro de texto más exitoso de la historia.":
+                "His 'Elements' is the most successful textbook in history.",
+            '¡Eureka! ¡Lo encontré!':
+                'Eureka! I found it!',
+            '"¡Eureka! ¡Lo encontré!"':
+                '"Eureka! I found it!"',
+            'Calculó π con una precisión asombrosa usando polígonos.':
+                'He calculated π with astonishing precision using polygons.',
+            'Al-jabr es la reunión de partes rotas.':
+                'Al-jabr is the reunion of broken parts.',
+            '"Al-jabr es la reunión de partes rotas."':
+                '"Al-jabr is the reunion of broken parts."',
+            "La palabra 'algoritmo' deriva de su nombre latinizado.":
+                "The word 'algorithm' derives from the Latinized form of his name.",
+            'La verdad se busca por sí misma.':
+                'Truth is sought for its own sake.',
+            '"La verdad se busca por sí misma."':
+                '"Truth is sought for its own sake."',
+            'Considerado el padre de la óptica moderna y pionero del método científico.':
+                'Considered the father of modern optics and a pioneer of the scientific method.',
+            'Los números revelan patrones en la naturaleza.':
+                'Numbers reveal patterns in nature.',
+            '"Los números revelan patrones en la naturaleza."':
+                '"Numbers reveal patterns in nature."',
+            'Su secuencia aparece en girasoles, piñas y conchas marinas.':
+                'His sequence appears in sunflowers, pine cones, and seashells.',
+            'Si he visto más lejos es porque me subí a hombros de gigantes.':
+                'If I have seen further, it is by standing on the shoulders of giants.',
+            '"Si he visto más lejos es porque me subí a hombros de gigantes."':
+                '"If I have seen further, it is by standing on the shoulders of giants."',
+            'Desarrolló el cálculo a los 23 años durante la cuarentena por la peste.':
+                'He developed calculus at age 23 during the plague quarantine.',
+            'Es indigno de hombres excelentes perder horas como esclavos en la labor de cálculo.':
+                'It is unworthy of excellent men to lose hours like slaves in the labor of calculation.',
+            '"Es indigno de hombres excelentes perder horas como esclavos en la labor de cálculo."':
+                '"It is unworthy of excellent men to lose hours like slaves in the labor of calculation."',
+            'Desarrolló el sistema binario, la base de la computación moderna.':
+                'He developed the binary system, the foundation of modern computing.',
+            'Lean a Euler, lean a Euler, él es el maestro de todos nosotros.':
+                'Read Euler, read Euler, he is the master of us all.',
+            '"Lean a Euler, lean a Euler, él es el maestro de todos nosotros."':
+                '"Read Euler, read Euler, he is the master of us all."',
+            'Continuó produciendo trabajos matemáticos de primer nivel incluso después de quedarse ciego.':
+                'He continued producing top-level mathematical work even after going blind.',
+            'Las matemáticas son la reina de las ciencias.':
+                'Mathematics is the queen of the sciences.',
+            '"Las matemáticas son la reina de las ciencias."':
+                '"Mathematics is the queen of the sciences."',
+            'A los tres años, corrigió un error en las cuentas de su padre.':
+                'At age three, he corrected an error in his father\'s calculations.',
+
             // historiamath.html — Discoveries descriptions
             'Revolucionó las matemáticas al introducir el concepto de "nada" como número, permitiendo el sistema posicional y cálculos complejos.':
                 'It revolutionized mathematics by introducing the concept of "nothing" as a number, enabling the positional system and complex calculations.',
@@ -2095,6 +2251,44 @@ const I18n = (() => {
                 'It created the theoretical foundations of modern computing, transforming every aspect of contemporary life.',
             'Revolucionó la toma de decisiones basada en datos, fundamental en ciencia, medicina y economía.':
                 'It revolutionized data-based decision making, fundamental in science, medicine, and economics.',
+
+            // historiamath.html — Discovery modal details
+            'Revolucionó completamente las matemáticas y permitió el desarrollo de sistemas numéricos avanzados.':
+                'It completely revolutionized mathematics and enabled the development of advanced numerical systems.',
+            'Permitió el desarrollo del sistema decimal, la computación moderna y cálculos complejos.':
+                'It enabled the development of the decimal system, modern computing, and complex calculations.',
+            'Computadoras, programación, sistemas financieros, criptografía.':
+                'Computers, programming, financial systems, cryptography.',
+            'Transformó las matemáticas de números concretos a símbolos abstractos.':
+                'It transformed mathematics from concrete numbers to abstract symbols.',
+            'Creó un lenguaje universal para resolver problemas matemáticos complejos.':
+                'It created a universal language for solving complex mathematical problems.',
+            'Ingeniería, física, economía, inteligencia artificial.':
+                'Engineering, physics, economics, artificial intelligence.',
+            'Permitió analizar el cambio y el movimiento de forma matemática.':
+                'It made it possible to analyze change and motion mathematically.',
+            'Revolucionó la física, ingeniería y todas las ciencias aplicadas.':
+                'It revolutionized physics, engineering, and all applied sciences.',
+            'Diseño de cohetes, medicina, economía, simulaciones por computadora.':
+                'Rocket design, medicine, economics, computer simulations.',
+            'Estableció los fundamentos de la lógica matemática a través de axiomas y demostraciones.':
+                'It established the foundations of mathematical logic through axioms and proofs.',
+            'Fue el estándar de razonamiento matemático por más de 2000 años.':
+                'It was the standard of mathematical reasoning for more than 2,000 years.',
+            'Arquitectura, ingeniería, diseño gráfico, física.':
+                'Architecture, engineering, graphic design, physics.',
+            'Creó las bases teóricas para la computación y los algoritmos.':
+                'It created the theoretical foundations for computing and algorithms.',
+            'Hizo posible la revolución digital y la era de la información.':
+                'It made the digital revolution and the information age possible.',
+            'Toda la tecnología digital, inteligencia artificial, internet.':
+                'All digital technology, artificial intelligence, internet.',
+            'Proporcionó herramientas para analizar datos y entender la incertidumbre.':
+                'It provided tools to analyze data and understand uncertainty.',
+            'Fundamental para la ciencia experimental, la economía y la toma de decisiones.':
+                'Fundamental for experimental science, economics, and decision-making.',
+            'Medicina, finanzas, marketing, aprendizaje automático.':
+                'Medicine, finance, marketing, machine learning.',
 
             // historiamath.html — Footer
             '© 2025 Prof. Yonatan Guerrero Soriano - Historia de las Matemáticas':
@@ -2704,14 +2898,62 @@ const I18n = (() => {
     };
 
     let currentLang = localStorage.getItem('lang') || 'es';
+    let liveTranslationObserver = null;
+    let processingLiveMutations = false;
+    const normalizedDictCache = new WeakMap();
+
+    function normalizeTextKey(value) {
+        return (value || '')
+            .replace(/\u00A0/g, ' ')
+            .replace(/[“”]/g, '"')
+            .replace(/[‘’]/g, '\'')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function getNormalizedDict(dict) {
+        if (!dict || typeof dict !== 'object') return null;
+        const cached = normalizedDictCache.get(dict);
+        if (cached) return cached;
+
+        const map = new Map();
+        Object.keys(dict).forEach(key => {
+            map.set(normalizeTextKey(key), dict[key]);
+        });
+        normalizedDictCache.set(dict, map);
+        return map;
+    }
+
+    function lookupTranslation(dict, key) {
+        if (!dict || !key) return null;
+        if (dict[key]) return dict[key];
+        const normalizedMap = getNormalizedDict(dict);
+        return normalizedMap?.get(normalizeTextKey(key)) || null;
+    }
+
+    function collectElements(root, selector) {
+        if (!root || !selector) return [];
+
+        const nodes = [];
+        if (root.nodeType === Node.ELEMENT_NODE && root.matches(selector)) {
+            nodes.push(root);
+        }
+        if (typeof root.querySelectorAll === 'function') {
+            nodes.push(...root.querySelectorAll(selector));
+        }
+        return nodes;
+    }
 
     // ── Paso 1: nodos de texto simples ─────────────────────────────────────
-    function translateTextNodes(lang) {
+    function translateTextNodes(lang, root = document.body) {
         const dict = textDict[lang];
-        if (!dict) return;
+        if (!dict || !root) return;
+
+        const walkerRoot = root.nodeType === Node.TEXT_NODE ? root.parentElement : root;
+        if (!walkerRoot) return;
 
         const walker = document.createTreeWalker(
-            document.body,
+            walkerRoot,
             NodeFilter.SHOW_TEXT,
             {
                 acceptNode(node) {
@@ -2729,47 +2971,94 @@ const I18n = (() => {
         let node;
         while ((node = walker.nextNode())) nodes.push(node);
 
-        nodes.forEach(node => {
-            const trimmed = node.textContent.trim();
-            if (trimmed && dict[trimmed]) {
-                node.textContent = node.textContent.replace(trimmed, dict[trimmed]);
+        nodes.forEach(textNode => {
+            const original = textNode.textContent || '';
+            const trimmed = original.trim();
+            if (!trimmed) return;
+
+            const translated = lookupTranslation(dict, trimmed);
+            if (translated) {
+                textNode.textContent = original.replace(trimmed, translated);
             }
         });
     }
 
     // ── Paso 2: párrafos de texto plano ────────────────────────────────────
-    function translateParagraphs(lang) {
+    function translateParagraphs(lang, root = document.body) {
         const dict = paraDict[lang];
-        if (!dict) return;
+        if (!dict || !root) return;
 
-        document.querySelectorAll('p, li').forEach(el => {
+        collectElements(root, 'p, li, blockquote').forEach(el => {
             const key = el.textContent.trim();
-            if (dict[key]) el.textContent = dict[key];
+            const translated = lookupTranslation(dict, key);
+            if (translated) el.textContent = translated;
         });
     }
 
     // ── Paso 3: párrafos con HTML interno ──────────────────────────────────
-    function translateHtmlElements(lang) {
+    function translateHtmlElements(lang, root = document.body) {
         const dict = htmlParaDict[lang];
-        if (!dict) return;
+        if (!dict || !root) return;
 
-        document.querySelectorAll('p, li').forEach(el => {
+        collectElements(root, 'p, li, blockquote').forEach(el => {
             const key = el.textContent.trim();
-            if (dict[key]) el.innerHTML = dict[key];
+            const translated = lookupTranslation(dict, key);
+            if (translated) el.innerHTML = translated;
         });
     }
 
     // ── Paso 4: atributos (placeholder, etc.) ──────────────────────────────
-    function translateAttributes(lang) {
+    function translateAttributes(lang, root = document.body) {
         const dict = attrDict[lang];
-        if (!dict) return;
+        if (!dict || !root) return;
 
         if (dict.placeholder) {
-            document.querySelectorAll('[placeholder]').forEach(el => {
+            collectElements(root, '[placeholder]').forEach(el => {
                 const key = el.getAttribute('placeholder');
-                if (dict.placeholder[key]) el.setAttribute('placeholder', dict.placeholder[key]);
+                const translated = lookupTranslation(dict.placeholder, key);
+                if (translated) el.setAttribute('placeholder', translated);
             });
         }
+    }
+
+    function setupLiveTranslationObserver(lang) {
+        if (liveTranslationObserver) {
+            liveTranslationObserver.disconnect();
+            liveTranslationObserver = null;
+        }
+
+        if (lang !== 'en' || !document.body || typeof MutationObserver === 'undefined') return;
+
+        liveTranslationObserver = new MutationObserver(mutations => {
+            if (processingLiveMutations || currentLang !== 'en') return;
+
+            const roots = [];
+            mutations.forEach(mutation => {
+                mutation.addedNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+                        roots.push(node);
+                    } else if (node.nodeType === Node.TEXT_NODE && node.parentElement) {
+                        roots.push(node.parentElement);
+                    }
+                });
+            });
+
+            if (!roots.length) return;
+
+            processingLiveMutations = true;
+            try {
+                roots.forEach(root => {
+                    translateTextNodes(currentLang, root);
+                    translateParagraphs(currentLang, root);
+                    translateHtmlElements(currentLang, root);
+                    translateAttributes(currentLang, root);
+                });
+            } finally {
+                processingLiveMutations = false;
+            }
+        });
+
+        liveTranslationObserver.observe(document.body, { childList: true, subtree: true });
     }
 
     // ── Paso 5: título de la pestaña ───────────────────────────────────────
@@ -2821,12 +3110,14 @@ const I18n = (() => {
 
     // ── API pública ────────────────────────────────────────────────────────
     function applyTranslation(lang) {
-        translateTextNodes(lang);
-        translateParagraphs(lang);
-        translateHtmlElements(lang);
-        translateAttributes(lang);
+        const root = document.body || document.documentElement;
+        translateTextNodes(lang, root);
+        translateParagraphs(lang, root);
+        translateHtmlElements(lang, root);
+        translateAttributes(lang, root);
         translateTitle(lang);
         translateHero(lang);
+        setupLiveTranslationObserver(lang);
         updateButton(lang);
         document.documentElement.lang = lang;
         document.dispatchEvent(new CustomEvent('i18n:langChange', { detail: { lang } }));
@@ -2852,5 +3143,5 @@ const I18n = (() => {
         if (saved === 'en') applyTranslation('en');
     }
 
-    return { setLanguage, init, getCurrentLang: () => currentLang };
+    return { setLanguage, init, getCurrentLang: () => currentLang, refresh: () => applyTranslation(currentLang) };
 })();

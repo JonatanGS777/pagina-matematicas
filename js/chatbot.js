@@ -2032,14 +2032,20 @@ Enviado desde el Chat Bot de Historia Matemática
     addToFavorites(period) {
         this.favoriteTopics.add(period);
         this.saveUserPreferences();
-        
-        // Update favorites indicator
-        const indicator = document.querySelector('.favorites-indicator');
-        if (indicator) {
-            indicator.classList.add('active');
-        }
+        this.updateFavoritesIndicator();
         
         this.addBotMessage(`⭐ "${period}" añadido a tus favoritos.`, true);
+    }
+
+    updateFavoritesIndicator() {
+        const indicator = document.querySelector('.favorites-indicator');
+        if (!indicator) return;
+
+        if (this.favoriteTopics && this.favoriteTopics.size > 0) {
+            indicator.classList.add('active');
+        } else {
+            indicator.classList.remove('active');
+        }
     }
     
     getRandomTip() {

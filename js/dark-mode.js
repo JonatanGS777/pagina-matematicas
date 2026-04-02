@@ -5,11 +5,50 @@ class DarkModeSystem {
         this.isDarkMode = false;
         this.toggleButton = null;
         this.isTransitioning = false;
+        this.mediaQuery = null;
+        this.projectRootUrl = this.getProjectRootUrl();
         this.init();
+    }
+
+    getProjectRootUrl() {
+        // Resolve a stable project root from the actual dark-mode.js script URL.
+        const scriptEl = document.currentScript || Array.from(document.scripts).find((s) =>
+            typeof s.src === 'string' && s.src.includes('dark-mode.js')
+        );
+
+        if (!scriptEl || !scriptEl.src) {
+            return new URL('./', window.location.href);
+        }
+
+        // dark-mode.js lives in /js/, so one level up is the site root.
+        return new URL('../', new URL(scriptEl.src, window.location.href));
+    }
+
+    resolveAssetUrl(relativePath) {
+        return new URL(String(relativePath).replace(/^\/+/, ''), this.projectRootUrl).href;
+    }
+
+    detectPageBackgroundImage() {
+        const animatedBg = document.querySelector('.animated-bg');
+        if (!animatedBg) return this.resolveAssetUrl('imagenes/fondo2.jpg');
+
+        const computedBg = window.getComputedStyle(animatedBg).backgroundImage || '';
+        const matches = Array.from(computedBg.matchAll(/url\((['"]?)(.*?)\1\)/g));
+        if (matches.length > 0) {
+            return matches[matches.length - 1][2];
+        }
+
+        return this.resolveAssetUrl('imagenes/fondo2.jpg');
+    }
+
+    refreshDarkBackgroundImageVariable() {
+        const pageBgImage = this.detectPageBackgroundImage();
+        document.documentElement.style.setProperty('--dark-mode-bg-image', `url("${pageBgImage}")`);
     }
     
     init() {
         this.addDarkModeStyles();
+        this.refreshDarkBackgroundImageVariable();
         this.createToggleButton();
         this.loadUserPreference();
         this.addEventListeners();
@@ -19,6 +58,7 @@ class DarkModeSystem {
     addDarkModeStyles() {
         const style = document.createElement('style');
         style.id = 'dark-mode-styles';
+        const darkBackgroundImage = this.resolveAssetUrl('imagenes/fondo2.jpg');
         style.textContent = `
             /* Dark Mode CSS Variables */
             :root {
@@ -54,7 +94,7 @@ class DarkModeSystem {
             .dark-mode .animated-bg {
                 background:
                     linear-gradient(-45deg, rgba(10, 14, 26, 0.65), rgba(26, 31, 46, 0.72), rgba(42, 47, 62, 0.65), rgba(10, 14, 26, 0.70)),
-                    url('imagenes/fondo2.jpg');
+                    var(--dark-mode-bg-image, url('${darkBackgroundImage}'));
                 background-size: 400% 400%, cover;
                 background-position: 0% 50%, center;
                 background-repeat: no-repeat;
@@ -66,7 +106,8 @@ class DarkModeSystem {
                 transition: all 0.3s ease !important;
             }
             
-            .dark-mode .header {
+            .dark-mode .header,
+            .dark-mode .navbar {
                 background: rgba(42, 47, 62, 0.95);
                 border-bottom: 1px solid rgba(139, 156, 247, 0.1);
                 transition: all 0.3s ease !important;
@@ -674,17 +715,7 @@ class DarkModeSystem {
                 this.toggleTheme();
             });
         }
-        
-        // Listen for system theme changes
-        if (window.matchMedia) {
-            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-            mediaQuery.addListener((e) => {
-                if (!this.hasUserPreference()) {
-                    this.setTheme(e.matches);
-                }
-            });
-        }
-        
+
         // Keyboard shortcut (Ctrl/Cmd + Shift + D)
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
@@ -692,36 +723,15 @@ class DarkModeSystem {
                 this.toggleTheme();
             }
         });
-        
-        // Header scroll effect with dark mode support
-        this.addScrollEffect();
+
+        window.addEventListener('load', () => {
+            this.refreshDarkBackgroundImageVariable();
+        });
     }
     
     addScrollEffect() {
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            if (!header) return;
-            
-            const isDark = document.documentElement.classList.contains('dark-mode');
-            
-            if (window.scrollY > 100) {
-                if (isDark) {
-                    header.style.background = 'rgba(42, 47, 62, 0.98)';
-                    header.style.boxShadow = '0 2px 20px rgba(10, 14, 26, 0.3)';
-                } else {
-                    header.style.background = 'rgba(255, 255, 255, 0.98)';
-                    header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-                }
-            } else {
-                if (isDark) {
-                    header.style.background = 'rgba(42, 47, 62, 0.95)';
-                    header.style.boxShadow = 'none';
-                } else {
-                    header.style.background = 'rgba(255, 255, 255, 0.95)';
-                    header.style.boxShadow = 'none';
-                }
-            }
-        });
+        // Intentionally unused.
+        // Each page already controls header scroll states with its own CSS/JS.
     }
     
     loadUserPreference() {
@@ -729,8 +739,10 @@ class DarkModeSystem {
         if (savedTheme !== null) {
             this.isDarkMode = savedTheme === 'true';
         } else {
-            // Check system preference
-            this.isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            // Default to light mode until the user explicitly chooses.
+            // This avoids mismatches between PC and mobile caused by OS theme.
+            this.isDarkMode = false;
+            localStorage.setItem('darkMode', 'false');
         }
     }
     
@@ -741,6 +753,10 @@ class DarkModeSystem {
     applyInitialTheme() {
         if (this.isDarkMode) {
             document.documentElement.classList.add('dark-mode');
+            document.body.classList.add('dark-mode');
+        } else {
+            document.documentElement.classList.remove('dark-mode');
+            document.body.classList.remove('dark-mode');
         }
         // Apply initial header state
         this.updateHeaderOnThemeChange();
@@ -772,10 +788,14 @@ class DarkModeSystem {
     }
     
     setTheme(isDark) {
+        this.refreshDarkBackgroundImageVariable();
+
         if (isDark) {
             document.documentElement.classList.add('dark-mode');
+            document.body.classList.add('dark-mode');
         } else {
             document.documentElement.classList.remove('dark-mode');
+            document.body.classList.remove('dark-mode');
         }
         this.isDarkMode = isDark;
         
@@ -784,28 +804,11 @@ class DarkModeSystem {
     }
     
     updateHeaderOnThemeChange() {
-        const header = document.querySelector('.header');
-        if (!header) return;
-        
-        const isDark = this.isDarkMode;
-        
-        if (window.scrollY > 100) {
-            if (isDark) {
-                header.style.background = 'rgba(42, 47, 62, 0.98)';
-                header.style.boxShadow = '0 2px 20px rgba(10, 14, 26, 0.3)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-            }
-        } else {
-            if (isDark) {
-                header.style.background = 'rgba(42, 47, 62, 0.95)';
-                header.style.boxShadow = 'none';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = 'none';
-            }
-        }
+        // Keep header visuals controlled by each page's own CSS/scroll logic.
+        document.querySelectorAll('.header, .navbar').forEach((el) => {
+            el.style.background = '';
+            el.style.boxShadow = '';
+        });
     }
     
     async createTransitionEffect() {
@@ -901,6 +904,9 @@ class DarkModeSystem {
             styleElement.remove();
         }
         document.documentElement.classList.remove('dark-mode');
+        if (document.body) {
+            document.body.classList.remove('dark-mode');
+        }
     }
 }
 

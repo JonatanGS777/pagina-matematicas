@@ -706,6 +706,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const labPanels = document.querySelectorAll('.lab-data-panel');
     
     if (!microscopeImage) return; // Salir si no existe el laboratorio virtual
+
+    let currentLang = localStorage.getItem('lang') || document.documentElement.lang || 'es';
+
+    function isEnglish() {
+        return currentLang === 'en';
+    }
+
+    function getPhaseLabel(phaseCode) {
+        const labels = {
+            es: {
+                lag: 'Latencia',
+                exponential: 'Exponencial',
+                stationary: 'Estacionaria',
+                death: 'Muerte'
+            },
+            en: {
+                lag: 'Lag',
+                exponential: 'Exponential',
+                stationary: 'Stationary',
+                death: 'Death'
+            }
+        };
+
+        const langLabels = isEnglish() ? labels.en : labels.es;
+        return langLabels[phaseCode] || phaseCode;
+    }
     
     // Datos de muestras
     const sampleData = {
@@ -844,16 +870,296 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     };
+
+    const sampleDataEn = {
+        'fase-lag': {
+            title: 'Lag Phase',
+            observations: `
+                <p>In this phase, bacteria are adapting to the new environment. There is no significant increase in cell count yet, but important metabolic changes are taking place:</p>
+                <ul>
+                    <li>Synthesis of enzymes and ribosomes required for growth</li>
+                    <li>Adaptation to the culture medium</li>
+                    <li>Cells are uniform in size and appear dispersed</li>
+                    <li>Low visible metabolic activity</li>
+                </ul>
+            `,
+            analysis: `
+                <p>Quantitative data:</p>
+                <ul>
+                    <li>Cell density: 1.2 × 10⁶ cells/ml</li>
+                    <li>Growth rate: close to 0</li>
+                    <li>Elapsed time: 0-2 hours</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <p>Enzymatic activity measurements:</p>
+                    <div style="height: 150px; background-color: #f8f9fa; border-radius: 5px; padding: 10px;">
+                        <canvas id="enzymeActivityChart"></canvas>
+                    </div>
+                </div>
+            `
+        },
+        'fase-exponencial': {
+            title: 'Exponential Phase',
+            observations: `
+                <p>Bacteria are dividing at their maximum rate. Main characteristics:</p>
+                <ul>
+                    <li>Rapid, synchronized cell division</li>
+                    <li>Cells are uniform in size and smaller than in the lag phase</li>
+                    <li>Formation of visible microcolonies</li>
+                    <li>High metabolic activity</li>
+                    <li>Active bacterial movement (in motile species)</li>
+                </ul>
+            `,
+            analysis: `
+                <p>Quantitative data:</p>
+                <ul>
+                    <li>Cell density: 5.7 × 10⁷ cells/ml</li>
+                    <li>Growth rate (r): 0.52 h⁻¹</li>
+                    <li>Doubling time: 1.33 hours</li>
+                    <li>Elapsed time: 2-6 hours</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <p>Growth curve:</p>
+                    <div style="height: 150px; background-color: #f8f9fa; border-radius: 5px; padding: 10px;">
+                        <canvas id="exponentialPhaseChart"></canvas>
+                    </div>
+                </div>
+            `
+        },
+        'fase-estacionaria': {
+            title: 'Stationary Phase',
+            observations: `
+                <p>The population has reached its carrying capacity. Observable characteristics:</p>
+                <ul>
+                    <li>Balance between dividing cells and dying cells</li>
+                    <li>High cell density with well-defined colonies</li>
+                    <li>Variation in cell size (some smaller cells)</li>
+                    <li>Morphological changes as a stress response</li>
+                    <li>Biofilm and resistance-structure formation</li>
+                </ul>
+            `,
+            analysis: `
+                <p>Quantitative data:</p>
+                <ul>
+                    <li>Cell density: 4.9 × 10⁸ cells/ml</li>
+                    <li>Net growth rate: approximately 0</li>
+                    <li>Secondary metabolite production: high</li>
+                    <li>Elapsed time: 8-12 hours</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <p>Metabolite analysis:</p>
+                    <div style="height: 150px; background-color: #f8f9fa; border-radius: 5px; padding: 10px;">
+                        <canvas id="metabolitesChart"></canvas>
+                    </div>
+                </div>
+            `
+        },
+        'fase-muerte': {
+            title: 'Death Phase',
+            observations: `
+                <p>The bacterial population starts to decline. Observable characteristics:</p>
+                <ul>
+                    <li>High proportion of dead or damaged cells</li>
+                    <li>Cell fragmentation and visible cellular debris</li>
+                    <li>Morphological heterogeneity (cells of different sizes and shapes)</li>
+                    <li>Spore formation in capable species</li>
+                    <li>Decrease in culture optical density</li>
+                </ul>
+            `,
+            analysis: `
+                <p>Quantitative data:</p>
+                <ul>
+                    <li>Viable cell density: 1.2 × 10⁸ cells/ml</li>
+                    <li>Death rate: 0.15 h⁻¹</li>
+                    <li>Viable/non-viable cell ratio: 1:3</li>
+                    <li>Elapsed time: 24+ hours</li>
+                </ul>
+                <div style="margin-top: 1rem;">
+                    <p>Cell viability analysis:</p>
+                    <div style="height: 150px; background-color: #f8f9fa; border-radius: 5px; padding: 10px;">
+                        <canvas id="viabilityChart"></canvas>
+                    </div>
+                </div>
+            `
+        }
+    };
     
     // Inicializar microscopio
     let currentSample = 'fase-lag';
     let currentZoom = 1;
     let currentBrightness = 1;
+    const syntheticMicroscopeCache = {};
+
+    function seedFromString(str) {
+        let seed = 0;
+        for (let i = 0; i < str.length; i++) {
+            seed = (seed << 5) - seed + str.charCodeAt(i);
+            seed |= 0;
+        }
+        return Math.abs(seed) + 1;
+    }
+
+    function mulberry32(seed) {
+        let t = seed >>> 0;
+        return function() {
+            t += 0x6D2B79F5;
+            let r = Math.imul(t ^ (t >>> 15), t | 1);
+            r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+            return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+        };
+    }
+
+    function getPhaseVisualConfig(sampleId) {
+        const map = {
+            'fase-lag': {
+                cells: 24,
+                sizeMin: 2.4,
+                sizeMax: 5.8,
+                hueMin: 170,
+                hueMax: 245,
+                sat: 84,
+                lightMin: 52,
+                lightMax: 70,
+                alphaMin: 0.35,
+                alphaMax: 0.68,
+                glow: '#9cfaf0',
+                base1: '#e9f8ff',
+                base2: '#d9e9ff',
+                rodChance: 0.25
+            },
+            'fase-exponencial': {
+                cells: 92,
+                sizeMin: 1.9,
+                sizeMax: 4.9,
+                hueMin: 176,
+                hueMax: 225,
+                sat: 86,
+                lightMin: 47,
+                lightMax: 66,
+                alphaMin: 0.45,
+                alphaMax: 0.9,
+                glow: '#89ffe9',
+                base1: '#e4fbf7',
+                base2: '#d4e7ff',
+                rodChance: 0.35
+            },
+            'fase-estacionaria': {
+                cells: 128,
+                sizeMin: 2.2,
+                sizeMax: 5.6,
+                hueMin: 188,
+                hueMax: 272,
+                sat: 72,
+                lightMin: 45,
+                lightMax: 62,
+                alphaMin: 0.42,
+                alphaMax: 0.78,
+                glow: '#c3b8ff',
+                base1: '#e7ecff',
+                base2: '#d8def5',
+                rodChance: 0.42
+            },
+            'fase-muerte': {
+                cells: 96,
+                sizeMin: 1.8,
+                sizeMax: 4.6,
+                hueMin: 350,
+                hueMax: 42,
+                sat: 62,
+                lightMin: 42,
+                lightMax: 58,
+                alphaMin: 0.2,
+                alphaMax: 0.54,
+                glow: '#f8c8a6',
+                base1: '#ede4e1',
+                base2: '#d9d7dd',
+                rodChance: 0.3
+            }
+        };
+        return map[sampleId] || map['fase-lag'];
+    }
+
+    function buildSyntheticMicroscopeImage(sampleId) {
+        if (syntheticMicroscopeCache[sampleId]) return syntheticMicroscopeCache[sampleId];
+
+        const cfg = getPhaseVisualConfig(sampleId);
+        const random = mulberry32(seedFromString(sampleId));
+        const width = 1200;
+        const height = 900;
+        const cx = width / 2;
+        const cy = height / 2;
+        const dishRadius = 330;
+        let cellsSvg = '';
+
+        for (let i = 0; i < cfg.cells; i++) {
+            const angle = random() * Math.PI * 2;
+            const distance = Math.sqrt(random()) * (dishRadius - 24);
+            const x = cx + Math.cos(angle) * distance;
+            const y = cy + Math.sin(angle) * distance;
+            const size = cfg.sizeMin + random() * (cfg.sizeMax - cfg.sizeMin);
+            const hue = cfg.hueMin + random() * (cfg.hueMax - cfg.hueMin);
+            const light = cfg.lightMin + random() * (cfg.lightMax - cfg.lightMin);
+            const alpha = cfg.alphaMin + random() * (cfg.alphaMax - cfg.alphaMin);
+
+            cellsSvg += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${size.toFixed(2)}" fill="hsla(${hue.toFixed(0)},${cfg.sat}%,${light.toFixed(0)}%,${alpha.toFixed(3)})" />`;
+
+            if (random() < cfg.rodChance) {
+                const w = size * (1.8 + random() * 1.3);
+                const h = size * (0.68 + random() * 0.24);
+                const rot = (random() * 180).toFixed(2);
+                cellsSvg += `<ellipse cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" rx="${w.toFixed(2)}" ry="${h.toFixed(2)}" transform="rotate(${rot} ${x.toFixed(2)} ${y.toFixed(2)})" fill="hsla(${(hue + 10).toFixed(0)},${Math.max(40, cfg.sat - 12)}%,${Math.max(30, light - 6).toFixed(0)}%,${Math.min(0.75, alpha + 0.08).toFixed(3)})" />`;
+            }
+        }
+
+        let debrisSvg = '';
+        if (sampleId === 'fase-muerte') {
+            for (let i = 0; i < 35; i++) {
+                const angle = random() * Math.PI * 2;
+                const distance = Math.sqrt(random()) * (dishRadius - 15);
+                const x = cx + Math.cos(angle) * distance;
+                const y = cy + Math.sin(angle) * distance;
+                const w = 6 + random() * 14;
+                const h = 1 + random() * 3;
+                const rot = (random() * 180).toFixed(2);
+                debrisSvg += `<ellipse cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" rx="${w.toFixed(2)}" ry="${h.toFixed(2)}" transform="rotate(${rot} ${x.toFixed(2)} ${y.toFixed(2)})" fill="rgba(80, 52, 52, 0.22)" />`;
+            }
+        }
+
+        const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="72%">
+      <stop offset="0%" stop-color="${cfg.base1}" />
+      <stop offset="100%" stop-color="${cfg.base2}" />
+    </radialGradient>
+    <radialGradient id="dish" cx="48%" cy="42%" r="68%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.92)" />
+      <stop offset="100%" stop-color="rgba(198,212,235,0.72)" />
+    </radialGradient>
+    <radialGradient id="glow" cx="52%" cy="48%" r="68%">
+      <stop offset="0%" stop-color="${cfg.glow}" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="${cfg.glow}" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="${width}" height="${height}" fill="url(#bg)" />
+  <circle cx="${cx}" cy="${cy}" r="${dishRadius + 22}" fill="rgba(91,76,245,0.12)" />
+  <circle cx="${cx}" cy="${cy}" r="${dishRadius}" fill="url(#dish)" />
+  <circle cx="${cx}" cy="${cy}" r="${dishRadius - 10}" fill="url(#glow)" />
+  ${cellsSvg}
+  ${debrisSvg}
+  <circle cx="${cx}" cy="${cy}" r="${dishRadius}" fill="none" stroke="rgba(91,76,245,0.25)" stroke-width="5" />
+  <ellipse cx="${cx - 120}" cy="${cy - 130}" rx="${dishRadius * 0.36}" ry="${dishRadius * 0.19}" fill="rgba(255,255,255,0.22)" />
+</svg>`;
+
+        const dataUri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        syntheticMicroscopeCache[sampleId] = dataUri;
+        return dataUri;
+    }
     
     // Cambiar muestra
     function changeSample(sampleId) {
         // Actualizar imagen
-        microscopeImage.src = `${sampleId}.png`;
+        microscopeImage.src = buildSyntheticMicroscopeImage(sampleId);
         currentSample = sampleId;
         
         // Actualizar información
@@ -870,8 +1176,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Actualizar información de la muestra
     function updateSampleInfo(sampleId) {
-        const sampleInfo = sampleData[sampleId];
-        if (!sampleInfo) return;
+        const baseInfo = sampleData[sampleId];
+        if (!baseInfo) return;
+        const localizedInfo = isEnglish() && sampleDataEn[sampleId]
+            ? { ...baseInfo, ...sampleDataEn[sampleId], modelParams: baseInfo.modelParams }
+            : baseInfo;
         
         // Actualizar paneles
         const observationsPanel = document.getElementById('sample-observations');
@@ -879,26 +1188,32 @@ document.addEventListener('DOMContentLoaded', function() {
         const modelParamsPanel = document.getElementById('sample-model-params');
         
         if (observationsPanel) {
-            observationsPanel.innerHTML = sampleInfo.observations;
+            observationsPanel.innerHTML = localizedInfo.observations;
         }
         
         if (analysisPanel) {
-            analysisPanel.innerHTML = sampleInfo.analysis;
+            analysisPanel.innerHTML = localizedInfo.analysis;
             
             // Inicializar gráficos específicos para cada fase
             initializePhaseSpecificCharts(sampleId);
         }
         
         if (modelParamsPanel) {
-            const params = sampleInfo.modelParams;
+            const params = localizedInfo.modelParams;
+            const modelParamsLabel = isEnglish() ? 'Model parameters:' : 'Parámetros del modelo:';
+            const initialPopulationLabel = isEnglish() ? 'Initial population (P₀)' : 'Población inicial (P₀)';
+            const growthRateLabel = isEnglish() ? 'Growth rate (r)' : 'Tasa de crecimiento (r)';
+            const carryingCapacityLabel = isEnglish() ? 'Carrying capacity (K)' : 'Capacidad de carga (K)';
+            const currentPhaseLabel = isEnglish() ? 'Current phase:' : 'Fase actual:';
+
             modelParamsPanel.innerHTML = `
-                <p><strong>Parámetros del modelo:</strong></p>
+                <p><strong>${modelParamsLabel}</strong></p>
                 <ul>
-                    <li>Población inicial (P₀): ${params.p0}</li>
-                    <li>Tasa de crecimiento (r): ${params.r}</li>
-                    <li>Capacidad de carga (K): ${params.k}</li>
+                    <li>${initialPopulationLabel}: ${params.p0}</li>
+                    <li>${growthRateLabel}: ${params.r}</li>
+                    <li>${carryingCapacityLabel}: ${params.k}</li>
                 </ul>
-                <p style="margin-top: 0.5rem;"><strong>Fase actual:</strong> ${params.currentPhase.charAt(0).toUpperCase() + params.currentPhase.slice(1)}</p>
+                <p style="margin-top: 0.5rem;"><strong>${currentPhaseLabel}</strong> ${getPhaseLabel(params.currentPhase)}</p>
             `;
             
             // Actualizar gráfico del modelo
@@ -917,7 +1232,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         data: {
                             labels: ['0h', '0.5h', '1h', '1.5h', '2h'],
                             datasets: [{
-                                label: 'Actividad Enzimática',
+                                label: isEnglish() ? 'Enzymatic Activity' : 'Actividad Enzimática',
                                 data: [10, 15, 25, 45, 70],
                                 borderColor: '#4a2bac',
                                 backgroundColor: 'rgba(74, 43, 172, 0.1)',
@@ -933,7 +1248,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     beginAtZero: true,
                                     title: {
                                         display: true,
-                                        text: 'Actividad (u.a.)'
+                                        text: isEnglish() ? 'Activity (a.u.)' : 'Actividad (u.a.)'
                                     }
                                 }
                             }
@@ -950,7 +1265,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         data: {
                             labels: ['2h', '3h', '4h', '5h', '6h'],
                             datasets: [{
-                                label: 'Densidad Celular',
+                                label: isEnglish() ? 'Cell Density' : 'Densidad Celular',
                                 data: [10, 50, 250, 1250, 6250],
                                 borderColor: '#ef476f',
                                 backgroundColor: 'rgba(239, 71, 111, 0.1)',
@@ -966,7 +1281,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     type: 'logarithmic',
                                     title: {
                                         display: true,
-                                        text: 'Células/ml (log)'
+                                        text: isEnglish() ? 'Cells/ml (log)' : 'Células/ml (log)'
                                     }
                                 }
                             }
@@ -981,9 +1296,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     new Chart(metaCtx, {
                         type: 'bar',
                         data: {
-                            labels: ['Antibióticos', 'Pigmentos', 'Enzimas', 'Toxinas'],
+                            labels: isEnglish()
+                                ? ['Antibiotics', 'Pigments', 'Enzymes', 'Toxins']
+                                : ['Antibióticos', 'Pigmentos', 'Enzimas', 'Toxinas'],
                             datasets: [{
-                                label: 'Concentración Relativa',
+                                label: isEnglish() ? 'Relative Concentration' : 'Concentración Relativa',
                                 data: [75, 60, 85, 45],
                                 backgroundColor: [
                                     'rgba(0, 187, 249, 0.7)',
@@ -1002,7 +1319,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     beginAtZero: true,
                                     title: {
                                         display: true,
-                                        text: 'Concentración (%)'
+                                        text: isEnglish() ? 'Concentration (%)' : 'Concentración (%)'
                                     }
                                 }
                             }
@@ -1017,7 +1334,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     new Chart(viabilityCtx, {
                         type: 'pie',
                         data: {
-                            labels: ['Células Viables', 'Células Dañadas', 'Células Muertas'],
+                            labels: isEnglish()
+                                ? ['Viable Cells', 'Damaged Cells', 'Dead Cells']
+                                : ['Células Viables', 'Células Dañadas', 'Células Muertas'],
                             datasets: [{
                                 data: [25, 30, 45],
                                 backgroundColor: [
@@ -1077,13 +1396,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Crear o actualizar gráfico
         if (window.microModelChart) {
-            window.microModelChart.data.labels = timeLabels;
-            window.microModelChart.data.datasets[0].data = modelData;
-            if (window.microModelChart.data.datasets.length > 1) {
-                window.microModelChart.data.datasets[1].data = [phasePoint];
-            } else {
-                window.microModelChart.data.datasets.push({
-                    label: 'Fase Actual',
+                window.microModelChart.data.labels = timeLabels;
+                window.microModelChart.data.datasets[0].data = modelData;
+                window.microModelChart.data.datasets[0].label = isEnglish() ? 'Logistic Model' : 'Modelo Logístico';
+                if (window.microModelChart.data.datasets.length > 1) {
+                    window.microModelChart.data.datasets[1].data = [phasePoint];
+                    window.microModelChart.data.datasets[1].label = isEnglish() ? 'Current Phase' : 'Fase Actual';
+                } else {
+                    window.microModelChart.data.datasets.push({
+                    label: isEnglish() ? 'Current Phase' : 'Fase Actual',
                     data: [phasePoint],
                     backgroundColor: '#ef476f',
                     borderColor: '#ef476f',
@@ -1091,8 +1412,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     pointHoverRadius: 8,
                     showLine: false
                 });
-            }
-            window.microModelChart.update();
+                }
+                if (window.microModelChart.options && window.microModelChart.options.scales) {
+                    if (window.microModelChart.options.scales.y && window.microModelChart.options.scales.y.title) {
+                        window.microModelChart.options.scales.y.title.text = isEnglish() ? 'Population' : 'Población';
+                    }
+                    if (window.microModelChart.options.scales.x && window.microModelChart.options.scales.x.title) {
+                        window.microModelChart.options.scales.x.title.text = isEnglish() ? 'Time (hours)' : 'Tiempo (horas)';
+                    }
+                }
+                window.microModelChart.update();
         } else {
             window.microModelChart = new Chart(modelChartCtx, {
                 type: 'line',
@@ -1100,7 +1429,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     labels: timeLabels,
                     datasets: [
                         {
-                            label: 'Modelo Logístico',
+                            label: isEnglish() ? 'Logistic Model' : 'Modelo Logístico',
                             data: modelData,
                             borderColor: '#4a2bac',
                             backgroundColor: 'rgba(74, 43, 172, 0.1)',
@@ -1108,7 +1437,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             fill: true
                         },
                         {
-                            label: 'Fase Actual',
+                            label: isEnglish() ? 'Current Phase' : 'Fase Actual',
                             data: [phasePoint],
                             backgroundColor: '#ef476f',
                             borderColor: '#ef476f',
@@ -1126,13 +1455,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Población'
+                                text: isEnglish() ? 'Population' : 'Población'
                             }
                         },
                         x: {
                             title: {
                                 display: true,
-                                text: 'Tiempo (horas)'
+                                text: isEnglish() ? 'Time (hours)' : 'Tiempo (horas)'
                             }
                         }
                     }
@@ -1213,9 +1542,246 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(`${tabId}-panel`).classList.add('active');
         });
     });
+
+    document.addEventListener('i18n:langChange', function(event) {
+        const nextLang = event && event.detail ? event.detail.lang : null;
+        currentLang = nextLang || localStorage.getItem('lang') || 'es';
+        updateSampleInfo(currentSample);
+    });
     
     // Inicializar con la primera muestra
     changeSample('fase-lag');
+});
+
+// ==========================================
+// Desglose Interactivo de Usos Reales
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    const diagram = document.getElementById('realUsesDiagram');
+    if (!diagram) return;
+
+    const headingEl = document.getElementById('realUsesHeading');
+    const subtitleEl = document.getElementById('realUsesSubtitle');
+    const hubTopEl = document.getElementById('realUsesHubTop');
+    const hubBottomEl = document.getElementById('realUsesHubBottom');
+    const detailTitleEl = document.getElementById('realUseTitle');
+    const detailDescriptionEl = document.getElementById('realUseDescription');
+    const detailListEl = document.getElementById('realUseList');
+    const metricPrecisionLabelEl = document.getElementById('realUseMetricPrecisionLabel');
+    const metricScaleLabelEl = document.getElementById('realUseMetricScaleLabel');
+    const metricImpactLabelEl = document.getElementById('realUseMetricImpactLabel');
+    const metricPrecisionFillEl = document.getElementById('realUseMetricPrecisionFill');
+    const metricScaleFillEl = document.getElementById('realUseMetricScaleFill');
+    const metricImpactFillEl = document.getElementById('realUseMetricImpactFill');
+    const metricPrecisionValueEl = document.getElementById('realUseMetricPrecisionValue');
+    const metricScaleValueEl = document.getElementById('realUseMetricScaleValue');
+    const metricImpactValueEl = document.getElementById('realUseMetricImpactValue');
+    const nodes = Array.from(diagram.querySelectorAll('.use-node'));
+
+    let activeKey = 'industry';
+    let currentLang = (localStorage.getItem('lang') || document.documentElement.lang || 'es') === 'en' ? 'en' : 'es';
+
+    const realUsesData = {
+        es: {
+            heading: 'Aplicaciones prácticas del modelado poblacional',
+            subtitle: 'Selecciona un sector para ver su desglose interactivo.',
+            hubTop: 'Bio + Matemáticas',
+            hubBottom: 'Modelado poblacional',
+            metrics: {
+                precision: 'Precisión del modelo',
+                scale: 'Escalabilidad',
+                impact: 'Impacto social'
+            },
+            items: {
+                industry: {
+                    label: 'Industria',
+                    tag: 'Bioprocesos',
+                    title: 'Bioprocesos industriales',
+                    description: 'Los modelos matemáticos optimizan el crecimiento microbiano en plantas y procesos de gran escala.',
+                    points: [
+                        'Ajuste de temperatura, nutrientes y tiempos de fermentación.',
+                        'Predicción de saturación y acumulación de desechos.',
+                        'Mayor rendimiento con menor costo energético.'
+                    ],
+                    metrics: { precision: 89, scale: 93, impact: 86 }
+                },
+                lab: {
+                    label: 'Laboratorio',
+                    tag: 'Diagnóstico',
+                    title: 'Microbiología clínica',
+                    description: 'El seguimiento de colonias en placas permite estimar tasas de crecimiento y detectar anomalías tempranas.',
+                    points: [
+                        'Comparación entre curvas esperadas y crecimiento observado.',
+                        'Detección rápida de cambios en la fase exponencial.',
+                        'Mejor planificación de tiempos de incubación.'
+                    ],
+                    metrics: { precision: 92, scale: 74, impact: 84 }
+                },
+                pharma: {
+                    label: 'Farmacéutica',
+                    tag: 'Producción',
+                    title: 'Producción de medicamentos',
+                    description: 'La modelación poblacional apoya la fabricación de antibióticos y el control de calidad en lotes farmacéuticos.',
+                    points: [
+                        'Estimación de productividad por lote y por hora.',
+                        'Control de consistencia en líneas de tabletas.',
+                        'Reducción de desperdicio en etapas críticas.'
+                    ],
+                    metrics: { precision: 88, scale: 90, impact: 91 }
+                },
+                vaccine: {
+                    label: 'Vacunación',
+                    tag: 'Salud pública',
+                    title: 'Estrategias de inmunización',
+                    description: 'Los modelos ayudan a simular cobertura y priorización para reducir riesgos en poblaciones vulnerables.',
+                    points: [
+                        'Proyección de escenarios de cobertura por región.',
+                        'Priorización de grupos con mayor exposición.',
+                        'Soporte para campañas de prevención basadas en datos.'
+                    ],
+                    metrics: { precision: 87, scale: 85, impact: 95 }
+                }
+            }
+        },
+        en: {
+            heading: 'Practical applications of population modeling',
+            subtitle: 'Select a sector to view its interactive breakdown.',
+            hubTop: 'Biology + Math',
+            hubBottom: 'Population modeling',
+            metrics: {
+                precision: 'Model precision',
+                scale: 'Scalability',
+                impact: 'Social impact'
+            },
+            items: {
+                industry: {
+                    label: 'Industry',
+                    tag: 'Bioprocesses',
+                    title: 'Industrial bioprocesses',
+                    description: 'Mathematical models optimize microbial growth in plants and large-scale production workflows.',
+                    points: [
+                        'Fine-tuning temperature, nutrients, and fermentation timing.',
+                        'Forecasting saturation and waste accumulation.',
+                        'Higher yield with lower energy cost.'
+                    ],
+                    metrics: { precision: 89, scale: 93, impact: 86 }
+                },
+                lab: {
+                    label: 'Laboratory',
+                    tag: 'Diagnostics',
+                    title: 'Clinical microbiology',
+                    description: 'Tracking colonies in petri dishes helps estimate growth rates and detect early anomalies.',
+                    points: [
+                        'Comparing expected curves with observed growth.',
+                        'Early detection of shifts in the exponential phase.',
+                        'Better incubation time planning.'
+                    ],
+                    metrics: { precision: 92, scale: 74, impact: 84 }
+                },
+                pharma: {
+                    label: 'Pharma',
+                    tag: 'Manufacturing',
+                    title: 'Drug production',
+                    description: 'Population modeling supports antibiotic manufacturing and batch quality control in pharma production.',
+                    points: [
+                        'Estimating productivity per batch and per hour.',
+                        'Consistency control across tablet production lines.',
+                        'Reducing waste in critical production stages.'
+                    ],
+                    metrics: { precision: 88, scale: 90, impact: 91 }
+                },
+                vaccine: {
+                    label: 'Vaccination',
+                    tag: 'Public health',
+                    title: 'Immunization strategies',
+                    description: 'Models help simulate coverage and prioritization to reduce risk in vulnerable populations.',
+                    points: [
+                        'Coverage scenario projection by region.',
+                        'Prioritizing groups with higher exposure.',
+                        'Data-informed prevention campaign planning.'
+                    ],
+                    metrics: { precision: 87, scale: 85, impact: 95 }
+                }
+            }
+        }
+    };
+
+    function applyNodeText(content) {
+        nodes.forEach(node => {
+            const key = node.getAttribute('data-use');
+            const item = content.items[key];
+            if (!item) return;
+            const labelEl = node.querySelector('.use-node-label');
+            const tagEl = node.querySelector('.use-node-tag');
+            if (labelEl) labelEl.textContent = item.label;
+            if (tagEl) tagEl.textContent = item.tag;
+        });
+    }
+
+    function applyDetails(content) {
+        const item = content.items[activeKey] || content.items.industry;
+        if (!item) return;
+
+        detailTitleEl.textContent = item.title;
+        detailDescriptionEl.textContent = item.description;
+        detailListEl.innerHTML = item.points.map(point => `<li>${point}</li>`).join('');
+
+        metricPrecisionLabelEl.textContent = content.metrics.precision;
+        metricScaleLabelEl.textContent = content.metrics.scale;
+        metricImpactLabelEl.textContent = content.metrics.impact;
+
+        metricPrecisionFillEl.style.width = item.metrics.precision + '%';
+        metricScaleFillEl.style.width = item.metrics.scale + '%';
+        metricImpactFillEl.style.width = item.metrics.impact + '%';
+
+        metricPrecisionValueEl.textContent = item.metrics.precision + '%';
+        metricScaleValueEl.textContent = item.metrics.scale + '%';
+        metricImpactValueEl.textContent = item.metrics.impact + '%';
+    }
+
+    function renderDiagram() {
+        const content = realUsesData[currentLang] || realUsesData.es;
+        headingEl.textContent = content.heading;
+        subtitleEl.textContent = content.subtitle;
+        hubTopEl.textContent = content.hubTop;
+        hubBottomEl.textContent = content.hubBottom;
+
+        applyNodeText(content);
+        applyDetails(content);
+
+        nodes.forEach(node => {
+            const isActive = node.getAttribute('data-use') === activeKey;
+            node.classList.toggle('active', isActive);
+            node.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+    }
+
+    function setActiveNode(key) {
+        if (!key) return;
+        activeKey = key;
+        renderDiagram();
+    }
+
+    nodes.forEach(node => {
+        node.addEventListener('click', function() {
+            setActiveNode(this.getAttribute('data-use'));
+        });
+
+        node.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                setActiveNode(this.getAttribute('data-use'));
+            }
+        });
+    });
+
+    document.addEventListener('i18n:langChange', function(event) {
+        const nextLang = event && event.detail ? event.detail.lang : null;
+        currentLang = nextLang === 'en' ? 'en' : 'es';
+        renderDiagram();
+    });
+
+    renderDiagram();
 });
 
 // ==========================================

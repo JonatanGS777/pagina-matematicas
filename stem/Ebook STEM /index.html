@@ -15,7 +15,6 @@
     <script src="nuevas-funciones.js" defer></script>
     <!-- Añadir el nuevo script de corrección -->
     <script src="casos-reales-fix.js" defer></script>
-    <script src="laboratorio-virtual-fix.js" defer></script>
 </head>
 <body>
     <div class="progress-container">
@@ -415,15 +414,86 @@
                             </li>
                             <li><strong>Discusión grupal:</strong> ¿Qué pasó con la población? ¿Cómo afecta cada parámetro?</li>
                         </ol>
-                        <div style="display: flex; margin-top: 1.5rem; gap: 1rem;">
-                            <div style="flex: 1;">
-                                <img src="images/factores-limitantes.png" alt="Factores que limitan el crecimiento bacteriano" style="width: 100%; border-radius: 8px;" loading="lazy">
-                                <p style="text-align: center; font-size: 0.9rem; margin-top: 0.5rem;">Factores que limitan el crecimiento</p>
-                            </div>
-                            <div style="flex: 1;">
-                                <img src="images/colonia-bacterias.png" alt="Colonia de bacterias en crecimiento" style="width: 100%; border-radius: 8px;" loading="lazy">
-                                <p style="text-align: center; font-size: 0.9rem; margin-top: 0.5rem;">Colonia bacteriana real</p>
-                            </div>
+                        <div class="visual-duo-panel" aria-label="Visualizaciones sobre factores y crecimiento bacteriano">
+                            <article class="concept-visual-card factor-card">
+                                <div class="concept-visual-head">
+                                    <h4>Gráfica de factores limitantes</h4>
+                                    <span>Impacto relativo (%)</span>
+                                </div>
+
+                                <div class="factors-chart" id="factorsChart" role="img" aria-label="Gráfica de barras con factores limitantes bacterianos">
+                                    <div class="chart-grid-line" style="--line: 1;"></div>
+                                    <div class="chart-grid-line" style="--line: 2;"></div>
+                                    <div class="chart-grid-line" style="--line: 3;"></div>
+                                    <div class="chart-grid-line" style="--line: 4;"></div>
+
+                                    <div class="factor-bar" data-factor="Nutrientes" data-value="82" style="--value:82; --bar-color:#00E5C3;">
+                                        <span class="factor-value">82%</span>
+                                    </div>
+                                    <div class="factor-bar" data-factor="Espacio" data-value="68" style="--value:68; --bar-color:#5B4CF5;">
+                                        <span class="factor-value">68%</span>
+                                    </div>
+                                    <div class="factor-bar" data-factor="pH" data-value="57" style="--value:57; --bar-color:#A78BFA;">
+                                        <span class="factor-value">57%</span>
+                                    </div>
+                                    <div class="factor-bar" data-factor="Temperatura" data-value="74" style="--value:74; --bar-color:#06B6D4;">
+                                        <span class="factor-value">74%</span>
+                                    </div>
+                                    <div class="factor-bar" data-factor="Desechos" data-value="49" style="--value:49; --bar-color:#F59E0B;">
+                                        <span class="factor-value">49%</span>
+                                    </div>
+                                </div>
+
+                                <div class="factor-labels">
+                                    <span>Nutrientes</span>
+                                    <span>Espacio</span>
+                                    <span>pH</span>
+                                    <span>Temp.</span>
+                                    <span>Desechos</span>
+                                </div>
+
+                                <p class="concept-note">
+                                    Cada barra representa cuánto limita ese factor el crecimiento. Valores más altos implican mayor presión sobre la población.
+                                </p>
+                            </article>
+
+                            <article class="concept-visual-card petri-card">
+                                <div class="concept-visual-head">
+                                    <h4>Simulación visual de colonia bacteriana</h4>
+                                    <span>Micromundo interactivo</span>
+                                </div>
+
+                                <canvas id="petriDishCanvas" width="460" height="280" aria-label="Simulación de colonia bacteriana en placa de Petri"></canvas>
+
+                                <div class="petri-metrics">
+                                    <div class="metric-chip">
+                                        <span>Población estimada</span>
+                                        <strong id="petriPopulation">10</strong>
+                                    </div>
+                                    <div class="metric-chip">
+                                        <span>Fase de crecimiento</span>
+                                        <strong id="petriPhase">Latencia</strong>
+                                    </div>
+                                </div>
+
+                                <div class="petri-controls">
+                                    <label>
+                                        Condiciones de crecimiento
+                                        <span class="petri-control-value" id="petriGrowthValue">0.60</span>
+                                        <input type="range" id="petriGrowthControl" min="0.2" max="1.5" step="0.05" value="0.6">
+                                    </label>
+                                    <label>
+                                        Nivel de nutrientes
+                                        <span class="petri-control-value" id="petriNutrientValue">70%</span>
+                                        <input type="range" id="petriNutrientControl" min="30" max="100" step="1" value="70">
+                                    </label>
+                                </div>
+
+                                <div class="petri-actions">
+                                    <button class="btn btn-secondary" id="petriToggleBtn" type="button">Pausar</button>
+                                    <button class="btn btn-secondary" id="petriResetBtn" type="button">Reiniciar</button>
+                                </div>
+                            </article>
                         </div>
                     </div>
                 </div>
@@ -675,7 +745,7 @@
                                 <div class="sample-selector">
                                     <div class="sample-option active" data-sample="fase-lag">
                                         <div class="sample-thumbnail">
-                                            <img src="images/fase-lag-thumb.png" alt="Fase de latencia" loading="lazy">
+                                            <div class="phase-thumb phase-lag" aria-hidden="true"></div>
                                         </div>
                                         <div class="sample-info">
                                             <h4>Fase de Latencia</h4>
@@ -684,7 +754,7 @@
                                     </div>
                                     <div class="sample-option" data-sample="fase-exponencial">
                                         <div class="sample-thumbnail">
-                                            <img src="images/fase-exponencial-thumb.png" alt="Fase exponencial" loading="lazy">
+                                            <div class="phase-thumb phase-exponencial" aria-hidden="true"></div>
                                         </div>
                                         <div class="sample-info">
                                             <h4>Fase Exponencial</h4>
@@ -693,7 +763,7 @@
                                     </div>
                                     <div class="sample-option" data-sample="fase-estacionaria">
                                         <div class="sample-thumbnail">
-                                            <img src="images/fase-estacionaria-thumb.png" alt="Fase estacionaria" loading="lazy">
+                                            <div class="phase-thumb phase-estacionaria" aria-hidden="true"></div>
                                         </div>
                                         <div class="sample-info">
                                             <h4>Fase Estacionaria</h4>
@@ -702,7 +772,7 @@
                                     </div>
                                     <div class="sample-option" data-sample="fase-muerte">
                                         <div class="sample-thumbnail">
-                                            <img src="images/fase-muerte-thumb.png" alt="Fase de muerte" loading="lazy">
+                                            <div class="phase-thumb phase-muerte" aria-hidden="true"></div>
                                         </div>
                                         <div class="sample-info">
                                             <h4>Fase de Muerte</h4>
@@ -883,8 +953,68 @@
                         <p>La lección no solo enseña sobre biología o matemáticas, sino que integra la programación como una herramienta para investigar la vida. Ayuda a los estudiantes a visualizar fenómenos invisibles de manera práctica y artística, desarrollando habilidades clave para un mundo dominado por la tecnología y los datos.</p>
                         
                         <div style="margin-top: 1.5rem;">
-                            <img src="images/aplicaciones-reales.png" alt="Aplicaciones del modelado poblacional" style="width: 100%; border-radius: 8px; margin-bottom: 1.5rem;" loading="lazy">
-                            <p style="text-align: center; font-size: 0.9rem; margin-bottom: 1.5rem;">Aplicaciones prácticas del modelado poblacional en ciencia e industria</p>
+                            <div class="real-uses-diagram" id="realUsesDiagram">
+                                <div class="real-uses-head">
+                                    <h3 class="real-uses-heading" id="realUsesHeading">Aplicaciones prácticas del modelado poblacional</h3>
+                                    <p class="real-uses-subtitle" id="realUsesSubtitle">Selecciona un sector para ver su desglose interactivo.</p>
+                                </div>
+                                <div class="real-uses-layout">
+                                    <div class="uses-map" role="tablist" aria-label="Diagrama interactivo de aplicaciones reales">
+                                        <button class="use-node node-industry active" data-use="industry" type="button" role="tab" aria-selected="true">
+                                            <i class="fas fa-industry" aria-hidden="true"></i>
+                                            <span class="use-node-label"></span>
+                                            <small class="use-node-tag"></small>
+                                        </button>
+                                        <button class="use-node node-lab" data-use="lab" type="button" role="tab" aria-selected="false">
+                                            <i class="fas fa-microscope" aria-hidden="true"></i>
+                                            <span class="use-node-label"></span>
+                                            <small class="use-node-tag"></small>
+                                        </button>
+                                        <button class="use-node node-pharma" data-use="pharma" type="button" role="tab" aria-selected="false">
+                                            <i class="fas fa-pills" aria-hidden="true"></i>
+                                            <span class="use-node-label"></span>
+                                            <small class="use-node-tag"></small>
+                                        </button>
+                                        <button class="use-node node-vaccine" data-use="vaccine" type="button" role="tab" aria-selected="false">
+                                            <i class="fas fa-syringe" aria-hidden="true"></i>
+                                            <span class="use-node-label"></span>
+                                            <small class="use-node-tag"></small>
+                                        </button>
+                                        <div class="uses-hub" aria-hidden="true">
+                                            <span id="realUsesHubTop">Bio + Matemáticas</span>
+                                            <strong id="realUsesHubBottom">Modelado poblacional</strong>
+                                        </div>
+                                    </div>
+                                    <article class="use-details" aria-live="polite">
+                                        <h4 id="realUseTitle"></h4>
+                                        <p id="realUseDescription"></p>
+                                        <ul id="realUseList"></ul>
+                                        <div class="use-impact">
+                                            <div class="use-impact-row">
+                                                <span class="impact-label" id="realUseMetricPrecisionLabel"></span>
+                                                <div class="impact-track">
+                                                    <div class="impact-fill" id="realUseMetricPrecisionFill"></div>
+                                                </div>
+                                                <strong class="impact-value" id="realUseMetricPrecisionValue">0%</strong>
+                                            </div>
+                                            <div class="use-impact-row">
+                                                <span class="impact-label" id="realUseMetricScaleLabel"></span>
+                                                <div class="impact-track">
+                                                    <div class="impact-fill" id="realUseMetricScaleFill"></div>
+                                                </div>
+                                                <strong class="impact-value" id="realUseMetricScaleValue">0%</strong>
+                                            </div>
+                                            <div class="use-impact-row">
+                                                <span class="impact-label" id="realUseMetricImpactLabel"></span>
+                                                <div class="impact-track">
+                                                    <div class="impact-fill" id="realUseMetricImpactFill"></div>
+                                                </div>
+                                                <strong class="impact-value" id="realUseMetricImpactValue">0%</strong>
+                                            </div>
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
                             
                             <h3 style="margin-bottom: 1rem;">Posibles mejoras futuras:</h3>
                             <div class="grid">
@@ -1226,6 +1356,295 @@
             document.addEventListener('DOMContentLoaded', initCharts);
         } else {
             initCharts();
+        }
+    })();
+    </script>
+    <script>
+    (function () {
+        function clamp(value, min, max) {
+            return Math.min(max, Math.max(min, value));
+        }
+
+        function initConceptVisuals() {
+            const canvas = document.getElementById('petriDishCanvas');
+            if (!canvas || canvas.dataset.initialized === 'true') return;
+            canvas.dataset.initialized = 'true';
+
+            const ctx = canvas.getContext('2d');
+            const growthControl = document.getElementById('petriGrowthControl');
+            const nutrientControl = document.getElementById('petriNutrientControl');
+            const growthValue = document.getElementById('petriGrowthValue');
+            const nutrientValue = document.getElementById('petriNutrientValue');
+            const populationEl = document.getElementById('petriPopulation');
+            const phaseEl = document.getElementById('petriPhase');
+            const toggleBtn = document.getElementById('petriToggleBtn');
+            const resetBtn = document.getElementById('petriResetBtn');
+            const factorBars = Array.from(document.querySelectorAll('#factorsChart .factor-bar'));
+
+            if (!growthControl || !nutrientControl || !populationEl || !phaseEl) return;
+
+            const BASE_W = 460;
+            const BASE_H = 280;
+            const INITIAL_POP = 10;
+            let growthRate = Number(growthControl.value) || 0.6;
+            let nutrientLevel = Number(nutrientControl.value) || 70;
+            let elapsed = 0;
+            let isRunning = true;
+            let rafId = null;
+            let viewWidth = BASE_W;
+            let viewHeight = BASE_H;
+            let bacteria = [];
+            let currentLang = localStorage.getItem('lang') || document.documentElement.lang || 'es';
+
+            function isEnglish() {
+                return currentLang === 'en';
+            }
+
+            function textByLang(esText, enText) {
+                return isEnglish() ? enText : esText;
+            }
+
+            function currentLocale() {
+                return isEnglish() ? 'en-US' : 'es-PR';
+            }
+
+            function updateToggleLabel() {
+                if (!toggleBtn) return;
+                toggleBtn.textContent = isRunning
+                    ? textByLang('Pausar', 'Pause')
+                    : textByLang('Reanudar', 'Resume');
+            }
+
+            function resizeCanvas() {
+                const dpr = Math.max(1, window.devicePixelRatio || 1);
+                const cssWidth = Math.max(300, canvas.clientWidth || BASE_W);
+                const cssHeight = Math.round(cssWidth * (BASE_H / BASE_W));
+
+                canvas.style.height = cssHeight + 'px';
+                canvas.width = Math.round(cssWidth * dpr);
+                canvas.height = Math.round(cssHeight * dpr);
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.scale(dpr, dpr);
+
+                viewWidth = cssWidth;
+                viewHeight = cssHeight;
+            }
+
+            function logisticPopulation(t) {
+                const carryingCapacity = clamp(40 + nutrientLevel * 1.8, 45, 240);
+                const ratio = (carryingCapacity - INITIAL_POP) / INITIAL_POP;
+                const value = carryingCapacity / (1 + ratio * Math.exp(-growthRate * t));
+                return clamp(Math.round(value), 0, 9999);
+            }
+
+            function getGrowthPhase(population) {
+                const carryingCapacity = clamp(40 + nutrientLevel * 1.8, 45, 240);
+                const fillRatio = carryingCapacity ? population / carryingCapacity : 0;
+                if (fillRatio < 0.24) return textByLang('Latencia', 'Lag');
+                if (fillRatio < 0.65) return textByLang('Exponencial', 'Exponential');
+                if (fillRatio < 0.9) return textByLang('Estacionaria', 'Stationary');
+                return textByLang('Saturación', 'Saturation');
+            }
+
+            function createBacterium(radius) {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.sqrt(Math.random()) * (radius - 10);
+                return {
+                    angle,
+                    distance,
+                    size: 1.5 + Math.random() * 2.8,
+                    pulse: Math.random() * Math.PI * 2,
+                    drift: (Math.random() - 0.5) * 0.01,
+                    alpha: 0.45 + Math.random() * 0.45,
+                    hue: Math.random() < 0.66 ? 172 : 248
+                };
+            }
+
+            function syncBacteria(targetCount, radius) {
+                while (bacteria.length < targetCount) {
+                    bacteria.push(createBacterium(radius));
+                }
+                while (bacteria.length > targetCount) {
+                    bacteria.pop();
+                }
+            }
+
+            function updateFactorChart(population) {
+                if (!factorBars.length) return;
+
+                const carryingCapacity = clamp(40 + nutrientLevel * 1.8, 45, 240);
+                const density = carryingCapacity ? clamp(population / carryingCapacity, 0, 1) : 0;
+
+                const factorValues = [
+                    clamp(Math.round(25 + (100 - nutrientLevel) * 0.72), 10, 95),             // Nutrientes
+                    clamp(Math.round(22 + density * 72), 8, 95),                               // Espacio
+                    clamp(Math.round(30 + Math.abs(65 - nutrientLevel) * 0.42 + growthRate * 9), 12, 92), // pH
+                    clamp(Math.round(36 + growthRate * 18 - Math.abs(70 - nutrientLevel) * 0.12), 10, 92), // Temperatura
+                    clamp(Math.round(18 + density * 74 + growthRate * 6), 8, 96)               // Desechos
+                ];
+
+                factorBars.forEach((bar, index) => {
+                    const value = factorValues[index] ?? 0;
+                    bar.style.setProperty('--value', value);
+                    bar.dataset.value = String(value);
+                    const valueTag = bar.querySelector('.factor-value');
+                    if (valueTag) valueTag.textContent = value + '%';
+                });
+            }
+
+            function drawPetri(population) {
+                const cx = viewWidth / 2;
+                const cy = viewHeight / 2;
+                const radius = Math.min(viewWidth, viewHeight) * 0.36;
+                const darkTheme = document.body.classList.contains('dark-theme');
+
+                ctx.clearRect(0, 0, viewWidth, viewHeight);
+
+                const ringGradient = ctx.createRadialGradient(cx, cy, radius * 0.26, cx, cy, radius + 18);
+                if (darkTheme) {
+                    ringGradient.addColorStop(0, 'rgba(26, 43, 70, 0.2)');
+                    ringGradient.addColorStop(1, 'rgba(8, 14, 26, 0.85)');
+                } else {
+                    ringGradient.addColorStop(0, 'rgba(255, 255, 255, 0.75)');
+                    ringGradient.addColorStop(1, 'rgba(91, 76, 245, 0.18)');
+                }
+                ctx.fillStyle = ringGradient;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius + 18, 0, Math.PI * 2);
+                ctx.fill();
+
+                const dishGradient = ctx.createRadialGradient(cx, cy, radius * 0.2, cx, cy, radius);
+                if (darkTheme) {
+                    dishGradient.addColorStop(0, 'rgba(17, 46, 71, 0.92)');
+                    dishGradient.addColorStop(1, 'rgba(9, 20, 33, 0.94)');
+                } else {
+                    dishGradient.addColorStop(0, 'rgba(239, 255, 252, 0.96)');
+                    dishGradient.addColorStop(1, 'rgba(217, 231, 255, 0.96)');
+                }
+                ctx.fillStyle = dishGradient;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                const carryingCapacity = clamp(40 + nutrientLevel * 1.8, 45, 240);
+                const density = carryingCapacity ? clamp(population / carryingCapacity, 0, 1) : 0;
+
+                const nutrientGlow = ctx.createRadialGradient(cx, cy, radius * 0.15, cx, cy, radius * 0.95);
+                nutrientGlow.addColorStop(0, 'rgba(0, 229, 195, ' + (0.18 + nutrientLevel / 600).toFixed(3) + ')');
+                nutrientGlow.addColorStop(1, 'rgba(0, 229, 195, 0)');
+                ctx.fillStyle = nutrientGlow;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius * 0.95, 0, Math.PI * 2);
+                ctx.fill();
+
+                syncBacteria(population, radius);
+
+                bacteria.forEach((item, index) => {
+                    item.angle += item.drift;
+                    const jitter = Math.sin(elapsed * 2.4 + item.pulse + index * 0.13) * 1.25;
+                    const localDistance = clamp(item.distance + jitter, 0, radius - 8);
+                    const x = cx + Math.cos(item.angle) * localDistance;
+                    const y = cy + Math.sin(item.angle) * localDistance;
+                    const size = item.size + Math.sin(elapsed * 3.1 + item.pulse) * 0.24;
+
+                    ctx.fillStyle = 'hsla(' + item.hue + ', 86%, ' + (darkTheme ? '67%' : '48%') + ', ' + (item.alpha + density * 0.22).toFixed(3) + ')';
+                    ctx.beginPath();
+                    ctx.arc(x, y, Math.max(0.8, size), 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                ctx.strokeStyle = darkTheme ? 'rgba(148, 163, 184, 0.36)' : 'rgba(91, 76, 245, 0.28)';
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            function refreshHud(population) {
+                populationEl.textContent = population.toLocaleString(currentLocale());
+                phaseEl.textContent = getGrowthPhase(population);
+                growthValue.textContent = growthRate.toFixed(2);
+                nutrientValue.textContent = nutrientLevel + '%';
+            }
+
+            function renderFrame() {
+                const population = logisticPopulation(elapsed);
+                drawPetri(population);
+                updateFactorChart(population);
+                refreshHud(population);
+            }
+
+            function step() {
+                if (isRunning) {
+                    elapsed += 0.04;
+                }
+                renderFrame();
+                rafId = requestAnimationFrame(step);
+            }
+
+            function resetSimulation() {
+                growthRate = 0.6;
+                nutrientLevel = 70;
+                growthControl.value = String(growthRate);
+                nutrientControl.value = String(nutrientLevel);
+                elapsed = 0;
+                bacteria = [];
+                isRunning = true;
+                updateToggleLabel();
+                renderFrame();
+            }
+
+            growthControl.addEventListener('input', () => {
+                growthRate = Number(growthControl.value) || 0.6;
+                renderFrame();
+            });
+
+            nutrientControl.addEventListener('input', () => {
+                nutrientLevel = Number(nutrientControl.value) || 70;
+                renderFrame();
+            });
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    isRunning = !isRunning;
+                    updateToggleLabel();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', resetSimulation);
+            }
+
+            document.addEventListener('i18n:langChange', event => {
+                const langFromEvent = event && event.detail ? event.detail.lang : null;
+                currentLang = langFromEvent || localStorage.getItem('lang') || 'es';
+                updateToggleLabel();
+                renderFrame();
+            });
+
+            let resizeTimer = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    resizeCanvas();
+                    renderFrame();
+                }, 120);
+            });
+
+            resizeCanvas();
+            updateToggleLabel();
+            renderFrame();
+            step();
+
+            window.addEventListener('beforeunload', () => {
+                if (rafId) cancelAnimationFrame(rafId);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initConceptVisuals);
+        } else {
+            initConceptVisuals();
         }
     })();
     </script>

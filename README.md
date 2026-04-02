@@ -268,6 +268,38 @@ El módulo inyecta automáticamente los estilos del botón (pill redondeado, efe
 
 El eBook usaba `../js/i18n.js` (path incorrecto) porque está un nivel más profundo (`stem/Ebook STEM /`). Corregido a `../../js/i18n.js`.
 
+### Modernización STEM — Terminal Neón / Dark Code Lab (mar 2026)
+
+Rediseño visual completo de las páginas STEM con dirección estética **"Terminal Neón / Dark Code Lab"**:
+
+#### Páginas modernizadas
+| Página | Estado |
+|---|---|
+| `stem/programacion.html` | Completada |
+| `stem/robotica.html` | Completada |
+
+#### Sistema de diseño aplicado
+- **Fondo**: `#07090F` (negro terminal) con grid de líneas neón `rgba(0,255,135,0.025)` de 48px
+- **Imagen de fondo**: se mantiene `imagenes/stem.png` con overlay oscuro encima
+- **Acento primario**: neón verde `#00FF87` — reemplazó el morado `#5B4CF5`
+- **Acento secundario**: cian `#00C8FF`
+- **Acento de énfasis**: naranja llama `#FF6B35`
+- **Superficies**: `#0D1220` (surface), `#121829` (raised), `#07090F` (base)
+- **Tipografía display**: `JetBrains Mono` — logo, quick-nav, labels, código (reemplazó Syne + DM Mono)
+- **Tipografía texto**: `Space Grotesk` — headings y cuerpo
+- **Cards**: fondo `#121829`, borde lateral verde de 3px que aparece al hover
+- **Secciones**: barra de 3px neón en esquina superior izquierda como acento
+- **Botones primarios**: relleno neón con texto oscuro + glow `box-shadow`
+- **Code blocks**: texto `#A8FF78` sobre negro, scrollbar neón
+- **Score de rúbrica**: número gigante en JetBrains Mono con `text-shadow` neón
+
+#### Notas técnicas
+- Todas las funcionalidades JS preservadas intactas (Three.js robot 3D, editor de código, stats en tiempo real, laboratorio de snippets, rúbrica automática)
+- CSS variables con aliases de compatibilidad (`--primary`, `--secondary`, etc.) para no romper JS que los lee
+- Responsive: mobile-first, todos los breakpoints existentes conservados
+
+---
+
 ### Modernización del eBook STEAM (mar 2026)
 
 Rediseño completo de `stem/Ebook STEM /styles.css` con dirección estética **"Minimalista Científico"**:

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería Estudiantil - Matemáticas Digitales</title>
+    <title>Galería de Proyectos - Matemáticas Digitales</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -151,7 +151,7 @@
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             padding: 0 2rem;
         }
@@ -739,15 +739,6 @@
                 <i class="fas fa-calculator"></i>
                 Matemáticas Digitales
             </a>
-            
-            <button id="lang-toggle" title="Switch to English"
-                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
-                EN
-            </button>
-
-            <button class="mobile-menu-toggle" id="mobileToggle">
-                <i class="fas fa-bars"></i>
-            </button>
         </div>
     </nav>
 
@@ -799,7 +790,7 @@
             </div>
 
             <!-- Gallery Container -->
-            <div class="gallery-container fade-in" id="gallery">
+            <div class="gallery-container" id="gallery">
                 <!-- Images will be loaded dynamically -->
             </div>
         </section>
@@ -829,6 +820,10 @@
     <script>
         I18n.init();
     </script>
+    <script src="../js/dark-mode.js"></script>
+    <script>
+        DarkMode.initDarkMode();
+    </script>
 
     <script>
         // Gallery configuration
@@ -842,28 +837,54 @@
         const searchInput = document.getElementById('searchInput');
         const filterBtns = document.querySelectorAll('.filter-btn');
 
+        const galleryCopy = {
+            es: {
+                projectAltPrefix: 'Proyecto estudiantil',
+                projectTitlePrefix: 'Proyecto Matemático',
+                projectDescription: 'Trabajo creativo desarrollado por estudiantes aplicando conceptos matemáticos de forma práctica e innovadora.',
+                viewProject: 'Ver proyecto completo',
+                imageUnavailable: 'Imagen no disponible'
+            },
+            en: {
+                projectAltPrefix: 'Student project',
+                projectTitlePrefix: 'Math Project',
+                projectDescription: 'Creative work developed by students by applying mathematical concepts in practical and innovative ways.',
+                viewProject: 'View full project',
+                imageUnavailable: 'Image not available'
+            }
+        };
+
+        function getCurrentLanguage() {
+            if (typeof I18n !== 'undefined' && typeof I18n.getCurrentLang === 'function') {
+                return I18n.getCurrentLang();
+            }
+            return localStorage.getItem('lang') || 'es';
+        }
+
+        function getCopy(key) {
+            const lang = getCurrentLanguage();
+            const dict = galleryCopy[lang] || galleryCopy.es;
+            return dict[key] || galleryCopy.es[key] || key;
+        }
+
+        function getImageMeta(image) {
+            return {
+                alt: `${getCopy('projectAltPrefix')} ${image.number}`,
+                title: `${getCopy('projectTitlePrefix')} ${image.number}`,
+                description: getCopy('projectDescription')
+            };
+        }
+
         // Generate images array
         const images = Array.from({ length: totalImages }, (_, i) => ({
             src: `fotos/foto${i + 1}.jpg`,
-            alt: `Proyecto estudiantil ${i + 1}`,
-            title: `Proyecto Matemático ${i + 1}`,
-            description: `Trabajo creativo desarrollado por estudiantes aplicando conceptos matemáticos de forma práctica e innovadora.`,
+            number: i + 1,
             category: i < 20 ? 'recent' : i < 40 ? 'featured' : 'all'
         }));
 
         let currentFilter = 'all';
         let searchTerm = '';
-
-        // Mobile menu toggle
-        const mobileToggle = document.getElementById('mobileToggle');
-        const navMenu = document.getElementById('navMenu');
-
-        mobileToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            const icon = mobileToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
+        let activeImage = null;
 
         // Navbar scroll effect
         const navbar = document.getElementById('navbar');
@@ -887,29 +908,33 @@
             }
             
             if (searchTerm) {
+                const normalizedSearch = searchTerm.toLowerCase();
                 filteredImages = filteredImages.filter(img => 
-                    img.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    img.description.toLowerCase().includes(searchTerm.toLowerCase())
+                    getImageMeta(img).title.toLowerCase().includes(normalizedSearch) ||
+                    getImageMeta(img).description.toLowerCase().includes(normalizedSearch)
                 );
             }
 
             // Create gallery items
             filteredImages.forEach((image, index) => {
                 const item = document.createElement('div');
-                item.className = 'gallery-item fade-in';
+                item.className = 'gallery-item';
                 item.setAttribute('data-delay', index * 50);
                 
                 const img = document.createElement('img');
                 img.src = image.src;
-                img.alt = image.alt;
-                img.loading = 'lazy';
+                const meta = getImageMeta(image);
+                img.alt = meta.alt;
+                img.loading = index < 12 ? 'eager' : 'lazy';
+                img.decoding = 'async';
+                img.fetchPriority = index < 6 ? 'high' : 'auto';
                 
                 // Create overlay
                 const overlay = document.createElement('div');
                 overlay.className = 'gallery-overlay';
                 overlay.innerHTML = `
                     <i class="fas fa-search-plus"></i>
-                    <p>Ver proyecto completo</p>
+                    <p>${getCopy('viewProject')}</p>
                 `;
                 
                 // Error handling
@@ -917,7 +942,7 @@
                     item.className = 'gallery-item error-placeholder';
                     item.innerHTML = `
                         <i class="fas fa-image"></i>
-                        <p>Imagen no disponible</p>
+                        <p>${getCopy('imageUnavailable')}</p>
                     `;
                 };
                 
@@ -940,14 +965,18 @@
 
         // Modal functions
         function openModal(image) {
+            const meta = getImageMeta(image);
+            activeImage = image;
             modalImage.src = image.src;
-            modalTitle.textContent = image.title;
-            modalDescription.textContent = image.description;
+            modalImage.alt = meta.alt;
+            modalTitle.textContent = meta.title;
+            modalDescription.textContent = meta.description;
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
+            activeImage = null;
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
@@ -1006,13 +1035,13 @@
             });
         }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navbar.contains(e.target) && navMenu.classList.contains('active')) {
-                navMenu.classList.remove('active');
-                const icon = mobileToggle.querySelector('i');
-                icon.classList.add('fa-bars');
-                icon.classList.remove('fa-times');
+        // Re-render dynamic gallery copy when language changes
+        document.addEventListener('i18n:langChange', () => {
+            const previousImage = activeImage;
+            const modalWasOpen = modal.style.display === 'flex';
+            loadGallery();
+            if (modalWasOpen && previousImage) {
+                openModal(previousImage);
             }
         });
 

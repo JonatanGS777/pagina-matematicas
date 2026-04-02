@@ -76,7 +76,15 @@ class MathParticleSystem {
         // Random content type
         const types = ['equation', 'symbol', 'number', 'greek'];
         const type = types[Math.floor(Math.random() * types.length)];
-        const content = this.mathContent[type + 's'][Math.floor(Math.random() * this.mathContent[type + 's'].length)];
+        const contentKeyMap = {
+            equation: 'equations',
+            symbol: 'symbols',
+            number: 'numbers',
+            greek: 'greek'
+        };
+        const contentKey = contentKeyMap[type];
+        const contentList = this.mathContent[contentKey] || this.mathContent.symbols;
+        const content = contentList[Math.floor(Math.random() * contentList.length)];
         
         particle.textContent = content;
         particle.classList.add(type);

@@ -7,34 +7,30 @@ class TypewriterEffect {
             {
                 element: document.getElementById('mainTitle'),
                 text: 'Matemáticas Digitales',
-                speed: 80,
-                delay: 300,
+                speed: 62,
                 sound: true
             },
             {
                 element: document.getElementById('subtitle'),
-                text: 'Departamento de Educación',
-                speed: 70,
-                delay: 1000,
+                text: 'Matemáticas • Ciencia • Tecnología',
+                speed: 55,
                 sound: true
             },
             {
                 element: document.getElementById('professorName'),
-                text: 'Prof. Yonatan Guerrero Soriano',
-                speed: 75,
-                delay: 1800,
+                text: 'Yonatan Guerrero Soriano EdD',
+                speed: 58,
                 sound: true
             },
             {
                 element: document.getElementById('description'),
                 text: 'Bienvenidos a mi aula digital donde las matemáticas cobran vida a través de la tecnología, la innovación y el aprendizaje interactivo.',
-                speed: 35,
-                delay: 2800,
+                speed: 28,
                 sound: false
             }
         ];
-        
-        this.currentIndex = 0;
+        this.initialDelay = 120;
+        this.betweenDelay = 160;
         this.init();
     }
     
@@ -54,11 +50,11 @@ class TypewriterEffect {
     }
     
     async startSequence() {
+        await this.wait(this.initialDelay);
         for (let i = 0; i < this.texts.length; i++) {
-            await this.wait(this.texts[i].delay);
             await this.typeText(this.texts[i]);
             this.createCompletionEffect(this.texts[i].element);
-            await this.wait(200); // Reduced pause between texts
+            await this.wait(this.betweenDelay);
         }
     }
     
@@ -107,7 +103,7 @@ class TypewriterEffect {
                     
                     resolve();
                 }
-            }, speed + Math.random() * 20 - 10); // Reduced speed variation
+            }, speed + Math.random() * 10 - 5);
         });
     }
     
@@ -134,7 +130,7 @@ class TypewriterEffect {
                 
                 resolve();
             }
-        }, speed + Math.random() * 20 - 10);
+        }, speed + Math.random() * 10 - 5);
     }
     
     createCompletionEffect(element) {
@@ -231,18 +227,22 @@ function addTypewriterAnimations() {
 
 // Initialize Typewriter Effect System
 function initTypewriterEffect() {
+    if (window.__typewriterBootstrapped) return;
+    window.__typewriterBootstrapped = true;
+
     // Add required CSS animations
     addTypewriterAnimations();
     
-    // Start typewriter effect when page loads
+    // Start as soon as DOM is ready; don't wait for all assets (images) to finish.
     const startTypewriter = () => {
+        if (window.__typewriterInstance) return;
         setTimeout(() => {
-            new TypewriterEffect();
-        }, 600); // Reduced wait time
+            window.__typewriterInstance = new TypewriterEffect();
+        }, 120);
     };
     
     if (document.readyState === 'loading') {
-        window.addEventListener('load', startTypewriter);
+        document.addEventListener('DOMContentLoaded', startTypewriter, { once: true });
     } else {
         startTypewriter();
     }
