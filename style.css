@@ -38,12 +38,23 @@
         }
 
         body {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             background: var(--dark);
             color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
             padding-top: 80px;
+        }
+
+        /* Display/heading font — Syne reserved for titles, nav, logo, buttons */
+        h1, h2, h3, h4, h5, h6,
+        .logo, .section-title, .nav-link,
+        .btn, .btn-primary, .btn-secondary,
+        .hero h1, .hero h2, .hero-description,
+        .card-title, .about-name, .about-title,
+        .dropdown-item .item-title,
+        .stat-label, .footer {
+            font-family: 'Syne', sans-serif;
         }
 
         /* Grain noise overlay for depth */
@@ -456,7 +467,7 @@
 
         .item-desc {
             display: block;
-            font-size: 0.71rem;
+            font-size: 0.75rem;
             color: #9a99ab;
             margin-top: 0.15rem;
             line-height: 1.35;
