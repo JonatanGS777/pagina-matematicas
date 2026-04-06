@@ -3,3 +3,4 @@ node_modules/
 screenshots/
 .env
 .env.local
+js/supabase-config.js

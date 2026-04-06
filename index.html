@@ -29,7 +29,7 @@
     <!-- Header/Navbar -->
     <header class="header">
         <nav class="navbar">
-            <a href="#" class="logo">
+            <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
                 <i class="fas fa-calculator"></i>
                 Matemáticas Digitales
             </a>
@@ -109,7 +109,7 @@
                                 <span class="item-desc">Diseño y resolución de problemas reales</span>
                             </span>
                         </a>
-                        <a href="stem/Ebook STEM /index.html" class="dropdown-item">
+                        <a href="stem/Ebook-STEM/index.html" class="dropdown-item">
                             <span class="item-icon"><i class="fas fa-book-open"></i></span>
                             <span class="item-text">
                                 <span class="item-title">Ebook STEM</span>
@@ -752,17 +752,6 @@
         const modalImg = document.getElementById('modalImg');
         const modalCaption = document.getElementById('modalCaption');
         const closeBtn = document.querySelector('.modal-close');
-        const galleryItems = document.querySelectorAll('.gallery-item[data-open-modal="true"]');
-
-        galleryItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const img = item.querySelector('.gallery-img');
-                modal.style.display = 'block';
-                modalImg.src = img.src;
-                modalCaption.textContent = img.alt;
-                document.body.style.overflow = 'hidden';
-            });
-        });
 
         function closeModal() {
             modal.style.display = 'none';
@@ -783,8 +772,8 @@
             }
         });
 
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        // Smooth scrolling for navigation (exclude bare "#" to keep logo scroll-to-top)
+        document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));

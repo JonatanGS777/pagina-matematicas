@@ -36,8 +36,8 @@ class SupabaseAnalytics {
 
     lockCounterElements() {
         const counterElements = [
-            'totalVisitors', 'activeNow', 'visitsToday', 
-            'pageViews', 'avgSession', 'dailyGrowth', 'todayChange'
+            'totalVisitors', 'activeNow', 'visitsToday',
+            'pageViews', 'dailyGrowth', 'todayChange'
         ];
         
         counterElements.forEach(id => {
@@ -494,11 +494,11 @@ class SupabaseAnalytics {
         this.animateCounter('activeNow', data.activeNow || 0);
         this.animateCounter('visitsToday', data.visitsToday || 0);
         this.animateCounter('pageViews', data.pageViews || 0);
-        this.animateCounter('avgSession', parseFloat(data.avgSession || 0).toFixed(1));
 
         document.getElementById('dailyGrowth').textContent = parseFloat(data.dailyGrowth || 0).toFixed(1);
         document.getElementById('todayChange').textContent = `+${data.todayChange || 0}`;
-        
+
+        this.updateActiveChart(data.activeNow || 0);
         this.updateLastUpdateTime();
         this.updateProgressBar();
     }
@@ -608,8 +608,55 @@ class SupabaseAnalytics {
         });
     }
 
-    // ... (resto de métodos sin cambios: animateCounter, updateLastUpdateTime, etc.)
-    
+    // Sparkline para visitantes activos
+    updateActiveChart(currentValue) {
+        const canvas = document.getElementById('activeChart');
+        if (!canvas) return;
+
+        if (!this._activeHistory) this._activeHistory = [];
+        this._activeHistory.push(Number(currentValue) || 0);
+        if (this._activeHistory.length > 20) this._activeHistory.shift();
+
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const data = this._activeHistory;
+        if (data.length < 2) return;
+
+        const max = Math.max(...data, 1);
+        const w = canvas.width;
+        const h = canvas.height;
+        const stepX = w / (data.length - 1);
+
+        const gradient = ctx.createLinearGradient(0, 0, 0, h);
+        gradient.addColorStop(0, 'rgba(0, 207, 175, 0.4)');
+        gradient.addColorStop(1, 'rgba(0, 207, 175, 0)');
+
+        ctx.beginPath();
+        data.forEach((v, i) => {
+            const x = i * stepX;
+            const y = h - (v / max) * (h - 4) - 2;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        // Cerrar área de relleno
+        ctx.lineTo((data.length - 1) * stepX, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Línea encima
+        ctx.beginPath();
+        data.forEach((v, i) => {
+            const x = i * stepX;
+            const y = h - (v / max) * (h - 4) - 2;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.strokeStyle = '#00CFAF';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+    }
+
     animateCounter(elementId, targetValue, animate = true) {
         const element = document.getElementById(elementId);
         if (!element) return;
@@ -797,8 +844,8 @@ class SupabaseAnalytics {
 
     checkSystemIntegrity() {
         const counterElements = [
-            'totalVisitors', 'activeNow', 'visitsToday', 
-            'pageViews', 'avgSession', 'dailyGrowth', 'todayChange'
+            'totalVisitors', 'activeNow', 'visitsToday',
+            'pageViews', 'dailyGrowth', 'todayChange'
         ];
         
         let integrityOk = true;
@@ -823,14 +870,14 @@ class SupabaseAnalytics {
         if (this.heartbeatInterval) {
             clearInterval(this.heartbeatInterval);
         }
-        
+
         if (this.realtimeChannel) {
             this.supabase.removeChannel(this.realtimeChannel);
         }
-        
+
         const counterElements = [
-            'totalVisitors', 'activeNow', 'visitsToday', 
-            'pageViews', 'avgSession', 'dailyGrowth', 'todayChange'
+            'totalVisitors', 'activeNow', 'visitsToday',
+            'pageViews', 'dailyGrowth', 'todayChange'
         ];
         
         counterElements.forEach(id => {
