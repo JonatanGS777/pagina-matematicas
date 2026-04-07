@@ -79,11 +79,12 @@
             height: 100%;
             z-index: -1;
             background:
-                linear-gradient(-45deg, rgba(91, 76, 245, 0.88), rgba(61, 31, 140, 0.92), rgba(0, 229, 195, 0.55), rgba(91, 76, 245, 0.82)),
-                url('imagenes/fondo2.jpg');
+                linear-gradient(-45deg, rgba(91, 76, 245, 0.72), rgba(61, 31, 140, 0.78), rgba(0, 229, 195, 0.38), rgba(91, 76, 245, 0.68)),
+                url('imagenes/stem-bg.png');
             background-size: 400% 400%, cover;
-            background-position: 0% 50%, center;
+            background-position: 0% 50%, center center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
             animation: gradientShift 18s ease infinite;
         }
 
