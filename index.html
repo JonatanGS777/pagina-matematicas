@@ -637,6 +637,30 @@
                 </a>
             </div>
         </section>
+        <!-- Repositories Section -->
+        <section class="section" id="repositorios">
+            <h2 class="section-title fade-in">Repositorios en GitHub</h2>
+            <p class="section-subtitle fade-in">Proyectos y recursos de código abierto disponibles en GitHub</p>
+
+            <div class="repos-loading fade-in" id="reposLoading">
+                <div class="repos-spinner"></div>
+                <p>Cargando repositorios...</p>
+            </div>
+
+            <div class="repos-grid" id="reposGrid"></div>
+
+            <div class="repos-error" id="reposError" style="display:none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>No se pudieron cargar los repositorios. Por favor intenta más tarde.</p>
+            </div>
+
+            <div class="repos-actions fade-in" id="reposActions" style="display:none;">
+                <a href="https://github.com/JonatanGS777" target="_blank" rel="noopener noreferrer" class="gallery-cta">
+                    <i class="fab fa-github"></i>
+                    Ver todos en GitHub
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Modal -->
@@ -867,6 +891,66 @@
 
         // Inicializar traducción (lee localStorage y aplica si lang=en)
         I18n.init();
+
+        // ── Repositorios GitHub ──────────────────────────────────────
+        (async function loadRepos() {
+            const grid    = document.getElementById('reposGrid');
+            const loading = document.getElementById('reposLoading');
+            const error   = document.getElementById('reposError');
+            const actions = document.getElementById('reposActions');
+
+            const LANG_LABELS = {
+                JavaScript: '#F7DF1E', HTML: '#E34C26', CSS: '#563D7C',
+                Python: '#3572A5', TypeScript: '#2B7489', Java: '#B07219',
+                'C++': '#F34B7D', Ruby: '#701516', Go: '#00ADD8',
+                Rust: '#DEA584', Shell: '#89E051', PHP: '#4F5D95'
+            };
+
+            try {
+                const res = await fetch('https://api.github.com/users/JonatanGS777/repos?sort=updated&per_page=12');
+                if (!res.ok) throw new Error('API error');
+                const repos = await res.json();
+
+                loading.style.display = 'none';
+
+                if (!repos.length) {
+                    error.style.display = 'flex';
+                    return;
+                }
+
+                repos.forEach((repo, i) => {
+                    const langColor = LANG_LABELS[repo.language] || '#9497B0';
+                    const card = document.createElement('a');
+                    card.className = 'repo-card fade-in';
+                    card.href = repo.html_url;
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                    card.dataset.delay = i * 60;
+                    card.innerHTML = `
+                        <div class="repo-card-header">
+                            <i class="fab fa-github repo-icon"></i>
+                            <span class="repo-visibility">${repo.private ? 'Privado' : 'Público'}</span>
+                        </div>
+                        <h3 class="repo-name">${repo.name}</h3>
+                        <p class="repo-desc">${repo.description || 'Sin descripción'}</p>
+                        <div class="repo-meta">
+                            ${repo.language ? `<span class="repo-lang"><span class="lang-dot" style="background:${langColor}"></span>${repo.language}</span>` : ''}
+                            <span class="repo-stat"><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
+                            <span class="repo-stat"><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                // trigger intersection observer for the new cards
+                document.querySelectorAll('.repo-card.fade-in').forEach(el => observer.observe(el));
+
+                actions.style.display = 'flex';
+            } catch (e) {
+                loading.style.display = 'none';
+                error.style.display   = 'flex';
+            }
+        })();
     </script>
 </body>
 </html>
