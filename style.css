@@ -2115,6 +2115,13 @@
             }
         }
 
+        /* Fix background-attachment: fixed on mobile (iOS/Android) */
+        @media (max-width: 768px) {
+            .animated-bg {
+                background-attachment: scroll;
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .header {
