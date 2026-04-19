@@ -1,140 +1,173 @@
+<div align="center">
+
 # Digital Mathematics
 
-Educational mathematics platform with interactive resources, real-time competitions, STEM modules and a virtual lab. Developed by Prof. Yonatan Guerrero Soriano for the Puerto Rico Department of Education.
+**Interactive mathematics platform for students, educators and researchers.**
+
+[![Stack](https://img.shields.io/badge/stack-HTML%20·%20CSS%20·%20JS-4ade80?style=for-the-badge&logoColor=white)](https://github.com/JonatanGS777/pagina-matematicas)
+[![Database](https://img.shields.io/badge/database-Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
+[![Deploy](https://img.shields.io/badge/deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
+[![Real-time](https://img.shields.io/badge/real--time-Socket.IO-010101?style=for-the-badge&logo=socketdotio&logoColor=white)](https://socket.io)
+[![i18n](https://img.shields.io/badge/i18n-ES%20↔%20EN-22c1ff?style=for-the-badge&logoColor=white)](#i18n-system-es--en)
+
+<br/>
+
+*Developed by **Prof. Yonatan Guerrero Soriano** for the Puerto Rico Department of Education.*
+
+[Features](#features) · [Tech Stack](#tech-stack) · [Structure](#project-structure) · [Setup](#supabase-setup) · [Deploy](#deploy-on-vercel)
+
+</div>
+
+---
+
+## Features
+
+<div align="center">
+
+| Module | Description |
+|:---|:---|
+| 🏆 **Math Competitions** | Real-time competitions with live leaderboard via Supabase Realtime |
+| 🔬 **Virtual Lab** | Physics simulations, projectiles, interactive geometry figures |
+| 📚 **Study Materials** | Library, exams, quizzes and rubrics by math area |
+| 🚀 **STEM Section** | Programming, robotics, engineering and data science modules |
+| 🎮 **MathBattle** | Multiplayer math game powered by Socket.IO |
+| 📊 **Live Analytics** | Real-time visitor stats and activity feed on the main page |
+| 🌐 **Bilingual** | Full ES ↔ EN support via custom `js/i18n.js` module |
+| 👨‍🔬 **Researcher Profile** | Academic profile with Chart.js visualizations and doctoral dissertation |
+
+</div>
+
+---
 
 ## Tech Stack
 
+<div align="center">
+
 | Layer | Technology |
-|---|---|
-| Frontend | HTML, CSS, Vanilla JavaScript |
-| Database | Supabase (PostgreSQL) |
-| Real-time | Supabase Realtime (`postgres_changes`) |
-| Deploy | Vercel (auto-deploy from GitHub) |
-| MathBattle | Node.js + Express + Socket.IO |
+|:---:|:---|
+| **Frontend** | HTML, CSS, Vanilla JavaScript — zero framework dependencies |
+| **Database** | Supabase (PostgreSQL) |
+| **Real-time** | Supabase Realtime (`postgres_changes`) |
+| **Deploy** | Vercel — auto-deploy on push to `main` |
+| **MathBattle** | Node.js + Express + Socket.IO |
+| **Charts** | Chart.js (Radar, Pie, Bar, Polar, Area Line) |
+| **Fonts** | Google Fonts — JetBrains Mono, Space Grotesk, Playfair Display |
+
+</div>
+
+---
 
 ## Project Structure
 
 ```
 pagina-matematicas/
-├── index.html                        # Main page with live analytics
-│
-├── club/                             # Mathematics Club
-│   ├── competencias.html             # Math competitions (Supabase real-time)
-│   ├── leaderboard.html              # Live leaderboard
-│   ├── admin.html                    # Admin panel
-│   ├── olimpiadas.html               # Math olympiads
-│   ├── investigacion.html            # Math research
-│   ├── proyectos-creativos.html      # Creative projects
-│   ├── registro.html                 # Member registration
-│   └── modulos/                      # Interactive modules by area
+├── index.html                     # Main page with live analytics
+├── club/                          # Mathematics Club
+│   ├── competencias.html          # Real-time math competitions
+│   ├── leaderboard.html           # Live leaderboard
+│   ├── olimpiadas.html            # Math olympiads
+│   ├── investigacion.html         # Math research hub
+│   ├── proyectos-creativos.html   # Creative projects
+│   ├── registro.html              # Member registration
+│   └── modulos/                   # Interactive modules
 │       ├── algebra.html
 │       ├── calculus.html
 │       ├── geometry.html
 │       ├── trigonometry.html
 │       ├── puzzles.html
 │       └── statistics.html
-│
-├── materiales/materiales/            # Study materials
-│   ├── biblioteca.html
-│   ├── examenes.html
-│   ├── ejercicios_matematicas.html
-│   ├── algebra-quiz.html
-│   ├── geometria-quiz.html
-│   ├── calculo-quiz.html
-│   ├── trigonometria-quiz.html
-│   ├── rubricas.html
-│   ├── guias_estudio.html
-│   └── presentaciones.html
-│
-├── lab/                              # Interactive virtual lab
-│   ├── experimentos.html
-│   ├── simulaciones.html
-│   ├── juegos.html
-│   ├── figuras.html
-│   ├── proyectiles.html
-│   └── modulos/ (data, physics, geometric, optimization)
-│
-├── salon/                            # Virtual classroom
-│   ├── algebra.html
-│   ├── geometria.html
-│   ├── estadisticas.html
-│   ├── finanzas.html
-│   └── game.html
-│
-├── stem/                             # STEM section
-│   ├── programacion.html
-│   ├── robotica.html
-│   ├── ingenieria.html
-│   ├── ciencia-datos.html
-│   └── Ebook STEM/
-│
-├── contexto/                         # History of Mathematics
-│   ├── historiamath.html
-│   ├── historiamath-examen.html
-│   └── profesor-dashboard.html
-│
-├── galeria/                          # Student work gallery
-├── links/                            # External resources & links
-│
-├── MathBattle/                       # Multiplayer game (Socket.IO)
-│
-├── supabase-setup.sql                # Analytics schema
-├── supabase-competition-setup.sql    # Competition system schema
-└── vercel.json                       # Vercel configuration
+├── materiales/                    # Study materials (library, exams, quizzes)
+├── lab/                           # Virtual lab (simulations, figures, games)
+├── salon/                         # Virtual classroom (algebra, stats, finance)
+├── stem/                          # STEM modules + eBook STEAM
+├── contexto/                      # History of Mathematics + timeline
+├── galeria/                       # Student work gallery
+├── links/                         # External resources
+├── MathBattle/                    # Multiplayer Socket.IO game
+├── js/
+│   ├── i18n.js                    # ES ↔ EN language module
+│   └── dark-mode.js               # Theme persistence
+├── supabase-setup.sql             # Analytics schema
+├── supabase-competition-setup.sql # Competition schema
+└── vercel.json                    # Vercel config
 ```
+
+---
 
 ## Supabase Database
 
 ### Analytics — `supabase-setup.sql`
 
 | Table | Description |
-|---|---|
-| `analytics` | Global stats per page (visits, active users) |
+|:---|:---|
+| `analytics` | Global stats per page — visits and active users |
 | `unique_visitors` | Unique visitors identified by `visitor_id` |
-| `daily_stats` | Stats by day and page |
-| `realtime_activity` | Real-time activity feed (last 24h) |
+| `daily_stats` | Stats broken down by day and page |
+| `realtime_activity` | Live activity feed (last 24 hours) |
 
 ### Competitions — `supabase-competition-setup.sql`
 
 | Table | Description |
-|---|---|
-| `competitions` | One active competition at a time, with codes and timer |
+|:---|:---|
+| `competitions` | One active competition at a time, with access codes and timer |
 | `competition_participants` | Participants with scores per math area |
 
 #### Available RPCs
 
 | Function | Description |
-|---|---|
+|:---|:---|
 | `get_active_competition()` | Gets or creates the active competition |
 | `join_competition(code, visitor_id, name, school)` | Validates code and registers participant |
-| `start_competition_timer(prof_code, competition_id)` | Professor starts the timer |
-| `reset_competition(prof_code)` | Ends the current and creates a new one |
-| `update_competition_score(participant_id, area, points, difficulty)` | Updates a participant's area score |
+| `start_competition_timer(prof_code, competition_id)` | Professor starts the synchronized timer |
+| `reset_competition(prof_code)` | Ends current session and creates a new one |
+| `update_competition_score(participant_id, area, points, difficulty)` | Updates participant score in real time |
+
+---
 
 ## Competition System
 
-### Access Codes
-
-**Students** (any of these):
-- `MATH24`
-- `COMP25`
-- `STEM2024`
-
-**Professor** (to start timer and manage):
-- `PROF2024`
-- `RESET123`
-- `TEACHER01`
-
 ### Math Areas
-Algebra · Geometry · Calculus · Trigonometry · Mental Math · Puzzles
+
+`Algebra` · `Geometry` · `Calculus` · `Trigonometry` · `Mental Math` · `Puzzles`
 
 ### Competition Flow
 
-1. Students enter a code → name → school → enter dashboard
-2. Professor opens the **Leaderboard** or dashboard → **Start Timer** → enters professor code
-3. The timer starts simultaneously on **all devices** via Supabase Realtime
-4. Scores update in real time on the leaderboard
-5. When finished: **Admin** → `reset_competition` creates a new clean session
+```
+Students enter code → name → school → dashboard
+         ↓
+Professor opens Leaderboard → Start Timer → enters professor code
+         ↓
+Timer starts simultaneously on ALL devices via Supabase Realtime
+         ↓
+Scores update live on leaderboard
+         ↓
+Admin → reset_competition → new clean session
+```
+
+<details>
+<summary>🔐 Access Codes (private — click to reveal)</summary>
+
+<br/>
+
+**Student codes** (any of these):
+| Code | Status |
+|:---|:---|
+| `MATH24` | Active |
+| `COMP25` | Active |
+| `STEM2024` | Active |
+
+**Professor codes** (timer management & admin):
+| Code | Purpose |
+|:---|:---|
+| `PROF2024` | Start timer |
+| `RESET123` | Reset competition |
+| `TEACHER01` | Admin access |
+
+> ⚠️ Keep these codes private. Do not share in public channels.
+
+</details>
+
+---
 
 ## Supabase Setup
 
@@ -149,19 +182,23 @@ this.SUPABASE_URL      = 'https://YOUR_REF.supabase.co';
 this.SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
 ```
 
+> 🔒 Never commit real credentials. Use environment variables for production.
+
+---
+
 ## Deploy on Vercel
 
-The project deploys automatically on every push to `main`:
+Auto-deploys on every push to `main`:
 
 ```bash
 git add .
-git commit -m "description"
+git commit -m "feat: description"
 git push origin main
 ```
 
-## MathBattle (local)
+---
 
-Multiplayer math game powered by Socket.IO:
+## MathBattle (local)
 
 ```bash
 cd MathBattle
@@ -169,93 +206,67 @@ npm install
 npm start
 ```
 
-## Researcher Profile (`perfil-investigador/index.html`)
-
-Single-page academic profile of Dr. Yonatan Guerrero Soriano with an editorial design.
-
-### Features
-- Dark / light mode with blue theme (`#2563eb`) in light and gold (`#d4a574`) in dark
-- Persistent theme toggle via `localStorage`
-- Responsive hamburger menu
-- Interactive horizontal timeline with drag-to-scroll (AI in Education 1950–2025)
-- Doctoral dissertation section with chapter navigation (I–V)
-- 6 Chart.js charts (Radar, Pie, Horizontal Bars, Grouped Bars, Polar Area, Area Line)
-- Chart colors update on theme toggle
-- Entry animations with IntersectionObserver
-- Counter and progress bar animations in the Results section
+---
 
 ## i18n System (ES ↔ EN)
 
-### Main file: `js/i18n.js`
-
-IIFE module that manages language switching across the platform. Loaded **without `defer`** at the end of each page's `<body>`, followed by `I18n.init()`.
+Custom IIFE module — no external library.
 
 ```html
+<!-- Add at the end of <body> on each page -->
 <script src="../../js/i18n.js"></script>
 <script>I18n.init();</script>
 ```
 
-#### How it works
-
-The module applies translations in 6 steps:
-1. **`translateTextNodes`** — walks the DOM with `TreeWalker` and replaces plain text nodes
-2. **`translateParagraphs`** — finds `<p>` and `<li>` whose `textContent` matches the dictionary
-3. **`translateHtmlElements`** — same as above but replaces `innerHTML` (for inner `<strong>` tags)
-4. **`translateAttributes`** — replaces attributes like `placeholder`
-5. **`translateTitle`** — updates the browser tab `<title>`
-6. **`translateHero`** — updates the animated hero block (only `index.html`, with retries at 4s and 7s)
-
-#### Language switching
-
 ```js
-// Switch to English
-I18n.setLanguage('en');
-
-// Back to Spanish (reloads the page)
-I18n.setLanguage('es');
-
-// Get current language
-I18n.getCurrentLang(); // 'es' | 'en'
+I18n.setLanguage('en');          // Switch to English
+I18n.setLanguage('es');          // Back to Spanish (reloads page)
+I18n.getCurrentLang();           // Returns 'es' | 'en'
 ```
 
-Language is persisted in `localStorage` under the key `lang`. If the value is `'es'` or missing, the page shows its original HTML; if `'en'`, translations are applied on load.
-
-#### Toggle button
-
-Each page exposes a `<button id="lang-toggle">` that calls the module:
-
-```html
-<button id="lang-toggle"
-    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
-    🇺🇸 EN
-</button>
-```
-
-The module automatically injects button styles (rounded pill, glass effect) — no extra CSS needed per page.
+Language persists in `localStorage` under the key `lang`.
 
 ### Pages with active i18n
 
-| Page | Path | Notes |
-|---|---|---|
-| Main | `index.html` | Typewriter hero, full navbar, stats, student work |
-| Math History | `contexto/historiamath.html` | Timeline, periods, mathematicians |
-| STEAM eBook | `stem/Ebook STEM /index.html` | Toggle in sidebar-header; path `../../js/i18n.js` |
-| Links | `links/links.html` | Tool descriptions |
-| Materials | `materiales/materiales.html` | Categories and descriptions |
-| Gallery | `galeria/galeria.html` | Titles and labels |
-| Competitions | `club/competencias.html` | Dashboard, areas, timer, inline leaderboard |
-| Leaderboard | `club/leaderboard.html` | Stats, podium, records, activity |
-| Olympiads | `club/olimpiadas.html` | Categories, problems, schedule, prizes |
-| Research | `club/investigacion.html` | Areas, methodology, timeline |
-| Creative Projects | `club/proyectos-creativos.html` | Guide, nav |
-| Registration | `club/registro.html` | Form, participants |
-| Researcher Profile | `perfil-investigador/index.html` | Independent `data-i18n` attribute system |
-| Math Mission | `club/mision-matematica/index.html` | Green accent pill button, Exo 2 font |
-
-## License
-
-Educational project by Prof. Yonatan Guerrero Soriano — academic use for the Puerto Rico Department of Education.
+| Page | Notes |
+|:---|:---|
+| `index.html` | Typewriter hero, full navbar, stats |
+| `contexto/historiamath.html` | AI in Education 1950–2025 timeline |
+| `stem/Ebook STEM /index.html` | Sidebar toggle, path `../../js/i18n.js` |
+| `club/competencias.html` | Dashboard, areas, timer, inline leaderboard |
+| `club/leaderboard.html` | Stats, podium, records, activity |
+| `club/olimpiadas.html` | Categories, problems, schedule, prizes |
+| `perfil-investigador/index.html` | Independent `data-i18n` attribute system |
 
 ---
 
-🌐 [digitalmathematics.org](https://digitalmathematics.org) · [LinkedIn](https://www.linkedin.com/in/yonatan-guerrero-soriano-6b3729136/)
+## Researcher Profile
+
+Single-page academic profile — `perfil-investigador/index.html`
+
+- 🌗 Dark / light mode with persistent theme (`localStorage`)
+- 📊 6 Chart.js visualizations (Radar, Pie, Bar, Polar Area, Area Line)
+- 📜 Doctoral dissertation with chapter navigation (I–V)
+- ⏳ Interactive horizontal timeline — AI in Education 1950–2025
+- 🎞️ Entry animations via IntersectionObserver
+
+🔗 Live at [digitalmathematics.org/perfil-investigador](https://digitalmathematics.org/perfil-investigador/index.html)
+
+---
+
+## License
+
+Educational project — **Prof. Yonatan Guerrero Soriano**
+Puerto Rico Department of Education · Academic use
+
+---
+
+<div align="center">
+
+**Building mathematics education that is interactive, accessible and data-driven.**
+
+🌐 [digitalmathematics.org](https://digitalmathematics.org) · [LinkedIn](https://www.linkedin.com/in/yonatan-guerrero-soriano-6b3729136/) · [GitHub](https://github.com/JonatanGS777)
+
+[Back to top](#digital-mathematics)
+
+</div>
