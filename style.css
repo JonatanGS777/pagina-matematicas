@@ -1699,6 +1699,95 @@
             font-weight: 500;
         }
 
+        /* Platform Section */
+        .platform-intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .platform-tagline {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+            font-weight: 500;
+            color: var(--text-secondary);
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.75;
+        }
+
+        .platform-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .platform-feat-card {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 24px;
+            padding: clamp(1.5rem, 2.5vw, 2.2rem);
+            border: 1px solid rgba(91, 76, 245, 0.1);
+            box-shadow: 0 8px 32px rgba(13, 14, 26, 0.06), 0 2px 8px rgba(91, 76, 245, 0.07);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-feat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient-main);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .platform-feat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 48px rgba(91, 76, 245, 0.14);
+        }
+
+        .platform-feat-card:hover::after {
+            opacity: 1;
+        }
+
+        .feat-icon-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .feat-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .feat-desc {
+            font-size: 0.96rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .platform-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Gallery Section */
         .gallery-header {
             text-align: center;
