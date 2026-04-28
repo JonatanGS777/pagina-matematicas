@@ -302,6 +302,29 @@ class DarkModeSystem {
                 border: 1px solid rgba(139, 156, 247, 0.1);
             }
 
+            /* Platform feature cards — dark mode */
+            .dark-mode .platform-feat-card {
+                background: rgba(42, 47, 62, 0.92);
+                border-color: rgba(139, 156, 247, 0.15);
+                box-shadow: 0 8px 32px rgba(10, 14, 26, 0.3), 0 2px 8px rgba(139, 156, 247, 0.08);
+            }
+
+            .dark-mode .platform-feat-card:hover {
+                box-shadow: 0 20px 48px rgba(10, 14, 26, 0.45);
+            }
+
+            .dark-mode .feat-title {
+                color: var(--text-primary);
+            }
+
+            .dark-mode .feat-desc {
+                color: var(--text-secondary);
+            }
+
+            .dark-mode .platform-tagline {
+                color: var(--text-secondary);
+            }
+
             .dark-mode .project-description::after {
                 color: rgba(139, 156, 247, 0.08);
             }
