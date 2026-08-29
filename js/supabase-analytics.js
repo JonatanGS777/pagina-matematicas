@@ -727,36 +727,20 @@ class SupabaseAnalytics {
                 <span>${message}</span>
             </div>
         `;
-        
-        notification.style.cssText = `
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: rgba(78, 205, 196, 0.95);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            z-index: 1000;
-            transform: translateX(400px);
-            transition: all 0.5s ease;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        `;
 
         document.body.appendChild(notification);
 
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
+        requestAnimationFrame(() => {
+            notification.classList.add('show');
+        });
 
         setTimeout(() => {
-            notification.style.transform = 'translateX(400px)';
+            notification.classList.remove('show');
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.parentNode.removeChild(notification);
                 }
-            }, 500);
+            }, 400);
         }, 3000);
     }
 
