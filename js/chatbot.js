@@ -305,23 +305,23 @@ class MathChatBot {
         const style = document.createElement('style');
         style.id = 'chatbot-styles';
         style.textContent = `
-            /* Estilos mejorados del Chat Bot */
+            /* Estilos del Chat Bot — Cuaderno de Cátedra */
             .chatbot-container {
                 position: fixed;
                 bottom: 20px;
                 right: 20px;
                 z-index: 10000;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                font-family: 'Karla', sans-serif;
             }
-            
+
             .chatbot-toggle {
                 width: 65px;
                 height: 65px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border: none;
+                background: var(--dark-mid);
+                border: 1.5px dashed rgba(227, 196, 104, 0.55);
                 cursor: pointer;
-                box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+                box-shadow: 0 4px 20px rgba(8, 16, 12, 0.4);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -346,37 +346,39 @@ class MathChatBot {
             .chatbot-toggle:hover::before {
                 opacity: 1;
             }
-            
+
             .chatbot-toggle:hover {
-                transform: scale(1.1);
-                box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+                transform: scale(1.08);
+                border-color: rgba(227, 196, 104, 0.9);
+                box-shadow: 0 8px 30px rgba(8, 16, 12, 0.5);
             }
-            
+
             .chatbot-toggle.active {
                 pointer-events: none;
                 opacity: 0.3;
                 transform: scale(0.9);
             }
-            
+
             .chatbot-toggle-icon {
-                font-size: 1.8rem;
-                color: white;
+                font-size: 1.5rem;
+                color: var(--primary);
                 transition: transform 0.3s ease;
             }
-            
+
             .chatbot-toggle.active .chatbot-toggle-icon {
                 transform: rotate(90deg);
             }
-            
+
             .chatbot-window {
                 position: absolute;
                 bottom: 85px;
                 right: 0;
                 width: 400px;
                 height: 600px;
-                background: white;
-                border-radius: 20px;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+                background: var(--light);
+                border-radius: 10px;
+                border: 1.5px dashed rgba(34, 53, 42, 0.22);
+                box-shadow: 0 20px 60px rgba(8, 16, 12, 0.3);
                 overflow: hidden;
                 transform: translateY(20px) scale(0.95);
                 opacity: 0;
@@ -384,74 +386,78 @@ class MathChatBot {
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 z-index: 10001;
             }
-            
+
             .chatbot-window.open {
                 transform: translateY(0) scale(1);
                 opacity: 1;
                 visibility: visible;
             }
-            
+
             .chatbot-header {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
+                background: var(--dark-mid);
+                color: var(--text-primary);
                 padding: 1.2rem;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                border-bottom: 1.5px dashed rgba(244, 240, 226, 0.2);
             }
-            
+
             .chatbot-header-info {
                 display: flex;
                 align-items: center;
                 gap: 0.8rem;
             }
-            
+
             .chatbot-avatar {
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
-                background: rgba(255, 255, 255, 0.2);
+                background: rgba(227, 196, 104, 0.16);
+                color: var(--primary);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
-            
+
             .chatbot-title {
+                font-family: 'Fraunces', serif;
                 font-size: 1.1rem;
                 font-weight: 600;
                 margin: 0;
             }
-            
+
             .chatbot-subtitle {
                 font-size: 0.8rem;
-                opacity: 0.9;
+                color: var(--text-secondary);
                 margin: 0;
             }
-            
+
             .chatbot-header-actions {
                 display: flex;
                 gap: 0.5rem;
             }
-            
+
             .chatbot-header-btn {
                 width: 32px;
                 height: 32px;
                 border-radius: 50%;
-                background: rgba(255, 255, 255, 0.2);
+                background: rgba(244, 240, 226, 0.1);
                 border: none;
-                color: white;
+                color: var(--text-primary);
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 transition: all 0.3s ease;
                 position: relative;
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
-            
+
             .chatbot-header-btn:hover {
-                background: rgba(255, 255, 255, 0.3);
+                background: var(--primary);
+                color: var(--ink);
                 transform: scale(1.1);
             }
             
@@ -467,90 +473,92 @@ class MathChatBot {
                 height: calc(100% - 140px);
                 overflow-y: auto;
                 padding: 1.2rem;
-                background: linear-gradient(to bottom, #f8faff, #ffffff);
+                background-color: var(--light);
+                background-image: repeating-linear-gradient(180deg, transparent 0px, transparent 27px, rgba(34, 53, 42, 0.06) 27px, rgba(34, 53, 42, 0.06) 28px);
                 display: flex;
                 flex-direction: column;
                 gap: 0.8rem;
             }
-            
+
             .chatbot-messages::-webkit-scrollbar {
                 width: 6px;
             }
-            
+
             .chatbot-messages::-webkit-scrollbar-track {
                 background: transparent;
             }
-            
+
             .chatbot-messages::-webkit-scrollbar-thumb {
-                background: rgba(102, 126, 234, 0.2);
+                background: rgba(227, 196, 104, 0.35);
                 border-radius: 3px;
             }
-            
+
             .chatbot-container .message {
                 animation: messageSlide 0.3s ease;
             }
-            
+
             .chatbot-container .message.bot {
                 align-self: flex-start;
                 max-width: 85%;
             }
-            
+
             .chatbot-container .message.user {
                 align-self: flex-end;
                 max-width: 85%;
             }
-            
+
             .chatbot-container .message-bubble {
                 padding: 0.8rem 1rem;
-                border-radius: 18px;
+                border-radius: 10px;
                 line-height: 1.4;
                 word-wrap: break-word;
             }
-            
+
             .chatbot-container .message.bot .message-bubble {
-                background: white;
-                border: 1px solid rgba(102, 126, 234, 0.1);
-                color: #2d3748;
-                border-bottom-left-radius: 6px;
+                background: var(--white);
+                border: 1.5px dashed rgba(34, 53, 42, 0.25);
+                color: var(--ink);
+                border-bottom-left-radius: 3px;
             }
-            
+
             .chatbot-container .message.user .message-bubble {
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                color: white;
-                border-bottom-right-radius: 6px;
+                background: var(--gradient-main);
+                color: var(--ink);
+                border-bottom-right-radius: 3px;
             }
-            
+
             .chatbot-container .message-card {
-                background: white;
-                border: 1px solid rgba(102, 126, 234, 0.15);
-                border-radius: 12px;
+                background: var(--white);
+                border: 1.5px dashed rgba(34, 53, 42, 0.22);
+                border-radius: 8px;
                 padding: 1rem;
                 margin-top: 0.5rem;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                box-shadow: 0 4px 14px rgba(34, 53, 42, 0.08);
             }
-            
+
             .chatbot-container .message-card-title {
+                font-family: 'Fraunces', serif;
                 font-weight: 600;
-                color: #2d3748;
+                color: var(--ink);
                 margin-bottom: 0.5rem;
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
             }
-            
+
             .quick-actions {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 0.5rem;
                 margin-top: 0.8rem;
             }
-            
+
             .quick-action-chip {
                 padding: 0.5rem 1rem;
-                background: white;
-                border: 1px solid rgba(102, 126, 234, 0.3);
+                background: var(--white);
+                border: 1.5px dashed rgba(227, 196, 104, 0.5);
                 border-radius: 20px;
-                color: #667eea;
+                color: var(--ink-secondary);
                 cursor: pointer;
                 font-size: 0.9rem;
                 transition: all 0.2s ease;
@@ -558,35 +566,39 @@ class MathChatBot {
                 align-items: center;
                 gap: 0.3rem;
             }
-            
+
             .quick-action-chip:hover {
-                background: rgba(102, 126, 234, 0.1);
+                background: var(--primary);
+                border-style: solid;
+                color: var(--ink);
                 transform: translateY(-1px);
             }
-            
+
             .period-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
                 gap: 0.5rem;
                 margin-top: 0.8rem;
             }
-            
+
             .period-card {
                 padding: 0.6rem;
-                background: linear-gradient(135deg, #f8faff, #ffffff);
-                border: 1px solid rgba(102, 126, 234, 0.2);
-                border-radius: 10px;
+                background: var(--white);
+                border: 1px solid rgba(34, 53, 42, 0.15);
+                border-radius: 8px;
                 cursor: pointer;
                 text-align: center;
                 font-size: 0.85rem;
+                color: var(--ink-secondary);
                 transition: all 0.2s ease;
             }
-            
+
             .period-card:hover {
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                color: white;
+                background: var(--gradient-main);
+                color: var(--ink);
+                border-color: transparent;
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+                box-shadow: 0 4px 12px rgba(227, 196, 104, 0.35);
             }
             
             .chatbot-container .nav-links {
@@ -603,36 +615,37 @@ class MathChatBot {
                 align-items: center;
                 gap: 0.8rem;
                 padding: 0.8rem;
-                background: white;
-                border: 1px solid #e5e7eb;
-                border-radius: 10px;
+                background: var(--white);
+                border: 1px solid rgba(34, 53, 42, 0.14);
+                border-radius: 8px;
                 text-decoration: none;
-                color: #2d3748;
+                color: var(--ink);
                 transition: all 0.2s ease;
             }
-            
+
             .chatbot-container .nav-link:hover {
-                background: rgba(102, 126, 234, 0.05);
-                border-color: rgba(102, 126, 234, 0.3);
+                background: rgba(227, 196, 104, 0.1);
+                border-color: rgba(227, 196, 104, 0.5);
                 transform: translateX(4px);
             }
-            
+
             .chatbot-container .nav-link-icon {
                 font-size: 1.2rem;
+                color: var(--primary);
             }
-            
+
             .chatbot-container .nav-link-text {
                 flex: 1;
             }
-            
+
             .chatbot-container .nav-link-title {
                 font-weight: 500;
                 margin: 0;
             }
-            
+
             .chatbot-container .nav-link-desc {
                 font-size: 0.75rem;
-                color: #718096;
+                color: var(--ink-muted);
                 margin: 0;
             }
             
@@ -645,54 +658,59 @@ class MathChatBot {
             .search-input {
                 flex: 1;
                 padding: 0.6rem 1rem;
-                border: 1px solid #e5e7eb;
-                border-radius: 10px;
+                border: 1px solid rgba(34, 53, 42, 0.25);
+                border-radius: 8px;
                 outline: none;
+                color: var(--ink);
+                background: var(--white);
                 transition: border-color 0.2s ease;
             }
-            
+
             .search-input:focus {
-                border-color: rgba(102, 126, 234, 0.5);
+                border-color: var(--primary);
             }
-            
+
             .search-btn {
                 padding: 0.6rem 1.2rem;
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                color: white;
+                background: var(--gradient-main);
+                color: var(--ink);
                 border: none;
-                border-radius: 10px;
+                border-radius: 8px;
                 cursor: pointer;
+                font-weight: 600;
                 transition: transform 0.2s ease;
             }
-            
+
             .search-btn:hover {
                 transform: translateY(-1px);
             }
-            
+
             .search-results {
                 margin-top: 0.8rem;
                 max-height: 250px;
                 overflow-y: auto;
             }
-            
+
             .search-result {
                 padding: 0.8rem;
-                background: #f8faff;
-                border-left: 3px solid #667eea;
+                background: var(--white);
+                border-left: 3px solid var(--primary);
                 margin-bottom: 0.5rem;
-                border-radius: 0 8px 8px 0;
+                border-radius: 0 6px 6px 0;
             }
-            
+
             .search-result-period {
+                font-family: 'JetBrains Mono', monospace;
                 font-weight: 600;
-                color: #667eea;
-                font-size: 0.85rem;
+                color: var(--secondary);
+                font-size: 0.8rem;
             }
-            
+
             .search-result-text {
                 margin-top: 0.3rem;
                 font-size: 0.9rem;
                 line-height: 1.4;
+                color: var(--ink);
             }
             
             .contact-form {
@@ -710,64 +728,66 @@ class MathChatBot {
             
             .chatbot-container .form-label {
                 font-size: 0.85rem;
-                color: #4a5568;
+                color: var(--ink-secondary);
                 font-weight: 500;
             }
-            
+
             .chatbot-container .form-input,
             .chatbot-container .form-select,
             .chatbot-container .form-textarea {
                 padding: 0.6rem 0.8rem;
-                border: 1px solid #e5e7eb;
-                border-radius: 8px;
+                border: 1px solid rgba(34, 53, 42, 0.25);
+                border-radius: 6px;
                 outline: none;
+                color: var(--ink);
+                background: var(--white);
                 transition: border-color 0.2s ease;
                 font-family: inherit;
             }
-            
+
             .chatbot-container .form-input:focus,
             .chatbot-container .form-select:focus,
             .chatbot-container .form-textarea:focus {
-                border-color: rgba(102, 126, 234, 0.5);
+                border-color: var(--primary);
             }
-            
+
             .chatbot-container .form-textarea {
                 resize: vertical;
                 min-height: 80px;
             }
-            
+
             .chatbot-container .form-submit {
                 padding: 0.8rem;
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                color: white;
+                background: var(--gradient-main);
+                color: var(--ink);
                 border: none;
-                border-radius: 10px;
+                border-radius: 8px;
                 cursor: pointer;
-                font-weight: 500;
+                font-weight: 600;
                 transition: transform 0.2s ease;
             }
-            
+
             .chatbot-container .form-submit:hover {
                 transform: translateY(-1px);
             }
-            
+
             .typing-indicator {
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
                 padding: 0.8rem 1rem;
-                background: white;
-                border: 1px solid rgba(102, 126, 234, 0.1);
-                border-radius: 18px;
-                border-bottom-left-radius: 6px;
+                background: var(--white);
+                border: 1.5px dashed rgba(34, 53, 42, 0.22);
+                border-radius: 10px;
+                border-bottom-left-radius: 3px;
                 max-width: 80px;
             }
-            
+
             .typing-dot {
                 width: 8px;
                 height: 8px;
                 border-radius: 50%;
-                background: #667eea;
+                background: var(--primary);
                 animation: typingDot 1.4s infinite;
             }
             
@@ -781,82 +801,84 @@ class MathChatBot {
             
             .chatbot-input-container {
                 padding: 1rem;
-                background: white;
-                border-top: 1px solid #e5e7eb;
+                background: var(--white);
+                border-top: 1.5px dashed rgba(34, 53, 42, 0.2);
                 display: flex;
                 gap: 0.5rem;
             }
-            
+
             .chatbot-input {
                 flex: 1;
                 padding: 0.6rem 1rem;
-                border: 1px solid #e5e7eb;
+                border: 1px solid rgba(34, 53, 42, 0.25);
                 border-radius: 20px;
                 outline: none;
+                color: var(--ink);
+                background: var(--light);
                 transition: border-color 0.2s ease;
             }
-            
+
             .chatbot-input:focus {
-                border-color: rgba(102, 126, 234, 0.5);
+                border-color: var(--primary);
             }
-            
+
             .chatbot-send {
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #667eea, #764ba2);
+                background: var(--gradient-main);
                 border: none;
-                color: white;
+                color: var(--ink);
                 cursor: pointer;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 transition: transform 0.2s ease;
             }
-            
+
             .chatbot-send:hover {
                 transform: scale(1.1);
             }
-            
+
             .favorites-indicator {
                 position: absolute;
                 top: -5px;
                 right: -5px;
                 min-width: 16px;
                 height: 16px;
-                background: #ef4444;
+                background: #D97A63;
                 border-radius: 50%;
                 display: none;
                 align-items: center;
                 justify-content: center;
                 font-size: 0.65rem;
                 font-weight: bold;
-                color: white;
+                color: var(--white);
                 padding: 1px;
-                border: 1.5px solid white;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+                border: 1.5px solid var(--dark-mid);
+                box-shadow: 0 1px 3px rgba(8, 16, 12, 0.4);
                 z-index: 1;
             }
-            
+
             .favorites-indicator.active {
                 display: flex;
             }
-            
+
             .tip-card {
-                background: linear-gradient(135deg, #fef3c7, #fef9e7);
-                border: 1px solid #fbbf24;
+                background: rgba(227, 196, 104, 0.14);
+                border: 1.5px dashed rgba(227, 196, 104, 0.5);
                 padding: 1rem;
-                border-radius: 12px;
+                border-radius: 8px;
                 margin-top: 0.5rem;
             }
-            
+
             .tip-card-icon {
                 font-size: 1.5rem;
                 margin-bottom: 0.5rem;
             }
-            
+
             .tip-card-text {
-                color: #78350f;
+                color: var(--ink);
                 line-height: 1.5;
             }
             
@@ -880,39 +902,6 @@ class MathChatBot {
                     transform: scale(1.3);
                     opacity: 1;
                 }
-            }
-            
-            /* Dark mode */
-            body.dark-mode .chatbot-window {
-                background: #1a202c;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            }
-            
-            body.dark-mode .chatbot-messages {
-                background: linear-gradient(to bottom, #1a202c, #2d3748);
-            }
-            
-            body.dark-mode .chatbot-container .message.bot .message-bubble {
-                background: #2d3748;
-                border-color: rgba(102, 126, 234, 0.3);
-                color: #e2e8f0;
-            }
-            
-            body.dark-mode .chatbot-container .message-card {
-                background: #2d3748;
-                border-color: rgba(102, 126, 234, 0.3);
-                color: #e2e8f0;
-            }
-            
-            body.dark-mode .chatbot-input-container {
-                background: #2d3748;
-                border-top-color: #4a5568;
-            }
-            
-            body.dark-mode .chatbot-container .chatbot-input {
-                background: #1a202c;
-                border-color: #4a5568;
-                color: #e2e8f0;
             }
             
             /* Modal styles (for any future modals) */
@@ -1028,8 +1017,8 @@ class MathChatBot {
                     bottom: 0;
                     left: 0;
                     right: 0;
-                    background: white;
-                    border-top: 1px solid #e5e7eb;
+                    background: var(--white);
+                    border-top: 1.5px dashed rgba(34, 53, 42, 0.2);
                 }
                 
                 .chatbot-input {
@@ -1081,10 +1070,6 @@ class MathChatBot {
                 
                 .search-btn {
                     width: 100%;
-                }
-                
-                .stat-item {
-                    padding: 1rem;
                 }
                 
                 .tip-card {
@@ -1209,7 +1194,7 @@ class MathChatBot {
             <div class="chatbot-window" id="chatbot-window">
                 <div class="chatbot-header">
                     <div class="chatbot-header-info">
-                        <div class="chatbot-avatar">📚</div>
+                        <div class="chatbot-avatar"><i class="fas fa-scroll"></i></div>
                         <div>
                             <h3 class="chatbot-title">Guía Histórico</h3>
                             <p class="chatbot-subtitle">Historia y navegación matemática</p>
@@ -1217,28 +1202,28 @@ class MathChatBot {
                     </div>
                     <div class="chatbot-header-actions">
                         <button class="chatbot-header-btn" id="favorites-btn" title="Favoritos">
-                            <span style="position: relative;">⭐</span>
+                            <span style="position: relative;"><i class="fas fa-star"></i></span>
                             <span class="favorites-indicator"></span>
                         </button>
                         <button class="chatbot-header-btn" id="refresh-btn" title="Nueva conversación">
-                            <span>🔄</span>
+                            <i class="fas fa-arrows-rotate"></i>
                         </button>
                         <button class="chatbot-header-btn" id="close-btn" title="Cerrar">
-                            <span>✕</span>
+                            <i class="fas fa-xmark"></i>
                         </button>
                     </div>
                 </div>
                 <div class="chatbot-messages" id="chatbot-messages"></div>
                 <div class="chatbot-input-container">
-                    <input type="text" class="chatbot-input" id="chatbot-input" 
+                    <input type="text" class="chatbot-input" id="chatbot-input"
                            placeholder="Historia, periodos, búsqueda, navegación..." maxlength="200">
                     <button class="chatbot-send" id="chatbot-send">
-                        <i>➤</i>
+                        <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
             <button class="chatbot-toggle" id="chatbot-toggle">
-                <span class="chatbot-toggle-icon">💬</span>
+                <i class="fas fa-scroll chatbot-toggle-icon"></i>
             </button>
         `;
         
@@ -1759,7 +1744,7 @@ class MathChatBot {
         
         if (results.length === 0) {
             resultsContainer.innerHTML = `
-                <div style="margin-top: 1rem; color: #718096;">
+                <div style="margin-top: 1rem; color: var(--ink-muted);">
                     No encontré resultados para "${searchInput.value}". 
                     Intenta con otros términos.
                 </div>
@@ -1778,7 +1763,7 @@ class MathChatBot {
                         </div>
                     `).join('')}
                     ${results.length > 5 ? `
-                        <div style="margin-top: 0.5rem; color: #718096; font-size: 0.85rem;">
+                        <div style="margin-top: 0.5rem; color: var(--ink-muted); font-size: 0.85rem;">
                             Mostrando 5 de ${results.length} resultados...
                         </div>
                     ` : ''}
@@ -1891,9 +1876,9 @@ Enviado desde el Chat Bot de Historia Matemática
                     ${tip}
                 </div>
             </div>
-            <div style="margin-top: 0.8rem; padding: 0.8rem; background: rgba(102, 126, 234, 0.05); 
-                        border-left: 3px solid #667eea; border-radius: 0 8px 8px 0;">
-                <em style="color: #4a5568; font-size: 0.9rem;">${quote}</em>
+            <div style="margin-top: 0.8rem; padding: 0.8rem; background: rgba(227, 196, 104, 0.1);
+                        border-left: 3px solid var(--primary); border-radius: 0 6px 6px 0;">
+                <em style="color: var(--ink-secondary); font-size: 0.9rem;">${quote}</em>
             </div>
             <div class="quick-actions">
                 <button class="quick-action-chip" data-action="tip">

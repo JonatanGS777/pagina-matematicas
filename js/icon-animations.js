@@ -246,15 +246,17 @@ class IconAnimationsSystem {
     addSpecialEffects() {
         // Add extra glow effect to trophy icons
         document.addEventListener('mouseenter', (e) => {
+            if (!e.target.classList) return;
             if (e.target.classList.contains('fa-trophy')) {
                 this.createGlowEffect(e.target, '#ffd700');
             } else if (e.target.classList.contains('fa-lightbulb')) {
                 this.createGlowEffect(e.target, '#ffe066');
             }
         }, true);
-        
+
         // Remove glow effects
         document.addEventListener('mouseleave', (e) => {
+            if (!e.target.classList) return;
             if (e.target.classList.contains('fa-trophy') || e.target.classList.contains('fa-lightbulb')) {
                 this.removeGlowEffect(e.target);
             }
