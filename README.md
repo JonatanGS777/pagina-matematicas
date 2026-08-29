@@ -14,7 +14,7 @@
 
 *Developed by **Prof. Yonatan Guerrero Soriano** for the Puerto Rico Department of Education.*
 
-[Features](#features) · [Tech Stack](#tech-stack) · [Structure](#project-structure) · [Setup](#supabase-setup) · [Deploy](#deploy-on-vercel)
+[Features](#features) · [Tech Stack](#tech-stack) · [Design System](#design-system--cuaderno-de-cátedra) · [Structure](#project-structure) · [Setup](#supabase-setup) · [Deploy](#deploy-on-vercel)
 
 </div>
 
@@ -51,9 +51,56 @@
 | **Deploy** | Vercel — auto-deploy on push to `main` |
 | **MathBattle** | Node.js + Express + Socket.IO |
 | **Charts** | Chart.js (Radar, Pie, Bar, Polar, Area Line) |
-| **Fonts** | Google Fonts — JetBrains Mono, Space Grotesk, Playfair Display |
+| **Fonts** | Google Fonts — Fraunces (display), Karla (body), JetBrains Mono (data) |
 
 </div>
+
+---
+
+## Design System — "Cuaderno de Cátedra"
+
+In August 2026 the public-facing pages were redesigned around a single visual
+identity: a classroom chalkboard for hero/header surfaces and ruled notebook
+paper for body content — replacing a generic purple-gradient theme.
+
+### Palette & type
+
+| Token | Value | Use |
+|:---|:---|:---|
+| `--dark` / `--dark-mid` | `#172922` / `#1E3229` | Chalkboard surfaces (header, hero, footer) |
+| `--light` | `#F4F0E2` | Notebook paper surface (`.main-content`) |
+| `--primary` | `#E3C468` | Chalk yellow — primary accent |
+| `--secondary` / `--accent` | `#8FB8D6` | Chalk blue — secondary accent |
+| `--ink` / `--ink-secondary` / `--ink-muted` | `#22352A` / `#5B6355` / `#8A8B76` | Text on paper surfaces |
+| `--text-primary` / `--text-secondary` | `#F4F0E2` / `#A9B6A9` | Text on chalkboard surfaces |
+
+Two text-color scopes exist by design: `--text-*` tokens are the light chalk
+values used on dark surfaces (header, hero, dropdowns), while `--ink*` tokens
+are dark values for the light paper surface — `.main-content` locally
+reassigns `--text-primary/secondary/muted` to the ink tokens so shared
+component rules (`.section-title`, `.stat-label`, etc.) resolve correctly
+depending on which surface they render on.
+
+Fonts: **Fraunces** (serif display, headings/logo), **Karla** (body/UI),
+**JetBrains Mono** (data, stats, mono labels) — all loaded per-page via
+Google Fonts `<link>`, no shared stylesheet across pages yet.
+
+### What changed
+
+| Area | Change |
+|:---|:---|
+| `index.html` + `style.css` | Full redesign: header/nav, hero, "The Platform" section, live-stats block (restyled as a wood-framed chalkboard slate with sticky-note stat cards), student gallery (Polaroid photos with washi tape), footer |
+| `galeria/galeria.html` | Full standalone redesign (own embedded `<style>`, not shared with `style.css`) — same nav/hero/footer language, gallery grid reuses the Polaroid + tape treatment, hero background is a dedicated illustration (`galeria-header.png`) |
+| `js/chatbot.js` | Chat widget re-themed from a generic purple gradient to the chalk palette; emoji UI chrome (toggle, avatar, header buttons, send) replaced with Font Awesome icons; dead `.dark-mode` CSS removed |
+| Dark mode toggle | Removed from `index.html` and `galeria.html` (`js/dark-mode.js` no longer loaded there) — the chalkboard identity is a fixed single theme. Other, not-yet-redesigned pages may still load it |
+| Background images | `imagenes/stem-bg.png` (index hero) and the old `imagenes/galeria.png` were too saturated for the dark theme; index keeps its image with a stronger `multiply`-blended overlay, gallery now uses `imagenes/galeria-bg.jpg` (a real chalkboard photo, Pexels/Vitaly Gariev) plus `galeria/galeria-header.png` (dedicated hero illustration) |
+| Bug fixes found along the way | `showActivityNotification()` in `supabase-analytics.js` was setting inline styles that ignored the real `.activity-notification` CSS class, rendering as a full-screen box on mobile Safari — fixed to use the class; a global `mouseenter`/`mouseleave` listener in `icon-animations.js` threw when `e.target` had no `classList` — guarded |
+
+### Not yet redesigned
+
+Everything under `club/`, `materiales/`, `lab/`, `salon/`, `stem/`, `contexto/`,
+`links/`, and `perfil-investigador/` still uses the previous purple theme and
+`js/dark-mode.js`. Redesign them the same way, page by page, when needed.
 
 ---
 
