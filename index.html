@@ -17,7 +17,7 @@
 <meta name="twitter:description" content="Recursos interactivos, simulaciones y proyectos STEM.">
 <meta name="twitter:image" content="https://digitalmathematics.org/imagenes/banner-linkedin.jpg">
 
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Supabase Cliente -->
@@ -351,7 +351,7 @@
             <!-- NUEVA SECCIÓN DE ESTADÍSTICAS CON SUPABASE (CONTADORES EN CERO) -->
             <div class="stats-section fade-in" id="modernStatsSection">
                 <div class="stats-header">
-                    <h3 style="text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    <h3 style="text-align: center; font-family: 'Fraunces', serif; font-weight: 600; font-size: 2rem; margin-bottom: 0.5rem; color: var(--ink);">
                         <i class="fas fa-chart-line"></i> Análisis en Tiempo Real
                     </h3>
                     <div class="live-indicator">
@@ -814,7 +814,6 @@
 
     <!-- Módulos JavaScript (EXCLUYENDO visitor-counter.js que ahora está integrado con Supabase) -->
     <script src="js/chatbot.js"></script>
-    <script src="js/dark-mode.js"></script>
     <script src="js/icon-animations.js"></script>
     <script src="js/typewriter-effects.js"></script>
     <script src="js/math-particles.js"></script>
@@ -824,10 +823,6 @@
             window.MathChatBot.initMathChatBot();
         }
         
-        if (window.DarkMode) {
-            window.DarkMode.initDarkMode();
-        }
-
         // Poll de profesión
         const POLL_LABELS = {
             educacion: 'Educación', ingenieria: 'Ingeniería', ciencias: 'Ciencias',

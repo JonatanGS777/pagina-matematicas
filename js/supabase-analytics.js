@@ -544,9 +544,9 @@ class SupabaseAnalytics {
         const deviceOrder = ['mobile', 'desktop', 'tablet'];
         const shortLabels = { mobile: 'MOB', desktop: 'PC', tablet: 'TAB' };
         const palette = {
-            mobile: { strong: '#00CFAF', soft: 'rgba(0, 207, 175, 0.28)' },
-            desktop: { strong: '#5B4CF5', soft: 'rgba(91, 76, 245, 0.26)' },
-            tablet: { strong: '#F5A623', soft: 'rgba(245, 166, 35, 0.28)' }
+            mobile: { strong: '#8FB8D6', soft: 'rgba(143, 184, 214, 0.28)' },
+            desktop: { strong: '#E3C468', soft: 'rgba(227, 196, 104, 0.26)' },
+            tablet: { strong: '#D97A63', soft: 'rgba(217, 122, 99, 0.28)' }
         };
 
         const activeIndex = Math.max(0, deviceOrder.indexOf(selectedDevice || 'mobile'));
@@ -557,7 +557,7 @@ class SupabaseAnalytics {
         const barWidth = Math.min(34, slotWidth * 0.56);
 
         // Rejilla de referencia
-        ctx.strokeStyle = 'rgba(91, 76, 245, 0.12)';
+        ctx.strokeStyle = 'rgba(34, 53, 42, 0.14)';
         ctx.lineWidth = 1;
         for (let i = 0; i <= 4; i++) {
             const y = chartArea.top + (plotHeight / 4) * i;
@@ -598,12 +598,12 @@ class SupabaseAnalytics {
             }
 
             ctx.textAlign = 'center';
-            ctx.font = '700 9px "DM Mono", monospace';
-            ctx.fillStyle = isActive ? '#1C2243' : 'rgba(60, 66, 101, 0.74)';
+            ctx.font = '700 9px "JetBrains Mono", monospace';
+            ctx.fillStyle = isActive ? '#22352A' : 'rgba(34, 53, 42, 0.7)';
             ctx.fillText(`${pct}%`, x + (barWidth / 2), Math.max(10, y - 4));
 
-            ctx.font = '700 8px "Space Grotesk", sans-serif';
-            ctx.fillStyle = isActive ? '#2D3360' : 'rgba(76, 84, 118, 0.75)';
+            ctx.font = '700 8px "Karla", sans-serif';
+            ctx.fillStyle = isActive ? '#3A4A3E' : 'rgba(60, 75, 64, 0.75)';
             ctx.fillText(shortLabels[device], x + (barWidth / 2), canvas.height - 5);
         });
     }
@@ -629,8 +629,8 @@ class SupabaseAnalytics {
         const stepX = w / (data.length - 1);
 
         const gradient = ctx.createLinearGradient(0, 0, 0, h);
-        gradient.addColorStop(0, 'rgba(0, 207, 175, 0.4)');
-        gradient.addColorStop(1, 'rgba(0, 207, 175, 0)');
+        gradient.addColorStop(0, 'rgba(143, 184, 214, 0.4)');
+        gradient.addColorStop(1, 'rgba(143, 184, 214, 0)');
 
         ctx.beginPath();
         data.forEach((v, i) => {
@@ -652,7 +652,7 @@ class SupabaseAnalytics {
             const y = h - (v / max) * (h - 4) - 2;
             i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         });
-        ctx.strokeStyle = '#00CFAF';
+        ctx.strokeStyle = '#5F97BE';
         ctx.lineWidth = 1.5;
         ctx.stroke();
     }
