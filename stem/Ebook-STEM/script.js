@@ -1,5 +1,6 @@
 // Indicador de progreso personalizado
 const progressSections = document.querySelectorAll('.progress-section');
+const allSections = document.querySelectorAll('.section, .hero');
 const introSections = ['introduccion', 'relevancia', 'nivel-educativo', 'objetivos'];
 const contentSections = ['contenido', 'integracion', 'metodologia'];
 const simulationSections = ['simulacion', 'visualizacion-avanzada'];
@@ -385,8 +386,8 @@ if (glossarySearch) {
             }
         });
     });
-}// Esperar a que el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', function() {
+}
+
 // Elementos del DOM
 const navLinks = document.querySelectorAll('.nav-links a');
 const sections = document.querySelectorAll('.section');
@@ -727,4 +728,3 @@ runSimulationBtn.addEventListener('click', function() {
 
 // Ejecutar simulación inicial
 runSimulationBtn.click();
-});

@@ -50,7 +50,7 @@ class RobotEnvironment {
         
         // Advanced PBR material
         const floorMaterial = new THREE.MeshStandardMaterial({
-            color: 0x1a1a2e,
+            color: 0x111512,
             metalness: 0.1,
             roughness: 0.8,
             transparent: true,
@@ -92,8 +92,8 @@ class RobotEnvironment {
             { 
                 size: 30, 
                 divisions: 30, 
-                color1: 0x667eea, 
-                color2: 0x334477, 
+                color1: 0xff6b2c,
+                color2: 0x29332e,
                 opacity: 0.8, 
                 height: 0.01,
                 speed: 0.05
@@ -101,8 +101,8 @@ class RobotEnvironment {
             { 
                 size: 15, 
                 divisions: 15, 
-                color1: 0x4ecdc4, 
-                color2: 0x226655, 
+                color1: 0x7ed8ce,
+                color2: 0x174b46,
                 opacity: 0.5, 
                 height: 0.02,
                 speed: -0.03
@@ -110,8 +110,8 @@ class RobotEnvironment {
             { 
                 size: 8, 
                 divisions: 8, 
-                color1: 0xf093fb, 
-                color2: 0x775577, 
+                color1: 0xe5ba47,
+                color2: 0x58483c,
                 opacity: 0.3, 
                 height: 0.03,
                 speed: 0.02
@@ -271,7 +271,7 @@ class RobotEnvironment {
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         
         const material = new THREE.PointsMaterial({
-            color: 0x667eea,
+            color: 0xff6b2c,
             size: 0.02,
             transparent: true,
             opacity: 0.3,
@@ -303,8 +303,8 @@ class RobotEnvironment {
         pillarPositions.forEach((pos, index) => {
             const geometry = new THREE.CylinderGeometry(0.3, 0.5, 4, 8);
             const material = new THREE.MeshStandardMaterial({
-                color: 0x4ecdc4,
-                emissive: 0x226655,
+                color: 0x7ed8ce,
+                emissive: 0x174b46,
                 emissiveIntensity: 0.3,
                 transparent: true,
                 opacity: 0.7,
@@ -344,8 +344,8 @@ class RobotEnvironment {
             // Core
             const coreGeometry = new THREE.SphereGeometry(0.3, 20, 16);
             const coreMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffe066,
-                emissive: 0xffaa00,
+                color: 0xe8e2d4,
+                emissive: 0xff8a3d,
                 emissiveIntensity: 0.8,
                 transparent: true,
                 opacity: 0.9
@@ -357,8 +357,8 @@ class RobotEnvironment {
             for (let i = 0; i < 3; i++) {
                 const ringGeometry = new THREE.TorusGeometry(0.5 + i * 0.3, 0.02, 8, 32);
                 const ringMaterial = new THREE.MeshStandardMaterial({
-                    color: 0x667eea,
-                    emissive: 0x334477,
+                    color: 0xff6b2c,
+                    emissive: 0x29332e,
                     emissiveIntensity: 0.5,
                     transparent: true,
                     opacity: 0.6
@@ -395,10 +395,10 @@ class RobotEnvironment {
         platformPositions.forEach((pos, index) => {
             const geometry = new THREE.CylinderGeometry(1.5, 1.5, 0.2, 12);
             const material = new THREE.MeshStandardMaterial({
-                color: 0x667eea,
+                color: 0xff6b2c,
                 metalness: 0.7,
                 roughness: 0.3,
-                emissive: 0x223366,
+                emissive: 0x263b37,
                 emissiveIntensity: 0.2
             });
             
@@ -438,8 +438,8 @@ class RobotEnvironment {
             const material = new THREE.ShaderMaterial({
                 uniforms: {
                     time: { value: 0.0 },
-                    color1: { value: new THREE.Color(0x667eea) },
-                    color2: { value: new THREE.Color(0x4ecdc4) }
+                    color1: { value: new THREE.Color(0xff6b2c) },
+                    color2: { value: new THREE.Color(0x7ed8ce) }
                 },
                 vertexShader: `
                     varying vec2 vUv;

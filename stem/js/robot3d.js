@@ -60,6 +60,7 @@ class Robot3D {
         this.stats = null;
         this.frameCount = 0;
         this.lastTime = performance.now();
+        this.currentFPS = 60;
         
         // Callbacks
         this.onStatsUpdate = null;
@@ -125,7 +126,7 @@ class Robot3D {
         // Basic floor
         const floorGeometry = new THREE.PlaneGeometry(30, 30);
         const floorMaterial = new THREE.MeshLambertMaterial({ 
-            color: 0x1a1a2e,
+            color: 0x111512,
             transparent: true,
             opacity: 0.9
         });
@@ -136,7 +137,7 @@ class Robot3D {
         this.scene.add(this.floor);
         
         // Basic grid
-        const grid = new THREE.GridHelper(20, 20, 0x667eea, 0x334477);
+        const grid = new THREE.GridHelper(20, 20, 0xff6b2c, 0x29332e);
         grid.material.transparent = true;
         grid.material.opacity = 0.6;
         this.scene.add(grid);
@@ -202,9 +203,9 @@ class Robot3D {
                 varying vec3 vWorldPosition;
                 
                 void main() {
-                    vec3 color1 = vec3(0.1, 0.1, 0.4);
-                    vec3 color2 = vec3(0.3, 0.1, 0.6);
-                    vec3 color3 = vec3(0.6, 0.3, 0.8);
+                    vec3 color1 = vec3(0.025, 0.04, 0.032);
+                    vec3 color2 = vec3(0.07, 0.13, 0.105);
+                    vec3 color3 = vec3(0.38, 0.12, 0.035);
                     
                     float noise = sin(vWorldPosition.x * 0.01 + time) * 
                                  cos(vWorldPosition.y * 0.01 + time * 0.7) * 
@@ -226,7 +227,7 @@ class Robot3D {
         this.scene.add(this.skybox);
         
         // Enhanced fog
-        this.scene.fog = new THREE.FogExp2(0x0a0a1a, 0.02);
+        this.scene.fog = new THREE.FogExp2(0x090d0b, 0.02);
         
         return Promise.resolve();
     }
@@ -248,12 +249,20 @@ class Robot3D {
         });
         
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Calidad adaptable: protege la fluidez en móviles y pantallas retina.
+        const compactViewport = window.matchMedia('(max-width: 820px)').matches;
+        const pixelRatioCap = compactViewport ? 1.25 : 1.75;
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, pixelRatioCap));
         
         // Advanced rendering settings
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        if ('outputColorSpace' in this.renderer && THREE.SRGBColorSpace) {
+            this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        } else if (THREE.sRGBEncoding) {
+            this.renderer.outputEncoding = THREE.sRGBEncoding;
+        }
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.2;
         this.renderer.physicallyCorrectLights = true;
@@ -292,7 +301,7 @@ class Robot3D {
     
     async setupAdvancedLighting() {
         // Enhanced ambient lighting with light probe
-        const ambientLight = new THREE.AmbientLight(0x404080, 0.2);
+        const ambientLight = new THREE.AmbientLight(0x6c746e, 0.28);
         this.scene.add(ambientLight);
         
         // Main directional light (sun) with realistic settings
@@ -301,8 +310,9 @@ class Robot3D {
         this.lights.sun.castShadow = true;
         
         // Ultra-high quality shadows
-        this.lights.sun.shadow.mapSize.width = 4096;
-        this.lights.sun.shadow.mapSize.height = 4096;
+        const shadowSize = window.matchMedia('(max-width: 820px)').matches ? 1024 : 2048;
+        this.lights.sun.shadow.mapSize.width = shadowSize;
+        this.lights.sun.shadow.mapSize.height = shadowSize;
         this.lights.sun.shadow.camera.near = 0.1;
         this.lights.sun.shadow.camera.far = 100;
         this.lights.sun.shadow.camera.left = -30;
@@ -315,12 +325,12 @@ class Robot3D {
         this.scene.add(this.lights.sun);
         
         // Advanced fill lighting setup
-        this.lights.fill = new THREE.DirectionalLight(0x667eea, 1.5);
+        this.lights.fill = new THREE.DirectionalLight(0xff6b2c, 1.5);
         this.lights.fill.position.set(-15, 20, -10);
         this.scene.add(this.lights.fill);
         
         // Rim light for dramatic effect
-        this.lights.rim = new THREE.DirectionalLight(0x4ecdc4, 1.0);
+        this.lights.rim = new THREE.DirectionalLight(0x7ed8ce, 1.0);
         this.lights.rim.position.set(10, 5, -20);
         this.scene.add(this.lights.rim);
         
@@ -342,7 +352,7 @@ class Robot3D {
     
     createAccentLights() {
         // Create multiple colored accent lights
-        const accentColors = [0xff6b6b, 0x4ecdc4, 0xffe066, 0xf093fb];
+        const accentColors = [0xe4543f, 0x7ed8ce, 0xe8e2d4, 0xe5ba47];
         const positions = [
             [15, 2, 15], [-15, 2, 15], [15, 2, -15], [-15, 2, -15]
         ];
@@ -381,7 +391,7 @@ class Robot3D {
         
         // Create advanced material with normal mapping simulation
         const floorMaterial = new THREE.MeshStandardMaterial({
-            color: 0x1a1a2e,
+            color: 0x111512,
             metalness: 0.1,
             roughness: 0.8,
             transparent: true,
@@ -409,9 +419,9 @@ class Robot3D {
     createAdvancedGrid() {
         // Multi-layered grid system
         const gridConfigs = [
-            { size: 30, divisions: 30, color1: 0x667eea, color2: 0x334477, opacity: 0.8, height: 0.01 },
-            { size: 15, divisions: 15, color1: 0x4ecdc4, color2: 0x226655, opacity: 0.5, height: 0.02 },
-            { size: 8, divisions: 8, color1: 0xf093fb, color2: 0x775577, opacity: 0.3, height: 0.03 }
+            { size: 30, divisions: 30, color1: 0xff6b2c, color2: 0x29332e, opacity: 0.8, height: 0.01 },
+            { size: 15, divisions: 15, color1: 0x7ed8ce, color2: 0x174b46, opacity: 0.5, height: 0.02 },
+            { size: 8, divisions: 8, color1: 0xe5ba47, color2: 0x58483c, opacity: 0.3, height: 0.03 }
         ];
         
         this.grids = [];
@@ -552,7 +562,7 @@ class Robot3D {
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         
         const material = new THREE.PointsMaterial({
-            color: 0x667eea,
+            color: 0xff6b2c,
             size: 0.02,
             transparent: true,
             opacity: 0.3,
@@ -585,8 +595,8 @@ class Robot3D {
         pillarPositions.forEach((pos, index) => {
             const geometry = new THREE.CylinderGeometry(0.3, 0.5, 4, 8);
             const material = new THREE.MeshStandardMaterial({
-                color: 0x4ecdc4,
-                emissive: 0x226655,
+                color: 0x7ed8ce,
+                emissive: 0x174b46,
                 emissiveIntensity: 0.3,
                 transparent: true,
                 opacity: 0.7,
@@ -622,8 +632,8 @@ class Robot3D {
             // Core
             const coreGeometry = new THREE.SphereGeometry(0.3, 20, 16);
             const coreMaterial = new THREE.MeshStandardMaterial({
-                color: 0xffe066,
-                emissive: 0xffaa00,
+                color: 0xe8e2d4,
+                emissive: 0xff8a3d,
                 emissiveIntensity: 0.8,
                 transparent: true,
                 opacity: 0.9
@@ -635,8 +645,8 @@ class Robot3D {
             for (let i = 0; i < 3; i++) {
                 const ringGeometry = new THREE.TorusGeometry(0.5 + i * 0.3, 0.02, 8, 32);
                 const ringMaterial = new THREE.MeshStandardMaterial({
-                    color: 0x667eea,
-                    emissive: 0x334477,
+                    color: 0xff6b2c,
+                    emissive: 0x29332e,
                     emissiveIntensity: 0.5,
                     transparent: true,
                     opacity: 0.6
@@ -670,10 +680,10 @@ class Robot3D {
         platformPositions.forEach((pos) => {
             const geometry = new THREE.CylinderGeometry(1.5, 1.5, 0.2, 12);
             const material = new THREE.MeshStandardMaterial({
-                color: 0x667eea,
+                color: 0xff6b2c,
                 metalness: 0.7,
                 roughness: 0.3,
-                emissive: 0x223366,
+                emissive: 0x263b37,
                 emissiveIntensity: 0.2
             });
             
@@ -710,8 +720,8 @@ class Robot3D {
             const material = new THREE.ShaderMaterial({
                 uniforms: {
                     time: { value: 0.0 },
-                    color1: { value: new THREE.Color(0x667eea) },
-                    color2: { value: new THREE.Color(0x4ecdc4) }
+                    color1: { value: new THREE.Color(0xff6b2c) },
+                    color2: { value: new THREE.Color(0x7ed8ce) }
                 },
                 vertexShader: `
                     varying vec2 vUv;
@@ -772,36 +782,36 @@ class Robot3D {
     createAdvancedMaterials() {
         return {
             chassis: new THREE.MeshStandardMaterial({
-                color: 0x667eea,
+                color: 0xff6b2c,
                 metalness: 0.8,
                 roughness: 0.2,
-                emissive: 0x223366,
+                emissive: 0x263b37,
                 emissiveIntensity: 0.1
             }),
             head: new THREE.MeshStandardMaterial({
-                color: 0x4ecdc4,
+                color: 0x7ed8ce,
                 metalness: 0.6,
                 roughness: 0.3,
-                emissive: 0x226655,
+                emissive: 0x174b46,
                 emissiveIntensity: 0.15
             }),
             limbs: new THREE.MeshStandardMaterial({
-                color: 0xf093fb,
+                color: 0xe5ba47,
                 metalness: 0.7,
                 roughness: 0.4,
-                emissive: 0x775577,
+                emissive: 0x58483c,
                 emissiveIntensity: 0.1
             }),
             details: new THREE.MeshStandardMaterial({
-                color: 0xffe066,
+                color: 0xe8e2d4,
                 metalness: 0.9,
                 roughness: 0.1,
-                emissive: 0xffaa00,
+                emissive: 0xff8a3d,
                 emissiveIntensity: 0.3
             }),
             eyes: new THREE.MeshStandardMaterial({
                 color: 0xffffff,
-                emissive: 0x00ffff,
+                emissive: 0x7ed8ce,
                 emissiveIntensity: 0.8,
                 transparent: true,
                 opacity: 0.9
@@ -866,7 +876,7 @@ class Robot3D {
         const screenGeometry = new THREE.PlaneGeometry(0.8, 0.6);
         const screenMaterial = new THREE.MeshStandardMaterial({
             color: 0x000000,
-            emissive: 0x004444,
+            emissive: 0x174b46,
             emissiveIntensity: 0.5,
             transparent: true,
             opacity: 0.8
@@ -1049,8 +1059,8 @@ class Robot3D {
         stripPositions.forEach((config) => {
             const stripGeometry = new THREE.BoxGeometry(1.8, 0.05, 0.05);
             const stripMaterial = new THREE.MeshStandardMaterial({
-                color: 0x00ffff,
-                emissive: 0x004444,
+                color: 0x7ed8ce,
+                emissive: 0x174b46,
                 emissiveIntensity: 0.8
             });
             const strip = new THREE.Mesh(stripGeometry, stripMaterial);
@@ -1133,7 +1143,7 @@ class Robot3D {
         // Create trail system for robot movement
         const trailGeometry = new THREE.BufferGeometry();
         const trailMaterial = new THREE.LineBasicMaterial({
-            color: 0x667eea,
+            color: 0xff6b2c,
             transparent: true,
             opacity: 0.6
         });
@@ -1396,6 +1406,7 @@ class Robot3D {
         
         if (currentTime - this.lastTime >= 1000) { // Every second
             const fps = Math.round((this.frameCount * 1000) / (currentTime - this.lastTime));
+            this.currentFPS = fps;
             
             // Update performance info
             if (this.onLog && this.frameCount % 300 === 0) { // Every 5 seconds
@@ -1494,8 +1505,8 @@ class Robot3D {
         for (let i = 0; i < particleCount; i++) {
             const geometry = new THREE.SphereGeometry(0.02, 8, 6);
             const material = new THREE.MeshStandardMaterial({
-                color: 0x667eea,
-                emissive: 0x334477,
+                color: 0xff6b2c,
+                emissive: 0x29332e,
                 emissiveIntensity: 0.8,
                 transparent: true,
                 opacity: 1.0
@@ -1549,7 +1560,7 @@ class Robot3D {
         const boundaryEffect = new THREE.Mesh(
             new THREE.RingGeometry(0.5, 1.0, 16),
             new THREE.MeshStandardMaterial({
-                color: 0xff6b6b,
+                color: 0xe4543f,
                 emissive: 0xff3333,
                 emissiveIntensity: 0.8,
                 transparent: true,
@@ -1654,7 +1665,7 @@ class Robot3D {
     createDanceLighting() {
         // Create disco ball effect
         this.discoLights = [];
-        const colors = [0xff6b6b, 0x4ecdc4, 0xffe066, 0xf093fb, 0x667eea];
+        const colors = [0xe4543f, 0x7ed8ce, 0xe8e2d4, 0xe5ba47, 0xff6b2c];
         
         for (let i = 0; i < 5; i++) {
             const light = new THREE.SpotLight(colors[i], 2.0, 30, Math.PI / 8, 0.2);
@@ -2012,7 +2023,7 @@ class Robot3D {
         const effect = new THREE.Mesh(
             new THREE.SphereGeometry(0.5, 16, 12),
             new THREE.MeshStandardMaterial({
-                color: 0xff6b6b,
+                color: 0xe4543f,
                 emissive: 0xff3333,
                 emissiveIntensity: 1.0,
                 transparent: true,
@@ -2225,8 +2236,8 @@ class Robot3D {
         // Create swirl effect during rotation
         const swirlGeometry = new THREE.RingGeometry(1.0, 2.0, 16);
         const swirlMaterial = new THREE.MeshStandardMaterial({
-            color: 0x667eea,
-            emissive: 0x334477,
+            color: 0xff6b2c,
+            emissive: 0x29332e,
             emissiveIntensity: 0.6,
             transparent: true,
             opacity: 0.6
@@ -2298,8 +2309,8 @@ class Robot3D {
             const particle = new THREE.Mesh(
                 new THREE.SphereGeometry(0.03, 8, 6),
                 new THREE.MeshStandardMaterial({
-                    color: 0x4ecdc4,
-                    emissive: 0x226655,
+                    color: 0x7ed8ce,
+                    emissive: 0x174b46,
                     emissiveIntensity: 0.8,
                     transparent: true,
                     opacity: 1.0
@@ -2387,8 +2398,8 @@ class Robot3D {
             const teleportOut = new THREE.Mesh(
                 new THREE.CylinderGeometry(0, 2, 6, 16),
                 new THREE.MeshStandardMaterial({
-                    color: 0x4ecdc4,
-                    emissive: 0x226655,
+                    color: 0x7ed8ce,
+                    emissive: 0x174b46,
                     emissiveIntensity: 1.0,
                     transparent: true,
                     opacity: 0.8
@@ -2432,8 +2443,8 @@ class Robot3D {
         const teleportIn = new THREE.Mesh(
             new THREE.CylinderGeometry(2, 0, 6, 16),
             new THREE.MeshStandardMaterial({
-                color: 0x667eea,
-                emissive: 0x334477,
+                color: 0xff6b2c,
+                emissive: 0x29332e,
                 emissiveIntensity: 1.0,
                 transparent: true,
                 opacity: 0.8
@@ -2535,7 +2546,7 @@ class Robot3D {
         
         if (this.robotParts.ledStrips) {
             this.robotParts.ledStrips.forEach(strip => {
-                strip.material.emissive.setHex(0x004444);
+                strip.material.emissive.setHex(0x174b46);
                 strip.material.emissiveIntensity = 0.8;
             });
         }
@@ -2672,14 +2683,8 @@ class Robot3D {
     }
     
     getCurrentFPS() {
-        // Simple FPS calculation
-        const now = performance.now();
-        if (this.lastFPSCheck) {
-            const delta = now - this.lastFPSCheck;
-            this.currentFPS = Math.round(1000 / delta);
-        }
-        this.lastFPSCheck = now;
-        return this.currentFPS || 60;
+        // Valor medido por el ciclo de render, no por la frecuencia de lectura.
+        return Number.isFinite(this.currentFPS) ? this.currentFPS : 60;
     }
     
     log(message) {
@@ -3015,8 +3020,8 @@ class Robot3D {
         const jumpEffect = new THREE.Mesh(
             new THREE.RingGeometry(0.5, 1.5, 16),
             new THREE.MeshStandardMaterial({
-                color: 0x4ecdc4,
-                emissive: 0x226655,
+                color: 0x7ed8ce,
+                emissive: 0x174b46,
                 emissiveIntensity: 0.8,
                 transparent: true,
                 opacity: 0.8
@@ -3052,8 +3057,8 @@ class Robot3D {
         const landingEffect = new THREE.Mesh(
             new THREE.CylinderGeometry(0, 1, 0.2, 12),
             new THREE.MeshStandardMaterial({
-                color: 0xffe066,
-                emissive: 0xffaa00,
+                color: 0xe8e2d4,
+                emissive: 0xff8a3d,
                 emissiveIntensity: 1.0,
                 transparent: true,
                 opacity: 0.9
@@ -3111,7 +3116,7 @@ class Robot3D {
         }
         
         const material = new THREE.MeshStandardMaterial({
-            color: 0xff6b6b,
+            color: 0xe4543f,
             emissive: 0x331111,
             emissiveIntensity: 0.3,
             transparent: true,

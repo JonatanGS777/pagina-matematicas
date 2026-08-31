@@ -1395,7 +1395,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Crear o actualizar gráfico
-        if (window.microModelChart) {
+        // (usa instanceof Chart: el <canvas id="microModelChart"> se auto-expone como
+        // window.microModelChart antes de que exista la instancia de Chart.js)
+        if (window.microModelChart instanceof Chart) {
                 window.microModelChart.data.labels = timeLabels;
                 window.microModelChart.data.datasets[0].data = modelData;
                 window.microModelChart.data.datasets[0].label = isEnglish() ? 'Logistic Model' : 'Modelo Logístico';

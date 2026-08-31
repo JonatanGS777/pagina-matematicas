@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robótica Educativa Avanzada - Prof. Yonatan Guerrero</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Laboratorio de Robótica - Prof. Yonatan Guerrero</title>
+    <meta name="description" content="Laboratorio interactivo de robótica educativa con gemelo digital, programación, física y diagnóstico en tiempo real.">
+    <meta name="theme-color" content="#121714">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22%23121714%22/><path d=%22M18 23h28v24H18zM25 16v7m14-7v7M13 29h5m28 0h5%22 stroke=%22%23ff6b2c%22 stroke-width=%224%22 fill=%22none%22/><circle cx=%2227%22 cy=%2234%22 r=%223%22 fill=%22%23e8e2d4%22/><circle cx=%2237%22 cy=%2234%22 r=%223%22 fill=%22%23e8e2d4%22/><path d=%22M26 42h12%22 stroke=%22%237ed8ce%22 stroke-width=%223%22/></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
@@ -744,381 +747,283 @@
             outline: 2px solid var(--neon); outline-offset: 2px;
         }
 </style>
+    <link rel="stylesheet" href="css/robotica-lab.css?v=20260830">
 </head>
-<body>
+<body data-lab-mode="operate">
+    <a class="skip-link" href="#robotViewer">Saltar al simulador 3D</a>
     <!-- Animated Background -->
     <div class="animated-bg"></div>
 
-   <header class="header">
-    <nav class="navbar">
-        <a href="../index.html" class="logo">
-            <i class="fas fa-robot"></i>
-            Robótica Avanzada
-        </a>
-        
-        <button id="lang-toggle" title="Switch to English"
-            onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
-            EN
-        </button>
+    <header class="header">
+        <nav class="navbar" aria-label="Navegación del laboratorio">
+            <a href="../index.html" class="logo" aria-label="Volver a Matemáticas Digitales">
+                <span class="logo-mark" aria-hidden="true"><i class="fas fa-robot"></i></span>
+                <span class="logo-copy">
+                    <small>MD / UNIDAD 04</small>
+                    <strong>Laboratorio de Robótica</strong>
+                </span>
+            </a>
 
-        <!-- Botón hamburguesa para móvil -->
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-        </button>
-        
-        <ul class="nav-menu" id="navMenu">
-            <li><a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a></li>
-            <li><a href="#robot-3d" class="nav-link"><i class="fas fa-robot"></i> Robot 3D</a></li>
-            <li><a href="#programming" class="nav-link"><i class="fas fa-code"></i> Programación</a></li>
-            <li><a href="#advanced" class="nav-link"><i class="fas fa-magic"></i> Avanzado</a></li>
-        </ul>
-        
-        <!-- Overlay para cerrar menú móvil -->
-        <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
-    </nav>
-</header>
+            <div class="system-status" aria-label="Estado del sistema: operativo">
+                <span class="status-light" aria-hidden="true"></span>
+                <span>Sistema operativo</span>
+                <time id="labClock" datetime="">00:00:00</time>
+            </div>
+
+            <div class="navbar-actions">
+                <button id="lang-toggle" title="Switch to English"
+                    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
+                    EN
+                </button>
+
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Inicio</a></li>
+                <li><a href="#robot-3d" class="nav-link" data-lab-link="operate"><i class="fas fa-gamepad"></i> Operar</a></li>
+                <li><a href="#programming" class="nav-link" data-lab-link="program"><i class="fas fa-code"></i> Programar</a></li>
+                <li><a href="#advanced" class="nav-link" data-lab-link="simulate"><i class="fas fa-atom"></i> Simular</a></li>
+            </ul>
+
+            <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+        </nav>
+    </header>
 
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <h1 class="page-title">
-            <i class="fas fa-robot"></i>
-            Robótica Educativa Avanzada
-        </h1>
-        <p class="page-subtitle">
-            Experimenta la robótica del futuro con simulación 3D ultra-realista, efectos visuales cinematográficos y programación interactiva de última generación.
-        </p>
+    <section class="page-header lab-briefing" aria-labelledby="labTitle">
+        <div class="briefing-copy">
+            <span class="eyebrow">Ingeniería STEM · Estación de pruebas 04</span>
+            <h1 class="page-title" id="labTitle">Laboratorio de Gemelo Digital</h1>
+            <p class="page-subtitle">Opera, programa y diagnostica un robot en un entorno tridimensional diseñado para aprender haciendo.</p>
+        </div>
+        <dl class="briefing-specs" aria-label="Especificaciones del laboratorio">
+            <div><dt>Motor</dt><dd>Three.js / WebGL</dd></div>
+            <div><dt>Control</dt><dd>Teclado + táctil</dd></div>
+            <div><dt>Estado</dt><dd><span class="status-light"></span> En línea</dd></div>
+        </dl>
     </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <div class="modules-grid">
-                
-                <!-- Robot 3D Module Enhanced -->
-                <section id="robot-3d" class="module robot-3d fade-in">
-                    <div class="module-header">
-                        <div class="module-icon">
-                            <i class="fas fa-robot"></i>
-                        </div>
-                        <div>
-                            <h2 class="module-title">Robot 3D Ultra-Avanzado</h2>
-                            <p class="module-description">Controla un robot futurista con física realista y efectos visuales cinematográficos</p>
+    <main class="main-content" id="labMain">
+        <div class="container lab-layout">
+            <aside class="mission-rail fade-in" aria-label="Modos y misión del laboratorio">
+                <div class="rail-heading">
+                    <span class="panel-kicker">Secuencia de trabajo</span>
+                    <strong>Elige un modo</strong>
+                </div>
+
+                <div class="mode-switcher" role="tablist" aria-label="Modos del laboratorio">
+                    <button class="mode-button is-active" type="button" role="tab" aria-label="Operar: control manual" aria-selected="true" data-lab-mode-target="operate">
+                        <span class="mode-index">01</span>
+                        <span><strong>Operar</strong><small>Control manual</small></span>
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    <button class="mode-button" type="button" role="tab" aria-label="Programar: secuencias y lógica" aria-selected="false" data-lab-mode-target="program">
+                        <span class="mode-index">02</span>
+                        <span><strong>Programar</strong><small>Secuencias y lógica</small></span>
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    <button class="mode-button" type="button" role="tab" aria-label="Simular: física y entorno" aria-selected="false" data-lab-mode-target="simulate">
+                        <span class="mode-index">03</span>
+                        <span><strong>Simular</strong><small>Física y entorno</small></span>
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    <button class="mode-button" type="button" role="tab" aria-label="Diagnosticar: rendimiento y datos" aria-selected="false" data-lab-mode-target="diagnose">
+                        <span class="mode-index">04</span>
+                        <span><strong>Diagnosticar</strong><small>Rendimiento y datos</small></span>
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <article class="mission-card" aria-live="polite">
+                    <div class="mission-card-head">
+                        <span>Misión activa</span>
+                        <span id="missionCode">OP-01</span>
+                    </div>
+                    <h2 id="missionTitle">Calibración inicial</h2>
+                    <p id="missionObjective">Mueve el robot, cambia su orientación y regresa al punto de origen.</p>
+                    <div class="mission-progress" aria-label="Progreso de la misión">
+                        <span id="missionProgressBar"></span>
+                    </div>
+                    <div class="mission-progress-copy"><span>Progreso</span><strong id="missionProgressText">0%</strong></div>
+                </article>
+
+                <div class="shortcut-card">
+                    <span class="panel-kicker">Control rápido</span>
+                    <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>Movimiento</span></div>
+                    <div><kbd>R</kbd><span>Restablecer</span></div>
+                    <div><kbd>P</kbd><span>Física</span></div>
+                </div>
+            </aside>
+
+            <section id="robot-3d" class="workbench fade-in" aria-labelledby="workbenchTitle">
+                <header class="workbench-header">
+                    <div>
+                        <span class="panel-kicker">Gemelo digital / RT-04</span>
+                        <h2 id="workbenchTitle">Banco de pruebas</h2>
+                    </div>
+                    <div class="workbench-actions">
+                        <button type="button" onclick="robotAction('reset')" title="Restablecer posición" aria-label="Restablecer posición del robot"><i class="fas fa-crosshairs"></i><span>Recentrar</span></button>
+                        <button type="button" onclick="optimizePerformance()" title="Optimizar rendimiento" aria-label="Optimizar rendimiento del simulador"><i class="fas fa-gauge-high"></i><span>Optimizar</span></button>
+                    </div>
+                </header>
+
+                <div class="stage-shell">
+                    <div class="robot-viewer" id="robotViewer" tabindex="0" aria-label="Simulador tridimensional del robot">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <strong>Inicializando gemelo digital...</strong>
+                            <span>Cargando escena, sensores y actuadores</span>
                         </div>
                     </div>
-                    
-                    <div class="robot-3d-content">
-                        <div class="robot-viewer" id="robotViewer">
-                            <div class="loading">
-                                <div class="loading-spinner"></div>
-                                <div>Inicializando motor 3D avanzado...</div>
-                                <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 0.5rem;">
-                                    Cargando shaders y efectos visuales
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="robot-controls">
-                            <div class="control-section">
-                                <h3 class="control-title">🎮 Controles Básicos</h3>
-                                <div class="control-buttons">
-                                    <button class="control-btn" onclick="moveRobot('rotate-left')" title="Girar Izquierda">
-                                        <i class="fas fa-undo"></i>
-                                    </button>
-                                    <button class="control-btn center" onclick="moveRobot('forward')" title="Avanzar">
-                                        <i class="fas fa-arrow-up"></i>
-                                    </button>
-                                    <button class="control-btn" onclick="moveRobot('rotate-right')" title="Girar Derecha">
-                                        <i class="fas fa-redo"></i>
-                                    </button>
-                                    <button class="control-btn" onclick="moveRobot('left')" title="Izquierda">
-                                        <i class="fas fa-arrow-left"></i>
-                                    </button>
-                                    <button class="control-btn center" onclick="moveRobot('stop')" title="Detener">
-                                        <i class="fas fa-stop"></i>
-                                    </button>
-                                    <button class="control-btn" onclick="moveRobot('right')" title="Derecha">
-                                        <i class="fas fa-arrow-right"></i>
-                                    </button>
-                                    <button class="control-btn" onclick="moveRobot('backward-left')" title="Atrás Izq">
-                                        <i class="fas fa-arrow-down"></i>
-                                    </button>
-                                    <button class="control-btn center" onclick="moveRobot('backward')" title="Retroceder">
-                                        <i class="fas fa-arrow-down"></i>
-                                    </button>
-                                    <button class="control-btn" onclick="moveRobot('backward-right')" title="Atrás Der">
-                                        <i class="fas fa-arrow-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="control-section">
-                                <h3 class="control-title">🎭 Acciones Especiales</h3>
-                                <button class="control-btn" onclick="robotAction('dance')" style="width: 100%; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-music"></i> Espectáculo de Baile
-                                </button>
-                                <button class="control-btn" onclick="robotAction('wave')" style="width: 100%; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-hand-paper"></i> Saludo Avanzado
-                                </button>
-                                <button class="control-btn" onclick="robotAction('reset')" style="width: 100%;">
-                                    <i class="fas fa-home"></i> Teleport Home
-                                </button>
-                            </div>
+                    <div class="stage-frame" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+                    <div class="stage-status" aria-label="Telemetría del robot">
+                        <div><small>EJE X</small><strong id="robotX">0</strong></div>
+                        <div><small>EJE Z</small><strong id="robotZ">0</strong></div>
+                        <div><small>RUMBO</small><strong id="robotAngle">0°</strong></div>
+                        <div><small>COMANDOS</small><strong id="commandCount">0</strong></div>
+                    </div>
+                    <div class="stage-mode-badge"><span class="status-light"></span><strong id="stageModeLabel">Control manual</strong></div>
+                </div>
 
-                            <div class="control-section">
-                                <h3 class="control-title">🚀 Efectos Avanzados</h3>
-                                <button class="control-btn advanced" onclick="enableAdvancedMode()" style="width: 100%; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-magic"></i> Modo Futurista
-                                </button>
-                                <button class="control-btn advanced" onclick="createFireworks()" style="width: 100%; margin-bottom: 0.5rem;">
-                                    <i class="fas fa-star"></i> Fuegos Artificiales
-                                </button>
-                                <button class="control-btn advanced" onclick="togglePhysics()" style="width: 100%;">
-                                    <i class="fas fa-atom"></i> <span id="physicsToggleText">Activar Física</span>
-                                </button>
-                            </div>
-                            
-                            <div class="control-section">
-                                <h3 class="control-title">📊 Estadísticas del Robot</h3>
-                                <div class="robot-stats">
-                                    <div class="stat-item">
-                                        <div class="stat-value" id="robotX">0</div>
-                                        <div class="stat-label">Pos X</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-value" id="robotZ">0</div>
-                                        <div class="stat-label">Pos Z</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-value" id="robotAngle">0°</div>
-                                        <div class="stat-label">Rotación</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <div class="stat-value" id="commandCount">0</div>
-                                        <div class="stat-label">Comandos</div>
-                                    </div>
-                                </div>
+                <footer class="workbench-footer">
+                    <span><i class="fas fa-circle-info"></i> Arrastra para explorar la escena · rueda para acercar</span>
+                    <span>ESCENA / 04—A</span>
+                </footer>
+            </section>
 
-                                <div class="performance-stats">
-                                    <h4><i class="fas fa-tachometer-alt"></i> Rendimiento</h4>
-                                    <div class="performance-grid">
-                                        <div class="perf-item">
-                                            <span>FPS:</span>
-                                            <span id="fpsCounter">60</span>
-                                        </div>
-                                        <div class="perf-item">
-                                            <span>Objetos:</span>
-                                            <span id="objectCount">0</span>
-                                        </div>
-                                        <div class="perf-item">
-                                            <span>Draw Calls:</span>
-                                            <span id="drawCalls">0</span>
-                                        </div>
-                                        <div class="perf-item">
-                                            <span>Física:</span>
-                                            <span id="physicsStatus">OFF</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+            <aside class="control-deck fade-in" aria-label="Panel de control del laboratorio">
+                <div class="deck-header">
+                    <div><span class="panel-kicker">Consola lateral</span><h2 id="deckTitle">Control manual</h2></div>
+                    <span class="deck-id">PANEL / A</span>
+                </div>
+
+                <section class="lab-panel is-active" data-lab-panel="operate" aria-labelledby="manualControlsTitle">
+                    <div class="panel-section">
+                        <div class="section-heading"><h3 id="manualControlsTitle">Vector de movimiento</h3><span>WASD</span></div>
+                        <div class="control-buttons movement-pad">
+                            <button class="control-btn" onclick="moveRobot('rotate-left')" aria-label="Girar a la izquierda"><i class="fas fa-rotate-left"></i><small>Q</small></button>
+                            <button class="control-btn center" onclick="moveRobot('forward')" aria-label="Avanzar"><i class="fas fa-arrow-up"></i><small>W</small></button>
+                            <button class="control-btn" onclick="moveRobot('rotate-right')" aria-label="Girar a la derecha"><i class="fas fa-rotate-right"></i><small>E</small></button>
+                            <button class="control-btn" onclick="moveRobot('left')" aria-label="Mover a la izquierda"><i class="fas fa-arrow-left"></i><small>A</small></button>
+                            <button class="control-btn stop" onclick="moveRobot('stop')" aria-label="Detener"><i class="fas fa-stop"></i><small>STOP</small></button>
+                            <button class="control-btn" onclick="moveRobot('right')" aria-label="Mover a la derecha"><i class="fas fa-arrow-right"></i><small>D</small></button>
+                            <button class="control-btn diagonal-left" onclick="moveRobot('backward-left')" aria-label="Retroceder hacia la izquierda"><i class="fas fa-arrow-down"></i><small>Z</small></button>
+                            <button class="control-btn center" onclick="moveRobot('backward')" aria-label="Retroceder"><i class="fas fa-arrow-down"></i><small>S</small></button>
+                            <button class="control-btn diagonal-right" onclick="moveRobot('backward-right')" aria-label="Retroceder hacia la derecha"><i class="fas fa-arrow-down"></i><small>C</small></button>
                         </div>
                     </div>
+
+                    <div class="panel-section">
+                        <div class="section-heading"><h3>Acciones del actuador</h3><span>DIRECTO</span></div>
+                        <div class="action-grid">
+                            <button class="control-btn action" onclick="robotAction('wave')"><i class="fas fa-hand"></i><span>Saludar</span></button>
+                            <button class="control-btn action" onclick="robotAction('dance')"><i class="fas fa-person-running"></i><span>Rutina</span></button>
+                            <button class="control-btn action" onclick="createFireworks()"><i class="fas fa-burst"></i><span>Señal</span></button>
+                            <button class="control-btn action" onclick="robotJump()"><i class="fas fa-arrow-up-from-ground-water"></i><span>Saltar</span></button>
+                        </div>
+                    </div>
+
+                    <button class="system-toggle" type="button" onclick="togglePhysics()">
+                        <span><i class="fas fa-atom"></i><strong id="physicsToggleText">Activar Física</strong></span>
+                        <span class="toggle-indicator" aria-hidden="true"></span>
+                    </button>
                 </section>
 
-                <!-- Programming Module Enhanced -->
-                <section id="programming" class="module programming fade-in">
-                    <div class="module-header">
-                        <div class="module-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <div>
-                            <h2 class="module-title">Programación Avanzada</h2>
-                            <p class="module-description">Programa secuencias complejas con sintaxis mejorada y efectos visuales</p>
-                        </div>
+                <section id="programming" class="lab-panel programming" data-lab-panel="program" hidden aria-labelledby="programmingTitle">
+                    <div class="section-heading"><h3 id="programmingTitle">Secuenciador de misión</h3><span>DSL / ES</span></div>
+                    <div class="editor-controls">
+                        <button class="editor-btn primary" onclick="runCode()"><i class="fas fa-play"></i> Ejecutar</button>
+                        <button class="editor-btn" onclick="loadExample()"><i class="fas fa-file-code"></i> Ejemplo</button>
+                        <button class="editor-btn" onclick="clearCode()"><i class="fas fa-eraser"></i> Limpiar</button>
                     </div>
-                    
-                    <div class="programming-content">
-                        <div class="code-editor">
-                            <div class="editor-header">
-                                <span class="editor-title">
-                                    <i class="fas fa-code"></i> Editor Avanzado
-                                </span>
-                                <div class="editor-controls">
-                                    <button class="editor-btn" onclick="runCode()">
-                                        <i class="fas fa-play"></i> Ejecutar
-                                    </button>
-                                    <button class="editor-btn" onclick="loadExample()">
-                                        <i class="fas fa-file-code"></i> Ejemplo
-                                    </button>
-                                    <button class="editor-btn" onclick="clearCode()">
-                                        <i class="fas fa-trash"></i> Limpiar
-                                    </button>
-                                </div>
-                            </div>
-                            <textarea id="codeInput" placeholder="// 🚀 Programa tu robot avanzado con física y entorno
-// Comandos básicos:
+                    <label class="sr-only" for="codeInput">Código de control del robot</label>
+                    <div class="code-editor">
+                        <span class="line-gutter" aria-hidden="true">01<br>02<br>03<br>04<br>05<br>06<br>07<br>08<br>09<br>10<br>11<br>12</span>
+                        <textarea id="codeInput" spellcheck="false" autocapitalize="off">// Misión: ruta de inspección
 avanzar(5);
-retroceder(3);
 girar_derecha(90);
-girar_izquierda(45);
-
-// Acciones especiales:
+esperar(1);
 saludar();
-bailar();
-fuegos_artificiales();
 
-// Sistema de física:
-activar_fisica();
-salto_cuantico();      // o saltar()
-gravedad(-9.81);       // ajustar gravedad
-desactivar_fisica();
-
-// Control de entorno:
-entorno_completo();    // entorno avanzado
-entorno_minimo();      // entorno básico
-campo_cuantico();      // partículas cuánticas
-particulas_energia();  // efectos de energía
-toggle_grillas();      // mostrar/ocultar grillas
-toggle_particulas();   // mostrar/ocultar partículas
-
-// Obstáculos y colisiones:
-crear_obstaculo('sphere', 3, 3);
-crear_obstaculo('box', -2, 4);
-
-// Efectos avanzados:
-modo_futurista();
-crear_particulas();
-
-// Control de tiempo:
-esperar(2);            // segundos
 repetir(3) {
-    avanzar(1);
-    girar_derecha(90);
-    salto_cuantico();
-}
-
-// ¡Experimenta con entornos dinámicos!"></textarea>
-                        </div>
-                        
-                        <div class="output-console">
-                            <div class="console-header">
-                                <i class="fas fa-terminal"></i>
-                                Consola Avanzada
-                                <span style="margin-left: auto; font-size: 0.8rem; opacity: 0.7;">
-                                    Física: <span id="consolePhysicsStatus">OFF</span>
-                                </span>
-                            </div>
-                            <div id="output">🤖 Robot Avanzado v2.0 - Listo para comandos
-⚡ Sistema de física disponible
-🎭 Efectos visuales cargados
-💫 Modo futurista preparado
-
-> Escribe tu código y presiona 'Ejecutar' para comenzar...
-</div>
-                        </div>
+    avanzar(2);
+    girar_izquierda(45);
+}</textarea>
+                    </div>
+                    <div class="output-console">
+                        <div class="console-header"><span><i class="fas fa-terminal"></i> Registro</span><span>FÍSICA <strong id="consolePhysicsStatus">OFF</strong></span></div>
+                        <div id="output" role="log" aria-live="polite">RT-04 listo para comandos.
+&gt; Selecciona un ejemplo o escribe una secuencia.</div>
                     </div>
                 </section>
 
-                <!-- New Advanced Controls Module -->
-                <section id="advanced" class="module advanced fade-in">
-                    <div class="module-header">
-                        <div class="module-icon">
-                            <i class="fas fa-magic"></i>
-                        </div>
-                        <div>
-                            <h2 class="module-title">Controles Avanzados</h2>
-                            <p class="module-description">Funciones experimentales y efectos de última generación</p>
-                        </div>
-                    </div>
-                    
-                    <div class="advanced-controls">
-                        <div class="advanced-section">
-                            <h3><i class="fas fa-atom"></i> Sistema de Física</h3>
+                <section id="advanced" class="lab-panel advanced" data-lab-panel="simulate" hidden aria-labelledby="simulationTitle">
+                    <div class="section-heading"><h3 id="simulationTitle">Simulación y entorno</h3><span>LIVE</span></div>
+                    <div class="simulation-grid">
+                        <article class="advanced-section">
+                            <h3><i class="fas fa-atom"></i> Dinámica</h3>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="physicsToggle" onchange="togglePhysics()">
-                                <span class="slider"></span>
+                                <span class="slider"></span><span>Colisiones y gravedad</span>
                             </label>
-                            <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.8);">
-                                Activa la simulación física realista
-                            </p>
-                            <button class="effect-btn" onclick="robotJump()">
-                                <i class="fas fa-arrow-up"></i> Salto Cuántico
-                            </button>
-                            <button class="effect-btn" onclick="adjustGravity()">
-                                <i class="fas fa-globe"></i> Gravedad
-                            </button>
-                        </div>
-
-                        <div class="advanced-section">
-                            <h3><i class="fas fa-globe"></i> Control de Entorno</h3>
-                            <button class="effect-btn" onclick="toggleGrids()">
-                                <i class="fas fa-th"></i> Toggle Grillas
-                            </button>
-                            <button class="effect-btn" onclick="toggleParticles()">
-                                <i class="fas fa-star"></i> Toggle Partículas
-                            </button>
-                            <button class="effect-btn" onclick="setEnvironmentPreset('minimal')">
-                                <i class="fas fa-minus"></i> Mínimo
-                            </button>
-                            <button class="effect-btn" onclick="setEnvironmentPreset('advanced')">
-                                <i class="fas fa-plus"></i> Completo
-                            </button>
-                                                        <!-- Agregar en la sección "Control de Entorno" -->
-                            <button class="effect-btn" onclick="increaseEnvironmentSize()">
-                                <i class="fas fa-plus"></i> Aumentar
-                            </button>
-                            <button class="effect-btn" onclick="decreaseEnvironmentSize()">
-                                <i class="fas fa-minus"></i> Disminuir
-                            </button>
-                            <button class="effect-btn" onclick="getEnvironmentStats()">
-                                <i class="fas fa-chart-bar"></i> Estadísticas
-                            </button>
-                        </div>
-
-                        <div class="advanced-section">
-                            <h3><i class="fas fa-palette"></i> Efectos Visuales</h3>
-                            <button class="effect-btn" onclick="createFireworks()">
-                                <i class="fas fa-star"></i> Fuegos Artificiales
-                            </button>
-                            <button class="effect-btn" onclick="enableAdvancedMode()">
-                                <i class="fas fa-magic"></i> Modo Futurista
-                            </button>
-                            <button class="effect-btn" onclick="createQuantumField()">
-                                <i class="fas fa-atom"></i> Campo Cuántico
-                            </button>
-                            <button class="effect-btn" onclick="toggleDebugMode()">
-                                <i class="fas fa-bug"></i> Debug
-                            </button>
-                        </div>
-
-                        <div class="advanced-section">
-                            <h3><i class="fas fa-cog"></i> Optimización</h3>
-                            <button class="effect-btn" onclick="optimizePerformance()">
-                                <i class="fas fa-tachometer-alt"></i> Optimizar
-                            </button>
-                            <button class="effect-btn" onclick="resetToDefaults()">
-                                <i class="fas fa-undo"></i> Restaurar
-                            </button>
-                            <p style="margin-top: 1rem; color: rgba(255,255,255,0.8); font-size: 0.9rem;">
-                                Ajuste automático basado en rendimiento del sistema
-                            </p>
-                        </div>
-
-                        <div class="advanced-section">
-                            <h3><i class="fas fa-download"></i> Exportar/Importar</h3>
-                            <button class="effect-btn" onclick="exportRobotState()">
-                                <i class="fas fa-download"></i> Exportar Estado
-                            </button>
-                            <button class="effect-btn" onclick="importRobotState()">
-                                <i class="fas fa-upload"></i> Importar Estado
-                            </button>
-                            <input type="file" id="fileInput" style="display: none;" accept=".json" onchange="handleFileImport(event)">
-                        </div>
+                            <button class="effect-btn" onclick="robotJump()"><i class="fas fa-arrow-up"></i> Salto de prueba</button>
+                            <button class="effect-btn" onclick="adjustGravity()"><i class="fas fa-weight-hanging"></i> Ajustar gravedad</button>
+                        </article>
+                        <article class="advanced-section">
+                            <h3><i class="fas fa-cubes"></i> Entorno</h3>
+                            <button class="effect-btn" onclick="setEnvironmentPreset('minimal')">Pista mínima</button>
+                            <button class="effect-btn" onclick="setEnvironmentPreset('advanced')">Pista completa</button>
+                            <button class="effect-btn" onclick="toggleGrids()">Alternar grillas</button>
+                            <button class="effect-btn" onclick="toggleParticles()">Alternar partículas</button>
+                        </article>
+                        <article class="advanced-section">
+                            <h3><i class="fas fa-wand-magic-sparkles"></i> Señales</h3>
+                            <button class="effect-btn" onclick="createFireworks()">Fuegos artificiales</button>
+                            <button class="effect-btn" onclick="enableAdvancedMode()">Modo futurista</button>
+                            <button class="effect-btn" onclick="createQuantumField()">Campo cuántico</button>
+                            <button class="effect-btn" onclick="toggleDebugMode()">Vista de depuración</button>
+                        </article>
+                        <article class="advanced-section compact-actions">
+                            <h3><i class="fas fa-expand"></i> Escala</h3>
+                            <button class="effect-btn" onclick="increaseEnvironmentSize()">Aumentar</button>
+                            <button class="effect-btn" onclick="decreaseEnvironmentSize()">Disminuir</button>
+                            <button class="effect-btn" onclick="getEnvironmentStats()">Informe de escena</button>
+                        </article>
                     </div>
                 </section>
-            </div>
+
+                <section class="lab-panel diagnostics" data-lab-panel="diagnose" hidden aria-labelledby="diagnosticsTitle">
+                    <div class="section-heading"><h3 id="diagnosticsTitle">Diagnóstico del sistema</h3><span>RT</span></div>
+                    <div class="performance-stats">
+                        <div class="diagnostic-gauge"><span id="fpsCounter">60</span><small>FPS</small></div>
+                        <div class="performance-grid">
+                            <div class="perf-item"><span>Objetos de escena</span><strong id="objectCount">0</strong></div>
+                            <div class="perf-item"><span>Llamadas de dibujo</span><strong id="drawCalls">0</strong></div>
+                            <div class="perf-item"><span>Motor físico</span><strong id="physicsStatus">OFF</strong></div>
+                            <div class="perf-item"><span>Comandos procesados</span><strong data-command-mirror>0</strong></div>
+                        </div>
+                    </div>
+                    <div class="diagnostic-actions">
+                        <button class="effect-btn primary" onclick="optimizePerformance()"><i class="fas fa-gauge-high"></i> Optimizar automáticamente</button>
+                        <button class="effect-btn" onclick="resetToDefaults()"><i class="fas fa-rotate-left"></i> Restaurar parámetros</button>
+                        <button class="effect-btn" onclick="toggleDebugMode()"><i class="fas fa-bug"></i> Alternar depuración</button>
+                        <button class="effect-btn" onclick="getEnvironmentStats()"><i class="fas fa-list-check"></i> Generar informe</button>
+                    </div>
+                    <div class="io-panel">
+                        <h3>Estado del proyecto</h3>
+                        <div>
+                            <button class="effect-btn" onclick="exportRobotState()"><i class="fas fa-download"></i> Exportar</button>
+                            <button class="effect-btn" onclick="importRobotState()"><i class="fas fa-upload"></i> Importar</button>
+                        </div>
+                        <input type="file" id="fileInput" hidden accept=".json" onchange="handleFileImport(event)">
+                    </div>
+                </section>
+            </aside>
         </div>
     </main>
 
@@ -1230,7 +1135,7 @@ repetir(3) {
                 
                 // Update physics status in multiple places
                 const physicsStatus = stats.physicsEnabled ? 'ON' : 'OFF';
-                const physicsColor = stats.physicsEnabled ? '#4ecdc4' : '#ff6b6b';
+                const physicsColor = stats.physicsEnabled ? '#7ed8ce' : '#e4543f';
                 
                 document.getElementById('physicsStatus').textContent = physicsStatus;
                 document.getElementById('physicsStatus').style.color = physicsColor;
@@ -1977,33 +1882,7 @@ function getEnvironmentStats() {
             });
         });
 
-        // Add dynamic help tooltips
-        document.addEventListener('DOMContentLoaded', () => {
-            const keyboardInfo = document.createElement('div');
-            keyboardInfo.innerHTML = `
-                <div style="position: fixed; bottom: 20px; right: 20px; background: rgba(26,26,46,0.95); color: white; padding: 20px; border-radius: 15px; font-size: 12px; z-index: 1000; max-width: 350px; border: 1px solid rgba(102,126,234,0.3); backdrop-filter: blur(10px);">
-                    <strong style="color: #4ecdc4;">⌨️ Atajos Avanzados:</strong><br>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; font-family: 'JetBrains Mono', monospace;">
-                        <div>↑/W: Avanzar</div><div>↓/S: Retroceder</div>
-                        <div>←/A: Girar izq.</div><div>→/D: Girar der.</div>
-                        <div>Space: Saludar</div><div>R: Reset</div>
-                        <div>B: Bailar</div><div>F: Fuegos</div>
-                        <div>P: Física</div><div>M: Modo avanzado</div>
-                    </div>
-                </div>
-            `;
-            
-            setTimeout(() => {
-                document.body.appendChild(keyboardInfo);
-                setTimeout(() => {
-                    keyboardInfo.style.transition = 'opacity 2s ease';
-                    keyboardInfo.style.opacity = '0';
-                    setTimeout(() => {
-                        keyboardInfo.remove();
-                    }, 2000);
-                }, 8000);
-            }, 3000);
-        });
+        // Los atajos ahora forman parte permanente del riel de misión.
         // Variables globales para el menú móvil
 let mobileMenuOpen = false;
 
@@ -2107,6 +1986,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-</script>
+    </script>
+    <script src="js/robotica-lab-ui.js"></script>
 </body>
 </html>
