@@ -4,32 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creador de Proyectos - Prof. Yonatan Guerrero (Versión Mejorada)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,600&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     <style>
         :root {
-            --primary: #5B4CF5;
-            --secondary: #3D1F8C;
-            --accent: #00E5C3;
-            --success: #00D4AA;
-            --warning: #F5C842;
-            --research: #ff6b6b;
-            --discovery: #ffa726;
-            --innovation: #26a69a;
-            --dark: #0D0E1A;
-            --light: #F0EEF8;
-            --white: #ffffff;
-            --text-primary: #1A1B2E;
-            --text-secondary: #5C5F78;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 40px 0 rgba(91, 76, 245, 0.28);
-            --shadow-hover: 0 20px 50px rgba(91, 76, 245, 0.32);
-            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            --gradient-research: linear-gradient(135deg, var(--research) 0%, var(--discovery) 100%);
-            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--innovation) 100%);
+            --paper: #F2EFE6;
+            --paper-alt: #E8E1CC;
+            --paper-dark: #DCD2B4;
+            --ink: #1A1A1A;
+            --ink-soft: #3A382F;
+            --ink-light: #6B675A;
+            --red: #B0332B;
+            --red-dark: #7A231D;
+            --success: #3F6B4A;
+            --warning: #A67C3D;
+            --info: #4A5568;
+            --white: #FFFFFF;
+            --light: var(--paper-alt);
+            --text-primary: var(--ink);
+            --text-secondary: var(--ink-light);
+            --shadow-soft: 0 2px 0 rgba(26, 26, 26, 0.06);
         }
 
         * {
@@ -39,17 +35,19 @@
         }
 
         body {
-            font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
+            font-family: 'PT Serif', Georgia, serif;
+            background-color: var(--paper);
+            background-image:
+                radial-gradient(circle at 2px 2px, rgba(26,26,26,0.05) 1px, transparent 1px);
+            background-size: 26px 26px;
             min-height: 100vh;
-            color: var(--text-primary);
+            color: var(--ink-soft);
         }
 
-        /* Header */
+        /* Header — Mesa de redacción */
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            background: var(--paper);
+            border-bottom: 4px double var(--ink);
             padding: 1rem 2rem;
             box-shadow: var(--shadow-soft);
             position: sticky;
@@ -63,65 +61,73 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.45rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: -0.01em;
+            color: var(--ink);
             text-decoration: none;
-            transition: opacity 0.2s ease;
+        }
+
+        .logo i {
+            color: var(--red);
         }
 
         .header-actions {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
+            padding: 0.7rem 1.3rem;
+            border: 1px solid var(--ink);
+            border-radius: 0;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: opacity 0.2s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
         }
 
         .btn-primary {
-            background: var(--gradient-main);
-            color: var(--white);
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--paper);
         }
 
         .btn-secondary {
-            background: var(--white);
-            color: var(--primary);
-            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--ink);
+            border: 1px solid var(--ink);
         }
 
         .btn-success {
-            background: var(--gradient-success);
-            color: var(--white);
+            background: var(--success);
+            border-color: var(--success);
+            color: var(--paper);
         }
 
         .btn-warning {
-            background: var(--gradient-research);
-            color: var(--white);
+            background: var(--warning);
+            border-color: var(--warning);
+            color: var(--ink);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
+            opacity: 0.8;
         }
 
         /* Main Container */
@@ -135,22 +141,27 @@
             min-height: calc(100vh - 100px);
         }
 
-        /* Sidebar */
+        /* Sidebar — Índice del manuscrito */
         .sidebar {
-            background: var(--white);
-            border-radius: 20px;
+            background: var(--paper-alt);
+            border-radius: 0;
+            border: 1px solid var(--ink);
             padding: 1.5rem;
-            box-shadow: var(--shadow-soft);
+            box-shadow: none;
             height: fit-content;
             position: sticky;
-            top: 120px;
+            top: 100px;
         }
 
         .sidebar h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--ink);
             margin-bottom: 1rem;
-            font-size: 1.1rem;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 0.75rem;
         }
 
         .step-nav {
@@ -159,60 +170,73 @@
         }
 
         .step-nav li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.15rem;
         }
 
         .step-nav button {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.65rem 0.5rem;
             background: transparent;
             border: none;
-            border-radius: 10px;
+            border-left: 3px solid transparent;
+            border-radius: 0;
             text-align: left;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            font-family: 'PT Serif', serif;
+            font-size: 0.92rem;
+            color: var(--ink-soft);
             display: flex;
             align-items: center;
             gap: 0.75rem;
         }
 
         .step-nav button:hover {
-            background: rgba(91, 76, 245, 0.1);
+            background: var(--paper-dark);
         }
 
         .step-nav button.active {
-            background: var(--gradient-main);
-            color: var(--white);
+            background: var(--paper);
+            border-left-color: var(--red);
+            color: var(--ink);
+            font-weight: 700;
         }
 
         .step-nav button.completed {
-            background: var(--gradient-success);
-            color: var(--white);
+            color: var(--success);
         }
 
         .step-icon {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid currentColor;
+            background: transparent;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            flex-shrink: 0;
         }
 
-        .step-nav button.active .step-icon,
+        .step-nav button.active .step-icon {
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--paper);
+        }
+
         .step-nav button.completed .step-icon {
-            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--success);
         }
 
-        /* Main Content */
+        /* Main Content — Página del manuscrito */
         .main-content {
             background: var(--white);
-            border-radius: 20px;
+            border-radius: 0;
+            border: 1px solid var(--ink);
             padding: 2rem;
-            box-shadow: var(--shadow-soft);
+            box-shadow: none;
             position: relative;
             overflow: hidden;
         }
@@ -223,13 +247,13 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: var(--gradient-main);
+            height: 4px;
+            background: var(--red);
         }
 
         .step {
             display: none;
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
         .step.active {
@@ -237,24 +261,27 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .step-header {
             margin-bottom: 2rem;
+            border-bottom: 1px solid var(--paper-dark);
+            padding-bottom: 1.25rem;
         }
 
         .step-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            color: var(--text-primary);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: var(--ink);
             margin-bottom: 0.5rem;
         }
 
         .step-description {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+            color: var(--ink-light);
+            font-size: 1.02rem;
             line-height: 1.6;
         }
 
@@ -266,28 +293,34 @@
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--ink);
         }
 
         .form-input,
         .form-textarea,
         .form-select {
             width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid var(--ink-light);
+            border-radius: 0;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            font-family: inherit;
+            transition: border-color 0.2s ease;
+            font-family: 'PT Serif', serif;
+            background: var(--white);
+            color: var(--ink-soft);
         }
 
         .form-input:focus,
         .form-textarea:focus,
         .form-select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(91, 76, 245, 0.1);
+            border-color: var(--red);
+            box-shadow: none;
         }
 
         .form-textarea {
@@ -296,44 +329,47 @@
         }
 
         .rich-editor {
-            border: 2px solid rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            border: 1px solid var(--ink-light);
+            border-radius: 0;
             min-height: 200px;
             padding: 1rem;
+            font-family: 'PT Serif', serif;
         }
 
         .rich-editor:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(91, 76, 245, 0.1);
+            border-color: var(--red);
+            box-shadow: none;
         }
 
         /* Editor Toolbar */
         .editor-toolbar {
             display: flex;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            background: var(--light);
-            border-radius: 10px 10px 0 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            gap: 0.25rem;
+            padding: 0.4rem;
+            background: var(--paper-alt);
+            border-radius: 0;
+            border: 1px solid var(--ink-light);
+            border-bottom: none;
         }
 
         .toolbar-btn {
-            padding: 0.5rem;
+            padding: 0.5rem 0.65rem;
             background: transparent;
-            border: none;
-            border-radius: 5px;
+            border: 1px solid transparent;
+            border-radius: 0;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            color: var(--ink-soft);
         }
 
         .toolbar-btn:hover {
-            background: rgba(91, 76, 245, 0.1);
+            border-color: var(--ink-light);
         }
 
         .toolbar-btn.active {
-            background: var(--primary);
-            color: var(--white);
+            background: var(--ink);
+            color: var(--paper);
         }
 
         /* Navigation */
@@ -343,61 +379,67 @@
             align-items: center;
             margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: 1px solid var(--paper-dark);
         }
 
-        /* Progress Bar */
+        /* Progress Bar — Contador editorial */
         .progress-container {
             margin-bottom: 2rem;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
+            height: 6px;
+            background: var(--paper-dark);
+            border-radius: 0;
             overflow: hidden;
+            border: 1px solid var(--ink);
         }
 
         .progress-fill {
             height: 100%;
-            background: var(--gradient-main);
+            background: var(--red);
             transition: width 0.3s ease;
-            border-radius: 4px;
+            border-radius: 0;
         }
 
         .progress-text {
             text-align: center;
             margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-light);
         }
 
-        /* Cards */
+        /* Cards — Nota editorial */
         .info-card {
-            background: linear-gradient(135deg, rgba(91, 76, 245, 0.1), rgba(240, 147, 251, 0.1));
-            border: 1px solid rgba(91, 76, 245, 0.2);
-            border-radius: 15px;
+            background: var(--paper-alt);
+            border: 1px solid var(--paper-dark);
+            border-left: 3px solid var(--red);
+            border-radius: 0;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
         .info-card h4 {
-            color: var(--primary);
+            color: var(--ink);
             margin-bottom: 0.5rem;
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
         }
 
         .info-card p {
-            color: var(--text-secondary);
+            color: var(--ink-soft);
             line-height: 1.5;
         }
 
-        /* Reference Manager */
+        /* Reference Manager — Ficha bibliográfica */
         .reference-item {
-            background: var(--light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            background: var(--white);
+            border: 1px solid var(--ink-soft);
+            border-radius: 0;
             padding: 1rem;
             margin-bottom: 1rem;
             position: relative;
@@ -407,17 +449,17 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: var(--research);
-            color: var(--white);
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            background: transparent;
+            color: var(--red);
+            border: 1px solid var(--red);
+            border-radius: 0;
+            width: 28px;
+            height: 28px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
-        /* Charts Container */
+        /* Charts Container — Recortes de prensa */
         .charts-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -427,33 +469,49 @@
 
         .chart-card {
             background: var(--white);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
+            border: 1px solid var(--ink);
+            border-radius: 0;
             padding: 1.5rem;
-            box-shadow: var(--shadow-soft);
+            box-shadow: none;
+            position: relative;
+        }
+
+        .chart-card::before {
+            content: '\f08d';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: -10px;
+            left: 16px;
+            background: var(--paper);
+            color: var(--red);
+            padding: 0 0.4rem;
+            font-size: 0.85rem;
+            transform: rotate(-8deg);
         }
 
         .chart-card h4 {
             margin-bottom: 1rem;
-            color: var(--text-primary);
-            font-family: 'Space Grotesk', sans-serif;
+            color: var(--ink);
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
         }
 
         .chart-result {
             min-height: 300px;
-            background: #f8f9fa;
-            border-radius: 10px;
+            background: var(--paper-alt);
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
         }
 
-        /* PDF Preview */
+        /* PDF Preview — Prueba de imprenta */
         .pdf-preview {
-            background: var(--light);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
+            background: var(--paper-alt);
+            border: 1px solid var(--ink);
+            border-radius: 0;
             padding: 2rem;
             margin-top: 2rem;
             max-height: 500px;
@@ -461,15 +519,15 @@
         }
 
         .pdf-preview h3 {
-            color: var(--text-primary);
+            color: var(--ink);
             margin-bottom: 1rem;
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Playfair Display', serif;
         }
 
         .pdf-section {
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--paper-dark);
         }
 
         .pdf-section:last-child {
@@ -477,9 +535,10 @@
         }
 
         .pdf-section h4 {
-            color: var(--primary);
+            color: var(--red);
             margin-bottom: 0.5rem;
             font-size: 1.1rem;
+            font-family: 'Playfair Display', serif;
         }
 
         /* Loading Animation */
@@ -490,10 +549,10 @@
         }
 
         .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid var(--white);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(242, 239, 230, 0.4);
+            border-top: 2px solid var(--paper);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -503,63 +562,52 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Messages */
-        .success-message {
-            background: var(--gradient-success);
-            color: var(--white);
+        /* Messages — Sellos editoriales */
+        .success-message,
+        .error-message,
+        .warning-message,
+        .info-message {
+            background: var(--paper-alt);
             padding: 1rem;
-            border-radius: 10px;
+            border-radius: 0;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--ink);
+            border-left: 4px solid var(--ink);
+        }
+
+        .success-message {
+            border-left-color: var(--success);
         }
 
         .error-message {
-            background: var(--gradient-research);
-            color: var(--white);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            border-left-color: var(--red);
         }
 
         .warning-message {
-            background: var(--warning);
-            color: var(--dark);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            border-left-color: var(--warning);
         }
 
         .info-message {
-            background: var(--primary);
-            color: var(--white);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            border-left-color: var(--info);
         }
 
         /* Debug Panel */
         .debug-panel {
-            background: #1a1a1a;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
+            background: var(--ink);
+            color: #7FE0A3;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
             padding: 1rem;
-            border-radius: 10px;
+            border-radius: 0;
             margin-top: 1rem;
             max-height: 200px;
             overflow-y: auto;
-            border: 1px solid #333;
+            border: 1px solid var(--ink);
         }
 
         .debug-panel .debug-line {
@@ -1530,7 +1578,16 @@ result
             };
         }
 
+        function escapePythonString(str) {
+            return String(str).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        }
+
         function getProfessionalVisualizationCodeImproved(chartType, chartData, chartLabels, chartTitle) {
+            // Escapar comillas/backslashes para no romper el código Python generado
+            const safeChartData = escapePythonString(chartData);
+            const safeChartLabels = escapePythonString(chartLabels);
+            const safeChartTitle = escapePythonString(chartTitle);
+
             // Código Python profesional MEJORADO - SIN plt.show()
             const baseCode = `
 import matplotlib.pyplot as plt
@@ -1570,9 +1627,9 @@ def process_data(chart_data):
         print(f"Error procesando datos: {e}")
         return None
 
-data_result = process_data("${chartData}")
-labels = [label.strip() for label in "${chartLabels}".split(',') if label.strip()] if "${chartLabels}" else None
-title = "${chartTitle}" if "${chartTitle}" else "Gráfica Profesional"
+data_result = process_data("${safeChartData}")
+labels = [label.strip() for label in "${safeChartLabels}".split(',') if label.strip()] if "${safeChartLabels}" else None
+title = "${safeChartTitle}" if "${safeChartTitle}" else "Gráfica Profesional"
 
 if data_result:
 `;
@@ -1939,7 +1996,7 @@ else:
         }
 
         function drawBasicLine(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset) {
-            ctx.strokeStyle = '#667eea';
+            ctx.strokeStyle = '#B0332B';
             ctx.lineWidth = 3;
             ctx.beginPath();
             
@@ -1957,7 +2014,7 @@ else:
             ctx.stroke();
             
             // Puntos
-            ctx.fillStyle = '#667eea';
+            ctx.fillStyle = '#B0332B';
             data.forEach((point, i) => {
                 const x = padding + (i / (data.length - 1)) * graphWidth;
                 const y = yOffset + graphHeight - ((point.y - minY) / rangeY) * graphHeight;
@@ -1972,7 +2029,7 @@ else:
             const barWidth = graphWidth / data.length * 0.8;
             const barSpacing = graphWidth / data.length * 0.2;
             
-            ctx.fillStyle = '#667eea';
+            ctx.fillStyle = '#B0332B';
             
             data.forEach((point, i) => {
                 const x = padding + i * (barWidth + barSpacing) + barSpacing / 2;
@@ -1986,12 +2043,12 @@ else:
                 ctx.font = '12px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText(point.y.toFixed(1), x + barWidth / 2, y - 5);
-                ctx.fillStyle = '#667eea';
+                ctx.fillStyle = '#B0332B';
             });
         }
 
         function drawBasicScatter(ctx, data, padding, graphWidth, graphHeight, minY, rangeY, yOffset) {
-            ctx.fillStyle = '#667eea';
+            ctx.fillStyle = '#B0332B';
             
             data.forEach((point, i) => {
                 const x = padding + (i / (data.length - 1)) * graphWidth;
@@ -2030,11 +2087,11 @@ else:
                 // Fallback sin imagen - mostrar título solo aquí
                 previewContent = `
                     <div style="text-align: center;">
-                        <i class="fas fa-chart-${getChartIcon(chartResult.chartType)}" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                        <i class="fas fa-chart-${getChartIcon(chartResult.chartType)}" style="font-size: 3rem; color: var(--red); margin-bottom: 1rem;"></i>
                         <h5>${chartResult.title}</h5>
                         <p style="color: var(--text-secondary); margin: 0.5rem 0;">${chartResult.description}</p>
-                        <div style="background: #ffe0e0; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                            <i class="fas fa-exclamation-triangle" style="color: #d32f2f;"></i>
+                        <div style="background: var(--paper-alt); border-left: 3px solid var(--red); padding: 1rem; border-radius: 0; margin: 1rem 0;">
+                            <i class="fas fa-exclamation-triangle" style="color: var(--red);"></i>
                             <strong>Preview no disponible</strong><br>
                             <small>La gráfica se generó pero no se capturó la imagen para preview</small>
                         </div>
