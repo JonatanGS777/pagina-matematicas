@@ -1022,9 +1022,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightMax: 70,
                 alphaMin: 0.35,
                 alphaMax: 0.68,
-                glow: '#9cfaf0',
-                base1: '#e9f8ff',
-                base2: '#d9e9ff',
+                glow: '#B9E8D9',
+                base1: '#F7F1E1',
+                base2: '#EDE2C4',
                 rodChance: 0.25
             },
             'fase-exponencial': {
@@ -1038,9 +1038,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightMax: 66,
                 alphaMin: 0.45,
                 alphaMax: 0.9,
-                glow: '#89ffe9',
-                base1: '#e4fbf7',
-                base2: '#d4e7ff',
+                glow: '#7FD9C4',
+                base1: '#FBF3DC',
+                base2: '#F3E3B8',
                 rodChance: 0.35
             },
             'fase-estacionaria': {
@@ -1054,9 +1054,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightMax: 62,
                 alphaMin: 0.42,
                 alphaMax: 0.78,
-                glow: '#c3b8ff',
-                base1: '#e7ecff',
-                base2: '#d8def5',
+                glow: '#E3C56B',
+                base1: '#F2E6C9',
+                base2: '#E8D3A0',
                 rodChance: 0.42
             },
             'fase-muerte': {
@@ -1070,9 +1070,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightMax: 58,
                 alphaMin: 0.2,
                 alphaMax: 0.54,
-                glow: '#f8c8a6',
-                base1: '#ede4e1',
-                base2: '#d9d7dd',
+                glow: '#D98F6F',
+                base1: '#EDE2D4',
+                base2: '#DCC9B0',
                 rodChance: 0.3
             }
         };
@@ -1134,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </radialGradient>
     <radialGradient id="dish" cx="48%" cy="42%" r="68%">
       <stop offset="0%" stop-color="rgba(255,255,255,0.92)" />
-      <stop offset="100%" stop-color="rgba(198,212,235,0.72)" />
+      <stop offset="100%" stop-color="rgba(233,219,189,0.72)" />
     </radialGradient>
     <radialGradient id="glow" cx="52%" cy="48%" r="68%">
       <stop offset="0%" stop-color="${cfg.glow}" stop-opacity="0.4" />
@@ -1142,12 +1142,12 @@ document.addEventListener('DOMContentLoaded', function() {
     </radialGradient>
   </defs>
   <rect width="${width}" height="${height}" fill="url(#bg)" />
-  <circle cx="${cx}" cy="${cy}" r="${dishRadius + 22}" fill="rgba(91,76,245,0.12)" />
+  <circle cx="${cx}" cy="${cy}" r="${dishRadius + 22}" fill="rgba(201,138,61,0.12)" />
   <circle cx="${cx}" cy="${cy}" r="${dishRadius}" fill="url(#dish)" />
   <circle cx="${cx}" cy="${cy}" r="${dishRadius - 10}" fill="url(#glow)" />
   ${cellsSvg}
   ${debrisSvg}
-  <circle cx="${cx}" cy="${cy}" r="${dishRadius}" fill="none" stroke="rgba(91,76,245,0.25)" stroke-width="5" />
+  <circle cx="${cx}" cy="${cy}" r="${dishRadius}" fill="none" stroke="rgba(27,74,68,0.25)" stroke-width="5" />
   <ellipse cx="${cx - 120}" cy="${cy - 130}" rx="${dishRadius * 0.36}" ry="${dishRadius * 0.19}" fill="rgba(255,255,255,0.22)" />
 </svg>`;
 
@@ -1234,8 +1234,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             datasets: [{
                                 label: isEnglish() ? 'Enzymatic Activity' : 'Actividad Enzimática',
                                 data: [10, 15, 25, 45, 70],
-                                borderColor: '#4a2bac',
-                                backgroundColor: 'rgba(74, 43, 172, 0.1)',
+                                borderColor: '#4FA89B',
+                                backgroundColor: 'rgba(79, 168, 155, 0.1)',
                                 borderWidth: 2,
                                 fill: true
                             }]
@@ -1267,8 +1267,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             datasets: [{
                                 label: isEnglish() ? 'Cell Density' : 'Densidad Celular',
                                 data: [10, 50, 250, 1250, 6250],
-                                borderColor: '#ef476f',
-                                backgroundColor: 'rgba(239, 71, 111, 0.1)',
+                                borderColor: '#C98A3D',
+                                backgroundColor: 'rgba(201, 138, 61, 0.1)',
                                 borderWidth: 2,
                                 fill: true
                             }]
@@ -1303,10 +1303,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 label: isEnglish() ? 'Relative Concentration' : 'Concentración Relativa',
                                 data: [75, 60, 85, 45],
                                 backgroundColor: [
-                                    'rgba(0, 187, 249, 0.7)',
-                                    'rgba(0, 245, 212, 0.7)',
-                                    'rgba(6, 214, 160, 0.7)',
-                                    'rgba(255, 209, 102, 0.7)'
+                                    'rgba(79, 168, 155, 0.7)',
+                                    'rgba(201, 138, 61, 0.7)',
+                                    'rgba(107, 142, 122, 0.7)',
+                                    'rgba(181, 83, 60, 0.7)'
                                 ],
                                 borderWidth: 1
                             }]
@@ -1340,9 +1340,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             datasets: [{
                                 data: [25, 30, 45],
                                 backgroundColor: [
-                                    'rgba(6, 214, 160, 0.7)',
-                                    'rgba(255, 209, 102, 0.7)',
-                                    'rgba(239, 71, 111, 0.7)'
+                                    'rgba(107, 142, 122, 0.7)',
+                                    'rgba(166, 124, 61, 0.7)',
+                                    'rgba(181, 83, 60, 0.7)'
                                 ],
                                 borderWidth: 1
                             }]
@@ -1408,8 +1408,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.microModelChart.data.datasets.push({
                     label: isEnglish() ? 'Current Phase' : 'Fase Actual',
                     data: [phasePoint],
-                    backgroundColor: '#ef476f',
-                    borderColor: '#ef476f',
+                    backgroundColor: '#B5533C',
+                    borderColor: '#B5533C',
                     pointRadius: 6,
                     pointHoverRadius: 8,
                     showLine: false
@@ -1433,16 +1433,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         {
                             label: isEnglish() ? 'Logistic Model' : 'Modelo Logístico',
                             data: modelData,
-                            borderColor: '#4a2bac',
-                            backgroundColor: 'rgba(74, 43, 172, 0.1)',
+                            borderColor: '#4FA89B',
+                            backgroundColor: 'rgba(79, 168, 155, 0.1)',
                             borderWidth: 2,
                             fill: true
                         },
                         {
                             label: isEnglish() ? 'Current Phase' : 'Fase Actual',
                             data: [phasePoint],
-                            backgroundColor: '#ef476f',
-                            borderColor: '#ef476f',
+                            backgroundColor: '#B5533C',
+                            borderColor: '#B5533C',
                             pointRadius: 6,
                             pointHoverRadius: 8,
                             showLine: false

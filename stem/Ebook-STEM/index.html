@@ -427,19 +427,19 @@
                                     <div class="chart-grid-line" style="--line: 3;"></div>
                                     <div class="chart-grid-line" style="--line: 4;"></div>
 
-                                    <div class="factor-bar" data-factor="Nutrientes" data-value="82" style="--value:82; --bar-color:#00E5C3;">
+                                    <div class="factor-bar" data-factor="Nutrientes" data-value="82" style="--value:82; --bar-color:#4FA89B;">
                                         <span class="factor-value">82%</span>
                                     </div>
-                                    <div class="factor-bar" data-factor="Espacio" data-value="68" style="--value:68; --bar-color:#5B4CF5;">
+                                    <div class="factor-bar" data-factor="Espacio" data-value="68" style="--value:68; --bar-color:#C98A3D;">
                                         <span class="factor-value">68%</span>
                                     </div>
-                                    <div class="factor-bar" data-factor="pH" data-value="57" style="--value:57; --bar-color:#A78BFA;">
+                                    <div class="factor-bar" data-factor="pH" data-value="57" style="--value:57; --bar-color:#6B8E7A;">
                                         <span class="factor-value">57%</span>
                                     </div>
-                                    <div class="factor-bar" data-factor="Temperatura" data-value="74" style="--value:74; --bar-color:#06B6D4;">
+                                    <div class="factor-bar" data-factor="Temperatura" data-value="74" style="--value:74; --bar-color:#B5533C;">
                                         <span class="factor-value">74%</span>
                                     </div>
-                                    <div class="factor-bar" data-factor="Desechos" data-value="49" style="--value:49; --bar-color:#F59E0B;">
+                                    <div class="factor-bar" data-factor="Desechos" data-value="49" style="--value:49; --bar-color:#A67C3D;">
                                         <span class="factor-value">49%</span>
                                     </div>
                                 </div>
@@ -1296,12 +1296,12 @@
             plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
             scales: {
                 x: {
-                    title: { display: true, text: 't (tiempo)', font: { size: 11 }, color: '#64748b' },
-                    grid: { color: 'rgba(0,0,0,0.05)' }
+                    title: { display: true, text: 't (tiempo)', font: { size: 11 }, color: '#5C6F64' },
+                    grid: { color: 'rgba(27,74,68,0.08)' }
                 },
                 y: {
-                    title: { display: true, text: 'P(t)', font: { size: 11 }, color: '#64748b' },
-                    grid: { color: 'rgba(0,0,0,0.05)' }
+                    title: { display: true, text: 'P(t)', font: { size: 11 }, color: '#5C6F64' },
+                    grid: { color: 'rgba(27,74,68,0.08)' }
                 }
             }
         };
@@ -1317,8 +1317,8 @@
                     labels: times,
                     datasets: [{
                         data: expData,
-                        borderColor: '#5B4CF5',
-                        backgroundColor: 'rgba(91,76,245,0.08)',
+                        borderColor: '#C98A3D',
+                        backgroundColor: 'rgba(201,138,61,0.08)',
                         fill: true,
                         tension: 0.4,
                         pointRadius: 0,
@@ -1334,8 +1334,8 @@
                     labels: times,
                     datasets: [{
                         data: logData,
-                        borderColor: '#00B8A9',
-                        backgroundColor: 'rgba(0,184,169,0.08)',
+                        borderColor: '#4FA89B',
+                        backgroundColor: 'rgba(79,168,155,0.08)',
                         fill: true,
                         tension: 0.4,
                         pointRadius: 0,
@@ -1500,11 +1500,11 @@
 
                 const ringGradient = ctx.createRadialGradient(cx, cy, radius * 0.26, cx, cy, radius + 18);
                 if (darkTheme) {
-                    ringGradient.addColorStop(0, 'rgba(26, 43, 70, 0.2)');
-                    ringGradient.addColorStop(1, 'rgba(8, 14, 26, 0.85)');
+                    ringGradient.addColorStop(0, 'rgba(22, 48, 42, 0.2)');
+                    ringGradient.addColorStop(1, 'rgba(14, 32, 28, 0.85)');
                 } else {
                     ringGradient.addColorStop(0, 'rgba(255, 255, 255, 0.75)');
-                    ringGradient.addColorStop(1, 'rgba(91, 76, 245, 0.18)');
+                    ringGradient.addColorStop(1, 'rgba(201, 138, 61, 0.18)');
                 }
                 ctx.fillStyle = ringGradient;
                 ctx.beginPath();
@@ -1513,11 +1513,11 @@
 
                 const dishGradient = ctx.createRadialGradient(cx, cy, radius * 0.2, cx, cy, radius);
                 if (darkTheme) {
-                    dishGradient.addColorStop(0, 'rgba(17, 46, 71, 0.92)');
-                    dishGradient.addColorStop(1, 'rgba(9, 20, 33, 0.94)');
+                    dishGradient.addColorStop(0, 'rgba(22, 48, 42, 0.92)');
+                    dishGradient.addColorStop(1, 'rgba(10, 24, 20, 0.94)');
                 } else {
-                    dishGradient.addColorStop(0, 'rgba(239, 255, 252, 0.96)');
-                    dishGradient.addColorStop(1, 'rgba(217, 231, 255, 0.96)');
+                    dishGradient.addColorStop(0, 'rgba(253, 249, 239, 0.96)');
+                    dishGradient.addColorStop(1, 'rgba(245, 231, 206, 0.96)');
                 }
                 ctx.fillStyle = dishGradient;
                 ctx.beginPath();
@@ -1528,8 +1528,8 @@
                 const density = carryingCapacity ? clamp(population / carryingCapacity, 0, 1) : 0;
 
                 const nutrientGlow = ctx.createRadialGradient(cx, cy, radius * 0.15, cx, cy, radius * 0.95);
-                nutrientGlow.addColorStop(0, 'rgba(0, 229, 195, ' + (0.18 + nutrientLevel / 600).toFixed(3) + ')');
-                nutrientGlow.addColorStop(1, 'rgba(0, 229, 195, 0)');
+                nutrientGlow.addColorStop(0, 'rgba(79, 168, 155, ' + (0.18 + nutrientLevel / 600).toFixed(3) + ')');
+                nutrientGlow.addColorStop(1, 'rgba(79, 168, 155, 0)');
                 ctx.fillStyle = nutrientGlow;
                 ctx.beginPath();
                 ctx.arc(cx, cy, radius * 0.95, 0, Math.PI * 2);
@@ -1551,7 +1551,7 @@
                     ctx.fill();
                 });
 
-                ctx.strokeStyle = darkTheme ? 'rgba(148, 163, 184, 0.36)' : 'rgba(91, 76, 245, 0.28)';
+                ctx.strokeStyle = darkTheme ? 'rgba(169, 189, 179, 0.36)' : 'rgba(27, 74, 68, 0.28)';
                 ctx.lineWidth = 1.6;
                 ctx.beginPath();
                 ctx.arc(cx, cy, radius, 0, Math.PI * 2);

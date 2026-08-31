@@ -530,8 +530,8 @@ const exponentialChart = new Chart(exponentialChartCtx, {
         datasets: [{
             label: 'Crecimiento Exponencial',
             data: [],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+            borderColor: '#C98A3D',
+            backgroundColor: 'rgba(201, 138, 61, 0.1)',
             borderWidth: 2,
             fill: true
         }]
@@ -564,8 +564,8 @@ const logisticChart = new Chart(logisticChartCtx, {
         datasets: [{
             label: 'Crecimiento Logístico',
             data: [],
-            borderColor: 'rgb(54, 162, 235)',
-            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+            borderColor: '#4FA89B',
+            backgroundColor: 'rgba(79, 168, 155, 0.1)',
             borderWidth: 2,
             fill: true
         }]
@@ -599,14 +599,14 @@ const comparisonChart = new Chart(comparisonChartCtx, {
             {
                 label: 'Crecimiento Exponencial',
                 data: [],
-                borderColor: 'rgb(255, 99, 132)',
+                borderColor: '#C98A3D',
                 borderWidth: 2,
                 fill: false
             },
             {
                 label: 'Crecimiento Logístico',
                 data: [],
-                borderColor: 'rgb(54, 162, 235)',
+                borderColor: '#4FA89B',
                 borderWidth: 2,
                 fill: false
             }
