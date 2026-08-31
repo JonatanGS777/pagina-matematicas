@@ -14,7 +14,7 @@
 
 *Developed by **Prof. Yonatan Guerrero Soriano** for the Puerto Rico Department of Education.*
 
-[Features](#features) · [Tech Stack](#tech-stack) · [Design System](#design-system--cuaderno-de-cátedra) · [Structure](#project-structure) · [Setup](#supabase-setup) · [Deploy](#deploy-on-vercel)
+[Features](#features) · [Tech Stack](#tech-stack) · [Design System](#design-system) · [Structure](#project-structure) · [Setup](#supabase-setup) · [Deploy](#deploy-on-vercel)
 
 </div>
 
@@ -57,11 +57,19 @@
 
 ---
 
-## Design System — "Cuaderno de Cátedra"
+## Design System
 
-In August 2026 the public-facing pages were redesigned around a single visual
-identity: a classroom chalkboard for hero/header surfaces and ruled notebook
-paper for body content — replacing a generic purple-gradient theme.
+Since August 2026 the site has been redesigned page by page. `index.html` and
+`galeria/galeria.html` share a single visual identity ("Cuaderno de Cátedra").
+Every content subpage redesigned since then gets its **own distinct visual
+identity** tailored to its subject instead of reusing that shared theme — a
+history page reads like an old atlas, a data-science page like a terminal, an
+engineering page like a blueprint, and so on.
+
+### Cuaderno de Cátedra (`index.html`, `galeria/galeria.html`)
+
+A classroom chalkboard for hero/header surfaces and ruled notebook paper for
+body content — replacing a generic purple-gradient theme.
 
 ### Palette & type
 
@@ -96,11 +104,41 @@ Google Fonts `<link>`, no shared stylesheet across pages yet.
 | Background images | `imagenes/stem-bg.png` (index hero) and the old `imagenes/galeria.png` were too saturated for the dark theme; index keeps its image with a stronger `multiply`-blended overlay, gallery now uses `imagenes/galeria-bg.jpg` (a real chalkboard photo, Pexels/Vitaly Gariev) plus `galeria/galeria-header.png` (dedicated hero illustration) |
 | Bug fixes found along the way | `showActivityNotification()` in `supabase-analytics.js` was setting inline styles that ignored the real `.activity-notification` CSS class, rendering as a full-screen box on mobile Safari — fixed to use the class; a global `mouseenter`/`mouseleave` listener in `icon-animations.js` threw when `e.target` had no `classList` — guarded |
 
+### Per-page identities (content subpages)
+
+Each row below is a standalone `<style>` block (or, for the Ebook, a CSS
+custom-property token swap) — no shared stylesheet across these pages.
+
+| Page | Identity | Look & feel |
+|:---|:---|:---|
+| `contexto/historiamath.html` | Atlas de Civilizaciones | Sepia/parchment/copper, trade-route timeline, compass-rose hero |
+| `materiales/materiales.html` | Fichero de Biblioteca | Library card-catalog aesthetic |
+| `links/links.html` | Panel de Circuitos | Circuit-board aesthetic |
+| `stem/ciencia-datos.html` | Terminal Ámbar | Dark hacker-terminal, amber-on-black; Chart.js globally re-themed |
+| `stem/ingenieria.html` | Plano de Ingeniero | Blueprint-blue technical drawing, dashed title-block, corner registration marks |
+| `stem/Ebook-STEM/` | Cuaderno de Campo Microbiológico | Warm cream/amber/teal lab-notebook theme; all interactive charts, simulations and accessibility toggles preserved |
+| `club/investigacion.html` | Gaceta Científica | Editorial newspaper/gazette front page — masthead, drop cap, duotone archive photo, dated headlines |
+| `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
+| `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
+
+Bugs found and fixed opportunistically along the way: a duplicate `<script>`
+include and a redundant `DOMContentLoaded` wrapper that broke the Ebook's
+scroll-spy sidebar; a DOM-named-access false positive
+(`window.microModelChart`) that crashed the Ebook's model chart; a null
+`this.renderer`/`this.scene` crash in `robot3d.js`'s `getStats()`; and several
+dead `../contexto/contexto.html` nav links (404) repointed to
+`../contexto/historiamath.html`.
+
 ### Not yet redesigned
 
-Everything under `club/`, `materiales/`, `lab/`, `salon/`, `stem/`, `contexto/`,
-`links/`, and `perfil-investigador/` still uses the previous purple theme and
-`js/dark-mode.js`. Redesign them the same way, page by page, when needed.
+`club/` (admin, competencias, leaderboard, olimpiadas, project,
+proyectos-creativos, registro, `modulos/`, `mision-matematica/`), `lab/`,
+`salon/`, `contexto/historiamath-examen.html`,
+`contexto/historiamath-preguntas.html`, `contexto/profesor-dashboard.html`,
+`materiales/materiales/` (the study-materials subpages), and
+`perfil-investigador/` still use the previous purple/glassmorphism theme and
+`js/dark-mode.js`. Redesign them the same way — one page at a time, each with
+its own identity — when needed.
 
 ---
 
