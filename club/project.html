@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creador de Proyectos - Prof. Yonatan Guerrero (Versión Mejorada)</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,600&family=PT+Serif:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     <style>
@@ -74,7 +73,7 @@
             text-decoration: none;
         }
 
-        .logo i {
+        .logo svg {
             color: var(--red);
         }
 
@@ -477,16 +476,15 @@
         }
 
         .chart-card::before {
-            content: '\f08d';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
+            content: '';
             position: absolute;
-            top: -10px;
-            left: 16px;
-            background: var(--paper);
-            color: var(--red);
-            padding: 0 0.4rem;
-            font-size: 0.85rem;
+            top: -8px;
+            left: 22px;
+            width: 14px;
+            height: 14px;
+            background: var(--red);
+            border-radius: 50%;
+            box-shadow: 0 2px 3px rgba(26, 26, 26, 0.35);
             transform: rotate(-8deg);
         }
 
@@ -682,7 +680,7 @@
     <header class="header">
         <div class="header-content">
             <a href="#" class="logo">
-                <i class="fas fa-microscope"></i>
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8" /> <path d="M3 22h18" /> <path d="M14 22a7 7 0 1 0 0-14h-1" /> <path d="M9 14h2" /> <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z" /> <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" /></svg>
                 Creador de Proyectos (Mejorado)
             </a>
             
@@ -692,15 +690,15 @@
                     EN
                 </button>
                 <button class="btn btn-secondary" onclick="saveProject()">
-                    <i class="fas fa-save"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" /> <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" /> <path d="M7 3v4a1 1 0 0 0 1 1h7" /></svg>
                     Guardar
                 </button>
                 <button class="btn btn-warning" onclick="loadProject()">
-                    <i class="fas fa-folder-open"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" /></svg>
                     Cargar
                 </button>
                 <button class="btn btn-success" onclick="exportToPDF()">
-                    <i class="fas fa-file-pdf"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></svg>
                     Exportar PDF
                 </button>
             </div>
@@ -711,7 +709,7 @@
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h3>🚀 Pasos del Proyecto</h3>
+            <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg> Pasos del Proyecto</h3>
             <ul class="step-nav">
                 <li>
                     <button onclick="showStep(0)" class="active" id="nav-0">
@@ -777,12 +775,12 @@
             <!-- Step 1: General Information -->
             <div class="step active" id="step-0">
                 <div class="step-header">
-                    <h2 class="step-title">📋 Información General</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="M12 11h4" /> <path d="M12 16h4" /> <path d="M8 11h.01" /> <path d="M8 16h.01" /></svg> Información General</h2>
                     <p class="step-description">Comencemos con los datos básicos de tu proyecto de investigación matemática.</p>
                 </div>
 
                 <div class="info-card">
-                    <h4>💡 Consejo</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg> Consejo</h4>
                     <p>Elige un título descriptivo y específico que refleje claramente el enfoque de tu investigación.</p>
                 </div>
 
@@ -824,7 +822,7 @@
                 <div class="step-navigation">
                     <div></div>
                     <button class="btn btn-primary" onclick="nextStep()">
-                        Siguiente <i class="fas fa-arrow-right"></i>
+                        Siguiente <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -832,21 +830,21 @@
             <!-- Step 2: Introduction -->
             <div class="step" id="step-1">
                 <div class="step-header">
-                    <h2 class="step-title">📖 Introducción</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg> Introducción</h2>
                     <p class="step-description">Presenta tu tema de investigación y su importancia en el contexto matemático.</p>
                 </div>
 
                 <div class="info-card">
-                    <h4>📝 Guía para la Introducción</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></svg> Guía para la Introducción</h4>
                     <p>• Presenta el tema general<br>• Explica por qué es importante<br>• Menciona aplicaciones relevantes<br>• Establece el contexto histórico</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Introducción</label>
                     <div class="editor-toolbar">
-                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4" /> <line x1="14" x2="5" y1="20" y2="20" /> <line x1="15" x2="9" y1="4" y2="20" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4" /> <line x1="4" x2="20" y1="20" y2="20" /></svg></button>
                     </div>
                     <div class="rich-editor" contenteditable="true" id="introductionContent" 
                          placeholder="Escribe aquí la introducción de tu proyecto...">
@@ -855,10 +853,10 @@
 
                 <div class="step-navigation">
                     <button class="btn btn-secondary" onclick="prevStep()">
-                        <i class="fas fa-arrow-left"></i> Anterior
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Anterior
                     </button>
                     <button class="btn btn-primary" onclick="nextStep()">
-                        Siguiente <i class="fas fa-arrow-right"></i>
+                        Siguiente <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -866,21 +864,21 @@
             <!-- Step 3: Literature Review -->
             <div class="step" id="step-2">
                 <div class="step-header">
-                    <h2 class="step-title">📚 Revisión de Literatura</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14" /> <path d="M12 6v14" /> <path d="M8 8v12" /> <path d="M4 4v16" /></svg> Revisión de Literatura</h2>
                     <p class="step-description">Analiza trabajos previos relacionados con tu tema de investigación.</p>
                 </div>
 
                 <div class="info-card">
-                    <h4>🔍 Gestión de Referencias</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></svg> Gestión de Referencias</h4>
                     <p>Agrega las fuentes que has consultado. Incluye libros, artículos, papers y recursos web relevantes.</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Análisis de Literatura</label>
                     <div class="editor-toolbar">
-                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4" /> <line x1="14" x2="5" y1="20" y2="20" /> <line x1="15" x2="9" y1="4" y2="20" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4" /> <line x1="4" x2="20" y1="20" y2="20" /></svg></button>
                     </div>
                     <div class="rich-editor" contenteditable="true" id="literatureContent" 
                          placeholder="Analiza y sintetiza los trabajos previos relacionados con tu investigación...">
@@ -888,9 +886,9 @@
                 </div>
 
                 <div class="form-group">
-                    <h4>📖 Referencias</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg> Referencias</h4>
                     <button class="btn btn-success" onclick="addReference()">
-                        <i class="fas fa-plus"></i> Agregar Referencia
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="M12 5v14" /></svg> Agregar Referencia
                     </button>
                     <div id="referencesContainer" style="margin-top: 1rem;">
                         <!-- Referencias se cargarán aquí dinámicamente -->
@@ -899,10 +897,10 @@
 
                 <div class="step-navigation">
                     <button class="btn btn-secondary" onclick="prevStep()">
-                        <i class="fas fa-arrow-left"></i> Anterior
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Anterior
                     </button>
                     <button class="btn btn-primary" onclick="nextStep()">
-                        Siguiente <i class="fas fa-arrow-right"></i>
+                        Siguiente <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -910,21 +908,21 @@
             <!-- Step 4: Research Problem -->
             <div class="step" id="step-3">
                 <div class="step-header">
-                    <h2 class="step-title">❓ Problema de Investigación</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /> <path d="M12 17h.01" /></svg> Problema de Investigación</h2>
                     <p class="step-description">Define claramente el problema que investigarás y tus objetivos.</p>
                 </div>
 
                 <div class="info-card">
-                    <h4>🎯 Formulación del Problema</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg> Formulación del Problema</h4>
                     <p>• Define el problema específico<br>• Establece objetivos claros<br>• Formula hipótesis si aplica<br>• Justifica la relevancia</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Planteamiento del Problema</label>
                     <div class="editor-toolbar">
-                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4" /> <line x1="14" x2="5" y1="20" y2="20" /> <line x1="15" x2="9" y1="4" y2="20" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4" /> <line x1="4" x2="20" y1="20" y2="20" /></svg></button>
                     </div>
                     <div class="rich-editor" contenteditable="true" id="problemContent" 
                          placeholder="Describe claramente el problema que vas a investigar...">
@@ -951,10 +949,10 @@
 
                 <div class="step-navigation">
                     <button class="btn btn-secondary" onclick="prevStep()">
-                        <i class="fas fa-arrow-left"></i> Anterior
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Anterior
                     </button>
                     <button class="btn btn-primary" onclick="nextStep()">
-                        Siguiente <i class="fas fa-arrow-right"></i>
+                        Siguiente <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -962,12 +960,12 @@
             <!-- Step 5: Methodology -->
             <div class="step" id="step-4">
                 <div class="step-header">
-                    <h2 class="step-title">🔬 Metodología</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8" /> <path d="M3 22h18" /> <path d="M14 22a7 7 0 1 0 0-14h-1" /> <path d="M9 14h2" /> <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z" /> <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" /></svg> Metodología</h2>
                     <p class="step-description">Describe los métodos y procedimientos que utilizarás en tu investigación.</p>
                 </div>
 
                 <div class="info-card">
-                    <h4>⚙️ Diseño Metodológico</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg> Diseño Metodológico</h4>
                     <p>• Tipo de investigación<br>• Métodos de recolección<br>• Herramientas a utilizar<br>• Procedimientos paso a paso</p>
                 </div>
 
@@ -985,9 +983,9 @@
                 <div class="form-group">
                     <label class="form-label">Metodología Detallada</label>
                     <div class="editor-toolbar">
-                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4" /> <line x1="14" x2="5" y1="20" y2="20" /> <line x1="15" x2="9" y1="4" y2="20" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4" /> <line x1="4" x2="20" y1="20" y2="20" /></svg></button>
                     </div>
                     <div class="rich-editor" contenteditable="true" id="methodologyContent" 
                          placeholder="Describe detalladamente la metodología de tu investigación...">
@@ -1002,10 +1000,10 @@
 
                 <div class="step-navigation">
                     <button class="btn btn-secondary" onclick="prevStep()">
-                        <i class="fas fa-arrow-left"></i> Anterior
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Anterior
                     </button>
                     <button class="btn btn-primary" onclick="nextStep()">
-                        Siguiente <i class="fas fa-arrow-right"></i>
+                        Siguiente <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -1013,21 +1011,21 @@
             <!-- Step 6: Data Analysis -->
             <div class="step" id="step-5">
                 <div class="step-header">
-                    <h2 class="step-title">📊 Análisis de Datos</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Análisis de Datos</h2>
                     <p class="step-description">Presenta y analiza los datos obtenidos en tu investigación con visualizaciones profesionales.</p>
                 </div>
 
                 <div class="info-card">
-                    <h4>📈 Análisis de Resultados</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></svg> Análisis de Resultados</h4>
                     <p>• Presenta los datos obtenidos<br>• Crea visualizaciones profesionales<br>• Interpreta los resultados<br>• Relaciona con los objetivos</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Presentación de Datos</label>
                     <div class="editor-toolbar">
-                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4" /> <line x1="14" x2="5" y1="20" y2="20" /> <line x1="15" x2="9" y1="4" y2="20" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4" /> <line x1="4" x2="20" y1="20" y2="20" /></svg></button>
                     </div>
                     <div class="rich-editor" contenteditable="true" id="dataAnalysisContent" 
                          placeholder="Describe y presenta los datos obtenidos en tu investigación...">
@@ -1036,18 +1034,18 @@
 
                 <!-- Visualización de Datos MEJORADA -->
                 <div class="form-group">
-                    <h4>📊 Generador de Visualizaciones Profesionales (MEJORADO)</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Generador de Visualizaciones Profesionales (MEJORADO)</h4>
                     
                     <div class="info-card">
-                        <h4>🎯 Sistema de Visualización Mejorado v2.1</h4>
+                        <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg> Sistema de Visualización Mejorado v2.1</h4>
                         <p><strong>MEJORAS IMPLEMENTADAS:</strong><br>
-                        ✅ Preview visual RESTAURADO - Ver gráficas en tiempo real<br>
-                        ✅ Captura de imágenes corregida para PDF<br>
-                        ✅ Eliminación de plt.show() antes de captura<br>
-                        ✅ Validación mejorada de base64<br>
-                        ✅ Panel de depuración en tiempo real<br>
-                        ✅ Fallback con preview básico cuando Pyodide no está listo<br>
-                        ✅ Manejo optimizado de memoria</p>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Preview visual RESTAURADO - Ver gráficas en tiempo real<br>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Captura de imágenes corregida para PDF<br>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Eliminación de plt.show() antes de captura<br>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Validación mejorada de base64<br>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Panel de depuración en tiempo real<br>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Fallback con preview básico cuando Pyodide no está listo<br>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Manejo optimizado de memoria</p>
                     </div>
 
                     <!-- Configuración de Gráfica -->
@@ -1089,26 +1087,26 @@
                     <!-- Botones de Acción -->
                     <div style="margin: 1rem 0; display: flex; gap: 1rem; flex-wrap: wrap;">
                         <button class="btn btn-success" onclick="generateChart()">
-                            <i class="fas fa-chart-bar"></i> Generar Gráfica
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Generar Gráfica
                         </button>
                         <button class="btn btn-warning" onclick="clearCharts()">
-                            <i class="fas fa-trash"></i> Limpiar Gráficas
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6" /> <path d="M14 11v6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /> <path d="M3 6h18" /> <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg> Limpiar Gráficas
                         </button>
                         <button class="btn btn-secondary" onclick="exportChartData()">
-                            <i class="fas fa-download"></i> Exportar Datos
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg> Exportar Datos
                         </button>
                         <button class="btn btn-primary" onclick="toggleDebugPanel()">
-                            <i class="fas fa-bug"></i> Panel Debug
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-9" /> <path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /> <path d="M14.12 3.88 16 2" /> <path d="M21 21a4 4 0 0 0-3.81-4" /> <path d="M21 5a4 4 0 0 1-3.55 3.97" /> <path d="M22 13h-4" /> <path d="M3 21a4 4 0 0 1 3.81-4" /> <path d="M3 5a4 4 0 0 0 3.55 3.97" /> <path d="M6 13H2" /> <path d="m8 2 1.88 1.88" /> <path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> Panel Debug
                         </button>
                         <button class="btn btn-warning" onclick="testPreview()">
-                            <i class="fas fa-eye"></i> Test Preview
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></svg> Test Preview
                         </button>
                     </div>
 
                     <!-- Panel de Depuración -->
                     <div class="debug-panel" id="debugPanel" style="display: none;">
                         <div style="margin-bottom: 0.5rem; font-weight: bold; color: #ffffff;">
-                            🔧 Panel de Depuración - Sistema de Visualización
+                            [DEBUG] Panel de Depuración - Sistema de Visualización
                         </div>
                         <div id="debugMessages">
                             <div class="debug-line debug-info">Sistema inicializado. Esperando comandos...</div>
@@ -1129,10 +1127,10 @@
 
                 <div class="step-navigation">
                     <button class="btn btn-secondary" onclick="prevStep()">
-                        <i class="fas fa-arrow-left"></i> Anterior
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Anterior
                     </button>
                     <button class="btn btn-primary" onclick="nextStep()">
-                        Siguiente <i class="fas fa-arrow-right"></i>
+                        Siguiente <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -1140,21 +1138,21 @@
             <!-- Step 7: Conclusions -->
             <div class="step" id="step-6">
                 <div class="step-header">
-                    <h2 class="step-title">🎯 Conclusiones</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" /></svg> Conclusiones</h2>
                     <p class="step-description">Sintetiza los hallazgos y reflexiona sobre los resultados obtenidos.</p>
                 </div>
 
                 <div class="info-card">
-                    <h4>📝 Redacción de Conclusiones</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></svg> Redacción de Conclusiones</h4>
                     <p>• Responde a los objetivos<br>• Sintetiza hallazgos principales<br>• Menciona limitaciones<br>• Sugiere investigaciones futuras</p>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Conclusiones Principales</label>
                     <div class="editor-toolbar">
-                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
-                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('bold')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('italic')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4" /> <line x1="14" x2="5" y1="20" y2="20" /> <line x1="15" x2="9" y1="4" y2="20" /></svg></button>
+                        <button type="button" class="toolbar-btn" onclick="formatText('underline')"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v6a6 6 0 0 0 12 0V4" /> <line x1="4" x2="20" y1="20" y2="20" /></svg></button>
                     </div>
                     <div class="rich-editor" contenteditable="true" id="conclusionsContent" 
                          placeholder="Escribe las conclusiones principales de tu investigación...">
@@ -1175,10 +1173,10 @@
 
                 <div class="step-navigation">
                     <button class="btn btn-secondary" onclick="prevStep()">
-                        <i class="fas fa-arrow-left"></i> Anterior
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Anterior
                     </button>
                     <button class="btn btn-primary" onclick="nextStep()">
-                        Siguiente <i class="fas fa-arrow-right"></i>
+                        Siguiente <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -1186,13 +1184,13 @@
             <!-- Step 8: Preview -->
             <div class="step" id="step-7">
                 <div class="step-header">
-                    <h2 class="step-title">👁️ Vista Previa</h2>
+                    <h2 class="step-title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></svg> Vista Previa</h2>
                     <p class="step-description">Revisa tu proyecto completo antes de exportar a PDF.</p>
                 </div>
 
                 <div style="text-align: center; margin-bottom: 2rem;">
                     <button class="btn btn-success" onclick="exportToPDF()" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                        <i class="fas fa-file-pdf"></i> Exportar a PDF (Con Imágenes Mejoradas)
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></svg> Exportar a PDF (Con Imágenes Mejoradas)
                     </button>
                 </div>
 
@@ -1202,10 +1200,10 @@
 
                 <div class="step-navigation">
                     <button class="btn btn-secondary" onclick="prevStep()">
-                        <i class="fas fa-arrow-left"></i> Anterior
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Anterior
                     </button>
                     <button class="btn btn-primary" onclick="showStep(0)">
-                        <i class="fas fa-refresh"></i> Nuevo Proyecto
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" /></svg> Nuevo Proyecto
                     </button>
                 </div>
             </div>
@@ -1222,6 +1220,23 @@
         let generatedCharts = [];
         let debugVisible = false;
 
+const ICONS = {
+            'bug': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-9" /> <path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /> <path d="M14.12 3.88 16 2" /> <path d="M21 21a4 4 0 0 0-3.81-4" /> <path d="M21 5a4 4 0 0 1-3.55 3.97" /> <path d="M22 13h-4" /> <path d="M3 21a4 4 0 0 1 3.81-4" /> <path d="M3 5a4 4 0 0 0 3.55 3.97" /> <path d="M6 13H2" /> <path d="m8 2 1.88 1.88" /> <path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg>`,
+            'check': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>`,
+            'image': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /> <circle cx="9" cy="9" r="2" /> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>`,
+            'chart_line': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg>`,
+            'chart_column': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg>`,
+            'chart_area': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M7 11.207a.5.5 0 0 1 .146-.353l2-2a.5.5 0 0 1 .708 0l3.292 3.292a.5.5 0 0 0 .708 0l4.292-4.292a.5.5 0 0 1 .854.353V16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1z" /></svg>`,
+            'chart_scatter': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /> <circle cx="18.5" cy="5.5" r=".5" fill="currentColor" /> <circle cx="11.5" cy="11.5" r=".5" fill="currentColor" /> <circle cx="7.5" cy="16.5" r=".5" fill="currentColor" /> <circle cx="17.5" cy="14.5" r=".5" fill="currentColor" /> <path d="M3 3v16a2 2 0 0 0 2 2h16" /></svg>`,
+            'chart_pie': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /> <path d="M21.21 15.89A10 10 0 1 1 8 2.83" /></svg>`,
+            'square': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /></svg>`,
+            'circle_check_big': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335" /> <path d="m9 11 3 3L22 4" /></svg>`,
+            'triangle_alert': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg>`,
+            'circle_alert': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></svg>`,
+            'info': `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg>`
+        };
+
+
         // ===========================================
         // SISTEMA DE DEPURACIÓN MEJORADO
         // ===========================================
@@ -1234,10 +1249,10 @@
             debugLine.className = `debug-line debug-${type}`;
             
             const icons = {
-                'info': 'ℹ️',
-                'success': '✅', 
-                'error': '❌',
-                'warning': '⚠️'
+                'info': '[i]',
+                'success': '[OK]',
+                'error': '[ERR]',
+                'warning': '[!]'
             };
             
             debugLine.textContent = `[${timestamp}] ${icons[type]} ${message}`;
@@ -1261,8 +1276,8 @@
             
             const button = document.querySelector('button[onclick="toggleDebugPanel()"]');
             button.innerHTML = debugVisible ? 
-                '<i class="fas fa-bug"></i> Ocultar Debug' : 
-                '<i class="fas fa-bug"></i> Panel Debug';
+                '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-9" /> <path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /> <path d="M14.12 3.88 16 2" /> <path d="M21 21a4 4 0 0 0-3.81-4" /> <path d="M21 5a4 4 0 0 1-3.55 3.97" /> <path d="M22 13h-4" /> <path d="M3 21a4 4 0 0 1 3.81-4" /> <path d="M3 5a4 4 0 0 0 3.55 3.97" /> <path d="M6 13H2" /> <path d="m8 2 1.88 1.88" /> <path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> Ocultar Debug' : 
+                '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-9" /> <path d="M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" /> <path d="M14.12 3.88 16 2" /> <path d="M21 21a4 4 0 0 0-3.81-4" /> <path d="M21 5a4 4 0 0 1-3.55 3.97" /> <path d="M22 13h-4" /> <path d="M3 21a4 4 0 0 1 3.81-4" /> <path d="M3 5a4 4 0 0 0 3.55 3.97" /> <path d="M6 13H2" /> <path d="m8 2 1.88 1.88" /> <path d="M9 7.13V6a3 3 0 1 1 6 0v1.13" /></svg> Panel Debug';
                 
             if (debugVisible) {
                 debugLog('Panel de depuración activado', 'info');
@@ -1275,7 +1290,7 @@
         async function initPyodide() {
             try {
                 debugLog('Iniciando carga de Pyodide...', 'info');
-                showMessage("🔧 Inicializando sistema de visualización profesional mejorado...", 'info');
+                showMessage("Inicializando sistema de visualización profesional mejorado...", 'info');
                 
                 pyodide = await loadPyodide();
                 debugLog('Pyodide cargado exitosamente', 'success');
@@ -1295,12 +1310,12 @@ print("Matplotlib configurado para captura de imágenes")
                 
                 debugLog('Matplotlib configurado para captura de imágenes', 'success');
                 console.log("Pyodide inicializado exitosamente con captura de imágenes mejorada");
-                showMessage("✅ Sistema de visualización MEJORADO listo - Preview visual + Captura optimizada para PDF", 'success');
+                showMessage("Sistema de visualización MEJORADO listo - Preview visual + Captura optimizada para PDF", 'success');
                 
             } catch (error) {
                 debugLog(`Error cargando Pyodide: ${error.message}`, 'error');
                 console.error("Error cargando Pyodide:", error);
-                showMessage("⚠️ Error inicializando visualización avanzada. Funcionalidad básica disponible.", 'warning');
+                showMessage("Error inicializando visualización avanzada. Funcionalidad básica disponible.", 'warning');
             }
         }
 
@@ -1350,7 +1365,7 @@ print("Matplotlib configurado para captura de imágenes")
             const navButton = document.getElementById(`nav-${step}`);
             if (navButton && !navButton.classList.contains('completed')) {
                 navButton.classList.add('completed');
-                navButton.querySelector('.step-icon').innerHTML = '<i class="fas fa-check"></i>';
+                navButton.querySelector('.step-icon').innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>';
             }
         }
 
@@ -1377,7 +1392,7 @@ print("Matplotlib configurado para captura de imágenes")
             const referenceHTML = `
                 <div class="reference-item" id="${referenceId}">
                     <button class="delete-btn" onclick="removeReference('${referenceId}')">
-                        <i class="fas fa-times"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
                     </button>
                     <div class="form-group">
                         <label class="form-label">Autor(es)</label>
@@ -1438,7 +1453,7 @@ print("Matplotlib configurado para captura de imágenes")
             const chartTitle = document.getElementById('chartTitle').value;
 
             if (!chartType || !chartData) {
-                showMessage("⚠️ Por favor selecciona el tipo de gráfica e ingresa los datos", 'warning');
+                showMessage("Por favor selecciona el tipo de gráfica e ingresa los datos", 'warning');
                 debugLog('Generación cancelada: faltan datos requeridos', 'warning');
                 return;
             }
@@ -1468,19 +1483,19 @@ print("Matplotlib configurado para captura de imágenes")
                 // Mensaje de éxito específico
                 if (chartResult.imageBase64 && chartResult.imageBase64.length > 100) {
                     debugLog(`Imagen capturada exitosamente: ${chartResult.imageBase64.length} caracteres`, 'success');
-                    showMessage("✅ Gráfica generada con preview visual e imagen capturada para PDF", 'success');
+                    showMessage("Gráfica generada con preview visual e imagen capturada para PDF", 'success');
                 } else if (chartResult.type === 'professional') {
                     debugLog('Gráfica generada pero imagen no capturada', 'warning');
-                    showMessage("✅ Gráfica profesional generada con preview visual (imagen no capturada - solo datos en PDF)", 'info');
+                    showMessage("Gráfica profesional generada con preview visual (imagen no capturada - solo datos en PDF)", 'info');
                 } else {
                     debugLog('Gráfica fallback generada con preview básico', 'info');
-                    showMessage("✅ Gráfica generada con preview básico (Sistema profesional inicializándose)", 'success');
+                    showMessage("Gráfica generada con preview básico (Sistema profesional inicializándose)", 'success');
                 }
                 
             } catch (error) {
                 debugLog(`Error generando gráfica: ${error.message}`, 'error');
                 console.error('Error generando gráfica:', error);
-                showMessage(`❌ Error al generar la gráfica: ${error.message}`, 'error');
+                showMessage(`Error al generar la gráfica: ${error.message}`, 'error');
             } finally {
                 // Restaurar botón
                 generateBtn.innerHTML = originalText;
@@ -2067,9 +2082,9 @@ else:
             
             const hasValidImage = chartResult.imageBase64 && chartResult.imageBase64.length > 100;
             const imageStatus = hasValidImage ? 
-                `✅ Imagen capturada (${Math.round(chartResult.imageBase64.length/1024)}KB)` : 
-                '⚠️ Solo metadatos';
-            const imageIcon = hasValidImage ? 'fas fa-image' : `fas fa-chart-${getChartIcon(chartResult.chartType)}`;
+                `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Imagen capturada (${Math.round(chartResult.imageBase64.length/1024)}KB)` : 
+                '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg> Solo metadatos';
+            const imageIcon = hasValidImage ? ICONS.image : ICONS[getChartIcon(chartResult.chartType)];
             
             // Contenido del preview - SIN TÍTULO DUPLICADO
             let previewContent = '';
@@ -2087,11 +2102,11 @@ else:
                 // Fallback sin imagen - mostrar título solo aquí
                 previewContent = `
                     <div style="text-align: center;">
-                        <i class="fas fa-chart-${getChartIcon(chartResult.chartType)}" style="font-size: 3rem; color: var(--red); margin-bottom: 1rem;"></i>
+                        <span style="font-size: 3rem; color: var(--red); margin-bottom: 1rem; display: inline-block;">${ICONS[getChartIcon(chartResult.chartType)].replace('width:1em;height:1em;', 'width:1em;height:1em;margin-right:0;')}</span>
                         <h5>${chartResult.title}</h5>
                         <p style="color: var(--text-secondary); margin: 0.5rem 0;">${chartResult.description}</p>
                         <div style="background: var(--paper-alt); border-left: 3px solid var(--red); padding: 1rem; border-radius: 0; margin: 1rem 0;">
-                            <i class="fas fa-exclamation-triangle" style="color: var(--red);"></i>
+                            <svg style="width:1em;height:1em;color: var(--red);;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg>
                             <strong>Preview no disponible</strong><br>
                             <small>La gráfica se generó pero no se capturó la imagen para preview</small>
                         </div>
@@ -2100,7 +2115,7 @@ else:
             }
             
             chartCard.innerHTML = `
-                <h4><i class="${imageIcon}"></i> ${hasValidImage ? `Gráfica ${chartResult.chartType.charAt(0).toUpperCase() + chartResult.chartType.slice(1)}` : chartResult.title}</h4>
+                <h4>${imageIcon} ${hasValidImage ? `Gráfica ${chartResult.chartType.charAt(0).toUpperCase() + chartResult.chartType.slice(1)}` : chartResult.title}</h4>
                 <div class="chart-result">
                     ${previewContent}
                     <div style="background: var(--light); padding: 0.5rem; border-radius: 5px; margin-top: 1rem;">
@@ -2113,7 +2128,7 @@ else:
                 </div>
                 <div style="margin-top: 1rem; text-align: center;">
                     <button class="btn btn-secondary" onclick="removeChart(this)" style="font-size: 0.8rem;">
-                        <i class="fas fa-trash"></i> Eliminar
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6" /> <path d="M14 11v6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /> <path d="M3 6h18" /> <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg> Eliminar
                     </button>
                 </div>
             `;
@@ -2126,14 +2141,14 @@ else:
 
         function getChartIcon(chartType) {
             const icons = {
-                'line': 'line',
-                'bar': 'bar',
-                'histogram': 'chart-area',
-                'scatter': 'circle',
-                'pie': 'chart-pie',
+                'line': 'chart_line',
+                'bar': 'chart_column',
+                'histogram': 'chart_area',
+                'scatter': 'chart_scatter',
+                'pie': 'chart_pie',
                 'box': 'square'
             };
-            return icons[chartType] || 'chart-bar';
+            return icons[chartType] || 'chart_column';
         }
 
         function removeChart(button) {
@@ -2150,7 +2165,7 @@ else:
             document.getElementById('chartsContainer').innerHTML = '';
             generatedCharts = [];
             debugLog('Todas las gráficas eliminadas', 'info');
-            showMessage("🗑️ Todas las gráficas han sido eliminadas", 'info');
+            showMessage("Todas las gráficas han sido eliminadas", 'info');
         }
 
         function exportChartData() {
@@ -2187,7 +2202,7 @@ else:
             link.click();
 
             debugLog('Proyectos exportados exitosamente', 'success');
-            showMessage("📊 Datos exportados exitosamente", 'success');
+            showMessage("Datos exportados exitosamente", 'success');
         }
 
         // ===========================================
@@ -2202,7 +2217,7 @@ else:
             document.getElementById('chartData').value = '0,0;1,0.84;2,0.91;3,0.14;4,-0.76;5,-0.96;6,-0.28';
             document.getElementById('chartLabels').value = '0°,30°,60°,90°,120°,150°,180°';
             
-            showMessage('🧪 Datos de prueba cargados. Generando gráfica de prueba...', 'info');
+            showMessage('Datos de prueba cargados. Generando gráfica de prueba...', 'info');
             debugLog('Datos de prueba configurados para función seno', 'info');
             
             // Generar automáticamente
@@ -2217,14 +2232,14 @@ else:
         function showMessage(message, type = 'info') {
             const messageDiv = document.createElement('div');
             const icons = {
-                'success': 'check-circle',
-                'error': 'exclamation-triangle',
-                'warning': 'exclamation-circle',
-                'info': 'info-circle'
+                'success': 'circle_check_big',
+                'error': 'triangle_alert',
+                'warning': 'circle_alert',
+                'info': 'info'
             };
-            
+
             messageDiv.className = `${type}-message`;
-            messageDiv.innerHTML = `<i class="fas fa-${icons[type] || 'info-circle'}"></i> ${message}`;
+            messageDiv.innerHTML = `${ICONS[icons[type] || 'info']} ${message}`;
             
             const container = document.querySelector('.main-content');
             container.insertBefore(messageDiv, container.firstChild);
@@ -2279,7 +2294,7 @@ else:
             link.click();
 
             debugLog('Proyecto guardado exitosamente', 'success');
-            showMessage('💾 Proyecto guardado exitosamente', 'success');
+            showMessage('Proyecto guardado exitosamente', 'success');
         }
 
         function loadProject() {
@@ -2295,10 +2310,10 @@ else:
                             const projectData = JSON.parse(e.target.result);
                             loadProjectData(projectData);
                             debugLog('Proyecto cargado exitosamente', 'success');
-                            showMessage('📂 Proyecto cargado exitosamente', 'success');
+                            showMessage('Proyecto cargado exitosamente', 'success');
                         } catch (error) {
                             debugLog(`Error cargando proyecto: ${error.message}`, 'error');
-                            showMessage('❌ Error al cargar el proyecto', 'error');
+                            showMessage('Error al cargar el proyecto', 'error');
                         }
                     };
                     reader.readAsText(file);
@@ -2434,7 +2449,7 @@ else:
                 if (chartType && chartData) {
                     return `
                         <div style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
-                            <h5>📊 Datos de Visualización Preparados</h5>
+                            <h5><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Datos de Visualización Preparados</h5>
                             <p><strong>Tipo:</strong> ${chartType}</p>
                             <p><strong>Título:</strong> ${chartTitle || 'Sin título'}</p>
                             <p><strong>Datos:</strong> ${chartData.substring(0, 100)}${chartData.length > 100 ? '...' : ''}</p>
@@ -2449,11 +2464,11 @@ else:
             
             return `
                 <div style="margin-top: 1rem;">
-                    <h5>📊 Gráficas Generadas (${generatedCharts.length}) - SISTEMA MEJORADO</h5>
-                    ${chartsWithImages > 0 ? `<p style="color: #28a745;"><strong>✅ ${chartsWithImages} gráficas con imágenes HD para PDF (Captura mejorada)</strong></p>` : ''}
-                    ${chartsWithoutImages > 0 ? `<p style="color: #ffc107;">⚠️ ${chartsWithoutImages} gráficas solo incluirán información textual</p>` : ''}
+                    <h5><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Gráficas Generadas (${generatedCharts.length}) - SISTEMA MEJORADO</h5>
+                    ${chartsWithImages > 0 ? `<p style="color: var(--success);"><strong><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> ${chartsWithImages} gráficas con imágenes HD para PDF (Captura mejorada)</strong></p>` : ''}
+                    ${chartsWithoutImages > 0 ? `<p style="color: var(--warning);"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg> ${chartsWithoutImages} gráficas solo incluirán información textual</p>` : ''}
                     <div style="background: #e3f2fd; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
-                        <strong>🔧 MEJORAS IMPLEMENTADAS:</strong><br>
+                        <strong><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /></svg> MEJORAS IMPLEMENTADAS:</strong><br>
                         • Preview visual RESTAURADO - Ver gráficas en tiempo real<br>
                         • Eliminación de plt.show() antes de captura<br>
                         • Validación mejorada de imágenes base64<br>
@@ -2466,10 +2481,10 @@ else:
                         const hasValidImage = chart.imageBase64 && chart.imageBase64.length > 100;
                         const imageSize = hasValidImage ? Math.round(chart.imageBase64.length/1024) : 0;
                         const imageStatus = hasValidImage ? 
-                            `<span style="color: #28a745;">📸 Imagen HD capturada (${imageSize}KB)</span>` : 
-                            '<span style="color: #ffc107;">📊 Solo metadatos</span>';
+                            `<span style="color: var(--success);"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /> <circle cx="9" cy="9" r="2" /> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg> Imagen HD capturada (${imageSize}KB)</span>` : 
+                            '<span style="color: var(--warning);"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Solo metadatos</span>';
                         return `
-                            <div style="padding: 0.5rem; background: #f8f9fa; border-radius: 5px; margin: 0.5rem 0; border-left: 5px solid ${hasValidImage ? '#28a745' : '#ffc107'};">
+                            <div style="padding: 0.5rem; background: #f8f9fa; border-radius: 5px; margin: 0.5rem 0; border-left: 5px solid ${hasValidImage ? 'var(--success)' : 'var(--warning)'};">
                                 <strong>${index + 1}. ${chart.title}</strong><br>
                                 <small>Tipo: ${chart.chartType} | ${chart.description}</small><br>
                                 <small>Estado: ${imageStatus} | Versión: ${chart.version || 'N/A'}</small>
@@ -2751,7 +2766,7 @@ else:
             doc.save(fileName);
             
             debugLog('PDF exportado exitosamente', 'success');
-            showMessage('📄 PDF exportado exitosamente con mejoras implementadas', 'success');
+            showMessage('PDF exportado exitosamente con mejoras implementadas', 'success');
         }
     </script>
 
