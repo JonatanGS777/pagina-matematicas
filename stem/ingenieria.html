@@ -6,7 +6,6 @@
     <title>Ingeniería para Secundaria - Matemáticas Digitales</title>
     <meta name="description" content="Recursos interactivos, proyectos prácticos y herramientas gratuitas para que estudiantes de secundaria descubran el mundo de la ingeniería.">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             /* Plano de Ingeniero — identidad propia de esta página */
@@ -69,7 +68,7 @@
             color: var(--line);
             text-decoration: none;
         }
-        .logo i { color: var(--accent); margin-right: 0.5rem; }
+        .logo svg { color: var(--accent); margin-right: 0.5rem; }
 
         #lang-toggle {
             background: transparent;
@@ -355,7 +354,7 @@
 <body>
     <header class="header">
         <nav class="navbar">
-            <a href="../index.html" class="logo"><i class="fas fa-drafting-compass"></i> Matemáticas Digitales</a>
+            <a href="../index.html" class="logo"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></svg> Matemáticas Digitales</a>
             <button id="lang-toggle" title="Switch to English"
                 onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
                 EN
@@ -392,12 +391,12 @@
         <section class="section" style="background: var(--bg-alt);">
             <h2 class="section-title fade-in">Ramas de la Ingeniería</h2>
             <div class="branches-grid">
-                <div class="branch-card civil fade-in"><div class="branch-icon"><i class="fas fa-hard-hat"></i></div><h3>Ingeniería Civil</h3><p>Construye puentes, carreteras y edificios que soportan nuestras ciudades.</p></div>
-                <div class="branch-card mechanical fade-in" data-delay="100"><div class="branch-icon"><i class="fas fa-cogs"></i></div><h3>Ingeniería Mecánica</h3><p>Crea máquinas y robots que facilitan la vida diaria.</p></div>
-                <div class="branch-card electrical fade-in" data-delay="200"><div class="branch-icon"><i class="fas fa-bolt"></i></div><h3>Ingeniería Eléctrica</h3><p>Diseña circuitos y dispositivos electrónicos, desde celulares hasta autos eléctricos.</p></div>
-                <div class="branch-card chemical fade-in" data-delay="300"><div class="branch-icon"><i class="fas fa-flask"></i></div><h3>Ingeniería Química</h3><p>Convierte materias primas en productos útiles como medicinas y combustibles limpios.</p></div>
-                <div class="branch-card computer fade-in" data-delay="400"><div class="branch-icon"><i class="fas fa-laptop-code"></i></div><h3>Ingeniería de Software</h3><p>Programa aplicaciones, videojuegos y sistemas que conectan al mundo.</p></div>
-                <div class="branch-card aerospace fade-in" data-delay="500"><div class="branch-icon"><i class="fas fa-space-shuttle"></i></div><h3>Ingeniería Aeroespacial</h3><p>Explora el espacio diseñando cohetes, satélites y drones.</p></div>
+                <div class="branch-card civil fade-in"><div class="branch-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5" /> <path d="M14 6a6 6 0 0 1 6 6v3" /> <path d="M4 15v-3a6 6 0 0 1 6-6" /> <rect x="2" y="15" width="20" height="4" rx="1" /></svg></div><h3>Ingeniería Civil</h3><p>Construye puentes, carreteras y edificios que soportan nuestras ciudades.</p></div>
+                <div class="branch-card mechanical fade-in" data-delay="100"><div class="branch-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg></div><h3>Ingeniería Mecánica</h3><p>Crea máquinas y robots que facilitan la vida diaria.</p></div>
+                <div class="branch-card electrical fade-in" data-delay="200"><div class="branch-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></svg></div><h3>Ingeniería Eléctrica</h3><p>Diseña circuitos y dispositivos electrónicos, desde celulares hasta autos eléctricos.</p></div>
+                <div class="branch-card chemical fade-in" data-delay="300"><div class="branch-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /></svg></div><h3>Ingeniería Química</h3><p>Convierte materias primas en productos útiles como medicinas y combustibles limpios.</p></div>
+                <div class="branch-card computer fade-in" data-delay="400"><div class="branch-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" /></svg></div><h3>Ingeniería de Software</h3><p>Programa aplicaciones, videojuegos y sistemas que conectan al mundo.</p></div>
+                <div class="branch-card aerospace fade-in" data-delay="500"><div class="branch-icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg></div><h3>Ingeniería Aeroespacial</h3><p>Explora el espacio diseñando cohetes, satélites y drones.</p></div>
             </div>
         </section>
 
@@ -418,19 +417,19 @@
             <div class="tools-grid-visible">
                 <a href="https://www.tinkercad.com/" target="_blank" class="tool-card-visible fade-in">
                     <div class="tool-card-img-container"><img src="https://image.thum.io/get/width/600/https://www.tinkercad.com" alt="Vista previa de TinkerCAD"></div>
-                    <div class="tool-card-content"><h3>TinkerCAD</h3><p>Diseña modelos 3D y circuitos. Perfecto para principiantes en electrónica y diseño.</p><div class="tool-card-link"><i class="fas fa-external-link-alt"></i> Probar TinkerCAD</div></div>
+                    <div class="tool-card-content"><h3>TinkerCAD</h3><p>Diseña modelos 3D y circuitos. Perfecto para principiantes en electrónica y diseño.</p><div class="tool-card-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg> Probar TinkerCAD</div></div>
                 </a>
                 <a href="https://scratch.mit.edu/" target="_blank" class="tool-card-visible fade-in" data-delay="100">
                     <div class="tool-card-img-container"><img src="https://image.thum.io/get/width/600/https://scratch.mit.edu" alt="Vista previa de Scratch"></div>
-                    <div class="tool-card-content"><h3>Scratch</h3><p>Aprende programación mediante bloques y crea tus propios juegos y animaciones.</p><div class="tool-card-link"><i class="fas fa-external-link-alt"></i> Probar Scratch</div></div>
+                    <div class="tool-card-content"><h3>Scratch</h3><p>Aprende programación mediante bloques y crea tus propios juegos y animaciones.</p><div class="tool-card-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg> Probar Scratch</div></div>
                 </a>
                 <a href="https://www.autodesk.com/products/fusion-360/students-teachers-educators" target="_blank" class="tool-card-visible fade-in" data-delay="200">
                     <div class="tool-card-img-container"><img src="https://image.thum.io/get/width/600/https://www.autodesk.com/products/fusion-360/students-teachers-educators" alt="Vista previa de Fusion 360"></div>
-                    <div class="tool-card-content"><h3>Fusion 360</h3><p>Software profesional de diseño 3D gratuito para estudiantes. Ideal para proyectos avanzados.</p><div class="tool-card-link"><i class="fas fa-external-link-alt"></i> Probar Fusion 360</div></div>
+                    <div class="tool-card-content"><h3>Fusion 360</h3><p>Software profesional de diseño 3D gratuito para estudiantes. Ideal para proyectos avanzados.</p><div class="tool-card-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg> Probar Fusion 360</div></div>
                 </a>
                 <a href="https://www.arduino.cc/" target="_blank" class="tool-card-visible fade-in" data-delay="300">
                     <div class="tool-card-img-container"><img src="https://image.thum.io/get/width/600/https://www.arduino.cc" alt="Vista previa de Arduino"></div>
-                    <div class="tool-card-content"><h3>Arduino</h3><p>Plataforma de hardware libre para crear proyectos de electrónica interactiva.</p><div class="tool-card-link"><i class="fas fa-external-link-alt"></i> Probar Arduino</div></div>
+                    <div class="tool-card-content"><h3>Arduino</h3><p>Plataforma de hardware libre para crear proyectos de electrónica interactiva.</p><div class="tool-card-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg> Probar Arduino</div></div>
                 </a>
             </div>
         </section>
@@ -441,10 +440,10 @@
             <p>&copy; 2025 Yonatan Guerrero Soriano - Matemáticas Digitales</p>
             <p>Inspirando el aprendizaje matemático a través de la tecnología</p>
             <div class="social-links">
-                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.linkedin.com/in/yonatan-guerrero-soriano-6b3729136/" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+                <a href="#" class="social-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /></svg></a>
+                <a href="#" class="social-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /> <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8" /></svg></a>
+                <a href="https://www.linkedin.com/in/yonatan-guerrero-soriano-6b3729136/" class="social-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg></a>
+                <a href="#" class="social-link"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg></a>
             </div>
         </div>
     </footer>
