@@ -2712,10 +2712,10 @@ class Robot3D {
             isAnimating: this.isAnimating,
             performance: {
                 fps: this.getCurrentFPS(),
-                objects: this.scene.children.length,
-                triangles: this.renderer.info.render.triangles,
-                drawCalls: this.renderer.info.render.calls,
-                memory: this.renderer.info.memory
+                objects: this.scene ? this.scene.children.length : 0,
+                triangles: this.renderer ? this.renderer.info.render.triangles : 0,
+                drawCalls: this.renderer ? this.renderer.info.render.calls : 0,
+                memory: this.renderer ? this.renderer.info.memory : null
             }
         };
         
