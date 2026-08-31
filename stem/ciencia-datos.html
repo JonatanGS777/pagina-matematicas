@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio de Ciencia de Datos - Prof. Yonatan Guerrero</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         :root {
@@ -700,7 +699,7 @@
             transform: scale(1.1);
         }
 
-        .tool-icon i {
+        .tool-icon svg {
             font-size: 1.5rem;
             color: var(--dark);
         }
@@ -835,7 +834,7 @@
             border-color: var(--primary);
         }
 
-        .career-card i {
+        .career-card svg {
             font-size: 2rem;
             color: var(--primary);
             margin-bottom: 1rem;
@@ -874,7 +873,7 @@
 
             <div class="navbar-actions">
                 <a href="../index.html" class="nav-back-link">
-                    <i class="fas fa-arrow-left"></i> Inicio
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg> Inicio
                 </a>
 
                 <button id="lang-toggle" title="Switch to English"
@@ -887,7 +886,7 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1><i class="fas fa-flask"></i> Laboratorio Interactivo de Ciencia de Datos</h1>
+        <h1><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /></svg> Laboratorio Interactivo de Ciencia de Datos</h1>
         <p>Experimenta, analiza y visualiza datos en tiempo real. ¡Aprende haciendo!</p>
     </section>
 
@@ -896,22 +895,22 @@
         <!-- Tab Navigation -->
         <div class="tab-nav">
             <button class="tab-btn active" onclick="showTab('dashboard')">
-                <i class="fas fa-tachometer-alt"></i> Dashboard Interactivo
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg> Dashboard Interactivo
             </button>
             <button class="tab-btn" onclick="showTab('visualizer')">
-                <i class="fas fa-chart-line"></i> Visualizador
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg> Visualizador
             </button>
             <button class="tab-btn" onclick="showTab('tools')">
-                <i class="fas fa-tools"></i> Herramientas
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /></svg> Herramientas
             </button>
             <button class="tab-btn" onclick="showTab('exercises')">
-                <i class="fas fa-tasks"></i> Ejercicios
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /></svg> Ejercicios
             </button>
             <button class="tab-btn" onclick="showTab('calculators')">
-                <i class="fas fa-calculator"></i> Calculadoras
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg> Calculadoras
             </button>
             <button class="tab-btn" onclick="showTab('simulator')">
-                <i class="fas fa-play-circle"></i> Simulador
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z" /> <circle cx="12" cy="12" r="10" /></svg> Simulador
             </button>
         </div>
 
@@ -937,7 +936,7 @@
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-chart-bar"></i> Notas por Materia - Datos en Vivo</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Notas por Materia - Datos en Vivo</h3>
                 <div class="controls">
                     <div class="control-group">
                         <label for="subject">Materia:</label>
@@ -958,7 +957,7 @@
                         </select>
                     </div>
                     <button class="btn" onclick="generateRandomData()">
-                        <i class="fas fa-dice"></i> Generar Datos Aleatorios
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2" ry="2" /> <path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6" /> <path d="M6 18h.01" /> <path d="M10 14h.01" /> <path d="M15 6h.01" /> <path d="M18 9h.01" /></svg> Generar Datos Aleatorios
                     </button>
                 </div>
                 <div class="chart-container">
@@ -967,16 +966,16 @@
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-table"></i> Datos de Estudiantes (Editable)</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" /> <rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M3 9h18" /> <path d="M3 15h18" /></svg> Datos de Estudiantes (Editable)</h3>
                 <div class="controls">
                     <button class="btn btn-success" onclick="addStudent()">
-                        <i class="fas fa-plus"></i> Agregar Estudiante
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="M12 5v14" /></svg> Agregar Estudiante
                     </button>
                     <button class="btn btn-warning" onclick="calculateStats()">
-                        <i class="fas fa-calculator"></i> Calcular Estadísticas
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg> Calcular Estadísticas
                     </button>
                     <button class="btn btn-danger" onclick="clearData()">
-                        <i class="fas fa-trash"></i> Limpiar Datos
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6" /> <path d="M14 11v6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /> <path d="M3 6h18" /> <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg> Limpiar Datos
                     </button>
                 </div>
                 <div style="overflow-x: auto;">
@@ -1004,7 +1003,7 @@
         <!-- Visualizer Tab -->
         <div id="visualizer" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-paint-brush"></i> Creador de Gráficas Personalizadas</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.622 17.897-10.68-2.913" /> <path d="M18.376 2.622a1 1 0 1 1 3.002 3.002L17.36 9.643a.5.5 0 0 0 0 .707l.944.944a2.41 2.41 0 0 1 0 3.408l-.944.944a.5.5 0 0 1-.707 0L8.354 7.348a.5.5 0 0 1 0-.707l.944-.944a2.41 2.41 0 0 1 3.408 0l.944.944a.5.5 0 0 0 .707 0z" /> <path d="M9 8c-1.804 2.71-3.97 3.46-6.583 3.948a.507.507 0 0 0-.302.819l7.32 8.883a1 1 0 0 0 1.185.204C12.735 20.405 16 16.792 16 15" /></svg> Creador de Gráficas Personalizadas</h3>
                 <div class="controls">
                     <div class="control-group">
                         <label>Título del Gráfico:</label>
@@ -1023,7 +1022,7 @@
                         <input type="color" id="customColor" class="control-input" value="#F5A623">
                     </div>
                     <button class="btn" onclick="createCustomChart()">
-                        <i class="fas fa-magic"></i> Crear Gráfico
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72" /> <path d="m14 7 3 3" /> <path d="M5 6v4" /> <path d="M19 14v4" /> <path d="M10 2v2" /> <path d="M7 8H3" /> <path d="M21 16h-4" /> <path d="M11 3H9" /></svg> Crear Gráfico
                     </button>
                 </div>
                 <div class="chart-container">
@@ -1032,7 +1031,7 @@
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-database"></i> Explorador de Datasets</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></svg> Explorador de Datasets</h3>
                 <div class="controls">
                     <div class="control-group">
                         <label>Dataset:</label>
@@ -1044,7 +1043,7 @@
                         </select>
                     </div>
                     <button class="btn" onclick="analyzeDataset()">
-                        <i class="fas fa-search"></i> Analizar Dataset
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></svg> Analizar Dataset
                     </button>
                 </div>
                 <div class="chart-container">
@@ -1057,14 +1056,14 @@
         <!-- Tools Tab -->
         <div id="tools" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-info-circle"></i> ¿Qué herramientas usan los científicos de datos profesionales?</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg> ¿Qué herramientas usan los científicos de datos profesionales?</h3>
                 <p>Aunque estamos usando un simulador web, es importante que conozcas las herramientas reales que utilizan los profesionales en ciencia de datos. ¡Algún día podrías usarlas tú también!</p>
             </div>
 
             <div class="tools-grid">
                 <div class="tool-card fade-in" data-delay="0">
                     <div class="tool-icon">
-                        <i class="fab fa-python"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19h8" /> <path d="m4 17 6-6-6-6" /></svg>
                     </div>
                     <h3>Python</h3>
                     <p><strong>¿Qué es?</strong> Un lenguaje de programación muy popular para analizar datos y crear gráficos.</p>
@@ -1088,7 +1087,7 @@
                 
                 <div class="tool-card fade-in" data-delay="100">
                     <div class="tool-icon">
-                        <i class="fab fa-r-project"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1" /> <path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1" /></svg>
                     </div>
                     <h3>R Studio</h3>
                     <p><strong>¿Qué es?</strong> Un programa especializado en estadísticas y gráficos muy bonitos.</p>
@@ -1107,7 +1106,7 @@
                 
                 <div class="tool-card fade-in" data-delay="200">
                     <div class="tool-icon">
-                        <i class="fas fa-chart-bar"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg>
                     </div>
                     <h3>Tableau / Power BI</h3>
                     <p><strong>¿Qué es?</strong> Programas para crear dashboards profesionales como el que estás usando ahora.</p>
@@ -1126,7 +1125,7 @@
                 
                 <div class="tool-card fade-in" data-delay="300">
                     <div class="tool-icon">
-                        <i class="fas fa-laptop-code"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" /></svg>
                     </div>
                     <h3>Jupyter Notebooks</h3>
                     <p><strong>¿Qué es?</strong> Como un cuaderno digital donde puedes escribir código, ver resultados y tomar notas.</p>
@@ -1145,7 +1144,7 @@
                 
                 <div class="tool-card fade-in" data-delay="400">
                     <div class="tool-icon">
-                        <i class="fas fa-database"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></svg>
                     </div>
                     <h3>Bases de Datos (SQL)</h3>
                     <p><strong>¿Qué es?</strong> Sistemas para guardar y buscar información en grandes cantidades, como nuestras tablas pero gigantes.</p>
@@ -1168,7 +1167,7 @@ WHERE nota > 90</pre>
                 
                 <div class="tool-card fade-in" data-delay="500">
                     <div class="tool-icon">
-                        <i class="fas fa-brain"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg>
                     </div>
                     <h3>Inteligencia Artificial (Machine Learning)</h3>
                     <p><strong>¿Qué es?</strong> Programas que "aprenden" de los datos para hacer predicciones, como nuestro simulador pero mucho más avanzado.</p>
@@ -1181,13 +1180,13 @@ WHERE nota > 90</pre>
                     </ul>
                     <div class="demo-section">
                         <strong>Ejemplos que usas todos los días:</strong>
-                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">📱 Siri y Alexa • 🎵 Spotify sugiere música • 📧 Gmail filtra spam • 🛒 Amazon recomienda productos</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></svg> Siri y Alexa • <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13" /> <circle cx="6" cy="18" r="3" /> <circle cx="18" cy="16" r="3" /></svg> Spotify sugiere música • <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg> Gmail filtra spam • <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18" /> <path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25" /> <circle cx="18" cy="20" r="2" /> <circle cx="8" cy="20" r="2" /></svg> Amazon recomienda productos</p>
                     </div>
                 </div>
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-graduation-cap"></i> ¿Cómo puedes empezar a aprender estas herramientas?</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /> <path d="M22 10v6" /> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg> ¿Cómo puedes empezar a aprender estas herramientas?</h3>
                 <div class="learning-path">
                     <div class="step-card">
                         <div class="step-number">1</div>
@@ -1221,28 +1220,28 @@ WHERE nota > 90</pre>
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-briefcase"></i> ¿Qué trabajos puedes hacer con estas herramientas?</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /> <rect width="20" height="14" x="2" y="6" rx="2" /></svg> ¿Qué trabajos puedes hacer con estas herramientas?</h3>
                 <div class="careers-grid">
                     <div class="career-card">
-                        <i class="fas fa-chart-line"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg>
                         <h4>Analista de Datos</h4>
                         <p>Ayuda a empresas a entender sus ventas, clientes y tendencias.</p>
                         <span class="salary">$45,000 - $70,000/año</span>
                     </div>
                     <div class="career-card">
-                        <i class="fas fa-brain"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg>
                         <h4>Científico de Datos</h4>
                         <p>Crea modelos de inteligencia artificial para resolver problemas complejos.</p>
                         <span class="salary">$80,000 - $150,000/año</span>
                     </div>
                     <div class="career-card">
-                        <i class="fas fa-hospital"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v4" /> <path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M14 9h-4" /> <path d="M18 11h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2" /> <path d="M18 21V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16" /></svg>
                         <h4>Analista en Salud</h4>
                         <p>Usa datos para mejorar tratamientos médicos y salvar vidas.</p>
                         <span class="salary">$60,000 - $90,000/año</span>
                     </div>
                     <div class="career-card">
-                        <i class="fas fa-gamepad"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11" /> <line x1="8" x2="8" y1="9" y2="13" /> <line x1="15" x2="15.01" y1="12" y2="12" /> <line x1="18" x2="18.01" y1="10" y2="10" /> <path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z" /></svg>
                         <h4>Analista de Videojuegos</h4>
                         <p>Estudia cómo juegan las personas para hacer juegos más divertidos.</p>
                         <span class="salary">$55,000 - $85,000/año</span>
@@ -1254,13 +1253,13 @@ WHERE nota > 90</pre>
         <!-- Exercises Tab -->
         <div id="exercises" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-graduation-cap"></i> Ejercicios Prácticos de Ciencia de Datos</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /> <path d="M22 10v6" /> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg> Ejercicios Prácticos de Ciencia de Datos</h3>
                 <p>Completa estos ejercicios para practicar conceptos fundamentales:</p>
             </div>
 
             <div class="exercise-grid">
                 <div class="exercise-card">
-                    <h4><i class="fas fa-chart-bar"></i> Ejercicio 1: Mi Primera Gráfica</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Ejercicio 1: Mi Primera Gráfica</h4>
                     <p><strong>Objetivo:</strong> Crear una gráfica de barras con datos de tu clase.</p>
                     <ol class="exercise-steps">
                         <li>Ve a la pestaña "Visualizador"</li>
@@ -1270,12 +1269,12 @@ WHERE nota > 90</pre>
                         <li>Título: "Notas del Examen de Matemáticas"</li>
                     </ol>
                     <button class="btn btn-success" onclick="completeExercise(1)">
-                        <i class="fas fa-check"></i> Marcar Completado
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Marcar Completado
                     </button>
                 </div>
 
                 <div class="exercise-card">
-                    <h4><i class="fas fa-calculator"></i> Ejercicio 2: Estadísticas Básicas</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg> Ejercicio 2: Estadísticas Básicas</h4>
                     <p><strong>Objetivo:</strong> Calcular estadísticas de una muestra de datos.</p>
                     <ol class="exercise-steps">
                         <li>Ve a la pestaña "Calculadoras"</li>
@@ -1285,12 +1284,12 @@ WHERE nota > 90</pre>
                         <li>Anota los resultados en tu cuaderno</li>
                     </ol>
                     <button class="btn btn-success" onclick="completeExercise(2)">
-                        <i class="fas fa-check"></i> Marcar Completado
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Marcar Completado
                     </button>
                 </div>
 
                 <div class="exercise-card">
-                    <h4><i class="fas fa-table"></i> Ejercicio 3: Manipulación de Datos</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" /> <rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M3 9h18" /> <path d="M3 15h18" /></svg> Ejercicio 3: Manipulación de Datos</h4>
                     <p><strong>Objetivo:</strong> Agregar y modificar datos en una tabla.</p>
                     <ol class="exercise-steps">
                         <li>Ve a la pestaña "Dashboard Interactivo"</li>
@@ -1300,12 +1299,12 @@ WHERE nota > 90</pre>
                         <li>Observa cómo cambia el gráfico automáticamente</li>
                     </ol>
                     <button class="btn btn-success" onclick="completeExercise(3)">
-                        <i class="fas fa-check"></i> Marcar Completado
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Marcar Completado
                     </button>
                 </div>
 
                 <div class="exercise-card">
-                    <h4><i class="fas fa-eye"></i> Ejercicio 4: Análisis Visual</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></svg> Ejercicio 4: Análisis Visual</h4>
                     <p><strong>Objetivo:</strong> Interpretar diferentes tipos de gráficos.</p>
                     <ol class="exercise-steps">
                         <li>Ve a la pestaña "Dashboard"</li>
@@ -1315,12 +1314,12 @@ WHERE nota > 90</pre>
                         <li>¿Cuál es mejor para mostrar tendencias?</li>
                     </ol>
                     <button class="btn btn-success" onclick="completeExercise(4)">
-                        <i class="fas fa-check"></i> Marcar Completado
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Marcar Completado
                     </button>
                 </div>
 
                 <div class="exercise-card">
-                    <h4><i class="fas fa-flask"></i> Ejercicio 5: Simulación de Experimento</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /></svg> Ejercicio 5: Simulación de Experimento</h4>
                     <p><strong>Objetivo:</strong> Simular el lanzamiento de monedas.</p>
                     <ol class="exercise-steps">
                         <li>Ve a la pestaña "Simulador"</li>
@@ -1330,12 +1329,12 @@ WHERE nota > 90</pre>
                         <li>¿Se acerca al 50% teórico?</li>
                     </ol>
                     <button class="btn btn-success" onclick="completeExercise(5)">
-                        <i class="fas fa-check"></i> Marcar Completado
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Marcar Completado
                     </button>
                 </div>
 
                 <div class="exercise-card">
-                    <h4><i class="fas fa-puzzle-piece"></i> Ejercicio 6: Proyecto Final</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" /></svg> Ejercicio 6: Proyecto Final</h4>
                     <p><strong>Objetivo:</strong> Crear un dashboard completo.</p>
                     <ol class="exercise-steps">
                         <li>Elige un tema (deportes, clima, etc.)</li>
@@ -1345,13 +1344,13 @@ WHERE nota > 90</pre>
                         <li>Presenta tus conclusiones</li>
                     </ol>
                     <button class="btn btn-success" onclick="completeExercise(6)">
-                        <i class="fas fa-check"></i> Marcar Completado
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Marcar Completado
                     </button>
                 </div>
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-trophy"></i> Progreso de Ejercicios</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg> Progreso de Ejercicios</h3>
                 <div id="exerciseProgress">
                     <p>Ejercicios completados: <span id="completedCount">0</span> de 6</p>
                     <div style="background: var(--bg-body); border: 1px solid var(--border); height: 20px; border-radius: 4px; margin: 1rem 0;">
@@ -1365,7 +1364,7 @@ WHERE nota > 90</pre>
         <div id="calculators" class="tab-content">
             <div class="calculator-grid">
                 <div class="calculator">
-                    <h4><i class="fas fa-chart-line"></i> Estadísticas Básicas</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg> Estadísticas Básicas</h4>
                     <label>Datos (separados por comas):</label>
                     <input type="text" id="statsData" class="calc-input" placeholder="1,2,3,4,5">
                     <button class="btn" onclick="calculateBasicStats()">Calcular</button>
@@ -1373,7 +1372,7 @@ WHERE nota > 90</pre>
                 </div>
 
                 <div class="calculator">
-                    <h4><i class="fas fa-percentage"></i> Calculadora de Porcentajes</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="5" y1="5" y2="19" /> <circle cx="6.5" cy="6.5" r="2.5" /> <circle cx="17.5" cy="17.5" r="2.5" /></svg> Calculadora de Porcentajes</h4>
                     <label>Valor:</label>
                     <input type="number" id="percentValue" class="calc-input" placeholder="25">
                     <label>Total:</label>
@@ -1383,7 +1382,7 @@ WHERE nota > 90</pre>
                 </div>
 
                 <div class="calculator">
-                    <h4><i class="fas fa-square-root-alt"></i> Correlación de Pearson</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h2l2 5 2-10h4" /> <rect x="3" y="3" width="18" height="18" rx="2" /></svg> Correlación de Pearson</h4>
                     <label>Variable X (separados por comas):</label>
                     <input type="text" id="correlationX" class="calc-input" placeholder="1,2,3,4,5">
                     <label>Variable Y (separados por comas):</label>
@@ -1393,7 +1392,7 @@ WHERE nota > 90</pre>
                 </div>
 
                 <div class="calculator">
-                    <h4><i class="fas fa-balance-scale"></i> Probabilidad Simple</h4>
+                    <h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg> Probabilidad Simple</h4>
                     <label>Eventos Favorables:</label>
                     <input type="number" id="favorableEvents" class="calc-input" placeholder="1">
                     <label>Eventos Totales:</label>
@@ -1407,17 +1406,17 @@ WHERE nota > 90</pre>
         <!-- Simulator Tab -->
         <div id="simulator" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-coins"></i> Simulador de Lanzamiento de Monedas</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.744 17.736a6 6 0 1 1-7.48-7.48" /> <path d="M15 6h1v4" /> <path d="m6.134 14.768.866-.5 2 3.464" /> <circle cx="16" cy="8" r="6" /></svg> Simulador de Lanzamiento de Monedas</h3>
                 <div class="controls">
                     <div class="control-group">
                         <label>Número de Lanzamientos:</label>
                         <input type="number" id="coinFlips" class="control-input" value="100" min="1" max="10000">
                     </div>
                     <button class="btn" onclick="simulateCoinFlips()">
-                        <i class="fas fa-play"></i> Ejecutar Simulación
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg> Ejecutar Simulación
                     </button>
                     <button class="btn btn-warning" onclick="resetSimulation()">
-                        <i class="fas fa-redo"></i> Reiniciar
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /></svg> Reiniciar
                     </button>
                 </div>
                 <div class="chart-container">
@@ -1427,7 +1426,7 @@ WHERE nota > 90</pre>
             </div>
 
             <div class="card">
-                <h3><i class="fas fa-dice"></i> Generador de Datos Aleatorios</h3>
+                <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="12" height="12" x="2" y="10" rx="2" ry="2" /> <path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6" /> <path d="M6 18h.01" /> <path d="M10 14h.01" /> <path d="M15 6h.01" /> <path d="M18 9h.01" /></svg> Generador de Datos Aleatorios</h3>
                 <div class="controls">
                     <div class="control-group">
                         <label>Tipo de Distribución:</label>
@@ -1442,7 +1441,7 @@ WHERE nota > 90</pre>
                         <input type="number" id="dataCount" class="control-input" value="50" min="10" max="1000">
                     </div>
                     <button class="btn" onclick="generateRandomDistribution()">
-                        <i class="fas fa-random"></i> Generar
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 14 4 4-4 4" /> <path d="m18 2 4 4-4 4" /> <path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" /> <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" /> <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" /></svg> Generar
                     </button>
                 </div>
                 <div class="chart-container">
@@ -1575,7 +1574,7 @@ WHERE nota > 90</pre>
                         <td><input type="number" value="${student.history}" onchange="updateStudent(${index}, 'history', this.value)" class="calc-input" style="width: 80px;"></td>
                         <td><input type="number" value="${student.english}" onchange="updateStudent(${index}, 'english', this.value)" class="calc-input" style="width: 80px;"></td>
                         <td><strong>${avg}</strong></td>
-                        <td><button class="btn btn-danger" onclick="removeStudent(${index})" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;"><i class="fas fa-trash"></i></button></td>
+                        <td><button class="btn btn-danger" onclick="removeStudent(${index})" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 11v6" /> <path d="M14 11v6" /> <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /> <path d="M3 6h18" /> <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg></button></td>
                     </tr>
                 `;
                 tbody.innerHTML += row;
@@ -1760,7 +1759,7 @@ WHERE nota > 90</pre>
         function showMessage(text, type = 'success') {
             const message = document.createElement('div');
             message.className = `message ${type}`;
-            message.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}`;
+            message.innerHTML = `${type === 'success' ? `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335" /> <path d="m9 11 3 3L22 4" /></svg>` : `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <line x1="12" x2="12" y1="8" y2="12" /> <line x1="12" x2="12.01" y1="16" y2="16" /></svg>`} ${text}`;
             
             // Find a good place to show the message (after the controls)
             const controls = document.querySelector('.controls');
@@ -1791,7 +1790,7 @@ WHERE nota > 90</pre>
                 'english': 'Inglés'
             };
             
-            let results = '<h4><i class="fas fa-chart-bar"></i> Estadísticas por Materia:</h4><br>';
+            let results = '<h4><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Estadísticas por Materia:</h4><br>';
             
             subjects.forEach(subject => {
                 const values = studentsData.map(s => s[subject]);
@@ -1810,11 +1809,11 @@ WHERE nota > 90</pre>
                 results += `
                     <div style="background: rgba(245, 166, 35, 0.06); padding: 1rem; border-radius: 4px; margin-bottom: 1rem; border-left: 4px solid var(--primary);">
                         <strong style="color: var(--primary); font-size: 1.1rem;">${subjectNames[subject]}:</strong><br>
-                        📊 Media: <strong>${mean.toFixed(1)}</strong> | 
-                        📈 Mediana: <strong>${median}</strong> | 
-                        📉 Min: <strong>${min}</strong> | 
-                        📈 Max: <strong>${max}</strong><br>
-                        📏 Desviación Estándar: <strong>${stdDev.toFixed(2)}</strong>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Media: <strong>${mean.toFixed(1)}</strong> | 
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></svg> Mediana: <strong>${median}</strong> | 
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17h6v-6" /> <path d="m22 17-8.5-8.5-5 5L2 7" /></svg> Min: <strong>${min}</strong> | 
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></svg> Max: <strong>${max}</strong><br>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" /> <path d="m14.5 12.5 2-2" /> <path d="m11.5 9.5 2-2" /> <path d="m8.5 6.5 2-2" /> <path d="m17.5 15.5 2-2" /></svg> Desviación Estándar: <strong>${stdDev.toFixed(2)}</strong>
                     </div>
                 `;
             });
@@ -1828,10 +1827,10 @@ WHERE nota > 90</pre>
             
             results += `
                 <div style="background: rgba(124, 252, 154, 0.06); padding: 1rem; border-radius: 4px; border-left: 4px solid var(--success);">
-                    <strong style="color: var(--success); font-size: 1.1rem;">🎯 Estadísticas Generales:</strong><br>
-                    📊 Promedio General: <strong>${overallMean.toFixed(1)}</strong><br>
-                    👥 Total de Estudiantes: <strong>${studentsData.length}</strong><br>
-                    📝 Total de Notas: <strong>${allGrades.length}</strong>
+                    <strong style="color: var(--success); font-size: 1.1rem;"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg> Estadísticas Generales:</strong><br>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg> Promedio General: <strong>${overallMean.toFixed(1)}</strong><br>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg> Total de Estudiantes: <strong>${studentsData.length}</strong><br>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></svg> Total de Notas: <strong>${allGrades.length}</strong>
                 </div>
             `;
             
@@ -2262,7 +2261,7 @@ WHERE nota > 90</pre>
             // Show success message
             const message = document.createElement('div');
             message.className = 'message success';
-            message.innerHTML = `<i class="fas fa-check-circle"></i> ¡Ejercicio ${exerciseNumber} completado!`;
+            message.innerHTML = `<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335" /> <path d="m9 11 3 3L22 4" /></svg> ¡Ejercicio ${exerciseNumber} completado!`;
             
             const button = event.target;
             button.parentNode.insertBefore(message, button);
@@ -2285,7 +2284,7 @@ WHERE nota > 90</pre>
             if (completed === total) {
                 const celebration = document.createElement('div');
                 celebration.className = 'message success';
-                celebration.innerHTML = '<i class="fas fa-trophy"></i> ¡Felicitaciones! Has completado todos los ejercicios.';
+                celebration.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg> ¡Felicitaciones! Has completado todos los ejercicios.';
                 document.getElementById('exerciseProgress').appendChild(celebration);
             }
         }
