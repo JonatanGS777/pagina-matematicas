@@ -99,7 +99,7 @@ Google Fonts `<link>`, no shared stylesheet across pages yet.
 |:---|:---|
 | `index.html` + `style.css` | Full redesign: header/nav, hero, "The Platform" section, live-stats block (restyled as a wood-framed chalkboard slate with sticky-note stat cards), student gallery (Polaroid photos with washi tape), footer |
 | `galeria/galeria.html` | Full standalone redesign (own embedded `<style>`, not shared with `style.css`) — same nav/hero/footer language, gallery grid reuses the Polaroid + tape treatment, hero background is a dedicated illustration (`galeria-header.png`) |
-| `js/chatbot.js` | Chat widget re-themed from a generic purple gradient to the chalk palette; emoji UI chrome (toggle, avatar, header buttons, send) replaced with Font Awesome icons; dead `.dark-mode` CSS removed |
+| `js/chatbot.js` | Chat widget re-themed from a generic purple gradient to the chalk palette; dead `.dark-mode` CSS removed. Icons since migrated again, see [Icons](#icons-lucide-svg) below |
 | Dark mode toggle | Removed from `index.html` and `galeria.html` (`js/dark-mode.js` no longer loaded there) — the chalkboard identity is a fixed single theme. Other, not-yet-redesigned pages may still load it |
 | Background images | `imagenes/stem-bg.png` (index hero) and the old `imagenes/galeria.png` were too saturated for the dark theme; index keeps its image with a stronger `multiply`-blended overlay, gallery now uses `imagenes/galeria-bg.jpg` (a real chalkboard photo, Pexels/Vitaly Gariev) plus `galeria/galeria-header.png` (dedicated hero illustration) |
 | Bug fixes found along the way | `showActivityNotification()` in `supabase-analytics.js` was setting inline styles that ignored the real `.activity-notification` CSS class, rendering as a full-screen box on mobile Safari — fixed to use the class; a global `mouseenter`/`mouseleave` listener in `icon-animations.js` threw when `e.target` had no `classList` — guarded |
@@ -118,6 +118,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `stem/ingenieria.html` | Plano de Ingeniero | Blueprint-blue technical drawing, dashed title-block, corner registration marks |
 | `stem/Ebook-STEM/` | Cuaderno de Campo Microbiológico | Warm cream/amber/teal lab-notebook theme; all interactive charts, simulations and accessibility toggles preserved |
 | `club/investigacion.html` | Gaceta Científica | Editorial newspaper/gazette front page — masthead, drop cap, duotone archive photo, dated headlines |
+| `club/project.html` | Mesa de Redacción | Companion identity to Gaceta Científica (same palette) reached via its "Comenzar Proyecto" CTA — manuscript-index sidebar, typewriter-draft editor, charts mounted as press clippings |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -125,9 +126,35 @@ Bugs found and fixed opportunistically along the way: a duplicate `<script>`
 include and a redundant `DOMContentLoaded` wrapper that broke the Ebook's
 scroll-spy sidebar; a DOM-named-access false positive
 (`window.microModelChart`) that crashed the Ebook's model chart; a null
-`this.renderer`/`this.scene` crash in `robot3d.js`'s `getStats()`; and several
+`this.renderer`/`this.scene` crash in `robot3d.js`'s `getStats()`; several
 dead `../contexto/contexto.html` nav links (404) repointed to
-`../contexto/historiamath.html`.
+`../contexto/historiamath.html`; and an unescaped-quote injection in
+`club/project.html`'s Pyodide chart generator (a title/data value containing
+a `"` broke the generated Python code).
+
+### Icons (Lucide SVG)
+
+Every icon on every page listed above is an inline Lucide SVG — `fill="none"
+stroke="currentColor"`, sized via `width:1em;height:1em` so it scales with
+the surrounding text's `font-size` and inherits color from CSS — not Font
+Awesome, not emoji. No icon-font or JS dependency; each page just embeds the
+`<path>` data it needs. Path data is pulled from
+`https://unpkg.com/lucide-static@latest/icons/<name>.svg` (ISC license),
+picking the closest semantic match from [lucide.dev/icons](https://lucide.dev/icons).
+Brand logos have no Lucide equivalent, so social/language icons fall back to
+a generic stand-in (Python → `terminal`, LinkedIn → `link`, Facebook →
+`message-circle`, Twitter/X → `at-sign`) rather than imitating the logo.
+
+The Font Awesome CDN `<link>` is removed from a page once every icon on it
+(including ones generated dynamically by its JS, like chat widgets or status
+toasts) has been converted. As of this writing that's done on: `index.html`
+(plus `js/chatbot.js` — including its ~100-entry historical-facts database,
+each with its own icon — and `js/supabase-analytics.js`), `galeria/galeria.html`,
+`contexto/historiamath.html`, `materiales/materiales.html`,
+`stem/ciencia-datos.html`, `stem/ingenieria.html`, `stem/Ebook-STEM/index.html`,
+`club/investigacion.html`, and `club/project.html`. `links/links.html` never
+used Font Awesome to begin with. Everything else still uses Font Awesome
+and/or emoji — convert them the same way when they get redesigned.
 
 ### Not yet redesigned
 
