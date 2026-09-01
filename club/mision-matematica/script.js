@@ -13,10 +13,8 @@ window.addEventListener('load', () => {
 
     setTimeout(() => {
         loader.classList.add('fade-out');
-        // Re-inicializar Lucide después del loader
         setTimeout(() => {
             loader.remove();
-            if (typeof lucide !== 'undefined') lucide.createIcons();
         }, 750);
     }, 1000);
 });
@@ -32,8 +30,18 @@ window.addEventListener('load', () => {
     let particles = [];
     let animId;
     let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const LINK_DIST = 130;
 
     if (reducedMotion) return;
+
+    let colors = { dot: '#f2f0e8', accent: '#d7ff3d', accent2: '#ff2e63' };
+
+    function readThemeColors() {
+        const style = getComputedStyle(document.documentElement);
+        colors.dot     = style.getPropertyValue('--text').trim()    || colors.dot;
+        colors.accent  = style.getPropertyValue('--accent').trim()  || colors.accent;
+        colors.accent2 = style.getPropertyValue('--accent-2').trim()|| colors.accent2;
+    }
 
     function resize() {
         canvas.width  = window.innerWidth;
@@ -42,10 +50,9 @@ window.addEventListener('load', () => {
 
     function createParticle() {
         const types = [
-            { color: '#ffffff', prob: 0.70, minSize: 0.3, maxSize: 1.8 },
-            { color: '#00ff88', prob: 0.20, minSize: 0.5, maxSize: 2.5 },
-            { color: '#ff6b2c', prob: 0.07, minSize: 0.5, maxSize: 2.0 },
-            { color: '#ffd700', prob: 0.03, minSize: 0.5, maxSize: 2.0 },
+            { key: 'dot',     prob: 0.70, minSize: 0.4, maxSize: 1.8 },
+            { key: 'accent',  prob: 0.20, minSize: 0.6, maxSize: 2.6 },
+            { key: 'accent2', prob: 0.10, minSize: 0.6, maxSize: 2.2 },
         ];
 
         let r = Math.random();
@@ -63,20 +70,40 @@ window.addEventListener('load', () => {
             speedX:     (Math.random() - 0.5) * 0.18,
             speedY:     (Math.random() - 0.5) * 0.18 - 0.06,
             opacity:    0.3 + Math.random() * 0.7,
-            color:      type.color,
+            colorKey:   type.key,
             phase:      Math.random() * Math.PI * 2,
             phaseSpeed: 0.005 + Math.random() * 0.025,
         };
     }
 
     function initParticlePool() {
-        const count = Math.min(220, Math.floor((canvas.width * canvas.height) / 5500));
+        const count = Math.min(160, Math.floor((canvas.width * canvas.height) / 8000));
         particles = Array.from({ length: count }, createParticle);
     }
 
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const t = performance.now() * 0.001;
+
+        // Líneas de constelación entre nodos cercanos
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const a = particles[i];
+                const b = particles[j];
+                const dx = a.x - b.x;
+                const dy = a.y - b.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < LINK_DIST) {
+                    ctx.globalAlpha = (1 - dist / LINK_DIST) * 0.35;
+                    ctx.strokeStyle = colors.accent;
+                    ctx.lineWidth = 0.6;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                }
+            }
+        }
 
         for (const p of particles) {
             p.x += p.speedX;
@@ -89,17 +116,18 @@ window.addEventListener('load', () => {
 
             const twinkle = (Math.sin(t * p.phaseSpeed * 10 + p.phase) + 1) * 0.5;
             const alpha   = p.opacity * (0.4 + twinkle * 0.6);
+            const fill    = colors[p.colorKey];
 
             ctx.globalAlpha = alpha;
 
-            if (p.color !== '#ffffff' && p.size > 1) {
-                ctx.shadowBlur  = 8;
-                ctx.shadowColor = p.color;
+            if (p.colorKey !== 'dot' && p.size > 1) {
+                ctx.shadowBlur  = 6;
+                ctx.shadowColor = fill;
             }
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
+            ctx.fillStyle = fill;
             ctx.fill();
 
             ctx.shadowBlur = 0;
@@ -111,6 +139,7 @@ window.addEventListener('load', () => {
 
     function start() {
         resize();
+        readThemeColors();
         initParticlePool();
         draw();
     }
@@ -131,6 +160,12 @@ window.addEventListener('load', () => {
         } else {
             animId = requestAnimationFrame(draw);
         }
+    });
+
+    // Recolorear nodos al cambiar de tema
+    new MutationObserver(readThemeColors).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme'],
     });
 
     start();
@@ -417,7 +452,7 @@ window.addEventListener('scroll', () => {
     if (window.innerWidth <= 768) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const colors = ['rgba(0,255,136,0.7)', 'rgba(255,107,44,0.6)', 'rgba(255,215,0,0.5)'];
+    const colors = ['rgba(215,255,61,0.8)', 'rgba(255,46,99,0.7)'];
     let lastTime = 0;
 
     document.addEventListener('mousemove', (e) => {
@@ -428,10 +463,9 @@ window.addEventListener('scroll', () => {
         const dot = document.createElement('div');
         dot.style.cssText = `
             position: fixed;
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             background: ${colors[Math.floor(Math.random() * colors.length)]};
-            border-radius: 50%;
             pointer-events: none;
             z-index: 9990;
             left: ${e.clientX - 3}px;
@@ -460,28 +494,28 @@ function showNotification(message, type = 'success') {
     const note = document.createElement('div');
     note.className = 'app-notification';
 
-    const gradients = {
-        success: 'linear-gradient(135deg, #00ff88, #00cc6a)',
-        info:    'linear-gradient(135deg, #4a9eff, #0066cc)',
-        error:   'linear-gradient(135deg, #ff6b2c, #cc3300)',
+    const bg = {
+        success: '#d7ff3d',
+        info:    '#f2f0e8',
+        error:   '#ff2e63',
     };
 
     note.style.cssText = `
         position: fixed;
         top: 90px;
         right: 20px;
-        background: ${gradients[type] ?? gradients.success};
-        color: #0a1628;
+        background: ${bg[type] ?? bg.success};
+        color: #0a0a0a;
         padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 10px 32px rgba(0,0,0,0.35);
+        border: 3px solid #0a0a0a;
+        box-shadow: 6px 6px 0 #0a0a0a;
         z-index: 10000;
         font-weight: 700;
-        font-family: 'Exo 2', sans-serif;
+        font-family: 'Space Grotesk', sans-serif;
         max-width: min(400px, calc(100vw - 40px));
         opacity: 0;
         transform: translateX(30px);
-        transition: opacity 0.35s ease, transform 0.35s ease;
+        transition: opacity 0.3s ease, transform 0.3s ease;
         cursor: pointer;
     `;
     note.textContent = message;
@@ -515,7 +549,7 @@ contactForm?.addEventListener('submit', (e) => {
 
     // Simulate sending
     setTimeout(() => {
-        showNotification('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto. 🚀', 'success');
+        showNotification('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.', 'success');
         contactForm.reset();
         btn.disabled = false;
     }, 800);
@@ -528,7 +562,7 @@ document.querySelectorAll('.resource-link').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const title = link.closest('.resource-card')?.querySelector('h3')?.textContent ?? 'Recurso';
-        showNotification(`Accediendo a "${title}"... 📚`, 'info');
+        showNotification(`Accediendo a "${title}"...`, 'info');
     });
 });
 
@@ -551,11 +585,15 @@ document.querySelectorAll('.gallery-item').forEach(item => {
 const themeToggle = document.getElementById('theme-toggle');
 const htmlEl      = document.documentElement;
 
+const THEME_ICON_PATHS = {
+    sun: '<circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" />',
+    moon: '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" />',
+};
+
 function updateThemeIcon(theme) {
     const icon = themeToggle?.querySelector('.theme-icon');
     if (!icon) return;
-    icon.setAttribute('data-lucide', theme === 'dark' ? 'moon' : 'sun');
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    icon.innerHTML = theme === 'dark' ? THEME_ICON_PATHS.moon : THEME_ICON_PATHS.sun;
 }
 
 function setTheme(theme) {
@@ -595,7 +633,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
 // =====================================================
 console.log(
     '%c∑ Misión Matemática ∑',
-    'font-size:22px;color:#00ff88;font-weight:bold;text-shadow:0 0 12px rgba(0,255,136,0.8);'
+    'font-size:22px;color:#d7ff3d;font-weight:bold;'
 );
-console.log('%cClub de Matemáticas · EMTP · 2024-2025', 'font-size:13px;color:#ff6b2c;');
-console.log('%c¡Prepárate para la aventura matemática!', 'font-size:12px;color:#b8c5db;');
+console.log('%cClub de Matemáticas · EMTP · 2024-2025', 'font-size:13px;color:#ff2e63;');
+console.log('%c¡Prepárate para la aventura matemática!', 'font-size:12px;color:#8f8d83;');
