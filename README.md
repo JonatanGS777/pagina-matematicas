@@ -124,6 +124,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `club/olimpiadas.html` | Ceremonia Olímpica | Deep navy + medal gold + cream, Cinzel serif headings, laurel/medal ceremonial motifs |
 | `club/admin.html` | Torre de Control | Dark slate air-traffic-control panel — cyan/amber/green/red accents, Barlow Condensed/Barlow/IBM Plex Mono, radar-ping status dot |
 | `club/mision-matematica/` | Constelación Modular | Brutalist geometric — black/paper with lime + magenta accent, Space Grotesk/JetBrains Mono; canvas particles draw connecting lines between nearby nodes |
+| `club/proyectos-creativos.html` | Feria de Inventos | Science-fair expo — cream poster-board cards pinned to a CSS-only corkboard texture, ribbon-blue/red/gold scoring, Permanent Marker/Archivo/JetBrains Mono |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -182,8 +183,9 @@ each with its own icon — and `js/supabase-analytics.js`), `galeria/galeria.htm
 `contexto/historiamath.html`, `materiales/materiales.html`,
 `stem/ciencia-datos.html`, `stem/ingenieria.html`, `stem/Ebook-STEM/index.html`,
 `club/investigacion.html`, `club/project.html`, `club/competencias.html`,
-`club/leaderboard.html`, `club/olimpiadas.html`, `club/admin.html`, and
-`club/mision-matematica/index.html`. `links/links.html` never used Font
+`club/leaderboard.html`, `club/olimpiadas.html`, `club/admin.html`,
+`club/mision-matematica/index.html`, and `club/proyectos-creativos.html`.
+`links/links.html` never used Font
 Awesome to begin with; `mision-matematica/index.html` used the `lucide.js`
 CDN build (`data-lucide` attributes + `lucide.createIcons()`) rather than
 Font Awesome, and was converted to the same inline-SVG-with-no-JS-dependency
@@ -193,7 +195,7 @@ get redesigned.
 
 ### Not yet redesigned
 
-`club/` (proyectos-creativos, registro, `modulos/` — algebra, calculus,
+`club/` (registro, `modulos/` — algebra, calculus,
 geometry, trigonometry, puzzles, statistics), `lab/`, `salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the

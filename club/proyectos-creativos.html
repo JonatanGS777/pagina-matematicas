@@ -4,1954 +4,842 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proyectos Creativos - Club Matemáticas | Prof. Yonatan Guerrero</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* ==================== Feria de Inventos — Design Tokens ==================== */
         :root {
-            --primary: #5B4CF5;
-            --secondary: #3D1F8C;
-            --accent: #00E5C3;
-            --success: #00D4AA;
-            --warning: #F5C842;
-            --dark: #0D0E1A;
-            --light: #F0EEF8;
-            --white: #ffffff;
-            --text-primary: #1A1B2E;
-            --text-secondary: #5C5F78;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 40px 0 rgba(91, 76, 245, 0.28);
-            --shadow-hover: 0 20px 50px rgba(91, 76, 245, 0.32);
-            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
-            --gradient-creativity: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
-            --gradient-project: linear-gradient(135deg, #fdbb2d 0%, #22c1c3 100%);
-            --gradient-guide: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
+            --color-paper: #F5EEDC;
+            --color-paper-alt: #ECE0C2;
+            --color-kraft: #C89B6A;
+            --color-kraft-dark: #8B6239;
+            --color-cork: #B98653;
+            --color-cork-dark: #7A5230;
+            --color-ink: #2B241C;
+            --color-ink-soft: #5B5040;
+            --color-ink-faint: #8A7D68;
+
+            --color-ribbon-blue: #1F4E8C;
+            --color-ribbon-blue-dark: #163A68;
+            --color-ribbon-red: #A9302B;
+            --color-ribbon-red-dark: #7E211D;
+            --color-ribbon-gold: #B8860F;
+            --color-ribbon-gold-dark: #8F6516;
+            --color-ribbon-neutral: #6E6353;
+
+            --color-cat-art: #B5502F;
+            --color-cat-tech: #1D6E6E;
+            --color-cat-social: #A67A1E;
+            --color-cat-science: #33507A;
+
+            --shadow-card: 0 6px 16px rgba(43, 36, 28, 0.22);
+            --shadow-card-hover: 0 14px 30px rgba(43, 36, 28, 0.28);
+            --shadow-header: 0 2px 0 rgba(43, 36, 28, 0.08), 0 6px 20px rgba(43, 36, 28, 0.18);
+
+            --radius-card: 8px;
+            --radius-pill: 999px;
+
+            --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 380ms cubic-bezier(0.4, 0, 0.2, 1);
+
+            --font-display: 'Permanent Marker', cursive;
+            --font-body: 'Archivo', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; overflow-x: hidden; }
 
         body {
-            font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
-            color: var(--text-primary);
+            font-family: var(--font-body);
+            color: var(--color-ink);
+            line-height: 1.6;
             overflow-x: hidden;
-            position: relative;
-            padding-top: 80px;
+            padding-top: 84px;
+            background-color: var(--color-cork);
+            background-image:
+                radial-gradient(rgba(122, 82, 48, 0.35) 1px, transparent 1.4px),
+                radial-gradient(rgba(158, 112, 64, 0.28) 1px, transparent 1.4px),
+                linear-gradient(160deg, rgba(122, 82, 48, 0.12), transparent 40%);
+            background-size: 15px 15px, 23px 23px, 100% 100%;
+            background-position: 0 0, 8px 12px, 0 0;
         }
 
-    .animated-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background:
-        url('../imagenes/PROYECTOMATH.png'),
-        linear-gradient(-45deg, rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7), rgba(240, 147, 251, 0.7), rgba(78, 205, 196, 0.7));
-    background-repeat: no-repeat, repeat;
-    background-position: center center, 0% 50%;
-    background-attachment: fixed, fixed;
-    background-size: cover, 400% 400%;
-    animation: gradientShift 15s ease infinite;
-}
+        img { max-width: 100%; height: auto; }
+        button { font-family: inherit; cursor: pointer; }
 
-        /* Floating Shapes */
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
 
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
 
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .shape:nth-child(2) {
-            width: 60px;
-            height: 60px;
-            left: 20%;
-            animation-delay: 2s;
-        }
-
-        .shape:nth-child(3) {
-            width: 100px;
-            height: 100px;
-            left: 80%;
-            animation-delay: 4s;
-        }
-
-        .shape:nth-child(4) {
-            width: 40px;
-            height: 40px;
-            left: 70%;
-            animation-delay: 6s;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Mathematical Particles */
-        .math-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .math-particle {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.6);
-            font-family: 'Space Grotesk', monospace;
-            font-weight: 500;
-            pointer-events: none;
-            animation: mathFloat linear infinite;
-        }
-
-        .math-particle.creativity {
-            font-size: clamp(16px, 2.5vw, 22px);
-            color: rgba(255, 107, 157, 0.4);
-        }
-
-        .math-particle.project {
-            font-size: clamp(14px, 2vw, 18px);
-            color: rgba(253, 187, 45, 0.5);
-        }
-
-        .math-particle.innovation {
-            font-size: clamp(18px, 2.8vw, 24px);
-            color: rgba(34, 193, 195, 0.4);
-        }
-
-        @keyframes mathFloat {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.8);
-                opacity: 0;
-            }
-            5% {
-                opacity: 1;
-            }
-            50% {
-                transform: translateY(50vh) translateX(var(--drift, 0px)) rotate(180deg) scale(1);
-            }
-            95% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) translateX(calc(var(--drift, 0px) * 2)) rotate(360deg) scale(1.2);
-                opacity: 0;
-            }
-        }
-
-        /* Header Styles */
+        /* ==================== Header ==================== */
         .header {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(240, 238, 248, 0.92);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid rgba(91, 76, 245, 0.1);
-            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
+            top: 0; left: 0; right: 0;
             z-index: 1000;
-            padding: 0;
-            transition: all 0.3s ease;
+            height: 84px;
+            display: flex;
+            align-items: center;
+            background: rgba(245, 238, 220, 0.96);
+            border-bottom: 3px solid var(--color-kraft-dark);
+            box-shadow: var(--shadow-header);
+            transition: var(--transition-base);
         }
 
-        .navbar {
+        .header__nav {
+            width: 100%;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
+            gap: 1rem;
         }
 
-        .logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.45rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-            transition: opacity 0.2s ease;
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-item {
-            position: relative;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            background: rgba(91, 76, 245, 0.1);
-            color: var(--primary);
-        }
-
-        .nav-link i {
-            margin-right: 0.5rem;
-        }
-
-        .back-btn {
-            background: var(--gradient-creativity);
-            color: var(--white);
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
+        .header__logo {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-soft);
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            color: var(--color-ribbon-blue);
+            text-decoration: none;
+            letter-spacing: 0.01em;
         }
 
-        .back-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-        }
+        .header__logo .icon { width: 1.3em; height: 1.3em; }
 
-        /* Hero Section */
-        .hero {
-            min-height: 70vh;
-            display: flex;
+        .header__mobile-btn {
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            position: relative;
-            padding: 2rem;
+            gap: 5px;
+            width: 42px;
+            height: 42px;
+            background: transparent;
+            border: 2px solid var(--color-kraft-dark);
+            border-radius: var(--radius-card);
+            z-index: 1001;
         }
 
-        .hero-content {
-            backdrop-filter: blur(20px);
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 3rem 2rem;
-            box-shadow: var(--shadow-soft);
-            max-width: 900px;
+        .header__hamburger {
+            width: 20px;
+            height: 2px;
+            background: var(--color-ink);
+            border-radius: 2px;
+            transition: var(--transition-base);
+        }
+
+        .header__mobile-btn--active .header__hamburger:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .header__mobile-btn--active .header__hamburger:nth-child(2) { opacity: 0; }
+        .header__mobile-btn--active .header__hamburger:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .header__menu {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            list-style: none;
+        }
+
+        .header__menu-link {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.9rem;
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: var(--color-ink-soft);
+            text-decoration: none;
+            border-radius: var(--radius-pill);
+            transition: var(--transition-base);
+        }
+
+        .header__menu-link:hover { background: var(--color-paper-alt); color: var(--color-ink); }
+
+        .header__menu-link--active {
+            background: var(--color-ribbon-blue);
+            color: var(--color-paper);
+        }
+
+        #lang-toggle {
+            border: 2px solid var(--color-kraft-dark);
+            background: var(--color-paper);
+            color: var(--color-ink);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: var(--radius-card);
+            transition: var(--transition-base);
+        }
+
+        #lang-toggle:hover { background: var(--color-ribbon-blue); color: var(--color-paper); border-color: var(--color-ribbon-blue-dark); }
+
+        /* ==================== Hero — Panel de Feria ==================== */
+        .hero {
+            position: relative;
+            padding: 4rem 1.25rem 5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero__board {
+            position: relative;
+            max-width: 780px;
             width: 100%;
-            position: relative;
-            overflow: hidden;
+            background: var(--color-paper);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            padding: 3rem 2.5rem;
+            text-align: center;
+            transform: rotate(-0.6deg);
         }
 
-        .hero-content::before {
-            content: '';
+        .hero__pin {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 3s infinite;
+            top: -12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            box-shadow: inset 0 -3px 4px rgba(0, 0, 0, 0.35), 0 3px 5px rgba(0, 0, 0, 0.35);
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
+        .hero__pin--left { left: 10%; background: radial-gradient(circle at 35% 30%, #e0645a, var(--color-ribbon-red-dark)); }
+        .hero__pin--right { right: 10%; background: radial-gradient(circle at 35% 30%, #3f74c2, var(--color-ribbon-blue-dark)); }
+
+        .hero__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--color-ribbon-blue);
+            color: var(--color-paper);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            padding: 0.4rem 0.9rem;
+            border-radius: var(--radius-pill);
+            margin-bottom: 1.4rem;
         }
 
         .hero h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 700;
-            color: var(--white);
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            color: var(--color-ink);
+            line-height: 1.15;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
+
+        .hero h1 .icon { color: var(--color-ribbon-gold); width: 0.85em; height: 0.85em; }
 
         .hero p {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: rgba(255,255,255,0.9);
-            line-height: 1.6;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Main Content */
-        .main-content {
-            background: var(--light);
-            border-radius: 50px 50px 0 0;
-            margin-top: 2rem;
-            position: relative;
-            z-index: 10;
-        }
-
-        .section {
-            padding: 4rem 2rem;
-            max-width: 1200px;
+            font-size: clamp(1rem, 1.6vw, 1.15rem);
+            color: var(--color-ink-soft);
+            max-width: 560px;
             margin: 0 auto;
         }
 
+        /* ==================== Sections & Titles ==================== */
+        main { position: relative; z-index: 2; }
+
+        .section { padding: 1.5rem 1.25rem 3.5rem; max-width: 1200px; margin: 0 auto; }
+
         .section-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+            color: var(--color-ink);
             text-align: center;
-            margin-bottom: 3rem;
-            background: var(--gradient-creativity);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 2.5rem;
             position: relative;
         }
 
         .section-title::after {
             content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
+            display: block;
+            width: 90px;
             height: 4px;
-            background: var(--gradient-creativity);
+            background: var(--color-ribbon-red);
             border-radius: 2px;
+            margin: 0.7rem auto 0;
         }
 
-        /* Guide Steps */
-        .guide-container {
+        .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ==================== Estaciones (Guide Steps) ==================== */
+        .stations-grid {
             display: grid;
-            gap: 2rem;
-            margin-bottom: 4rem;
+            gap: 1.8rem;
         }
 
-        .guide-step {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow-soft);
-            border-left: 5px solid;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .station-card {
+            background: var(--color-paper);
+            border-radius: var(--radius-card);
+            padding: 2rem 2rem 2.2rem;
+            box-shadow: var(--shadow-card);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
         }
 
-        .guide-step::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--gradient-creativity);
+        .station-card:nth-child(odd) { transform: rotate(-0.5deg); }
+        .station-card:nth-child(even) { transform: rotate(0.5deg); }
+
+        .station-card:hover {
+            transform: translateY(-4px) rotate(0deg);
+            box-shadow: var(--shadow-card-hover);
         }
 
-        .guide-step.step1 { border-left-color: #ff6b9d; }
-        .guide-step.step2 { border-left-color: #fdbb2d; }
-        .guide-step.step3 { border-left-color: #22c1c3; }
-        .guide-step.step4 { border-left-color: #667eea; }
-        .guide-step.step5 { border-left-color: #4ecdc4; }
-
-        .guide-step:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .step-header {
+        .station-header {
             display: flex;
             align-items: center;
-            margin-bottom: 1.5rem;
+            gap: 1.1rem;
+            margin-bottom: 1.2rem;
         }
 
-        .step-number {
-            width: 60px;
-            height: 60px;
+        .station-number {
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
-            background: var(--gradient-creativity);
-            color: var(--white);
+            border: 3px dashed var(--color-ribbon-blue);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-family: var(--font-mono);
             font-weight: 700;
-            margin-right: 1rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 1.3rem;
+            color: var(--color-ribbon-blue);
+            flex-shrink: 0;
         }
 
-        .step-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
+        .station-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--color-ink);
         }
 
-        .step-content p {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
+        .station-content p { color: var(--color-ink-soft); margin-bottom: 1.1rem; }
+
+        .station-tip {
+            position: relative;
+            background: var(--color-paper-alt);
+            border-radius: var(--radius-card);
+            padding: 1.3rem 1.4rem 1.2rem;
         }
 
-        .step-tips {
-            background: rgba(102, 126, 234, 0.05);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border-left: 4px solid var(--primary);
-            margin-top: 1.5rem;
+        .station-tip::before {
+            content: '';
+            position: absolute;
+            top: -9px;
+            left: 22px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #e0645a, var(--color-ribbon-red-dark));
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .step-tips h4 {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .station-tip h4 {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            color: var(--color-ribbon-blue);
+            font-weight: 700;
+            font-size: 0.98rem;
+            margin-bottom: 0.7rem;
         }
 
-        .step-tips ul {
-            margin-left: 1rem;
-            color: var(--text-secondary);
+        .station-tip ul { list-style: none; }
+
+        .station-tip li {
+            position: relative;
+            padding-left: 1.1rem;
+            color: var(--color-ink-soft);
+            font-size: 0.94rem;
+            margin-bottom: 0.45rem;
         }
 
-        .step-tips li {
-            margin-bottom: 0.5rem;
+        .station-tip li::before {
+            content: '·';
+            position: absolute;
+            left: 0;
+            color: var(--color-ribbon-red);
+            font-weight: 700;
         }
 
-        /* Project Categories */
+        /* ==================== Categorías (Corkboard cards) ==================== */
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.2rem;
         }
 
         .category-card {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            border-top: 5px solid;
+            background: var(--color-paper);
+            border-radius: var(--radius-card);
+            padding: 2.2rem 1.8rem 1.8rem;
+            box-shadow: var(--shadow-card);
+            border-top: 6px solid var(--accent, var(--color-cat-art));
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
         }
 
-        .category-card.art { border-top-color: #ff6b9d; }
-        .category-card.tech { border-top-color: #22c1c3; }
-        .category-card.social { border-top-color: #fdbb2d; }
-        .category-card.science { border-top-color: #667eea; }
+        .category-card:nth-child(1) { transform: rotate(-1deg); --accent: var(--color-cat-art); }
+        .category-card:nth-child(2) { transform: rotate(0.8deg); --accent: var(--color-cat-tech); }
+        .category-card:nth-child(3) { transform: rotate(-0.6deg); --accent: var(--color-cat-social); }
+        .category-card:nth-child(4) { transform: rotate(1deg); --accent: var(--color-cat-science); }
 
-        .category-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
+        .category-card:hover { transform: translateY(-6px) rotate(0deg); box-shadow: var(--shadow-card-hover); }
+
+        .category-pin {
+            position: absolute;
+            top: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--accent) 60%, white), var(--accent));
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
         }
 
         .category-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: var(--gradient-creativity);
+            background: var(--accent);
+            color: var(--color-paper);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            color: var(--white);
+            margin-bottom: 1.2rem;
         }
 
-        .category-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
+        .category-icon .icon { width: 1.7rem; height: 1.7rem; }
 
-        .category-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
+        .category-title { font-family: var(--font-display); font-size: 1.2rem; color: var(--color-ink); margin-bottom: 0.8rem; }
+        .category-description { color: var(--color-ink-soft); margin-bottom: 1.3rem; font-size: 0.96rem; }
 
         .project-examples {
-            background: rgba(102, 126, 234, 0.05);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-top: 1rem;
+            background: var(--color-paper-alt);
+            padding: 1.2rem 1.3rem;
+            border-radius: var(--radius-card);
         }
 
         .project-examples h4 {
-            color: var(--primary);
-            font-weight: 600;
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
         }
 
-        .example-list {
-            display: grid;
-            gap: 0.5rem;
-        }
+        .example-list { display: grid; gap: 0.45rem; }
 
         .example-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
+            color: var(--color-ink-soft);
+            font-size: 0.9rem;
         }
 
-        .example-item i {
-            color: var(--success);
-            font-size: 0.8rem;
+        .example-item .icon { color: var(--accent); }
+
+        /* ==================== Aplicaciones Matemáticas ==================== */
+        .math-panel {
+            background: var(--color-paper);
+            border-radius: var(--radius-card);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-card);
         }
 
-        /* Math Applications */
-        .math-applications {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 3rem;
-            margin: 3rem 0;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(91, 76, 245, 0.1);
-        }
-
-        .math-applications h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 2rem;
+        .math-panel h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
             text-align: center;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 1.8rem;
+            color: var(--color-ink);
         }
 
         .math-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.1rem;
         }
 
         .math-card {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(91, 76, 245, 0.1);
-            transition: all 0.3s ease;
+            background: var(--color-paper-alt);
+            border-left: 4px solid var(--color-ribbon-gold);
+            border-radius: 6px;
+            padding: 1.1rem 1.2rem;
+            transition: transform var(--transition-base);
         }
 
-        .math-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(91, 76, 245, 0.1);
-        }
+        .math-card:hover { transform: translateY(-3px); }
 
         .math-card h4 {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--color-ribbon-blue);
+            margin-bottom: 0.4rem;
         }
 
-        .math-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.5;
+        .math-card p { color: var(--color-ink-soft); font-size: 0.88rem; }
+
+        /* ==================== Programa del Evento (Timeline) ==================== */
+        .agenda-panel {
+            background: var(--color-paper);
+            border-radius: var(--radius-card);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-card);
         }
 
-        /* Timeline */
-        .timeline-container {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 3rem;
-            margin: 3rem 0;
-            box-shadow: var(--shadow-soft);
-        }
+        .agenda { position: relative; padding-left: 2.3rem; }
 
-        .timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .timeline::before {
+        .agenda::before {
             content: '';
             position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--gradient-creativity);
-            border-radius: 2px;
+            left: 10px;
+            top: 6px;
+            bottom: 6px;
+            width: 3px;
+            background: repeating-linear-gradient(to bottom, var(--color-kraft-dark) 0 6px, transparent 6px 12px);
         }
 
-        .timeline-item {
-            position: relative;
-            margin-bottom: 2rem;
-            padding-left: 2rem;
-        }
+        .agenda-item { position: relative; margin-bottom: 1.8rem; }
+        .agenda-item:last-child { margin-bottom: 0; }
 
-        .timeline-item::before {
+        .agenda-item::before {
             content: '';
             position: absolute;
-            left: -10px;
-            top: 0.5rem;
-            width: 20px;
-            height: 20px;
-            background: var(--gradient-creativity);
+            left: -2.3rem;
+            top: 0.2rem;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            box-shadow: 0 0 0 4px var(--white);
+            background: var(--color-ribbon-red);
+            border: 3px solid var(--color-paper);
+            box-shadow: 0 0 0 2px var(--color-kraft-dark);
         }
 
-        .timeline-title {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+        .agenda-title { font-weight: 700; color: var(--color-ink); font-size: 1.05rem; margin-bottom: 0.2rem; }
+
+        .agenda-duration {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--color-ribbon-blue);
+            font-weight: 700;
+            margin-bottom: 0.35rem;
         }
 
-        .timeline-duration {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            font-style: italic;
-        }
+        .agenda-description { color: var(--color-ink-soft); font-size: 0.94rem; }
 
-        .timeline-description {
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* Resources Section */
+        /* ==================== Caja de Herramientas (Resources) ==================== */
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
         }
 
         .resource-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow-soft);
-            border-top: 4px solid var(--success);
-            transition: all 0.3s ease;
+            background: var(--color-paper);
+            border-radius: var(--radius-card);
+            padding: 1.8rem;
+            box-shadow: var(--shadow-card);
+            transition: transform var(--transition-base), box-shadow var(--transition-base);
         }
 
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
+        .resource-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
 
         .resource-icon {
-            font-size: 2.5rem;
-            color: var(--success);
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-card);
+            background: var(--color-ribbon-gold);
+            color: var(--color-paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 1rem;
         }
 
-        .resource-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
+        .resource-icon .icon { width: 1.5rem; height: 1.5rem; }
 
-        .resource-list {
-            list-style: none;
-            padding: 0;
-        }
+        .resource-title { font-family: var(--font-display); font-size: 1.1rem; color: var(--color-ink); margin-bottom: 0.9rem; }
+
+        .resource-list { list-style: none; }
 
         .resource-list li {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
+            gap: 0.55rem;
+            color: var(--color-ink-soft);
+            font-size: 0.92rem;
             margin-bottom: 0.5rem;
-            font-size: 0.95rem;
         }
 
-        .resource-list li i {
-            color: var(--success);
-            font-size: 0.8rem;
-        }
+        .resource-list li .icon { color: var(--color-ribbon-gold); }
 
-        /* Evaluation Criteria */
-        .evaluation-section {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 3rem;
-            margin: 3rem 0;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(91, 76, 245, 0.1);
+        /* ==================== Tarjeta de Jurado (Rubric) ==================== */
+        .scorecard-panel {
+            background: var(--color-paper);
+            border-radius: var(--radius-card);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-card);
         }
 
         .rubric-intro {
             text-align: center;
+            background: var(--color-paper-alt);
+            border-left: 5px solid var(--color-ribbon-blue);
+            border-radius: 6px;
+            padding: 1.2rem 1.4rem;
             margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
-            border-radius: 15px;
-            border-left: 5px solid var(--primary);
+            color: var(--color-ink);
         }
 
-        .rubric-intro p {
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            margin: 0;
-        }
+        .table-container { overflow-x: auto; margin: 1.5rem 0; border-radius: var(--radius-card); box-shadow: var(--shadow-card); }
 
-        .table-container {
-            overflow-x: auto;
-            margin: 2rem 0;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+        .rubric-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; background: var(--color-paper); }
 
-        .evaluation-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-            background: var(--white);
-            border-radius: 15px;
-            overflow: hidden;
-        }
+        .rubric-table thead { background: var(--color-ribbon-blue); color: var(--color-paper); }
 
-        .evaluation-table thead {
-            background: var(--gradient-creativity);
-            color: var(--white);
-        }
-
-        .evaluation-table th {
-            padding: 1rem 0.75rem;
+        .rubric-table th {
+            padding: 0.9rem 0.7rem;
             text-align: center;
-            font-weight: 600;
-            border-right: 1px solid rgba(255,255,255,0.2);
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.82rem;
             line-height: 1.3;
+            border-right: 1px solid rgba(245, 238, 220, 0.2);
         }
 
-        .evaluation-table th:last-child {
-            border-right: none;
-        }
+        .rubric-table th:last-child { border-right: none; }
 
         .criteria-col { width: 18%; }
         .points-col { width: 8%; }
         .excellent-col, .good-col, .satisfactory-col, .needs-improvement-col { width: 18.5%; }
 
-        .criterion-row {
-            border-bottom: 2px solid #f0f0f0;
-            transition: all 0.3s ease;
-        }
+        .criterion-row { border-bottom: 2px solid var(--color-paper-alt); }
 
-        .criterion-row:hover {
-            background: rgba(102, 126, 234, 0.02);
-        }
+        .criterion-row.math-application { border-left: 5px solid var(--color-ribbon-blue); }
+        .criterion-row.creativity { border-left: 5px solid var(--color-cat-art); }
+        .criterion-row.methodology { border-left: 5px solid var(--color-cat-tech); }
+        .criterion-row.presentation { border-left: 5px solid var(--color-ribbon-gold); }
+        .criterion-row.impact { border-left: 5px solid var(--color-ribbon-red); }
 
-        .criterion-row.math-application { border-left: 5px solid #667eea; }
-        .criterion-row.creativity { border-left: 5px solid #ff6b9d; }
-        .criterion-row.methodology { border-left: 5px solid #22c1c3; }
-        .criterion-row.presentation { border-left: 5px solid #fdbb2d; }
-        .criterion-row.impact { border-left: 5px solid #4ecdc4; }
+        .rubric-table td { padding: 1.1rem 0.7rem; vertical-align: top; border-right: 1px solid var(--color-paper-alt); }
+        .rubric-table td:last-child { border-right: none; }
 
-        .evaluation-table td {
-            padding: 1.25rem 0.75rem;
-            vertical-align: top;
-            border-right: 1px solid #e0e0e0;
-        }
+        .criteria-cell { background: var(--color-paper-alt); }
 
-        .evaluation-table td:last-child {
-            border-right: none;
-        }
+        .criterion-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; font-size: 0.96rem; color: var(--color-ink); }
+        .criteria-cell small { color: var(--color-ink-faint); font-size: 0.78rem; line-height: 1.3; display: block; }
 
-        .criteria-cell {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(240, 147, 251, 0.03));
-        }
+        .points-cell { text-align: center; font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; color: var(--color-ribbon-blue); }
 
-        .criterion-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .criterion-header i {
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        .criteria-cell small {
-            color: var(--text-secondary);
-            font-style: italic;
-            font-size: 0.8rem;
-            line-height: 1.3;
-        }
-
-        .points-cell {
-            text-align: center;
-            background: linear-gradient(135deg, rgba(78, 205, 196, 0.05), rgba(102, 126, 234, 0.05));
-            font-size: 1.1rem;
-            color: var(--primary);
-        }
-
-        .performance-cell {
-            font-size: 0.8rem;
-            line-height: 1.4;
-        }
-
-        .performance-cell.excellent { background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(76, 175, 80, 0.02)); }
-        .performance-cell.good { background: linear-gradient(135deg, rgba(33, 150, 243, 0.05), rgba(33, 150, 243, 0.02)); }
-        .performance-cell.satisfactory { background: linear-gradient(135deg, rgba(255, 193, 7, 0.05), rgba(255, 193, 7, 0.02)); }
-        .performance-cell.needs-improvement { background: linear-gradient(135deg, rgba(244, 67, 54, 0.05), rgba(244, 67, 54, 0.02)); }
+        .performance-cell { font-size: 0.78rem; line-height: 1.4; }
+        .performance-cell.excellent { background: rgba(31, 78, 140, 0.06); }
+        .performance-cell.good { background: rgba(169, 48, 43, 0.06); }
+        .performance-cell.satisfactory { background: rgba(184, 134, 15, 0.07); }
+        .performance-cell.needs-improvement { background: rgba(110, 99, 83, 0.08); }
 
         .points-range {
-            background: var(--gradient-creativity);
-            color: var(--white);
-            padding: 0.3rem 0.6rem;
-            border-radius: 12px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 0.7rem;
-            font-size: 0.75rem;
+            display: inline-block;
+            font-family: var(--font-mono);
+            color: var(--color-paper);
+            padding: 0.25rem 0.55rem;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 0.72rem;
+            margin-bottom: 0.6rem;
         }
 
-        .performance-cell.excellent .points-range { background: linear-gradient(135deg, #4CAF50, #388E3C); }
-        .performance-cell.good .points-range { background: linear-gradient(135deg, #2196F3, #1565C0); }
-        .performance-cell.satisfactory .points-range { background: linear-gradient(135deg, #FFC107, #F57C00); }
-        .performance-cell.needs-improvement .points-range { background: linear-gradient(135deg, #F44336, #C62828); }
+        .performance-cell.excellent .points-range { background: var(--color-ribbon-blue); }
+        .performance-cell.good .points-range { background: var(--color-ribbon-red); }
+        .performance-cell.satisfactory .points-range { background: var(--color-ribbon-gold); }
+        .performance-cell.needs-improvement .points-range { background: var(--color-ribbon-neutral); }
 
-        .performance-cell ul {
-            margin: 0;
-            padding-left: 1rem;
-        }
+        .performance-cell ul { padding-left: 1rem; }
+        .performance-cell li { margin-bottom: 0.25rem; color: var(--color-ink-soft); font-size: 0.74rem; }
 
-        .performance-cell li {
-            margin-bottom: 0.3rem;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            line-height: 1.3;
-        }
+        .total-row { background: var(--color-ink); color: var(--color-paper); font-weight: 700; }
+        .total-row td { padding: 0.9rem 0.7rem; text-align: center; border-right: 1px solid rgba(245, 238, 220, 0.15); font-size: 0.8rem; }
+        .total-row td:last-child { border-right: none; }
+        .total-label { font-size: 1rem; }
 
-        .total-row {
-            background: var(--gradient-main);
-            color: var(--white);
-            font-weight: 600;
-        }
-
-        .total-row td {
-            padding: 1rem 0.75rem;
-            text-align: center;
-            border-right: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .total-row td:last-child {
-            border-right: none;
-        }
-
-        .total-label {
-            background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
-            font-size: 1.1rem;
-        }
-
-        .total-excellent { background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(76, 175, 80, 0.9)); }
-        .total-good { background: linear-gradient(135deg, rgba(33, 150, 243, 0.8), rgba(33, 150, 243, 0.9)); }
-        .total-satisfactory { background: linear-gradient(135deg, rgba(255, 193, 7, 0.8), rgba(255, 193, 7, 0.9)); }
-        .total-needs-improvement { background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(244, 67, 54, 0.9)); }
-
-        /* Grading Scale */
-        .grading-scale {
-            margin-top: 3rem;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(240, 147, 251, 0.05));
-            padding: 2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(91, 76, 245, 0.1);
-        }
+        .grading-scale { margin-top: 2.5rem; background: var(--color-paper-alt); padding: 1.8rem; border-radius: var(--radius-card); }
 
         .grading-scale h4 {
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            font-family: var(--font-display); font-size: 1.2rem; text-align: center;
+            color: var(--color-ink); margin-bottom: 1.4rem;
+        }
+
+        .scale-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+
+        .ribbon-item {
+            display: flex; align-items: center; gap: 1rem;
+            background: var(--color-paper); padding: 1.2rem; border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+        }
+
+        .ribbon-icon { width: 44px; height: 44px; flex-shrink: 0; }
+        .ribbon-icon .icon { width: 100%; height: 100%; }
+
+        .ribbon-1st .ribbon-icon { color: var(--color-ribbon-blue); }
+        .ribbon-2nd .ribbon-icon { color: var(--color-ribbon-red); }
+        .ribbon-3rd .ribbon-icon { color: var(--color-ribbon-gold); }
+        .ribbon-4th .ribbon-icon { color: var(--color-ribbon-neutral); }
+
+        .ribbon-info { display: flex; flex-direction: column; gap: 0.15rem; }
+        .ribbon-label { font-weight: 700; color: var(--color-ink); font-size: 0.95rem; }
+        .ribbon-points { font-family: var(--font-mono); color: var(--color-ink-soft); font-size: 0.85rem; }
+
+        /* ==================== Footer ==================== */
+        .footer {
+            background: var(--color-ink);
+            color: var(--color-paper);
             text-align: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.4rem;
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            padding: 2.2rem 1.25rem;
         }
 
-        .grading-scale h4 i {
-            color: var(--primary);
-        }
+        .footer__text { font-size: 0.9rem; opacity: 0.85; margin-bottom: 0.3rem; }
+        .footer__text.mb-0 { margin-bottom: 0; opacity: 0.6; }
 
-        .scale-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
+        /* ==================== Responsive ==================== */
+        @media (max-width: 860px) {
+            .header__mobile-btn { display: flex; }
 
-        .scale-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .scale-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .scale-letter {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--white);
-        }
-
-        .excellent-scale .scale-letter { background: linear-gradient(135deg, #4CAF50, #388E3C); }
-        .good-scale .scale-letter { background: linear-gradient(135deg, #2196F3, #1565C0); }
-        .satisfactory-scale .scale-letter { background: linear-gradient(135deg, #FFC107, #F57C00); }
-        .needs-improvement-scale .scale-letter { background: linear-gradient(135deg, #F44336, #C62828); }
-
-        .scale-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-
-        .scale-points {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-
-        .scale-percentage {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Mobile Responsive for Table */
-        @media (max-width: 1024px) {
-            .table-container {
-                font-size: 0.8rem;
-            }
-            
-            .evaluation-table th,
-            .evaluation-table td {
-                padding: 0.75rem 0.5rem;
-            }
-            
-            .performance-cell li {
-                font-size: 0.7rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .evaluation-section {
-                padding: 2rem 1rem;
-            }
-            
-            .table-container {
-                margin: 1rem -1rem;
-                border-radius: 0;
-            }
-            
-            .evaluation-table {
-                font-size: 0.7rem;
-            }
-            
-            .evaluation-table th,
-            .evaluation-table td {
-                padding: 0.5rem 0.3rem;
-            }
-            
-            .criterion-header {
+            .header__menu {
+                position: fixed;
+                top: 84px;
+                right: -100%;
+                width: 280px;
+                height: calc(100vh - 84px);
+                background: var(--color-paper);
+                border-left: 3px solid var(--color-kraft-dark);
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 0.3rem;
+                align-items: stretch;
+                gap: 0.4rem;
+                padding: 1.5rem;
+                transition: right var(--transition-slow);
+                overflow-y: auto;
             }
-            
-            .performance-cell li {
-                font-size: 0.65rem;
-                margin-bottom: 0.2rem;
-            }
-            
-            .scale-grid {
-                grid-template-columns: 1fr;
-            }
+
+            .header__menu--active { right: 0; }
+
+            .header__menu-link { padding: 0.9rem 1rem; }
+
+            #lang-toggle { margin-top: 0.5rem; }
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem;
-            }
-
-            .hero-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .section {
-                padding: 3rem 1rem;
-            }
-
-            .guide-step, .math-applications, .timeline-container, .evaluation-section {
-                padding: 2rem 1.5rem;
-            }
-
-            .categories-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .step-header {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-
-            .step-number {
-                margin-right: 0;
-            }
+        @media (max-width: 640px) {
+            .hero__board { padding: 2.2rem 1.4rem; }
+            .section { padding: 1rem 1rem 2.5rem; }
+            .math-panel, .agenda-panel, .scorecard-panel { padding: 1.5rem 1.2rem; }
+            .station-card { padding: 1.5rem 1.4rem 1.7rem; }
         }
 
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
         }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .slide-in-left {
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: all 0.6s ease;
-        }
-
-        .slide-in-left.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .slide-in-right {
-            opacity: 0;
-            transform: translateX(50px);
-            transition: all 0.6s ease;
-        }
-
-        .slide-in-right.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        @keyframes gradientShift {
-    0% {
-        background-position: center center, 0% 50%;
-    }
-    50% {
-        background-position: center center, 100% 50%;
-    }
-    100% {
-        background-position: center center, 0% 50%;
-    }
-}
-/* Botón hamburguesa - solo visible en móvil */
-.mobile-menu-btn {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1001;
-}
-
-.mobile-menu-btn:hover {
-    background: rgba(91, 76, 245, 0.1);
-}
-
-.hamburger-line {
-    display: block;
-    width: 24px;
-    height: 3px;
-    background: var(--text-primary);
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-/* Animación del botón hamburguesa cuando está activo */
-.mobile-menu-btn.active .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
-
-.mobile-menu-btn.active .hamburger-line:nth-child(2) {
-    opacity: 0;
-}
-
-.mobile-menu-btn.active .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-}
-
-/* Overlay para cerrar menú móvil */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
-
-/* Actualizar estilos de nav-menu */
-.nav-menu {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-
-/* Responsive para imagen de fondo */
-@media (max-width: 1200px) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-        background-position: center top, 0% 50%;
-    }
-}
-
-@media (max-width: 768px) {
-    /* Mostrar botón hamburguesa */
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    /* Menú móvil para proyectos creativos */
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 280px;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        border-left: 2px solid rgba(91, 76, 245, 0.2);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem;
-        transition: right 0.3s ease;
-        z-index: 1000;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    .nav-menu.active {
-        right: 0;
-    }
-    
-    .nav-menu.active ~ .mobile-menu-overlay {
-        display: block;
-    }
-    
-    /* Estilo del botón en móvil */
-    .back-btn {
-        width: 100%;
-        justify-content: center;
-        padding: 1.5rem 2rem;
-        border-radius: 15px;
-        font-size: 1.1rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .back-btn .btn-text {
-        display: inline;
-        margin-left: 0.75rem;
-    }
-    
-    .back-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.3s ease;
-        z-index: -1;
-    }
-    
-    .back-btn:hover::before {
-        left: 100%;
-    }
-    
-    .back-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
-    }
-    
-    /* Imagen de fondo responsiva para móvil */
-    .animated-bg {
-        background-attachment: scroll, scroll;
-        background-size: cover, 400% 400%;
-        background-position: center center, 0% 50%;
-    }
-    
-    .navbar {
-        padding: 1rem;
-    }
-    
-    .logo {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .navbar {
-        padding: 0.75rem;
-    }
-    
-    .logo {
-        font-size: 1rem;
-    }
-    
-    .mobile-menu-btn {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .hamburger-line {
-        width: 20px;
-        height: 2px;
-    }
-    
-    .nav-menu {
-        width: 100%;
-    }
-    
-    .back-btn {
-        padding: 1.2rem 1.5rem;
-        font-size: 1rem;
-    }
-}
-
-/* Optimizaciones para imagen de fondo en diferentes ratios */
-@media (min-aspect-ratio: 16/9) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-        background-position: center center, 0% 50%;
-    }
-}
-
-@media (max-aspect-ratio: 4/3) {
-    .animated-bg {
-        background-size: contain, 400% 400%;
-        background-position: center top, 0% 50%;
-        background-repeat: no-repeat, repeat;
-    }
-}
-
-/* Para pantallas muy pequeñas o con orientación portrait estrecha */
-@media (max-width: 480px) and (max-aspect-ratio: 9/16) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-        background-position: center 20%, 0% 50%;
-    }
-}
-
-/* Mejoras para pantallas de alta densidad */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-    }
-}
-
-/* Animaciones específicas para proyectos creativos */
-@media (prefers-reduced-motion: no-preference) {
-    .nav-menu {
-        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-    
-    .back-btn {
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-    
-    .hamburger-line {
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-}
-
-/* Para usuarios que prefieren menos animación */
-@media (prefers-reduced-motion: reduce) {
-    .nav-menu,
-    .back-btn,
-    .hamburger-line,
-    .mobile-menu-btn,
-    .animated-bg {
-        transition: none;
-        animation: none;
-    }
-}
-
-/* Focus visible para accesibilidad */
-.mobile-menu-btn:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
-
-.back-btn:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
-
-/* Ajustes específicos para contenido de proyectos creativos */
-@media (max-width: 768px) {
-    .hero-content {
-        padding: 2.5rem 1.5rem;
-        margin: 1rem;
-    }
-    
-    .section {
-        padding: 3rem 1rem;
-    }
-    
-    .guide-step,
-    .math-applications,
-    .timeline-container,
-    .evaluation-section {
-        padding: 2rem 1.5rem;
-    }
-    
-    .categories-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .step-header {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .step-number {
-        margin-right: 0;
-    }
-    
-    /* Tabla responsiva específica */
-    .table-container {
-        margin: 1rem -1rem;
-        border-radius: 0;
-    }
-    
-    .evaluation-table {
-        font-size: 0.7rem;
-    }
-    
-    .evaluation-table th,
-    .evaluation-table td {
-        padding: 0.5rem 0.3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: clamp(1.8rem, 6vw, 2.5rem);
-    }
-    
-    .hero p {
-        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    }
-    
-    .section-title {
-        font-size: clamp(1.8rem, 5vw, 2.5rem);
-    }
-    
-    .step-title,
-    .category-title {
-        font-size: 1.2rem;
-    }
-    
-    .category-card,
-    .resource-card {
-        padding: 1.5rem;
-    }
-    
-    .timeline-container,
-    .math-applications {
-        padding: 2rem 1rem;
-    }
-}
-
-/* Ajustes para orientación landscape en móviles */
-@media (max-height: 500px) and (orientation: landscape) {
-    .hero {
-        min-height: 80vh;
-    }
-    
-    .hero-content {
-        padding: 2rem 1.5rem;
-    }
-    
-    .animated-bg {
-        background-position: center top, 0% 50%;
-    }
-}
-
-/* Optimización para carga de imagen en conexiones lentas */
-@media (max-width: 768px) {
-    .animated-bg::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(-45deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9), rgba(240, 147, 251, 0.9), rgba(78, 205, 196, 0.9));
-        z-index: -1;
-    }
-}
-
-/* Fallback para navegadores que no soportan backdrop-filter */
-@supports not (backdrop-filter: blur(20px)) {
-    .nav-menu {
-        background: rgba(255, 255, 255, 0.95);
-    }
-    
-    .hero-content {
-        background: rgba(255, 255, 255, 0.9);
-    }
-}
-/* Botón hamburguesa - solo visible en móvil */
-.mobile-menu-btn {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1001;
-}
-
-.mobile-menu-btn:hover {
-    background: rgba(91, 76, 245, 0.1);
-}
-
-.hamburger-line {
-    display: block;
-    width: 24px;
-    height: 3px;
-    background: var(--text-primary);
-    margin: 3px 0;
-    transition: all 0.3s ease;
-    border-radius: 2px;
-}
-
-/* Animación del botón hamburguesa cuando está activo */
-.mobile-menu-btn.active .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
-}
-
-.mobile-menu-btn.active .hamburger-line:nth-child(2) {
-    opacity: 0;
-}
-
-.mobile-menu-btn.active .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
-}
-
-/* Overlay para cerrar menú móvil */
-.mobile-menu-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
-
-/* Actualizar estilos de nav-menu */
-.nav-menu {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-
-/* Responsive para imagen de fondo */
-@media (max-width: 1200px) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-        background-position: center top, 0% 50%;
-    }
-}
-
-@media (max-width: 768px) {
-    /* Mostrar botón hamburguesa */
-    .mobile-menu-btn {
-        display: flex;
-    }
-    
-    /* Menú móvil para proyectos creativos */
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 280px;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        border-left: 2px solid rgba(91, 76, 245, 0.2);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 2rem;
-        transition: right 0.3s ease;
-        z-index: 1000;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    .nav-menu.active {
-        right: 0;
-    }
-    
-    .nav-menu.active ~ .mobile-menu-overlay {
-        display: block;
-    }
-    
-    /* Estilo del botón en móvil */
-    .back-btn {
-        width: 100%;
-        justify-content: center;
-        padding: 1.5rem 2rem;
-        border-radius: 15px;
-        font-size: 1.1rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .back-btn .btn-text {
-        display: inline;
-        margin-left: 0.75rem;
-    }
-    
-    .back-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.3s ease;
-        z-index: -1;
-    }
-    
-    .back-btn:hover::before {
-        left: 100%;
-    }
-    
-    .back-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
-    }
-    
-    /* Imagen de fondo responsiva para móvil */
-    .animated-bg {
-        background-attachment: scroll, scroll;
-        background-size: cover, 400% 400%;
-        background-position: center center, 0% 50%;
-    }
-    
-    .navbar {
-        padding: 1rem;
-    }
-    
-    .logo {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .navbar {
-        padding: 0.75rem;
-    }
-    
-    .logo {
-        font-size: 1rem;
-    }
-    
-    .mobile-menu-btn {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .hamburger-line {
-        width: 20px;
-        height: 2px;
-    }
-    
-    .nav-menu {
-        width: 100%;
-    }
-    
-    .back-btn {
-        padding: 1.2rem 1.5rem;
-        font-size: 1rem;
-    }
-}
-
-/* Optimizaciones para imagen de fondo en diferentes ratios */
-@media (min-aspect-ratio: 16/9) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-        background-position: center center, 0% 50%;
-    }
-}
-
-@media (max-aspect-ratio: 4/3) {
-    .animated-bg {
-        background-size: contain, 400% 400%;
-        background-position: center top, 0% 50%;
-        background-repeat: no-repeat, repeat;
-    }
-}
-
-/* Para pantallas muy pequeñas o con orientación portrait estrecha */
-@media (max-width: 480px) and (max-aspect-ratio: 9/16) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-        background-position: center 20%, 0% 50%;
-    }
-}
-
-/* Mejoras para pantallas de alta densidad */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
-    .animated-bg {
-        background-size: cover, 400% 400%;
-    }
-}
-
-/* Animaciones específicas para proyectos creativos */
-@media (prefers-reduced-motion: no-preference) {
-    .nav-menu {
-        transition: right 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-    
-    .back-btn {
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-    
-    .hamburger-line {
-        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    }
-}
-
-/* Para usuarios que prefieren menos animación */
-@media (prefers-reduced-motion: reduce) {
-    .nav-menu,
-    .back-btn,
-    .hamburger-line,
-    .mobile-menu-btn,
-    .animated-bg {
-        transition: none;
-        animation: none;
-    }
-}
-
-/* Focus visible para accesibilidad */
-.mobile-menu-btn:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
-
-.back-btn:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-}
-
-/* Ajustes específicos para contenido de proyectos creativos */
-@media (max-width: 768px) {
-    .hero-content {
-        padding: 2.5rem 1.5rem;
-        margin: 1rem;
-    }
-    
-    .section {
-        padding: 3rem 1rem;
-    }
-    
-    .guide-step,
-    .math-applications,
-    .timeline-container,
-    .evaluation-section {
-        padding: 2rem 1.5rem;
-    }
-    
-    .categories-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
-    .step-header {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .step-number {
-        margin-right: 0;
-    }
-    
-    /* Tabla responsiva específica */
-    .table-container {
-        margin: 1rem -1rem;
-        border-radius: 0;
-    }
-    
-    .evaluation-table {
-        font-size: 0.7rem;
-    }
-    
-    .evaluation-table th,
-    .evaluation-table td {
-        padding: 0.5rem 0.3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: clamp(1.8rem, 6vw, 2.5rem);
-    }
-    
-    .hero p {
-        font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-    }
-    
-    .section-title {
-        font-size: clamp(1.8rem, 5vw, 2.5rem);
-    }
-    
-    .step-title,
-    .category-title {
-        font-size: 1.2rem;
-    }
-    
-    .category-card,
-    .resource-card {
-        padding: 1.5rem;
-    }
-    
-    .timeline-container,
-    .math-applications {
-        padding: 2rem 1rem;
-    }
-}
-
-/* Ajustes para orientación landscape en móviles */
-@media (max-height: 500px) and (orientation: landscape) {
-    .hero {
-        min-height: 80vh;
-    }
-    
-    .hero-content {
-        padding: 2rem 1.5rem;
-    }
-    
-    .animated-bg {
-        background-position: center top, 0% 50%;
-    }
-}
-
-/* Optimización para carga de imagen en conexiones lentas */
-@media (max-width: 768px) {
-    .animated-bg::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(-45deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9), rgba(240, 147, 251, 0.9), rgba(78, 205, 196, 0.9));
-        z-index: -1;
-    }
-}
-
-/* Fallback para navegadores que no soportan backdrop-filter */
-@supports not (backdrop-filter: blur(20px)) {
-    .nav-menu {
-        background: rgba(255, 255, 255, 0.95);
-    }
-    
-    .hero-content {
-        background: rgba(255, 255, 255, 0.9);
-    }
-}
-</style>
     </style>
 </head>
 <body>
-    <header class="header">
-    <nav class="navbar">
-        <a href="../index.html" class="logo">
-            <i class="fas fa-calculator"></i>
-            Matemáticas Digitales
-        </a>
-        
-        <!-- Botón hamburguesa para móvil -->
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Abrir menú">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-        </button>
-        
-        <div class="nav-menu" id="navMenu">
-            <a href="../index.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                <span class="btn-text">Volver al Inicio</span>
-            </a>
+    <header class="header" id="header">
+        <nav class="container">
+            <div class="header__nav">
+                <a href="../index.html" class="header__logo">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg>
+                    <span>Matemáticas Digitales</span>
+                </a>
 
-            <button id="lang-toggle"
-                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
-                EN
-            </button>
-        </div>
-        
-        <!-- Overlay para cerrar menú móvil -->
-        <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
-    </nav>
-</header>
+                <button class="header__mobile-btn" id="mobileMenuBtn" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="headerMenu">
+                    <span class="header__hamburger"></span>
+                    <span class="header__hamburger"></span>
+                    <span class="header__hamburger"></span>
+                </button>
 
-    <!-- Animated Background -->
-    <div class="animated-bg"></div>
-    
-    <!-- Floating Shapes -->
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
+                <ul class="header__menu" id="headerMenu">
+                    <li>
+                        <a href="../index.html" class="header__menu-link">
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="header__menu-link header__menu-link--active">
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg>
+                            <span>Proyectos Creativos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="investigacion.html" class="header__menu-link">
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg>
+                            <span>Investigación</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="competencias.html" class="header__menu-link">
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></svg>
+                            <span>Competencias</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../materiales/materiales.html" class="header__menu-link">
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" /> <path d="M12 22V12" /> <polyline points="3.29 7 12 12 20.71 7" /> <path d="m7.5 4.27 9 5.15" /></svg>
+                            <span>Recursos</span>
+                        </a>
+                    </li>
 
-    <!-- Mathematical Particles -->
-    <div class="math-particles" id="mathParticles"></div>
+                    <button id="lang-toggle" onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
-        <div class="hero-content">
-            <h1><i class="fas fa-lightbulb"></i> Proyectos Creativos</h1>
+        <div class="hero__board">
+            <span class="hero__pin hero__pin--left"></span>
+            <span class="hero__pin hero__pin--right"></span>
+            <span class="hero__badge">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.22C11 9.997 10 9 10 8a2 2 0 0 1 4 0c0 1-.998 2.002-2.01 3.22" /> <path d="m12 18 2.57-3.5" /> <path d="M6.243 9.016a7 7 0 0 1 11.507-.009" /> <path d="M9.35 14.53 12 11.22" /> <path d="M9.35 14.53C7.728 12.246 6 10.221 6 7a6 5 0 0 1 12 0c-.005 3.22-1.778 5.235-3.43 7.5l3.557 4.527a1 1 0 0 1-.203 1.43l-1.894 1.36a1 1 0 0 1-1.384-.215L12 18l-2.679 3.593a1 1 0 0 1-1.39.213l-1.865-1.353a1 1 0 0 1-.203-1.422z" /></svg>
+                Guía oficial de la feria
+            </span>
+            <h1>
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg>
+                Proyectos Creativos
+            </h1>
             <p>Guía completa para desarrollar proyectos innovadores donde las matemáticas sean las protagonistas. Transforma ideas en realidad aplicando conceptos matemáticos de forma creativa y práctica.</p>
         </div>
     </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
+    <main>
         <!-- Guide Section -->
         <section class="section">
             <h2 class="section-title fade-in">Guía Paso a Paso</h2>
-            
-            <div class="guide-container">
-                <div class="guide-step step1 fade-in">
-                    <div class="step-header">
-                        <div class="step-number">1</div>
-                        <h3 class="step-title">Identificación del Problema</h3>
+
+            <div class="stations-grid">
+                <div class="station-card fade-in">
+                    <div class="station-header">
+                        <div class="station-number">1</div>
+                        <h3 class="station-title">Identificación del Problema</h3>
                     </div>
-                    <div class="step-content">
+                    <div class="station-content">
                         <p>El primer paso es identificar un problema real o una pregunta interesante que pueda ser abordada usando matemáticas. Busca situaciones en tu vida diaria, en tu comunidad o en temas que te apasionen.</p>
-                        
-                        <div class="step-tips">
-                            <h4><i class="fas fa-search"></i> Consejos para encontrar problemas:</h4>
+                        <div class="station-tip">
+                            <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></svg> Consejos para encontrar problemas:</h4>
                             <ul>
                                 <li>Observa patrones en la naturaleza, arquitectura o arte</li>
                                 <li>Analiza datos de redes sociales, deportes o música</li>
@@ -1963,16 +851,15 @@
                     </div>
                 </div>
 
-                <div class="guide-step step2 fade-in">
-                    <div class="step-header">
-                        <div class="step-number">2</div>
-                        <h3 class="step-title">Investigación y Planificación</h3>
+                <div class="station-card fade-in">
+                    <div class="station-header">
+                        <div class="station-number">2</div>
+                        <h3 class="station-title">Investigación y Planificación</h3>
                     </div>
-                    <div class="step-content">
+                    <div class="station-content">
                         <p>Una vez identificado el problema, es hora de investigar qué matemáticas necesitarás y planificar tu enfoque. Esta fase es crucial para el éxito de tu proyecto.</p>
-                        
-                        <div class="step-tips">
-                            <h4><i class="fas fa-book"></i> Elementos clave de la investigación:</h4>
+                        <div class="station-tip">
+                            <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg> Elementos clave de la investigación:</h4>
                             <ul>
                                 <li>Revisa fuentes académicas y artículos especializados</li>
                                 <li>Identifica las herramientas matemáticas necesarias</li>
@@ -1984,16 +871,15 @@
                     </div>
                 </div>
 
-                <div class="guide-step step3 fade-in">
-                    <div class="step-header">
-                        <div class="step-number">3</div>
-                        <h3 class="step-title">Desarrollo y Aplicación</h3>
+                <div class="station-card fade-in">
+                    <div class="station-header">
+                        <div class="station-number">3</div>
+                        <h3 class="station-title">Desarrollo y Aplicación</h3>
                     </div>
-                    <div class="step-content">
+                    <div class="station-content">
                         <p>Aplica las matemáticas para resolver tu problema. Utiliza herramientas tecnológicas, recolecta datos, crea modelos y desarrolla soluciones innovadoras.</p>
-                        
-                        <div class="step-tips">
-                            <h4><i class="fas fa-cogs"></i> Herramientas recomendadas:</h4>
+                        <div class="station-tip">
+                            <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg> Herramientas recomendadas:</h4>
                             <ul>
                                 <li>Software de matemáticas: GeoGebra, Desmos, Wolfram Alpha</li>
                                 <li>Programación: Python, Scratch, JavaScript</li>
@@ -2005,16 +891,15 @@
                     </div>
                 </div>
 
-                <div class="guide-step step4 fade-in">
-                    <div class="step-header">
-                        <div class="step-number">4</div>
-                        <h3 class="step-title">Documentación y Análisis</h3>
+                <div class="station-card fade-in">
+                    <div class="station-header">
+                        <div class="station-number">4</div>
+                        <h3 class="station-title">Documentación y Análisis</h3>
                     </div>
-                    <div class="step-content">
+                    <div class="station-content">
                         <p>Documenta todo tu proceso, analiza los resultados obtenidos y reflexiona sobre las implicaciones de tus hallazgos. La documentación es tan importante como el resultado final.</p>
-                        
-                        <div class="step-tips">
-                            <h4><i class="fas fa-file-alt"></i> Elementos de la documentación:</h4>
+                        <div class="station-tip">
+                            <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></svg> Elementos de la documentación:</h4>
                             <ul>
                                 <li>Registro detallado del proceso de investigación</li>
                                 <li>Explicación clara de las matemáticas utilizadas</li>
@@ -2026,16 +911,15 @@
                     </div>
                 </div>
 
-                <div class="guide-step step5 fade-in">
-                    <div class="step-header">
-                        <div class="step-number">5</div>
-                        <h3 class="step-title">Presentación y Comunicación</h3>
+                <div class="station-card fade-in">
+                    <div class="station-header">
+                        <div class="station-number">5</div>
+                        <h3 class="station-title">Presentación y Comunicación</h3>
                     </div>
-                    <div class="step-content">
+                    <div class="station-content">
                         <p>Prepara una presentación impactante que comunique efectivamente tu trabajo. Adapta tu mensaje a diferentes audiencias y utiliza elementos visuales atractivos.</p>
-                        
-                        <div class="step-tips">
-                            <h4><i class="fas fa-presentation"></i> Consejos para presentar:</h4>
+                        <div class="station-tip">
+                            <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20" /> <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" /> <path d="m7 21 5-5 5 5" /></svg> Consejos para presentar:</h4>
                             <ul>
                                 <li>Cuenta una historia con tu proyecto</li>
                                 <li>Usa visualizaciones claras y atractivas</li>
@@ -2052,128 +936,76 @@
         <!-- Project Categories Section -->
         <section class="section">
             <h2 class="section-title fade-in">Categorías de Proyectos</h2>
-            
+
             <div class="categories-grid">
-                <div class="category-card art fade-in">
+                <div class="category-card fade-in">
+                    <span class="category-pin"></span>
                     <div class="category-icon">
-                        <i class="fas fa-palette"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" /> <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /> <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" /> <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" /> <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" /></svg>
                     </div>
                     <h3 class="category-title">Arte y Diseño Matemático</h3>
-                    <p class="category-description">
-                        Explora la belleza de las matemáticas a través del arte, creando obras que revelan patrones, simetrías y estructuras matemáticas fascinantes.
-                    </p>
+                    <p class="category-description">Explora la belleza de las matemáticas a través del arte, creando obras que revelan patrones, simetrías y estructuras matemáticas fascinantes.</p>
                     <div class="project-examples">
-                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg> Ejemplos de proyectos:</h4>
                         <div class="example-list">
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Fractales en la naturaleza y el arte
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Mosaicos y teselaciones matemáticas
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Espirales áureas en arquitectura
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Arte generativo con algoritmos
-                            </div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Fractales en la naturaleza y el arte</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Mosaicos y teselaciones matemáticas</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Espirales áureas en arquitectura</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Arte generativo con algoritmos</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="category-card tech fade-in">
+                <div class="category-card fade-in">
+                    <span class="category-pin"></span>
                     <div class="category-icon">
-                        <i class="fas fa-laptop-code"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" /></svg>
                     </div>
                     <h3 class="category-title">Tecnología e Innovación</h3>
-                    <p class="category-description">
-                        Desarrolla aplicaciones, simulaciones y herramientas tecnológicas que utilicen matemáticas para resolver problemas modernos.
-                    </p>
+                    <p class="category-description">Desarrolla aplicaciones, simulaciones y herramientas tecnológicas que utilicen matemáticas para resolver problemas modernos.</p>
                     <div class="project-examples">
-                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg> Ejemplos de proyectos:</h4>
                         <div class="example-list">
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                App para optimizar rutas urbanas
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Simulador de fenómenos físicos
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Juego educativo de álgebra
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Calculadora de huella de carbono
-                            </div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> App para optimizar rutas urbanas</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Simulador de fenómenos físicos</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Juego educativo de álgebra</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Calculadora de huella de carbono</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="category-card social fade-in">
+                <div class="category-card fade-in">
+                    <span class="category-pin"></span>
                     <div class="category-icon">
-                        <i class="fas fa-users"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg>
                     </div>
                     <h3 class="category-title">Impacto Social</h3>
-                    <p class="category-description">
-                        Utiliza las matemáticas para abordar problemas sociales, económicos o ambientales que afecten a tu comunidad o al mundo.
-                    </p>
+                    <p class="category-description">Utiliza las matemáticas para abordar problemas sociales, económicos o ambientales que afecten a tu comunidad o al mundo.</p>
                     <div class="project-examples">
-                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg> Ejemplos de proyectos:</h4>
                         <div class="example-list">
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Análisis de desigualdad económica
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Modelo de propagación de epidemias
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Optimización del transporte público
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Predicción de patrones climáticos
-                            </div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Análisis de desigualdad económica</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Modelo de propagación de epidemias</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Optimización del transporte público</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Predicción de patrones climáticos</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="category-card science fade-in">
+                <div class="category-card fade-in">
+                    <span class="category-pin"></span>
                     <div class="category-icon">
-                        <i class="fas fa-atom"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1" /> <path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z" /> <path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z" /></svg>
                     </div>
                     <h3 class="category-title">Ciencia y Experimentación</h3>
-                    <p class="category-description">
-                        Diseña experimentos y estudios que utilicen métodos matemáticos para explorar fenómenos científicos y naturales.
-                    </p>
+                    <p class="category-description">Diseña experimentos y estudios que utilicen métodos matemáticos para explorar fenómenos científicos y naturales.</p>
                     <div class="project-examples">
-                        <h4><i class="fas fa-star"></i> Ejemplos de Proyectos:</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg> Ejemplos de proyectos:</h4>
                         <div class="example-list">
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Estado de péndulos acoplados
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Crecimiento poblacional de bacterias
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Análisis de frecuencias musicales
-                            </div>
-                            <div class="example-item">
-                                <i class="fas fa-check"></i>
-                                Modelos de sistemas dinámicos
-                            </div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Estado de péndulos acoplados</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Crecimiento poblacional de bacterias</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Análisis de frecuencias musicales</div>
+                            <div class="example-item"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Modelos de sistemas dinámicos</div>
                         </div>
                     </div>
                 </div>
@@ -2182,31 +1014,31 @@
 
         <!-- Math Applications -->
         <section class="section">
-            <div class="math-applications fade-in">
+            <div class="math-panel fade-in">
                 <h3>Aplicaciones Matemáticas Clave</h3>
                 <div class="math-grid">
                     <div class="math-card">
-                        <h4><i class="fas fa-chart-line"></i> Álgebra y Funciones</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></svg> Álgebra y Funciones</h4>
                         <p>Modelado de relaciones, optimización de recursos, análisis de tendencias y predicciones.</p>
                     </div>
                     <div class="math-card">
-                        <h4><i class="fas fa-shapes"></i> Geometría</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z" /> <rect x="3" y="14" width="7" height="7" rx="1" /> <circle cx="17.5" cy="17.5" r="3.5" /></svg> Geometría</h4>
                         <p>Diseño espacial, análisis de formas, cálculo de áreas y volúmenes, perspectiva y simetría.</p>
                     </div>
                     <div class="math-card">
-                        <h4><i class="fas fa-wave-square"></i> Trigonometría</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></svg> Trigonometría</h4>
                         <p>Análisis de ondas, navegación, astronomía, música y fenómenos periódicos.</p>
                     </div>
                     <div class="math-card">
-                        <h4><i class="fas fa-chart-pie"></i> Estadística</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /> <path d="M21.21 15.89A10 10 0 1 1 8 2.83" /></svg> Estadística</h4>
                         <p>Análisis de datos, investigación de mercados, estudios sociales y toma de decisiones.</p>
                     </div>
                     <div class="math-card">
-                        <h4><i class="fas fa-percentage"></i> Probabilidad</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="5" y1="5" y2="19" /> <circle cx="6.5" cy="6.5" r="2.5" /> <circle cx="17.5" cy="17.5" r="2.5" /></svg> Probabilidad</h4>
                         <p>Análisis de riesgos, juegos, predicciones y modelado de incertidumbre.</p>
                     </div>
                     <div class="math-card">
-                        <h4><i class="fas fa-infinity"></i> Cálculo</h4>
+                        <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16c5 0 7-8 12-8a4 4 0 0 1 0 8c-5 0-7-8-12-8a4 4 0 1 0 0 8" /></svg> Cálculo</h4>
                         <p>Tasas de cambio, optimización, área bajo curvas y modelado de fenómenos continuos.</p>
                     </div>
                 </div>
@@ -2215,33 +1047,33 @@
 
         <!-- Timeline -->
         <section class="section">
-            <div class="timeline-container fade-in">
+            <div class="agenda-panel fade-in">
                 <h3 class="section-title">Cronograma Sugerido</h3>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <h4 class="timeline-title">Semana 1-2: Exploración e Identificación</h4>
-                        <p class="timeline-duration">14 días</p>
-                        <p class="timeline-description">Identificar el problema, realizar investigación preliminar y definir objetivos específicos del proyecto.</p>
+                <div class="agenda">
+                    <div class="agenda-item">
+                        <h4 class="agenda-title">Semana 1-2: Exploración e Identificación</h4>
+                        <p class="agenda-duration">14 días</p>
+                        <p class="agenda-description">Identificar el problema, realizar investigación preliminar y definir objetivos específicos del proyecto.</p>
                     </div>
-                    <div class="timeline-item">
-                        <h4 class="timeline-title">Semana 3-4: Planificación Detallada</h4>
-                        <p class="timeline-duration">14 días</p>
-                        <p class="timeline-description">Desarrollar metodología, crear cronograma detallado y adquirir recursos necesarios.</p>
+                    <div class="agenda-item">
+                        <h4 class="agenda-title">Semana 3-4: Planificación Detallada</h4>
+                        <p class="agenda-duration">14 días</p>
+                        <p class="agenda-description">Desarrollar metodología, crear cronograma detallado y adquirir recursos necesarios.</p>
                     </div>
-                    <div class="timeline-item">
-                        <h4 class="timeline-title">Semana 5-8: Desarrollo y Implementación</h4>
-                        <p class="timeline-duration">28 días</p>
-                        <p class="timeline-description">Aplicar matemáticas, recolectar datos, crear modelos y desarrollar soluciones.</p>
+                    <div class="agenda-item">
+                        <h4 class="agenda-title">Semana 5-8: Desarrollo e Implementación</h4>
+                        <p class="agenda-duration">28 días</p>
+                        <p class="agenda-description">Aplicar matemáticas, recolectar datos, crear modelos y desarrollar soluciones.</p>
                     </div>
-                    <div class="timeline-item">
-                        <h4 class="timeline-title">Semana 9-10: Análisis y Documentación</h4>
-                        <p class="timeline-duration">14 días</p>
-                        <p class="timeline-description">Analizar resultados, documentar proceso y elaborar conclusiones.</p>
+                    <div class="agenda-item">
+                        <h4 class="agenda-title">Semana 9-10: Análisis y Documentación</h4>
+                        <p class="agenda-duration">14 días</p>
+                        <p class="agenda-description">Analizar resultados, documentar proceso y elaborar conclusiones.</p>
                     </div>
-                    <div class="timeline-item">
-                        <h4 class="timeline-title">Semana 11-12: Presentación Final</h4>
-                        <p class="timeline-duration">14 días</p>
-                        <p class="timeline-description">Preparar presentación, crear materiales visuales y practicar exposición.</p>
+                    <div class="agenda-item">
+                        <h4 class="agenda-title">Semana 11-12: Presentación Final</h4>
+                        <p class="agenda-duration">14 días</p>
+                        <p class="agenda-description">Preparar presentación, crear materiales visuales y practicar exposición.</p>
                     </div>
                 </div>
             </div>
@@ -2250,61 +1082,53 @@
         <!-- Resources -->
         <section class="section">
             <h2 class="section-title fade-in">Recursos y Herramientas</h2>
-            
+
             <div class="resources-grid">
                 <div class="resource-card fade-in">
-                    <div class="resource-icon">
-                        <i class="fas fa-calculator"></i>
-                    </div>
+                    <div class="resource-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg></div>
                     <h3 class="resource-title">Software Matemático</h3>
                     <ul class="resource-list">
-                        <li><i class="fas fa-check"></i> GeoGebra (geometría y álgebra)</li>
-                        <li><i class="fas fa-check"></i> Desmos (graficación)</li>
-                        <li><i class="fas fa-check"></i> Wolfram Alpha (cálculos)</li>
-                        <li><i class="fas fa-check"></i> MATLAB/Octave (análisis)</li>
-                        <li><i class="fas fa-check"></i> R/Python (estadística)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> GeoGebra (geometría y álgebra)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Desmos (graficación)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Wolfram Alpha (cálculos)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> MATLAB/Octave (análisis)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> R/Python (estadística)</li>
                     </ul>
                 </div>
 
                 <div class="resource-card fade-in">
-                    <div class="resource-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
+                    <div class="resource-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6" /> <path d="m8 6-6 6 6 6" /></svg></div>
                     <h3 class="resource-title">Programación</h3>
                     <ul class="resource-list">
-                        <li><i class="fas fa-check"></i> Scratch (principiantes)</li>
-                        <li><i class="fas fa-check"></i> Python (análisis de datos)</li>
-                        <li><i class="fas fa-check"></i> JavaScript (web apps)</li>
-                        <li><i class="fas fa-check"></i> Processing (arte generativo)</li>
-                        <li><i class="fas fa-check"></i> MIT App Inventor (móvil)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Scratch (principiantes)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Python (análisis de datos)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> JavaScript (web apps)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Processing (arte generativo)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> MIT App Inventor (móvil)</li>
                     </ul>
                 </div>
 
                 <div class="resource-card fade-in">
-                    <div class="resource-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
+                    <div class="resource-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg></div>
                     <h3 class="resource-title">Análisis de Datos</h3>
                     <ul class="resource-list">
-                        <li><i class="fas fa-check"></i> Excel/Google Sheets</li>
-                        <li><i class="fas fa-check"></i> Tableau Public</li>
-                        <li><i class="fas fa-check"></i> SPSS/IBM Watson</li>
-                        <li><i class="fas fa-check"></i> Orange (machine learning)</li>
-                        <li><i class="fas fa-check"></i> Knime (análisis visual)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Excel/Google Sheets</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Tableau Public</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> SPSS/IBM Watson</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Orange (machine learning)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Knime (análisis visual)</li>
                     </ul>
                 </div>
 
                 <div class="resource-card fade-in">
-                    <div class="resource-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
+                    <div class="resource-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" /></svg></div>
                     <h3 class="resource-title">Diseño y Presentación</h3>
                     <ul class="resource-list">
-                        <li><i class="fas fa-check"></i> Canva (diseño gráfico)</li>
-                        <li><i class="fas fa-check"></i> Adobe Creative Suite</li>
-                        <li><i class="fas fa-check"></i> PowerPoint/Google Slides</li>
-                        <li><i class="fas fa-check"></i> Prezi (presentaciones)</li>
-                        <li><i class="fas fa-check"></i> Figma (prototipado)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Canva (diseño gráfico)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Adobe Creative Suite</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> PowerPoint/Google Slides</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Prezi (presentaciones)</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Figma (prototipado)</li>
                     </ul>
                 </div>
             </div>
@@ -2312,34 +1136,31 @@
 
         <!-- Evaluation Criteria -->
         <section class="section">
-            <div class="evaluation-section fade-in">
+            <div class="scorecard-panel fade-in">
                 <h3 class="section-title">Rúbrica de Evaluación</h3>
                 <div class="rubric-intro">
-                    <p><strong>Puntuación Total: 300 puntos</strong> - Esta rúbrica evalúa integralmente el desarrollo y presentación de proyectos creativos matemáticos.</p>
+                    <p><strong>Puntuación total: 300 puntos.</strong> Esta rúbrica evalúa integralmente el desarrollo y presentación de proyectos creativos matemáticos, como en el panel de jurado de una feria.</p>
                 </div>
-                
+
                 <div class="table-container">
-                    <table class="evaluation-table">
+                    <table class="rubric-table">
                         <thead>
                             <tr>
-                                <th class="criteria-col">Criterio de Evaluación</th>
+                                <th class="criteria-col">Criterio de evaluación</th>
                                 <th class="points-col">Puntos</th>
                                 <th class="excellent-col">Excelente<br>(90-100%)</th>
                                 <th class="good-col">Bueno<br>(80-89%)</th>
                                 <th class="satisfactory-col">Satisfactorio<br>(70-79%)</th>
-                                <th class="needs-improvement-col">Necesita Mejorar<br>(60-69%)</th>
+                                <th class="needs-improvement-col">Necesita mejorar<br>(60-69%)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="criterion-row math-application">
                                 <td class="criteria-cell">
-                                    <div class="criterion-header">
-                                        <i class="fas fa-calculator"></i>
-                                        <strong>Aplicación Matemática</strong>
-                                    </div>
+                                    <div class="criterion-header"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg> <strong>Aplicación matemática</strong></div>
                                     <small>Uso correcto y profundo de conceptos matemáticos</small>
                                 </td>
-                                <td class="points-cell"><strong>90 pts</strong></td>
+                                <td class="points-cell">90 pts</td>
                                 <td class="performance-cell excellent">
                                     <div class="points-range">81-90 pts</div>
                                     <ul>
@@ -2380,13 +1201,10 @@
 
                             <tr class="criterion-row creativity">
                                 <td class="criteria-cell">
-                                    <div class="criterion-header">
-                                        <i class="fas fa-lightbulb"></i>
-                                        <strong>Creatividad e Innovación</strong>
-                                    </div>
+                                    <div class="criterion-header"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg> <strong>Creatividad e innovación</strong></div>
                                     <small>Originalidad y pensamiento crítico en el enfoque</small>
                                 </td>
-                                <td class="points-cell"><strong>75 pts</strong></td>
+                                <td class="points-cell">75 pts</td>
                                 <td class="performance-cell excellent">
                                     <div class="points-range">68-75 pts</div>
                                     <ul>
@@ -2427,13 +1245,10 @@
 
                             <tr class="criterion-row methodology">
                                 <td class="criteria-cell">
-                                    <div class="criterion-header">
-                                        <i class="fas fa-cogs"></i>
-                                        <strong>Metodología y Proceso</strong>
-                                    </div>
+                                    <div class="criterion-header"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg> <strong>Metodología y proceso</strong></div>
                                     <small>Organización, planificación y documentación del trabajo</small>
                                 </td>
-                                <td class="points-cell"><strong>60 pts</strong></td>
+                                <td class="points-cell">60 pts</td>
                                 <td class="performance-cell excellent">
                                     <div class="points-range">54-60 pts</div>
                                     <ul>
@@ -2474,13 +1289,10 @@
 
                             <tr class="criterion-row presentation">
                                 <td class="criteria-cell">
-                                    <div class="criterion-header">
-                                        <i class="fas fa-presentation"></i>
-                                        <strong>Presentación y Comunicación</strong>
-                                    </div>
+                                    <div class="criterion-header"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20" /> <path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" /> <path d="m7 21 5-5 5 5" /></svg> <strong>Presentación y comunicación</strong></div>
                                     <small>Claridad, recursos visuales y capacidad explicativa</small>
                                 </td>
-                                <td class="points-cell"><strong>45 pts</strong></td>
+                                <td class="points-cell">45 pts</td>
                                 <td class="performance-cell excellent">
                                     <div class="points-range">41-45 pts</div>
                                     <ul>
@@ -2521,13 +1333,10 @@
 
                             <tr class="criterion-row impact">
                                 <td class="criteria-cell">
-                                    <div class="criterion-header">
-                                        <i class="fas fa-heart"></i>
-                                        <strong>Impacto y Relevancia</strong>
-                                    </div>
+                                    <div class="criterion-header"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg> <strong>Impacto y relevancia</strong></div>
                                     <small>Relevancia del problema y potencial impacto de la solución</small>
                                 </td>
-                                <td class="points-cell"><strong>30 pts</strong></td>
+                                <td class="points-cell">30 pts</td>
                                 <td class="performance-cell excellent">
                                     <div class="points-range">27-30 pts</div>
                                     <ul>
@@ -2568,45 +1377,45 @@
                         </tbody>
                         <tfoot>
                             <tr class="total-row">
-                                <td class="total-label" colspan="2"><strong>PUNTUACIÓN TOTAL</strong></td>
-                                <td class="total-excellent"><strong>270-300 pts</strong><br>Excelente</td>
-                                <td class="total-good"><strong>240-269 pts</strong><br>Bueno</td>
-                                <td class="total-satisfactory"><strong>210-239 pts</strong><br>Satisfactorio</td>
-                                <td class="total-needs-improvement"><strong>180-209 pts</strong><br>Necesita Mejorar</td>
+                                <td class="total-label" colspan="2">Puntuación total</td>
+                                <td>270-300 pts<br>Excelente</td>
+                                <td>240-269 pts<br>Bueno</td>
+                                <td>210-239 pts<br>Satisfactorio</td>
+                                <td>180-209 pts<br>Necesita mejorar</td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
 
                 <div class="grading-scale">
-                    <h4><i class="fas fa-chart-line"></i> Escala de Calificación</h4>
+                    <h4><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" /> <circle cx="12" cy="8" r="6" /></svg> Escala de calificación</h4>
                     <div class="scale-grid">
-                        <div class="scale-item excellent-scale">
-                            <div class="scale-letter">A</div>
-                            <div class="scale-info">
-                                <span class="scale-points">270-300 pts</span>
-                                <span class="scale-percentage">90-100%</span>
+                        <div class="ribbon-item ribbon-1st">
+                            <div class="ribbon-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.22C11 9.997 10 9 10 8a2 2 0 0 1 4 0c0 1-.998 2.002-2.01 3.22" /> <path d="m12 18 2.57-3.5" /> <path d="M6.243 9.016a7 7 0 0 1 11.507-.009" /> <path d="M9.35 14.53 12 11.22" /> <path d="M9.35 14.53C7.728 12.246 6 10.221 6 7a6 5 0 0 1 12 0c-.005 3.22-1.778 5.235-3.43 7.5l3.557 4.527a1 1 0 0 1-.203 1.43l-1.894 1.36a1 1 0 0 1-1.384-.215L12 18l-2.679 3.593a1 1 0 0 1-1.39.213l-1.865-1.353a1 1 0 0 1-.203-1.422z" /></svg></div>
+                            <div class="ribbon-info">
+                                <span class="ribbon-label">A — Cinta azul</span>
+                                <span class="ribbon-points">270-300 pts · 90-100%</span>
                             </div>
                         </div>
-                        <div class="scale-item good-scale">
-                            <div class="scale-letter">B</div>
-                            <div class="scale-info">
-                                <span class="scale-points">240-269 pts</span>
-                                <span class="scale-percentage">80-89%</span>
+                        <div class="ribbon-item ribbon-2nd">
+                            <div class="ribbon-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.22C11 9.997 10 9 10 8a2 2 0 0 1 4 0c0 1-.998 2.002-2.01 3.22" /> <path d="m12 18 2.57-3.5" /> <path d="M6.243 9.016a7 7 0 0 1 11.507-.009" /> <path d="M9.35 14.53 12 11.22" /> <path d="M9.35 14.53C7.728 12.246 6 10.221 6 7a6 5 0 0 1 12 0c-.005 3.22-1.778 5.235-3.43 7.5l3.557 4.527a1 1 0 0 1-.203 1.43l-1.894 1.36a1 1 0 0 1-1.384-.215L12 18l-2.679 3.593a1 1 0 0 1-1.39.213l-1.865-1.353a1 1 0 0 1-.203-1.422z" /></svg></div>
+                            <div class="ribbon-info">
+                                <span class="ribbon-label">B — Cinta roja</span>
+                                <span class="ribbon-points">240-269 pts · 80-89%</span>
                             </div>
                         </div>
-                        <div class="scale-item satisfactory-scale">
-                            <div class="scale-letter">C</div>
-                            <div class="scale-info">
-                                <span class="scale-points">210-239 pts</span>
-                                <span class="scale-percentage">70-79%</span>
+                        <div class="ribbon-item ribbon-3rd">
+                            <div class="ribbon-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.22C11 9.997 10 9 10 8a2 2 0 0 1 4 0c0 1-.998 2.002-2.01 3.22" /> <path d="m12 18 2.57-3.5" /> <path d="M6.243 9.016a7 7 0 0 1 11.507-.009" /> <path d="M9.35 14.53 12 11.22" /> <path d="M9.35 14.53C7.728 12.246 6 10.221 6 7a6 5 0 0 1 12 0c-.005 3.22-1.778 5.235-3.43 7.5l3.557 4.527a1 1 0 0 1-.203 1.43l-1.894 1.36a1 1 0 0 1-1.384-.215L12 18l-2.679 3.593a1 1 0 0 1-1.39.213l-1.865-1.353a1 1 0 0 1-.203-1.422z" /></svg></div>
+                            <div class="ribbon-info">
+                                <span class="ribbon-label">C — Cinta amarilla</span>
+                                <span class="ribbon-points">210-239 pts · 70-79%</span>
                             </div>
                         </div>
-                        <div class="scale-item needs-improvement-scale">
-                            <div class="scale-letter">D</div>
-                            <div class="scale-info">
-                                <span class="scale-points">180-209 pts</span>
-                                <span class="scale-percentage">60-69%</span>
+                        <div class="ribbon-item ribbon-4th">
+                            <div class="ribbon-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.22C11 9.997 10 9 10 8a2 2 0 0 1 4 0c0 1-.998 2.002-2.01 3.22" /> <path d="m12 18 2.57-3.5" /> <path d="M6.243 9.016a7 7 0 0 1 11.507-.009" /> <path d="M9.35 14.53 12 11.22" /> <path d="M9.35 14.53C7.728 12.246 6 10.221 6 7a6 5 0 0 1 12 0c-.005 3.22-1.778 5.235-3.43 7.5l3.557 4.527a1 1 0 0 1-.203 1.43l-1.894 1.36a1 1 0 0 1-1.384-.215L12 18l-2.679 3.593a1 1 0 0 1-1.39.213l-1.865-1.353a1 1 0 0 1-.203-1.422z" /></svg></div>
+                            <div class="ribbon-info">
+                                <span class="ribbon-label">D — Mención honorífica</span>
+                                <span class="ribbon-points">180-209 pts · 60-69%</span>
                             </div>
                         </div>
                     </div>
@@ -2615,337 +1424,90 @@
         </section>
     </main>
 
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__text">&copy; 2025 Prof. Yonatan Guerrero - Club de Matemáticas</p>
+            <p class="footer__text mb-0">Inspirando el amor por las matemáticas en nuestra escuela</p>
+        </div>
+    </footer>
+
     <script>
-        // Mathematical Particles System
-        function createMathParticles() {
-            const particles = document.getElementById('mathParticles');
-            const creativitySymbols = ['∇', '∞', '∑', '∫', 'π', '√', '∆', 'Φ', 'λ', 'σ'];
-            const projectSymbols = ['f(x)=', 'y=mx+b', 'a²+b²=c²', 'E=mc²', 'P(A∩B)', '∂f/∂x'];
-            const innovationSymbols = ['⌘', '⚡', '✦', '◊', '⬢', '▲', '●', '✕', '+', '×'];
-            
-            function createParticle() {
-                const particle = document.createElement('div');
-                particle.classList.add('math-particle');
-                
-                const rand = Math.random();
-                let symbol, className;
-                
-                if (rand < 0.4) {
-                    symbol = creativitySymbols[Math.floor(Math.random() * creativitySymbols.length)];
-                    className = 'creativity';
-                } else if (rand < 0.8) {
-                    symbol = projectSymbols[Math.floor(Math.random() * projectSymbols.length)];
-                    className = 'project';
-                } else {
-                    symbol = innovationSymbols[Math.floor(Math.random() * innovationSymbols.length)];
-                    className = 'innovation';
-                }
-                
-                particle.classList.add(className);
-                particle.textContent = symbol;
-                
-                const startX = Math.random() * window.innerWidth;
-                const drift = (Math.random() - 0.5) * 200;
-                const duration = 15 + Math.random() * 20;
-                
-                particle.style.left = startX + 'px';
-                particle.style.setProperty('--drift', drift + 'px');
-                particle.style.animationDuration = duration + 's';
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                
-                particles.appendChild(particle);
-                
-                setTimeout(() => {
-                    if (particle.parentNode) {
-                        particle.parentNode.removeChild(particle);
-                    }
-                }, (duration + 5) * 1000);
+        class ProyectosCreativosApp {
+            constructor() {
+                this.mobileMenuOpen = false;
+                this.init();
             }
-            
-            // Create initial particles
-            for (let i = 0; i < 8; i++) {
-                setTimeout(createParticle, i * 2000);
+
+            init() {
+                this.setupEventListeners();
+                this.setupIntersectionObserver();
+                this.setupHeaderScroll();
             }
-            
-            // Continue creating particles
-            setInterval(createParticle, 3000);
-        }
 
-        // Scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+            setupEventListeners() {
+                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                mobileMenuBtn?.addEventListener('click', () => this.toggleMobileMenu());
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const delay = entry.target.dataset.delay || 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, delay);
-                }
-            });
-        }, observerOptions);
-
-        // Observe all animated elements
-        document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Initialize when page loads
-        window.addEventListener('load', () => {
-            createMathParticles();
-        });
-
-        // Smooth scrolling for internal links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                document.querySelectorAll('.header__menu-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (this.mobileMenuOpen) this.closeMobileMenu();
                     });
-                }
-            });
-        });
+                });
 
-        // Add hover effects to cards
-        document.querySelectorAll('.guide-step, .category-card, .resource-card, .criteria-item, .math-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 860 && this.mobileMenuOpen) this.closeMobileMenu();
+                });
 
-        // Interactive step numbers
-        document.querySelectorAll('.step-number').forEach(stepNum => {
-            stepNum.addEventListener('click', function() {
-                this.style.transform = 'scale(1.2) rotate(360deg)';
-                setTimeout(() => {
-                    this.style.transform = 'scale(1) rotate(0deg)';
-                }, 500);
-            });
-        });
-        // Variables globales para el menú móvil
-let mobileMenuOpen = false;
-
-function toggleMobileMenu() {
-    const navMenu = document.getElementById('navMenu');
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    
-    if (!mobileMenuOpen) {
-        openMobileMenu();
-    } else {
-        closeMobileMenu();
-    }
-}
-
-function openMobileMenu() {
-    const navMenu = document.getElementById('navMenu');
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const overlay = document.querySelector('.mobile-menu-overlay');
-    
-    navMenu.classList.add('active');
-    menuBtn.classList.add('active');
-    overlay.style.display = 'block';
-    
-    // Prevenir scroll del body
-    document.body.style.overflow = 'hidden';
-    
-    mobileMenuOpen = true;
-    
-    // Añadir evento para cerrar con Escape
-    document.addEventListener('keydown', handleEscapeKey);
-}
-
-function closeMobileMenu() {
-    const navMenu = document.getElementById('navMenu');
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const overlay = document.querySelector('.mobile-menu-overlay');
-    
-    navMenu.classList.remove('active');
-    menuBtn.classList.remove('active');
-    overlay.style.display = 'none';
-    
-    // Restaurar scroll del body
-    document.body.style.overflow = 'auto';
-    
-    mobileMenuOpen = false;
-    
-    // Remover evento de Escape
-    document.removeEventListener('keydown', handleEscapeKey);
-}
-
-// Cerrar menú con tecla Escape
-function handleEscapeKey(event) {
-    if (event.key === 'Escape' && mobileMenuOpen) {
-        closeMobileMenu();
-    }
-}
-
-// Inicializar eventos del menú responsivo para proyectos creativos
-function initCreativeProjectsMobileMenu() {
-    // Cerrar menú al hacer click en el botón de navegación
-    const backBtn = document.querySelector('.back-btn');
-    
-    if (backBtn) {
-        backBtn.addEventListener('click', function() {
-            if (mobileMenuOpen) {
-                closeMobileMenu();
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.mobileMenuOpen) this.closeMobileMenu();
+                });
             }
-        });
-    }
-    
-    // Cerrar menú al cambiar tamaño de ventana
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768 && mobileMenuOpen) {
-            closeMobileMenu();
+
+            toggleMobileMenu() {
+                this.mobileMenuOpen ? this.closeMobileMenu() : this.openMobileMenu();
+            }
+
+            openMobileMenu() {
+                document.getElementById('headerMenu')?.classList.add('header__menu--active');
+                document.getElementById('mobileMenuBtn')?.classList.add('header__mobile-btn--active');
+                document.getElementById('mobileMenuBtn')?.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+                this.mobileMenuOpen = true;
+            }
+
+            closeMobileMenu() {
+                document.getElementById('headerMenu')?.classList.remove('header__menu--active');
+                document.getElementById('mobileMenuBtn')?.classList.remove('header__mobile-btn--active');
+                document.getElementById('mobileMenuBtn')?.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+                this.mobileMenuOpen = false;
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+                document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+            }
+
+            setupHeaderScroll() {
+                const header = document.getElementById('header');
+                window.addEventListener('scroll', () => {
+                    header?.classList.toggle('header--scrolled', window.scrollY > 20);
+                }, { passive: true });
+            }
         }
-        
-        // Ajustar imagen de fondo dinámicamente
-        adjustBackgroundForViewport();
-    });
-    
-    // Mejorar accesibilidad del menú
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.getElementById('navMenu');
-    
-    if (menuBtn && navMenu) {
-        menuBtn.setAttribute('aria-expanded', 'false');
-        menuBtn.setAttribute('aria-controls', 'navMenu');
-        
-        // Actualizar aria-expanded cuando cambie el estado
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    const isActive = navMenu.classList.contains('active');
-                    menuBtn.setAttribute('aria-expanded', isActive.toString());
-                }
-            });
-        });
-        
-        observer.observe(navMenu, {
-            attributes: true,
-            attributeFilter: ['class']
-        });
-    }
-}
 
-// Ajustar imagen de fondo dinámicamente según viewport
-function adjustBackgroundForViewport() {
-    const animatedBg = document.querySelector('.animated-bg');
-    if (!animatedBg) return;
-    
-    const aspectRatio = window.innerWidth / window.innerHeight;
-    const isSmallScreen = window.innerWidth <= 768;
-    const isVerySmallScreen = window.innerWidth <= 480;
-    
-    if (isVerySmallScreen) {
-        // Móviles muy pequeños: priorizar cobertura total
-        animatedBg.style.backgroundSize = 'cover, 400% 400%';
-        animatedBg.style.backgroundPosition = 'center 20%, 0% 50%';
-    } else if (isSmallScreen) {
-        // Móviles normales: balance entre cobertura y visibilidad
-        animatedBg.style.backgroundSize = 'cover, 400% 400%';
-        animatedBg.style.backgroundPosition = 'center center, 0% 50%';
-    } else if (aspectRatio > 1.7) {
-        // Pantallas muy anchas: usar cover
-        animatedBg.style.backgroundSize = 'cover, 400% 400%';
-        animatedBg.style.backgroundPosition = 'center center, 0% 50%';
-    } else if (aspectRatio < 1.2) {
-        // Pantallas muy altas: usar contain para mostrar imagen completa
-        animatedBg.style.backgroundSize = 'contain, 400% 400%';
-        animatedBg.style.backgroundPosition = 'center top, 0% 50%';
-    } else {
-        // Pantallas normales: usar cover
-        animatedBg.style.backgroundSize = 'cover, 400% 400%';
-        animatedBg.style.backgroundPosition = 'center center, 0% 50%';
-    }
-}
+        document.addEventListener('DOMContentLoaded', () => new ProyectosCreativosApp());
+    </script>
 
-// Lazy loading optimizado para imagen de fondo
-function optimizeBackgroundLoading() {
-    const animatedBg = document.querySelector('.animated-bg');
-    if (!animatedBg) return;
-    
-    // Crear una imagen temporal para precargar
-    const img = new Image();
-    const imagePath = '../imagenes/PROYECTOMATH.png';
-    
-    img.onload = function() {
-        // Imagen cargada, aplicar con transición suave
-        animatedBg.style.transition = 'opacity 0.5s ease-in-out';
-        animatedBg.style.opacity = '1';
-        
-        // Ajustar posición según el tamaño real de la imagen
-        adjustBackgroundForViewport();
-    };
-    
-    img.onerror = function() {
-        // Error cargando imagen, usar solo gradiente
-        console.warn('No se pudo cargar la imagen de fondo, usando gradiente de respaldo');
-        animatedBg.style.backgroundImage = 'linear-gradient(-45deg, rgba(102, 126, 234, 0.7), rgba(118, 75, 162, 0.7), rgba(240, 147, 251, 0.7), rgba(78, 205, 196, 0.7))';
-    };
-    
-    // Iniciar precarga
-    img.src = imagePath;
-    
-    // Mientras tanto, mostrar solo gradiente
-    animatedBg.style.opacity = '0.8';
-}
-
-// Gestión de rendimiento para dispositivos lentos
-function handlePerformanceOptimizations() {
-    // Detectar dispositivos de bajo rendimiento
-    const isLowPerformance = 
-        /Android.*Chrome|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-        window.devicePixelRatio > 2 ||
-        window.innerWidth <= 480;
-    
-    if (isLowPerformance) {
-        // Reducir animaciones en dispositivos lentos
-        const animatedBg = document.querySelector('.animated-bg');
-        if (animatedBg) {
-            animatedBg.style.animationDuration = '30s'; // Animación más lenta
-        }
-        
-        // Reducir partículas matemáticas
-        const particleIntervals = window.mathParticleIntervals || [];
-        particleIntervals.forEach(interval => {
-            if (interval) clearInterval(interval);
-        });
-    }
-}
-
-// Inicializar todo cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    initCreativeProjectsMobileMenu();
-    optimizeBackgroundLoading();
-    handlePerformanceOptimizations();
-    
-    // Ajustar fondo al cargar
-    setTimeout(adjustBackgroundForViewport, 100);
-});
-
-// También inicializar cuando la ventana se carga completamente
-window.addEventListener('load', function() {
-    initCreativeProjectsMobileMenu();
-    adjustBackgroundForViewport();
-});
-
-// Reajustar en cambio de orientación
-window.addEventListener('orientationchange', function() {
-    setTimeout(adjustBackgroundForViewport, 500);
-});
-</script>
-
-<script src="../js/i18n.js"></script>
-<script>I18n.init();</script>
+    <script src="../js/i18n.js"></script>
+    <script>I18n.init();</script>
 </body>
 </html>
