@@ -4,33 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabla de Posiciones en Vivo - Competencias Matemáticas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
-            --primary: #5B4CF5;
-            --secondary: #3D1F8C;
-            --accent: #00E5C3;
-            --success: #00D4AA;
-            --warning: #F5C842;
-            --danger: #FF4D6D;
-            --gold: #ffd700;
-            --silver: #c0c0c0;
-            --bronze: #cd7f32;
-            --dark: #0D0E1A;
-            --light: #F0EEF8;
-            --white: #ffffff;
-            --text-primary: #1A1B2E;
-            --text-secondary: #5C5F78;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 40px 0 rgba(91, 76, 245, 0.28);
-            --shadow-hover: 0 20px 50px rgba(91, 76, 245, 0.32);
-            --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            --gradient-silver: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
-            --gradient-bronze: linear-gradient(135deg, #cd7f32 0%, #daa520 100%);
+            --bg: #0A0A0F;
+            --bg-alt: #14141C;
+            --bg-card: #17171F;
+            --gold: #FFC831;
+            --gold-dim: #B8941F;
+            --blue: #00D9FF;
+            --blue-dim: #0099B3;
+            --success: #39FF88;
+            --warning: #FFC831;
+            --danger: #FF3B5C;
+            --white: #F5F5F7;
+            --text-primary: #F5F5F7;
+            --text-secondary: #8A8A9C;
+            --border: rgba(255, 200, 49, 0.2);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 12px 40px rgba(255, 200, 49, 0.15);
+            --gradient-main: linear-gradient(135deg, var(--gold) 0%, var(--blue) 100%);
+            --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFC831 100%);
+            --gradient-silver: linear-gradient(135deg, #E8E8E8 0%, #C0C0C0 100%);
+            --gradient-bronze: linear-gradient(135deg, #CD7F32 0%, #B8860B 100%);
+            /* legacy aliases used throughout inline styles/JS */
+            --primary: var(--gold);
+            --secondary: var(--blue);
+            --accent: var(--blue);
+            --dark: var(--bg);
+            --light: var(--bg-alt);
         }
 
         * {
@@ -40,8 +43,8 @@
         }
 
         body {
-            font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--bg);
             color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
@@ -56,16 +59,18 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: 
-                linear-gradient(-45deg, rgba(91, 76, 245, 0.88), rgba(61, 31, 140, 0.92), rgba(0, 229, 195, 0.55), rgba(91, 76, 245, 0.82));
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(rgba(255, 200, 49, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 200, 49, 0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .animated-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0, 217, 255, 0.12), transparent 60%);
         }
 
         /* Header */
@@ -74,11 +79,11 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(240, 238, 248, 0.92);
+            background: rgba(10, 10, 15, 0.92);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid rgba(91, 76, 245, 0.1);
-            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             padding: 0;
         }
@@ -93,15 +98,14 @@
         }
 
         .logo {
-            font-family: 'Syne', sans-serif;
-            font-size: 1.45rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
             font-weight: 800;
-            letter-spacing: -0.03em;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: -0.01em;
+            color: var(--gold);
             text-decoration: none;
+            display: flex;
+            align-items: center;
             transition: opacity 0.2s ease;
         }
 
@@ -109,25 +113,30 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .nav-back {
             display: flex;
             align-items: center;
             padding: 0.75rem 1.5rem;
-            background: var(--gradient-main);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             color: var(--white);
             text-decoration: none;
-            border-radius: 12px;
-            font-family: 'Syne', sans-serif;
-            font-weight: 600;
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
             font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-back:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(91, 76, 245, 0.4);
+            box-shadow: 0 8px 24px rgba(255, 200, 49, 0.25);
+            border-color: var(--gold);
         }
 
         .refresh-btn {
@@ -135,17 +144,21 @@
             align-items: center;
             padding: 0.75rem 1.5rem;
             background: var(--success);
-            color: var(--white);
+            color: var(--bg);
             border: none;
-            border-radius: 25px;
-            font-weight: 500;
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .refresh-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.3);
+            box-shadow: 0 10px 25px rgba(57, 255, 136, 0.3);
         }
 
         /* Live Status */
@@ -156,9 +169,11 @@
             padding: 0.5rem 1rem;
             background: var(--danger);
             color: var(--white);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
         }
 
         .live-dot {
@@ -176,8 +191,8 @@
 
         /* Main Content */
         .main-content {
-            background: var(--light);
-            border-radius: 50px 50px 0 0;
+            background: var(--bg);
+            border-radius: 0;
             margin-top: 0;
             position: relative;
             z-index: 10;
@@ -200,14 +215,14 @@
         }
 
         .stat-card {
-            background: var(--white);
-            border-radius: 25px;
+            background: var(--bg-card);
+            border-radius: 8px;
             padding: 2rem;
             box-shadow: var(--shadow-soft);
             text-align: center;
             position: relative;
             overflow: hidden;
-            border: 2px solid transparent;
+            border: 2px solid var(--border);
             transition: all 0.3s ease;
         }
 
@@ -223,29 +238,29 @@
 
         .stat-card:hover {
             transform: translateY(-5px);
-            border-color: var(--primary);
+            border-color: var(--gold);
         }
 
         .stat-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--gold);
         }
 
         .stat-number {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 2.2rem;
             font-weight: 700;
-            color: var(--text-primary);
+            color: var(--white);
             margin-bottom: 0.5rem;
         }
 
         .stat-label {
             color: var(--text-secondary);
-            font-weight: 500;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.03em;
         }
 
         /* Leaderboard Container */
@@ -258,24 +273,26 @@
 
         /* Main Leaderboard */
         .leaderboard-main {
-            background: var(--white);
-            border-radius: 25px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
             box-shadow: var(--shadow-soft);
             overflow: hidden;
         }
 
         .leaderboard-header {
             background: var(--gradient-main);
-            color: var(--white);
+            color: var(--bg);
             padding: 2rem;
             text-align: center;
         }
 
         .leaderboard-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
             margin-bottom: 0.5rem;
+            text-transform: uppercase;
         }
 
         .leaderboard-subtitle {
@@ -320,8 +337,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Orbitron', sans-serif;
             font-size: 2rem;
-            color: var(--white);
+            color: var(--bg);
             font-weight: 700;
             position: relative;
         }
@@ -331,15 +349,17 @@
             width: 100px;
             height: 100px;
             font-size: 2.5rem;
+            box-shadow: 0 0 30px rgba(255, 200, 49, 0.5);
         }
 
         .podium-place.second .podium-avatar {
             background: var(--gradient-silver);
-            color: var(--dark);
+            box-shadow: 0 0 24px rgba(192, 192, 192, 0.35);
         }
 
         .podium-place.third .podium-avatar {
             background: var(--gradient-bronze);
+            box-shadow: 0 0 24px rgba(184, 134, 11, 0.35);
         }
 
         .podium-crown {
@@ -350,8 +370,8 @@
         }
 
         .podium-name {
-            font-weight: 600;
-            color: var(--text-primary);
+            font-weight: 700;
+            color: var(--white);
             margin-bottom: 0.25rem;
         }
 
@@ -362,10 +382,10 @@
         }
 
         .podium-score {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-weight: 700;
             font-size: 1.2rem;
-            color: var(--primary);
+            color: var(--gold);
         }
 
         /* Detailed Rankings */
@@ -377,50 +397,51 @@
             display: flex;
             align-items: center;
             padding: 1.5rem 2rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--border);
             transition: all 0.3s ease;
             position: relative;
         }
 
         .ranking-item:hover {
-            background: var(--light);
+            background: var(--bg-alt);
             transform: translateX(10px);
         }
 
         .ranking-item.highlight {
-            background: linear-gradient(135deg, rgba(91, 76, 245, 0.1), rgba(240, 147, 251, 0.1));
-            border-left: 4px solid var(--primary);
+            background: linear-gradient(135deg, rgba(255, 200, 49, 0.08), rgba(0, 217, 255, 0.08));
+            border-left: 4px solid var(--gold);
         }
 
         .rank-position {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
             margin-right: 2rem;
             min-width: 50px;
             text-align: center;
+            color: var(--white);
         }
 
         .rank-change {
             margin-left: 0.5rem;
             font-size: 0.8rem;
             padding: 0.25rem 0.5rem;
-            border-radius: 10px;
-            font-weight: 600;
+            border-radius: 4px;
+            font-weight: 700;
         }
 
         .rank-change.up {
-            background: rgba(78, 205, 196, 0.2);
+            background: rgba(57, 255, 136, 0.15);
             color: var(--success);
         }
 
         .rank-change.down {
-            background: rgba(255, 107, 107, 0.2);
+            background: rgba(255, 59, 92, 0.15);
             color: var(--danger);
         }
 
         .rank-change.same {
-            background: rgba(113, 128, 150, 0.2);
+            background: rgba(138, 138, 156, 0.15);
             color: var(--text-secondary);
         }
 
@@ -433,8 +454,9 @@
             align-items: center;
             justify-content: center;
             background: var(--gradient-main);
-            color: var(--white);
-            font-weight: 600;
+            color: var(--bg);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
         }
 
         .participant-details {
@@ -442,8 +464,8 @@
         }
 
         .participant-name {
-            font-weight: 600;
-            color: var(--text-primary);
+            font-weight: 700;
+            color: var(--white);
             margin-bottom: 0.25rem;
             font-size: 1.1rem;
         }
@@ -461,10 +483,10 @@
         }
 
         .participant-total-score {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--gold);
             margin-bottom: 0.25rem;
         }
 
@@ -497,21 +519,23 @@
         }
 
         .sidebar-card {
-            background: var(--white);
-            border-radius: 25px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 2rem;
             box-shadow: var(--shadow-soft);
         }
 
         .sidebar-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--gold);
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            text-transform: uppercase;
         }
 
         /* Area Performance */
@@ -526,14 +550,15 @@
             align-items: center;
             justify-content: space-between;
             padding: 1rem;
-            background: var(--light);
-            border-radius: 15px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             transition: all 0.3s ease;
         }
 
         .area-item:hover {
             transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .area-info {
@@ -543,11 +568,8 @@
         }
 
         .area-icon-small {
-            font-size: 1.5rem;
-            background: var(--gradient-main);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.3rem;
+            color: var(--gold);
         }
 
         .area-stats-right {
@@ -555,9 +577,9 @@
         }
 
         .area-average {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--gold);
         }
 
         .area-participants {
@@ -577,8 +599,9 @@
             align-items: center;
             gap: 1rem;
             padding: 1rem;
-            background: var(--light);
-            border-radius: 15px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             transition: all 0.3s ease;
         }
 
@@ -594,7 +617,7 @@
             align-items: center;
             justify-content: center;
             background: var(--success);
-            color: var(--white);
+            color: var(--bg);
             font-size: 1rem;
         }
 
@@ -604,7 +627,7 @@
 
         .activity-text {
             font-size: 0.9rem;
-            color: var(--text-primary);
+            color: var(--white);
             margin-bottom: 0.25rem;
         }
 
@@ -619,18 +642,19 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            background: var(--light);
-            border-radius: 15px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 6px;
             margin-bottom: 1rem;
         }
 
         .record-label {
-            font-weight: 500;
-            color: var(--text-primary);
+            font-weight: 600;
+            color: var(--white);
         }
 
         .record-value {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Share Tech Mono', monospace;
             font-weight: 700;
             color: var(--success);
         }
@@ -689,7 +713,7 @@
 
         @keyframes positionHighlight {
             0%, 100% { background: transparent; }
-            50% { background: linear-gradient(135deg, rgba(78, 205, 196, 0.3), rgba(91, 76, 245, 0.35)); }
+            50% { background: linear-gradient(135deg, rgba(255, 200, 49, 0.25), rgba(0, 217, 255, 0.25)); }
         }
 
         /* New record alert */
@@ -738,7 +762,7 @@
     <header class="header">
         <nav class="navbar">
             <a href="#" class="logo">
-                <i class="fas fa-trophy"></i>
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
                 Tabla de Posiciones en Vivo
             </a>
             
@@ -749,23 +773,23 @@
                 </div>
                 
                 <button class="refresh-btn" onclick="refreshLeaderboard()">
-                    <i class="fas fa-sync-alt"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" /></svg>
                     <span class="loading" id="refreshLoading" style="display: none;"></span>
                     <span id="refreshText">Actualizar</span>
                 </button>
 
                 <button class="refresh-btn" onclick="startCompetitionTimer()" style="background: var(--primary); margin-left: 0.5rem;">
-                    <i class="fas fa-play"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg>
                     Iniciar Timer
                 </button>
 
                 <button class="refresh-btn" onclick="resetCompetition()" style="background: var(--text-secondary); margin-left: 0.5rem; font-size: 0.8rem; opacity: 0.7;">
-                    <i class="fas fa-cog"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg>
                     Admin
                 </button>
                 
                 <a href="competencias.html" class="nav-back">
-                    <i class="fas fa-arrow-left"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg>
                     Volver a Competencias
                 </a>
 
@@ -784,7 +808,7 @@
             <div class="hero-stats">
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fas fa-users"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg>
                     </div>
                     <div class="stat-number" id="totalParticipants">0</div>
                     <div class="stat-label">Participantes Activos</div>
@@ -792,7 +816,7 @@
 
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fas fa-clock"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></svg>
                     </div>
                     <div class="stat-number" id="timeRemaining">01:45:23</div>
                     <div class="stat-label">Tiempo Restante</div>
@@ -800,7 +824,7 @@
 
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg>
                     </div>
                     <div class="stat-number" id="averageScore">0</div>
                     <div class="stat-label">Puntuación Promedio</div>
@@ -808,7 +832,7 @@
 
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="fas fa-fire"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></svg>
                     </div>
                     <div class="stat-number" id="topScore">0</div>
                     <div class="stat-label">Puntuación Máxima</div>
@@ -821,7 +845,7 @@
                 <div class="leaderboard-main">
                     <div class="leaderboard-header">
                         <h2 class="leaderboard-title">
-                            <i class="fas fa-crown"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" /> <path d="M5 21h14" /></svg>
                             Tabla de Posiciones
                         </h2>
                         <p class="leaderboard-subtitle">Actualización automática cada 10 segundos</p>
@@ -838,7 +862,7 @@
 
                         <div class="podium-place first">
                             <div class="podium-avatar" id="podium1Avatar">
-                                <div class="podium-crown">👑</div>
+                                <div class="podium-crown"><svg style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" /> <path d="M5 21h14" /></svg></div>
                                 1
                             </div>
                             <div class="podium-name" id="podium1Name">-</div>
@@ -865,7 +889,7 @@
                     <!-- Area Performance -->
                     <div class="sidebar-card">
                         <h3 class="sidebar-title">
-                            <i class="fas fa-chart-bar"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg>
                             Rendimiento por Área
                         </h3>
                         <div class="area-performance" id="areaPerformance">
@@ -876,7 +900,7 @@
                     <!-- Recent Activity -->
                     <div class="sidebar-card">
                         <h3 class="sidebar-title">
-                            <i class="fas fa-bolt"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></svg>
                             Actividad Reciente
                         </h3>
                         <div class="activity-list" id="activityList">
@@ -887,7 +911,7 @@
                     <!-- Records -->
                     <div class="sidebar-card">
                         <h3 class="sidebar-title">
-                            <i class="fas fa-medal"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" /> <path d="M11 12 5.12 2.2" /> <path d="m13 12 5.88-9.8" /> <path d="M8 7h8" /> <circle cx="12" cy="17" r="5" /> <path d="M12 18v-2h-.5" /></svg>
                             Récords de Hoy
                         </h3>
                         <div class="record-item">
@@ -910,6 +934,15 @@
 
     <script>
         // Live Leaderboard — Supabase Real-Time
+const AREA_ICONS = {
+            'algebra': `<svg class="area-icon-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h2l2 5 2-10h4" /> <rect x="3" y="3" width="18" height="18" rx="2" /></svg>`,
+            'geometry': `<svg class="area-icon-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z" /> <rect x="3" y="14" width="7" height="7" rx="1" /> <circle cx="17.5" cy="17.5" r="3.5" /></svg>`,
+            'calculus': `<svg class="area-icon-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16c5 0 7-8 12-8a4 4 0 0 1 0 8c-5 0-7-8-12-8a4 4 0 1 0 0 8" /></svg>`,
+            'trigonometry': `<svg class="area-icon-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></svg>`,
+            'mental-calc': `<svg class="area-icon-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18V5" /> <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /> <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /> <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /> <path d="M18 18a4 4 0 0 0 2-7.464" /> <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /> <path d="M6 18a4 4 0 0 1-2-7.464" /> <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg>`,
+            'puzzles': `<svg class="area-icon-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" /></svg>`
+        };
+
         class LiveLeaderboard {
             constructor() {
                 this.SUPABASE_URL     = 'https://mywwtkpcswisdwrfqzch.supabase.co';
@@ -927,11 +960,7 @@
                     'algebra': 'Álgebra', 'geometry': 'Geometría', 'calculus': 'Cálculo',
                     'trigonometry': 'Trigonometría', 'mental-calc': 'Cálculo Mental', 'puzzles': 'Acertijos'
                 };
-                this.areaIcons = {
-                    'algebra': 'fas fa-square-root-alt', 'geometry': 'fas fa-shapes',
-                    'calculus': 'fas fa-infinity', 'trigonometry': 'fas fa-wave-square',
-                    'mental-calc': 'fas fa-brain', 'puzzles': 'fas fa-puzzle-piece'
-                };
+
                 this.init();
             }
 
@@ -1030,7 +1059,7 @@
                 }
                 const startButton = document.querySelector('[onclick="startCompetitionTimer()"]');
                 if (startButton && this.competition.timer_started) {
-                    startButton.innerHTML = '<i class="fas fa-check"></i> Timer Iniciado';
+                    startButton.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Timer Iniciado';
                     startButton.style.background = 'var(--success)';
                     startButton.disabled = true;
                 }
@@ -1040,7 +1069,7 @@
                 const tableContainer = document.getElementById('rankingsTable');
                 tableContainer.innerHTML = `
                     <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; color: var(--primary);"></i>
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;;font-size: 3rem; margin-bottom: 1rem; color: var(--primary);" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg>
                         <h3>Esperando Participantes</h3>
                         <p>Los participantes aparecerán aquí cuando ingresen con el código de acceso</p>
                         <p style="margin-top: 1rem; font-size: 0.9rem;">La tabla se actualiza automáticamente cada 5 segundos</p>
@@ -1062,14 +1091,14 @@
                         const avatarText = participant.name.split(' ').map(n => n[0]).join('');
                         
                         document.getElementById(`podium${i + 1}Avatar`).innerHTML = 
-                            i === 0 ? '<div class="podium-crown">👑</div>' + avatarText : avatarText;
+                            i === 0 ? '<div class="podium-crown"><svg style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" /> <path d="M5 21h14" /></svg></div>' + avatarText : avatarText;
                         document.getElementById(`podium${i + 1}Name`).textContent = participant.name;
                         document.getElementById(`podium${i + 1}School`).textContent = participant.school;
                         document.getElementById(`podium${i + 1}Score`).textContent = `${participant.totalScore} pts`;
                     } else {
                         // No participant for this position
                         document.getElementById(`podium${i + 1}Avatar`).innerHTML = i === 0 ? 
-                            '<div class="podium-crown">👑</div>?' : '?';
+                            '<div class="podium-crown"><svg style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" /> <path d="M5 21h14" /></svg></div>?' : '?';
                         document.getElementById(`podium${i + 1}Name`).textContent = 'Esperando...';
                         document.getElementById(`podium${i + 1}School`).textContent = 'Participante';
                         document.getElementById(`podium${i + 1}Score`).textContent = '0 pts';
@@ -1135,10 +1164,10 @@
                         <div class="participant-details">
                             <div class="participant-name">${participant.name}</div>
                             <div class="participant-info">
-                                <span><i class="fas fa-school"></i> ${participant.school}</span>
-                                <span><i class="fas fa-fire"></i> Racha: ${participant.streak || 0}</span>
-                                <span><i class="fas fa-tasks"></i> Problemas: ${totalProblems}</span>
-                                <span><i class="fas fa-clock"></i> ${lastActivityTime}</span>
+                                <span><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M18 4.933V21" /> <path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6" /> <path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11" /> <path d="M6 4.933V21" /> <circle cx="12" cy="9" r="2" /></svg> ${participant.school}</span>
+                                <span><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></svg> Racha: ${participant.streak || 0}</span>
+                                <span><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /></svg> Problemas: ${totalProblems}</span>
+                                <span><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></svg> ${lastActivityTime}</span>
                             </div>
                         </div>
                         <div class="participant-score-section">
@@ -1168,11 +1197,11 @@
             getRankChange(participant) {
                 const change = participant.previousRank - participant.currentRank;
                 if (change > 0) {
-                    return { type: 'up', icon: '↑', value: change };
+                    return { type: 'up', icon: `<svg style="width:0.85em;height:0.85em;vertical-align:-0.1em;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /></svg>`, value: change };
                 } else if (change < 0) {
-                    return { type: 'down', icon: '↓', value: change };
+                    return { type: 'down', icon: `<svg style="width:0.85em;height:0.85em;vertical-align:-0.1em;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14" /> <path d="m19 12-7 7-7-7" /></svg>`, value: change };
                 } else {
-                    return { type: 'same', icon: '−', value: 0 };
+                    return { type: 'same', icon: `<svg style="width:0.85em;height:0.85em;vertical-align:-0.1em;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /></svg>`, value: 0 };
                 }
             }
 
@@ -1183,7 +1212,7 @@
                 if (this.recentActivity.length === 0) {
                     activityContainer.innerHTML = `
                         <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                            <i class="fas fa-clock" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;;font-size: 2rem; margin-bottom: 1rem;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></svg>
                             <p>No hay actividad reciente</p>
                             <p style="font-size: 0.8rem; margin-top: 0.5rem;">La actividad aparecerá cuando los participantes resuelvan problemas</p>
                         </div>
@@ -1202,7 +1231,7 @@
 
                     activityItem.innerHTML = `
                         <div class="activity-icon" style="background: ${difficultyColor};">
-                            <i class="fas fa-plus"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="M12 5v14" /></svg>
                         </div>
                         <div class="activity-content">
                             <div class="activity-text">
@@ -1224,7 +1253,7 @@
                 if (this.participants.length === 0) {
                     areaContainer.innerHTML = `
                         <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                            <i class="fas fa-chart-bar" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;;font-size: 2rem; margin-bottom: 1rem;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg>
                             <p>Sin datos de rendimiento</p>
                             <p style="font-size: 0.8rem;">Los datos aparecerán cuando haya participantes activos</p>
                         </div>
@@ -1247,7 +1276,7 @@
 
                     areaItem.innerHTML = `
                         <div class="area-info">
-                            <i class="${this.areaIcons[area]} area-icon-small"></i>
+                            ${AREA_ICONS[area]}
                             <span>${this.areaNames[area]}</span>
                         </div>
                         <div class="area-stats-right">
@@ -1305,7 +1334,7 @@
                 const el = document.getElementById('timeRemaining');
                 if (!el) return;
                 if (!this.timerActive) {
-                    el.textContent = '⏳ ' + display;
+                    el.textContent = '' + display;
                     el.style.color = '#ffa726';
                     el.style.animation = 'waitingPulse 2s infinite';
                 } else {
@@ -1340,20 +1369,20 @@
                 await lb.loadData();
             }
             if (!lb.competition) {
-                alert('⚠️ No se pudo conectar. Recarga la página.');
+                alert('No se pudo conectar. Recarga la página.');
                 return;
             }
 
-            const accessCode = prompt('🎯 INICIAR CRONÓMETRO — SOLO PROFESOR 🎯\n\nIngresa el código del profesor:');
+            const accessCode = prompt('INICIAR CRONÓMETRO — SOLO PROFESOR\n\nIngresa el código del profesor:');
             if (!accessCode) return;
 
             const partCount = lb.participants.length;
             if (partCount === 0) {
-                alert('⚠️ No hay participantes aún.\n\nEspera a que al menos un estudiante ingrese.');
+                alert('No hay participantes aún.\n\nEspera a que al menos un estudiante ingrese.');
                 return;
             }
 
-            if (!confirm(`🚀 INICIAR COMPETENCIA\n\nParticipantes: ${partCount}\nDuración: 2 horas\n\n¿Iniciar ahora?`)) return;
+            if (!confirm(`INICIAR COMPETENCIA\n\nParticipantes: ${partCount}\nDuración: 2 horas\n\n¿Iniciar ahora?`)) return;
 
             const { data, error } = await lb.supabase.rpc('start_competition_timer', {
                 p_prof_code:      accessCode.toUpperCase(),
@@ -1361,32 +1390,32 @@
             });
 
             if (error || !data || !data.success) {
-                alert('❌ ' + (data?.error || 'Código incorrecto o error.'));
+                alert(data?.error || 'Código incorrecto o error.');
                 return;
             }
-            alert('✅ ¡Cronómetro iniciado! Todos los participantes han sido notificados.');
+            alert('¡Cronómetro iniciado! Todos los participantes han sido notificados.');
         }
 
         // Reiniciar competencia — Supabase
         async function resetCompetition() {
             const lb = liveLeaderboard;
-            const accessCode = prompt('🔒 ACCESO RESTRINGIDO — SOLO PROFESOR\n\nIngresa el código del profesor:');
+            const accessCode = prompt('ACCESO RESTRINGIDO — SOLO PROFESOR\n\nIngresa el código del profesor:');
             if (!accessCode) return;
 
-            if (!confirm('⚠️ ADVERTENCIA\n\nEsto eliminará TODOS los datos:\n• Participantes\n• Puntuaciones\n\n¿Continuar?')) return;
-            if (!confirm('🔥 ÚLTIMA CONFIRMACIÓN\n\nEsta acción NO se puede deshacer.\n\n¿Reiniciar completamente?')) return;
+            if (!confirm('ADVERTENCIA\n\nEsto eliminará TODOS los datos:\n• Participantes\n• Puntuaciones\n\n¿Continuar?')) return;
+            if (!confirm('ÚLTIMA CONFIRMACIÓN\n\nEsta acción NO se puede deshacer.\n\n¿Reiniciar completamente?')) return;
 
             const { data, error } = await lb.supabase.rpc('reset_competition', {
                 p_prof_code: accessCode.toUpperCase()
             });
 
             if (error || !data || !data.success) {
-                alert('❌ ' + (data?.error || 'Código incorrecto o error.'));
+                alert(data?.error || 'Código incorrecto o error.');
                 return;
             }
 
             localStorage.removeItem('currentParticipant');
-            alert('✅ Competencia reiniciada. La página se recargará.');
+            alert('Competencia reiniciada. La página se recargará.');
             location.reload();
         }
 

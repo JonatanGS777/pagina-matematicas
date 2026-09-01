@@ -1906,7 +1906,7 @@
                 document.getElementById('competitionStatus').textContent = 'Preparando';
                 
                 // Show welcome message with participant info
-                alert(`¡Bienvenido ${this.currentParticipant.name}!\n\n⏳ Esperando que el profesor inicie la competencia...\n\nPuedes ver la tabla de posiciones mientras esperas.`);
+                alert(`¡Bienvenido ${this.currentParticipant.name}!\n\nEsperando que el profesor inicie la competencia...\n\nPuedes ver la tabla de posiciones mientras esperas.`);
                 
                 // Show main content with smooth transition
                 setTimeout(() => {
@@ -2002,7 +2002,7 @@
 
                 const started = this.currentCompetition && this.currentCompetition.timer_started;
                 if (!started) {
-                    el.textContent = '⏳ ' + display;
+                    el.textContent = display;
                     el.style.color = 'var(--warning)';
                     el.style.animation = 'waitingPulse 2s infinite';
                 } else {
