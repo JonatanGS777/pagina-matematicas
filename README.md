@@ -119,6 +119,11 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `stem/Ebook-STEM/` | Cuaderno de Campo Microbiológico | Warm cream/amber/teal lab-notebook theme; all interactive charts, simulations and accessibility toggles preserved |
 | `club/investigacion.html` | Gaceta Científica | Editorial newspaper/gazette front page — masthead, drop cap, duotone archive photo, dated headlines |
 | `club/project.html` | Mesa de Redacción | Companion identity to Gaceta Científica (same palette) reached via its "Comenzar Proyecto" CTA — manuscript-index sidebar, typewriter-draft editor, charts mounted as press clippings |
+| `club/competencias.html` | Arena de Torneo | Esports scoreboard — black/gold-neon/electric-blue, Orbitron/Rajdhani/Share Tech Mono |
+| `club/leaderboard.html` | Arena de Torneo *(companion)* | Same identity as `competencias.html`, reused deliberately — it's the public live-display screen for the same competition system |
+| `club/olimpiadas.html` | Ceremonia Olímpica | Deep navy + medal gold + cream, Cinzel serif headings, laurel/medal ceremonial motifs |
+| `club/admin.html` | Torre de Control | Dark slate air-traffic-control panel — cyan/amber/green/red accents, Barlow Condensed/Barlow/IBM Plex Mono, radar-ping status dot |
+| `club/mision-matematica/` | Constelación Modular | Brutalist geometric — black/paper with lime + magenta accent, Space Grotesk/JetBrains Mono; canvas particles draw connecting lines between nearby nodes |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -131,6 +136,30 @@ dead `../contexto/contexto.html` nav links (404) repointed to
 `../contexto/historiamath.html`; and an unescaped-quote injection in
 `club/project.html`'s Pyodide chart generator (a title/data value containing
 a `"` broke the generated Python code).
+
+More bugs found during the `club/` competition-system and admin passes: a
+residual `⏳` emoji (outside the Unicode range an earlier regex swept) left in
+`competencias.html`'s timer display and a welcome `alert()`; `podium-avatar`
+text on gold/bronze rendering white-on-white in `leaderboard.html` (only
+silver had a dark-text override); `olimpiadas.html`'s `[data-theme="dark"]`
+selector actually applying the *light* palette (inverted naming, pre-existing)
+— renamed so dark means dark; a CSS-specificity bug in
+`mision-matematica/index.html` where a `.competition-card.featured *` wildcard
+rule (2 classes) beat the single-class `.featured-badge` rule, rendering its
+"Principal" label as black-on-black; and, in `admin.html`, two dangling CSS
+variable references (`--gradient-primary`, `--color-gray-500`) left over from
+the old palette that silently broke the participant-avatar gradient and the
+row-subtitle color once the tokens were renamed.
+
+`club/admin.html` also had **zero access control** — unlike the password
+prompt gating the link to it from `olimpiadas.html`, the page itself loaded
+and displayed real participant PII (names, emails, ages, schools) for anyone
+who navigated to it directly, and the "Volver" link was the only thing
+gating the *link*, not the destination. Fixed by adding the same client-side
+password prompt directly on `admin.html`'s own `DOMContentLoaded`, blocking
+all Supabase calls until it's entered correctly. This is not real
+authentication (client-side only, same weak level already accepted
+elsewhere on the site) — a proper fix needs server-side auth.
 
 ### Icons (Lucide SVG)
 
@@ -152,20 +181,25 @@ toasts) has been converted. As of this writing that's done on: `index.html`
 each with its own icon — and `js/supabase-analytics.js`), `galeria/galeria.html`,
 `contexto/historiamath.html`, `materiales/materiales.html`,
 `stem/ciencia-datos.html`, `stem/ingenieria.html`, `stem/Ebook-STEM/index.html`,
-`club/investigacion.html`, and `club/project.html`. `links/links.html` never
-used Font Awesome to begin with. Everything else still uses Font Awesome
-and/or emoji — convert them the same way when they get redesigned.
+`club/investigacion.html`, `club/project.html`, `club/competencias.html`,
+`club/leaderboard.html`, `club/olimpiadas.html`, `club/admin.html`, and
+`club/mision-matematica/index.html`. `links/links.html` never used Font
+Awesome to begin with; `mision-matematica/index.html` used the `lucide.js`
+CDN build (`data-lucide` attributes + `lucide.createIcons()`) rather than
+Font Awesome, and was converted to the same inline-SVG-with-no-JS-dependency
+pattern as every other page, dropping that CDN script too. Everything else
+still uses Font Awesome and/or emoji — convert them the same way when they
+get redesigned.
 
 ### Not yet redesigned
 
-`club/` (admin, competencias, leaderboard, olimpiadas, project,
-proyectos-creativos, registro, `modulos/`, `mision-matematica/`), `lab/`,
-`salon/`, `contexto/historiamath-examen.html`,
-`contexto/historiamath-preguntas.html`, `contexto/profesor-dashboard.html`,
-`materiales/materiales/` (the study-materials subpages), and
-`perfil-investigador/` still use the previous purple/glassmorphism theme and
-`js/dark-mode.js`. Redesign them the same way — one page at a time, each with
-its own identity — when needed.
+`club/` (proyectos-creativos, registro, `modulos/` — algebra, calculus,
+geometry, trigonometry, puzzles, statistics), `lab/`, `salon/`,
+`contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
+`contexto/profesor-dashboard.html`, `materiales/materiales/` (the
+study-materials subpages), and `perfil-investigador/` still use the previous
+purple/glassmorphism theme and `js/dark-mode.js`. Redesign them the same
+way — one page at a time, each with its own identity — when needed.
 
 ---
 
@@ -348,6 +382,7 @@ Language persists in `localStorage` under the key `lang`.
 | `club/competencias.html` | Dashboard, areas, timer, inline leaderboard |
 | `club/leaderboard.html` | Stats, podium, records, activity |
 | `club/olimpiadas.html` | Categories, problems, schedule, prizes |
+| `club/mision-matematica/index.html` | Nav, hero typewriter, mission/vision, activities, resources, contact form |
 | `perfil-investigador/index.html` | Independent `data-i18n` attribute system |
 
 ---
