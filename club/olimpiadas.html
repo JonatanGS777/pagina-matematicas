@@ -6,49 +6,48 @@
     <title>Olimpiadas Matemáticas - Prof. Yonatan Guerrero</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* ==================== CSS Variables ==================== */
         :root {
-            /* Colors */
-            --color-primary: #2563eb;
-            --color-primary-dark: #1d4ed8;
-            --color-secondary: #7c3aed;
-            --color-accent: #f59e0b;
-            --color-success: #10b981;
-            --color-warning: #f59e0b;
-            --color-danger: #ef4444;
-            --color-gold: #fbbf24;
-            --color-silver: #9ca3af;
-            --color-bronze: #d97706;
-            
-            /* Neutrals */
-            --color-white: #ffffff;
-            --color-gray-50: #f9fafb;
-            --color-gray-100: #f3f4f6;
-            --color-gray-200: #e5e7eb;
-            --color-gray-300: #d1d5db;
-            --color-gray-400: #9ca3af;
-            --color-gray-500: #6b7280;
-            --color-gray-600: #4b5563;
-            --color-gray-700: #374151;
-            --color-gray-800: #1f2937;
-            --color-gray-900: #111827;
-            
+            /* Colors — Ceremonia Olímpica */
+            --color-primary: #C9A227;
+            --color-primary-dark: #A8871F;
+            --color-secondary: #8FA6C9;
+            --color-accent: #C9A227;
+            --color-success: #4A9C6D;
+            --color-warning: #C9A227;
+            --color-danger: #B0453D;
+            --color-gold: #D4AF37;
+            --color-silver: #B8C4D0;
+            --color-bronze: #B87333;
+
+            /* Neutrals — navy surfaces + cream text */
+            --color-white: #16244F;
+            --color-gray-50: #16244F;
+            --color-gray-100: #1C2E5E;
+            --color-gray-200: #2A3D6E;
+            --color-gray-300: #3D4F7A;
+            --color-gray-400: #7A88A8;
+            --color-gray-500: #9BA8C4;
+            --color-gray-600: #B9C2DA;
+            --color-gray-700: #D8DDEC;
+            --color-gray-800: #E8E4D8;
+            --color-gray-900: #F2EEE3;
+
             /* Gradients */
-            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
-            --gradient-olympic: linear-gradient(135deg, var(--color-gold) 0%, #f97316 50%, var(--color-danger) 100%);
-            --gradient-hero: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
-            
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, #E8C766 100%);
+            --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary-dark) 100%);
+            --gradient-olympic: linear-gradient(135deg, var(--color-gold) 0%, #E8C766 50%, var(--color-primary-dark) 100%);
+            --gradient-hero: linear-gradient(135deg, #0F1B3C 0%, #16244F 50%, #1C2E5E 100%);
+
             /* Shadows */
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.25);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.35), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.35);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.45), 0 8px 10px -6px rgb(0 0 0 / 0.35);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.6);
             
             /* Spacing */
             --space-1: 0.25rem;
@@ -104,7 +103,7 @@
         }
 
         body {
-            font-family: 'Syne', sans-serif;
+            font-family: 'EB Garamond', serif;
             line-height: 1.6;
             color: var(--color-gray-900);
             background-color: var(--color-gray-50);
@@ -143,17 +142,17 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(240, 238, 248, 0.92);
+            background: rgba(15, 27, 60, 0.92);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
-            border-bottom: 1px solid rgba(91, 76, 245, 0.1);
+            box-shadow: 0 1px 0 rgba(201, 162, 39, 0.1), 0 4px 24px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(201, 162, 39, 0.2);
             transition: var(--transition-base);
         }
 
         .header--scrolled {
             box-shadow: var(--shadow-lg);
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(15, 27, 60, 0.98);
         }
 
         .header__nav {
@@ -168,7 +167,7 @@
             display: flex;
             align-items: center;
             gap: var(--space-2);
-            font-family: 'Syne', sans-serif;
+            font-family: 'EB Garamond', serif;
             font-size: var(--font-size-xl);
             font-weight: 800;
             letter-spacing: -0.03em;
@@ -294,22 +293,13 @@
             width: 100%;
             height: 100%;
             background: var(--gradient-hero);
-            animation: gradientShift 10s ease infinite;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { 
-                background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
-            }
-            25% { 
-                background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 50%, var(--color-primary) 100%);
-            }
-            50% { 
-                background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 50%, var(--color-secondary) 100%);
-            }
-            75% { 
-                background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 50%, var(--color-secondary) 100%);
-            }
+        .hero__background::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 50% 30%, rgba(201, 162, 39, 0.18), transparent 65%);
         }
 
         .hero__particles {
@@ -350,7 +340,7 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            color: var(--color-white);
+            color: var(--color-gray-900);
             max-width: 900px;
             padding: var(--space-8);
             animation: fadeInUp 1s var(--transition-slow);
@@ -368,17 +358,20 @@
         }
 
         .hero__title {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Cinzel', serif;
             font-size: clamp(var(--font-size-4xl), 6vw, var(--font-size-6xl));
             font-weight: 700;
             margin-bottom: var(--space-6);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--color-primary);
+            text-shadow: 0 0 30px rgba(201, 162, 39, 0.4);
             line-height: 1.1;
         }
 
         .hero__subtitle {
+            font-family: 'EB Garamond', serif;
+            font-style: italic;
             font-size: var(--font-size-xl);
-            font-weight: 300;
+            font-weight: 500;
             margin-bottom: var(--space-8);
             opacity: 0.9;
             line-height: 1.4;
@@ -476,7 +469,7 @@
         }
 
         .section__title {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Cinzel', serif;
             font-size: clamp(var(--font-size-3xl), 4vw, var(--font-size-5xl));
             font-weight: 700;
             margin-bottom: var(--space-6);
@@ -603,6 +596,11 @@
             color: #92400e;
         }
 
+        .card--gold .card__description,
+        .card--gold .card__feature {
+            color: #78502e;
+        }
+
         .card--silver {
             border: 2px solid var(--color-silver);
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -623,6 +621,11 @@
             color: #475569;
         }
 
+        .card--silver .card__description,
+        .card--silver .card__feature {
+            color: #52606d;
+        }
+
         .card--bronze {
             border: 2px solid var(--color-bronze);
             background: linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%);
@@ -641,6 +644,11 @@
 
         .card--bronze .card__title {
             color: #9a3412;
+        }
+
+        .card--bronze .card__description,
+        .card--bronze .card__feature {
+            color: #7c3a0f;
         }
 
         /* Prize Card Hover Effects */
@@ -765,22 +773,22 @@
         }
 
         .problem__difficulty--easy {
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(74, 156, 109, 0.18);
             color: var(--color-success);
         }
 
         .problem__difficulty--medium {
-            background: rgba(245, 158, 11, 0.1);
+            background: rgba(201, 162, 39, 0.18);
             color: var(--color-warning);
         }
 
         .problem__difficulty--hard {
-            background: rgba(124, 58, 237, 0.1);
+            background: rgba(143, 166, 201, 0.18);
             color: var(--color-secondary);
         }
 
         .problem__content {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'EB Garamond', serif;
             font-size: var(--font-size-lg);
             line-height: 1.7;
             color: var(--color-gray-800);
@@ -938,7 +946,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(201, 162, 39, 0.12) 0%, transparent 70%);
             animation: shimmer 4s infinite;
         }
 
@@ -1024,7 +1032,7 @@
 
         .cta__description {
             font-size: var(--font-size-xl);
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(22, 36, 79, 0.85);
             margin-bottom: var(--space-8);
             max-width: 600px;
             margin-left: auto;
@@ -1054,8 +1062,8 @@
 
         /* ==================== Footer Component ==================== */
         .footer {
-            background: var(--color-gray-900);
-            color: var(--color-white);
+            background: #0B142E;
+            color: var(--color-gray-900);
             text-align: center;
             padding: var(--space-12) 0;
             position: relative;
@@ -1077,6 +1085,14 @@
         }
 
         /* ==================== Utility Classes ==================== */
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -1104,7 +1120,7 @@
                 right: -100%;
                 width: 300px;
                 height: 100vh;
-                background: rgba(255, 255, 255, 0.98);
+                background: rgba(15, 27, 60, 0.98);
                 backdrop-filter: blur(20px);
                 flex-direction: column;
                 justify-content: flex-start;
@@ -1282,7 +1298,7 @@
         }
 
         .olimpiad-modal__title {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Cinzel', serif;
             font-size: var(--font-size-2xl);
             font-weight: 700;
             background: var(--gradient-olympic);
@@ -1347,7 +1363,11 @@
         .olimpiad-form__input:focus,
         .olimpiad-form__select:focus {
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.2);
+        }
+
+        .olimpiad-form__input::placeholder {
+            color: var(--color-gray-500);
         }
 
         .olimpiad-form__actions {
@@ -1445,7 +1465,7 @@
         .inscritos-counter--avanzada { border-color: var(--color-secondary); background: rgba(124,58,237,0.05); }
 
         .inscritos-counter__number {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Cinzel', serif;
             font-size: var(--font-size-4xl);
             font-weight: 700;
             line-height: 1;
@@ -1488,7 +1508,7 @@
         }
 
         .inscritos-category__title {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: 'Cinzel', serif;
             font-size: var(--font-size-xl);
             font-weight: 700;
             display: flex;
@@ -1576,7 +1596,7 @@
         <nav class="container">
             <div class="header__nav">
                 <a href="../index.html" class="header__logo">
-                    <i class="fas fa-calculator header__logo-icon"></i>
+                    <svg class="header__logo-icon" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg>
                     <span>Matemáticas Digitales</span>
                 </a>
                 
@@ -1589,25 +1609,25 @@
                 <ul class="header__menu" id="headerMenu">
                     <li class="header__menu-item">
                         <a href="../index.html" class="header__menu-link">
-                            <i class="fas fa-home"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
                             <span>Inicio</span>
                         </a>
                     </li>
                     <li class="header__menu-item">
                         <a href="#" class="header__menu-link header__menu-link--active">
-                            <i class="fas fa-trophy"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
                             <span>Olimpiadas</span>
                         </a>
                     </li>
                     <li class="header__menu-item">
                         <a href="../club/competencias.html" class="header__menu-link">
-                            <i class="fas fa-medal"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" /> <path d="M11 12 5.12 2.2" /> <path d="m13 12 5.88-9.8" /> <path d="M8 7h8" /> <circle cx="12" cy="17" r="5" /> <path d="M12 18v-2h-.5" /></svg>
                             <span>Competencias</span>
                         </a>
                     </li>
                     <li class="header__menu-item">
                         <a href="../materiales/materiales.html" class="header__menu-link">
-                            <i class="fas fa-book"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /></svg>
                             <span>Recursos</span>
                         </a>
                     </li>
@@ -1631,13 +1651,13 @@
             <p class="hero__subtitle">Escuela Superior María Teresa Piñeiro - Club de Matemáticas</p>
             
             <div class="hero__trophies">
-                <i class="fas fa-trophy hero__trophy hero__trophy--gold"></i>
-                <i class="fas fa-trophy hero__trophy hero__trophy--silver"></i>
-                <i class="fas fa-trophy hero__trophy hero__trophy--bronze"></i>
+                <svg class="hero__trophy hero__trophy--gold" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
+                <svg class="hero__trophy hero__trophy--silver" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
+                <svg class="hero__trophy hero__trophy--bronze" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
             </div>
             
             <a href="https://ompr.weebly.com/biblioteca.html?utm_source=chatgpt.com" class="hero__cta">
-                <i class="fas fa-rocket"></i>
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg>
                 <span>Practica y Prepárate para las olimpiadas</span>
             </a>
         </div>
@@ -1659,7 +1679,7 @@
 
                 <div class="card-grid">
                     <article class="card fade-in">
-                        <div class="card__icon">🌟</div>
+                        <div class="card__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg></div>
                         <h3 class="card__title">Categoría Novato</h3>
                         <p class="card__description">
                             Para estudiantes nuevos en el Club de Matemáticas que están descubriendo su pasión por los números.
@@ -1673,7 +1693,7 @@
                     </article>
 
                     <article class="card fade-in">
-                        <div class="card__icon">🚀</div>
+                        <div class="card__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg></div>
                         <h3 class="card__title">Categoría Intermedia</h3>
                         <p class="card__description">
                             Para miembros activos del club con experiencia en resolución de problemas matemáticos avanzados.
@@ -1687,7 +1707,7 @@
                     </article>
 
                     <article class="card fade-in">
-                        <div class="card__icon">💎</div>
+                        <div class="card__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3 8 9l4 13 4-13-2.5-6" /> <path d="M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z" /> <path d="M2 9h20" /></svg></div>
                         <h3 class="card__title">Categoría Avanzada</h3>
                         <p class="card__description">
                             Para nuestros veteranos del club que buscan los retos matemáticos más desafiantes y complejos.
@@ -1726,11 +1746,11 @@
                         </div>
                         <div class="problem__actions">
                             <button class="problem__btn problem__btn--primary">
-                                <i class="fas fa-pencil-alt"></i>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></svg>
                                 Resolver
                             </button>
                             <button class="problem__btn problem__btn--secondary">
-                                <i class="fas fa-lightbulb"></i>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg>
                                 Ver Pista
                             </button>
                         </div>
@@ -1747,11 +1767,11 @@
                         </div>
                         <div class="problem__actions">
                             <button class="problem__btn problem__btn--primary">
-                                <i class="fas fa-pencil-alt"></i>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></svg>
                                 Resolver
                             </button>
                             <button class="problem__btn problem__btn--secondary">
-                                <i class="fas fa-lightbulb"></i>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg>
                                 Ver Pista
                             </button>
                         </div>
@@ -1767,11 +1787,11 @@
                         </div>
                         <div class="problem__actions">
                             <button class="problem__btn problem__btn--primary">
-                                <i class="fas fa-pencil-alt"></i>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /> <path d="m15 5 4 4" /></svg>
                                 Resolver
                             </button>
                             <button class="problem__btn problem__btn--secondary">
-                                <i class="fas fa-lightbulb"></i>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg>
                                 Ver Pista
                             </button>
                         </div>
@@ -1851,7 +1871,7 @@
 
                 <div class="card-grid">
                     <article class="card card--gold fade-in">
-                        <div class="card__icon">🥇</div>
+                        <div class="card__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" /> <circle cx="12" cy="8" r="6" /></svg></div>
                         <h3 class="card__title">Primer Lugar</h3>
                         <p class="card__description">
                             El máximo reconocimiento para el campeón de cada categoría.
@@ -1865,7 +1885,7 @@
                     </article>
 
                     <article class="card card--silver fade-in">
-                        <div class="card__icon">🥈</div>
+                        <div class="card__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" /> <circle cx="12" cy="8" r="6" /></svg></div>
                         <h3 class="card__title">Segundo Lugar</h3>
                         <p class="card__description">
                             Reconocimiento especial para el subcampeón de la competencia.
@@ -1879,7 +1899,7 @@
                     </article>
 
                     <article class="card card--bronze fade-in">
-                        <div class="card__icon">🥉</div>
+                        <div class="card__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" /> <circle cx="12" cy="8" r="6" /></svg></div>
                         <h3 class="card__title">Tercer Lugar</h3>
                         <p class="card__description">
                             Premio de reconocimiento para el tercer lugar de cada categoría.
@@ -1907,25 +1927,25 @@
 
                 <div class="achievement-grid">
                     <article class="achievement fade-in">
-                        <div class="achievement__icon">🏆</div>
+                        <div class="achievement__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg></div>
                         <h4 class="achievement__title">Estudiantes preparados para Competir</h4>
                         <p class="achievement__description"> Cultura de Participantes activos</p>
                     </article>
 
                     <article class="achievement fade-in">
-                        <div class="achievement__icon">⭐</div>
+                        <div class="achievement__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg></div>
                         <h4 class="achievement__title">Listos para Destacarse y Solucionar problemas</h4>
                         <p class="achievement__description">En diferentes categorías</p>
                     </article>
 
                     <article class="achievement fade-in">
-                        <div class="achievement__icon">📚</div>
+                        <div class="achievement__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></div>
                         <h4 class="achievement__title">Desarrollar Capacidades Analíticas</h4>
                         <p class="achievement__description">Resueltos en grupo este año</p>
                     </article>
 
                     <article class="achievement fade-in">
-                        <div class="achievement__icon">🎯</div>
+                        <div class="achievement__icon"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg></div>
                         <h4 class="achievement__title">Participar en Eventos</h4>
                         <p class="achievement__description">Olimpiadas programadas al año</p>
                     </article>
@@ -1944,7 +1964,7 @@
                             Completa tu registro para formar parte de nuestra comunidad matemática.
                         </p>
                         <button onclick="olimpiadasRegistro.openModal()" class="cta__button" style="border:none;">
-                            <i class="fas fa-user-plus"></i>
+                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <line x1="19" x2="19" y1="8" y2="14" /> <line x1="22" x2="16" y1="11" y2="11" /></svg>
                             <span>Registrarse Ahora</span>
                         </button>
                     </div>
@@ -1983,7 +2003,7 @@
                 <div class="inscritos-categories" id="inscritosCategories">
                     <div class="inscritos-category inscritos-category--novato">
                         <div class="inscritos-category__header">
-                            <h3 class="inscritos-category__title">🌟 Novato</h3>
+                            <h3 class="inscritos-category__title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg> Novato</h3>
                             <span class="inscritos-category__count" id="badgeNovato">0</span>
                         </div>
                         <div class="inscritos-list" id="listNovato">
@@ -1993,7 +2013,7 @@
 
                     <div class="inscritos-category inscritos-category--intermedia">
                         <div class="inscritos-category__header">
-                            <h3 class="inscritos-category__title">🚀 Intermedia</h3>
+                            <h3 class="inscritos-category__title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg> Intermedia</h3>
                             <span class="inscritos-category__count" id="badgeIntermedia">0</span>
                         </div>
                         <div class="inscritos-list" id="listIntermedia">
@@ -2003,7 +2023,7 @@
 
                     <div class="inscritos-category inscritos-category--avanzada">
                         <div class="inscritos-category__header">
-                            <h3 class="inscritos-category__title">💎 Avanzada</h3>
+                            <h3 class="inscritos-category__title"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3 8 9l4 13 4-13-2.5-6" /> <path d="M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z" /> <path d="M2 9h20" /></svg> Avanzada</h3>
                             <span class="inscritos-category__count" id="badgeAvanzada">0</span>
                         </div>
                         <div class="inscritos-list" id="listAvanzada">
@@ -2020,10 +2040,10 @@
         <div class="olimpiad-modal" role="dialog" aria-modal="true" aria-labelledby="olimpiadModalTitle">
             <div class="olimpiad-modal__header">
                 <h2 class="olimpiad-modal__title" id="olimpiadModalTitle">
-                    <i class="fas fa-trophy"></i> Inscribirse a las Olimpiadas
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg> Inscribirse a las Olimpiadas
                 </h2>
                 <button class="olimpiad-modal__close" onclick="olimpiadasRegistro.closeModal()" aria-label="Cerrar">
-                    <i class="fas fa-times"></i>
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></svg>
                 </button>
             </div>
 
@@ -2046,9 +2066,9 @@
                     <label class="olimpiad-form__label" for="fieldCategory">Categoría</label>
                     <select class="olimpiad-form__select" id="fieldCategory" required>
                         <option value="">Selecciona tu categoría</option>
-                        <option value="novato">🌟 Novato — Para nuevos integrantes del club</option>
-                        <option value="intermedia">🚀 Intermedia — Para miembros con experiencia</option>
-                        <option value="avanzada">💎 Avanzada — Para veteranos del club</option>
+                        <option value="novato"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg> Novato — Para nuevos integrantes del club</option>
+                        <option value="intermedia"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg> Intermedia — Para miembros con experiencia</option>
+                        <option value="avanzada"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3 8 9l4 13 4-13-2.5-6" /> <path d="M17 3a2 2 0 0 1 1.6.8l3 4a2 2 0 0 1 .013 2.382l-7.99 10.986a2 2 0 0 1-3.247 0l-7.99-10.986A2 2 0 0 1 2.4 7.8l2.998-3.997A2 2 0 0 1 7 3z" /> <path d="M2 9h20" /></svg> Avanzada — Para veteranos del club</option>
                     </select>
                 </div>
 
@@ -2075,7 +2095,7 @@
                         Cancelar
                     </button>
                     <button type="submit" class="olimpiad-form__btn olimpiad-form__btn--submit" id="submitBtn">
-                        <i class="fas fa-user-plus"></i> Inscribirse
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <line x1="19" x2="19" y1="8" y2="14" /> <line x1="22" x2="16" y1="11" y2="11" /></svg> Inscribirse
                     </button>
                 </div>
             </form>
@@ -2091,7 +2111,7 @@
         <!-- Enlace discreto para admin -->
         <div style="margin-top: 1rem;">
             <button id="adminAccessBtn" style="background: none; border: none; color: rgba(255,255,255,0.5); font-size: 0.8rem; cursor: pointer; padding: 0.5rem;">
-                ⚙️
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg>
             </button>
         </div>
     </footer>
@@ -2300,12 +2320,12 @@
             }
 
             requestAdminAccess() {
-                const adminKey = prompt('🔒 Acceso Administrativo\n\nIngrese la clave de acceso:');
+                const adminKey = prompt('Acceso Administrativo\n\nIngrese la clave de acceso:');
                 
                 if (adminKey === 'MathClub2025') {
                     window.open('admin.html', '_blank');
                 } else if (adminKey !== null) {
-                    alert('❌ Clave incorrecta. Acceso denegado.');
+                    alert('Clave incorrecta. Acceso denegado.');
                 }
             }
 
@@ -2513,7 +2533,7 @@
 
                 const submitBtn = document.getElementById('submitBtn');
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registrando...';
+                submitBtn.innerHTML = '<svg class="spin" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg> Registrando...';
                 this.clearFormMessage();
 
                 try {
@@ -2540,7 +2560,7 @@
                     this.showFormMessage('error', 'Error de conexión. Verifica tu internet e intenta de nuevo.');
                 } finally {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Inscribirse';
+                    submitBtn.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <line x1="19" x2="19" y1="8" y2="14" /> <line x1="22" x2="16" y1="11" y2="11" /></svg> Inscribirse';
                 }
             }
 
@@ -2601,10 +2621,10 @@
                                 ${this.escapeHtml(p.name)} ${isMe ? '<span style="font-size:0.7rem;color:var(--color-primary);font-weight:600;">(tú)</span>' : ''}
                             </div>
                             <div class="inscrito-card__details">
-                                <span class="inscrito-card__detail"><i class="fas fa-school"></i> ${this.escapeHtml(p.school)}</span>
-                                <span class="inscrito-card__detail"><i class="fas fa-graduation-cap"></i> ${this.escapeHtml(p.grade)}</span>
-                                <span class="inscrito-card__detail"><i class="fas fa-id-card"></i> #${this.escapeHtml(p.student_number)}</span>
-                                <span class="inscrito-card__detail"><i class="fas fa-clock"></i> ${date}</span>
+                                <span class="inscrito-card__detail"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M18 4.933V21" /> <path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6" /> <path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11" /> <path d="M6 4.933V21" /> <circle cx="12" cy="9" r="2" /></svg> ${this.escapeHtml(p.school)}</span>
+                                <span class="inscrito-card__detail"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /> <path d="M22 10v6" /> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg> ${this.escapeHtml(p.grade)}</span>
+                                <span class="inscrito-card__detail"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10h2" /> <path d="M16 14h2" /> <path d="M6.17 15a3 3 0 0 1 5.66 0" /> <circle cx="9" cy="11" r="2" /> <rect x="2" y="5" width="20" height="14" rx="2" /></svg> #${this.escapeHtml(p.student_number)}</span>
+                                <span class="inscrito-card__detail"><svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 6v6l4 2" /></svg> ${date}</span>
                             </div>
                         </div>
                     `;
