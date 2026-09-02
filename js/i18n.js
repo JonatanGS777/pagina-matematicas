@@ -224,8 +224,7 @@ const I18n = (() => {
             'Simulaciones':                   'Simulations',
             'Laboratorio de Proyectiles':     'Projectile Lab',
             'Figuras Geométricas':            'Geometric Figures',
-            // Aula
-            'Δ Aula Matemática':              'Δ Math Classroom',
+            // Tópicos
             'Álgebra':                        'Algebra',
             'Geometría':                      'Geometry',
             'Estadísticas':                   'Statistics',
