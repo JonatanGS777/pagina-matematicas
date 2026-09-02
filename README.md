@@ -131,6 +131,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `lab/proyectiles.html` | Campo de Tiro | Firing-range palette (olive/khaki + blaze orange) over the page's existing light/dark dashboard system — canvas trajectory grid, results overlay and theory/guide cards re-themed via CSS custom properties (the physics canvas already read them, so no simulation code changed), Oswald display type, Lucide icons replacing every emoji, back-to-site nav added, and a dead duplicate `--font-mono` declaration fixed so the imported DM Mono is actually used |
 | `lab/simulaciones.html` | Espiral Áurea | Golden-ratio/nature palette (warm parchment + gold/amber, meadow-green secondary accent) for the Fibonacci rabbit-reproduction model — same token names repointed to new hex values so every component (month cards, bubble physics, spiral visualizer, data table) re-themed without touching the physics/geometry JS; the golden-spiral mode's hue range already matched gold, mandala/polar modes kept their own distinct accent intentionally. Font Awesome + emoji (🐇💧🌀) replaced with Lucide SVG, including the rabbit-pair grid icons; Fraunces added for display type; back-to-site nav added |
 | `lab/experimentos.html` | Mesa de Laboratorio | Clinical lab-bench palette (white/brushed-steel `--primary`/`--secondary`, millimeter graph-paper body background replacing the old `mathexp.png` + purple `.animated-bg`) across the 3-experiment hub (finance interest simulator, algebra balance scale, unit-circle trig explorer) — kept the existing `--success`/`--warning`/`--danger` token names as the per-station accent (finances/algebra/geometry) and repointed their values, so only the `<style>` block and a handful of hardcoded hex/rgba needed touching. Font Awesome + emoji converted to Lucide SVG across the main page *and* its 3 external scripts (`lab/javascript/finanzas.js`, `algebra.js`, `geometria.js`); the Plotly interest chart's trace colors, grid, and font (was `Inter`, a font this project avoids as generic) re-themed to match |
+| `lab/juegos.html` | Coliseo Numérico | Roman-gladiator-colosseum reframe of the real-time Socket.IO multiplayer quiz "MATH ARENA" — replaced the neon void-black/cyan-pink-yellow-green esports look (too close to `club/competencias.html`'s existing Arena de Torneo identity) with torch-lit stone/basalt, imperial gold/blood-red/bronze/laurel-green accents, Marcellus display serif; lives (hearts) became gladiator shields, avatars/badges/verdicts moved to Lucide SVG. Also fixed the QR-join flow, which previously linked to a hardcoded production URL with no room code (scanning didn't actually get you into the room) — now builds the URL from `window.location` plus `?code=`, and the join screen auto-fills the code from that param. Socket.IO event contracts, timer, reconnection and elimination logic untouched |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -193,9 +194,9 @@ each with its own icon — and `js/supabase-analytics.js`), `galeria/galeria.htm
 `club/mision-matematica/index.html`, `club/proyectos-creativos.html`,
 `club/registro.html`, `club/modulos/algebra.html`, `calculus.html`,
 `geometry.html`, `trigonometry.html`, `puzzles.html`, `statistics.html`,
-`lab/figuras.html`, `lab/proyectiles.html`, `lab/simulaciones.html`, and
+`lab/figuras.html`, `lab/proyectiles.html`, `lab/simulaciones.html`,
 `lab/experimentos.html` (plus its `lab/javascript/finanzas.js`, `algebra.js`,
-and `geometria.js`). `links/links.html` never used Font
+and `geometria.js`), and `lab/juegos.html`. `links/links.html` never used Font
 Awesome to begin with; `mision-matematica/index.html` used the `lucide.js`
 CDN build (`data-lucide` attributes + `lucide.createIcons()`) rather than
 Font Awesome, and was converted to the same inline-SVG-with-no-JS-dependency
@@ -205,8 +206,7 @@ get redesigned.
 
 ### Not yet redesigned
 
-`lab/` (juegos.html,
-`modulos/` — datos, fisica, geometrico, optimizacion), `salon/`,
+`lab/modulos/` (datos, fisica, geometrico, optimizacion), `salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
 study-materials subpages), and `perfil-investigador/` still use the previous
