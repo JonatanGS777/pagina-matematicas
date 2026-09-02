@@ -1,3 +1,18 @@
+// Inline Lucide icons for activity-feed notifications (replaces emoji)
+const ANALYTICS_ICONS = {
+    barChart: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg>',
+    calendar: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /> <path d="M8 13h.01" /> <path d="M12 13h.01" /> <path d="M16 13h.01" /> <path d="M8 17h.01" /> <path d="M12 17h.01" /> <path d="M16 17h.01" /></svg>',
+    smartphone: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></svg>',
+    monitor: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2" /> <line x1="8" x2="16" y1="21" y2="21" /> <line x1="12" x2="12" y1="17" y2="21" /></svg>',
+    eye: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></svg>',
+    download: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3" /> <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <path d="m7 10 5 5 5-5" /></svg>',
+    click: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4.1 12 6" /> <path d="m5.1 8-2.9-.8" /> <path d="m6 12-1.9 2" /> <path d="M7.2 2.2 8 5.1" /> <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" /></svg>',
+    share: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3" /> <circle cx="6" cy="12" r="3" /> <circle cx="18" cy="19" r="3" /> <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /> <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>',
+    sparkles: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /> <path d="M20 2v4" /> <path d="M22 4h-4" /> <circle cx="4" cy="20" r="2" /></svg>',
+    settings: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg>',
+    partyPopper: '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79" /> <path d="M4 3h.01" /> <path d="M22 8h.01" /> <path d="M15 2h.01" /> <path d="M22 20h.01" /> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10" /> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17" /> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7" /> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" /></svg>'
+};
+
 class SupabaseAnalytics {
     constructor() {
         // ✅ CREDENCIALES CONFIGURADAS
@@ -251,7 +266,7 @@ class SupabaseAnalytics {
             }
             
             this.updateLastUpdateTime();
-            this.showActivityNotification('📊 Estadísticas actualizadas en tiempo real');
+            this.showActivityNotification('Estadísticas actualizadas en tiempo real', ANALYTICS_ICONS.barChart);
         }
     }
 
@@ -267,7 +282,7 @@ class SupabaseAnalytics {
             document.getElementById('dailyGrowth').textContent = this.calculateGrowth(ds).toFixed(1);
             
             this.updateLastUpdateTime();
-            this.showActivityNotification('📅 Estadísticas diarias actualizadas');
+            this.showActivityNotification('Estadísticas diarias actualizadas', ANALYTICS_ICONS.calendar);
         }
     }
 
@@ -278,28 +293,28 @@ class SupabaseAnalytics {
             // Refrescar desgloses cuando hay nuevo visitante en esta página
             this.fetchBreakdowns();
             
-            const deviceEmoji = {
-                'mobile': '📱',
-                'tablet': '📱', 
-                'desktop': '💻'
+            const deviceIcon = {
+                'mobile': ANALYTICS_ICONS.smartphone,
+                'tablet': ANALYTICS_ICONS.smartphone,
+                'desktop': ANALYTICS_ICONS.monitor
             };
-            
-            const emoji = deviceEmoji[visitor.device_type] || '💻';
-            this.showActivityNotification(`${emoji} Nuevo visitante desde ${visitor.country_code || 'desconocido'}`);
+
+            const icon = deviceIcon[visitor.device_type] || ANALYTICS_ICONS.monitor;
+            this.showActivityNotification(`Nuevo visitante desde ${visitor.country_code || 'desconocido'}`, icon);
         }
     }
 
     handleActivityUpdate(payload) {
         const activity = payload.new;
         const activityMessages = {
-            'page_view': '👁️ Nueva página vista',
-            'download': '📥 Descarga de material',
-            'interaction': '🖱️ Nueva interacción',
-            'share': '📤 Contenido compartido'
+            'page_view': ['Nueva página vista', ANALYTICS_ICONS.eye],
+            'download': ['Descarga de material', ANALYTICS_ICONS.download],
+            'interaction': ['Nueva interacción', ANALYTICS_ICONS.click],
+            'share': ['Contenido compartido', ANALYTICS_ICONS.share]
         };
-        
-        const message = activityMessages[activity.activity_type] || '✨ Nueva actividad';
-        this.showActivityNotification(message);
+
+        const [message, icon] = activityMessages[activity.activity_type] || ['Nueva actividad', ANALYTICS_ICONS.sparkles];
+        this.showActivityNotification(message, icon);
     }
 
     // 🆕 OBTENER DESGLOSES DE DISPOSITIVOS Y PAÍSES
@@ -718,12 +733,13 @@ class SupabaseAnalytics {
         document.getElementById('dailyProgress').style.width = `${dailyProgress}%`;
     }
 
-    showActivityNotification(message) {
+    showActivityNotification(message, iconSvg) {
+        const icon = iconSvg || '<svg class="pulse-dot-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /></svg>';
         const notification = document.createElement('div');
         notification.className = 'activity-notification';
         notification.innerHTML = `
             <div class="activity-content">
-                <svg class="pulse-dot-small" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /></svg>
+                ${icon}
                 <span>${message}</span>
             </div>
         `;
@@ -808,7 +824,7 @@ class SupabaseAnalytics {
         };
         
         this.updateUI(initialData);
-        this.showActivityNotification('⚙️ Sistema iniciado. Modo de demostración');
+        this.showActivityNotification('Sistema iniciado. Modo de demostración', ANALYTICS_ICONS.settings);
         
         setTimeout(() => {
             const firstVisitData = {
@@ -822,7 +838,7 @@ class SupabaseAnalytics {
             };
             
             this.updateUI(firstVisitData);
-            this.showActivityNotification('🎉 ¡Primera visita registrada! (Demo)');
+            this.showActivityNotification('¡Primera visita registrada! (Demo)', ANALYTICS_ICONS.partyPopper);
         }, 5000);
     }
 
