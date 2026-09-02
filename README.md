@@ -129,6 +129,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `club/registro.html` | Pasaporte del Competidor | Passport/enrollment-desk aesthetic — navy passport-cover header with a gold wax-seal emblem, cream document pages, dashed ticket-stub divider between the form and the live roster, Cormorant Garamond display + IBM Plex Mono for stamps/IDs |
 | `lab/figuras.html` | Holograma Geométrico *(targeted polish, not a full rebuild)* | Already had a distinctive full-screen Three.js viewer (glass side panel, starfield, bloom) — kept it and added the site's missing top navigation bar (logo + back-to-home), Lucide icons on the category tabs and explode/wireframe controls, and put the previously-unused DM Mono import to work on the technical UI chrome |
 | `lab/proyectiles.html` | Campo de Tiro | Firing-range palette (olive/khaki + blaze orange) over the page's existing light/dark dashboard system — canvas trajectory grid, results overlay and theory/guide cards re-themed via CSS custom properties (the physics canvas already read them, so no simulation code changed), Oswald display type, Lucide icons replacing every emoji, back-to-site nav added, and a dead duplicate `--font-mono` declaration fixed so the imported DM Mono is actually used |
+| `lab/simulaciones.html` | Espiral Áurea | Golden-ratio/nature palette (warm parchment + gold/amber, meadow-green secondary accent) for the Fibonacci rabbit-reproduction model — same token names repointed to new hex values so every component (month cards, bubble physics, spiral visualizer, data table) re-themed without touching the physics/geometry JS; the golden-spiral mode's hue range already matched gold, mandala/polar modes kept their own distinct accent intentionally. Font Awesome + emoji (🐇💧🌀) replaced with Lucide SVG, including the rabbit-pair grid icons; Fraunces added for display type; back-to-site nav added |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -201,7 +202,7 @@ get redesigned.
 
 ### Not yet redesigned
 
-`lab/` (experimentos.html, juegos.html, simulaciones.html,
+`lab/` (experimentos.html, juegos.html,
 `modulos/` — datos, fisica, geometrico, optimizacion), `salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
