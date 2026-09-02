@@ -130,6 +130,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `lab/figuras.html` | Holograma Geométrico *(targeted polish, not a full rebuild)* | Already had a distinctive full-screen Three.js viewer (glass side panel, starfield, bloom) — kept it and added the site's missing top navigation bar (logo + back-to-home), Lucide icons on the category tabs and explode/wireframe controls, and put the previously-unused DM Mono import to work on the technical UI chrome |
 | `lab/proyectiles.html` | Campo de Tiro | Firing-range palette (olive/khaki + blaze orange) over the page's existing light/dark dashboard system — canvas trajectory grid, results overlay and theory/guide cards re-themed via CSS custom properties (the physics canvas already read them, so no simulation code changed), Oswald display type, Lucide icons replacing every emoji, back-to-site nav added, and a dead duplicate `--font-mono` declaration fixed so the imported DM Mono is actually used |
 | `lab/simulaciones.html` | Espiral Áurea | Golden-ratio/nature palette (warm parchment + gold/amber, meadow-green secondary accent) for the Fibonacci rabbit-reproduction model — same token names repointed to new hex values so every component (month cards, bubble physics, spiral visualizer, data table) re-themed without touching the physics/geometry JS; the golden-spiral mode's hue range already matched gold, mandala/polar modes kept their own distinct accent intentionally. Font Awesome + emoji (🐇💧🌀) replaced with Lucide SVG, including the rabbit-pair grid icons; Fraunces added for display type; back-to-site nav added |
+| `lab/experimentos.html` | Mesa de Laboratorio | Clinical lab-bench palette (white/brushed-steel `--primary`/`--secondary`, millimeter graph-paper body background replacing the old `mathexp.png` + purple `.animated-bg`) across the 3-experiment hub (finance interest simulator, algebra balance scale, unit-circle trig explorer) — kept the existing `--success`/`--warning`/`--danger` token names as the per-station accent (finances/algebra/geometry) and repointed their values, so only the `<style>` block and a handful of hardcoded hex/rgba needed touching. Font Awesome + emoji converted to Lucide SVG across the main page *and* its 3 external scripts (`lab/javascript/finanzas.js`, `algebra.js`, `geometria.js`); the Plotly interest chart's trace colors, grid, and font (was `Inter`, a font this project avoids as generic) re-themed to match |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -190,9 +191,11 @@ each with its own icon — and `js/supabase-analytics.js`), `galeria/galeria.htm
 `club/investigacion.html`, `club/project.html`, `club/competencias.html`,
 `club/leaderboard.html`, `club/olimpiadas.html`, `club/admin.html`,
 `club/mision-matematica/index.html`, `club/proyectos-creativos.html`,
-`club/registro.html`, and `club/modulos/algebra.html`, `calculus.html`,
-`geometry.html`, `trigonometry.html`, `puzzles.html`, `statistics.html`.
-`links/links.html` never used Font
+`club/registro.html`, `club/modulos/algebra.html`, `calculus.html`,
+`geometry.html`, `trigonometry.html`, `puzzles.html`, `statistics.html`,
+`lab/figuras.html`, `lab/proyectiles.html`, `lab/simulaciones.html`, and
+`lab/experimentos.html` (plus its `lab/javascript/finanzas.js`, `algebra.js`,
+and `geometria.js`). `links/links.html` never used Font
 Awesome to begin with; `mision-matematica/index.html` used the `lucide.js`
 CDN build (`data-lucide` attributes + `lucide.createIcons()`) rather than
 Font Awesome, and was converted to the same inline-SVG-with-no-JS-dependency
@@ -202,7 +205,7 @@ get redesigned.
 
 ### Not yet redesigned
 
-`lab/` (experimentos.html, juegos.html,
+`lab/` (juegos.html,
 `modulos/` — datos, fisica, geometrico, optimizacion), `salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the

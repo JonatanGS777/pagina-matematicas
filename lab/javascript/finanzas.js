@@ -124,14 +124,14 @@ class FinanzasModule {
             type: 'scatter',
             mode: 'lines+markers',
             name: 'Interés Simple',
-            line: { 
-                color: '#4ecdc4', 
+            line: {
+                color: '#35526B',
                 width: 3,
                 shape: 'linear'
             },
-            marker: { 
+            marker: {
                 size: 8,
-                color: '#4ecdc4',
+                color: '#35526B',
                 line: { color: '#fff', width: 2 }
             },
             hovertemplate: '<b>Año %{x}</b><br>' +
@@ -145,14 +145,14 @@ class FinanzasModule {
             type: 'scatter',
             mode: 'lines+markers',
             name: 'Interés Compuesto',
-            line: { 
-                color: '#ff6b6b', 
+            line: {
+                color: '#2E8B6F',
                 width: 3,
                 shape: 'spline'
             },
-            marker: { 
+            marker: {
                 size: 8,
-                color: '#ff6b6b',
+                color: '#2E8B6F',
                 line: { color: '#fff', width: 2 }
             },
             hovertemplate: '<b>Año %{x}</b><br>' +
@@ -164,16 +164,16 @@ class FinanzasModule {
         const layout = {
             title: {
                 text: 'Comparación: Interés Simple vs Compuesto',
-                font: { family: 'Space Grotesk, sans-serif', size: 18, color: '#2d3748' }
+                font: { family: 'Space Grotesk, sans-serif', size: 18, color: '#1E2530' }
             },
-            xaxis: { 
+            xaxis: {
                 title: 'Años',
-                gridcolor: '#e2e8f0',
+                gridcolor: '#DDE3E6',
                 zeroline: false
             },
-            yaxis: { 
+            yaxis: {
                 title: 'Monto ($)',
-                gridcolor: '#e2e8f0',
+                gridcolor: '#DDE3E6',
                 zeroline: false,
                 tickformat: '$,.0f'
             },
@@ -182,11 +182,11 @@ class FinanzasModule {
                 x: 0.02,
                 y: 0.98,
                 bgcolor: 'rgba(255,255,255,0.8)',
-                bordercolor: '#e2e8f0',
+                bordercolor: '#DDE3E6',
                 borderwidth: 1
             },
-            font: { family: 'Inter, sans-serif', color: '#2d3748' },
-            plot_bgcolor: '#f8f9fa',
+            font: { family: 'Syne, sans-serif', color: '#1E2530' },
+            plot_bgcolor: '#F4F6F7',
             paper_bgcolor: '#ffffff',
             margin: { l: 60, r: 40, t: 60, b: 60 }
         };
@@ -214,20 +214,20 @@ class FinanzasModule {
         const resultsHTML = `
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
                 <div class="result-card simple">
-                    <div class="result-icon">📈</div>
+                    <div class="result-icon"><svg style="width:1em;height:1em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /></svg></div>
                     <h4>Interés Simple</h4>
                     <div class="result-amount">$${this.formatNumber(finalSimple)}</div>
                     <div class="result-gain">Ganancia: $${this.formatNumber(finalSimple - this.currentData.principal)}</div>
                 </div>
                 <div class="result-card compound">
-                    <div class="result-icon">🚀</div>
+                    <div class="result-icon"><svg style="width:1em;height:1em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /> <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09" /> <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z" /> <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05" /></svg></div>
                     <h4>Interés Compuesto</h4>
                     <div class="result-amount">$${this.formatNumber(finalCompound)}</div>
                     <div class="result-gain">Ganancia: $${this.formatNumber(finalCompound - this.currentData.principal)}</div>
                 </div>
             </div>
             <div class="result-card difference">
-                <div class="result-icon">💰</div>
+                <div class="result-icon"><svg style="width:1em;height:1em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.744 17.736a6 6 0 1 1-7.48-7.48" /> <path d="M15 6h1v4" /> <path d="m6.134 14.768.866-.5 2 3.464" /> <circle cx="16" cy="8" r="6" /></svg></div>
                 <h4>Diferencia a favor del Interés Compuesto</h4>
                 <div class="result-amount">$${this.formatNumber(difference)}</div>
                 <div class="result-percentage">${percentageDifference.toFixed(1)}% más ganancia</div>
@@ -245,7 +245,7 @@ class FinanzasModule {
         
         let tableHTML = `
             <div class="table-container">
-                <h3 style="margin-bottom: 1rem; text-align: center; color: #2d3748;">Tabla Comparativa Detallada</h3>
+                <h3 style="margin-bottom: 1rem; text-align: center; color: #1E2530;">Tabla Comparativa Detallada</h3>
                 <table class="results-table">
                     <thead>
                         <tr>
@@ -312,17 +312,17 @@ class FinanzasModule {
             }
             
             .result-card.simple {
-                background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+                background: linear-gradient(135deg, #35526B 0%, #22344A 100%);
                 color: white;
             }
-            
+
             .result-card.compound {
-                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+                background: linear-gradient(135deg, #2E8B6F 0%, #1F6B52 100%);
                 color: white;
             }
-            
+
             .result-card.difference {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #2FA6A0 0%, #1E7A75 100%);
                 color: white;
                 grid-column: 1 / -1;
                 margin-top: 1rem;
@@ -382,8 +382,8 @@ class FinanzasModule {
         const errorDiv = document.getElementById('resultsContainer');
         if (errorDiv) {
             errorDiv.innerHTML = `
-                <div style="background: #fed7d7; color: #c53030; padding: 1rem; border-radius: 10px; text-align: center; border: 1px solid #feb2b2;">
-                    <i class="fas fa-exclamation-triangle"></i> ${message}
+                <div style="background: rgba(178, 58, 58, 0.1); color: #B23A3A; padding: 1rem; border-radius: 10px; text-align: center; border: 1px solid rgba(178, 58, 58, 0.3);">
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.4em;flex-shrink:0;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg> ${message}
                 </div>
             `;
         }

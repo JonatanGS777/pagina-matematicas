@@ -182,7 +182,7 @@ class GeometriaModule {
             
             // Cambiar color según cuadrante
             const quadrant = Math.floor(degrees / 90) % 4;
-            const colors = ['#4ecdc4', '#ff6b6b', '#ffa726', '#667eea'];
+            const colors = ['#2FA6A0', '#B23A3A', '#C98A2E', '#35526B'];
             radiusLine.style.background = colors[quadrant];
             radiusLine.style.boxShadow = `0 0 10px ${colors[quadrant]}`;
         }
@@ -202,7 +202,7 @@ class GeometriaModule {
 
     getQuadrantColor(degrees) {
         const quadrant = Math.floor(degrees / 90) % 4;
-        const colors = ['#4ecdc4', '#ff6b6b', '#ffa726', '#667eea'];
+        const colors = ['#2FA6A0', '#B23A3A', '#C98A2E', '#35526B'];
         return colors[quadrant];
     }
 
@@ -240,10 +240,10 @@ class GeometriaModule {
         if (!circleDisplay) return;
         
         // Proyección X (coseno)
-        this.updateProjection('xProjection', 'x-projection', 150 + cos * 147, 150, '#ff6b6b');
+        this.updateProjection('xProjection', 'x-projection', 150 + cos * 147, 150, '#B23A3A');
         
         // Proyección Y (seno)
-        this.updateProjection('yProjection', 'y-projection', 150, 150 - sin * 147, '#4ecdc4');
+        this.updateProjection('yProjection', 'y-projection', 150, 150 - sin * 147, '#2FA6A0');
     }
 
     updateProjection(id, className, x, y, color) {
@@ -269,11 +269,11 @@ class GeometriaModule {
         
         // Línea vertical (proyección del seno)
         this.updateLine('verticalLine', 'projection-line vertical', 
-            150 + cos * 147, 150, 0, -sin * 147, '#4ecdc4');
+            150 + cos * 147, 150, 0, -sin * 147, '#2FA6A0');
         
         // Línea horizontal (proyección del coseno)
         this.updateLine('horizontalLine', 'projection-line horizontal',
-            150, 150 - sin * 147, cos * 147, 0, '#ff6b6b');
+            150, 150 - sin * 147, cos * 147, 0, '#B23A3A');
     }
 
     updateLine(id, className, x, y, dx, dy, color) {
@@ -327,7 +327,7 @@ class GeometriaModule {
         
         infoDiv.innerHTML = `
             <div class="special-angle-header">
-                <i class="fas fa-star"></i>
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.35em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
                 <span>Ángulo Especial: ${angle}°</span>
             </div>
             <div class="special-angle-details">
@@ -389,7 +389,7 @@ class GeometriaModule {
             marker.style.position = 'absolute';
             marker.style.width = '8px';
             marker.style.height = '8px';
-            marker.style.background = '#667eea';
+            marker.style.background = '#35526B';
             marker.style.borderRadius = '50%';
             marker.style.border = '2px solid white';
             marker.style.cursor = 'pointer';
@@ -433,8 +433,8 @@ class GeometriaModule {
         this.isAnimating = true;
         const button = document.querySelector('[onclick="geometriaModule.animateFullCircle()"]');
         if (button) {
-            button.innerHTML = '<i class="fas fa-stop"></i> Detener Animación';
-            button.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+            button.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.35em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /></svg> Detener Animación';
+            button.style.background = 'linear-gradient(135deg, #B23A3A 0%, #8C2A2A 100%)';
         }
         
         let currentAngle = this.currentAngle;
@@ -458,7 +458,7 @@ class GeometriaModule {
         
         const button = document.querySelector('[onclick="geometriaModule.animateFullCircle()"]');
         if (button) {
-            button.innerHTML = '<i class="fas fa-play"></i> Animación Completa';
+            button.innerHTML = '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.35em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg> Animación Completa';
             button.style.background = 'var(--gradient-main)';
         }
     }
@@ -582,12 +582,12 @@ class GeometriaModule {
             }
             
             .projection-line.vertical {
-                border-left: 2px dashed #4ecdc4;
+                border-left: 2px dashed #2FA6A0;
                 height: 1px;
             }
             
             .projection-line.horizontal {
-                border-top: 2px dashed #ff6b6b;
+                border-top: 2px dashed #B23A3A;
             }
             
             .angle-marker {
@@ -597,12 +597,12 @@ class GeometriaModule {
             
             .angle-marker:hover {
                 transform: scale(1.5);
-                background: #ffa726 !important;
+                background: #C98A2E !important;
                 z-index: 15;
             }
             
             .special-angle-info {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #35526B 0%, #22344A 100%);
                 color: white;
                 border-radius: 15px;
                 padding: 1.5rem;
@@ -622,7 +622,7 @@ class GeometriaModule {
             
             .special-angle-header i {
                 margin-right: 0.5rem;
-                color: #ffa726;
+                color: #C98A2E;
             }
             
             .special-angle-details {
@@ -672,7 +672,7 @@ class GeometriaModule {
             }
             
             .unit-circle:hover {
-                box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
+                box-shadow: 0 0 30px rgba(53, 82, 107, 0.4);
             }
             
             .radius-line {
@@ -743,13 +743,13 @@ class GeometriaModule {
             
             /* Mejoras de accesibilidad */
             .angle-marker:focus {
-                outline: 3px solid #ffa726;
+                outline: 3px solid #C98A2E;
                 outline-offset: 2px;
             }
             
             .trig-value[aria-selected="true"] {
-                border: 3px solid #667eea;
-                background: rgba(102, 126, 234, 0.1);
+                border: 3px solid #35526B;
+                background: rgba(53, 82, 107, 0.1);
             }
             
             /* Indicador de cuadrante */

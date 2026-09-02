@@ -415,11 +415,11 @@ class AlgebraModule {
         solutionDiv.className = 'solution-alert';
         solutionDiv.innerHTML = `
             <div class="solution-content">
-                <i class="fas fa-trophy solution-icon"></i>
+                <svg class="solution-icon" style="width:1.4em;height:1.4em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
                 <h3>¡Ecuación Resuelta!</h3>
                 <div class="solution-value">x = ${this.formatNumber(solution)}</div>
                 <button class="verify-btn" onclick="algebraModule.verifySolution(${solution})">
-                    <i class="fas fa-check"></i> Verificar Solución
+                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.35em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Verificar Solución
                 </button>
             </div>
         `;
@@ -446,7 +446,9 @@ class AlgebraModule {
             <p>Lado izquierdo: ${leftValue.toFixed(3)}</p>
             <p>Lado derecho: ${rightValue.toFixed(3)}</p>
             <p class="verification-result">
-                <i class="fas fa-${isCorrect ? 'check-circle' : 'times-circle'}"></i>
+                ${isCorrect
+                    ? '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.35em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335" /> <path d="m9 11 3 3L22 4" /></svg>'
+                    : '<svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.35em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m15 9-6 6" /> <path d="m9 9 6 6" /></svg>'}
                 ${isCorrect ? '¡Correcto!' : 'Incorrecto'}
             </p>
         `;
@@ -516,7 +518,7 @@ class AlgebraModule {
     showError(message) {
         const errorDiv = document.getElementById('algebraError') || this.createErrorDiv();
         errorDiv.innerHTML = `
-            <i class="fas fa-exclamation-triangle"></i> ${message}
+            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.35em;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg> ${message}
         `;
         errorDiv.style.display = 'block';
         
@@ -554,14 +556,14 @@ class AlgebraModule {
                 align-items: flex-start;
                 padding: 1rem;
                 margin: 0.5rem 0;
-                background: rgba(102, 126, 234, 0.05);
+                background: rgba(53, 82, 107, 0.05);
                 border-radius: 10px;
                 border-left: 4px solid var(--primary);
                 transition: all 0.3s ease;
             }
             
             .step:hover {
-                background: rgba(102, 126, 234, 0.1);
+                background: rgba(53, 82, 107, 0.1);
                 transform: translateX(5px);
             }
             
@@ -592,7 +594,7 @@ class AlgebraModule {
             }
             
             .solution-alert {
-                background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+                background: linear-gradient(135deg, #2E8B6F 0%, #1F6B52 100%);
                 color: white;
                 border-radius: 15px;
                 padding: 2rem;
@@ -637,9 +639,9 @@ class AlgebraModule {
             
             .verify-btn:hover {
                 background: white;
-                color: #22c55e;
+                color: #2E8B6F;
             }
-            
+
             .verification {
                 background: rgba(255,255,255,0.2);
                 padding: 1rem;
@@ -647,28 +649,28 @@ class AlgebraModule {
                 margin-top: 1rem;
                 text-align: left;
             }
-            
+
             .verification.correct {
-                border: 2px solid #22c55e;
+                border: 2px solid #2E8B6F;
             }
-            
+
             .verification.incorrect {
-                border: 2px solid #ef4444;
+                border: 2px solid #B23A3A;
             }
-            
+
             .verification-result {
                 font-weight: bold;
                 font-size: 1.1rem;
                 margin-top: 0.5rem;
             }
-            
+
             .error-message {
-                background: #fed7d7;
-                color: #c53030;
+                background: rgba(178, 58, 58, 0.1);
+                color: #B23A3A;
                 padding: 1rem;
                 border-radius: 10px;
                 margin: 1rem 0;
-                border: 1px solid #feb2b2;
+                border: 1px solid rgba(178, 58, 58, 0.3);
                 display: none;
             }
             

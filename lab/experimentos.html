@@ -4,32 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratorio de Experimentos - Matemáticas Digitales</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
     <style>
+        /* ==================== Mesa de Laboratorio ==================== */
         :root {
-            --primary: #5B4CF5;
-            --secondary: #3D1F8C;
-            --accent: #00E5C3;
-            --success: #00D4AA;
-            --warning: #F5C842;
-            --danger: #FF4D6D;
-            --dark: #0D0E1A;
-            --light: #F0EEF8;
+            --primary: #35526B;
+            --secondary: #22344A;
+            --accent: #2FA6A0;
+            --success: #2E8B6F;
+            --warning: #C98A2E;
+            --danger: #B23A3A;
+            --dark: #1E2530;
+            --light: #F4F6F7;
             --white: #ffffff;
-            --text-primary: #1A1B2E;
-            --text-secondary: #5C5F78;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 40px 0 rgba(91, 76, 245, 0.28);
-            --shadow-hover: 0 20px 50px rgba(91, 76, 245, 0.32);
+            --text-primary: #1E2530;
+            --text-secondary: #5B6472;
+            --glass: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --shadow-soft: 0 8px 30px 0 rgba(30, 37, 48, 0.14);
+            --shadow-hover: 0 16px 40px rgba(30, 37, 48, 0.2);
             --gradient-main: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
-            --gradient-success: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%);
-            --gradient-warning: linear-gradient(135deg, var(--warning) 0%, #ffa726 100%);
-            --gradient-danger: linear-gradient(135deg, var(--danger) 0%, #e91e63 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, #1F6B52 100%);
+            --gradient-warning: linear-gradient(135deg, var(--warning) 0%, #A66F1F 100%);
+            --gradient-danger: linear-gradient(135deg, var(--danger) 0%, #8C2A2A 100%);
         }
 
         * {
@@ -38,9 +40,15 @@
             box-sizing: border-box;
         }
 
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
+
         body {
             font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
+            background-color: #EDF0F1;
+            background-image:
+                linear-gradient(rgba(53, 82, 107, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(53, 82, 107, 0.06) 1px, transparent 1px);
+            background-size: 24px 24px;
             color: var(--text-primary);
             overflow-x: hidden;
             padding-top: 80px;
@@ -52,11 +60,11 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(240, 238, 248, 0.92);
+            background: rgba(244, 246, 247, 0.92);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid rgba(91, 76, 245, 0.1);
-            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
+            border-bottom: 1px solid rgba(53, 82, 107, 0.1);
+            box-shadow: 0 1px 0 rgba(53, 82, 107, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
             z-index: 1000;
             padding: 0;
         }
@@ -102,30 +110,19 @@
         }
 
         .nav-link:hover {
-            background: rgba(91, 76, 245, 0.1);
+            background: rgba(53, 82, 107, 0.1);
             color: var(--primary);
         }
 
-        .nav-link i {
+        .nav-link i, .nav-link .icon {
             margin-right: 0.5rem;
         }
 
-        /* Animated Background con imagen superpuesta */
-   .animated-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    background-image: 
-        url('../imagenes/mathexp.png'),
-        linear-gradient(-45deg, rgba(91, 76, 245, 0.88), rgba(61, 31, 140, 0.92), rgba(0, 229, 195, 0.55), rgba(91, 76, 245, 0.82));
-    background-size: contain, 400% 400%;
-    background-repeat: no-repeat, no-repeat;
-    background-position: center center, center center;
-}
-
+        /* Graph-paper background lives on body now; this layer is retired but kept inert
+           so the .animated-bg div in the markup doesn't need removing. */
+        .animated-bg {
+            display: none;
+        }
 
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
@@ -133,7 +130,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Hero Section */
+        /* Hero Section — steel instrument-panel band */
         .hero {
             min-height: 60vh;
             display: flex;
@@ -143,6 +140,7 @@
             text-align: center;
             position: relative;
             padding: 2rem;
+            background: var(--gradient-main);
         }
 
         .hero-content {
@@ -201,7 +199,7 @@
             border-radius: 25px;
             padding: 2rem;
             box-shadow: var(--shadow-soft);
-            border: 1px solid rgba(91, 76, 245, 0.1);
+            border: 1px solid rgba(53, 82, 107, 0.1);
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
@@ -293,7 +291,7 @@
             font-size: 0.9rem;
         }
 
-        .lab-features li i {
+        .lab-features li i, .lab-features li .icon {
             margin-right: 0.5rem;
             color: var(--success);
         }
@@ -411,14 +409,14 @@
             background: var(--light);
             padding: 1.5rem;
             border-radius: 15px;
-            border: 2px solid rgba(91, 76, 245, 0.1);
+            border: 2px solid rgba(53, 82, 107, 0.1);
         }
 
         .experiment-display {
             background: var(--white);
             padding: 1.5rem;
             border-radius: 15px;
-            border: 2px solid rgba(91, 76, 245, 0.1);
+            border: 2px solid rgba(53, 82, 107, 0.1);
         }
 
         .control-group {
@@ -436,7 +434,7 @@
         .control-group select {
             width: 100%;
             padding: 0.75rem;
-            border: 2px solid rgba(91, 76, 245, 0.2);
+            border: 2px solid rgba(53, 82, 107, 0.2);
             border-radius: 10px;
             font-size: 1rem;
             transition: border-color 0.3s ease;
@@ -463,7 +461,7 @@
 
         .experiment-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(91, 76, 245, 0.35);
+            box-shadow: 0 5px 15px rgba(53, 82, 107, 0.35);
         }
 
         /* Charts and Visual Elements */
@@ -498,13 +496,13 @@
         }
 
         .results-table tr:nth-child(even) {
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(53, 82, 107, 0.05);
         }
 
         /* Formula Display */
         .formula-container {
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
-            border: 2px solid rgba(91, 76, 245, 0.2);
+            background: linear-gradient(135deg, #F4F6F7 0%, #E3E8EA 100%);
+            border: 2px solid rgba(53, 82, 107, 0.2);
             border-radius: 15px;
             padding: 1.5rem;
             margin: 1rem 0;
@@ -527,7 +525,7 @@
             padding: 1rem;
             border-radius: 10px;
             margin: 0.5rem 0;
-            border: 1px solid rgba(91, 76, 245, 0.1);
+            border: 1px solid rgba(53, 82, 107, 0.1);
         }
 
         /* Algebra Balance */
@@ -537,7 +535,7 @@
             align-items: center;
             flex-direction: column;
             padding: 2rem;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            background: linear-gradient(135deg, #F4F6F7 0%, #E3E8EA 100%);
             border-radius: 15px;
             margin: 1rem 0;
         }
@@ -619,12 +617,12 @@
 
         .operation-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(91, 76, 245, 0.35);
+            box-shadow: 0 5px 15px rgba(53, 82, 107, 0.35);
         }
 
         .steps-container {
             background: var(--white);
-            border: 2px solid rgba(91, 76, 245, 0.1);
+            border: 2px solid rgba(53, 82, 107, 0.1);
             border-radius: 15px;
             padding: 1.5rem;
             margin-top: 1rem;
@@ -633,7 +631,7 @@
         .step {
             padding: 0.75rem;
             margin: 0.5rem 0;
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(53, 82, 107, 0.05);
             border-radius: 8px;
             border-left: 4px solid var(--primary);
         }
@@ -644,7 +642,7 @@
             flex-direction: column;
             align-items: center;
             padding: 2rem;
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            background: linear-gradient(135deg, #F4F6F7 0%, #E3E8EA 100%);
             border-radius: 15px;
         }
 
@@ -718,7 +716,7 @@
             padding: 1rem;
             border-radius: 10px;
             text-align: center;
-            border: 2px solid rgba(91, 76, 245, 0.1);
+            border: 2px solid rgba(53, 82, 107, 0.1);
         }
 
         .trig-value h4 {
@@ -768,23 +766,7 @@
                 font-size: 0.9rem;
             }
         }
-        /* Background responsivo mejorado */
-.animated-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    background-image: 
-        url('../imagenes/mathexp.png'),
-        linear-gradient(-45deg, rgba(91, 76, 245, 0.88), rgba(61, 31, 140, 0.92), rgba(0, 229, 195, 0.55), rgba(91, 76, 245, 0.82));
-    background-size: cover, 400% 400%;
-    background-repeat: no-repeat, repeat;
-    background-position: center center, center center;
-    background-attachment: fixed, fixed;
-    animation: gradientShift 15s ease infinite;
-}
+        /* Retired duplicate background layer (see .animated-bg { display: none; } above) */
 
 /* Botón hamburguesa - solo visible en móvil */
 .mobile-menu-btn {
@@ -805,7 +787,7 @@
 }
 
 .mobile-menu-btn:hover {
-    background: rgba(91, 76, 245, 0.1);
+    background: rgba(53, 82, 107, 0.1);
 }
 
 .hamburger-line {
@@ -897,7 +879,7 @@
     display: none;
 }
 
-.nav-link i {
+.nav-link i, .nav-link .icon {
     margin-right: 0.5rem;
     flex-shrink: 0;
 }
@@ -949,7 +931,7 @@
         height: 100vh;
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(20px);
-        border-left: 2px solid rgba(91, 76, 245, 0.2);
+        border-left: 2px solid rgba(53, 82, 107, 0.2);
         flex-direction: column;
         justify-content: flex-start;
         align-items: stretch;
@@ -1014,8 +996,8 @@
     .nav-link.active {
         background: var(--gradient-main);
         color: var(--white);
-        border: 2px solid rgba(91, 76, 245, 0.35);
-        box-shadow: 0 5px 20px rgba(91, 76, 245, 0.35);
+        border: 2px solid rgba(53, 82, 107, 0.35);
+        box-shadow: 0 5px 20px rgba(53, 82, 107, 0.35);
     }
     
     /* Imagen de fondo responsiva para móvil */
@@ -1256,7 +1238,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(-45deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9), rgba(240, 147, 251, 0.9), rgba(78, 205, 196, 0.9));
+        background: linear-gradient(-45deg, rgba(53, 82, 107, 0.9), rgba(118, 75, 162, 0.9), rgba(240, 147, 251, 0.9), rgba(78, 205, 196, 0.9));
         z-index: -1;
     }
 }
@@ -1299,13 +1281,13 @@
         letter-spacing: 1px;
         margin-bottom: 1rem;
         padding-bottom: 0.5rem;
-        border-bottom: 1px solid rgba(91, 76, 245, 0.2);
+        border-bottom: 1px solid rgba(53, 82, 107, 0.2);
         width: 100%;
     }
     
     /* Agregar separador antes del último enlace (Laboratorio) */
     .nav-menu li:last-child {
-        border-top: 1px solid rgba(91, 76, 245, 0.2);
+        border-top: 1px solid rgba(53, 82, 107, 0.2);
         padding-top: 0.75rem;
         margin-top: 0.75rem;
     }
@@ -1317,7 +1299,7 @@
     <header class="header">
     <nav class="navbar">
         <a href="../index.html" class="logo">
-            <i class="fas fa-calculator"></i>
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg>
             Matemáticas Digitales
         </a>
         
@@ -1332,19 +1314,19 @@
         
         <ul class="nav-menu" id="navMenu">
             <li><a href="../index.html" class="nav-link">
-                <i class="fas fa-home"></i> 
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
                 <span class="link-text">Inicio</span>
             </a></li>
             <li><a href="../contexto/contexto.html" class="nav-link">
-                <i class="fas fa-book"></i> 
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg>
                 <span class="link-text">ContextoMath</span>
             </a></li>
             <li><a href="../galeria/galeria.html" class="nav-link">
-                <i class="fas fa-images"></i> 
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16" /> <path d="M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2" /> <circle cx="13" cy="7" r="1" fill="currentColor" /> <rect x="8" y="2" width="14" height="14" rx="2" /></svg>
                 <span class="link-text">Galería</span>
             </a></li>
             <li><a href="#" class="nav-link active">
-                <i class="fas fa-flask"></i> 
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /></svg>
                 <span class="link-text">Laboratorio</span>
             </a></li>
         </ul>
@@ -1360,7 +1342,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1><i class="fas fa-flask"></i> Laboratorio Experimental</h1>
+            <h1><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /></svg> Laboratorio Experimental</h1>
             <p>Explora las matemáticas a través de simulaciones interactivas y experimentos virtuales. Cada módulo está diseñado para hacer tangibles los conceptos abstractos.</p>
         </div>
     </section>
@@ -1372,15 +1354,15 @@
                 <!-- Módulo 1: Finanzas Personales -->
                 <div class="lab-card finances" onclick="openLabModal('finances')">
                     <div class="lab-icon">
-                        <i class="fas fa-chart-line"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg>
                     </div>
                     <h3 class="lab-title">Finanzas Personales</h3>
                     <p class="lab-description">Simulador comparativo de interés simple y compuesto con visualizaciones gráficas interactivas.</p>
                     <ul class="lab-features">
-                        <li><i class="fas fa-check"></i> Gráficas comparativas interactivas</li>
-                        <li><i class="fas fa-check"></i> Tabla de crecimiento año por año</li>
-                        <li><i class="fas fa-check"></i> Fórmulas matemáticas explicadas</li>
-                        <li><i class="fas fa-check"></i> Simulación en tiempo real</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Gráficas comparativas interactivas</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Tabla de crecimiento año por año</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Fórmulas matemáticas explicadas</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Simulación en tiempo real</li>
                     </ul>
                     <button class="lab-button">Explorar Módulo</button>
                 </div>
@@ -1388,15 +1370,15 @@
                 <!-- Módulo 2: Álgebra -->
                 <div class="lab-card algebra" onclick="openLabModal('algebra')">
                     <div class="lab-icon">
-                        <i class="fas fa-balance-scale"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg>
                     </div>
                     <h3 class="lab-title">Balanza Algebraica</h3>
                     <p class="lab-description">Visualización interactiva de ecuaciones algebraicas usando una balanza virtual.</p>
                     <ul class="lab-features">
-                        <li><i class="fas fa-check"></i> Balanza interactiva visual</li>
-                        <li><i class="fas fa-check"></i> Operaciones paso a paso</li>
-                        <li><i class="fas fa-check"></i> Bloques para variables y constantes</li>
-                        <li><i class="fas fa-check"></i> Registro de pasos algebraicos</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Balanza interactiva visual</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Operaciones paso a paso</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Bloques para variables y constantes</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Registro de pasos algebraicos</li>
                     </ul>
                     <button class="lab-button">Explorar Módulo</button>
                 </div>
@@ -1404,15 +1386,15 @@
                 <!-- Módulo 3: Geometría y Trigonometría -->
                 <div class="lab-card geometry" onclick="openLabModal('geometry')">
                     <div class="lab-icon">
-                        <i class="fas fa-circle"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /></svg>
                     </div>
                     <h3 class="lab-title">Círculo Unitario</h3>
                     <p class="lab-description">Explorador interactivo del círculo unitario con funciones trigonométricas dinámicas.</p>
                     <ul class="lab-features">
-                        <li><i class="fas fa-check"></i> Círculo unitario interactivo</li>
-                        <li><i class="fas fa-check"></i> Valores trigonométricos en tiempo real</li>
-                        <li><i class="fas fa-check"></i> Visualización de ángulos</li>
-                        <li><i class="fas fa-check"></i> Triángulo rectángulo dinámico</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Círculo unitario interactivo</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Valores trigonométricos en tiempo real</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Visualización de ángulos</li>
+                        <li><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg> Triángulo rectángulo dinámico</li>
                     </ul>
                     <button class="lab-button">Explorar Módulo</button>
                 </div>
@@ -1424,7 +1406,7 @@
     <div id="financesModal" class="lab-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-chart-line"></i> Simulador de Finanzas Personales</h2>
+                <h2><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg> Simulador de Finanzas Personales</h2>
                 <button class="modal-close" onclick="closeLabModal('finances')">&times;</button>
             </div>
             <div class="modal-body">
@@ -1468,7 +1450,7 @@
     <div id="algebraModal" class="lab-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-balance-scale"></i> Balanza Algebraica Interactiva</h2>
+                <h2><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" /> <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" /> <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" /> <path d="M7 21h10" /></svg> Balanza Algebraica Interactiva</h2>
                 <button class="modal-close" onclick="closeLabModal('algebra')">&times;</button>
             </div>
             <div class="modal-body">
@@ -1525,7 +1507,7 @@
     <div id="geometryModal" class="lab-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-circle"></i> Explorador del Círculo Unitario</h2>
+                <h2><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /></svg> Explorador del Círculo Unitario</h2>
                 <button class="modal-close" onclick="closeLabModal('geometry')">&times;</button>
             </div>
             <div class="modal-body">
@@ -1736,7 +1718,7 @@
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
+                background: linear-gradient(135deg, #35526B 0%, #22344A 100%);
                 color: white;
                 padding: 1rem;
                 border-radius: 10px;
@@ -1746,7 +1728,7 @@
                 animation: slideInRight 0.5s ease;
             `;
             loadingIndicator.innerHTML = `
-                <i class="fas fa-check-circle"></i>
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.4em;flex-shrink:0;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335" /> <path d="m9 11 3 3L22 4" /></svg>
                 Laboratorio cargado correctamente
             `;
             
@@ -1787,7 +1769,7 @@
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: #ef4444;
+                background: #B23A3A;
                 color: white;
                 padding: 1rem;
                 border-radius: 10px;
@@ -1797,7 +1779,7 @@
                 animation: slideInRight 0.5s ease;
             `;
             errorToast.innerHTML = `
-                <i class="fas fa-exclamation-triangle"></i>
+                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.4em;flex-shrink:0;display:inline-block;" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg>
                 Ha ocurrido un error. Por favor, recarga la página.
             `;
             
@@ -1968,7 +1950,7 @@ function optimizeBackgroundLoading() {
     img.onerror = function() {
         // Error cargando imagen, usar solo gradiente
         console.warn('No se pudo cargar la imagen de fondo, usando gradiente de respaldo');
-        animatedBg.style.backgroundImage = 'linear-gradient(-45deg, rgba(91, 76, 245, 0.88), rgba(61, 31, 140, 0.92), rgba(0, 229, 195, 0.55), rgba(91, 76, 245, 0.82))';
+        animatedBg.style.backgroundImage = 'linear-gradient(-45deg, rgba(53, 82, 107, 0.88), rgba(61, 31, 140, 0.92), rgba(0, 229, 195, 0.55), rgba(53, 82, 107, 0.82))';
     };
     
     // Iniciar precarga
