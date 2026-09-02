@@ -25,45 +25,49 @@
   </script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
     /* ------------------- */
-    /* RESET & FONT        */
+    /* RESET & FONT — Campo de Tiro        */
     /* ------------------- */
     :root {
       --font-sans: 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Oswald', var(--font-sans);
       --font-mono: 'DM Mono', 'SFMono-Regular', Consolas, monospace;
-      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-      
-      /* Light Theme (Default) */
-      --bg: #f8f9fa;
-      --fg: #212529;
-      --bg-card: rgba(255, 255, 255, 0.75);
-      --border: #dee2e6;
-      --shadow: rgba(0, 0, 0, 0.08);
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
+
+      /* Light Theme (Default) — day range */
+      --bg: #F4F0E1;
+      --fg: #262B1D;
+      --bg-card: rgba(255, 253, 245, 0.85);
+      --border: #C9C2A0;
+      --shadow: rgba(43, 46, 34, 0.12);
+      --accent: #D9631E;
+      --accent-hover: #B84F14;
       --accent-text: #ffffff;
-      --muted: #6c757d;
-      --grid: #e9ecef;
-      --success: #28a745;
-      --warning: #ffc107;
-      --danger: #dc3545;
+      --muted: #6B6A52;
+      --grid: #E1DAC0;
+      --success: #4B7F3D;
+      --warning: #C99A2E;
+      --danger: #B23A2E;
+      --olive: #5C6B3F;
+      --olive-dark: #3E4A2A;
     }
 
     html[data-theme="dark"] {
-      --bg: #121212;
-      --fg: #e0e0e0;
-      --bg-card: rgba(33, 37, 41, 0.75);
-      --border: #495057;
-      --shadow: rgba(0, 0, 0, 0.25);
-      --accent: #60a5fa;
-      --accent-hover: #93c5fd;
-      --accent-text: #121212;
-      --muted: #adb5bd;
-      --grid: #343a40;
-      --success: #198754;
-      --warning: #ffc107;
-      --danger: #dc3545;
+      --bg: #14170F;
+      --fg: #E7E4D2;
+      --bg-card: rgba(35, 40, 26, 0.85);
+      --border: #4A5233;
+      --shadow: rgba(0, 0, 0, 0.4);
+      --accent: #FF8A3D;
+      --accent-hover: #FFA65C;
+      --accent-text: #14170F;
+      --muted: #9BA37E;
+      --grid: #2B3320;
+      --success: #6FAE55;
+      --warning: #E0B23B;
+      --danger: #E0574A;
+      --olive: #7C8F52;
+      --olive-dark: #232A17;
     }
 
     *, *::before, *::after {
@@ -82,9 +86,11 @@
     }
 
     h1, h2, h3 {
+      font-family: var(--font-display);
       line-height: 1.2;
       margin-bottom: 0.5em;
       font-weight: 600;
+      letter-spacing: 0.01em;
     }
 
     /* ------------------- */
@@ -115,7 +121,8 @@
     .card {
       background-color: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-top: 3px solid var(--olive);
+      border-radius: 8px;
       padding: 1.5rem;
       box-shadow: 0 8px 24px -4px var(--shadow);
       backdrop-filter: blur(10px);
@@ -137,7 +144,7 @@
       width: 100%;
       height: 100%;
       background-color: var(--bg-card);
-      border-radius: 12px;
+      border-radius: 8px;
       border: 1px solid var(--border);
       cursor: crosshair;
     }
@@ -149,27 +156,50 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid var(--border);
     }
-    
-    .header-placeholder {
-        width: 40px; /* Same width as theme switcher button */
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    
+
+    .back-home {
+        width: 40px; height: 40px; /* Same width as theme switcher button */
+        display: flex; align-items: center; justify-content: center;
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: var(--fg);
+        text-decoration: none;
+        transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .back-home:hover {
+        background-color: var(--olive);
+        border-color: var(--olive);
+        color: #fff;
+        transform: scale(1.06);
+    }
+    .back-home svg { width: 1.2rem; height: 1.2rem; }
+
     .app-header h1 {
+        display: flex; align-items: center; justify-content: center; gap: 0.6rem;
         font-size: 1.75rem;
         margin: 0;
         font-weight: 700;
+        letter-spacing: 0.01em;
         text-align: center;
         flex-grow: 1;
+        color: var(--olive);
     }
-    
+
     .app-header h1 .icon {
-        font-size: 2rem;
-        vertical-align: middle;
-        margin-right: 0.5rem;
+        color: var(--accent);
+        display: inline-flex;
     }
+    .app-header h1 .icon svg { width: 1.5rem; height: 1.5rem; }
 
     .theme-switcher {
       background: none;
@@ -182,16 +212,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;
       transition: background-color 0.2s ease, transform 0.2s ease;
     }
+    .theme-switcher svg { width: 1.1rem; height: 1.1rem; }
     .theme-switcher:hover {
       background-color: var(--border);
       transform: scale(1.1) rotate(15deg);
     }
     .theme-switcher .icon-moon { display: none; }
     html[data-theme="dark"] .theme-switcher .icon-sun { display: none; }
-    html[data-theme="dark"] .theme-switcher .icon-moon { display: block; }
+    html[data-theme="dark"] .theme-switcher .icon-moon { display: flex; }
     
     .control-group {
       margin-bottom: 1.25rem;
@@ -268,14 +298,18 @@
     }
     
     .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
       padding: 0.75rem 1rem;
-      border-radius: 8px;
+      border-radius: 6px;
       border: none;
       cursor: pointer;
       font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
       transition: transform 0.1s ease, box-shadow 0.2s ease;
       text-align: center;
     }
+    .btn svg { width: 1.05em; height: 1.05em; flex-shrink: 0; }
     .btn:active {
       transform: translateY(1px);
     }
@@ -310,7 +344,8 @@
         right: 1rem;
         background-color: var(--bg-card);
         border: 1px solid var(--border);
-        border-radius: 12px;
+        border-top: 3px solid var(--accent);
+        border-radius: 8px;
         padding: 1rem;
         box-shadow: 0 4px 12px var(--shadow);
         backdrop-filter: blur(5px);
@@ -318,14 +353,19 @@
         max-width: 280px;
         pointer-events: auto;
     }
-    
+
     .results-overlay h3 {
+        display: flex; align-items: center; gap: 0.4rem;
         margin-top: 0;
-        font-size: 1.1rem;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
         border-bottom: 1px solid var(--border);
         padding-bottom: 0.5rem;
         margin-bottom: 0.75rem;
     }
+    .results-overlay h3 svg { width: 1em; height: 1em; color: var(--accent); }
 
     .result-item {
         display: flex;
@@ -365,10 +405,11 @@
     
     .analysis-guide details {
       background-color: var(--grid);
-      border-radius: 8px;
+      border-radius: 6px;
       margin-top: 1rem;
       padding: 0.75rem 1.25rem;
       border: 1px solid var(--border);
+      border-left: 3px solid var(--olive);
       transition: background-color 0.2s ease;
     }
     .analysis-guide details[open] {
@@ -449,18 +490,22 @@
 
   <div class="app-container">
     <header class="app-header">
-      <div class="header-placeholder"></div>
-      <h1><span class="icon">🎯</span> Laboratorio de Proyectiles</h1>
-      <button class="theme-switcher" id="themeSwitcher" title="Cambiar tema">
-        <span class="icon-sun">☀️</span>
-        <span class="icon-moon">🌙</span>
-      </button>
-      <button id="lang-toggle" aria-label="Switch language"
-        onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
+      <a href="../index.html" class="back-home" title="Volver al inicio" aria-label="Volver al inicio">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+      </a>
+      <h1><span class="icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg></span> Laboratorio de Proyectiles</h1>
+      <div class="header-controls">
+        <button class="theme-switcher" id="themeSwitcher" title="Cambiar tema">
+          <span class="icon-sun"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" /></svg></span>
+          <span class="icon-moon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></svg></span>
+        </button>
+        <button id="lang-toggle" aria-label="Switch language" class="theme-switcher" style="width:auto; border-radius:20px; padding:0 0.8rem; font-family:var(--font-mono); font-size:0.8rem;"
+          onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
+      </div>
     </header>
 
     <aside class="controls-panel card">
-      <h2><span class="icon">⚙️</span> Parámetros de Entrada</h2>
+      <h2 style="display:flex; align-items:center; gap:0.5rem;"><svg aria-hidden="true" style="width:1.1em;height:1.1em;color:var(--olive);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /> <circle cx="12" cy="12" r="3" /></svg> Parámetros de Entrada</h2>
       
       <div class="control-group">
         <label for="v0Slider">Velocidad inicial (v₀)</label>
@@ -500,21 +545,21 @@
       
       <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
       
-      <h2><span class="icon">🎬</span> Escenas Predefinidas</h2>
+      <h2 style="display:flex; align-items:center; gap:0.5rem;"><svg aria-hidden="true" style="width:1.1em;height:1.1em;color:var(--olive);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" /></svg> Escenas Predefinidas</h2>
       <div class="button-group">
-        <button class="btn btn-secondary" id="scene1">Tiro Clásico</button>
-        <button class="btn btn-secondary" id="scene2">Horizontal</button>
-        <button class="btn btn-secondary" id="scene3">Tiro Alto</button>
-        <button class="btn btn-secondary" id="scene4">Lunar</button>
+        <button class="btn btn-secondary" id="scene1"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <line x1="22" x2="18" y1="12" y2="12" /> <line x1="6" x2="2" y1="12" y2="12" /> <line x1="12" x2="12" y1="6" y2="2" /> <line x1="12" x2="12" y1="22" y2="18" /></svg> Tiro Clásico</button>
+        <button class="btn btn-secondary" id="scene2"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 8 4 4-4 4" /> <path d="M2 12h20" /> <path d="m6 8-4 4 4 4" /></svg> Horizontal</button>
+        <button class="btn btn-secondary" id="scene3"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></svg> Tiro Alto</button>
+        <button class="btn btn-secondary" id="scene4"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401" /></svg> Lunar</button>
       </div>
-      <button class="btn btn-secondary" id="resetDefaults" style="width: 100%; margin-top: 0.5rem;">Restablecer Valores</button>
+      <button class="btn btn-secondary" id="resetDefaults" style="width: 100%; margin-top: 0.5rem;"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /> <path d="M3 3v5h5" /></svg> Restablecer Valores</button>
     </aside>
 
     <main class="simulation-panel">
         <div class="simulation-wrapper">
             <div class="simulation-controls">
-                <button class="btn btn-primary" id="playPauseBtn">▶️ Iniciar</button>
-                <button class="btn btn-secondary" id="resetBtn">⏮️ Reiniciar</button>
+                <button class="btn btn-primary" id="playPauseBtn"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg><span class="btn-label">Iniciar</span></button>
+                <button class="btn btn-secondary" id="resetBtn"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /> <path d="M3 3v5h5" /></svg> Reiniciar</button>
                 <select id="simSpeedSelect" class="btn btn-secondary" title="Velocidad de simulación">
                     <option value="0.25">0.25x</option>
                     <option value="0.5">0.5x</option>
@@ -525,7 +570,7 @@
             </div>
             <canvas id="simulationCanvas"></canvas>
             <div class="results-overlay card">
-                <h3><span class="icon">📊</span> Resultados Clave</h3>
+                <h3><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /></svg> Resultados Clave</h3>
                 <div class="result-item">
                     <span class="label">Altura Máxima (yₘₐₓ)</span>
                     <span class="value" id="yMaxValue">0.00 m</span>
@@ -548,7 +593,7 @@
     </main>
 
     <section class="theory-section card">
-        <h2>📜 Fundamentos Teóricos y Fórmulas</h2>
+        <h2 style="display:flex; align-items:center; gap:0.5rem;"><svg aria-hidden="true" style="width:1em;height:1em;color:var(--olive);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></svg> Fundamentos Teóricos y Fórmulas</h2>
         <p style="color: var(--muted); margin-top: -0.5rem; margin-bottom: 1rem;">El movimiento parabólico se analiza descomponiendo el movimiento en dos ejes independientes: <strong>horizontal (eje x)</strong> y <strong>vertical (eje y)</strong>.</p>
         <ul>
             <li><strong>Eje Horizontal (x):</strong> El movimiento es a velocidad constante (Movimiento Rectilíneo Uniforme, MRU), ya que no hay aceleración horizontal (ignorando la resistencia del aire).</li>
@@ -583,7 +628,7 @@
     </section>
     
     <section class="analysis-guide card">
-        <h2>🔬 Análisis y Guías de Estudio</h2>
+        <h2 style="display:flex; align-items:center; gap:0.5rem;"><svg aria-hidden="true" style="width:1em;height:1em;color:var(--olive);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></svg> Análisis y Guías de Estudio</h2>
         <p style="color: var(--muted); margin-top: -0.5rem; margin-bottom: 1rem;">Usa estas preguntas para explorar los conceptos clave del movimiento de proyectiles con el simulador. ¡Experimenta y descubre!</p>
 
         <details>
@@ -631,6 +676,11 @@
       // -----------------------------
       // --- ELEMENTOS DEL DOM ---
       // -----------------------------
+      const ICONS = {
+        play: '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg>',
+        pause: '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="3" width="5" height="18" rx="1" /> <rect x="5" y="3" width="5" height="18" rx="1" /></svg>'
+      };
+
       const canvas = document.getElementById('simulationCanvas');
       const ctx = canvas.getContext('2d');
       const tooltip = document.getElementById('tooltip');
@@ -1000,24 +1050,24 @@
       function startSimulation() {
         if (state.isRunning) return;
         state.isRunning = true;
-        playPauseBtn.innerHTML = '⏸️ Pausar';
+        playPauseBtn.innerHTML = ICONS.pause + '<span class="btn-label">Pausar</span>';
         state.lastTimestamp = performance.now();
         state.animationFrameId = requestAnimationFrame(animationLoop);
       }
-      
+
       function pauseSimulation() {
         if (!state.isRunning) return;
         state.isRunning = false;
-        playPauseBtn.innerHTML = '▶️ Continuar';
+        playPauseBtn.innerHTML = ICONS.play + '<span class="btn-label">Continuar</span>';
         if (state.animationFrameId) {
           cancelAnimationFrame(state.animationFrameId);
           state.animationFrameId = null;
         }
       }
-      
+
       function stopSimulation() {
         state.isRunning = false;
-        playPauseBtn.innerHTML = '▶️ Iniciar';
+        playPauseBtn.innerHTML = ICONS.play + '<span class="btn-label">Iniciar</span>';
         if (state.animationFrameId) {
           cancelAnimationFrame(state.animationFrameId);
           state.animationFrameId = null;

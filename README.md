@@ -128,6 +128,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `club/modulos/*.html` (algebra, calculus, geometry, trigonometry, puzzles, statistics) | Consola Arcade | Shared system across all 6 competition/quiz modules — dark CRT cabinet chrome, scanline overlay, Press Start 2P pixel-font scores/titles, JetBrains Mono UI, shared easy/medium/hard semantic colors (mint/amber/red), each module keeping its own accent: algebra blue, calculus violet, geometry jade, trigonometry orange, puzzles magenta, statistics cyan |
 | `club/registro.html` | Pasaporte del Competidor | Passport/enrollment-desk aesthetic — navy passport-cover header with a gold wax-seal emblem, cream document pages, dashed ticket-stub divider between the form and the live roster, Cormorant Garamond display + IBM Plex Mono for stamps/IDs |
 | `lab/figuras.html` | Holograma Geométrico *(targeted polish, not a full rebuild)* | Already had a distinctive full-screen Three.js viewer (glass side panel, starfield, bloom) — kept it and added the site's missing top navigation bar (logo + back-to-home), Lucide icons on the category tabs and explode/wireframe controls, and put the previously-unused DM Mono import to work on the technical UI chrome |
+| `lab/proyectiles.html` | Campo de Tiro | Firing-range palette (olive/khaki + blaze orange) over the page's existing light/dark dashboard system — canvas trajectory grid, results overlay and theory/guide cards re-themed via CSS custom properties (the physics canvas already read them, so no simulation code changed), Oswald display type, Lucide icons replacing every emoji, back-to-site nav added, and a dead duplicate `--font-mono` declaration fixed so the imported DM Mono is actually used |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -200,7 +201,7 @@ get redesigned.
 
 ### Not yet redesigned
 
-`lab/` (experimentos.html, juegos.html, proyectiles.html, simulaciones.html,
+`lab/` (experimentos.html, juegos.html, simulaciones.html,
 `modulos/` — datos, fisica, geometrico, optimizacion), `salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
