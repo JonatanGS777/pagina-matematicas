@@ -127,6 +127,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `club/proyectos-creativos.html` | Feria de Inventos | Science-fair expo — cream poster-board cards pinned to a CSS-only corkboard texture, ribbon-blue/red/gold scoring, Permanent Marker/Archivo/JetBrains Mono |
 | `club/modulos/*.html` (algebra, calculus, geometry, trigonometry, puzzles, statistics) | Consola Arcade | Shared system across all 6 competition/quiz modules — dark CRT cabinet chrome, scanline overlay, Press Start 2P pixel-font scores/titles, JetBrains Mono UI, shared easy/medium/hard semantic colors (mint/amber/red), each module keeping its own accent: algebra blue, calculus violet, geometry jade, trigonometry orange, puzzles magenta, statistics cyan |
 | `club/registro.html` | Pasaporte del Competidor | Passport/enrollment-desk aesthetic — navy passport-cover header with a gold wax-seal emblem, cream document pages, dashed ticket-stub divider between the form and the live roster, Cormorant Garamond display + IBM Plex Mono for stamps/IDs |
+| `lab/figuras.html` | Holograma Geométrico *(targeted polish, not a full rebuild)* | Already had a distinctive full-screen Three.js viewer (glass side panel, starfield, bloom) — kept it and added the site's missing top navigation bar (logo + back-to-home), Lucide icons on the category tabs and explode/wireframe controls, and put the previously-unused DM Mono import to work on the technical UI chrome |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -199,7 +200,8 @@ get redesigned.
 
 ### Not yet redesigned
 
-`lab/`, `salon/`,
+`lab/` (experimentos.html, juegos.html, proyectiles.html, simulaciones.html,
+`modulos/` — datos, fisica, geometrico, optimizacion), `salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
 study-materials subpages), and `perfil-investigador/` still use the previous
