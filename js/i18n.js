@@ -225,6 +225,7 @@ const I18n = (() => {
             'Laboratorio de Proyectiles':     'Projectile Lab',
             'Figuras Geométricas':            'Geometric Figures',
             // Tópicos
+            'Tópicos':                        'Topics',
             'Álgebra':                        'Algebra',
             'Geometría':                      'Geometry',
             'Estadísticas':                   'Statistics',
