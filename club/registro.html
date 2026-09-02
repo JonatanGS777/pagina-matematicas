@@ -6,45 +6,49 @@
     <title>Registro - Olimpiadas Matemáticas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <style>
-        /* ==================== CSS Variables ==================== */
+        /* ==================== Pasaporte del Competidor ==================== */
         :root {
-            --color-primary: #2563eb;
-            --color-secondary: #7c3aed;
-            --color-accent: #f59e0b;
-            --color-success: #10b981;
-            --color-danger: #ef4444;
+            --navy: #12294A;
+            --navy-deep: #0A1B32;
+            --navy-mid: #1B3B63;
+            --gold: #C9A24B;
+            --gold-dim: #8A7134;
+            --cream: #F6F0DF;
+            --cream-alt: #ECE2C6;
+            --ink: #1C2333;
+            --ink-soft: #52586B;
+            --ink-faint: #8A8D9E;
+
+            --color-success: #2F8F5B;
+            --color-danger: #B23A32;
+            --color-info: #2C5F8A;
             --color-white: #ffffff;
-            --color-gray-50: #f9fafb;
-            --color-gray-100: #f3f4f6;
-            --color-gray-200: #e5e7eb;
-            --color-gray-300: #d1d5db;
-            --color-gray-500: #6b7280;
-            --color-gray-600: #4b5563;
-            --color-gray-700: #374151;
-            --color-gray-800: #1f2937;
-            --color-gray-900: #111827;
-            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            --gradient-hero: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-accent) 100%);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+            --shadow-xl: 0 20px 40px rgba(10, 27, 50, 0.35);
+            --shadow-card: 0 10px 26px rgba(10, 27, 50, 0.14);
+
             --space-1: 0.25rem;
             --space-2: 0.5rem;
             --space-4: 1rem;
             --space-6: 1.5rem;
             --space-8: 2rem;
             --space-12: 3rem;
-            --radius-lg: 0.5rem;
-            --radius-xl: 0.75rem;
-            --radius-2xl: 1rem;
-            --radius-3xl: 1.5rem;
+            --radius-lg: 8px;
+            --radius-xl: 10px;
+            --radius-2xl: 14px;
+            --radius-3xl: 16px;
             --radius-full: 9999px;
-            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
         }
 
         * {
@@ -54,13 +58,19 @@
         }
 
         body {
-            font-family: 'Syne', sans-serif;
+            font-family: var(--font-body);
             line-height: 1.6;
-            color: var(--color-gray-900);
-            background: var(--gradient-hero);
+            color: var(--ink);
             min-height: 100vh;
             padding: var(--space-8) 0;
+            background-color: var(--navy-deep);
+            background-image:
+                repeating-linear-gradient(135deg, rgba(201, 162, 75, 0.05) 0px, rgba(201, 162, 75, 0.05) 1px, transparent 1px, transparent 14px),
+                radial-gradient(circle at 20% 10%, rgba(201, 162, 75, 0.12), transparent 45%),
+                radial-gradient(circle at 85% 90%, rgba(27, 59, 99, 0.5), transparent 50%);
         }
+
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
 
         .container {
             max-width: 1200px;
@@ -68,50 +78,85 @@
             padding: 0 var(--space-4);
         }
 
-        /* ==================== Header ==================== */
+        /* ==================== Header — passport cover ==================== */
         .header {
+            position: relative;
             text-align: center;
             margin-bottom: var(--space-12);
-            color: var(--color-white);
+            color: var(--cream);
+            background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 100%);
+            border: 2px solid var(--gold-dim);
+            border-radius: var(--radius-3xl);
+            padding: var(--space-12) var(--space-6) var(--space-8);
+            box-shadow: var(--shadow-xl);
         }
+
+        .header__emblem {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--space-4);
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+        }
+
+        .header__emblem .icon { width: 1.8rem; height: 1.8rem; }
 
         .header__back {
             display: inline-flex;
             align-items: center;
             gap: var(--space-2);
-            color: var(--color-white);
+            color: var(--navy);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.85rem;
             padding: var(--space-2) var(--space-6);
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--gold);
             border-radius: var(--radius-full);
-            backdrop-filter: blur(10px);
             transition: var(--transition-base);
-            margin-bottom: var(--space-8);
+            margin-bottom: var(--space-6);
         }
 
         .header__back:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--cream);
             transform: translateY(-2px);
         }
 
+        #lang-toggle {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            border: 1px solid var(--gold-dim);
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--cream);
+            font-family: var(--font-mono);
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: var(--radius-lg);
+        }
+
         .header__title {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-family: var(--font-display);
             font-weight: 700;
+            font-size: clamp(2.2rem, 5vw, 3.6rem);
             margin-bottom: var(--space-4);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
         .header__subtitle {
-            font-size: 1.25rem;
-            opacity: 0.9;
+            font-size: 1.1rem;
+            color: var(--cream);
+            opacity: 0.82;
             max-width: 600px;
             margin: 0 auto;
         }
 
         /* ==================== Main Layout ==================== */
         .main {
+            position: relative;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--space-8);
@@ -119,29 +164,40 @@
             margin: 0 auto;
         }
 
-        /* ==================== Form Section ==================== */
-        .form-section {
-            background: var(--color-white);
-            border-radius: var(--radius-3xl);
+        .main::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            border-left: 2px dashed var(--gold-dim);
+            opacity: 0.6;
+        }
+
+        /* ==================== Form & List Panels — passport pages ==================== */
+        .form-section, .list-section {
+            background: var(--cream);
+            border: 1px solid var(--gold-dim);
+            border-radius: var(--radius-2xl);
             padding: var(--space-8);
-            box-shadow: var(--shadow-xl);
+            box-shadow: var(--shadow-card);
             height: fit-content;
         }
 
-        .form__title {
-            font-family: 'Syne', sans-serif;
-            font-size: 2rem;
+        .form__title, .list__title {
+            font-family: var(--font-display);
             font-weight: 700;
-            color: var(--color-gray-900);
+            font-size: 2.1rem;
+            color: var(--navy);
             margin-bottom: var(--space-2);
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
 
         .form__description {
-            color: var(--color-gray-600);
+            color: var(--ink-soft);
             margin-bottom: var(--space-8);
             line-height: 1.6;
         }
@@ -153,10 +209,12 @@
             gap: var(--space-2);
             margin-bottom: var(--space-4);
             padding: var(--space-2) var(--space-4);
-            background: var(--color-gray-50);
+            background: var(--cream-alt);
             border-radius: var(--radius-lg);
-            font-size: 0.875rem;
-            border: 1px solid var(--color-gray-200);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            border: 1px solid rgba(28, 35, 51, 0.1);
         }
 
         .status-dot {
@@ -167,31 +225,35 @@
 
         .status-dot--online { background: var(--color-success); }
         .status-dot--offline { background: var(--color-danger); }
-        .status-dot--loading { background: var(--color-accent); animation: pulse 2s infinite; }
+        .status-dot--loading { background: var(--gold); animation: pulse 2s infinite; }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
 
-        /* ==================== Messages ==================== */
+        /* ==================== Messages — ink stamps ==================== */
         .message {
             display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
             padding: var(--space-4);
             border-radius: var(--radius-lg);
             margin-bottom: var(--space-6);
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
+            border: 2px dashed rgba(255, 255, 255, 0.35);
         }
 
         .message.show {
-            display: block;
+            display: flex;
             animation: slideDown 0.3s ease-out;
         }
 
         .message--success { background: var(--color-success); color: white; }
         .message--error { background: var(--color-danger); color: white; }
-        .message--info { background: var(--color-primary); color: white; }
+        .message--info { background: var(--color-info); color: white; }
 
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-10px); }
@@ -204,26 +266,33 @@
         }
 
         .form__label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             font-weight: 600;
-            color: var(--color-gray-700);
+            color: var(--navy);
             margin-bottom: var(--space-2);
         }
+
+        .form__label .icon { color: var(--gold-dim); }
 
         .form__input, .form__select {
             width: 100%;
             padding: var(--space-4);
-            border: 2px solid var(--color-gray-200);
+            border: 2px solid rgba(28, 35, 51, 0.15);
             border-radius: var(--radius-lg);
             font-size: 1rem;
+            font-family: var(--font-body);
             transition: var(--transition-base);
-            background: var(--color-white);
+            background: var(--cream-alt);
+            color: var(--ink);
         }
 
         .form__input:focus, .form__select:focus {
             outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: var(--gold);
+            background: var(--color-white);
+            box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.2);
         }
 
         .form__input.error, .form__select.error {
@@ -232,7 +301,7 @@
 
         .form__error {
             color: var(--color-danger);
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             margin-top: var(--space-1);
             display: none;
         }
@@ -244,12 +313,13 @@
         .form__submit {
             width: 100%;
             padding: var(--space-4) var(--space-6);
-            background: var(--gradient-primary);
-            color: var(--color-white);
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+            color: var(--navy-deep);
             border: none;
             border-radius: var(--radius-lg);
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
             transition: var(--transition-base);
             display: flex;
@@ -260,7 +330,7 @@
 
         .form__submit:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+            box-shadow: 0 10px 22px rgba(201, 162, 75, 0.35);
         }
 
         .form__submit:disabled {
@@ -284,26 +354,6 @@
         }
 
         /* ==================== List Section ==================== */
-        .list-section {
-            background: var(--color-white);
-            border-radius: var(--radius-3xl);
-            padding: var(--space-8);
-            box-shadow: var(--shadow-xl);
-            height: fit-content;
-        }
-
-        .list__title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--color-gray-900);
-            margin-bottom: var(--space-2);
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
         .list__stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -314,35 +364,37 @@
         .stat-card {
             text-align: center;
             padding: var(--space-4);
-            background: var(--color-gray-50);
+            background: var(--cream-alt);
             border-radius: var(--radius-xl);
-            border: 1px solid var(--color-gray-200);
+            border-top: 3px solid var(--gold);
         }
 
         .stat-card__number {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
+            font-family: var(--font-mono);
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--color-primary);
+            color: var(--navy);
             display: block;
         }
 
         .stat-card__label {
-            font-size: 0.875rem;
-            color: var(--color-gray-600);
-            font-weight: 500;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            color: var(--ink-soft);
+            font-weight: 600;
+            letter-spacing: 0.03em;
         }
 
         .list__container {
             max-height: 500px;
             overflow-y: auto;
             border-radius: var(--radius-lg);
-            border: 1px solid var(--color-gray-200);
+            border: 1px solid rgba(28, 35, 51, 0.12);
         }
 
         .participant-card {
             padding: var(--space-4);
-            border-bottom: 1px solid var(--color-gray-100);
+            border-bottom: 1px solid rgba(28, 35, 51, 0.08);
             transition: var(--transition-base);
             display: flex;
             align-items: center;
@@ -354,51 +406,59 @@
         }
 
         .participant-card:hover {
-            background: var(--color-gray-50);
+            background: var(--cream-alt);
         }
 
         .participant__avatar {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: var(--gradient-primary);
+            background: var(--navy);
+            border: 2px solid var(--gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--color-white);
+            color: var(--gold);
+            font-family: var(--font-mono);
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
         .participant__info {
             flex: 1;
+            min-width: 0;
         }
 
         .participant__name {
             font-weight: 600;
-            color: var(--color-gray-900);
+            color: var(--navy);
             margin-bottom: var(--space-1);
         }
 
         .participant__details {
-            font-size: 0.875rem;
-            color: var(--color-gray-600);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--ink-soft);
         }
 
         .participant__badge {
             padding: var(--space-1) var(--space-2);
-            border-radius: var(--radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-family: var(--font-mono);
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            background: rgba(16, 185, 129, 0.1);
+            border: 1px dashed var(--color-success);
             color: var(--color-success);
+            transform: rotate(-3deg);
+            flex-shrink: 0;
         }
 
         /* ==================== Loading & Error States ==================== */
         .loading-skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background: linear-gradient(90deg, var(--cream-alt) 25%, var(--cream) 50%, var(--cream-alt) 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
             border-radius: var(--space-1);
@@ -411,15 +471,15 @@
 
         .skeleton-card {
             padding: var(--space-4);
-            border-bottom: 1px solid var(--color-gray-100);
+            border-bottom: 1px solid rgba(28, 35, 51, 0.08);
             display: flex;
             align-items: center;
             gap: var(--space-4);
         }
 
         .skeleton-avatar {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
         }
 
@@ -434,13 +494,14 @@
         .error-message {
             text-align: center;
             padding: var(--space-8);
-            color: var(--color-gray-500);
+            color: var(--ink-soft);
         }
 
-        .error-message i {
-            font-size: 3rem;
+        .error-message .icon {
+            width: 2.6rem;
+            height: 2.6rem;
             margin-bottom: var(--space-4);
-            color: var(--color-gray-400);
+            color: var(--gold-dim);
         }
 
         /* ==================== Responsive Design ==================== */
@@ -449,6 +510,8 @@
                 grid-template-columns: 1fr;
                 gap: var(--space-6);
             }
+
+            .main::before { display: none; }
         }
 
         @media (max-width: 768px) {
@@ -457,21 +520,27 @@
             .header__title { font-size: 2.5rem; }
             .list__stats { grid-template-columns: 1fr; gap: var(--space-2); }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            .status-dot--loading, .form__loading, .loading-skeleton { animation: none; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <header class="header">
-            <a href="olimpiadas.html" class="header__back">
-                <i class="fas fa-arrow-left"></i>
-                <span>Volver a Olimpiadas</span>
-            </a>
             <button id="lang-toggle"
-                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')"
-                style="position:absolute; top:1rem; right:1rem;">
+                onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">
                 EN
             </button>
+            <a href="olimpiadas.html" class="header__back">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg>
+                <span>Volver a Olimpiadas</span>
+            </a>
+            <div class="header__emblem">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 13V8.5C14 7 15 7 15 5a3 3 0 0 0-6 0c0 2 1 2 1 3.5V13" /> <path d="M20 15.5a2.5 2.5 0 0 0-2.5-2.5h-11A2.5 2.5 0 0 0 4 15.5V17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1z" /> <path d="M5 22h14" /></svg>
+            </div>
             <h1 class="header__title">Registro para el Club de Matemáticas</h1>
             <p class="header__subtitle">
                 Únete oficialmente al Club de Matemáticas y participa en nuestras emocionantes olimpiadas matemáticas
@@ -482,9 +551,12 @@
         <main class="main">
             <!-- Registration Form -->
             <section class="form-section">
-                <h2 class="form__title">Formulario de Registro</h2>
+                <h2 class="form__title">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10h2" /> <path d="M16 14h2" /> <path d="M6.17 15a3 3 0 0 1 5.66 0" /> <circle cx="9" cy="11" r="2" /> <rect x="2" y="5" width="20" height="14" rx="2" /></svg>
+                    Formulario de Registro
+                </h2>
                 <p class="form__description">
-                    Complete todos los campos para registrarse en las olimpiadas matemáticas. 
+                    Complete todos los campos para registrarse en las olimpiadas matemáticas.
                     Su información será utilizada para organizar las competencias por categorías.
                 </p>
 
@@ -496,17 +568,17 @@
 
                 <!-- Messages -->
                 <div id="successMessage" class="message message--success">
-                    <i class="fas fa-check-circle"></i>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /></svg>
                     <span id="successText">¡Registro exitoso!</span>
                 </div>
 
                 <div id="errorMessage" class="message message--error">
-                    <i class="fas fa-exclamation-triangle"></i>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg>
                     <span id="errorText">Error en el registro</span>
                 </div>
 
                 <div id="infoMessage" class="message message--info">
-                    <i class="fas fa-info-circle"></i>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" /></svg>
                     <span id="infoText">Información</span>
                 </div>
 
@@ -514,7 +586,8 @@
                 <form id="registrationForm" class="form">
                     <div class="form__group">
                         <label for="fullName" class="form__label">
-                            <i class="fas fa-user"></i> Nombre Completo *
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /> <circle cx="12" cy="7" r="4" /></svg>
+                            Nombre Completo *
                         </label>
                         <input type="text" id="fullName" name="fullName" class="form__input" required
                                placeholder="Ej: María González López">
@@ -523,7 +596,8 @@
 
                     <div class="form__group">
                         <label for="email" class="form__label">
-                            <i class="fas fa-envelope"></i> Correo Electrónico *
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /></svg>
+                            Correo Electrónico *
                         </label>
                         <input type="email" id="email" name="email" class="form__input" required
                                placeholder="ejemplo@email.com">
@@ -532,7 +606,8 @@
 
                     <div class="form__group">
                         <label for="age" class="form__label">
-                            <i class="fas fa-birthday-cake"></i> Edad *
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" /> <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1" /> <path d="M2 21h20" /> <path d="M7 8v3" /> <path d="M12 8v3" /> <path d="M17 8v3" /> <path d="M7 4h.01" /> <path d="M12 4h.01" /> <path d="M17 4h.01" /></svg>
+                            Edad *
                         </label>
                         <input type="number" id="age" name="age" class="form__input" required
                                min="10" max="25" placeholder="15">
@@ -541,7 +616,8 @@
 
                     <div class="form__group">
                         <label for="grade" class="form__label">
-                            <i class="fas fa-graduation-cap"></i> Grado Escolar *
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /> <path d="M22 10v6" /> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg>
+                            Grado Escolar *
                         </label>
                         <select id="grade" name="grade" class="form__select" required>
                             <option value="">Seleccionar grado</option>
@@ -557,7 +633,8 @@
 
                     <div class="form__group">
                         <label for="school" class="form__label">
-                            <i class="fas fa-school"></i> Escuela
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M18 4.933V21" /> <path d="m4 6 7.106-3.79a2 2 0 0 1 1.788 0L20 6" /> <path d="m6 11-3.52 2.147a1 1 0 0 0-.48.854V19a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a1 1 0 0 0-.48-.853L18 11" /> <path d="M6 4.933V21" /> <circle cx="12" cy="9" r="2" /></svg>
+                            Escuela
                         </label>
                         <input type="text" id="school" name="school" class="form__input"
                                placeholder="Ej: Escuela Superior Central">
@@ -565,7 +642,8 @@
 
                     <div class="form__group">
                         <label for="category" class="form__label">
-                            <i class="fas fa-trophy"></i> Categoría *
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
+                            Categoría *
                         </label>
                         <select id="category" name="category" class="form__select" required>
                             <option value="">Seleccionar categoría</option>
@@ -578,7 +656,8 @@
 
                     <div class="form__group">
                         <label for="experience" class="form__label">
-                            <i class="fas fa-star"></i> Experiencia Previa
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></svg>
+                            Experiencia Previa
                         </label>
                         <select id="experience" name="experience" class="form__select">
                             <option value="">Seleccionar experiencia</option>
@@ -591,7 +670,8 @@
 
                     <div class="form__group">
                         <label for="motivation" class="form__label">
-                            <i class="fas fa-heart"></i> ¿Por qué quieres participar?
+                            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg>
+                            ¿Por qué quieres participar?
                         </label>
                         <input type="text" id="motivation" name="motivation" class="form__input"
                                placeholder="Me encantan los desafíos matemáticos...">
@@ -599,7 +679,7 @@
 
                     <button type="submit" class="form__submit" id="submitBtn">
                         <span class="form__loading" id="loadingSpinner"></span>
-                        <i class="fas fa-user-plus" id="submitIcon"></i>
+                        <svg class="icon" id="submitIcon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <line x1="19" x2="19" y1="8" y2="14" /> <line x1="22" x2="16" y1="11" y2="11" /></svg>
                         <span id="submitText">Registrarse en las Olimpiadas</span>
                     </button>
                 </form>
@@ -607,7 +687,10 @@
 
             <!-- Participants List -->
             <section class="list-section">
-                <h2 class="list__title">Participantes Registrados</h2>
+                <h2 class="list__title">
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 13a3 3 0 1 0-6 0" /> <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /> <circle cx="12" cy="8" r="2" /></svg>
+                    Participantes Registrados
+                </h2>
 
                 <!-- Statistics -->
                 <div class="list__stats">
@@ -641,7 +724,13 @@
     </div>
 
     <script>
-        // ==================== Supabase Configuration ==================== 
+        // Inline Lucide icons used inside JS-generated markup (replaces Font Awesome)
+        const ICONS = {
+            users: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg>',
+            triangleAlert: '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /> <path d="M12 9v4" /> <path d="M12 17h.01" /></svg>'
+        };
+
+        // ==================== Supabase Configuration ====================
         const SUPABASE_CONFIG = {
             url: 'https://ztrhumtqvmqsskcdcykt.supabase.co',
             anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0cmh1bXRxdm1xc3NrY2RjeWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMTU4ODksImV4cCI6MjA3MDU5MTg4OX0.3bAdCuuI_UTLBFF7O79H6cx8k2dJ04e7Ka80-6i4UIE'
@@ -651,7 +740,7 @@
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
-        // ==================== Olympics Registration App ==================== 
+        // ==================== Olympics Registration App ====================
         class OlympicsSupabaseApp {
             constructor() {
                 this.form = document.getElementById('registrationForm');
@@ -672,7 +761,7 @@
 
             setupEventListeners() {
                 this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-                
+
                 // Form validation
                 this.form.querySelectorAll('input, select').forEach(field => {
                     field.addEventListener('blur', () => this.validateField(field));
@@ -680,11 +769,11 @@
                 });
             }
 
-            // ==================== Supabase Connection ==================== 
+            // ==================== Supabase Connection ====================
             async checkConnection() {
                 try {
                     this.updateStatus('loading', 'Conectando a Supabase...');
-                    
+
                     // Test connection with a simple query
                     const { data, error } = await supabaseClient
                         .from('participants')
@@ -696,7 +785,7 @@
                     this.isConnected = true;
                     this.updateStatus('online', 'Conectado a Supabase ✓');
                     this.log('✅ Supabase conectado exitosamente');
-                    
+
                 } catch (error) {
                     this.isConnected = false;
                     this.updateStatus('offline', 'Error de conexión');
@@ -705,10 +794,10 @@
                 }
             }
 
-            // ==================== Form Submission ==================== 
+            // ==================== Form Submission ====================
             async handleSubmit(e) {
                 e.preventDefault();
-                
+
                 if (!this.validateForm()) return;
                 if (!this.isConnected) {
                     this.showMessage('error', 'Sin conexión a la base de datos');
@@ -761,7 +850,7 @@
                 }
             }
 
-            // ==================== Data Loading ==================== 
+            // ==================== Data Loading ====================
             async loadParticipants() {
                 try {
                     this.showLoadingSkeleton();
@@ -774,7 +863,7 @@
                             .eq('status', 'active')
                             .order('registration_date', { ascending: false })
                             .limit(50),
-                        
+
                         supabaseClient
                             .from('participant_stats')
                             .select('*')
@@ -797,7 +886,7 @@
                 }
             }
 
-            // ==================== Real-time Updates ==================== 
+            // ==================== Real-time Updates ====================
             setupRealTimeSubscription() {
                 // Subscribe to real-time changes in participants table
                 supabaseClient
@@ -815,14 +904,14 @@
                 this.log('📡 Subscrito a actualizaciones en tiempo real');
             }
 
-            // ==================== UI Rendering ==================== 
+            // ==================== UI Rendering ====================
             renderParticipants() {
                 const container = document.getElementById('participantsList');
 
                 if (this.participants.length === 0) {
                     container.innerHTML = `
                         <div class="error-message">
-                            <i class="fas fa-users"></i>
+                            ${ICONS.users}
                             <p>Aún no hay participantes registrados.</p>
                             <p>¡Sé el primero en registrarte!</p>
                         </div>
@@ -865,26 +954,26 @@
             animateCounter(elementId, targetValue) {
                 const element = document.getElementById(elementId);
                 const currentValue = parseInt(element.textContent) || 0;
-                
+
                 if (targetValue === currentValue) return;
-                
+
                 const increment = Math.ceil(Math.abs(targetValue - currentValue) / 20);
                 const direction = targetValue > currentValue ? 1 : -1;
-                
+
                 let current = currentValue;
                 const timer = setInterval(() => {
                     current += increment * direction;
-                    
+
                     if ((direction > 0 && current >= targetValue) || (direction < 0 && current <= targetValue)) {
                         current = targetValue;
                         clearInterval(timer);
                     }
-                    
+
                     element.textContent = current;
                 }, 50);
             }
 
-            // ==================== Form Validation ==================== 
+            // ==================== Form Validation ====================
             validateForm() {
                 const requiredFields = ['fullName', 'email', 'age', 'grade', 'category'];
                 let isValid = true;
@@ -960,14 +1049,14 @@
                 }
             }
 
-            // ==================== UI State Management ==================== 
+            // ==================== UI State Management ====================
             showMessage(type, message, duration = 5000) {
                 const messageEl = document.getElementById(`${type}Message`);
                 const textEl = document.getElementById(`${type}Text`);
-                
+
                 if (textEl) textEl.textContent = message;
                 messageEl.classList.add('show');
-                
+
                 setTimeout(() => {
                     messageEl.classList.remove('show');
                 }, duration);
@@ -976,7 +1065,7 @@
             updateStatus(status, text) {
                 const dot = document.getElementById('statusDot');
                 const statusText = document.getElementById('statusText');
-                
+
                 dot.className = `status-dot status-dot--${status}`;
                 statusText.textContent = text;
             }
@@ -1022,7 +1111,7 @@
             showErrorState() {
                 document.getElementById('participantsList').innerHTML = `
                     <div class="error-message">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        ${ICONS.triangleAlert}
                         <p>Error cargando participantes</p>
                         <p>Verifica tu conexión</p>
                     </div>
@@ -1034,14 +1123,14 @@
             }
         }
 
-        // ==================== Initialize App ==================== 
+        // ==================== Initialize App ====================
         document.addEventListener('DOMContentLoaded', () => {
             // Check if Supabase configuration is set
             if (SUPABASE_CONFIG.url.includes('your-project-id') || SUPABASE_CONFIG.anonKey.includes('your-anon-key')) {
                 document.getElementById('statusText').textContent = '⚠️ Configuración de Supabase pendiente';
                 document.getElementById('participantsList').innerHTML = `
                     <div class="error-message">
-                        <i class="fas fa-exclamation-triangle"></i>
+                        ${ICONS.triangleAlert}
                         <p>Configuración pendiente</p>
                         <p>Actualiza SUPABASE_CONFIG con tus credenciales</p>
                     </div>

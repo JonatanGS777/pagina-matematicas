@@ -126,6 +126,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `club/mision-matematica/` | Constelación Modular | Brutalist geometric — black/paper with lime + magenta accent, Space Grotesk/JetBrains Mono; canvas particles draw connecting lines between nearby nodes |
 | `club/proyectos-creativos.html` | Feria de Inventos | Science-fair expo — cream poster-board cards pinned to a CSS-only corkboard texture, ribbon-blue/red/gold scoring, Permanent Marker/Archivo/JetBrains Mono |
 | `club/modulos/*.html` (algebra, calculus, geometry, trigonometry, puzzles, statistics) | Consola Arcade | Shared system across all 6 competition/quiz modules — dark CRT cabinet chrome, scanline overlay, Press Start 2P pixel-font scores/titles, JetBrains Mono UI, shared easy/medium/hard semantic colors (mint/amber/red), each module keeping its own accent: algebra blue, calculus violet, geometry jade, trigonometry orange, puzzles magenta, statistics cyan |
+| `club/registro.html` | Pasaporte del Competidor | Passport/enrollment-desk aesthetic — navy passport-cover header with a gold wax-seal emblem, cream document pages, dashed ticket-stub divider between the form and the live roster, Cormorant Garamond display + IBM Plex Mono for stamps/IDs |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -185,9 +186,9 @@ each with its own icon — and `js/supabase-analytics.js`), `galeria/galeria.htm
 `stem/ciencia-datos.html`, `stem/ingenieria.html`, `stem/Ebook-STEM/index.html`,
 `club/investigacion.html`, `club/project.html`, `club/competencias.html`,
 `club/leaderboard.html`, `club/olimpiadas.html`, `club/admin.html`,
-`club/mision-matematica/index.html`, `club/proyectos-creativos.html`, and
-`club/modulos/algebra.html`, `calculus.html`, `geometry.html`,
-`trigonometry.html`, `puzzles.html`, `statistics.html`.
+`club/mision-matematica/index.html`, `club/proyectos-creativos.html`,
+`club/registro.html`, and `club/modulos/algebra.html`, `calculus.html`,
+`geometry.html`, `trigonometry.html`, `puzzles.html`, `statistics.html`.
 `links/links.html` never used Font
 Awesome to begin with; `mision-matematica/index.html` used the `lucide.js`
 CDN build (`data-lucide` attributes + `lucide.createIcons()`) rather than
@@ -198,7 +199,7 @@ get redesigned.
 
 ### Not yet redesigned
 
-`club/registro.html`, `lab/`, `salon/`,
+`lab/`, `salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
 study-materials subpages), and `perfil-investigador/` still use the previous
