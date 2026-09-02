@@ -4,26 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modelado Geométrico - Laboratorio de Matemáticas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ==================== Sala de Máquinas — Modelado Geométrico ==================== */
         :root {
-            --primary: #5B4CF5;
-            --secondary: #3D1F8C;
+            --primary: #7B6EF6;
+            --secondary: #4A3FB0;
             --accent: #4ecdc4;
-            --success: #26d0ce;
+            --success: #4ecdc4;
             --warning: #f093fb;
-            --dark: #0D0E1A;
-            --light: #F0EEF8;
-            --white: #ffffff;
-            --text-primary: #1A1B2E;
-            --text-secondary: #5C5F78;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 32px 0 rgba(102, 126, 234, 0.37);
-            --shadow-hover: 0 15px 35px rgba(102, 126, 234, 0.25);
-            --gradient-main: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
+            --dark: #14141A;
+            --light: #26262E;
+            --white: #1E1E26;
+            --text-primary: #E8E6F0;
+            --text-secondary: #9A98A8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+            --shadow-hover: 0 15px 35px rgba(123, 110, 246, 0.3);
+            --gradient-main: linear-gradient(135deg, #7B6EF6 0%, #4A3FB0 100%);
             --gradient-accent: linear-gradient(135deg, #4ecdc4 0%, #26d0ce 100%);
+            --font-mono: 'DM Mono', monospace;
+            --metal-edge: rgba(255, 255, 255, 0.08);
+            --rivet: rgba(0, 0, 0, 0.55);
+            --on-color: #F5F4FA;
         }
 
         * {
@@ -32,9 +38,17 @@
             box-sizing: border-box;
         }
 
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
+        .icon-spin { animation: iconSpin 1s linear infinite; }
+        @keyframes iconSpin { to { transform: rotate(360deg); } }
+
         body {
             font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, #5B4CF5 0%, #3D1F8C 100%);
+            background-color: var(--dark);
+            background-image:
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 2px, transparent 2px, transparent 42px),
+                radial-gradient(circle at 18% 8%, rgba(123, 110, 246, 0.18), transparent 45%),
+                radial-gradient(circle at 85% 92%, rgba(78, 205, 196, 0.1), transparent 45%);
             color: var(--text-primary);
             min-height: 100vh;
             padding-top: 80px;
@@ -46,11 +60,11 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(240, 238, 248, 0.92);
+            background: rgba(20, 20, 26, 0.92);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid rgba(91, 76, 245, 0.1);
-            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
+            border-bottom: 1px solid var(--metal-edge);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0, 0, 0, 0.5);
             z-index: 1000;
             padding: 1rem 0;
         }
@@ -81,7 +95,7 @@
             align-items: center;
             padding: 0.75rem 1.5rem;
             background: var(--gradient-accent);
-            color: var(--white);
+            color: var(--on-color);
             text-decoration: none;
             border-radius: 12px;
             font-weight: 600;
@@ -106,11 +120,26 @@
             margin: 0 auto;
             padding: 2rem;
             background: var(--white);
-            border-radius: 25px;
+            border: 1px solid var(--metal-edge);
+            border-radius: 18px;
             margin-top: 2rem;
             margin-bottom: 2rem;
             box-shadow: var(--shadow-soft);
+            position: relative;
         }
+
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.25), var(--rivet));
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.15), 0 1px 2px rgba(0,0,0,0.6);
+        }
+        .container::before { left: 14px; }
+        .container::after  { right: 14px; }
 
         .page-header {
             text-align: center;
@@ -118,7 +147,7 @@
             padding: 2rem;
             background: var(--gradient-main);
             border-radius: 20px;
-            color: var(--white);
+            color: var(--on-color);
         }
 
         .page-title {
@@ -135,7 +164,7 @@
 
         /* Model Section */
         .model-explanation {
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(123, 110, 246, 0.08);
             border-left: 4px solid var(--primary);
             padding: 2rem;
             border-radius: 0 15px 15px 0;
@@ -200,9 +229,10 @@
             width: 100%;
             height: 8px;
             border-radius: 5px;
-            background: #ddd;
+            background: var(--dark);
+            border: 1px solid var(--metal-edge);
             outline: none;
-            opacity: 0.7;
+            opacity: 0.85;
             transition: opacity 0.2s;
             margin-bottom: 0.5rem;
         }
@@ -233,7 +263,7 @@
         .control-value {
             display: inline-block;
             background: var(--primary);
-            color: var(--white);
+            color: var(--on-color);
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
             font-weight: 600;
@@ -244,7 +274,7 @@
 
         .btn {
             background: var(--gradient-main);
-            color: var(--white);
+            color: var(--on-color);
             border: none;
             padding: 1rem 2rem;
             border-radius: 15px;
@@ -267,10 +297,10 @@
             transform: none;
         }
 
-        /* Visualization Panel */
+        /* Visualization Panel — oscilloscope screen */
         .visualization-panel {
-            background: var(--white);
-            border: 2px solid #f1f5f9;
+            background: var(--dark);
+            border: 2px solid var(--metal-edge);
             border-radius: 20px;
             padding: 1.5rem;
             display: flex;
@@ -279,6 +309,7 @@
             justify-content: center;
             min-height: 450px;
             position: relative;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
         }
 
         .canvas-container {
@@ -290,9 +321,10 @@
         }
 
         canvas {
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--metal-edge);
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             max-width: 100%;
         }
 
@@ -300,17 +332,19 @@
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: rgba(91, 76, 245, 0.1);
+            background: rgba(123, 110, 246, 0.15);
+            border: 1px solid rgba(123, 110, 246, 0.3);
             padding: 0.5rem 1rem;
             border-radius: 10px;
-            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
             color: var(--primary);
             font-weight: 500;
         }
 
-        /* Results Panel */
+        /* Results Panel — gauge readouts */
         .results-panel {
-            background: rgba(78, 205, 196, 0.1);
+            background: rgba(78, 205, 196, 0.06);
             border: 2px solid var(--accent);
             border-radius: 20px;
             padding: 2rem;
@@ -337,11 +371,12 @@
         }
 
         .result-item {
-            background: var(--white);
+            background: var(--dark);
+            border: 1px solid var(--metal-edge);
             padding: 1.5rem;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 16px rgba(0,0,0,0.4);
             transition: transform 0.3s ease;
         }
 
@@ -353,14 +388,17 @@
             font-weight: 500;
             color: var(--text-secondary);
             margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .result-value {
             font-weight: 700;
             color: var(--accent);
             font-size: 1.5rem;
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: var(--font-mono);
+            text-shadow: 0 0 12px rgba(78, 205, 196, 0.4);
         }
 
         .result-unit {
@@ -368,10 +406,11 @@
             color: var(--text-secondary);
         }
 
-        /* Model Variants Section */
+        /* Model Variants Section — mode switches */
         .model-variants {
             margin-top: 3rem;
             background: var(--light);
+            border: 1px solid var(--metal-edge);
             padding: 2rem;
             border-radius: 20px;
         }
@@ -398,18 +437,19 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 2px solid var(--metal-edge);
         }
 
         .variant-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: 0 8px 25px rgba(91, 76, 245, 0.2);
+            box-shadow: 0 8px 25px rgba(123, 110, 246, 0.25);
         }
 
         .variant-card.active {
             border-color: var(--accent);
-            background: rgba(78, 205, 196, 0.05);
+            background: rgba(78, 205, 196, 0.08);
+            box-shadow: 0 0 0 1px var(--accent), 0 8px 25px rgba(78, 205, 196, 0.2);
         }
 
         .variant-icon {
@@ -488,12 +528,12 @@
     <!-- Header -->
     <header class="header">
         <nav class="navbar">
-            <a href="modelado.html" class="logo">
-                <i class="fas fa-cube"></i>
+            <a href="../experimentos.html" class="logo">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg>
                 Modelado Geométrico
             </a>
-            <a href="modelado.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
+            <a href="../experimentos.html" class="back-btn">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg>
                 Volver al Menú
             </a>
             <button id="lang-toggle" aria-label="Switch language"
@@ -506,7 +546,7 @@
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">
-                <i class="fas fa-cube"></i>
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg>
                 Modelado Geométrico
             </h1>
             <p class="page-subtitle">Explora volúmenes, áreas y formas geométricas tridimensionales</p>
@@ -514,7 +554,7 @@
 
         <!-- Model Explanation -->
         <div class="model-explanation">
-            <h3><i class="fas fa-lightbulb"></i> Volumen de Sólidos Geométricos</h3>
+            <h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg> Volumen de Sólidos Geométricos</h3>
             <p>
                 Experimenta con diferentes sólidos geométricos y observa cómo cambian sus propiedades al modificar las dimensiones. 
                 Calcula volúmenes, áreas superficiales y diagonales en tiempo real. Este modelo te ayuda a visualizar conceptos 
@@ -528,31 +568,31 @@
             <div class="variants-grid">
                 <div class="variant-card active" onclick="selectModel('box')" id="box-variant">
                     <div class="variant-icon">
-                        <i class="fas fa-cube"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg>
                     </div>
                     <h4 class="variant-name">Prisma Rectangular</h4>
                     <p class="variant-description">Caja con largo, ancho y alto variables</p>
                 </div>
-                
+
                 <div class="variant-card" onclick="selectModel('cylinder')" id="cylinder-variant">
                     <div class="variant-icon">
-                        <i class="fas fa-database"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></svg>
                     </div>
                     <h4 class="variant-name">Cilindro</h4>
                     <p class="variant-description">Sólido circular con radio y altura</p>
                 </div>
-                
+
                 <div class="variant-card" onclick="selectModel('sphere')" id="sphere-variant">
                     <div class="variant-icon">
-                        <i class="fas fa-circle"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /></svg>
                     </div>
                     <h4 class="variant-name">Esfera</h4>
                     <p class="variant-description">Sólido esférico con radio variable</p>
                 </div>
-                
+
                 <div class="variant-card" onclick="selectModel('pyramid')" id="pyramid-variant">
                     <div class="variant-icon">
-                        <i class="fas fa-mountain"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z" /></svg>
                     </div>
                     <h4 class="variant-name">Pirámide</h4>
                     <p class="variant-description">Pirámide cuadrada con base y altura</p>
@@ -565,7 +605,7 @@
             <!-- Controls Panel -->
             <div class="controls-panel">
                 <h3 class="controls-title">
-                    <i class="fas fa-sliders-h"></i>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3" /> <path d="M12 19H3" /> <path d="M14 3v4" /> <path d="M16 17v4" /> <path d="M21 12h-9" /> <path d="M21 19h-5" /> <path d="M21 5h-7" /> <path d="M8 10v4" /> <path d="M8 12H3" /></svg>
                     Controles
                 </h3>
                 
@@ -626,7 +666,7 @@
                 </div>
                 
                 <button class="btn" onclick="animateModel()" id="animateBtn">
-                    <i class="fas fa-play"></i> Animar Modelo
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg> Animar Modelo
                 </button>
             </div>
             
@@ -642,7 +682,7 @@
         <!-- Results Panel -->
         <div class="results-panel">
             <h3 class="results-title">
-                <i class="fas fa-calculator"></i>
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg>
                 Resultados Calculados
             </h3>
             <div class="results-grid" id="resultsGrid">
@@ -812,7 +852,7 @@
             gradient1.addColorStop(1, 'rgba(102, 126, 234, 0.6)');
             ctx.fillStyle = gradient1;
             ctx.fillRect(centerX - scaledLength/2, centerY - scaledHeight/2, scaledLength, scaledHeight);
-            ctx.strokeStyle = '#2d3748';
+            ctx.strokeStyle = '#E8E6F0';
             ctx.lineWidth = 2;
             ctx.strokeRect(centerX - scaledLength/2, centerY - scaledHeight/2, scaledLength, scaledHeight);
             
@@ -845,7 +885,7 @@
             ctx.stroke();
             
             // Draw back edges
-            ctx.strokeStyle = 'rgba(45, 55, 72, 0.4)';
+            ctx.strokeStyle = 'rgba(232, 230, 240, 0.35)';
             ctx.lineWidth = 1;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
@@ -883,7 +923,7 @@
             ctx.beginPath();
             ctx.ellipse(centerX, centerY - scaledHeight/2, scaledRadius, ellipseHeight, 0, 0, 2 * Math.PI);
             ctx.fill();
-            ctx.strokeStyle = '#2d3748';
+            ctx.strokeStyle = '#E8E6F0';
             ctx.lineWidth = 2;
             ctx.stroke();
             
@@ -928,12 +968,12 @@
             ctx.beginPath();
             ctx.arc(centerX, centerY, scaledRadius, 0, 2 * Math.PI);
             ctx.fill();
-            ctx.strokeStyle = '#2d3748';
+            ctx.strokeStyle = '#E8E6F0';
             ctx.lineWidth = 2;
             ctx.stroke();
             
             // Draw equator line
-            ctx.strokeStyle = 'rgba(45, 55, 72, 0.3)';
+            ctx.strokeStyle = 'rgba(232, 230, 240, 0.25)';
             ctx.lineWidth = 1;
             ctx.setLineDash([5, 5]);
             ctx.beginPath();
@@ -977,7 +1017,7 @@
             // Draw base
             ctx.fillStyle = 'rgba(118, 75, 162, 0.6)';
             ctx.fillRect(baseLeft, baseY - scaledBase/2, scaledBase, scaledBase);
-            ctx.strokeStyle = '#2d3748';
+            ctx.strokeStyle = '#E8E6F0';
             ctx.lineWidth = 2;
             ctx.strokeRect(baseLeft, baseY - scaledBase/2, scaledBase, scaledBase);
             
@@ -1008,7 +1048,7 @@
             ctx.stroke();
             
             // Draw back edges (dashed)
-            ctx.strokeStyle = 'rgba(45, 55, 72, 0.4)';
+            ctx.strokeStyle = 'rgba(232, 230, 240, 0.35)';
             ctx.lineWidth = 1;
             ctx.setLineDash([3, 3]);
             ctx.beginPath();
@@ -1024,7 +1064,7 @@
         function animateModel() {
             const btn = document.getElementById('animateBtn');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Animando...';
+            btn.innerHTML = '<svg class="icon icon-spin" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg> Animando...';
             
             if (animationId) {
                 cancelAnimationFrame(animationId);
@@ -1058,7 +1098,7 @@
                     animationId = requestAnimationFrame(animate);
                 } else {
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-play"></i> Animar Modelo';
+                    btn.innerHTML = '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg> Animar Modelo';
                     animationId = null;
                 }
             };

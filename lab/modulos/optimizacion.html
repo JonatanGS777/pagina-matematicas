@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Optimización Matemática - Laboratorio de Matemáticas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* ==================== Sala de Máquinas — Optimización Matemática ==================== */
         :root {
             --primary: #ffa726;
             --secondary: #ff7043;
-            --accent: #ff8a65;
-            --success: #ffb74d;
+            --accent: #4ecdc4;
+            --success: #4ecdc4;
             --warning: #ffcc02;
-            --dark: #0D0E1A;
-            --light: #F0EEF8;
-            --white: #ffffff;
-            --text-primary: #1A1B2E;
-            --text-secondary: #5C5F78;
-            --glass: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 32px 0 rgba(255, 167, 38, 0.37);
-            --shadow-hover: 0 15px 35px rgba(255, 167, 38, 0.25);
+            --dark: #14141A;
+            --light: #26262E;
+            --white: #1E1E26;
+            --text-primary: #E8E6F0;
+            --text-secondary: #9A98A8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-soft: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+            --shadow-hover: 0 15px 35px rgba(255, 167, 38, 0.3);
             --gradient-main: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
             --gradient-accent: linear-gradient(135deg, #ff8a65 0%, #ffb74d 100%);
+            --font-mono: 'DM Mono', monospace;
+            --metal-edge: rgba(255, 255, 255, 0.08);
+            --rivet: rgba(0, 0, 0, 0.55);
+            --on-color: #F5F4FA;
         }
 
         * {
@@ -33,9 +39,17 @@
             box-sizing: border-box;
         }
 
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
+        .icon-spin { animation: iconSpin 1s linear infinite; }
+        @keyframes iconSpin { to { transform: rotate(360deg); } }
+
         body {
             font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+            background-color: var(--dark);
+            background-image:
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 2px, transparent 2px, transparent 42px),
+                radial-gradient(circle at 18% 8%, rgba(255, 167, 38, 0.15), transparent 45%),
+                radial-gradient(circle at 85% 92%, rgba(78, 205, 196, 0.1), transparent 45%);
             color: var(--text-primary);
             min-height: 100vh;
             padding-top: 80px;
@@ -47,11 +61,11 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(240, 238, 248, 0.92);
+            background: rgba(20, 20, 26, 0.92);
             backdrop-filter: blur(24px) saturate(180%);
             -webkit-backdrop-filter: blur(24px) saturate(180%);
-            box-shadow: 0 1px 0 rgba(91, 76, 245, 0.06), 0 4px 24px rgba(13, 14, 26, 0.06);
-            border-bottom: 1px solid rgba(255, 167, 38, 0.1);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid var(--metal-edge);
             z-index: 1000;
             padding: 1rem 0;
         }
@@ -82,7 +96,7 @@
             align-items: center;
             padding: 0.75rem 1.5rem;
             background: var(--gradient-accent);
-            color: var(--white);
+            color: var(--on-color);
             text-decoration: none;
             border-radius: 12px;
             font-weight: 600;
@@ -107,11 +121,26 @@
             margin: 0 auto;
             padding: 2rem;
             background: var(--white);
-            border-radius: 25px;
+            border: 1px solid var(--metal-edge);
+            border-radius: 18px;
             margin-top: 2rem;
             margin-bottom: 2rem;
             box-shadow: var(--shadow-soft);
+            position: relative;
         }
+
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.25), var(--rivet));
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.15), 0 1px 2px rgba(0,0,0,0.6);
+        }
+        .container::before { left: 14px; }
+        .container::after  { right: 14px; }
 
         .page-header {
             text-align: center;
@@ -119,7 +148,7 @@
             padding: 2rem;
             background: var(--gradient-main);
             border-radius: 20px;
-            color: var(--white);
+            color: var(--on-color);
         }
 
         .page-title {
@@ -136,7 +165,7 @@
 
         /* Model Section */
         .model-explanation {
-            background: rgba(255, 167, 38, 0.05);
+            background: rgba(255, 167, 38, 0.08);
             border-left: 4px solid var(--primary);
             padding: 2rem;
             border-radius: 0 15px 15px 0;
@@ -186,19 +215,20 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid var(--metal-edge);
+            box-shadow: inset 0 0 16px rgba(0,0,0,0.4);
         }
 
         .problem-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
+            box-shadow: 0 8px 25px rgba(255, 167, 38, 0.25);
         }
 
         .problem-card.active {
             border-color: var(--accent);
-            background: rgba(255, 167, 38, 0.05);
-            box-shadow: 0 8px 25px rgba(255, 167, 38, 0.2);
+            background: rgba(78, 205, 196, 0.08);
+            box-shadow: 0 0 0 1px var(--accent), 0 8px 25px rgba(78, 205, 196, 0.2);
         }
 
         .problem-icon {
@@ -222,7 +252,7 @@
 
         /* Problem Details */
         .problem-details {
-            background: rgba(255, 167, 38, 0.05);
+            background: rgba(255, 167, 38, 0.08);
             border: 2px solid var(--primary);
             border-radius: 20px;
             padding: 2rem;
@@ -246,6 +276,7 @@
 
         .objective-function {
             background: var(--white);
+            border: 1px solid var(--metal-edge);
             padding: 1.5rem;
             border-radius: 15px;
             text-align: center;
@@ -311,9 +342,10 @@
             width: 100%;
             height: 8px;
             border-radius: 5px;
-            background: #ddd;
+            background: var(--dark);
+            border: 1px solid var(--metal-edge);
             outline: none;
-            opacity: 0.7;
+            opacity: 0.85;
             transition: opacity 0.2s;
             margin-bottom: 0.5rem;
         }
@@ -344,7 +376,7 @@
         .control-value {
             display: inline-block;
             background: var(--primary);
-            color: var(--white);
+            color: var(--on-color);
             padding: 0.3rem 0.8rem;
             border-radius: 15px;
             font-weight: 600;
@@ -355,7 +387,7 @@
 
         .btn {
             background: var(--gradient-main);
-            color: var(--white);
+            color: var(--on-color);
             border: none;
             padding: 1rem 2rem;
             border-radius: 15px;
@@ -383,16 +415,17 @@
             margin-top: 0.5rem;
         }
 
-        /* Visualization Panel */
+        /* Visualization Panel — oscilloscope screen */
         .visualization-panel {
-            background: var(--white);
-            border: 2px solid #f1f5f9;
+            background: var(--dark);
+            border: 2px solid var(--metal-edge);
             border-radius: 20px;
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             min-height: 500px;
             position: relative;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
         }
 
         .viz-tabs {
@@ -404,7 +437,7 @@
         .viz-tab {
             padding: 0.75rem 1.5rem;
             background: var(--light);
-            border: 2px solid transparent;
+            border: 2px solid var(--metal-edge);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -414,7 +447,7 @@
 
         .viz-tab.active {
             background: var(--primary);
-            color: var(--white);
+            color: var(--on-color);
             border-color: var(--accent);
         }
 
@@ -429,14 +462,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: rgba(255,255,255,0.02);
             border-radius: 15px;
         }
 
         canvas {
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--metal-edge);
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             max-width: 100%;
         }
 
@@ -452,17 +486,18 @@
             top: 1rem;
             right: 1rem;
             background: rgba(255, 167, 38, 0.9);
-            color: var(--white);
+            color: var(--on-color);
             padding: 0.75rem 1rem;
             border-radius: 15px;
             font-weight: 600;
             font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-family: var(--font-mono);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* Results Panel */
+        /* Results Panel — gauge readouts */
         .results-panel {
-            background: rgba(255, 167, 38, 0.1);
+            background: rgba(78, 205, 196, 0.06);
             border: 2px solid var(--accent);
             border-radius: 20px;
             padding: 2rem;
@@ -489,11 +524,12 @@
         }
 
         .result-item {
-            background: var(--white);
+            background: var(--dark);
+            border: 1px solid var(--metal-edge);
             padding: 1.5rem;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 16px rgba(0,0,0,0.4);
             transition: transform 0.3s ease;
         }
 
@@ -502,27 +538,31 @@
         }
 
         .result-item.optimal {
-            border: 2px solid var(--accent);
-            background: linear-gradient(135deg, rgba(255, 167, 38, 0.1), rgba(255, 138, 101, 0.1));
+            border: 2px solid var(--primary);
+            background: linear-gradient(135deg, rgba(255, 167, 38, 0.12), rgba(255, 138, 101, 0.1));
         }
 
         .result-label {
             font-weight: 500;
             color: var(--text-secondary);
             margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .result-value {
             font-weight: 700;
             color: var(--accent);
             font-size: 1.4rem;
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: var(--font-mono);
+            text-shadow: 0 0 12px rgba(78, 205, 196, 0.4);
         }
 
         .result-value.optimal {
             color: var(--primary);
             font-size: 1.6rem;
+            text-shadow: 0 0 12px rgba(255, 167, 38, 0.5);
         }
 
         .result-unit {
@@ -532,7 +572,7 @@
 
         .optimization-summary {
             grid-column: 1 / -1;
-            background: var(--white);
+            background: var(--dark);
             padding: 2rem;
             border-radius: 15px;
             border: 2px solid var(--primary);
@@ -554,7 +594,7 @@
 
         /* Constraints Display */
         .constraints-panel {
-            background: rgba(255, 167, 38, 0.05);
+            background: rgba(255, 167, 38, 0.08);
             padding: 1.5rem;
             border-radius: 15px;
             margin-bottom: 2rem;
@@ -569,10 +609,11 @@
 
         .constraint-item {
             background: var(--white);
+            border: 1px solid var(--metal-edge);
             padding: 1rem;
             border-radius: 10px;
             margin-bottom: 0.5rem;
-            font-family: 'Space Grotesk', monospace;
+            font-family: var(--font-mono);
             color: var(--text-primary);
         }
 
@@ -654,12 +695,12 @@
     <!-- Header -->
     <header class="header">
         <nav class="navbar">
-            <a href="modelado.html" class="logo">
-                <i class="fas fa-bullseye"></i>
+            <a href="../experimentos.html" class="logo">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg>
                 Optimización Matemática
             </a>
-            <a href="modelado.html" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
+            <a href="../experimentos.html" class="back-btn">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /></svg>
                 Volver al Menú
             </a>
             <button id="lang-toggle" aria-label="Switch language"
@@ -672,7 +713,7 @@
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">
-                <i class="fas fa-bullseye"></i>
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <circle cx="12" cy="12" r="6" /> <circle cx="12" cy="12" r="2" /></svg>
                 Optimización Matemática
             </h1>
             <p class="page-subtitle">Encuentra máximos y mínimos en problemas del mundo real</p>
@@ -680,7 +721,7 @@
 
         <!-- Model Explanation -->
         <div class="model-explanation">
-            <h3><i class="fas fa-lightbulb"></i> Optimización y Cálculo Aplicado</h3>
+            <h3><svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" /></svg> Optimización y Cálculo Aplicado</h3>
             <p>
                 La optimización matemática es el proceso de encontrar la mejor solución posible dentro de un conjunto de 
                 alternativas. Utilizando cálculo diferencial, podemos encontrar máximos y mínimos de funciones que 
@@ -695,31 +736,31 @@
             <div class="problems-cards">
                 <div class="problem-card active" onclick="selectProblem('box')" id="box-card">
                     <div class="problem-icon">
-                        <i class="fas fa-cube"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></svg>
                     </div>
                     <h4 class="problem-name">Volumen Máximo de Caja</h4>
                     <p class="problem-description">Maximizar volumen cortando esquinas</p>
                 </div>
-                
+
                 <div class="problem-card" onclick="selectProblem('fence')" id="fence-card">
                     <div class="problem-icon">
-                        <i class="fas fa-border-style"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3a2 2 0 0 0-2 2" /> <path d="M19 3a2 2 0 0 1 2 2" /> <path d="M21 19a2 2 0 0 1-2 2" /> <path d="M5 21a2 2 0 0 1-2-2" /> <path d="M9 3h1" /> <path d="M9 21h1" /> <path d="M14 3h1" /> <path d="M14 21h1" /> <path d="M3 9v1" /> <path d="M21 9v1" /> <path d="M3 14v1" /> <path d="M21 14v1" /></svg>
                     </div>
                     <h4 class="problem-name">Área Máxima Cercada</h4>
                     <p class="problem-description">Maximizar área con perímetro fijo</p>
                 </div>
-                
+
                 <div class="problem-card" onclick="selectProblem('cost')" id="cost-card">
                     <div class="problem-icon">
-                        <i class="fas fa-dollar-sign"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22" /> <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
                     </div>
                     <h4 class="problem-name">Costo Mínimo</h4>
                     <p class="problem-description">Minimizar costo de producción</p>
                 </div>
-                
+
                 <div class="problem-card" onclick="selectProblem('distance')" id="distance-card">
                     <div class="problem-icon">
-                        <i class="fas fa-route"></i>
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3" /> <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /> <circle cx="18" cy="5" r="3" /></svg>
                     </div>
                     <h4 class="problem-name">Distancia Mínima</h4>
                     <p class="problem-description">Encontrar el camino más corto</p>
@@ -754,7 +795,7 @@
             <!-- Controls Panel -->
             <div class="controls-panel">
                 <h3 class="controls-title">
-                    <i class="fas fa-sliders-h"></i>
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3" /> <path d="M12 19H3" /> <path d="M14 3v4" /> <path d="M16 17v4" /> <path d="M21 12h-9" /> <path d="M21 19h-5" /> <path d="M21 5h-7" /> <path d="M8 10v4" /> <path d="M8 12H3" /></svg>
                     Parámetros del Problema
                 </h3>
                 
@@ -837,22 +878,22 @@
                 </div>
                 
                 <button class="btn" onclick="findOptimum()" id="optimizeBtn">
-                    <i class="fas fa-search"></i> Encontrar Óptimo
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></svg> Encontrar Óptimo
                 </button>
-                
+
                 <button class="btn btn-secondary" onclick="animateToOptimum()" id="animateBtn">
-                    <i class="fas fa-play"></i> Animar hacia Óptimo
+                    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg> Animar hacia Óptimo
                 </button>
             </div>
-            
+
             <!-- Visualization Panel -->
             <div class="visualization-panel">
                 <div class="viz-tabs">
                     <button class="viz-tab active" onclick="switchTab('visual')" id="visual-tab">
-                        <i class="fas fa-eye"></i> Visualización
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></svg> Visualización
                     </button>
                     <button class="viz-tab" onclick="switchTab('graph')" id="graph-tab">
-                        <i class="fas fa-chart-line"></i> Gráfica de Función
+                        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg> Gráfica de Función
                     </button>
                 </div>
                 
@@ -875,7 +916,7 @@
         <!-- Results Panel -->
         <div class="results-panel">
             <h3 class="results-title">
-                <i class="fas fa-trophy"></i>
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" /> <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" /> <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" /> <path d="M4 22h16" /> <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" /> <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /></svg>
                 Resultados de Optimización
             </h3>
             <div class="results-grid" id="resultsGrid">
@@ -1207,8 +1248,8 @@
                         scaledL - 2*scaledX, scaledW - 2*scaledX);
             
             // Add dimensions
-            ctx.fillStyle = '#2d3748';
-            ctx.font = '12px Inter';
+            ctx.fillStyle = '#E8E6F0';
+            ctx.font = '12px Space Grotesk';
             ctx.textAlign = 'center';
             ctx.fillText(`${L} cm`, centerX, centerY - scaledW/2 - 10);
             ctx.fillText(`x = ${x.toFixed(1)} cm`, centerX - scaledL/2 + scaledX/2, centerY - scaledW/2 + scaledX/2);
@@ -1258,8 +1299,8 @@
             }
             
             // Add dimensions
-            ctx.fillStyle = '#2d3748';
-            ctx.font = '12px Inter';
+            ctx.fillStyle = '#E8E6F0';
+            ctx.font = '12px Space Grotesk';
             ctx.textAlign = 'center';
             ctx.fillText(`${l.toFixed(1)} m`, centerX, centerY - scaledW/2 - 20);
             ctx.save();
@@ -1323,8 +1364,8 @@
             const totalCost = F + n * c;
             const avgCost = totalCost / n;
             
-            ctx.fillStyle = '#2d3748';
-            ctx.font = '12px Inter';
+            ctx.fillStyle = '#E8E6F0';
+            ctx.font = '12px Space Grotesk';
             ctx.textAlign = 'center';
             ctx.fillText(`Unidades: ${n}`, centerX, centerY + factoryHeight/2 + 20);
             ctx.fillText(`Costo Total: $${totalCost.toFixed(0)}`, centerX, centerY + factoryHeight/2 + 35);
@@ -1343,9 +1384,9 @@
             const centerY = canvas.height / 2;
             
             // Draw coordinate system
-            ctx.strokeStyle = 'rgba(45, 55, 72, 0.3)';
+            ctx.strokeStyle = 'rgba(232, 230, 240, 0.25)';
             ctx.lineWidth = 1;
-            
+
             // X-axis
             ctx.beginPath();
             ctx.moveTo(50, centerY + h * scale);
@@ -1368,15 +1409,15 @@
             ctx.beginPath();
             ctx.arc(pointAx, pointAy, 8, 0, 2 * Math.PI);
             ctx.fill();
-            ctx.fillStyle = '#2d3748';
-            ctx.font = '12px Inter';
+            ctx.fillStyle = '#E8E6F0';
+            ctx.font = '12px Space Grotesk';
             ctx.fillText('A', pointAx - 5, pointAy - 12);
             
             ctx.fillStyle = 'rgba(255, 112, 67, 1)';
             ctx.beginPath();
             ctx.arc(pointBx, pointBy, 8, 0, 2 * Math.PI);
             ctx.fill();
-            ctx.fillStyle = '#2d3748';
+            ctx.fillStyle = '#E8E6F0';
             ctx.fillText('B', pointBx - 5, pointBy - 12);
             
             // Test point P
@@ -1387,7 +1428,7 @@
             ctx.beginPath();
             ctx.arc(testXpos, testYpos, 6, 0, 2 * Math.PI);
             ctx.fill();
-            ctx.fillStyle = '#2d3748';
+            ctx.fillStyle = '#E8E6F0';
             ctx.fillText('P', testXpos - 5, testYpos + 18);
             
             // Distance lines
@@ -1412,7 +1453,7 @@
             const d2 = Math.sqrt((testX - b) * (testX - b) + h * h);
             const totalDistance = d1 + d2;
             
-            ctx.fillStyle = '#2d3748';
+            ctx.fillStyle = '#E8E6F0';
             ctx.font = 'bold 14px Space Grotesk';
             ctx.textAlign = 'center';
             ctx.fillText(`Distancia Total: ${totalDistance.toFixed(2)} unidades`, centerX, canvas.height - 30);
@@ -1464,11 +1505,19 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'top'
+                            position: 'top',
+                            labels: {
+                                color: '#E8E6F0'
+                            }
                         },
                         tooltip: {
                             mode: 'point',
                             intersect: false,
+                            backgroundColor: 'rgba(20, 20, 26, 0.92)',
+                            titleColor: '#E8E6F0',
+                            bodyColor: '#E8E6F0',
+                            borderColor: 'rgba(255, 255, 255, 0.08)',
+                            borderWidth: 1,
                             callbacks: {
                                 title: function(context) {
                                     return `${problems[currentProblem].variable}: ${context[0].parsed.x.toFixed(2)}`;
@@ -1485,19 +1534,27 @@
                             position: 'bottom',
                             title: {
                                 display: true,
-                                text: problems[currentProblem].variable
+                                text: problems[currentProblem].variable,
+                                color: '#9A98A8'
+                            },
+                            ticks: {
+                                color: '#9A98A8'
                             },
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                color: 'rgba(255, 255, 255, 0.08)'
                             }
                         },
                         y: {
                             title: {
                                 display: true,
-                                text: `Valor (${problems[currentProblem].unit})`
+                                text: `Valor (${problems[currentProblem].unit})`,
+                                color: '#9A98A8'
+                            },
+                            ticks: {
+                                color: '#9A98A8'
                             },
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                color: 'rgba(255, 255, 255, 0.08)'
                             }
                         }
                     }
@@ -1587,7 +1644,7 @@
         function findOptimum() {
             const btn = document.getElementById('optimizeBtn');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Optimizando...';
+            btn.innerHTML = '<svg class="icon icon-spin" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg> Optimizando...';
             
             setTimeout(() => {
                 const optimal = calculateOptimum();
@@ -1617,14 +1674,14 @@
                 }
                 
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-search"></i> Encontrar Óptimo';
+                btn.innerHTML = '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /> <circle cx="11" cy="11" r="8" /></svg> Encontrar Óptimo';
             }, 1500);
         }
 
         function animateToOptimum() {
             const btn = document.getElementById('animateBtn');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Animando...';
+            btn.innerHTML = '<svg class="icon icon-spin" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg> Animando...';
             
             const optimal = calculateOptimum();
             const current = getCurrentVariableValue();
@@ -1668,7 +1725,7 @@
                     animationId = requestAnimationFrame(animate);
                 } else {
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-play"></i> Animar hacia Óptimo';
+                    btn.innerHTML = '<svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg> Animar hacia Óptimo';
                     animationId = null;
                 }
             };
