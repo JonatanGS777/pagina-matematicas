@@ -136,6 +136,9 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `lab/modulos/datos.html` | Sala de Máquinas *(shared system, teal accent kept)* | Same industrial reskin applied to the curve-fitting/regression calculator (linear, quadratic, exponential, logarithmic). Chart.js legend/axis/tick/grid colors retheme for the dark canvas (was invisible near-black on dark before); `.function-formula`/`.equation-formula` switched to DM Mono with the gauge glow, and a broken `font-family: 'Space Grotesk', monospace` declaration (Space Grotesk isn't monospace) fixed along the way. Same `modelado.html` dead-link and Font Awesome→Lucide fixes as geometrico.html. Regression math and dataset logic untouched |
 | `lab/modulos/fisica.html` | Sala de Máquinas *(shared system, pink/coral accent kept)* | Same industrial reskin applied to the physics simulator (tiro parabólico, distancia de frenado, péndulo simple, masa-resorte). Canvas-drawn car, pendulum string, spring, and coordinate-grid colors brightened for the dark background (previously near-black, invisible) — physics-specific fixes not needed on the other 3 files. Same `modelado.html` dead-link and Font Awesome→Lucide fixes as geometrico.html. Physics calculations and simulation loops untouched |
 | `lab/modulos/optimizacion.html` | Sala de Máquinas *(shared system, orange accent kept)* | Same industrial reskin applied to the optimization calculator (volumen máximo, área máxima, costo mínimo, distancia mínima), the largest of the 4 files. Both its plain-canvas diagram view and its Chart.js function-graph view retheme for the dark background (legend/tooltip/axis colors were Chart.js defaults, invisible on dark). Same `modelado.html` dead-link and Font Awesome→Lucide fixes as geometrico.html. Optimization math and Chart.js data generation untouched |
+| `salon/algebra.html` | Mesa de Trazado | Technical drafting-table/blueprint aesthetic for the function grapher — light mode reframed as "Diazo/Whiteprint" (cream paper, blueprint-ink blue `#1D4ED8`), dark mode as "Cyanotype/Blueprint" (deep navy `#0B2545`, cyan ink `#7DD3FC`), amber highlighter-pen secondary, coral 2nd-function plot color, Space Mono on the hero only, whole-page technical grid background, Lucide compass/ruler line-art replacing the old color-blob hero decoration. Added a real "remove function" control (Lucide `trash-2`) — the plotter previously only let you *add* a 2nd function, never remove or deactivate it. Dead `href="#"` logo link fixed to `../index.html`. Quadratic solver, evaluator, pan/zoom, and all function math untouched |
+| `salon/geometria.html` | Taller de Cristales | Gem-cutting workshop/crystallography aesthetic, dark-only (theme toggle removed) — graphite-black background, malachite teal `#14B8A6` + citrine amber `#F4A900` + sparing amethyst `#9D6FE0` accents, faceted "cut gem" card corners via `clip-path`, Unica One on the hero only, faceted-polygon spotlight hero replacing the old color blobs. Added a full **Volumen y Área de Sólidos** calculator (cube/cylinder/cone/sphere/pyramid/triangular prism) — the "Sólidos 3D" section was previously purely illustrative with no calculator at all, unlike its 2D-figures sibling section. Also fixed a real bug: the page had no way to open the nav menu on mobile (`ul{display:none}` with no toggle button). Dead `href="#"` logo link fixed to `../index.html`. Área/perímetro, Pitágoras, and analítica calculators untouched |
+| `salon/finanzas.html` | Piso de Bolsa | Stock-trading-floor/financial-terminal aesthetic, dark-only (theme toggle removed) — near-black `#0A0E14` terminal background, ticker-gold `#FBBF24` brand accent (green/red reserved specifically for gain/loss semantics, not the whole brand — avoids the cliché all-green "money" look), Chakra Petch on the hero only, terminal-window-chrome cards, a decorative scrolling ticker-tape strip of formulas. Fixed a real correctness bug: `formatMoney()` was hardcoded to Mexican pesos (`MXN`/`es-MX`) on a Puerto Rico Department of Education site — now USD/`en-US`. Added a savings-growth line chart (with a goal reference line) to the "Metas de Ahorro" section, which previously showed only a single final number while its sibling "Interés" section already had a full growth chart. Dead `href="#"` logo link fixed to `../index.html`. Budget/pie chart, interest/line chart, loan/amortization table, and inflation calculators untouched |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -212,11 +215,15 @@ get redesigned.
 
 ### Not yet redesigned
 
-`salon/`,
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
 study-materials subpages), and `perfil-investigador/` still use the previous
-purple/glassmorphism theme and `js/dark-mode.js`. Redesign them the same
+purple/glassmorphism theme and `js/dark-mode.js`. `salon/estadisticas.html`
+(neo-brutalist violet/cyan/pink/lime, hard borders) and `salon/game.html`
+("Math Masters", Tailwind CDN, dark-mode-default indigo/slate) are also not
+yet redesigned, but — like `salon/algebra.html`, `geometria.html`, and
+`finanzas.html` were before this pass — they already have their own bespoke
+design systems rather than the generic purple theme; redesign them the same
 way — one page at a time, each with its own identity — when needed.
 
 ---

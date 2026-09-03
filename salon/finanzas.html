@@ -19,7 +19,7 @@
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
 
     <!-- Embedded CSS -->
     <style>
@@ -27,26 +27,25 @@
         /* VARIABLES Y RESET   */
         /* ------------------- */
         :root {
-            /* Nueva Paleta de Colores: Violeta y Verde */
-            --color-bg: #f3f4f6;
-            --color-surface: #ffffff;
-            --color-primary: #6d28d9; /* Violeta Principal */
-            --color-secondary: #16a34a; /* Verde Secundario */
-            --color-accent: #f59e0b; /* Acento Ámbar */
-            --color-text-primary: #111827;
-            --color-text-secondary: #4b5563;
-            --color-border: #e5e7eb;
-            --color-glass-bg: rgba(243, 244, 246, 0.8);
-            --color-hero-blob1: #a78bfa; /* Violeta Claro */
-            --color-hero-blob2: #bef264; /* Verde Lima */
-            --color-success: #16a34a;
-            --color-alert: #dc2626;
-            --color-shadow-light: rgba(255, 255, 255, 0.8);
-            --color-shadow-dark: rgba(163, 177, 198, 0.6);
+            /* Paleta "Piso de Bolsa": terminal financiero oscuro */
+            --color-bg: #0A0E14;
+            --color-surface: #12171F;
+            --color-primary: #FBBF24; /* Oro ticker - marca */
+            --color-secondary: #22C55E; /* Verde ganancia - semantico */
+            --color-accent: #F97316; /* Naranja - serie "Simple", categoria "Deseos" */
+            --color-text-primary: #E5E9F0;
+            --color-text-secondary: #8B95A5;
+            --color-border: rgba(255, 255, 255, 0.08);
+            --color-glass-bg: rgba(10, 14, 20, 0.85);
+            --color-success: #22C55E;
+            --color-alert: #EF4444;
+            --color-shadow-light: rgba(255, 255, 255, 0.03);
+            --color-shadow-dark: rgba(0, 0, 0, 0.6);
 
             /* Tipografía */
             --font-family-sans: 'Syne', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             --font-family-mono: 'DM Mono', monospace;
+            --font-family-display: 'Chakra Petch', var(--font-family-sans);
             --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
             --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
             --font-size-h2: clamp(2rem, 1.25rem + 3.75vw, 3.5rem);
@@ -61,26 +60,8 @@
             --spacing-xxl: 4rem;
 
             /* Otros */
-            --border-radius: 12px;
+            --border-radius: 10px;
             --transition-speed: 0.3s;
-        }
-
-        .dark-mode {
-            --color-bg: #111827;
-            --color-surface: #1f2937;
-            --color-primary: #a78bfa; /* Violeta Claro */
-            --color-secondary: #4ade80; /* Verde Brillante */
-            --color-accent: #f59e0b;
-            --color-text-primary: #f9fafb;
-            --color-text-secondary: #9ca3af;
-            --color-border: #374151;
-            --color-glass-bg: rgba(31, 41, 55, 0.8);
-            --color-hero-blob1: #5b21b6; /* Violeta Oscuro */
-            --color-hero-blob2: #4d7c0f; /* Verde Oscuro */
-            --color-success: #4ade80;
-            --color-alert: #f87171;
-            --color-shadow-light: rgba(42, 52, 78, 0.8);
-            --color-shadow-dark: rgba(0, 0, 0, 0.6);
         }
 
         *, *::before, *::after {
@@ -111,9 +92,11 @@
             font-weight: 700;
             color: var(--color-primary);
         }
-        h1 { font-size: var(--font-size-h1); }
+        h1 { font-size: var(--font-size-h1); font-family: var(--font-family-display); letter-spacing: -0.01em; }
         h2 { font-size: var(--font-size-h2); margin-block: var(--spacing-xl) var(--spacing-lg); }
         h3 { font-size: var(--font-size-h3); margin-block: var(--spacing-lg) var(--spacing-md); }
+
+        .icon { width: 1em; height: 1em; display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
 
         a {
             color: var(--color-secondary);
@@ -233,32 +216,6 @@
             align-items: center;
             gap: var(--spacing-md);
         }
-        .theme-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--color-text-primary);
-            border-radius: 50%;
-            transition: background-color var(--transition-speed) ease;
-        }
-        .theme-toggle:hover, .theme-toggle:focus-visible {
-            background-color: var(--color-border);
-        }
-        .theme-toggle svg {
-            width: 24px;
-            height: 24px;
-            transition: transform 0.3s ease;
-        }
-        .theme-toggle .moon-icon { display: block; }
-        .theme-toggle .sun-icon { display: none; }
-        .dark-mode .theme-toggle .moon-icon { display: none; }
-        .dark-mode .theme-toggle .sun-icon { display: block; }
-
         /* --- Mobile Navigation --- */
         .nav-toggle {
             display: none;
@@ -340,37 +297,14 @@
             justify-content: center;
             align-items: center;
         }
-        .hero::before, .hero::after {
+        .hero::before {
             content: '';
             position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
+            inset: 0;
             z-index: -1;
-        }
-        .hero::before {
-            width: 30vw;
-            height: 30vw;
-            min-width: 200px;
-            min-height: 200px;
-            background: var(--color-hero-blob1);
-            top: 10%;
-            left: 15%;
-            animation: blob-move 20s infinite alternate;
-        }
-        .hero::after {
-            width: 25vw;
-            height: 25vw;
-            min-width: 150px;
-            min-height: 150px;
-            background: var(--color-hero-blob2);
-            bottom: 10%;
-            right: 15%;
-            animation: blob-move 25s infinite alternate-reverse;
-        }
-
-        @keyframes blob-move {
-            from { transform: translate(-20%, -10%) scale(1); }
-            to { transform: translate(20%, 10%) scale(1.2); }
+            background-image:
+                radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.10), transparent 60%),
+                repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 3px);
         }
 
         .hero h1 {
@@ -381,6 +315,37 @@
             color: var(--color-text-secondary);
             max-width: 60ch;
             margin: 0 auto var(--spacing-xl);
+        }
+
+        /* --- Ticker Tape --- */
+        .ticker-tape {
+            width: 100%;
+            overflow: hidden;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            background-color: var(--color-surface);
+            padding: 0.6rem 0;
+            margin-top: var(--spacing-xl);
+        }
+        .ticker-track {
+            display: inline-flex;
+            gap: 3rem;
+            white-space: nowrap;
+            font-family: var(--font-family-mono);
+            color: var(--color-primary);
+            font-size: 0.85rem;
+            animation: ticker-scroll 32s linear infinite;
+            padding-right: 3rem;
+        }
+        .ticker-track span::before {
+            content: '▲';
+            color: var(--color-success);
+            margin-right: 0.5rem;
+            font-size: 0.7rem;
+        }
+        @keyframes ticker-scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
         }
 
         /* --- Botones --- */
@@ -399,13 +364,13 @@
         }
         .btn-primary {
             background-color: var(--color-primary);
-            color: #fff;
+            color: #0A0E14;
         }
         .btn-primary:hover, .btn-primary:focus-visible {
-            background-color: var(--color-secondary);
+            background-color: var(--color-accent);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(109, 40, 217, 0.3);
-            color: #fff;
+            box-shadow: 0 4px 14px rgba(251, 191, 36, 0.35);
+            color: #0A0E14;
         }
         .btn-secondary {
              background-color: var(--color-surface);
@@ -449,17 +414,36 @@
         }
 
         .card {
-            background-color: var(--color-glass-bg);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            position: relative;
+            background-color: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--border-radius);
-            padding: var(--spacing-lg);
-            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            padding: calc(var(--spacing-lg) + 1.5rem) var(--spacing-lg) var(--spacing-lg);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1.75rem;
+            border-bottom: 1px solid var(--color-border);
+            background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+        .card::after {
+            content: '● ● ●';
+            position: absolute;
+            top: 0.42rem;
+            left: 0.85rem;
+            font-size: 0.5rem;
+            letter-spacing: 0.3rem;
+            color: var(--color-text-secondary);
+            opacity: 0.5;
         }
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+            border-color: var(--color-primary);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.35);
         }
         
         /* --- Formularios --- */
@@ -625,7 +609,7 @@
 
     <header class="main-header">
         <div class="container">
-            <a href="#" class="logo">
+            <a href="../index.html" class="logo">
                 <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M21.38,10.42a1,1,0,0,0-1,0,7.1,7.1,0,0,1-7.23,7.23,1,1,0,0,0,0,2,9.1,9.1,0,0,0,9.14-9.14A1,1,0,0,0,21.38,10.42ZM12,11a1,1,0,1,0-1-1A1,1,0,0,0,12,11Zm0-5A6,6,0,1,0,6,12,6,6,0,0,0,12,6Zm0,10a4,4,0,1,1,4-4A4,4,0,0,1,12,16Z"/></svg>
                 <span>Finanzas para Estudiantes</span>
             </a>
@@ -633,10 +617,6 @@
                 <!-- Links will be populated by JS -->
             </nav>
             <div class="header-controls">
-                <button class="theme-toggle js-only" id="theme-toggle" aria-label="Cambiar tema de color">
-                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                </button>
                 <button id="lang-toggle" aria-label="Switch language"
                     onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
                 <button class="nav-toggle js-only" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
@@ -655,6 +635,20 @@
                 <h1>Tu Aventura Financiera Comienza Aquí</h1>
                 <p>Aprende a manejar tu dinero de forma inteligente y divertida. Desde crear tu primer presupuesto hasta entender cómo crece tu ahorro, te guiaremos paso a paso.</p>
                 <a href="#presupuesto" class="btn btn-primary">Comenzar a Aprender</a>
+            </div>
+            <div class="ticker-tape" aria-hidden="true">
+                <div class="ticker-track">
+                    <span>FV = P(1 + r/n)^(nt)</span>
+                    <span>PMT = P · i(1+i)^n / [(1+i)^n − 1]</span>
+                    <span>REGLA 50/30/20</span>
+                    <span>Valor Real = Nominal / (1+π)^t</span>
+                    <span>FV = d · [(1+r/m)^(mt) − 1] / (r/m)</span>
+                    <span>FV = P(1 + r/n)^(nt)</span>
+                    <span>PMT = P · i(1+i)^n / [(1+i)^n − 1]</span>
+                    <span>REGLA 50/30/20</span>
+                    <span>Valor Real = Nominal / (1+π)^t</span>
+                    <span>FV = d · [(1+r/m)^(mt) − 1] / (r/m)</span>
+                </div>
             </div>
         </section>
 
@@ -795,6 +789,12 @@
                         <p>\[ FV = d \cdot \frac{(1+\frac{r}{m})^{mt}-1}{\frac{r}{m}} \]</p>
                         <div id="savings-results" class="result-box" aria-live="polite"></div>
                     </div>
+                    <div class="card" style="grid-column: 1 / -1;">
+                        <h3>Proyección de Crecimiento</h3>
+                        <div class="chart-container" id="savings-chart-container">
+                            <svg id="savings-chart" role="img" aria-labelledby="savings-chart-title"></svg>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -923,6 +923,7 @@
     <footer class="main-footer">
         <div class="container">
             <div class="footer-links">
+                <a href="../index.html">Volver al Inicio</a>
                 <a href="#hero">Volver Arriba</a>
                 <a href="#faq">FAQ</a>
             </div>
@@ -941,15 +942,16 @@
         const $$ = (selector) => document.querySelectorAll(selector);
         
         const state = {
-            theme: localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
             budget: JSON.parse(localStorage.getItem('budget')) || [],
         };
 
         const sections = $$('main > .section');
         const navLinks = {};
 
+        const ICON_UP = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 7h6v6" /><path d="m22 7-8.5 8.5-5-5L2 17" /></svg>';
+        const ICON_DOWN = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 17h6v-6" /><path d="m22 17-8.5-8.5-5 5L2 7" /></svg>';
+
         function saveState() {
-            localStorage.setItem('theme', state.theme);
             localStorage.setItem('budget', JSON.stringify(state.budget));
         }
 
@@ -959,10 +961,10 @@
             return parseFloat(cleanedStr) || 0;
         }
 
-        function formatMoney(num, currency = 'MXN') {
+        function formatMoney(num, currency = 'USD') {
             const value = normalizeNumber(num);
             if (Math.abs(value) < 0.005) return '$0.00';
-            return value.toLocaleString('es-MX', {
+            return value.toLocaleString('en-US', {
                 style: 'currency',
                 currency: currency,
                 minimumFractionDigits: 2,
@@ -986,25 +988,6 @@
             if (window.MathJax && window.MathJax.typeset) {
                 window.MathJax.typeset();
             }
-        }
-
-        function initTheme() {
-            const themeToggle = $('#theme-toggle');
-            
-            function applyTheme(theme) {
-                document.documentElement.className = theme === 'dark' ? 'dark-mode' : 'light-mode';
-                state.theme = theme;
-                if(window.renderInterestChart) setTimeout(renderInterestChart, 50);
-                if(window.renderBudgetPieChart) setTimeout(renderBudgetPieChart, 50);
-            }
-
-            themeToggle.addEventListener('click', () => {
-                const newTheme = state.theme === 'light' ? 'dark' : 'light';
-                localStorage.setItem('theme', newTheme);
-                applyTheme(newTheme);
-            });
-
-            applyTheme(state.theme);
         }
 
         function initNavigation() {
@@ -1221,7 +1204,7 @@
                     <h3>Resultados</h3>
                     <p><strong>Interés Simple:</strong> ${formatMoney(simpleI)} (Total: ${formatMoney(simpleA)})</p>
                     <p><strong>Interés Compuesto:</strong> ${formatMoney(compoundI)} (Total: ${formatMoney(compoundA)})</p>
-                    <p style="color: var(--color-success)"><strong>Diferencia:</strong> ${formatMoney(compoundA - simpleA)}</p>
+                    <p style="color: var(--color-success)">${ICON_UP} <strong>Diferencia:</strong> ${formatMoney(compoundA - simpleA)}</p>
                 `;
                 
                 renderInterestChart();
@@ -1258,35 +1241,53 @@
             const form = $('#savings-form');
             if(!form) return;
             const resultsEl = $('#savings-results');
+            const chartEl = $('#savings-chart');
             const goal = $('#savings-goal'), deposit = $('#savings-deposit'), rate = $('#savings-rate'), time = $('#savings-time');
-            
+
+            function computeFV(d, r, m, periods) {
+                if (periods <= 0) return 0;
+                if (r > 0) {
+                    const ratePerPeriod = r / m;
+                    return d * ( (Math.pow(1 + ratePerPeriod, periods) - 1) / ratePerPeriod );
+                }
+                return d * periods; // sin interés: aportes acumulados
+            }
+
+            function renderSavingsChart(d, r, t, M) {
+                if (!chartEl) return;
+                const m = 12;
+                const savingsData = [];
+                for (let year = 0; year <= t; year++) {
+                    savingsData.push({ x: year, y: computeFV(d, r, m, m * year) });
+                }
+                const goalData = [{ x: 0, y: M }, { x: t, y: M }];
+
+                const style = getComputedStyle(document.body);
+                const series = [
+                    { data: savingsData, color: style.getPropertyValue('--color-primary'), name: 'Ahorro' },
+                    { data: goalData, color: style.getPropertyValue('--color-alert'), name: 'Meta' }
+                ];
+                renderLineChart(chartEl, series, 'Año', 'Monto ($)');
+            }
+
             function calculateAndRender() {
                 const M = normalizeNumber(goal.value);
                 const d = normalizeNumber(deposit.value);
                 const r = normalizeNumber(rate.value) / 100;
                 const t = normalizeNumber(time.value);
                 const m = 12;
+                const fv = computeFV(d, r, m, m * t);
+                const reachedGoal = fv >= M;
+                const interestNote = r > 0 ? '' : ' (sin interés)';
 
-                if (r > 0) {
-                    const ratePerPeriod = r / m;
-                    const numPeriods = m * t;
-                    const fv = d * ( (Math.pow(1 + ratePerPeriod, numPeriods) - 1) / ratePerPeriod );
-                    
-                    resultsEl.innerHTML = `
-                        <h3>Proyección de Ahorro</h3>
-                        <p>En <strong>${t} años</strong>, con aportes de <strong>${formatMoney(d)}/mes</strong>, tendrás:</p>
-                        <p class="result-value">${formatMoney(fv)}</p>
-                        <p>Para tu meta de ${formatMoney(M)}, te ${fv >= M ? 'sobrarán ' + formatMoney(fv - M) : 'faltarán ' + formatMoney(M - fv)}.</p>
-                    `;
-                } else {
-                    const fv = d * t * 12;
-                     resultsEl.innerHTML = `
-                        <h3>Proyección de Ahorro</h3>
-                        <p>En <strong>${t} años</strong>, con aportes de <strong>${formatMoney(d)}/mes</strong> (sin interés), tendrás:</p>
-                        <p class="result-value">${formatMoney(fv)}</p>
-                        <p>Para tu meta de ${formatMoney(M)}, te ${fv >= M ? 'sobrarán ' + formatMoney(fv - M) : 'faltarán ' + formatMoney(M - fv)}.</p>
-                    `;
-                }
+                resultsEl.innerHTML = `
+                    <h3>Proyección de Ahorro</h3>
+                    <p>En <strong>${t} años</strong>, con aportes de <strong>${formatMoney(d)}/mes</strong>${interestNote}, tendrás:</p>
+                    <p class="result-value">${formatMoney(fv)}</p>
+                    <p style="color: ${reachedGoal ? 'var(--color-success)' : 'var(--color-alert)'}">${reachedGoal ? ICON_UP : ICON_DOWN} Para tu meta de ${formatMoney(M)}, te ${reachedGoal ? 'sobrarán ' + formatMoney(fv - M) : 'faltarán ' + formatMoney(M - fv)}.</p>
+                `;
+
+                renderSavingsChart(d, r, t, M);
             }
 
             form.addEventListener('input', calculateAndRender);
@@ -1328,7 +1329,7 @@
                     <h3>Resumen del Préstamo</h3>
                     <p><strong>Pago Mensual:</strong> ${formatMoney(pmt)}</p>
                     <p><strong>Total Pagado:</strong> ${formatMoney(totalPaid)}</p>
-                    <p style="color: var(--color-alert)"><strong>Total Intereses:</strong> ${formatMoney(totalInterest)}</p>
+                    <p style="color: var(--color-alert)">${ICON_DOWN} <strong>Total Intereses:</strong> ${formatMoney(totalInterest)}</p>
                 `;
 
                 let balance = P;
@@ -1414,7 +1415,7 @@
                 const y = yMax * (i / 5);
                 const yPos = yScale(y);
                 g.innerHTML += `<line class="grid-line" x1="${padding.left}" y1="${yPos}" x2="${width - padding.right}" y2="${yPos}" style="stroke: var(--color-border); stroke-width: 1;"/>`;
-                g.innerHTML += `<text class="axis-text" x="${padding.left - 10}" y="${yPos + 4}" text-anchor="end" style="font-size: 10px; fill: var(--color-text-secondary);">${formatMoney(y).replace('MXN', '')}</text>`;
+                g.innerHTML += `<text class="axis-text" x="${padding.left - 10}" y="${yPos + 4}" text-anchor="end" style="font-size: 10px; fill: var(--color-text-secondary);">${formatMoney(y)}</text>`;
             }
             const xTickCount = Math.min(xMax, 10);
             for (let i = 0; i <= xTickCount; i++) {
@@ -1470,7 +1471,6 @@
         }
 
         function init() {
-            initTheme();
             initNavigation();
             initScrollSpy();
             initMobileNav();

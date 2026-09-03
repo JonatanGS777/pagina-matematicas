@@ -22,7 +22,7 @@
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
     </script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Unica+One&display=swap" rel="stylesheet">
 
     <!-- Estilos CSS Embebidos -->
     <style>
@@ -30,24 +30,21 @@
         /* VARIABLES Y RESET   */
         /* ------------------- */
         :root {
-            /* Colores (Modo Claro por defecto) */
-            --color-bg: #f0f2f5;
-            --color-surface: #ffffff;
-            --color-primary: #005f73;
-            --color-secondary: #0a9396;
-            --color-accent: #ee9b00;
-            --color-text-primary: #0a1128;
-            --color-text-secondary: #5f677a;
-            --color-border: #d9dde8;
-            --color-shadow-light: rgba(255, 255, 255, 0.8);
-            --color-shadow-dark: rgba(163, 177, 198, 0.6);
-            --color-glass-bg: rgba(255, 255, 255, 0.5);
-            --color-hero-blob1: #94d2bd;
-            --color-hero-blob2: #e9d8a6;
+            /* Taller de Cristales — paleta mineral (dark-only) */
+            --color-bg: #12181C;
+            --color-surface: #1B2427;
+            --color-primary: #14B8A6;   /* malaquita */
+            --color-secondary: #F4A900; /* citrino */
+            --color-accent: #9D6FE0;    /* amatista */
+            --color-text-primary: #EAF2F0;
+            --color-text-secondary: #8FA39D;
+            --color-border: #2A3538;
+            --color-glass-bg: rgba(27, 36, 39, 0.72);
 
             /* Tipografía */
             --font-family-sans: 'Syne', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             --font-family-mono: 'DM Mono', monospace;
+            --font-family-display: 'Unica One', 'Syne', sans-serif;
             --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16px -> 18px */
             --font-size-h1: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
             --font-size-h2: clamp(2rem, 1.25rem + 3.75vw, 3.5rem);
@@ -65,28 +62,13 @@
             /* Otros */
             --border-radius: 12px;
             --transition-speed: 0.3s;
-            --shadow-neumorph: 
-                -6px -6px 12px var(--color-shadow-light),
-                6px 6px 12px var(--color-shadow-dark);
-            --shadow-neumorph-inset: 
-                inset -4px -4px 8px var(--color-shadow-light),
-                inset 4px 4px 8px var(--color-shadow-dark);
-        }
-
-        .dark-theme {
-            --color-bg: #0a1128;
-            --color-surface: #121c33;
-            --color-primary: #94d2bd;
-            --color-secondary: #0a9396;
-            --color-accent: #ee9b00;
-            --color-text-primary: #f0f2f5;
-            --color-text-secondary: #a0a8b9;
-            --color-border: #2a344e;
-            --color-shadow-light: rgba(42, 52, 78, 0.8);
-            --color-shadow-dark: rgba(0, 0, 0, 0.6);
-            --color-glass-bg: rgba(18, 28, 51, 0.5);
-            --color-hero-blob1: #005f73;
-            --color-hero-blob2: #0a9396;
+            --facet-cut: 22px;
+            --shadow-neumorph:
+                0 0 0 1px var(--color-border),
+                0 4px 14px rgba(0, 0, 0, 0.35);
+            --shadow-neumorph-inset:
+                inset 0 0 0 1px var(--color-primary),
+                inset 0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
         *, *::before, *::after {
@@ -107,9 +89,9 @@
         body {
             font-family: var(--font-family-sans);
             background-color: var(--color-bg);
+            background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(20, 184, 166, 0.07), transparent 60%);
             color: var(--color-text-primary);
             line-height: 1.6;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
         h1, h2, h3 {
@@ -213,7 +195,7 @@
         }
 
         .main-nav ul {
-            display: none; /* Oculto en móvil */
+            display: flex;
             list-style: none;
             gap: var(--spacing-lg);
         }
@@ -255,39 +237,58 @@
             gap: var(--spacing-md);
         }
 
-        .theme-toggle {
+        #mobile-menu-btn {
+            display: none;
             background: none;
             border: none;
             cursor: pointer;
             width: 44px;
             height: 44px;
-            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: var(--color-text-primary);
-            border-radius: 50%;
-            transition: background-color var(--transition-speed) ease;
+            gap: 5px;
+            z-index: 1001;
         }
-        .theme-toggle:hover, .theme-toggle:focus-visible {
-            background-color: var(--color-border);
-        }
-        .theme-toggle svg {
+        #mobile-menu-btn .bar {
             width: 24px;
-            height: 24px;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            fill: none;
+            height: 2px;
+            background-color: var(--color-text-primary);
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
-        .theme-toggle .icon-moon { display: block; }
-        .theme-toggle .icon-sun { display: none; }
-        .dark-theme .theme-toggle .icon-moon { display: none; }
-        .dark-theme .theme-toggle .icon-sun { display: block; }
+        #mobile-menu-btn.is-open .bar1 { transform: translateY(7px) rotate(45deg); }
+        #mobile-menu-btn.is-open .bar2 { opacity: 0; }
+        #mobile-menu-btn.is-open .bar3 { transform: translateY(-7px) rotate(-45deg); }
 
-        @media (min-width: 768px) {
-            .main-nav ul {
+        @media (max-width: 767px) {
+            #mobile-menu-btn {
                 display: flex;
+            }
+            .main-nav {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--color-surface);
+                transform: translateX(100%);
+                transition: transform 0.3s ease-in-out;
+                padding-top: var(--spacing-xxl);
+                z-index: 1000;
+                border-left: 1px solid var(--color-border);
+            }
+            .main-nav.is-open {
+                transform: translateX(0);
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.4);
+            }
+            .main-nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--spacing-xl);
+            }
+            .main-nav a {
+                font-size: 1.25rem;
             }
         }
 
@@ -302,41 +303,43 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 40%, rgba(20, 184, 166, 0.14), transparent 70%),
+                radial-gradient(ellipse 40% 40% at 80% 70%, rgba(244, 169, 0, 0.09), transparent 70%);
         }
         .hero::before, .hero::after {
             content: '';
             position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
             z-index: -1;
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            filter: blur(2px);
         }
         .hero::before {
-            width: 30vw;
-            height: 30vw;
-            min-width: 200px;
-            min-height: 200px;
-            background: var(--color-hero-blob1);
-            top: 10%;
-            left: 15%;
-            animation: blob-move 20s infinite alternate;
+            width: 300px;
+            height: 300px;
+            top: -70px;
+            left: -70px;
+            background: conic-gradient(from 45deg, var(--color-primary), transparent 45%);
+            animation: facet-glint 8s ease-in-out infinite alternate;
         }
         .hero::after {
-            width: 25vw;
-            height: 25vw;
-            min-width: 150px;
-            min-height: 150px;
-            background: var(--color-hero-blob2);
-            bottom: 10%;
-            right: 15%;
-            animation: blob-move 25s infinite alternate-reverse;
+            width: 220px;
+            height: 220px;
+            bottom: -50px;
+            right: -50px;
+            background: conic-gradient(from 200deg, var(--color-secondary), transparent 50%);
+            animation: facet-glint 10s ease-in-out infinite alternate-reverse;
         }
 
-        @keyframes blob-move {
-            from { transform: translate(-20%, -10%) scale(1); }
-            to { transform: translate(20%, 10%) scale(1.2); }
+        @keyframes facet-glint {
+            from { transform: rotate(0deg) scale(1); opacity: 0.35; }
+            to { transform: rotate(25deg) scale(1.15); opacity: 0.6; }
         }
 
         .hero h1 {
+            font-family: var(--font-family-display);
+            font-weight: 400;
+            letter-spacing: 0.02em;
             margin-bottom: var(--spacing-md);
         }
         .hero p {
@@ -372,7 +375,7 @@
         .btn-primary:hover, .btn-primary:focus-visible {
             background-color: var(--color-secondary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.3);
+            box-shadow: 0 4px 10px rgba(20, 184, 166, 0.35);
         }
 
         /* --- Secciones y Tarjetas --- */
@@ -412,16 +415,33 @@
 
         .card {
             background-color: var(--color-glass-bg);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             padding: var(--spacing-lg);
+            position: relative;
             transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            clip-path: polygon(0 0, calc(100% - var(--facet-cut)) 0, 100% var(--facet-cut), 100% 100%, var(--facet-cut) 100%, 0 calc(100% - var(--facet-cut)));
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            clip-path: inherit;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-border) 45%, var(--color-secondary));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.55;
+            transition: opacity var(--transition-speed) ease;
         }
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+        }
+        .card:hover::before {
+            opacity: 1;
         }
         .card-header {
             display: flex;
@@ -466,7 +486,7 @@
         }
         .svg-interactive .shape {
             fill: var(--color-primary);
-            fill-opacity: 0.1;
+            fill-opacity: 0.16;
             stroke: var(--color-primary);
             stroke-width: 2;
             transition: fill-opacity var(--transition-speed) ease;
@@ -542,7 +562,7 @@
         .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 95, 115, 0.2);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25);
         }
         .calculator-result {
             margin-top: var(--spacing-md);
@@ -561,7 +581,7 @@
             font-weight: 400;
         }
         .error-message {
-            color: #ae2012;
+            color: #F87171;
             font-size: var(--font-size-small);
             font-weight: 500;
         }
@@ -592,7 +612,7 @@
             font-size: 1.1rem;
             color: var(--color-secondary);
         }
-        .dark-theme .formula mjx-container {
+        .formula mjx-container {
             color: var(--color-secondary) !important;
         }
 
@@ -673,15 +693,16 @@
     <!-- Header -->
     <header class="main-header">
         <div class="container">
-            <a href="#" class="logo" aria-label="Geometría Moderna - Inicio">
+            <a href="../index.html" class="logo" aria-label="Geometría Moderna - Volver al inicio del sitio">
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M95 95H5V5l90 90z"/></svg>
                 <span>Geometría Moderna</span>
             </a>
-            <nav class="main-nav js-only" aria-label="Navegación principal">
+            <nav class="main-nav js-only" id="main-nav" aria-label="Navegación principal">
                 <ul>
                     <li><a href="#concepts">Conceptos</a></li>
                     <li><a href="#figures-2d">Figuras 2D</a></li>
                     <li><a href="#solids-3d">Sólidos 3D</a></li>
+                    <li><a href="#solids-calculator">Volumen y Área</a></li>
                     <li><a href="#calculators">Calculadoras</a></li>
                     <li><a href="#formulas">Fórmulas</a></li>
                     <li><a href="#glossary">Glosario</a></li>
@@ -691,9 +712,10 @@
             <div class="header-controls">
                 <button id="lang-toggle" aria-label="Switch language"
                     onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
-                <button class="theme-toggle js-only" id="theme-toggle" aria-label="Cambiar tema de color">
-                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <button id="mobile-menu-btn" class="js-only" aria-label="Abrir menú" aria-expanded="false">
+                    <span class="bar bar1"></span>
+                    <span class="bar bar2"></span>
+                    <span class="bar bar3"></span>
                 </button>
             </div>
         </div>
@@ -962,6 +984,37 @@
             </div>
         </section>
 
+        <!-- Calculadora de Sólidos 3D -->
+        <section id="solids-calculator" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Volumen y Área de Sólidos</h2>
+                    <p>Calcula el volumen y el área superficial de los sólidos que acabas de explorar. Selecciona una figura e introduce sus medidas.</p>
+                </div>
+                <article class="card calculator" style="max-width: 700px; margin: 0 auto;">
+                    <h3>Calculadora de Sólidos</h3>
+                    <form id="calc-solids" class="calculator-form">
+                        <div class="form-group">
+                            <label for="solid-select">Selecciona un sólido:</label>
+                            <select id="solid-select" name="solid">
+                                <option value="cubo">Cubo</option>
+                                <option value="cilindro">Cilindro</option>
+                                <option value="cono">Cono</option>
+                                <option value="esfera">Esfera</option>
+                                <option value="piramide">Pirámide (base cuadrada)</option>
+                                <option value="prisma">Prisma (base triangular equilátero)</option>
+                            </select>
+                        </div>
+                        <div id="solid-inputs">
+                            <!-- Inputs dinámicos aquí -->
+                        </div>
+                        <button type="submit" class="btn">Calcular</button>
+                    </form>
+                    <div id="result-solids" class="calculator-result" aria-live="polite"></div>
+                </article>
+            </div>
+        </section>
+
         <!-- Calculadoras -->
         <section id="calculators" class="section">
             <div class="container">
@@ -1192,7 +1245,8 @@
     <footer class="main-footer">
         <div class="container">
             <div class="footer-links">
-                <a href="#">Volver arriba</a>
+                <a href="../index.html">Volver al inicio</a>
+                <a href="#main-content">Volver arriba</a>
             </div>
             <p>&copy; 2025 Geometría Moderna. Creado con fines educativos por Dr. Yonatan Guerrero Soriano.</p>
             <p>Contenido bajo licencia Creative Commons. Accesibilidad como prioridad.</p>
@@ -1207,39 +1261,22 @@
             document.documentElement.classList.remove('no-js');
 
             /* ------------------- */
-            /* GESTIÓN DEL TEMA    */
+            /* MENÚ MÓVIL          */
             /* ------------------- */
-            const themeToggle = document.getElementById('theme-toggle');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-            let currentTheme = localStorage.getItem('theme');
-
-            function applyTheme(theme) {
-                if (theme === 'dark') {
-                    document.documentElement.classList.add('dark-theme');
-                } else {
-                    document.documentElement.classList.remove('dark-theme');
-                }
-            }
-
-            function toggleTheme() {
-                currentTheme = document.documentElement.classList.contains('dark-theme') ? 'light' : 'dark';
-                localStorage.setItem('theme', currentTheme);
-                applyTheme(currentTheme);
-            }
-
-            if (themeToggle) {
-                // Aplicar tema inicial
-                if (currentTheme) {
-                    applyTheme(currentTheme);
-                } else {
-                    applyTheme(prefersDark.matches ? 'dark' : 'light');
-                }
-                
-                themeToggle.addEventListener('click', toggleTheme);
-                prefersDark.addEventListener('change', (e) => {
-                    if (!localStorage.getItem('theme')) {
-                        applyTheme(e.matches ? 'dark' : 'light');
-                    }
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mainNav = document.getElementById('main-nav');
+            if (mobileMenuBtn && mainNav) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    const isOpen = mobileMenuBtn.classList.toggle('is-open');
+                    mainNav.classList.toggle('is-open');
+                    mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+                });
+                mainNav.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenuBtn.classList.remove('is-open');
+                        mainNav.classList.remove('is-open');
+                        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    });
                 });
             }
 
@@ -1378,6 +1415,140 @@
                         announceResult(resultAreaPerimeter, resultHtml);
                     } catch (error) {
                         announceResult(resultAreaPerimeter, `<span class="error-message">${error.message}</span>`);
+                    }
+                });
+            }
+
+            // --- Calculadora de Sólidos 3D ---
+            const solidsForm = document.getElementById('calc-solids');
+            const solidSelect = document.getElementById('solid-select');
+            const solidInputsContainer = document.getElementById('solid-inputs');
+            const resultSolids = document.getElementById('result-solids');
+
+            const solidInputTemplates = {
+                cubo: `
+                    <div class="form-group">
+                        <label for="sol-lado">Lado (l):</label>
+                        <input type="text" id="sol-lado" name="lado" inputmode="decimal" required>
+                    </div>`,
+                cilindro: `
+                    <div class="form-group">
+                        <label for="sol-radio">Radio (r):</label>
+                        <input type="text" id="sol-radio" name="radio" inputmode="decimal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sol-altura">Altura (h):</label>
+                        <input type="text" id="sol-altura" name="altura" inputmode="decimal" required>
+                    </div>`,
+                cono: `
+                    <div class="form-group">
+                        <label for="sol-radio-cono">Radio (r):</label>
+                        <input type="text" id="sol-radio-cono" name="radio" inputmode="decimal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sol-altura-cono">Altura (h):</label>
+                        <input type="text" id="sol-altura-cono" name="altura" inputmode="decimal" required>
+                    </div>`,
+                esfera: `
+                    <div class="form-group">
+                        <label for="sol-radio-esfera">Radio (r):</label>
+                        <input type="text" id="sol-radio-esfera" name="radio" inputmode="decimal" required>
+                    </div>`,
+                piramide: `
+                    <div class="form-group">
+                        <label for="sol-lado-piramide">Lado de la base (l):</label>
+                        <input type="text" id="sol-lado-piramide" name="lado" inputmode="decimal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sol-altura-piramide">Altura (h):</label>
+                        <input type="text" id="sol-altura-piramide" name="altura" inputmode="decimal" required>
+                    </div>`,
+                prisma: `
+                    <div class="form-group">
+                        <label for="sol-lado-prisma">Lado del triángulo (s):</label>
+                        <input type="text" id="sol-lado-prisma" name="lado" inputmode="decimal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sol-longitud-prisma">Longitud del prisma (h):</label>
+                        <input type="text" id="sol-longitud-prisma" name="longitud" inputmode="decimal" required>
+                    </div>`
+            };
+
+            function updateSolidInputs() {
+                solidInputsContainer.innerHTML = solidInputTemplates[solidSelect.value] || '';
+            }
+
+            if (solidsForm) {
+                updateSolidInputs();
+                solidSelect.addEventListener('change', updateSolidInputs);
+
+                solidsForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(solidsForm);
+                    const solid = formData.get('solid');
+                    let volume, area, resultHtml = '';
+
+                    try {
+                        switch (solid) {
+                            case 'cubo': {
+                                const lado = normalizeNumber(formData.get('lado'));
+                                if (isNaN(lado) || lado <= 0) throw new Error("El lado debe ser un número positivo.");
+                                volume = Math.pow(lado, 3);
+                                area = 6 * lado * lado;
+                                resultHtml = `Volumen: <strong>${formatResult(volume)}</strong> u³<br>Área superficial: <strong>${formatResult(area)}</strong> u²`;
+                                break;
+                            }
+                            case 'cilindro': {
+                                const radio = normalizeNumber(formData.get('radio'));
+                                const altura = normalizeNumber(formData.get('altura'));
+                                if (isNaN(radio) || isNaN(altura) || radio <= 0 || altura <= 0) throw new Error("El radio y la altura deben ser números positivos.");
+                                volume = PI * radio * radio * altura;
+                                area = 2 * PI * radio * radio + 2 * PI * radio * altura;
+                                resultHtml = `Volumen: <strong>${formatResult(volume)}</strong> u³<br>Área superficial: <strong>${formatResult(area)}</strong> u²`;
+                                break;
+                            }
+                            case 'cono': {
+                                const radio = normalizeNumber(formData.get('radio'));
+                                const altura = normalizeNumber(formData.get('altura'));
+                                if (isNaN(radio) || isNaN(altura) || radio <= 0 || altura <= 0) throw new Error("El radio y la altura deben ser números positivos.");
+                                const slant = Math.sqrt(radio * radio + altura * altura);
+                                volume = (1 / 3) * PI * radio * radio * altura;
+                                area = PI * radio * radio + PI * radio * slant;
+                                resultHtml = `Volumen: <strong>${formatResult(volume)}</strong> u³<br>Área superficial: <strong>${formatResult(area)}</strong> u²`;
+                                break;
+                            }
+                            case 'esfera': {
+                                const radio = normalizeNumber(formData.get('radio'));
+                                if (isNaN(radio) || radio <= 0) throw new Error("El radio debe ser un número positivo.");
+                                volume = (4 / 3) * PI * Math.pow(radio, 3);
+                                area = 4 * PI * radio * radio;
+                                resultHtml = `Volumen: <strong>${formatResult(volume)}</strong> u³<br>Área superficial: <strong>${formatResult(area)}</strong> u²`;
+                                break;
+                            }
+                            case 'piramide': {
+                                const lado = normalizeNumber(formData.get('lado'));
+                                const altura = normalizeNumber(formData.get('altura'));
+                                if (isNaN(lado) || isNaN(altura) || lado <= 0 || altura <= 0) throw new Error("El lado y la altura deben ser números positivos.");
+                                const slantHeight = Math.sqrt(altura * altura + Math.pow(lado / 2, 2));
+                                volume = (1 / 3) * lado * lado * altura;
+                                area = lado * lado + 2 * lado * slantHeight;
+                                resultHtml = `Volumen: <strong>${formatResult(volume)}</strong> u³<br>Área superficial: <strong>${formatResult(area)}</strong> u²`;
+                                break;
+                            }
+                            case 'prisma': {
+                                const lado = normalizeNumber(formData.get('lado'));
+                                const longitud = normalizeNumber(formData.get('longitud'));
+                                if (isNaN(lado) || isNaN(longitud) || lado <= 0 || longitud <= 0) throw new Error("El lado y la longitud deben ser números positivos.");
+                                const areaBase = (Math.sqrt(3) / 4) * lado * lado;
+                                volume = areaBase * longitud;
+                                area = 2 * areaBase + 3 * lado * longitud;
+                                resultHtml = `Volumen: <strong>${formatResult(volume)}</strong> u³<br>Área superficial: <strong>${formatResult(area)}</strong> u²<br><small>(Prisma con base triangular equilátera)</small>`;
+                                break;
+                            }
+                        }
+                        announceResult(resultSolids, resultHtml);
+                    } catch (error) {
+                        announceResult(resultSolids, `<span class="error-message">${error.message}</span>`);
                     }
                 });
             }
