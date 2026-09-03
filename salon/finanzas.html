@@ -188,6 +188,7 @@
             padding: var(--spacing-sm) 0;
             position: relative;
             color: var(--color-text-secondary);
+            white-space: nowrap;
             transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .main-nav a::after {
@@ -652,7 +653,7 @@
             </div>
         </section>
 
-        <section class="section" id="presupuesto">
+        <section class="section" id="presupuesto" data-nav-label="Presupuesto">
             <div class="container">
                 <div class="section-header">
                     <h2>Crea tu Presupuesto</h2>
@@ -710,7 +711,7 @@
             </div>
         </section>
 
-        <section class="section" id="interes">
+        <section class="section" id="interes" data-nav-label="Interés">
             <div class="container">
                 <div class="section-header">
                     <h2>Interés Simple vs. Compuesto</h2>
@@ -755,7 +756,7 @@
             </div>
         </section>
 
-        <section class="section" id="ahorro">
+        <section class="section" id="ahorro" data-nav-label="Ahorro">
             <div class="container">
                 <div class="section-header">
                     <h2>Metas de Ahorro</h2>
@@ -799,7 +800,7 @@
             </div>
         </section>
 
-        <section class="section" id="deuda">
+        <section class="section" id="deuda" data-nav-label="Deuda">
             <div class="container">
                 <div class="section-header">
                     <h2>Deuda y Crédito</h2>
@@ -839,7 +840,7 @@
             </div>
         </section>
 
-        <section class="section" id="inflacion">
+        <section class="section" id="inflacion" data-nav-label="Inflación">
             <div class="container">
                 <div class="section-header">
                     <h2>Inflación</h2>
@@ -872,7 +873,7 @@
             </div>
         </section>
 
-        <section class="section" id="glosario">
+        <section class="section" id="glosario" data-nav-label="Glosario">
             <div class="container">
                 <div class="section-header">
                     <h2>Glosario Financiero</h2>
@@ -890,7 +891,7 @@
             </div>
         </section>
 
-        <section class="section" id="faq">
+        <section class="section" id="faq" data-nav-label="FAQ">
             <div class="container">
                 <div class="section-header">
                     <h2>Preguntas Frecuentes (FAQ)</h2>
@@ -995,7 +996,7 @@
             let navHTML = '<ul>';
             sections.forEach(section => {
                 const id = section.id;
-                const name = section.querySelector('h2')?.textContent;
+                const name = section.dataset.navLabel || section.querySelector('h2')?.textContent;
                 if (id && name) {
                    navHTML += `<li><a href="#${id}">${name}</a></li>`;
                 }
