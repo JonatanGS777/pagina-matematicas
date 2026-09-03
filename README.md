@@ -139,6 +139,7 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `salon/algebra.html` | Mesa de Trazado | Technical drafting-table/blueprint aesthetic for the function grapher — light mode reframed as "Diazo/Whiteprint" (cream paper, blueprint-ink blue `#1D4ED8`), dark mode as "Cyanotype/Blueprint" (deep navy `#0B2545`, cyan ink `#7DD3FC`), amber highlighter-pen secondary, coral 2nd-function plot color, Space Mono on the hero only, whole-page technical grid background, Lucide compass/ruler line-art replacing the old color-blob hero decoration. Added a real "remove function" control (Lucide `trash-2`) — the plotter previously only let you *add* a 2nd function, never remove or deactivate it. Dead `href="#"` logo link fixed to `../index.html`. Quadratic solver, evaluator, pan/zoom, and all function math untouched |
 | `salon/geometria.html` | Taller de Cristales | Gem-cutting workshop/crystallography aesthetic, dark-only (theme toggle removed) — graphite-black background, malachite teal `#14B8A6` + citrine amber `#F4A900` + sparing amethyst `#9D6FE0` accents, faceted "cut gem" card corners via `clip-path`, Unica One on the hero only, faceted-polygon spotlight hero replacing the old color blobs. Added a full **Volumen y Área de Sólidos** calculator (cube/cylinder/cone/sphere/pyramid/triangular prism) — the "Sólidos 3D" section was previously purely illustrative with no calculator at all, unlike its 2D-figures sibling section. Also fixed a real bug: the page had no way to open the nav menu on mobile (`ul{display:none}` with no toggle button). Dead `href="#"` logo link fixed to `../index.html`. Área/perímetro, Pitágoras, and analítica calculators untouched |
 | `salon/finanzas.html` | Piso de Bolsa | Stock-trading-floor/financial-terminal aesthetic, dark-only (theme toggle removed) — near-black `#0A0E14` terminal background, ticker-gold `#FBBF24` brand accent (green/red reserved specifically for gain/loss semantics, not the whole brand — avoids the cliché all-green "money" look), Chakra Petch on the hero only, terminal-window-chrome cards, a decorative scrolling ticker-tape strip of formulas. Fixed a real correctness bug: `formatMoney()` was hardcoded to Mexican pesos (`MXN`/`es-MX`) on a Puerto Rico Department of Education site — now USD/`en-US`. Added a savings-growth line chart (with a goal reference line) to the "Metas de Ahorro" section, which previously showed only a single final number while its sibling "Interés" section already had a full growth chart. Dead `href="#"` logo link fixed to `../index.html`. Budget/pie chart, interest/line chart, loan/amortization table, and inflation calculators untouched |
+| `salon/estadisticas.html` | *(unchanged, by request)* | Already had a distinctive neo-brutalist system (hard black borders, offset "sticker" shadows, violet/cyan/pink/lime) — kept it as-is rather than reskinning. Fixed the dead `href="#"` logo link to `../index.html` and added a "Volver al inicio" footer link. Fixed the scatter plot, the only chart missing axes/tick labels (the code literally had `// Axes (simplified) // ...` where the other 3 charts had full axis code). Added a **Calculadora de Probabilidad Normal** (P(Z<z) via an erf-based standard normal CDF) next to the existing Z-score calculator — the "Calculadoras Rápidas" section had a `<!-- More calculators could be added here -->` comment marking it as intentionally incomplete. All data-parsing, chart rendering, and simulation logic untouched |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -218,13 +219,14 @@ get redesigned.
 `contexto/historiamath-examen.html`, `contexto/historiamath-preguntas.html`,
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
 study-materials subpages), and `perfil-investigador/` still use the previous
-purple/glassmorphism theme and `js/dark-mode.js`. `salon/estadisticas.html`
-(neo-brutalist violet/cyan/pink/lime, hard borders) and `salon/game.html`
-("Math Masters", Tailwind CDN, dark-mode-default indigo/slate) are also not
-yet redesigned, but — like `salon/algebra.html`, `geometria.html`, and
-`finanzas.html` were before this pass — they already have their own bespoke
-design systems rather than the generic purple theme; redesign them the same
-way — one page at a time, each with its own identity — when needed.
+purple/glassmorphism theme and `js/dark-mode.js`. `salon/game.html` ("Math
+Masters", Tailwind CDN, dark-mode-default indigo/slate) is also not yet
+redesigned, but — like the other `salon/` pages — it already has its own
+bespoke design system rather than the generic purple theme; redesign it the
+same way — with its own identity — when needed. `salon/estadisticas.html`
+was kept exactly as-is by request (see the Identity table above) since its
+existing neo-brutalist system was already solid; only real bugs and a
+missing calculator were fixed there.
 
 ---
 

@@ -629,7 +629,7 @@
 
   <header class="main-header">
     <div class="container header-container">
-      <a href="#" class="logo">
+      <a href="../index.html" class="logo">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 4H6C4.9 4 4 4.9 4 6V18C4 19.1 4.9 20 6 20H18C19.1 20 20 19.1 20 18V6C20 4.9 19.1 4 18 4ZM18 6V8H6V6H18ZM11 16H8V14H11V16ZM11 12H8V10H11V12ZM16 16H13V14H16V16ZM16 12H13V10H16V12Z"></path></svg>
         <span>Estadística Moderna</span>
       </a>
@@ -854,7 +854,16 @@
             <button id="calculate-z" class="btn">Calcular Z</button>
             <div id="z-result" class="card" style="margin-top: 1rem;"></div>
           </div>
-          <!-- More calculators could be added here -->
+          <div class="card">
+            <h3>Calculadora de Probabilidad Normal</h3>
+            <p>Calcula el área bajo la curva normal estándar a partir de una puntuación \(z\).</p>
+            <div class="input-group">
+              <label for="normprob-z">Puntuación Z</label>
+              <input type="number" id="normprob-z" class="form-control" placeholder="Ej: 1.5" step="any">
+            </div>
+            <button id="calculate-normprob" class="btn">Calcular Probabilidad</button>
+            <div id="normprob-result" class="card" style="margin-top: 1rem;"></div>
+          </div>
         </div>
       </section>
 
@@ -946,7 +955,8 @@
         <p>&copy; 2025 Estadística Moderna. Creado con fines educativos por Dr. Yonatan Guerrero Soriano.</p>
         <p>Contenido bajo licencia Creative Commons. Accesibilidad como prioridad.</p>
       </div>
-      <a href="#main-content" class="btn btn-accent">Volver arriba</a>
+      <a href="../index.html" class="btn btn-accent">Volver al inicio</a>
+      <a href="#main-content" class="btn btn-secondary">Volver arriba</a>
     </div>
   </footer>
 
@@ -1088,9 +1098,21 @@
           const rNumerator = n * sumXY - sumX * sumY;
           const rDenominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
           const r = rDenominator === 0 ? 0 : rNumerator / rDenominator;
-          
+
           return { a, b, r };
       };
+
+      // Abramowitz and Stegun approximation (accurate to ~1.5e-7)
+      const erf = (x) => {
+        const sign = x >= 0 ? 1 : -1;
+        x = Math.abs(x);
+        const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741,
+              a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+        const t = 1 / (1 + p * x);
+        const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+        return sign * y;
+      };
+      const normalCDF = (z) => 0.5 * (1 + erf(z / Math.SQRT2));
 
       // --- UI UPDATE FUNCTIONS ---
       const updateDataSummary = () => {
@@ -1512,9 +1534,62 @@
             g.appendChild(line);
         }
         
-        // Axes (simplified)
-        // ...
-        
+        // X Axis
+        const xAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        xAxisG.setAttribute('transform', `translate(0, ${h})`);
+        const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxisLine.setAttribute('x1', 0);
+        xAxisLine.setAttribute('x2', w);
+        xAxisLine.setAttribute('class', 'axis-line');
+        xAxisG.appendChild(xAxisLine);
+        const xTickCount = Math.min(10, Math.floor(w / 60));
+        for (let i = 0; i <= xTickCount; i++) {
+          const val = xMin + (i / xTickCount) * (xMax - xMin);
+          const x = xScale(val);
+          const tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          tick.setAttribute('transform', `translate(${x}, 0)`);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('y2', 5);
+          line.setAttribute('stroke', 'currentColor');
+          tick.appendChild(line);
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('y', 20);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('fill', 'currentColor');
+          text.textContent = formatNumber(val, 1);
+          tick.appendChild(text);
+          xAxisG.appendChild(tick);
+        }
+        g.appendChild(xAxisG);
+
+        // Y Axis
+        const yAxisG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxisLine.setAttribute('y1', 0);
+        yAxisLine.setAttribute('y2', h);
+        yAxisLine.setAttribute('class', 'axis-line');
+        yAxisG.appendChild(yAxisLine);
+        const yTickCount = Math.min(8, Math.floor(h / 40));
+        for (let i = 0; i <= yTickCount; i++) {
+          const val = yMin + (i / yTickCount) * (yMax - yMin);
+          const y = yScale(val);
+          const tick = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          tick.setAttribute('transform', `translate(0, ${y})`);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x2', -5);
+          line.setAttribute('stroke', 'currentColor');
+          tick.appendChild(line);
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', -10);
+          text.setAttribute('dy', '0.32em');
+          text.setAttribute('text-anchor', 'end');
+          text.setAttribute('fill', 'currentColor');
+          text.textContent = formatNumber(val, 1);
+          tick.appendChild(text);
+          yAxisG.appendChild(tick);
+        }
+        g.appendChild(yAxisG);
+
         // Summary
         summaryEl.innerHTML = `
             <h4>Resumen de Regresión</h4>
@@ -1918,7 +1993,26 @@
           const z = (x - mean) / sd;
           resultEl.innerHTML = `<p>La puntuación Z es: <strong>${formatNumber(z, 3)}</strong></p>`;
       });
-      
+
+      // Normal Probability Calculator
+      document.getElementById('calculate-normprob').addEventListener('click', () => {
+          const z = parseFloat(document.getElementById('normprob-z').value);
+          const resultEl = document.getElementById('normprob-result');
+          if (isNaN(z)) {
+              resultEl.innerHTML = '<p>Por favor, ingresa un valor numérico válido para Z.</p>';
+              return;
+          }
+          const pLess = normalCDF(z);
+          const pGreater = 1 - pLess;
+          const pBetween = 1 - 2 * normalCDF(-Math.abs(z));
+          resultEl.innerHTML = `
+              <p>\\(P(Z < ${formatNumber(z, 3)}) = ${formatNumber(pLess, 4)}\\)</p>
+              <p>\\(P(Z > ${formatNumber(z, 3)}) = ${formatNumber(pGreater, 4)}\\)</p>
+              <p>\\(P(-|z| < Z < |z|) = ${formatNumber(pBetween, 4)}\\)</p>
+          `;
+          refreshMathJax();
+      });
+
       // Glossary Filter
       const glossaryFilter = document.getElementById('glossary-filter');
       const glossaryItems = document.querySelectorAll('#glossary-list dt, #glossary-list dd');
