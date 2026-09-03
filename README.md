@@ -177,6 +177,20 @@ all Supabase calls until it's entered correctly. This is not real
 authentication (client-side only, same weak level already accepted
 elsewhere on the site) — a proper fix needs server-side auth.
 
+`contexto/historiamath-examen.html` had a more serious version of the same
+problem: the 10-question answer key and *both* passwords (student and
+professor) were plaintext constants in the page's own `<script>` — visible
+to anyone via "View Page Source", no unlocking or dev-tools access needed,
+despite the page's client-side anti-cheating measures (blocked right-click,
+F12, tab-switch/blur detection) which only ever guarded against the wrong
+threat. This one got the real server-side fix: the questions, answer key,
+and both password hashes now live in Supabase with no RLS policy granting
+the `anon` role read access at all, and 3 Edge Functions
+(`exam-start`/`exam-submit`/`exam-report`, service-role-backed) handle
+password checks and grading — the browser now never receives the answer
+key or the passwords in any form. See the Exam System entry above for the
+schema and functions.
+
 ### Icons (Lucide SVG)
 
 Every icon on every page listed above is an inline Lucide SVG — `fill="none"
@@ -294,6 +308,27 @@ pagina-matematicas/
 | `start_competition_timer(prof_code, competition_id)` | Professor starts the synchronized timer |
 | `reset_competition(prof_code)` | Ends current session and creates a new one |
 | `update_competition_score(participant_id, area, points, difficulty)` | Updates participant score in real time |
+
+### Exam System — `supabase-exam-setup.sql` (`contexto/historiamath-examen.html`)
+
+| Table | Description |
+|:---|:---|
+| `exam_secrets` | Student/professor password *hashes* (SHA-256) and duration, per exam slug |
+| `exam_questions` | Question text and options only — never the correct answer |
+| `exam_answer_key` | Correct answer index, in its own table with zero anon access |
+| `exam_submissions` | Graded results, written only by `exam-submit` |
+
+None of these 4 tables have RLS policies for `anon`/`authenticated` — by
+design, the public REST API can't read any of them directly. All access
+goes through 3 Edge Functions (`supabase/functions/exam-start`,
+`exam-submit`, `exam-report`), deployed with `verify_jwt=false` since they
+implement their own password-based access control instead of Supabase Auth:
+
+| Function | Description |
+|:---|:---|
+| `exam-start` | Checks the student password hash server-side; on success, returns questions *without* answers |
+| `exam-submit` | Grades answers server-side against the answer key; stores the submission; returns only the score |
+| `exam-report` | Checks the professor password hash; returns the full per-question breakdown for one submission (used for the professor's PDF) |
 
 ---
 

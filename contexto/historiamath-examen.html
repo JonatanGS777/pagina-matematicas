@@ -740,131 +740,45 @@
     </div>
 
     <script>
+        // ==================== Supabase Configuration ====================
+        // The anon key is safe to expose (Supabase's public-client design) —
+        // what actually protects the exam is that exam_secrets, exam_questions'
+        // answer key, and exam_submissions have NO row-level-security policy
+        // granting the anon role access. All password checks, question
+        // delivery, and grading happen server-side in Edge Functions using
+        // the service role key, which never reaches the browser. See
+        // supabase/functions/exam-start, exam-submit, exam-report.
+        const SUPABASE_URL = 'https://mywwtkpcswisdwrfqzch.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15d3d0a3Bjc3dpc2R3cmZxemNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEyOTQzOTgsImV4cCI6MjA4Njg3MDM5OH0.XEzvjC7PmDG6uEhiYzo8HgK564WXKUi94LNHaS6jkQs';
+        const EXAM_SLUG = 'historiamath';
+
+        async function callExamFunction(name, payload) {
+            const res = await fetch(`${SUPABASE_URL}/functions/v1/${name}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json().catch(() => ({ ok: false, error: 'invalid_response' }));
+            return { status: res.status, data };
+        }
+
         class SecureExamSystem {
             constructor() {
-                this.EXAM_PASSWORD = 'profemath2025';
-                this.PROFESSOR_PASSWORD = 'profesor2025';
-                this.EXAM_DURATION = 45 * 60; // 45 minutes in seconds
+                this.EXAM_DURATION = 45 * 60; // fallback; overwritten by the server's duration_seconds on unlock
                 this.timeRemaining = this.EXAM_DURATION;
                 this.examStarted = false;
                 this.examCompleted = false;
                 this.warningCount = 0;
                 this.studentData = {};
                 this.answers = {};
-                
-                this.questions = [
-                    {
-                        id: 1,
-                        text: "¿En qué civilización antigua se desarrolló por primera vez el sistema sexagesimal (base 60)?",
-                        options: [
-                            "Egipcia",
-                            "Griega", 
-                            "Babilónica",
-                            "China"
-                        ],
-                        correct: 2
-                    },
-                    {
-                        id: 2,
-                        text: "¿Quién es considerado el 'Padre del Álgebra'?",
-                        options: [
-                            "Euclides",
-                            "Al-Khwarizmi",
-                            "Pitágoras",
-                            "Arquímedes"
-                        ],
-                        correct: 1
-                    },
-                    {
-                        id: 3,
-                        text: "¿En qué siglo vivió Euclides y escribió 'Los Elementos'?",
-                        options: [
-                            "Siglo V a.C.",
-                            "Siglo IV a.C.",
-                            "Siglo III a.C.",
-                            "Siglo II a.C."
-                        ],
-                        correct: 2
-                    },
-                    {
-                        id: 4,
-                        text: "¿Cuál fue la principal contribución matemática de la civilización india?",
-                        options: [
-                            "La geometría",
-                            "El concepto de cero",
-                            "El álgebra",
-                            "La trigonometría"
-                        ],
-                        correct: 1
-                    },
-                    {
-                        id: 5,
-                        text: "¿Quién desarrolló simultáneamente el cálculo diferencial e integral junto con Newton?",
-                        options: [
-                            "Descartes",
-                            "Leibniz",
-                            "Euler",
-                            "Gauss"
-                        ],
-                        correct: 1
-                    },
-                    {
-                        id: 6,
-                        text: "¿Cuál era el método principal de cálculo usado por los egipcios?",
-                        options: [
-                            "Fracciones unitarias",
-                            "Números decimales",
-                            "Sistema binario",
-                            "Notación científica"
-                        ],
-                        correct: 0
-                    },
-                    {
-                        id: 7,
-                        text: "¿En qué ciudad se estableció la famosa biblioteca que preservó muchos textos matemáticos antiguos?",
-                        options: [
-                            "Atenas",
-                            "Roma",
-                            "Alejandría",
-                            "Bagdad"
-                        ],
-                        correct: 2
-                    },
-                    {
-                        id: 8,
-                        text: "¿Qué matemático griego es famoso por el método de exhaución (precursor del cálculo integral)?",
-                        options: [
-                            "Tales",
-                            "Pitágoras",
-                            "Arquímedes",
-                            "Apolonio"
-                        ],
-                        correct: 2
-                    },
-                    {
-                        id: 9,
-                        text: "¿Durante qué período histórico se tradujo la mayoría de textos matemáticos griegos al árabe?",
-                        options: [
-                            "Siglos VII-IX",
-                            "Siglos VIII-X",
-                            "Siglos IX-XI",
-                            "Siglos X-XII"
-                        ],
-                        correct: 1
-                    },
-                    {
-                        id: 10,
-                        text: "¿Qué secuencia numérica fue introducida en Europa por Leonardo de Pisa (Fibonacci)?",
-                        options: [
-                            "Números primos",
-                            "Serie geométrica",
-                            "Secuencia de Fibonacci",
-                            "Números perfectos"
-                        ],
-                        correct: 2
-                    }
-                ];
-                
+                this.questions = []; // populated by exam-start (never includes correct answers)
+                this.lastResults = null;
+                this.submissionId = null;
+
                 this.init();
             }
             
@@ -948,11 +862,19 @@
                 document.getElementById('examDate').value = today;
             }
             
-            attemptUnlock() {
+            async attemptUnlock() {
                 const password = document.getElementById('passwordInput').value;
                 const errorMessage = document.getElementById('errorMessage');
-                
-                if (password === this.EXAM_PASSWORD) {
+                const unlockBtn = document.getElementById('unlockBtn');
+
+                unlockBtn.disabled = true;
+                const { data } = await callExamFunction('exam-start', { exam_slug: EXAM_SLUG, password });
+                unlockBtn.disabled = false;
+
+                if (data.ok) {
+                    this.questions = data.questions.map(q => ({ id: q.id, order: q.order, text: q.text, options: q.options }));
+                    this.EXAM_DURATION = data.duration_seconds || this.EXAM_DURATION;
+                    this.timeRemaining = this.EXAM_DURATION;
                     this.startExam();
                 } else {
                     errorMessage.classList.add('show');
@@ -962,14 +884,14 @@
                     }, 3000);
                 }
             }
-            
+
             startExam() {
                 document.getElementById('lockScreen').classList.add('hidden');
                 document.getElementById('examContainer').classList.add('active');
                 this.examStarted = true;
                 this.generateQuestions();
                 this.startTimer();
-                
+
                 // Disable right-click and keyboard shortcuts
                 document.body.style.userSelect = 'none';
             }
@@ -982,7 +904,7 @@
                     const questionHTML = `
                         <div class="question-container">
                             <div class="question-header">
-                                <div class="question-number">${question.id}</div>
+                                <div class="question-number">${question.order}</div>
                                 <div class="question-text">${question.text}</div>
                             </div>
                             <div class="question-options">
@@ -1031,37 +953,10 @@
                 });
                 return answers;
             }
-            
-            calculateScore() {
-                this.answers = this.collectAnswers();
-                let correctCount = 0;
-                
-                this.questions.forEach(question => {
-                    if (this.answers[question.id] === question.correct) {
-                        correctCount++;
-                    }
-                });
-                
-                const percentage = Math.round((correctCount / this.questions.length) * 100);
-                return {
-                    correct: correctCount,
-                    total: this.questions.length,
-                    percentage: percentage,
-                    grade: this.getLetterGrade(percentage)
-                };
-            }
-            
-            getLetterGrade(percentage) {
-                if (percentage >= 90) return 'A';
-                if (percentage >= 80) return 'B';
-                if (percentage >= 70) return 'C';
-                if (percentage >= 60) return 'D';
-                return 'F';
-            }
-            
-            submitExam(forced = false) {
+
+            async submitExam(forced = false) {
                 if (this.examCompleted) return;
-                
+
                 // Collect student data
                 this.studentData = {
                     name: document.getElementById('studentName').value,
@@ -1072,22 +967,48 @@
                     warningCount: this.warningCount,
                     forced: forced
                 };
-                
+
                 // Validate student info
                 if (!this.studentData.name || !this.studentData.group) {
                     alert('Por favor, completa tu información personal antes de enviar el examen.');
                     return;
                 }
-                
+
                 this.examCompleted = true;
                 clearInterval(this.timerInterval);
-                
-                // Calculate results
-                const results = this.calculateScore();
+                this.answers = this.collectAnswers();
+
+                // Grading happens server-side — the client never has the answer key
+                const submitBtn = document.getElementById('submitExamBtn');
+                if (submitBtn) submitBtn.disabled = true;
+
+                const { data } = await callExamFunction('exam-submit', {
+                    exam_slug: EXAM_SLUG,
+                    student_name: this.studentData.name,
+                    student_group: this.studentData.group,
+                    exam_date: this.studentData.date,
+                    answers: this.answers,
+                    time_used: this.studentData.timeUsed,
+                    warning_count: this.studentData.warningCount,
+                    forced: this.studentData.forced
+                });
+
+                if (!data.ok) {
+                    this.examCompleted = false;
+                    if (submitBtn) submitBtn.disabled = false;
+                    alert('No se pudo enviar el examen. Verifica tu conexión e inténtalo de nuevo.');
+                    return;
+                }
+
+                this.submissionId = data.submission_id;
+                const results = {
+                    correct: data.correct,
+                    total: data.total,
+                    percentage: data.percentage,
+                    grade: data.grade
+                };
+                this.lastResults = results;
                 this.displayResults(results);
-                
-                // Save to storage
-                this.saveExamResults(results);
             }
             
             displayResults(results) {
@@ -1119,23 +1040,8 @@
                 document.getElementById('examGrade').textContent = results.grade;
             }
             
-            saveExamResults(results) {
-                const examData = {
-                    id: Date.now(),
-                    student: this.studentData,
-                    results: results,
-                    answers: this.answers,
-                    questions: this.questions
-                };
-                
-                // Save to localStorage (in real app, this would be server-side)
-                const existingResults = JSON.parse(localStorage.getItem('examResults') || '[]');
-                existingResults.push(examData);
-                localStorage.setItem('examResults', JSON.stringify(existingResults));
-            }
-            
             async downloadStudentPDF() {
-                const results = this.calculateScore();
+                const results = this.lastResults;
                 const pdfContent = this.createStudentPDFContent(results);
                 
                 const element = document.createElement('div');
@@ -1157,14 +1063,31 @@
             
             async downloadProfessorPDF() {
                 const password = prompt('Ingresa la clave del profesor:');
-                
-                if (password !== this.PROFESSOR_PASSWORD) {
+                if (!password) return;
+
+                if (!this.submissionId) {
+                    alert('Primero debes enviar el examen antes de descargar el reporte del profesor.');
+                    return;
+                }
+
+                const { data } = await callExamFunction('exam-report', {
+                    exam_slug: EXAM_SLUG,
+                    submission_id: this.submissionId,
+                    professor_password: password
+                });
+
+                if (!data.ok) {
                     alert('Clave incorrecta. Acceso denegado.');
                     return;
                 }
-                
-                const results = this.calculateScore();
-                const pdfContent = this.createProfessorPDFContent(results);
+
+                const results = {
+                    correct: data.submission.correct_count,
+                    total: data.submission.total,
+                    percentage: data.submission.percentage,
+                    grade: data.submission.grade
+                };
+                const pdfContent = this.createProfessorPDFContent(results, data.breakdown);
                 
                 const element = document.createElement('div');
                 element.innerHTML = pdfContent;
@@ -1247,7 +1170,7 @@
                 `;
             }
             
-            createProfessorPDFContent(results) {
+            createProfessorPDFContent(results, breakdown) {
                 return `
                     <div style="font-family: 'Poppins', Arial, sans-serif; padding: 30px; line-height: 1.5; color: #2C2C2C; font-size: 12px;">
                         <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #D32F2F; padding-bottom: 15px;">
@@ -1297,25 +1220,24 @@
                             <h3 style="color: #D32F2F; margin: 0 0 15px 0; font-size: 16px; border-bottom: 2px solid #D32F2F; padding-bottom: 5px;">
                                 Análisis Detallado de Respuestas
                             </h3>
-                            ${this.questions.map(question => {
-                                const studentAnswer = this.answers[question.id];
-                                const isCorrect = studentAnswer === question.correct;
-                                const correctLetter = String.fromCharCode(65 + question.correct);
-                                const studentLetter = studentAnswer !== null ? String.fromCharCode(65 + studentAnswer) : 'Sin respuesta';
-                                
+                            ${breakdown.map(item => {
+                                const isCorrect = item.is_correct;
+                                const correctLetter = String.fromCharCode(65 + item.correct_index);
+                                const studentLetter = item.student_answer !== null ? String.fromCharCode(65 + item.student_answer) : 'Sin respuesta';
+
                                 return `
                                     <div style="margin-bottom: 15px; border-left: 4px solid ${isCorrect ? '#4CAF50' : '#F44336'}; padding-left: 12px; background: ${isCorrect ? '#f1f8e9' : '#ffebee'}; padding: 10px; border-radius: 5px;">
                                         <div style="display: flex; align-items: flex-start; margin-bottom: 8px;">
                                             <div style="background: ${isCorrect ? '#4CAF50' : '#F44336'}; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; margin-right: 10px; flex-shrink: 0;">
-                                                ${question.id}
+                                                ${item.order}
                                             </div>
                                             <div style="flex: 1;">
                                                 <p style="margin: 0 0 8px 0; font-weight: 600; font-size: 11px; line-height: 1.4;">
-                                                    ${question.text}
+                                                    ${item.text}
                                                 </p>
                                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 10px;">
-                                                    <p style="margin: 0;"><strong>Respuesta correcta:</strong> ${correctLetter}. ${question.options[question.correct]}</p>
-                                                    <p style="margin: 0;"><strong>Respuesta del estudiante:</strong> ${studentLetter}${studentAnswer !== null ? '. ' + question.options[studentAnswer] : ''}</p>
+                                                    <p style="margin: 0;"><strong>Respuesta correcta:</strong> ${correctLetter}. ${item.options[item.correct_index]}</p>
+                                                    <p style="margin: 0;"><strong>Respuesta del estudiante:</strong> ${studentLetter}${item.student_answer !== null ? '. ' + item.options[item.student_answer] : ''}</p>
                                                 </div>
                                                 <p style="margin: 5px 0 0 0; font-size: 10px; color: ${isCorrect ? '#2e7d32' : '#c62828'}; font-weight: 600;">
                                                     ${isCorrect ? '✓ CORRECTA' : '✗ INCORRECTA'}
