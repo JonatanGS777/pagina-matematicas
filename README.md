@@ -274,8 +274,15 @@ pagina-matematicas/
 ├── js/
 │   ├── i18n.js                    # ES ↔ EN language module
 │   └── dark-mode.js               # Theme persistence
+├── supabase/
+│   └── functions/                 # Edge Functions (Deno)
+│       ├── exam-start/
+│       ├── exam-submit/
+│       └── exam-report/
 ├── supabase-setup.sql             # Analytics schema
 ├── supabase-competition-setup.sql # Competition schema
+├── supabase-olimpiadas-setup.sql  # Olympics registration schema
+├── supabase-exam-setup.sql        # Secure exam schema (historiamath-examen.html)
 └── vercel.json                    # Vercel config
 ```
 
@@ -308,6 +315,13 @@ pagina-matematicas/
 | `start_competition_timer(prof_code, competition_id)` | Professor starts the synchronized timer |
 | `reset_competition(prof_code)` | Ends current session and creates a new one |
 | `update_competition_score(participant_id, area, points, difficulty)` | Updates participant score in real time |
+
+### Olympics Registration — `supabase-olimpiadas-setup.sql`
+
+| Table | Description |
+|:---|:---|
+| `olimpiad_events` | One olympiad event, with registration status and professor codes |
+| `olimpiad_registrations` | Student sign-ups (name, school, category, grade) for an event |
 
 ### Exam System — `supabase-exam-setup.sql` (`contexto/historiamath-examen.html`)
 
