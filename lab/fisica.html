@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#193f39"><meta name="description" content="Laboratorio virtual de Física de 12.º grado: recorre un salón 3D, experimenta y construye explicaciones con evidencia.">
+<title>Física · Laboratorio 3D | Matemáticas con el Prof. Guerrero</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'%3E%3Crect width='50' height='50' rx='12' fill='%23193f39'/%3E%3Ctext x='11' y='37' font-size='38' fill='%23dcef9e'%3Eφ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="fisica/lab.css">
+<script defer src="fisica/vendor/three.min.js"></script>
+<script defer src="fisica/models.js"></script>
+<script defer src="fisica/room.js"></script>
+<script defer src="fisica/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+<a class="brand" href="../index.html" aria-label="Volver a la página de matemáticas"><span class="brand-mark">φ</span><span>GUERRERO<span class="brand-sub">MATEMÁTICAS & CIENCIAS</span></span></a>
+<div class="course-tag">FÍSICA <span>/</span> 12.º GRADO</div>
+<div class="top-actions"><button id="notebook-btn">Cuaderno <span id="record-count">0</span></button><button id="teacher-btn" class="dark-btn">Espacio docente ↗</button></div>
+</header>
+<main>
+<section class="intro"><div><p class="eyebrow">OBSERVA. EXPERIMENTA. COMPRENDE.</p><h1>La física se <em>descubre.</em></h1><p>Un salón para hacer preguntas. Seis estaciones para encontrar respuestas.</p></div><div class="progress-summary"><span id="progress-text">0 de 6 estaciones completadas</span><div class="progress-track"><div id="progress-bar"></div></div><small>Tu recorrido se guarda en este navegador.</small></div></section>
+<nav id="stations" class="stations" aria-label="Estaciones del laboratorio"></nav>
+<div class="workspace">
+<section class="room-panel" aria-label="Salón virtual de física">
+<div class="scene-top"><div><span class="live-dot"></span><span id="view-label">VISTA DEL SALÓN</span></div><div class="view-buttons"><button id="overview-btn" class="active" aria-pressed="true">Salón</button><button id="walk-btn" aria-pressed="false">Recorrer</button><button id="focus-btn" aria-pressed="false">Mesa</button><button id="fullscreen-btn" aria-label="Pantalla completa">⛶</button></div></div>
+<div id="scene" tabindex="0" role="application" aria-label="Salón 3D. Selecciona Recorrer y usa W A S D para moverte, flechas izquierda y derecha para girar. Arrastra para mirar. Usa las estaciones de arriba como alternativa."><div id="scene-fallback" hidden><strong>La vista 3D no está disponible.</strong><p>Puedes realizar los experimentos con los controles, las gráficas y el cuaderno. Prueba un navegador con WebGL para recorrer el salón.</p></div></div>
+<div class="scene-caption"><span class="eyebrow">TU MESA DE TRABAJO</span><h2 id="scene-title">Vectores y medición</h2><p id="scene-subtitle">Cada descubrimiento comienza con una buena pregunta.</p></div>
+<div id="walk-pad" class="walk-pad" hidden aria-label="Controles para recorrer"><button data-move="ArrowLeft" aria-label="Girar a la izquierda">↶</button><button data-move="KeyW" aria-label="Avanzar">↑</button><button data-move="ArrowRight" aria-label="Girar a la derecha">↷</button><button data-move="KeyA" aria-label="Moverse a la izquierda">←</button><button data-move="KeyS" aria-label="Retroceder">↓</button><button data-move="KeyD" aria-label="Moverse a la derecha">→</button></div>
+<div class="scene-bottom"><span id="navigation-hint">Selecciona una mesa o una estación para comenzar.</span><button id="help-btn" aria-label="Ayuda de navegación">?</button></div>
+</section>
+<aside class="experiment-panel" aria-labelledby="experiment-title">
+<div class="experiment-heading"><span id="unit-label" class="eyebrow"></span><span class="pill">EXPERIMENTO</span></div><h2 id="experiment-title"></h2><p id="experiment-question" class="experiment-question"></p>
+<div id="parameters"></div>
+<div class="experiment-actions"><button id="run-btn" class="primary-btn">▶ Iniciar experimento</button><button id="reset-btn" aria-label="Reiniciar experimento" title="Reiniciar experimento">↺</button></div>
+<div class="time-row"><span id="sim-status" role="status">Listo para experimentar</span><label>Velocidad <select id="speed" aria-label="Velocidad de simulación"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label></div>
+<div id="readouts" class="readouts"></div>
+<canvas id="chart" width="640" height="240" role="img" aria-label="Gráfica del experimento"></canvas><p id="chart-description" class="small-note"></p>
+<button id="record-btn" class="record-btn">＋ Registrar medición</button>
+</aside>
+</div>
+<section class="learning-panel">
+<div class="learning-tabs" role="tablist" aria-label="Aprendizaje"><button role="tab" aria-selected="true" aria-controls="learning-content" id="tab-guide" data-tab="guide">01 <span>Guía de exploración</span></button><button role="tab" aria-selected="false" aria-controls="learning-content" id="tab-concept" data-tab="concept" tabindex="-1">02 <span>Comprende la física</span></button><button role="tab" aria-selected="false" aria-controls="learning-content" id="tab-challenge" data-tab="challenge" tabindex="-1">03 <span>Ponte a prueba</span></button></div>
+<div id="learning-content" role="tabpanel" aria-labelledby="tab-guide"></div>
+</section>
+<footer><span>UN ESPACIO PARA APRENDER HACIENDO</span><span>Basado en tus mapas curriculares F.1–F.6 · Puerto Rico</span><button id="sources-btn">Sobre el laboratorio</button></footer>
+</main>
+<dialog id="modal"><div class="modal-heading"><h2 id="modal-title"></h2><button id="close-modal" aria-label="Cerrar">✕</button></div><div id="modal-content"></div></dialog>
+<div id="toast" role="status" class="toast" hidden></div>
+<noscript>Activa JavaScript para usar el laboratorio interactivo.</noscript>
+</body></html>
