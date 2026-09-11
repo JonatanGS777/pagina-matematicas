@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio de Fisica 3D | Matematicas Digitales</title>
+<meta name="description" content="Laboratorio virtual de fisica en tres dimensiones. Siete estaciones con experimentos de mecanica y electromagnetismo, misiones progresivas y descargas para el profesor.">
+
+<meta property="og:title" content="Laboratorio de Fisica 3D">
+<meta property="og:description" content="Salon de fisica en 3D: camina entre siete estaciones, corre experimentos reales y descarga tus datos.">
+<meta property="og:type" content="website">
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/lab.css">
+</head>
+<body>
+
+<canvas id="lienzo"></canvas>
+
+<!-- Mira central, solo visible mientras se camina -->
+<div id="mira" class="oculto"></div>
+
+<!-- Interfaz permanente -->
+<div id="hud">
+  <div class="barra-superior">
+    <span class="marca-hud">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/></svg>
+      <span>Laboratorio de fisica</span>
+    </span>
+    <div class="progreso">
+      <div class="progreso-cabecera">
+        <span id="nivel-nombre">Recien llegado</span>
+        <span id="progreso-texto">0 / 0</span>
+      </div>
+      <div class="progreso-riel"><div id="progreso-barra"></div></div>
+    </div>
+  </div>
+
+  <div class="acciones-hud">
+    <button class="btn" id="btn-descargas">
+      <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+      <span>Descargas</span>
+    </button>
+    <button class="btn" id="btn-ayuda">
+      <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      <span>Como se usa</span>
+    </button>
+  </div>
+
+  <div class="mapa-caja">
+    <h2>Plano del salon</h2>
+    <canvas id="mapa" width="230" height="126"></canvas>
+    <p class="mapa-pie">Haz clic en una estacion del plano para moverte hasta ella.</p>
+  </div>
+
+  <div id="aviso-estacion" class="oculto"></div>
+</div>
+
+<!-- Panel lateral de la estacion abierta -->
+<aside id="panel" class="oculto">
+  <div class="panel-cabecera">
+    <div>
+      <h2 id="panel-titulo"></h2>
+      <p id="panel-subtitulo"></p>
+    </div>
+    <button class="btn" id="btn-cerrar-panel" aria-label="Cerrar el panel">
+      <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <nav id="pestanas"></nav>
+  <div id="panel-cuerpo"></div>
+</aside>
+
+<!-- Portada -->
+<div id="portada">
+  <div class="portada-caja">
+    <p class="portada-marca">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z"/></svg>
+      Matematicas Digitales
+    </p>
+
+    <h1>Laboratorio de <em>fisica en 3D</em></h1>
+    <p class="entrada">
+      Un salon completo que puedes recorrer caminando. Siete estaciones con experimentos
+      de verdad: sueltas un cuerpo en un tubo de vacio, disparas un canon, chocas dos
+      carros, mides un pendulo y ves las lineas de un campo electrico en el aire.
+      Cada estacion trae misiones donde primero calculas el resultado y despues lo
+      compruebas con el experimento.
+    </p>
+
+    <div class="rejilla-estaciones">
+      <button class="chip-estacion" data-ir="caida-libre" style="--acento:#4fd6e3"><b>01</b> Caida libre</button>
+      <button class="chip-estacion" data-ir="plano-inclinado" style="--acento:#ffb347"><b>02</b> Plano inclinado</button>
+      <button class="chip-estacion" data-ir="pendulo" style="--acento:#b08cff"><b>03</b> Pendulo simple</button>
+      <button class="chip-estacion" data-ir="colisiones" style="--acento:#7ee787"><b>04</b> Colisiones</button>
+      <button class="chip-estacion" data-ir="proyectiles" style="--acento:#ff6b6b"><b>05</b> Tiro parabolico</button>
+      <button class="chip-estacion" data-ir="campo-electrico" style="--acento:#5aa9ff"><b>06</b> Campo electrico</button>
+      <button class="chip-estacion" data-ir="lorentz" style="--acento:#b08cff"><b>07</b> Fuerza magnetica</button>
+    </div>
+    <p class="pie-rejilla">Toca una estacion para ir directo a ella.</p>
+
+    <div id="aviso-tactil" class="aviso-dispositivo oculto">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      <span>Para caminar por el salon hace falta teclado y mouse, asi que este
+      dispositivo no permite recorrerlo. Lo que si funciona es entrar a cada
+      estacion desde la lista de arriba: los experimentos, las misiones y las
+      descargas andan igual.</span>
+    </div>
+
+    <div class="campos">
+      <div class="campo">
+        <label for="campo-nombre">Tu nombre</label>
+        <input type="text" id="campo-nombre" placeholder="Para que aparezca en el reporte" autocomplete="name">
+      </div>
+      <div class="campo">
+        <label for="campo-grupo">Grupo o seccion</label>
+        <input type="text" id="campo-grupo" placeholder="Por ejemplo 10-B">
+      </div>
+    </div>
+
+    <div class="portada-acciones">
+      <button class="btn principal" id="btn-entrar">
+        <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        <span>Entrar al laboratorio</span>
+      </button>
+      <button class="btn" id="btn-reiniciar-progreso">
+        <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        <span>Borrar mi progreso</span>
+      </button>
+    </div>
+
+    <div class="teclas-fila">
+      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> caminar</span>
+      <span><kbd>mouse</kbd> mirar</span>
+      <span><kbd>shift</kbd> correr</span>
+      <span><kbd>E</kbd> abrir la estacion</span>
+      <span><kbd>esc</kbd> soltar el cursor</span>
+    </div>
+  </div>
+</div>
+
+<!-- Ventana de descargas -->
+<div id="descargas" class="modal oculto">
+  <div class="modal-caja">
+    <div class="modal-cabecera">
+      <svg class="ic" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+      <h2>Descargas</h2>
+      <button class="btn" id="btn-cerrar-descargas" aria-label="Cerrar">
+        <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-cuerpo">
+      <div class="lista-descargas">
+        <button class="descarga" id="dl-offline">
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          <span>
+            <b>El laboratorio completo, sin internet</b>
+            <small>Un solo archivo HTML con todo adentro, incluido el motor 3D. Copialo a las computadoras del salon y funciona con doble clic, sin instalar nada ni tener conexion.</small>
+          </span>
+        </button>
+
+        <button class="descarga" id="dl-reporte">
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+          <span>
+            <b>Reporte del estudiante en PDF</b>
+            <small>Hoja de laboratorio con el puntaje, las misiones resueltas, los intentos, todas las mediciones y espacio para escribir las conclusiones a mano. Se abre listo para guardar como PDF o imprimir.</small>
+          </span>
+        </button>
+
+        <button class="descarga" id="dl-csv-todo">
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>
+          <span>
+            <b>Datos de todas las estaciones en CSV</b>
+            <small>Tabla con cada medicion tomada, lista para abrir en Excel o Google Sheets y graficar. Usa punto y coma y coma decimal para que abra bien en espanol.</small>
+          </span>
+        </button>
+
+        <button class="descarga" id="dl-csv">
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>
+          <span>
+            <b>Datos de la estacion abierta en CSV</b>
+            <small>Solo las mediciones de la estacion que tengas abierta en ese momento. Si no hay ninguna abierta, descarga todas.</small>
+          </span>
+        </button>
+
+        <button class="descarga" id="dl-guia">
+          <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+          <span>
+            <b>Guia didactica del profesor</b>
+            <small>Guion de clase con las siete estaciones, los controles de cada una, todas las misiones con sus respuestas, los rangos aceptados y preguntas para discutir en voz alta. Imprimible.</small>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Ventana de ayuda -->
+<div id="ayuda" class="modal oculto">
+  <div class="modal-caja">
+    <div class="modal-cabecera">
+      <svg class="ic" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      <h2>Como se usa el laboratorio</h2>
+      <button class="btn" id="btn-cerrar-ayuda" aria-label="Cerrar">
+        <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-cuerpo">
+      <div class="bloque-ayuda">
+        <h3>Para moverte</h3>
+        <div class="tabla-teclas">
+          <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span>Caminar por el salon</span>
+          <span><kbd>mouse</kbd></span><span>Girar la cabeza y mirar alrededor</span>
+          <span><kbd>shift</kbd></span><span>Correr</span>
+          <span><kbd>E</kbd></span><span>Abrir o cerrar la estacion que tengas delante</span>
+          <span><kbd>espacio</kbd></span><span>Ejecutar el experimento de la estacion abierta</span>
+          <span><kbd>M</kbd></span><span>Abrir las descargas</span>
+          <span><kbd>esc</kbd></span><span>Soltar el cursor del mouse</span>
+        </div>
+      </div>
+
+      <div class="bloque-ayuda">
+        <h3>Como avanzar</h3>
+        <p>
+          Cada estacion tiene misiones en orden. Las de prediccion te piden calcular un
+          numero con lapiz y papel antes de correr el experimento: escribes tu resultado y
+          el laboratorio lo compara con el valor exacto, aceptando un margen del cinco por
+          ciento. Las de reto se cumplen manipulando los controles hasta lograr lo que pide
+          el enunciado.
+        </p>
+        <p>
+          Una mision se desbloquea cuando resuelves la anterior. Cada una vale cien puntos
+          y se descuentan quince por cada intento fallido, con un minimo de cuarenta. Tu
+          progreso queda guardado en esta computadora aunque cierres la pagina.
+        </p>
+      </div>
+
+      <div class="bloque-ayuda">
+        <h3>Para el profesor</h3>
+        <p>
+          En Descargas encuentras la guia didactica con todas las respuestas, el reporte en
+          PDF que entrega el estudiante, los datos en CSV para graficar en clase y el
+          laboratorio completo en un archivo que funciona sin internet.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<div id="error-carga" class="oculto">
+  <div>
+    <h2>No se pudo iniciar el laboratorio</h2>
+    <p></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script src="js/fisica.js"></script>
+<script src="js/util3d.js"></script>
+<script src="js/escena.js"></script>
+<script src="js/jugador.js"></script>
+<script src="js/estaciones-mecanica.js"></script>
+<script src="js/estaciones-em.js"></script>
+<script src="js/misiones.js"></script>
+<script src="js/exportar.js"></script>
+<script src="js/hud.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
