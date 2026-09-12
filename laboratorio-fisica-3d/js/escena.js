@@ -1,9 +1,9 @@
 /*
- * Laboratorio de Fisica 3D - Construccion del salon
+ * Laboratorio de Física 3D - Construcción del salón
  *
- * Levanta el aula completa con geometria procedural: piso, paredes,
+ * Levanta el aula completa con geometría procedural: piso, paredes,
  * ventanales, techo con tragaluz, pizarra y las mesas de trabajo.
- * No se carga ningun modelo ni textura externa, todo se dibuja aqui.
+ * No se carga ningún modelo ni textura externa, todo se dibuja aquí.
  */
 (function (global) {
   'use strict';
@@ -35,7 +35,7 @@
    * Texturas generadas por canvas
    * ------------------------------------------------------------------ */
 
-  // Piso de losas con lineas tenues, sirve de referencia metrica al caminar.
+  // Piso de losas con líneas tenues, sirve de referencia métrica al caminar.
   function texturaPiso() {
     var lado = 256;
     var c = document.createElement('canvas');
@@ -54,15 +54,15 @@
       g.beginPath(); g.moveTo(0, p); g.lineTo(lado, p); g.stroke();
     }
     var t = new THREE.CanvasTexture(c);
-    // Sin marcar la codificacion, Three trata el canvas como lineal y el
-    // piso se ve varios tonos mas claro de lo dibujado.
+    // Sin marcar la codificación, Three trata el canvas como lineal y el
+    // piso se ve varios tonos más claro de lo dibujado.
     t.encoding = THREE.sRGBEncoding;
     t.wrapS = t.wrapT = THREE.RepeatWrapping;
     t.repeat.set(SALON.ancho / 2, SALON.fondo / 2);
     return t;
   }
 
-  // Panel de texto para letreros y rotulos flotantes.
+  // Panel de texto para letreros y rótulos flotantes.
   function texturaTexto(lineas, opciones) {
     var o = opciones || {};
     var ancho = o.ancho || 512;
@@ -129,7 +129,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * Piezas del salon
+   * Piezas del salón
    * ------------------------------------------------------------------ */
 
   function crearPiso() {
@@ -155,7 +155,7 @@
     return m;
   }
 
-  // Ventanal con marco y cristal levemente azulado, deja pasar luz de dia.
+  // Ventanal con marco y cristal levemente azulado, deja pasar luz de día.
   function crearVentanal(x, y, z, ancho, alto, rotY) {
     var grupo = new THREE.Group();
     var cristal = new THREE.Mesh(
@@ -182,7 +182,7 @@
     return grupo;
   }
 
-  // Mesa de trabajo: es la base fisica de cada estacion.
+  // Mesa de trabajo: es la base física de cada estación.
   function crearMesa(ancho, fondo, altura) {
     var grupo = new THREE.Group();
     var matSup = new THREE.MeshStandardMaterial({
@@ -214,7 +214,7 @@
       grupo.add(pata);
     });
 
-    // Travesano inferior, da sensacion de mueble real de laboratorio.
+    // Travesano inferior, da sensación de mueble real de laboratorio.
     var travesano = new THREE.Mesh(new THREE.BoxGeometry(ancho - 0.2, 0.06, 0.06), matPata);
     travesano.position.set(0, 0.25, 0);
     grupo.add(travesano);
@@ -222,7 +222,7 @@
     return grupo;
   }
 
-  // Letrero colgante sobre cada estacion con numero y nombre.
+  // Letrero colgante sobre cada estación con número y nombre.
   function crearLetrero(numero, titulo, subtitulo) {
     var grupo = new THREE.Group();
     var tex = texturaTexto([numero + '. ' + titulo, subtitulo], {
@@ -248,7 +248,7 @@
     return grupo;
   }
 
-  // Disco en el piso que indica donde pararse para operar la estacion.
+  // Disco en el piso que indica dónde pararse para operar la estación.
   function crearMarcaPiso(color) {
     var grupo = new THREE.Group();
     var anillo = new THREE.Mesh(
@@ -278,7 +278,7 @@
     escena.add(crearPared(SALON.fondo, SALON.alto, -mitadX, SALON.alto / 2, 0, Math.PI / 2));
     escena.add(crearPared(SALON.fondo, SALON.alto, mitadX, SALON.alto / 2, 0, -Math.PI / 2));
 
-    // Zocalo perimetral, ayuda a leer la escala del salon.
+    // Zócalo perimetral, ayuda a leer la escala del salón.
     var matZocalo = new THREE.MeshStandardMaterial({ color: PALETA.zocalo, roughness: 0.9 });
     [[SALON.ancho, 0.35, 0.15, 0, 0.175, -mitadZ + 0.08],
      [SALON.ancho, 0.35, 0.15, 0, 0.175, mitadZ - 0.08],
@@ -289,7 +289,7 @@
       escena.add(m);
     });
 
-    // Techo con un hueco circular donde sube el tubo de caida libre.
+    // Techo con un hueco circular donde sube el tubo de caída libre.
     var forma = new THREE.Shape();
     forma.moveTo(-mitadX, -mitadZ);
     forma.lineTo(mitadX, -mitadZ);
@@ -324,7 +324,7 @@
           'v^2 = v0^2 + 2 a d',
           'R = v0^2 sen(2a) / g',
           'p = m v    (se conserva siempre)',
-          'T = 2 pi raiz(L / g)',
+          'T = 2 pi raíz(L / g)',
           'E = k q / r^2',
           'F = q (v x B)'
         ]),
@@ -360,11 +360,11 @@
   }
 
   function agregarLuces(escena) {
-    // Ambiente bajo a proposito: el salon se lee como laboratorio de tarde,
+    // Ambiente bajo a propósito: el salón se lee como laboratorio de tarde,
     // con la luz concentrada en las mesas y no repartida por todas partes.
     escena.add(new THREE.AmbientLight(0x4a5a72, 0.42));
 
-    // Luz de dia entrando por los ventanales del sur.
+    // Luz de día entrando por los ventanales del sur.
     var sol = new THREE.DirectionalLight(0xffeacd, 0.5);
     sol.position.set(14, 16, 20);
     sol.castShadow = true;
@@ -379,12 +379,12 @@
     sol.shadow.bias = -0.0006;
     escena.add(sol);
 
-    // Relleno frio desde el norte para que las sombras no queden negras.
+    // Relleno frío desde el norte para que las sombras no queden negras.
     var relleno = new THREE.DirectionalLight(0x9ec4ff, 0.2);
     relleno.position.set(-12, 10, -18);
     escena.add(relleno);
 
-    // Las lamparas del techo son la fuente principal: caen sobre las mesas
+    // Las lámparas del techo son la fuente principal: caen sobre las mesas
     // y dejan el piso en penumbra, que es lo que separa una cosa de la otra.
     for (var l = -2; l <= 2; l++) {
       for (var f = -1; f <= 1; f += 2) {
@@ -394,7 +394,7 @@
       }
     }
 
-    // Un rebote tenue hacia el techo para que no quede como un vacio negro.
+    // Un rebote tenue hacia el techo para que no quede como un vacío negro.
     var haciaArriba = new THREE.HemisphereLight(0x2b3444, 0x0d1219, 0.35);
     escena.add(haciaArriba);
 

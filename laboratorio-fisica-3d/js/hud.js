@@ -1,9 +1,9 @@
 /*
- * Laboratorio de Fisica 3D - Interfaz
+ * Laboratorio de Física 3D - Interfaz
  *
- * Todo el panel de instrumentos: controles de cada estacion, lecturas en
- * vivo, misiones, tabla de datos, mapa del salon y menu de descargas.
- * Los iconos son SVG de Lucide escritos en linea, sin cargar fuentes de
+ * Todo el panel de instrumentos: controles de cada estación, lecturas en
+ * vivo, misiones, tabla de datos, mapa del salón y menú de descargas.
+ * Los iconos son SVG de Lucide escritos en línea, sin cargar fuentes de
  * iconos externas.
  */
 (function (global) {
@@ -85,12 +85,12 @@
 
     el('btn-entrar').addEventListener('click', function () { self.lab.entrar(); });
 
-    // En pantallas tactiles no hay teclado ni bloqueo de cursor, asi que se
-    // avisa y se deja la via que si funciona: entrar por la lista de estaciones.
+    // En pantallas táctiles no hay teclado ni bloqueo de cursor, así que se
+    // avisa y se deja la vía que sí funciona: entrar por la lista de estaciones.
     var punteroFino = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
     if (!punteroFino) {
       el('aviso-tactil').classList.remove('oculto');
-      el('btn-entrar').querySelector('span').textContent = 'Ver el salon';
+      el('btn-entrar').querySelector('span').textContent = 'Ver el salón';
     }
 
     Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'), function (btn) {
@@ -121,7 +121,7 @@
     });
 
     el('btn-reiniciar-progreso').addEventListener('click', function () {
-      if (confirm('Se borra todo el progreso guardado en esta computadora. Continuar?')) {
+      if (confirm('Se borra todo el progreso guardado en esta computadora. ¿Continuar?')) {
         self.lab.progreso.reiniciarTodo();
         self.toast('Progreso reiniciado.', 'info');
         if (self.estacionAbierta) self.dibujarPanel();
@@ -181,7 +181,7 @@
       }
     });
 
-    // El mapa permite saltar de estacion sin caminar.
+    // El mapa permite saltar de estación sin caminar.
     this.nodo.mapa.addEventListener('click', function (ev) {
       var caja = self.nodo.mapa.getBoundingClientRect();
       var rx = (ev.clientX - caja.left) / caja.width;
@@ -196,7 +196,7 @@
       });
       if (mejor) {
         self.irAEstacion(mejor.id);
-        self.toast('Te moviste a la estacion ' + mejor.numero + ': ' + mejor.titulo, 'info');
+        self.toast('Te moviste a la estación ' + mejor.numero + ': ' + mejor.titulo, 'info');
       }
     });
 
@@ -211,8 +211,8 @@
     this.nodo.portada.classList.add('oculto');
   };
 
-  // Coloca al estudiante en el puesto de una estacion. Algunas se miran de
-  // lado, como la galeria de tiro, y por eso pueden definir su propio punto.
+  // Coloca al estudiante en el puesto de una estación. Algunas se miran de
+  // lado, como la galería de tiro, y por eso pueden definir su propio punto.
   Hud.prototype.irAEstacion = function (id) {
     var e = this.lab.buscarEstacion(id);
     if (!e) return;
@@ -267,7 +267,7 @@
   };
 
   /* ------------------------------------------------------------------ *
-   * Panel de estacion
+   * Panel de estación
    * ------------------------------------------------------------------ */
 
   Hud.prototype.abrirPanel = function (idEstacion) {
@@ -366,10 +366,10 @@
     if (e.id === 'campo-electrico') {
       h.push('<button class="btn principal" id="btn-correr">' + icono('play') +
         '<span>' + (e.corriendo ? 'Detener la carga' : 'Soltar la carga de prueba') + '</span></button>');
-      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>Anotar medicion</span></button>');
+      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>Anotar medición</span></button>');
     } else if (e.id === 'lorentz') {
-      h.push('<button class="btn principal" id="btn-correr">' + icono('play') + '<span>Lanzar particula</span></button>');
-      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>Anotar medicion</span></button>');
+      h.push('<button class="btn principal" id="btn-correr">' + icono('play') + '<span>Lanzar partícula</span></button>');
+      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>Anotar medición</span></button>');
     } else {
       h.push('<button class="btn principal" id="btn-correr">' + icono('play') + '<span>Ejecutar experimento</span></button>');
     }
@@ -378,7 +378,7 @@
 
     if (e.id === 'campo-electrico') {
       h.push('<div class="mover-sonda"><span>Mover la sonda</span><div class="cruceta">');
-      [['-x', 'izquierda'], ['+x', 'derecha'], ['+y', 'subir'], ['-y', 'bajar'], ['-z', 'atras'], ['+z', 'adelante']]
+      [['-x', 'izquierda'], ['+x', 'derecha'], ['+y', 'subir'], ['-y', 'bajar'], ['-z', 'atrás'], ['+z', 'adelante']]
         .forEach(function (m) {
           h.push('<button class="btn mini" data-mover="' + m[0] + '">' + escapar(m[1]) + '</button>');
         });
@@ -390,7 +390,7 @@
 
     this.nodo.panelCuerpo.innerHTML = h.join('');
 
-    // Conexion de los controles al modelo.
+    // Conexión de los controles al modelo.
     Array.prototype.forEach.call(this.nodo.panelCuerpo.querySelectorAll('[data-par]'), function (control) {
       var i = parseInt(control.getAttribute('data-par'), 10);
       var par = e.parametros[i];
@@ -418,7 +418,7 @@
     if (btnAnotar) {
       btnAnotar.addEventListener('click', function () {
         e.registrarMedicion();
-        self.toast('Medicion anotada en la tabla de datos.', 'ok');
+        self.toast('Medición anotada en la tabla de datos.', 'ok');
         self.dibujarPanel();
       });
     }
@@ -454,7 +454,7 @@
     });
     h.push('</div>');
     h.push('<p class="nota">' + icono('info', 15) +
-      ' Los valores en gris son los que predice la teoria. Los resaltados son lo que midio el laboratorio.</p>');
+      ' Los valores en gris son los que predice la teoría. Los resaltados son lo que midió el laboratorio.</p>');
     this.nodo.panelCuerpo.innerHTML = h.join('');
   };
 
@@ -473,15 +473,15 @@
       h.push('<span class="mision-estado">' +
         (reg.completada ? icono('check', 16) : (abierta ? icono('objetivo', 16) : icono('candado', 16))) +
         '</span>');
-      h.push('<span class="mision-titulo">Mision ' + (i + 1) +
-        '<small>' + (m.tipo === 'prediccion' ? 'prediccion numerica' : 'reto practico') + '</small></span>');
+      h.push('<span class="mision-titulo">Misión ' + (i + 1) +
+        '<small>' + (m.tipo === 'prediccion' ? 'predicción numérica' : 'reto práctico') + '</small></span>');
       if (reg.completada) {
         h.push('<span class="mision-puntos">' + pr.puntosDe(e.id, m.id) + ' pts</span>');
       }
       h.push('</div>');
 
       if (!abierta) {
-        h.push('<p class="mision-texto">Resuelve la mision anterior para desbloquear esta.</p>');
+        h.push('<p class="mision-texto">Resuelve la misión anterior para desbloquear esta.</p>');
       } else {
         h.push('<p class="mision-texto">' + escapar(m.enunciado) + '</p>');
 
@@ -497,7 +497,7 @@
           } else {
             h.push('<div class="mision-entrada">');
             h.push('<button class="btn principal" data-verificar="' + i + '">' +
-              icono('check', 16) + '<span>Comprobar si lo logre</span></button>');
+              icono('check', 16) + '<span>Comprobar si lo logré</span></button>');
             h.push('</div>');
           }
           if (reg.intentos > 0) {
@@ -537,7 +537,7 @@
           '<span>' + escapar(resultado.mensaje) + '</span>';
 
         if (resultado.ok) {
-          self.toast('Mision resuelta. ' + (resultado.puntos || 0) + ' puntos.', 'ok');
+          self.toast('Misión resuelta. ' + (resultado.puntos || 0) + ' puntos.', 'ok');
           setTimeout(function () { self.dibujarPanel(); }, 1800);
         }
       });
@@ -561,7 +561,7 @@
 
     if (!e.historial.length) {
       h.push('<div class="vacio">' + icono('tabla', 28) +
-        '<p>Todavia no hay mediciones. Ejecuta el experimento y cada corrida se anota aqui sola.</p></div>');
+        '<p>Todavía no hay mediciones. Ejecuta el experimento y cada corrida se anota aquí sola.</p></div>');
     } else {
       var cols = e.columnas();
       h.push('<div class="tabla-envoltura"><table class="tabla-datos"><thead><tr>');
@@ -599,7 +599,7 @@
   };
 
   /* ------------------------------------------------------------------ *
-   * Mapa del salon
+   * Mapa del salón
    * ------------------------------------------------------------------ */
 
   Hud.prototype.dibujarMapa = function () {
@@ -637,7 +637,7 @@
       ctx.fillText(String(e.numero), q[0], q[1] + 0.5);
     });
 
-    // Posicion y direccion de la mirada del estudiante.
+    // Posición y dirección de la mirada del estudiante.
     var j = this.lab.jugador;
     var pj = aMapa(j.posicion.x, j.posicion.z);
     ctx.save();
@@ -656,7 +656,7 @@
 
   Hud.prototype.refrescar = function (dt) {
     this.tiempoRefresco += dt;
-    // Diez refrescos por segundo alcanzan para que los numeros se lean bien
+    // Diez refrescos por segundo alcanzan para que los números se lean bien
     // sin rehacer el DOM en cada cuadro.
     if (this.tiempoRefresco < 0.1) return;
     this.tiempoRefresco = 0;

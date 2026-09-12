@@ -1,0 +1,12 @@
+﻿Laboratorio de Fisica 3D
+Estacion;5. Tiro parabolico
+Estudiante;sin nombre
+Grupo;sin grupo
+Fecha;12/9/2026, 18:27:24
+
+N;v0 (m/s);Angulo (gr);Aire;Alcance (m);Alcance teorico (m);h max (m);t vuelo (s);Error a diana (m)
+1;11,5;25;Con aire;19,73;29,60;3,73;2,60;2,73
+2;9,0;25;Con aire;14,36;18,95;2,87;2,21;-2,64
+3;10,5;25;Con aire;17,58;25,04;3,38;2,45;0,58
+4;10,5;25;Sin aire;25,04;25,04;3,85;2,63;8,04
+5;10,5;25;Con aire;17,58;25,04;3,38;2,45;0,58

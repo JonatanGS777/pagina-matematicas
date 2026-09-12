@@ -1,8 +1,8 @@
 /*
- * Laboratorio de Fisica 3D - Arranque
+ * Laboratorio de Física 3D - Arranque
  *
- * Monta el renderizador, arma el salon con sus siete estaciones,
- * conecta al jugador con la interfaz y corre el ciclo de animacion.
+ * Monta el renderizador, arma el salón con sus siete estaciones,
+ * conecta al jugador con la interfaz y corre el ciclo de animación.
  */
 (function (global) {
   'use strict';
@@ -16,7 +16,7 @@
 
   Laboratorio.prototype.iniciar = function () {
     if (typeof THREE === 'undefined') {
-      this.mostrarError('No se pudo cargar el motor 3D. Revisa tu conexion a internet y recarga la pagina.');
+      this.mostrarError('No se pudo cargar el motor 3D. Revisa tu conexión a internet y recarga la página.');
       return;
     }
 
@@ -79,8 +79,8 @@
       var grupo = estacion.construir();
       grupo.position.set(estacion.posicion.x, 0, estacion.posicion.z);
 
-      // Toda estacion se arma mirando hacia +z y su puesto queda de ese
-      // lado, asi que las pantallas de instrumentos siempre dan al frente.
+      // Toda estación se arma mirando hacia +z y su puesto queda de ese
+      // lado, así que las pantallas de instrumentos siempre dan al frente.
       self.escena.add(grupo);
 
       // Mesa de trabajo bajo las estaciones que la necesitan.
@@ -113,7 +113,7 @@
     var self = this;
 
     this.jugador = new global.Jugador(this.camara, this.lienzo, {
-      // Entra por el fondo del salon, de cara a las estaciones y la pizarra.
+      // Entra por el fondo del salón, de cara a las estaciones y la pizarra.
       x: 0, z: 9.5, yaw: 0,
       limites: {
         minX: -S.ancho / 2 + 0.6, maxX: S.ancho / 2 - 0.6,
@@ -129,7 +129,7 @@
       document.getElementById('mira').classList.toggle('oculto', !activo);
     };
 
-    // Cada estacion es solida y tiene su circulo de activacion.
+    // Cada estación es sólida y tiene su círculo de activación.
     this.estaciones.forEach(function (e) {
       self.jugador.registrarEstacion(e.id, e.puesto.x, e.puesto.z, 2.4);
       if (!e.sinMesa) {
@@ -140,7 +140,7 @@
         );
       }
     });
-    // El tubo de caida libre y las bobinas tambien bloquean el paso.
+    // El tubo de caída libre y las bobinas también bloquean el paso.
     this.jugador.agregarObstaculo(-15.9, -14.1, -5.9, -4.1);
     this.jugador.agregarObstaculo(7.4, 10.6, 2.4, 5.6);
   };
@@ -165,7 +165,7 @@
       self.renderizador.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // Al hacer clic en el salon se recupera el control de la camara.
+    // Al hacer clic en el salón se recupera el control de la cámara.
     this.lienzo.addEventListener('click', function () {
       if (!self.hud.estacionAbierta &&
           document.getElementById('descargas').classList.contains('oculto') &&
@@ -174,7 +174,7 @@
       }
     });
 
-    // Con la pestana en segundo plano no tiene sentido seguir calculando.
+    // Con la pestaña en segundo plano no tiene sentido seguir calculando.
     document.addEventListener('visibilitychange', function () {
       self.pausado = document.hidden;
       if (!self.pausado) self.reloj.anterior = performance.now();
@@ -203,7 +203,7 @@
     requestAnimationFrame(cuadro);
   };
 
-  // La marca del piso late cuando el estudiante esta parado sobre ella.
+  // La marca del piso late cuando el estudiante está parado sobre ella.
   Laboratorio.prototype.animarMarcas = function (t) {
     var cercana = this.jugador.estacionCercana;
     for (var i = 0; i < this.estaciones.length; i++) {
@@ -221,7 +221,7 @@
     }
   };
 
-  // Arranque cuando el documento esta listo.
+  // Arranque cuando el documento está listo.
   function arrancar() {
     var lab = new Laboratorio();
     global.laboratorio = lab;

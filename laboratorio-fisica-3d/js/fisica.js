@@ -1,23 +1,23 @@
 /*
- * Laboratorio de Fisica 3D - Nucleo numerico
+ * Laboratorio de Física 3D - Núcleo numérico
  *
- * Este archivo no toca el DOM ni Three.js: solo resuelve fisica.
+ * Este archivo no toca el DOM ni Three.js: solo resuelve física.
  * Todo se integra con Runge-Kutta de cuarto orden (RK4) sobre el vector
  * de estado de cada sistema, para que los resultados aguanten pasos de
- * tiempo grandes sin desviarse del valor analitico.
+ * tiempo grandes sin desviarse del valor analítico.
  *
  * Unidades del sistema internacional en todo el archivo:
- *   longitud m, masa kg, tiempo s, carga C, campo magnetico T.
+ *   longitud m, masa kg, tiempo s, carga C, campo magnético T.
  */
 (function (global) {
   'use strict';
 
-  var G = 9.80665;          // gravedad estandar, m/s^2
+  var G = 9.80665;          // gravedad estándar, m/s^2
   var K_COULOMB = 8.9875517923e9; // constante de Coulomb, N m^2 / C^2
   var RHO_AIRE = 1.225;     // densidad del aire a nivel del mar, kg/m^3
 
   /* ------------------------------------------------------------------ *
-   * Utilidades de vectores (arreglos planos de 3 numeros)
+   * Utilidades de vectores (arreglos planos de 3 números)
    * ------------------------------------------------------------------ */
 
   function v3(x, y, z) { return [x || 0, y || 0, z || 0]; }
@@ -39,9 +39,9 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * Integrador RK4 generico
+   * Integrador RK4 genérico
    *
-   * estado: arreglo de numeros de cualquier largo
+   * estado: arreglo de números de cualquier largo
    * derivada(t, estado) -> arreglo del mismo largo
    * ------------------------------------------------------------------ */
 
@@ -70,8 +70,8 @@
   /* ------------------------------------------------------------------ *
    * Arrastre del aire
    *
-   * Fuerza cuadratica: F = -0.5 * rho * Cd * A * |v| * v
-   * Devuelve la aceleracion que produce sobre una masa m.
+   * Fuerza cuadrática: F = -0.5 * rho * Cd * A * |v| * v
+   * Devuelve la aceleración que produce sobre una masa m.
    * ------------------------------------------------------------------ */
 
   function aceleracionArrastre(velocidad, masa, coefArrastre, area) {
@@ -130,7 +130,7 @@
   CaidaLibre.prototype.posicion = function () { return this.estado[0]; };
   CaidaLibre.prototype.velocidad = function () { return this.estado[1]; };
 
-  // Solucion analitica sin arrastre, util para que el estudiante compare.
+  // Solución analítica sin arrastre, útil para que el estudiante compare.
   CaidaLibre.prototype.tiempoTeorico = function () {
     return Math.sqrt(2 * this.altura / this.gravedad);
   };
@@ -142,7 +142,7 @@
    * 2. PLANO INCLINADO
    *
    * Estado: [s, vs] medido a lo largo del plano, positivo hacia abajo.
-   * Incluye friccion estatica y cinetica.
+   * Incluye fricción estática y cinética.
    * ================================================================== */
 
   function PlanoInclinado(opciones) {
@@ -167,19 +167,19 @@
     return this.anguloGrados * Math.PI / 180;
   };
 
-  // Aceleracion a lo largo del plano. Positiva significa deslizar hacia abajo.
+  // Aceleración a lo largo del plano. Positiva significa deslizar hacia abajo.
   PlanoInclinado.prototype.aceleracion = function (velocidad) {
     var th = this.angulo();
     var aMotriz = this.gravedad * Math.sin(th);
     var aFriccionMax = this.gravedad * Math.cos(th) * this.muCinetico;
 
     if (Math.abs(velocidad) < 1e-6) {
-      // Todavia en reposo: decide si la friccion estatica lo sostiene.
+      // Todavía en reposo: decide si la fricción estática lo sostiene.
       var limiteEstatico = this.gravedad * Math.cos(th) * this.muEstatico;
       if (aMotriz <= limiteEstatico) return 0;
       return aMotriz - aFriccionMax;
     }
-    // En movimiento: la friccion cinetica siempre se opone a la velocidad.
+    // En movimiento: la fricción cinética siempre se opone a la velocidad.
     return aMotriz - Math.sign(velocidad) * aFriccionMax;
   };
 
@@ -192,7 +192,7 @@
     }, this.t, this.estado, dt);
     this.t += dt;
 
-    // Si la friccion frena el bloque, no se deja invertir el movimiento.
+    // Si la fricción frena el bloque, no se deja invertir el movimiento.
     if (previo > 0 && this.estado[1] < 0) {
       this.estado[1] = 0;
       this.detenido = true;
@@ -216,8 +216,8 @@
   /* ================================================================== *
    * 3. PROYECTIL
    *
-   * Estado: [x, y, z, vx, vy, vz]. Lanza en el plano x-y con desviacion
-   * opcional en z para que el tiro se vea en el espacio del salon.
+   * Estado: [x, y, z, vx, vy, vz]. Lanza en el plano x-y con desviación
+   * opcional en z para que el tiro se vea en el espacio del salón.
    * ================================================================== */
 
   function Proyectil(opciones) {
@@ -279,7 +279,7 @@
     return v3(this.estado[3], this.estado[4], this.estado[5]);
   };
 
-  // Valores analiticos en el vacio, para contrastar con el resultado medido.
+  // Valores analíticos en el vacío, para contrastar con el resultado medido.
   Proyectil.prototype.alcanceTeorico = function () {
     var th = this.anguloGrados * Math.PI / 180;
     var v = this.rapidez;
@@ -301,10 +301,10 @@
   };
 
   /* ================================================================== *
-   * 4. COLISION EN UNA DIMENSION
+   * 4. COLISIÓN EN UNA DIMENSIÓN
    *
-   * Dos carros en un carril sin friccion. El coeficiente de restitucion e
-   * va de 0 (perfectamente inelastica) a 1 (perfectamente elastica).
+   * Dos carros en un carril sin fricción. El coeficiente de restitución e
+   * va de 0 (perfectamente inelástica) a 1 (perfectamente elástica).
    * ================================================================== */
 
   function Colision(opciones) {
@@ -340,8 +340,8 @@
     return 0.5 * this.masaA * this.vA * this.vA + 0.5 * this.masaB * this.vB * this.vB;
   };
 
-  // Resolucion exacta del choque a partir de conservacion del momento
-  // y de la definicion del coeficiente de restitucion.
+  // Resolución exacta del choque a partir de conservación del momento
+  // y de la definición del coeficiente de restitución.
   Colision.prototype.resolverChoque = function () {
     var mA = this.masaA, mB = this.masaB, e = this.restitucion;
     var uA = this.vA, uB = this.vB;
@@ -376,12 +376,12 @@
   };
 
   /* ================================================================== *
-   * 5. PENDULO SIMPLE
+   * 5. PÉNDULO SIMPLE
    *
-   * Estado: [theta, omega]. Se resuelve la ecuacion completa
+   * Estado: [theta, omega]. Se resuelve la ecuación completa
    *   theta'' = -(g/L) sen(theta) - b * theta'
    * sin aproximar sen(theta) por theta, para que el estudiante vea
-   * donde se rompe la formula del periodo que aparece en el libro.
+   * dónde se rompe la fórmula del periodo que aparece en el libro.
    * ================================================================== */
 
   function Pendulo(opciones) {
@@ -414,7 +414,7 @@
     }, this.t, this.estado, dt);
     this.t += dt;
 
-    // Mide el periodo real contando cruces por el punto mas bajo.
+    // Mide el periodo real contando cruces por el punto más bajo.
     var signo = Math.sign(this.estado[0]);
     if (signo !== 0 && this.signoPrevio !== 0 && signo !== this.signoPrevio) {
       if (this.tiempoUltimoCruce != null) {
@@ -430,11 +430,11 @@
   Pendulo.prototype.angulo = function () { return this.estado[0]; };
   Pendulo.prototype.velocidadAngular = function () { return this.estado[1]; };
 
-  // Periodo de la aproximacion de angulo pequeno que ensena el libro.
+  // Periodo de la aproximación de ángulo pequeño que enseña el libro.
   Pendulo.prototype.periodoPequeno = function () {
     return 2 * Math.PI * Math.sqrt(this.largo / this.gravedad);
   };
-  // Correccion de segundo orden, mas cercana al periodo real.
+  // Corrección de segundo orden, más cercana al periodo real.
   Pendulo.prototype.periodoCorregido = function () {
     var th0 = this.anguloInicialGrados * Math.PI / 180;
     var s = Math.sin(th0 / 2);
@@ -452,9 +452,9 @@
   };
 
   /* ================================================================== *
-   * 6. CAMPO ELECTRICO DE CARGAS PUNTUALES
+   * 6. CAMPO ELÉCTRICO DE CARGAS PUNTUALES
    *
-   * Las cargas se dan en nanocoulombs para que los numeros sean legibles
+   * Las cargas se dan en nanocoulombs para que los números sean legibles
    * en pantalla, y se convierten internamente.
    * ================================================================== */
 
@@ -500,15 +500,15 @@
     return total;
   };
 
-  // Traza una linea de campo siguiendo la direccion de E paso a paso.
+  // Traza una línea de campo siguiendo la dirección de E paso a paso.
   CampoElectrico.prototype.lineaDeCampo = function (inicio, opciones) {
     var o = opciones || {};
     var paso = o.paso || 0.06;
     var maxPuntos = o.maxPuntos || 420;
     var sentido = o.sentido || 1;   // 1 sale de positiva, -1 entra a negativa
     var limite = o.limite || 6;
-    // La linea se corta al salir de una esfera alrededor del montaje. Sin
-    // un centro propio se mediria desde el origen, que suele estar en el piso.
+    // La línea se corta al salir de una esfera alrededor del montaje. Sin
+    // un centro propio se mediría desde el origen, que suele estar en el piso.
     var centro = o.centro || [0, 0, 0];
     var puntos = [inicio.slice()];
     var p = inicio.slice();
@@ -519,7 +519,7 @@
       p = suma(p, escala(normaliza(e), paso * sentido));
       puntos.push(p.slice());
       if (norma(resta(p, centro)) > limite) break;
-      // Se detiene si llego al centro de otra carga.
+      // Se detiene si llegó al centro de otra carga.
       var choco = false;
       for (var j = 0; j < this.cargas.length; j++) {
         if (norma(resta(p, this.cargas[j].posicion)) < 0.12) { choco = true; break; }
@@ -539,7 +539,7 @@
    *
    * Estado: [x, y, z, vx, vy, vz]
    *   F = q (E + v x B),  a = F / m
-   * Con E nulo y B constante la trayectoria es una helice de radio
+   * Con E nulo y B constante la trayectoria es una hélice de radio
    * r = m v_perp / (q B).
    * ================================================================== */
 
@@ -593,13 +593,13 @@
     var vPerp = norma(resta(v, vParalela));
     return this.masa * vPerp / (Math.abs(this.carga) * b);
   };
-  // Periodo ciclotronico: no depende de la rapidez.
+  // Periodo ciclotrónico: no depende de la rapidez.
   Lorentz.prototype.periodoCiclotron = function () {
     var b = norma(this.campoB);
     if (b < 1e-12 || Math.abs(this.carga) < 1e-18) return Infinity;
     return 2 * Math.PI * this.masa / (Math.abs(this.carga) * b);
   };
-  // Avance de la helice en cada vuelta completa.
+  // Avance de la hélice en cada vuelta completa.
   Lorentz.prototype.pasoHelice = function () {
     var bHat = normaliza(this.campoB);
     var vParalela = producto(this.velocidadInicial, bHat);
@@ -607,7 +607,7 @@
   };
 
   /* ------------------------------------------------------------------ *
-   * Exportacion
+   * Exportación
    * ------------------------------------------------------------------ */
 
   global.Fisica = {

@@ -1,14 +1,14 @@
 /*
- * Laboratorio de Fisica 3D - Misiones y progreso
+ * Laboratorio de Física 3D - Misiones y progreso
  *
- * Cada estacion tiene una secuencia de retos que se desbloquean en orden.
+ * Cada estación tiene una secuencia de retos que se desbloquean en orden.
  * Hay dos tipos:
- *   prediccion  el estudiante calcula un numero antes de correr el experimento
+ *   prediccion  el estudiante calcula un número antes de correr el experimento
  *               y el laboratorio lo compara con el valor correcto
- *   reto        se cumple manipulando el experimento hasta lograr una condicion
+ *   reto        se cumple manipulando el experimento hasta lograr una condición
  *
  * El progreso se guarda en el navegador para que el estudiante pueda
- * cerrar la pagina y retomar donde iba.
+ * cerrar la página y retomar donde iba.
  */
 (function (global) {
   'use strict';
@@ -40,7 +40,7 @@
     return this.datos[idEstacion][idMision];
   };
 
-  // Una mision queda disponible cuando la anterior de su estacion se completo.
+  // Una misión queda disponible cuando la anterior de su estación se completó.
   Progreso.prototype.desbloqueada = function (estacion, indice) {
     if (indice === 0) return true;
     var previa = estacion.misiones[indice - 1];
@@ -103,25 +103,25 @@
     return null;
   };
 
-  // Nivel segun cuantas misiones lleva resueltas.
+  // Nivel según cuántas misiones lleva resueltas.
   Progreso.prototype.nivel = function () {
     var hechas = this.totalCompletadas();
     var total = this.totalMisiones();
     var fraccion = total > 0 ? hechas / total : 0;
-    if (fraccion >= 1) return { nombre: 'Fisico de laboratorio', indice: 5 };
+    if (fraccion >= 1) return { nombre: 'Físico de laboratorio', indice: 5 };
     if (fraccion >= 0.75) return { nombre: 'Investigador', indice: 4 };
     if (fraccion >= 0.5) return { nombre: 'Experimentador', indice: 3 };
     if (fraccion >= 0.25) return { nombre: 'Ayudante de laboratorio', indice: 2 };
     if (hechas > 0) return { nombre: 'Aprendiz', indice: 1 };
-    return { nombre: 'Recien llegado', indice: 0 };
+    return { nombre: 'Recién llegado', indice: 0 };
   };
 
   /* ------------------------------------------------------------------ *
-   * Evaluacion
+   * Evaluación
    * ------------------------------------------------------------------ */
 
   // Compara la respuesta del estudiante con el valor correcto. Se acepta
-  // por tolerancia relativa, y ademas por una absoluta para los casos en
+  // por tolerancia relativa, y además por una absoluta para los casos en
   // que el valor correcto ronda el cero.
   Progreso.prototype.evaluarPrediccion = function (estacion, mision, valor) {
     var r = this.registro(estacion.id, mision.id);
@@ -130,7 +130,7 @@
       return { ok: false, mensaje: mision.avisoPrevio || 'Ajusta primero las condiciones del experimento.', sinIntento: true };
     }
     if (!isFinite(valor)) {
-      return { ok: false, mensaje: 'Escribe un numero para poder compararlo.', sinIntento: true };
+      return { ok: false, mensaje: 'Escribe un número para poder compararlo.', sinIntento: true };
     }
 
     var objetivo = mision.objetivo(estacion);
@@ -233,7 +233,7 @@
         filas.push({
           estacion: e.numero + '. ' + e.titulo,
           mision: m.enunciado,
-          tipo: m.tipo === 'prediccion' ? 'Prediccion' : 'Reto',
+          tipo: m.tipo === 'prediccion' ? 'Predicción' : 'Reto',
           completada: r.completada,
           intentos: r.intentos,
           respuesta: r.respuesta,

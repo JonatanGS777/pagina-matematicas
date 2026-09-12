@@ -1,13 +1,13 @@
 /*
- * Laboratorio de Fisica 3D - Descargas para el profesor
+ * Laboratorio de Física 3D - Descargas para el profesor
  *
  * Cuatro salidas:
- *   1. CSV con las mediciones tomadas en una estacion
+ *   1. CSV con las mediciones tomadas en una estación
  *   2. Reporte del estudiante listo para imprimir o guardar como PDF
- *   3. Guia didactica para el profesor, generada desde las mismas
+ *   3. Guía didáctica para el profesor, generada desde las mismas
  *      definiciones de las estaciones para que nunca se desincronice
  *   4. El laboratorio completo en un solo archivo HTML que funciona
- *      sin conexion
+ *      sin conexión
  */
 (function (global) {
   'use strict';
@@ -15,7 +15,7 @@
   var URL_THREE = 'https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js';
 
   /* ------------------------------------------------------------------ *
-   * Descarga generica de un archivo de texto
+   * Descarga genérica de un archivo de texto
    * ------------------------------------------------------------------ */
 
   function descargarTexto(nombre, contenido, tipo) {
@@ -55,13 +55,13 @@
   }
 
   // Se usa punto y coma como separador porque es lo que abre bien Excel
-  // en configuracion regional de espanol sin pedir importar nada.
+  // en configuración regional de español sin pedir importar nada.
   function csvDeEstacion(estacion, estudiante) {
     var columnas = estacion.columnas();
     var lineas = [];
 
-    lineas.push(celdaCSV('Laboratorio de Fisica 3D'));
-    lineas.push(celdaCSV('Estacion') + ';' + celdaCSV(estacion.numero + '. ' + estacion.titulo));
+    lineas.push(celdaCSV('Laboratorio de Física 3D'));
+    lineas.push(celdaCSV('Estación') + ';' + celdaCSV(estacion.numero + '. ' + estacion.titulo));
     lineas.push(celdaCSV('Estudiante') + ';' + celdaCSV(estudiante.nombre || 'sin nombre'));
     lineas.push(celdaCSV('Grupo') + ';' + celdaCSV(estudiante.grupo || 'sin grupo'));
     lineas.push(celdaCSV('Fecha') + ';' + celdaCSV(new Date().toLocaleString('es')));
@@ -73,7 +73,7 @@
       lineas.push(columnas.map(function (c) {
         var v = fila[c.clave];
         if (typeof v === 'number' && c.decimales != null) {
-          // Coma decimal para que Excel en espanol lo lea como numero.
+          // Coma decimal para que Excel en español lo lea como número.
           return celdaCSV(v.toFixed(c.decimales).replace('.', ','));
         }
         return celdaCSV(v);
@@ -85,7 +85,7 @@
 
   function descargarCSV(estacion, estudiante) {
     if (!estacion.historial.length) {
-      return { ok: false, mensaje: 'Todavia no hay mediciones en esta estacion. Corre el experimento al menos una vez.' };
+      return { ok: false, mensaje: 'Todavía no hay mediciones en esta estación. Corre el experimento al menos una vez.' };
     }
     // El BOM hace que Excel reconozca los acentos.
     descargarTexto(
@@ -100,7 +100,7 @@
   function descargarCSVCompleto(estaciones, estudiante) {
     var conDatos = estaciones.filter(function (e) { return e.historial.length; });
     if (!conDatos.length) {
-      return { ok: false, mensaje: 'Todavia no hay mediciones en ninguna estacion.' };
+      return { ok: false, mensaje: 'Todavía no hay mediciones en ninguna estación.' };
     }
     var partes = conDatos.map(function (e) { return csvDeEstacion(e, estudiante); });
     descargarTexto(
@@ -112,7 +112,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * Hoja de estilos compartida por el reporte y la guia
+   * Hoja de estilos compartida por el reporte y la guía
    * ------------------------------------------------------------------ */
 
   var ESTILO_IMPRESION = [
@@ -156,7 +156,7 @@
   function abrirParaImprimir(titulo, cuerpo) {
     var ventana = window.open('', '_blank');
     if (!ventana) {
-      return { ok: false, mensaje: 'El navegador bloqueo la ventana. Permite las ventanas emergentes de este sitio y vuelve a intentarlo.' };
+      return { ok: false, mensaje: 'El navegador bloqueó la ventana. Permite las ventanas emergentes de este sitio y vuelve a intentarlo.' };
     }
     ventana.document.write(
       '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">' +
@@ -167,7 +167,7 @@
       cuerpo + '</body></html>'
     );
     ventana.document.close();
-    return { ok: true, mensaje: 'Se abrio el documento en una pestana nueva. Usa el boton de imprimir y elige "Guardar como PDF".' };
+    return { ok: true, mensaje: 'Se abrió el documento en una pestaña nueva. Usa el botón de imprimir y elige "Guardar como PDF".' };
   }
 
   /* ------------------------------------------------------------------ *
@@ -183,7 +183,7 @@
 
     var h = [];
     h.push('<div class="cabecera">');
-    h.push('<h1>Reporte de laboratorio de fisica</h1>');
+    h.push('<h1>Reporte de laboratorio de física</h1>');
     h.push('<p class="sub">Laboratorio virtual en tres dimensiones</p>');
     h.push('<div class="ficha">');
     h.push('<div><b>Estudiante</b>' + escapar(est.nombre || '_______________________') + '</div>');
@@ -194,9 +194,9 @@
     h.push('<div><b>Nivel alcanzado</b>' + nivel.nombre + '</div>');
     h.push('</div></div>');
 
-    // Desempeno por mision.
+    // Desempeño por misión.
     h.push('<h2>Misiones</h2>');
-    h.push('<table><thead><tr><th>Estacion</th><th>Tipo</th><th>Estado</th>' +
+    h.push('<table><thead><tr><th>Estación</th><th>Tipo</th><th>Estado</th>' +
            '<th>Intentos</th><th>Respuesta</th><th>Valor correcto</th><th>Puntos</th></tr></thead><tbody>');
     filas.forEach(function (f) {
       h.push('<tr>' +
@@ -211,7 +211,7 @@
     });
     h.push('</tbody></table>');
 
-    // Mediciones tomadas en cada estacion.
+    // Mediciones tomadas en cada estación.
     var conDatos = estaciones.filter(function (e) { return e.historial.length; });
     if (conDatos.length) {
       h.push('<h2>Mediciones registradas</h2>');
@@ -234,20 +234,20 @@
       });
     } else {
       h.push('<h2>Mediciones registradas</h2>');
-      h.push('<div class="caja">No se registraron mediciones en esta sesion.</div>');
+      h.push('<div class="caja">No se registraron mediciones en esta sesión.</div>');
     }
 
     // Espacio para las conclusiones escritas a mano.
     h.push('<h2>Conclusiones del estudiante</h2>');
-    h.push('<div class="caja"><b>Que ley fisica comprobaste y con que evidencia?</b>');
+    h.push('<div class="caja"><b>Qué ley física comprobaste y con qué evidencia?</b>');
     for (var i = 0; i < 4; i++) h.push('<div class="lineas"></div>');
     h.push('</div>');
-    h.push('<div class="caja"><b>Donde no coincidio la teoria con la medicion y por que?</b>');
+    h.push('<div class="caja"><b>Dónde no coincidió la teoría con la medición y por qué?</b>');
     for (var j = 0; j < 4; j++) h.push('<div class="lineas"></div>');
     h.push('</div>');
 
-    h.push('<div class="pie">Generado por el laboratorio virtual de fisica en 3D. ' +
-           'El puntaje descuenta 15 puntos por cada intento fallido, con un minimo de 40 puntos por mision resuelta.</div>');
+    h.push('<div class="pie">Generado por el laboratorio virtual de física en 3D. ' +
+           'El puntaje descuenta 15 puntos por cada intento fallido, con un mínimo de 40 puntos por misión resuelta.</div>');
 
     return abrirParaImprimir('Reporte de laboratorio', h.join('\n'));
   }
@@ -259,24 +259,24 @@
   function guiaDocente(estaciones) {
     var h = [];
     h.push('<div class="cabecera">');
-    h.push('<h1>Guia didactica del laboratorio de fisica 3D</h1>');
+    h.push('<h1>Guía didáctica del laboratorio de física 3D</h1>');
     h.push('<p class="sub">Material para el profesor, con respuestas. Generado el ' +
            new Date().toLocaleDateString('es') + '</p>');
     h.push('</div>');
 
-    h.push('<h2>Como se usa en clase</h2>');
+    h.push('<h2>Cómo se usa en clase</h2>');
     h.push('<div class="caja">');
-    h.push('<p><b>Movimiento:</b> el estudiante hace clic en el salon para entrar, camina con ' +
+    h.push('<p><b>Movimiento:</b> el estudiante hace clic en el salón para entrar, camina con ' +
            'las teclas W, A, S y D, mira con el mouse y corre con shift. La tecla E abre la ' +
-           'estacion que tenga enfrente y la tecla escape libera el cursor.</p>');
-    h.push('<p><b>Ritmo sugerido:</b> una estacion por sesion de 50 minutos, o dos si el grupo ' +
-           'ya domina el tema. Las misiones estan en orden de dificultad y cada una se desbloquea ' +
+           'estación que tenga enfrente y la tecla escape libera el cursor.</p>');
+    h.push('<p><b>Ritmo sugerido:</b> una estación por sesión de 50 minutos, o dos si el grupo ' +
+           'ya domina el tema. Las misiones están en orden de dificultad y cada una se desbloquea ' +
            'al resolver la anterior.</p>');
-    h.push('<p><b>Evaluacion:</b> al final de la clase cada estudiante descarga su reporte en PDF ' +
+    h.push('<p><b>Evaluación:</b> al final de la clase cada estudiante descarga su reporte en PDF ' +
            'y el archivo CSV con sus mediciones. El reporte trae el puntaje, los intentos por ' +
-           'mision y espacio para conclusiones escritas a mano.</p>');
-    h.push('<p><b>Sin internet:</b> descarga el laboratorio completo en un archivo HTML y copialo ' +
-           'a las computadoras del salon. Funciona con doble clic, sin instalar nada.</p>');
+           'misión y espacio para conclusiones escritas a mano.</p>');
+    h.push('<p><b>Sin internet:</b> descarga el laboratorio completo en un archivo HTML y cópialo ' +
+           'a las computadoras del salón. Funciona con doble clic, sin instalar nada.</p>');
     h.push('</div>');
 
     estaciones.forEach(function (e) {
@@ -304,7 +304,7 @@
       h.push('<h3>Misiones y respuestas</h3>');
       e.misiones.forEach(function (m, i) {
         h.push('<div class="caja">');
-        h.push('<p><b>Mision ' + (i + 1) + ' (' + (m.tipo === 'prediccion' ? 'prediccion numerica' : 'reto practico') + ').</b> ' +
+        h.push('<p><b>Misión ' + (i + 1) + ' (' + (m.tipo === 'prediccion' ? 'predicción numérica' : 'reto práctico') + ').</b> ' +
                escapar(m.enunciado) + '</p>');
         h.push('<p><b>Pista que ve el estudiante:</b> ' + escapar(m.pista || '') + '</p>');
         if (m.tipo === 'prediccion') {
@@ -315,10 +315,10 @@
                  ' ' + escapar(m.entrada.unidad) +
                  '. Se acepta con ' + Math.round((m.tolerancia || 0.05) * 100) + ' por ciento de tolerancia.</div>');
           if (m.condicionPrevia) {
-            h.push('<p><b>Condicion previa:</b> ' + escapar(m.avisoPrevio || '') + '</p>');
+            h.push('<p><b>Condición previa:</b> ' + escapar(m.avisoPrevio || '') + '</p>');
           }
         } else {
-          h.push('<div class="respuesta"><b>Como se logra:</b> ' + escapar(m.pista || '') + '</div>');
+          h.push('<div class="respuesta"><b>Cómo se logra:</b> ' + escapar(m.pista || '') + '</div>');
         }
         h.push('</div>');
       });
@@ -329,49 +329,49 @@
       }).join('') + '</div>');
     });
 
-    h.push('<div class="pie">Guia generada automaticamente desde las definiciones de cada ' +
-           'estacion, por lo que siempre coincide con lo que ve el estudiante en pantalla.</div>');
+    h.push('<div class="pie">Guía generada automáticamente desde las definiciones de cada ' +
+           'estación, por lo que siempre coincide con lo que ve el estudiante en pantalla.</div>');
 
-    return abrirParaImprimir('Guia didactica del laboratorio', h.join('\n'));
+    return abrirParaImprimir('Guía didáctica del laboratorio', h.join('\n'));
   }
 
   // Preguntas de cierre por estacion, pensadas para conversar en clase.
   function preguntasDeDiscusion(id) {
     var banco = {
       'caida-libre': [
-        'Si la masa no aparece en la formula del tiempo de caida, por que en la vida real una pluma cae mas lento que una piedra?',
-        'En la Luna no hay aire. Que pasaria alli con la pluma y la piedra?',
-        'Por que el tiempo de caida crece con la raiz de la altura y no de forma proporcional?'
+        'Si la masa no aparece en la fórmula del tiempo de caída, ¿por qué en la vida real una pluma cae más lento que una piedra?',
+        'En la Luna no hay aire. ¿Qué pasaría allí con la pluma y la piedra?',
+        '¿Por qué el tiempo de caída crece con la raíz de la altura y no de forma proporcional?'
       ],
       'plano-inclinado': [
-        'Por que el bloque de 8 kg acelera igual que el de 0.5 kg si pesa dieciseis veces mas?',
-        'Que informacion util da el angulo justo en el que el bloque empieza a moverse?',
-        'Donde se usa en la vida diaria el hecho de que una rampa reduzca la fuerza necesaria?'
+        '¿Por qué el bloque de 8 kg acelera igual que el de 0.5 kg si pesa dieciséis veces más?',
+        '¿Qué información útil da el ángulo justo en el que el bloque empieza a moverse?',
+        '¿Dónde se usa en la vida diaria el hecho de que una rampa reduzca la fuerza necesaria?'
       ],
       'pendulo': [
-        'La formula del libro da un valor menor que el periodo real. Eso significa que la formula esta mal?',
-        'Que error aceptarian ustedes en un reloj de pendulo de una casa?',
-        'Como usarian un pendulo para medir la gravedad del lugar donde estan?'
+        'La fórmula del libro da un valor menor que el periodo real. ¿Eso significa que la fórmula está mal?',
+        '¿Qué error aceptarían ustedes en un reloj de péndulo de una casa?',
+        '¿Cómo usarían un péndulo para medir la gravedad del lugar donde están?'
       ],
       'colisiones': [
-        'El momento se conservo incluso cuando se perdio energia. A donde se fue esa energia?',
-        'Por que los autos modernos se disenan para deformarse en un choque en vez de rebotar?',
-        'Que pasa si un carro muy pesado choca con uno muy liviano que esta quieto?'
+        'El momento se conservó incluso cuando se perdió energía. ¿A dónde se fue esa energía?',
+        '¿Por qué los autos modernos se diseñan para deformarse en un choque en vez de rebotar?',
+        '¿Qué pasa si un carro muy pesado choca con uno muy liviano que está quieto?'
       ],
       'proyectiles': [
-        'Por que 30 y 60 grados dan el mismo alcance, pero no el mismo tiempo de vuelo?',
-        'Con resistencia del aire el angulo optimo baja de 45 grados. Por que?',
-        'Como afecta al tiro el hecho de que el canon este a 1.2 m de altura y no en el piso?'
+        '¿Por qué 30 y 60 grados dan el mismo alcance, pero no el mismo tiempo de vuelo?',
+        'Con resistencia del aire el ángulo óptimo baja de 45 grados. ¿Por qué?',
+        '¿Cómo afecta al tiro el hecho de que el cañón esté a 1.2 m de altura y no en el piso?'
       ],
       'campo-electrico': [
-        'Por que las lineas de campo nunca se cruzan entre si?',
-        'En el punto medio entre dos cargas iguales el campo es cero, pero el potencial no. Como se explica?',
-        'Si el campo cae con el cuadrado de la distancia, a diez veces la distancia en cuanto queda?'
+        '¿Por qué las líneas de campo nunca se cruzan entre sí?',
+        'En el punto medio entre dos cargas iguales el campo es cero, pero el potencial no. ¿Cómo se explica?',
+        '¿Si el campo cae con el cuadrado de la distancia, a diez veces la distancia en cuánto queda?'
       ],
       'lorentz': [
-        'La fuerza magnetica no cambia la rapidez de la particula. Como puede entonces cambiar su movimiento?',
-        'Por que el periodo de giro no depende de que tan rapido entre la particula?',
-        'Que relacion tiene esto con las auroras boreales y con un acelerador de particulas?'
+        'La fuerza magnética no cambia la rapidez de la partícula. ¿Cómo puede entonces cambiar su movimiento?',
+        '¿Por qué el periodo de giro no depende de qué tan rápido entre la partícula?',
+        '¿Qué relación tiene esto con las auroras boreales y con un acelerador de partículas?'
       ]
     };
     return banco[id] || [];
@@ -389,7 +389,7 @@
 
     function traer(url) {
       return fetch(url, { cache: 'no-cache' }).then(function (r) {
-        if (!r.ok) throw new Error('No se pudo leer ' + url + ' (codigo ' + r.status + ')');
+        if (!r.ok) throw new Error('No se pudo leer ' + url + ' (código ' + r.status + ')');
         return r.text();
       });
     }
@@ -397,7 +397,7 @@
     avisar('Leyendo el laboratorio...');
 
     return traer('index.html').then(function (html) {
-      // Lista de scripts propios en el mismo orden en que los carga la pagina.
+      // Lista de scripts propios en el mismo orden en que los carga la página.
       var scripts = [];
       var re = /<script\s+src="(js\/[^"]+)"><\/script>/g;
       var m;
@@ -421,7 +421,7 @@
           '<style>\n' + css + '\n</style>'
         );
 
-        // Fuera todo lo que necesite internet: tipografias y el CDN.
+        // Fuera todo lo que necesite internet: tipografías y el CDN.
         salida = salida.replace(/<link[^>]+fonts\.(googleapis|gstatic)\.com[^>]*>/g, '');
         salida = salida.replace(/<script src="https:\/\/cdn\.jsdelivr\.net[^"]*"><\/script>/,
           '<script>\n' + three + '\n<\/script>');
@@ -434,13 +434,13 @@
           );
         });
 
-        // Marca para que el laboratorio sepa que corre sin conexion.
+        // Marca para que el laboratorio sepa que corre sin conexión.
         salida = salida.replace('<body>', '<body data-portable="1">');
 
         descargarTexto('laboratorio-fisica-3d-offline.html', salida, 'text/html');
         return {
           ok: true,
-          mensaje: 'Listo. Se descargo el laboratorio completo en un archivo de ' +
+          mensaje: 'Listo. Se descargó el laboratorio completo en un archivo de ' +
             Math.round(salida.length / 1024) + ' KB. Funciona con doble clic, sin internet.'
         };
       });
@@ -448,7 +448,7 @@
       return {
         ok: false,
         mensaje: 'No se pudo generar el archivo: ' + err.message +
-          '. Esta descarga necesita que la pagina este abierta desde un servidor web, no desde un archivo local.'
+          '. Esta descarga necesita que la página esté abierta desde un servidor web, no desde un archivo local.'
       };
     });
   }

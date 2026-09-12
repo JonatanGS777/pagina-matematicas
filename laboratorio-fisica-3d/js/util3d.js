@@ -1,13 +1,13 @@
 /*
- * Laboratorio de Fisica 3D - Utilidades de escena para las estaciones
+ * Laboratorio de Física 3D - Utilidades de escena para las estaciones
  *
  * Piezas que se repiten en varias mesas: flechas de vectores, reglas
- * graduadas, trazas de trayectoria y rotulos flotantes.
+ * graduadas, trazas de trayectoria y rótulos flotantes.
  */
 (function (global) {
   'use strict';
 
-  /* Flecha de vector con punta conica. Se reorienta cada cuadro. */
+  /* Flecha de vector con punta cónica. Se reorienta cada cuadro. */
   function Flecha(color, grosor) {
     grosor = grosor || 0.035;
     this.grupo = new THREE.Group();
@@ -23,7 +23,7 @@
     this.grupo.visible = false;
   }
 
-  // origen y vector son THREE.Vector3. escala convierte unidades fisicas a metros de escena.
+  // origen y vector son THREE.Vector3. escala convierte unidades físicas a metros de escena.
   Flecha.prototype.apuntar = function (origen, vector, escala) {
     var largo = vector.length() * (escala || 1);
     if (largo < 0.02) { this.grupo.visible = false; return; }
@@ -40,7 +40,7 @@
 
   Flecha.prototype.ocultar = function () { this.grupo.visible = false; };
 
-  /* Traza de trayectoria: linea que va acumulando puntos. */
+  /* Traza de trayectoria: línea que va acumulando puntos. */
   function Traza(color, maxPuntos, opciones) {
     var o = opciones || {};
     this.max = maxPuntos || 1200;
@@ -105,7 +105,7 @@
     return grupo;
   }
 
-  /* Rotulo plano que siempre se puede leer de frente. */
+  /* Rótulo plano que siempre se puede leer de frente. */
   function rotulo(texto, opciones) {
     var o = opciones || {};
     var c = document.createElement('canvas');

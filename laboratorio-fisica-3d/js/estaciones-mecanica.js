@@ -1,11 +1,11 @@
 /*
- * Laboratorio de Fisica 3D - Estaciones de mecanica
+ * Laboratorio de Física 3D - Estaciones de mecánica
  *
- * Cada estacion es un objeto con la misma interfaz:
- *   construir()          arma la geometria y la deja en this.grupo
- *   aplicarParametros()  traslada los controles del panel al modelo fisico
+ * Cada estación es un objeto con la misma interfaz:
+ *   construir()          arma la geometría y la deja en this.grupo
+ *   aplicarParametros()  traslada los controles del panel al modelo físico
  *   correr() / reiniciar()
- *   actualizar(dt)       avanza la simulacion y mueve la geometria
+ *   actualizar(dt)       avanza la simulación y mueve la geometría
  *   lecturas()           valores que se muestran en el panel y en la mesa
  *   registrarMedicion()  fila que se agrega a la tabla de datos
  */
@@ -19,10 +19,10 @@
     { valor: 9.81, etiqueta: 'Tierra 9.81' },
     { valor: 1.62, etiqueta: 'Luna 1.62' },
     { valor: 3.72, etiqueta: 'Marte 3.72' },
-    { valor: 24.79, etiqueta: 'Jupiter 24.79' }
+    { valor: 24.79, etiqueta: 'Júpiter 24.79' }
   ];
 
-  // Lee el valor actual de un parametro por su id.
+  // Lee el valor actual de un parámetro por su id.
   function p(est, id) {
     for (var i = 0; i < est.parametros.length; i++) {
       if (est.parametros[i].id === id) return est.parametros[i].valor;
@@ -31,32 +31,32 @@
   }
 
   /* ================================================================== *
-   * ESTACION 1 - Caida libre en tubo de vacio
+   * ESTACIÓN 1 - Caída libre en tubo de vacío
    * ================================================================== */
 
   function CaidaLibreEstacion() {
     this.id = 'caida-libre';
     this.numero = 1;
-    this.titulo = 'Caida libre';
-    this.subtitulo = 'Tubo de vacio de 12 metros';
+    this.titulo = 'Caída libre';
+    this.subtitulo = 'Tubo de vacío de 12 metros';
     this.color = 0x4fd6e3;
     this.posicion = { x: -15, z: -5 };
-    // Algo mas lejos que las demas: el tubo mide doce metros y hay que
+    // Algo más lejos que las demás: el tubo mide doce metros y hay que
     // poder verlo entero sin doblar el cuello.
     this.puesto = { x: -15, z: -1.4 };
     this.sinMesa = true;
     this.descripcion = 'Suelta un cuerpo dentro de un tubo del que puedes sacar el aire. ' +
       'Sin aire, la masa no importa: todo cae igual. Con aire, la forma manda.';
-    this.ecuaciones = ['y = h - g t^2 / 2', 't = raiz(2h / g)', 'v = raiz(2 g h)'];
+    this.ecuaciones = ['y = h - g t^2 / 2', 't = raíz(2h / g)', 'v = raíz(2 g h)'];
 
     this.parametros = [
-      { id: 'altura', etiqueta: 'Altura de caida', unidad: 'm', tipo: 'rango', min: 2, max: 12, paso: 0.5, valor: 10 },
+      { id: 'altura', etiqueta: 'Altura de caída', unidad: 'm', tipo: 'rango', min: 2, max: 12, paso: 0.5, valor: 10 },
       { id: 'gravedad', etiqueta: 'Gravedad', unidad: 'm/s2', tipo: 'opciones', opciones: GRAVEDADES, valor: 9.81 },
       { id: 'medio', etiqueta: 'Medio', tipo: 'opciones', valor: 0, opciones: [
-        { valor: 0, etiqueta: 'Vacio' }, { valor: 1, etiqueta: 'Con aire' }
+        { valor: 0, etiqueta: 'Vacío' }, { valor: 1, etiqueta: 'Con aire' }
       ] },
       { id: 'cuerpo', etiqueta: 'Cuerpo', tipo: 'opciones', valor: 0, opciones: [
-        { valor: 0, etiqueta: 'Balin de acero' },
+        { valor: 0, etiqueta: 'Balín de acero' },
         { valor: 1, etiqueta: 'Pelota de espuma' },
         { valor: 2, etiqueta: 'Hoja de papel' }
       ] }
@@ -65,54 +65,54 @@
     this.misiones = [
       {
         id: 'cl-1', tipo: 'prediccion',
-        enunciado: 'Antes de soltar el cuerpo, calcula cuanto tiempo tarda en llegar al piso con los valores que pusiste en el panel.',
+        enunciado: 'Antes de soltar el cuerpo, calcula cuánto tiempo tarda en llegar al piso con los valores que pusiste en el panel.',
         pista: 'Despeja el tiempo de h = g t^2 / 2.',
-        entrada: { etiqueta: 'Tiempo de caida', unidad: 's' },
+        entrada: { etiqueta: 'Tiempo de caída', unidad: 's' },
         objetivo: function (e) { return Math.sqrt(2 * p(e, 'altura') / p(e, 'gravedad')); },
         tolerancia: 0.05,
         condicionPrevia: function (e) { return p(e, 'medio') === 0; },
-        avisoPrevio: 'Pon el medio en vacio para que valga la formula.'
+        avisoPrevio: 'Pon el medio en vacío para que valga la fórmula.'
       },
       {
         id: 'cl-2', tipo: 'prediccion',
-        enunciado: 'Ahora predice con que rapidez llega al piso.',
+        enunciado: 'Ahora predice con qué rapidez llega al piso.',
         pista: 'Usa v^2 = 2 g h, o bien v = g t con el tiempo que ya calculaste.',
         entrada: { etiqueta: 'Rapidez de impacto', unidad: 'm/s' },
         objetivo: function (e) { return Math.sqrt(2 * p(e, 'gravedad') * p(e, 'altura')); },
         tolerancia: 0.05,
         condicionPrevia: function (e) { return p(e, 'medio') === 0; },
-        avisoPrevio: 'Pon el medio en vacio para que valga la formula.'
+        avisoPrevio: 'Pon el medio en vacío para que valga la fórmula.'
       },
       {
         id: 'cl-3', tipo: 'reto',
-        enunciado: 'En vacio, suelta el balin de acero y la hoja de papel desde la misma altura. Comprueba que los dos tiempos son iguales.',
+        enunciado: 'En vacío, suelta el balín de acero y la hoja de papel desde la misma altura. Comprueba que los dos tiempos son iguales.',
         pista: 'Corre una vez con cada cuerpo sin cambiar la altura y compara la tabla de datos.',
         verificar: function (e) {
-          var enVacio = e.historial.filter(function (m) { return m.medio === 'Vacio'; });
-          var acero = enVacio.filter(function (m) { return m.cuerpo === 'Balin de acero'; }).pop();
+          var enVacio = e.historial.filter(function (m) { return m.medio === 'Vacío'; });
+          var acero = enVacio.filter(function (m) { return m.cuerpo === 'Balín de acero'; }).pop();
           var papel = enVacio.filter(function (m) { return m.cuerpo === 'Hoja de papel'; }).pop();
-          if (!acero || !papel) return { ok: false, mensaje: 'Faltan corridas en vacio con los dos cuerpos.' };
+          if (!acero || !papel) return { ok: false, mensaje: 'Faltan corridas en vacío con los dos cuerpos.' };
           if (Math.abs(acero.altura - papel.altura) > 0.01) {
             return { ok: false, mensaje: 'Repite las dos corridas usando la misma altura.' };
           }
           var dif = Math.abs(acero.tiempo - papel.tiempo);
           return dif < 0.02
-            ? { ok: true, mensaje: 'Exacto: en vacio los dos tardan ' + acero.tiempo.toFixed(2) + ' s. La masa no aparece en la formula.' }
+            ? { ok: true, mensaje: 'Exacto: en vacío los dos tardan ' + acero.tiempo.toFixed(2) + ' s. La masa no aparece en la fórmula.' }
             : { ok: false, mensaje: 'Los tiempos difieren en ' + dif.toFixed(2) + ' s.' };
         }
       },
       {
         id: 'cl-4', tipo: 'reto',
-        enunciado: 'Deja entrar aire al tubo y suelta la hoja de papel. Logra que tarde al menos 1 segundo mas que en vacio.',
-        pista: 'El arrastre crece con el area. La hoja es la que mas superficie ofrece.',
+        enunciado: 'Deja entrar aire al tubo y suelta la hoja de papel. Logra que tarde al menos 1 segundo más que en vacío.',
+        pista: 'El arrastre crece con el área. La hoja es la que más superficie ofrece.',
         verificar: function (e) {
           var papelAire = e.historial.filter(function (m) { return m.cuerpo === 'Hoja de papel' && m.medio === 'Con aire'; }).pop();
-          var papelVacio = e.historial.filter(function (m) { return m.cuerpo === 'Hoja de papel' && m.medio === 'Vacio'; }).pop();
-          if (!papelAire || !papelVacio) return { ok: false, mensaje: 'Suelta la hoja en vacio y con aire.' };
+          var papelVacio = e.historial.filter(function (m) { return m.cuerpo === 'Hoja de papel' && m.medio === 'Vacío'; }).pop();
+          if (!papelAire || !papelVacio) return { ok: false, mensaje: 'Suelta la hoja en vacío y con aire.' };
           var dif = papelAire.tiempo - papelVacio.tiempo;
           return dif >= 1
-            ? { ok: true, mensaje: 'Con aire tarda ' + dif.toFixed(2) + ' s mas. Esa diferencia es la fuerza de arrastre.' }
-            : { ok: false, mensaje: 'Solo hay ' + dif.toFixed(2) + ' s de diferencia. Prueba con mas altura.' };
+            ? { ok: true, mensaje: 'Con aire tarda ' + dif.toFixed(2) + ' s más. Esa diferencia es la fuerza de arrastre.' }
+            : { ok: false, mensaje: 'Solo hay ' + dif.toFixed(2) + ' s de diferencia. Prueba con más altura.' };
         }
       }
     ];
@@ -124,7 +124,7 @@
 
   CaidaLibreEstacion.prototype.datosCuerpo = function () {
     var tipo = p(this, 'cuerpo');
-    if (tipo === 0) return { masa: 0.51, radio: 0.05, cd: 0.47, area: Math.PI * 0.05 * 0.05, color: 0xb9c3d4, nombre: 'Balin de acero' };
+    if (tipo === 0) return { masa: 0.51, radio: 0.05, cd: 0.47, area: Math.PI * 0.05 * 0.05, color: 0xb9c3d4, nombre: 'Balín de acero' };
     if (tipo === 1) return { masa: 0.012, radio: 0.09, cd: 0.47, area: Math.PI * 0.09 * 0.09, color: 0xff9f6b, nombre: 'Pelota de espuma' };
     return { masa: 0.005, radio: 0.11, cd: 1.28, area: 0.06, color: 0xf2ead6, nombre: 'Hoja de papel' };
   };
@@ -215,7 +215,7 @@
       area: conAire ? d.area : 0
     });
 
-    // Reconstruye el cuerpo si cambio de tipo.
+    // Reconstruye el cuerpo si cambió de tipo.
     if (this.cuerpo && this.cuerpoActual !== d.nombre) {
       this.cuerpo.geometry.dispose();
       this.cuerpo.geometry = new THREE.SphereGeometry(d.radio, 28, 20);
@@ -270,7 +270,7 @@
     var altura = this.sim ? this.sim.posicion() : 0;
     var vel = this.sim ? Math.abs(this.sim.velocidad()) : 0;
     this.pantalla.userData.dibujar([
-      'CAIDA LIBRE',
+      'CAÍDA LIBRE',
       't = ' + (this.sim ? this.sim.t : 0).toFixed(3) + ' s',
       'y = ' + altura.toFixed(2) + ' m',
       'v = ' + vel.toFixed(2) + ' m/s'
@@ -284,8 +284,8 @@
       { etiqueta: 'Tiempo transcurrido', valor: this.sim.t.toFixed(3), unidad: 's' },
       { etiqueta: 'Altura actual', valor: this.sim.posicion().toFixed(2), unidad: 'm' },
       { etiqueta: 'Rapidez actual', valor: Math.abs(this.sim.velocidad()).toFixed(2), unidad: 'm/s' },
-      { etiqueta: 'Tiempo teorico sin aire', valor: teorico.toFixed(3), unidad: 's', teorico: true },
-      { etiqueta: 'Rapidez teorica sin aire', valor: vTeorica.toFixed(2), unidad: 'm/s', teorico: true }
+      { etiqueta: 'Tiempo teórico sin aire', valor: teorico.toFixed(3), unidad: 's', teorico: true },
+      { etiqueta: 'Rapidez teórica sin aire', valor: vTeorica.toFixed(2), unidad: 'm/s', teorico: true }
     ];
     if (this.impacto) {
       out.push({ etiqueta: 'Tiempo medido al caer', valor: this.impacto.tiempo.toFixed(3), unidad: 's', destacado: true });
@@ -300,7 +300,7 @@
       corrida: this.historial.length + 1,
       altura: p(this, 'altura'),
       gravedad: p(this, 'gravedad'),
-      medio: p(this, 'medio') === 1 ? 'Con aire' : 'Vacio',
+      medio: p(this, 'medio') === 1 ? 'Con aire' : 'Vacío',
       cuerpo: d.nombre,
       masa: d.masa,
       tiempo: this.sim.t,
@@ -319,31 +319,31 @@
       { clave: 'medio', etiqueta: 'Medio' },
       { clave: 'cuerpo', etiqueta: 'Cuerpo' },
       { clave: 'tiempo', etiqueta: 't medido (s)', decimales: 3 },
-      { clave: 'tiempoTeorico', etiqueta: 't teorico (s)', decimales: 3 },
+      { clave: 'tiempoTeorico', etiqueta: 't teórico (s)', decimales: 3 },
       { clave: 'velocidad', etiqueta: 'v impacto (m/s)', decimales: 2 }
     ];
   };
 
   /* ================================================================== *
-   * ESTACION 2 - Plano inclinado con friccion
+   * ESTACIÓN 2 - Plano inclinado con fricción
    * ================================================================== */
 
   function PlanoEstacion() {
     this.id = 'plano-inclinado';
     this.numero = 2;
     this.titulo = 'Plano inclinado';
-    this.subtitulo = 'Friccion y angulo critico';
+    this.subtitulo = 'Fricción y ángulo crítico';
     this.color = 0xffb347;
     this.posicion = { x: -5, z: -5 };
     this.puesto = { x: -5, z: -1.6 };
     this.mesaTamano = { ancho: 5.6, fondo: 2.0 };
-    this.descripcion = 'Sube el angulo poco a poco. Hay un valor exacto donde el bloque ' +
-      'vence a la friccion y empieza a bajar: ese angulo te mide el coeficiente.';
-    this.ecuaciones = ['a = g (sen A - mu cos A)', 'tan A_critico = mu_estatico'];
+    this.descripcion = 'Sube el ángulo poco a poco. Hay un valor exacto donde el bloque ' +
+      'vence a la fricción y empieza a bajar: ese ángulo te mide el coeficiente.';
+    this.ecuaciones = ['a = g (sen A - mu cos A)', 'tan A_crítico = mu_estático'];
 
     this.parametros = [
-      { id: 'angulo', etiqueta: 'Angulo de la rampa', unidad: 'grados', tipo: 'rango', min: 5, max: 50, paso: 1, valor: 25 },
-      { id: 'mu', etiqueta: 'Coef. de friccion', unidad: '', tipo: 'rango', min: 0, max: 0.8, paso: 0.02, valor: 0.3 },
+      { id: 'angulo', etiqueta: 'Ángulo de la rampa', unidad: 'grados', tipo: 'rango', min: 5, max: 50, paso: 1, valor: 25 },
+      { id: 'mu', etiqueta: 'Coef. de fricción', unidad: '', tipo: 'rango', min: 0, max: 0.8, paso: 0.02, valor: 0.3 },
       { id: 'masa', etiqueta: 'Masa del bloque', unidad: 'kg', tipo: 'rango', min: 0.5, max: 8, paso: 0.5, valor: 2 },
       { id: 'gravedad', etiqueta: 'Gravedad', unidad: 'm/s2', tipo: 'opciones', opciones: GRAVEDADES, valor: 9.81 }
     ];
@@ -351,9 +351,9 @@
     this.misiones = [
       {
         id: 'pi-1', tipo: 'prediccion',
-        enunciado: 'Con los valores del panel, calcula la aceleracion del bloque al bajar la rampa.',
+        enunciado: 'Con los valores del panel, calcula la aceleración del bloque al bajar la rampa.',
         pista: 'a = g (sen A - mu cos A). Si te da negativa, el bloque ni se mueve.',
-        entrada: { etiqueta: 'Aceleracion', unidad: 'm/s2' },
+        entrada: { etiqueta: 'Aceleración', unidad: 'm/s2' },
         objetivo: function (e) {
           var th = p(e, 'angulo') * Math.PI / 180;
           var a = p(e, 'gravedad') * (Math.sin(th) - p(e, 'mu') * Math.cos(th));
@@ -364,19 +364,19 @@
           var th = p(e, 'angulo') * Math.PI / 180;
           return Math.tan(th) > p(e, 'mu') * 1.25;
         },
-        avisoPrevio: 'Con ese angulo el bloque no desliza. Subelo hasta que se mueva.'
+        avisoPrevio: 'Con ese ángulo el bloque no desliza. Súbelo hasta que se mueva.'
       },
       {
         id: 'pi-2', tipo: 'prediccion',
-        enunciado: 'Busca el angulo critico: el minimo con el que el bloque empieza a deslizar por si solo.',
-        pista: 'En el limite, tan del angulo iguala al coeficiente estatico, que aqui vale 1.25 veces el que ajustaste.',
-        entrada: { etiqueta: 'Angulo critico', unidad: 'grados' },
+        enunciado: 'Busca el ángulo crítico: el mínimo con el que el bloque empieza a deslizar por sí solo.',
+        pista: 'En el límite, tan del ángulo iguala al coeficiente estático, que aquí vale 1.25 veces el que ajustaste.',
+        entrada: { etiqueta: 'Ángulo crítico', unidad: 'grados' },
         objetivo: function (e) { return Math.atan(p(e, 'mu') * 1.25) * 180 / Math.PI; },
         tolerancia: 0.06
       },
       {
         id: 'pi-3', tipo: 'reto',
-        enunciado: 'Demuestra que la masa no cambia la aceleracion: haz dos corridas con el mismo angulo y friccion pero masas muy distintas.',
+        enunciado: 'Demuestra que la masa no cambia la aceleración: haz dos corridas con el mismo ángulo y fricción pero masas muy distintas.',
         pista: 'La masa se cancela al dividir la fuerza entre m. Prueba 0.5 kg y 8 kg.',
         verificar: function (e) {
           if (e.historial.length < 2) return { ok: false, mensaje: 'Necesitas al menos dos corridas.' };
@@ -390,7 +390,7 @@
           if (!v) return { ok: false, mensaje: 'Repite la corrida cambiando solo la masa (al menos 1 kg de diferencia).' };
           var dif = Math.abs(u.aceleracion - v.aceleracion);
           return dif < 0.01
-            ? { ok: true, mensaje: 'Con ' + v.masa + ' kg y ' + u.masa + ' kg la aceleracion es la misma: ' + u.aceleracion.toFixed(2) + ' m/s2.' }
+            ? { ok: true, mensaje: 'Con ' + v.masa + ' kg y ' + u.masa + ' kg la aceleración es la misma: ' + u.aceleracion.toFixed(2) + ' m/s2.' }
             : { ok: false, mensaje: 'Las aceleraciones no coinciden.' };
         }
       }
@@ -448,7 +448,7 @@
     );
     g.add(this.puntal);
 
-    // Transportador que muestra el angulo.
+    // Transportador que muestra el ángulo.
     var disco = new THREE.Mesh(
       new THREE.CircleGeometry(0.55, 40, Math.PI / 2, Math.PI / 2),
       new THREE.MeshBasicMaterial({ color: 0x4fd6e3, transparent: true, opacity: 0.16, side: THREE.DoubleSide })
@@ -511,7 +511,7 @@
   PlanoEstacion.prototype.colocarBloque = function (distancia) {
     if (!this.bloque) return;
     // El bloque apoya sobre la cara de la rampa: media altura ya escalada
-    // mas el medio grosor del tablero.
+    // más el medio grosor del tablero.
     var escala = (0.25 + p(this, 'masa') * 0.035) / 0.45;
     var medio = 0.15 * escala;
     this.bloque.position.set(-this.largoRampa + 0.35 + distancia, 0.04 + medio, 0);
@@ -552,13 +552,13 @@
     var g = p(this, 'gravedad');
     var m = p(this, 'masa');
     return [
-      { etiqueta: 'Aceleracion', valor: this.sim.aceleracion(this.sim.velocidad()).toFixed(3), unidad: 'm/s2' },
+      { etiqueta: 'Aceleración', valor: this.sim.aceleracion(this.sim.velocidad()).toFixed(3), unidad: 'm/s2' },
       { etiqueta: 'Rapidez', valor: this.sim.velocidad().toFixed(2), unidad: 'm/s' },
       { etiqueta: 'Distancia recorrida', valor: this.sim.distancia().toFixed(2), unidad: 'm' },
       { etiqueta: 'Tiempo', valor: this.sim.t.toFixed(2), unidad: 's' },
       { etiqueta: 'Peso paralelo', valor: (m * g * Math.sin(th)).toFixed(2), unidad: 'N', teorico: true },
-      { etiqueta: 'Friccion maxima', valor: (m * g * Math.cos(th) * p(this, 'mu') * 1.25).toFixed(2), unidad: 'N', teorico: true },
-      { etiqueta: 'Angulo critico', valor: this.sim.anguloCriticoGrados().toFixed(1), unidad: 'grados', teorico: true },
+      { etiqueta: 'Fricción máxima', valor: (m * g * Math.cos(th) * p(this, 'mu') * 1.25).toFixed(2), unidad: 'N', teorico: true },
+      { etiqueta: 'Ángulo crítico', valor: this.sim.anguloCriticoGrados().toFixed(1), unidad: 'grados', teorico: true },
       { etiqueta: 'Estado', valor: this.sim.desliza() ? 'Desliza' : 'En reposo', unidad: '', destacado: true }
     ];
   };
@@ -581,7 +581,7 @@
   PlanoEstacion.prototype.columnas = function () {
     return [
       { clave: 'corrida', etiqueta: 'N' },
-      { clave: 'angulo', etiqueta: 'Angulo (gr)', decimales: 0 },
+      { clave: 'angulo', etiqueta: 'Ángulo (gr)', decimales: 0 },
       { clave: 'mu', etiqueta: 'mu', decimales: 2 },
       { clave: 'masa', etiqueta: 'm (kg)', decimales: 1 },
       { clave: 'aceleracion', etiqueta: 'a (m/s2)', decimales: 3 },
@@ -591,25 +591,25 @@
   };
 
   /* ================================================================== *
-   * ESTACION 3 - Pendulo simple
+   * ESTACIÓN 3 - Péndulo simple
    * ================================================================== */
 
   function PenduloEstacion() {
     this.id = 'pendulo';
     this.numero = 3;
-    this.titulo = 'Pendulo simple';
-    this.subtitulo = 'Donde falla la formula del libro';
+    this.titulo = 'Péndulo simple';
+    this.subtitulo = 'Donde falla la fórmula del libro';
     this.color = 0xb08cff;
     this.posicion = { x: 5, z: -5 };
     this.puesto = { x: 5, z: -1.6 };
     this.mesaTamano = { ancho: 3.4, fondo: 1.8 };
     this.descripcion = 'El periodo casi no depende de la masa ni de la amplitud, pero ese ' +
-      '"casi" se nota: pasa de 10 a 70 grados y mira crecer el error de la formula.';
-    this.ecuaciones = ['T = 2 pi raiz(L / g)', 'valido solo si el angulo es pequeno'];
+      '"casi" se nota: pasa de 10 a 70 grados y mira crecer el error de la fórmula.';
+    this.ecuaciones = ['T = 2 pi raíz(L / g)', 'válido solo si el ángulo es pequeño'];
 
     this.parametros = [
       { id: 'largo', etiqueta: 'Largo del hilo', unidad: 'm', tipo: 'rango', min: 0.3, max: 2.3, paso: 0.05, valor: 1.2 },
-      { id: 'angulo', etiqueta: 'Angulo inicial', unidad: 'grados', tipo: 'rango', min: 5, max: 80, paso: 1, valor: 15 },
+      { id: 'angulo', etiqueta: 'Ángulo inicial', unidad: 'grados', tipo: 'rango', min: 5, max: 80, paso: 1, valor: 15 },
       { id: 'masa', etiqueta: 'Masa', unidad: 'kg', tipo: 'rango', min: 0.1, max: 3, paso: 0.1, valor: 0.5 },
       { id: 'roce', etiqueta: 'Rozamiento', unidad: '1/s', tipo: 'rango', min: 0, max: 0.5, paso: 0.02, valor: 0 },
       { id: 'gravedad', etiqueta: 'Gravedad', unidad: 'm/s2', tipo: 'opciones', opciones: GRAVEDADES, valor: 9.81 }
@@ -618,16 +618,16 @@
     this.misiones = [
       {
         id: 'pe-1', tipo: 'prediccion',
-        enunciado: 'Calcula el periodo del pendulo con la formula del libro y comparalo con el que mide el laboratorio.',
-        pista: 'T = 2 pi raiz(L / g). Deja el angulo inicial en 15 grados o menos.',
+        enunciado: 'Calcula el periodo del péndulo con la fórmula del libro y compáralo con el que mide el laboratorio.',
+        pista: 'T = 2 pi raíz(L / g). Deja el ángulo inicial en 15 grados o menos.',
         entrada: { etiqueta: 'Periodo', unidad: 's' },
         objetivo: function (e) { return 2 * Math.PI * Math.sqrt(p(e, 'largo') / p(e, 'gravedad')); },
         tolerancia: 0.04
       },
       {
         id: 'pe-2', tipo: 'reto',
-        enunciado: 'Comprueba que la masa no cambia el periodo: dos corridas con el mismo largo y angulo, pero masas distintas.',
-        pista: 'La masa se cancela en la ecuacion del pendulo, igual que en la caida libre.',
+        enunciado: 'Comprueba que la masa no cambia el periodo: dos corridas con el mismo largo y ángulo, pero masas distintas.',
+        pista: 'La masa se cancela en la ecuación del péndulo, igual que en la caída libre.',
         verificar: function (e) {
           if (e.historial.length < 2) return { ok: false, mensaje: 'Necesitas dos corridas.' };
           var u = e.historial[e.historial.length - 1], v = null;
@@ -645,19 +645,19 @@
       },
       {
         id: 'pe-3', tipo: 'reto',
-        enunciado: 'Encuentra un angulo inicial con el que la formula del libro se equivoque en mas de 3 por ciento.',
-        pista: 'La formula supone angulos pequenos. Prueba pasando de 45 grados.',
+        enunciado: 'Encuentra un ángulo inicial con el que la fórmula del libro se equivoque en más de 3 por ciento.',
+        pista: 'La fórmula supone ángulos pequeños. Prueba pasando de 45 grados.',
         verificar: function (e) {
           var malo = e.historial.filter(function (m) { return m.errorPorciento > 3; }).pop();
           return malo
-            ? { ok: true, mensaje: 'A ' + malo.angulo + ' grados la formula falla por ' + malo.errorPorciento.toFixed(1) + ' por ciento. Ese es el limite de la aproximacion.' }
-            : { ok: false, mensaje: 'Todavia no pasas del 3 por ciento. Sube mas el angulo y deja correr una oscilacion completa.' };
+            ? { ok: true, mensaje: 'A ' + malo.angulo + ' grados la fórmula falla por ' + malo.errorPorciento.toFixed(1) + ' por ciento. Ese es el límite de la aproximación.' }
+            : { ok: false, mensaje: 'Todavía no pasas del 3 por ciento. Sube más el ángulo y deja correr una oscilación completa.' };
         }
       },
       {
         id: 'pe-4', tipo: 'prediccion',
-        enunciado: 'Si quieres un pendulo que tarde exactamente 2 segundos por oscilacion en la Tierra, que largo necesitas?',
-        pista: 'Despeja L de T = 2 pi raiz(L / g) con T = 2 s.',
+        enunciado: 'Si quieres un péndulo que tarde exactamente 2 segundos por oscilación en la Tierra, ¿qué largo necesitas?',
+        pista: 'Despeja L de T = 2 pi raíz(L / g) con T = 2 s.',
         entrada: { etiqueta: 'Largo del hilo', unidad: 'm' },
         objetivo: function () { return 9.81 * Math.pow(2 / (2 * Math.PI), 2); },
         tolerancia: 0.05
@@ -671,9 +671,9 @@
   PenduloEstacion.prototype.construir = function () {
     var g = new THREE.Group();
 
-    // Portico del que cuelga el pendulo.
+    // Pórtico del que cuelga el péndulo.
     var matMetal = new THREE.MeshStandardMaterial({ color: 0x8a94a6, roughness: 0.4, metalness: 0.85 });
-    // El portico se monta sobre la superficie de la mesa, a 1.03 m.
+    // El pórtico se monta sobre la superficie de la mesa, a 1.03 m.
     var MESA = 1.03, ALTO_PORTICO = 2.6;
     [-0.9, 0.9].forEach(function (x) {
       var col = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, ALTO_PORTICO, 12), matMetal);
@@ -778,7 +778,7 @@
         this.traza.agregar(this.masa.position.x, this.masa.position.y, this.masa.position.z);
       }
       // En cuanto hay dos cruces por la vertical ya se conoce el periodo:
-      // esa es la medicion que se anota en la tabla.
+      // esa es la medición que se anota en la tabla.
       if (!teniaPeriodo && this.sim.periodoMedido != null) {
         this.registrarMedicion();
       }
@@ -790,10 +790,10 @@
     if (!this.pantalla) return;
     var medido = this.sim.periodoMedido;
     this.pantalla.userData.dibujar([
-      'PENDULO',
+      'PÉNDULO',
       'T libro = ' + this.sim.periodoPequeno().toFixed(3) + ' s',
       'T real  = ' + (medido ? medido.toFixed(3) + ' s' : 'midiendo...'),
-      'angulo  = ' + (this.sim.angulo() * 180 / Math.PI).toFixed(1) + ' gr'
+      'ángulo  = ' + (this.sim.angulo() * 180 / Math.PI).toFixed(1) + ' gr'
     ]);
   };
 
@@ -805,15 +805,15 @@
   PenduloEstacion.prototype.lecturas = function () {
     var err = this.errorPorciento();
     var out = [
-      { etiqueta: 'Periodo formula del libro', valor: this.sim.periodoPequeno().toFixed(4), unidad: 's', teorico: true },
-      { etiqueta: 'Periodo con correccion', valor: this.sim.periodoCorregido().toFixed(4), unidad: 's', teorico: true },
+      { etiqueta: 'Periodo fórmula del libro', valor: this.sim.periodoPequeno().toFixed(4), unidad: 's', teorico: true },
+      { etiqueta: 'Periodo con corrección', valor: this.sim.periodoCorregido().toFixed(4), unidad: 's', teorico: true },
       { etiqueta: 'Periodo medido', valor: this.sim.periodoMedido ? this.sim.periodoMedido.toFixed(4) : 'sin medir', unidad: 's', destacado: true },
-      { etiqueta: 'Angulo actual', valor: (this.sim.angulo() * 180 / Math.PI).toFixed(1), unidad: 'grados' },
-      { etiqueta: 'Energia total', valor: this.sim.energiaTotal().toFixed(4), unidad: 'J' },
+      { etiqueta: 'Ángulo actual', valor: (this.sim.angulo() * 180 / Math.PI).toFixed(1), unidad: 'grados' },
+      { etiqueta: 'Energía total', valor: this.sim.energiaTotal().toFixed(4), unidad: 'J' },
       { etiqueta: 'Oscilaciones', valor: this.sim.ciclos.toFixed(1), unidad: '' }
     ];
     if (err != null) {
-      out.push({ etiqueta: 'Error de la formula', valor: err.toFixed(2), unidad: 'por ciento', destacado: true });
+      out.push({ etiqueta: 'Error de la fórmula', valor: err.toFixed(2), unidad: 'por ciento', destacado: true });
     }
     return out;
   };
@@ -837,7 +837,7 @@
     return [
       { clave: 'corrida', etiqueta: 'N' },
       { clave: 'largo', etiqueta: 'L (m)', decimales: 2 },
-      { clave: 'angulo', etiqueta: 'Angulo (gr)', decimales: 0 },
+      { clave: 'angulo', etiqueta: 'Ángulo (gr)', decimales: 0 },
       { clave: 'masa', etiqueta: 'm (kg)', decimales: 1 },
       { clave: 'periodoMedido', etiqueta: 'T medido (s)', decimales: 4 },
       { clave: 'periodoLibro', etiqueta: 'T libro (s)', decimales: 4 },
@@ -846,34 +846,34 @@
   };
 
   /* ================================================================== *
-   * ESTACION 4 - Colisiones en carril de aire
+   * ESTACIÓN 4 - Colisiones en carril de aire
    * ================================================================== */
 
   function ColisionEstacion() {
     this.id = 'colisiones';
     this.numero = 4;
     this.titulo = 'Colisiones';
-    this.subtitulo = 'Carril de aire sin friccion';
+    this.subtitulo = 'Carril de aire sin fricción';
     this.color = 0x7ee787;
     this.posicion = { x: 15, z: -5 };
     this.puesto = { x: 15, z: -1.6 };
     this.mesaTamano = { ancho: 7.4, fondo: 1.6 };
-    this.descripcion = 'El momento total siempre se conserva. La energia solo se conserva ' +
-      'si el choque es elastico: mueve el control de rebote y mira cuanta se pierde.';
-    this.ecuaciones = ['m1 v1 + m2 v2 = constante', 'e = (v2 - v1) despues / (v1 - v2) antes'];
+    this.descripcion = 'El momento total siempre se conserva. La energía solo se conserva ' +
+      'si el choque es elástico: mueve el control de rebote y mira cuánta se pierde.';
+    this.ecuaciones = ['m1 v1 + m2 v2 = constante', 'e = (v2 - v1) después / (v1 - v2) antes'];
 
     this.parametros = [
       { id: 'masaA', etiqueta: 'Masa del carro rojo', unidad: 'kg', tipo: 'rango', min: 0.2, max: 5, paso: 0.1, valor: 1 },
       { id: 'masaB', etiqueta: 'Masa del carro azul', unidad: 'kg', tipo: 'rango', min: 0.2, max: 5, paso: 0.1, valor: 1 },
       { id: 'velA', etiqueta: 'Velocidad del rojo', unidad: 'm/s', tipo: 'rango', min: 0, max: 4, paso: 0.1, valor: 2 },
       { id: 'velB', etiqueta: 'Velocidad del azul', unidad: 'm/s', tipo: 'rango', min: -4, max: 0, paso: 0.1, valor: 0 },
-      { id: 'rebote', etiqueta: 'Coef. de restitucion', unidad: '', tipo: 'rango', min: 0, max: 1, paso: 0.05, valor: 1 }
+      { id: 'rebote', etiqueta: 'Coef. de restitución', unidad: '', tipo: 'rango', min: 0, max: 1, paso: 0.05, valor: 1 }
     ];
 
     this.misiones = [
       {
         id: 'co-1', tipo: 'prediccion',
-        enunciado: 'Choque elastico entre masas iguales: predice la velocidad final del carro rojo.',
+        enunciado: 'Choque elástico entre masas iguales: predice la velocidad final del carro rojo.',
         pista: 'Con masas iguales y rebote 1, los carros intercambian velocidades.',
         entrada: { etiqueta: 'Velocidad final del rojo', unidad: 'm/s' },
         objetivo: function (e) {
@@ -888,41 +888,41 @@
       },
       {
         id: 'co-2', tipo: 'prediccion',
-        enunciado: 'Choque perfectamente inelastico: los carros quedan pegados. Predice la velocidad con la que siguen juntos.',
+        enunciado: 'Choque perfectamente inelástico: los carros quedan pegados. Predice la velocidad con la que siguen juntos.',
         pista: 'v = (mA uA + mB uB) / (mA + mB).',
-        entrada: { etiqueta: 'Velocidad comun', unidad: 'm/s' },
+        entrada: { etiqueta: 'Velocidad común', unidad: 'm/s' },
         objetivo: function (e) {
           return (p(e, 'masaA') * p(e, 'velA') + p(e, 'masaB') * p(e, 'velB')) / (p(e, 'masaA') + p(e, 'masaB'));
         },
         tolerancia: 0.06,
         toleranciaAbsoluta: 0.08,
         condicionPrevia: function (e) { return p(e, 'rebote') < 0.01; },
-        avisoPrevio: 'Baja el coeficiente de restitucion a 0.'
+        avisoPrevio: 'Baja el coeficiente de restitución a 0.'
       },
       {
         id: 'co-3', tipo: 'reto',
-        enunciado: 'Consigue una colision que pierda mas del 40 por ciento de la energia cinetica, sin que el momento cambie.',
-        pista: 'Cuanto mas bajo el coeficiente de restitucion, mas energia se convierte en deformacion y calor.',
+        enunciado: 'Consigue una colisión que pierda más del 40 por ciento de la energía cinética, sin que el momento cambie.',
+        pista: 'Cuanto más bajo el coeficiente de restitución, más energía se convierte en deformación y calor.',
         verificar: function (e) {
           var m = e.historial[e.historial.length - 1];
-          if (!m) return { ok: false, mensaje: 'Corre al menos una colision.' };
+          if (!m) return { ok: false, mensaje: 'Corre al menos una colisión.' };
           if (m.energiaPerdidaPorciento > 40 && Math.abs(m.momentoDespues - m.momentoAntes) < 1e-6) {
-            return { ok: true, mensaje: 'Perdiste ' + m.energiaPerdidaPorciento.toFixed(1) + ' por ciento de la energia y el momento no cambio ni un poco.' };
+            return { ok: true, mensaje: 'Perdiste ' + m.energiaPerdidaPorciento.toFixed(1) + ' por ciento de la energía y el momento no cambió ni un poco.' };
           }
           return { ok: false, mensaje: 'Solo perdiste ' + m.energiaPerdidaPorciento.toFixed(1) + ' por ciento. Baja el rebote.' };
         }
       },
       {
         id: 'co-4', tipo: 'reto',
-        enunciado: 'Haz que el carro rojo quede totalmente quieto despues del choque, sin que su velocidad inicial sea cero.',
-        pista: 'Con masas iguales y choque elastico contra un carro en reposo, el primero se detiene por completo.',
+        enunciado: 'Haz que el carro rojo quede totalmente quieto después del choque, sin que su velocidad inicial sea cero.',
+        pista: 'Con masas iguales y choque elástico contra un carro en reposo, el primero se detiene por completo.',
         verificar: function (e) {
           var m = e.historial[e.historial.length - 1];
-          if (!m) return { ok: false, mensaje: 'Corre una colision.' };
+          if (!m) return { ok: false, mensaje: 'Corre una colisión.' };
           if (Math.abs(m.velA) > 0.05 || Math.abs(m.velAFinal) > 0.02) {
-            return { ok: false, mensaje: 'El rojo quedo a ' + m.velAFinal.toFixed(2) + ' m/s.' };
+            return { ok: false, mensaje: 'El rojo quedó a ' + m.velAFinal.toFixed(2) + ' m/s.' };
           }
-          return { ok: true, mensaje: 'El rojo entrego toda su velocidad al azul. Eso solo pasa con masas iguales y choque elastico.' };
+          return { ok: true, mensaje: 'El rojo entregó toda su velocidad al azul. Eso solo pasa con masas iguales y choque elástico.' };
         }
       }
     ];
@@ -1075,7 +1075,7 @@
       'CARRIL DE AIRE',
       'p total = ' + this.sim.momentoTotal().toFixed(3) + ' kg m/s',
       'K total = ' + this.sim.energiaCinetica().toFixed(3) + ' J',
-      'energia perdida = ' + perdida.toFixed(1) + ' %',
+      'energía perdida = ' + perdida.toFixed(1) + ' %',
       this.sim.choco ? 'choque realizado' : 'antes del choque'
     ]);
   };
@@ -1088,9 +1088,9 @@
       { etiqueta: 'Velocidad azul', valor: this.sim.vB.toFixed(3), unidad: 'm/s' },
       { etiqueta: 'Momento total', valor: this.sim.momentoTotal().toFixed(4), unidad: 'kg m/s', destacado: true },
       { etiqueta: 'Momento inicial', valor: this.sim.momentoInicial.toFixed(4), unidad: 'kg m/s', teorico: true },
-      { etiqueta: 'Energia cinetica', valor: this.sim.energiaCinetica().toFixed(4), unidad: 'J' },
-      { etiqueta: 'Energia inicial', valor: this.sim.energiaInicial.toFixed(4), unidad: 'J', teorico: true },
-      { etiqueta: 'Energia perdida', valor: perdida.toFixed(1), unidad: 'por ciento', destacado: true }
+      { etiqueta: 'Energía cinética', valor: this.sim.energiaCinetica().toFixed(4), unidad: 'J' },
+      { etiqueta: 'Energía inicial', valor: this.sim.energiaInicial.toFixed(4), unidad: 'J', teorico: true },
+      { etiqueta: 'Energía perdida', valor: perdida.toFixed(1), unidad: 'por ciento', destacado: true }
     ];
   };
 
@@ -1129,28 +1129,28 @@
   };
 
   /* ================================================================== *
-   * ESTACION 5 - Galeria de tiro parabolico
+   * ESTACIÓN 5 - Galería de tiro parabólico
    * ================================================================== */
 
   function ProyectilEstacion() {
     this.id = 'proyectiles';
     this.numero = 5;
-    this.titulo = 'Tiro parabolico';
-    this.subtitulo = 'Galeria de 30 metros';
+    this.titulo = 'Tiro parabólico';
+    this.subtitulo = 'Galería de 30 metros';
     this.color = 0xff6b6b;
     this.posicion = { x: -16, z: 9.5 };
     this.puesto = { x: -18.6, z: 7.6 };
-    // Se mira a lo largo de la galeria, para ver la parabola completa
-    // en vez de tener el canon de frente tapando el recorrido.
+    // Se mira a lo largo de la galería, para ver la parábola completa
+    // en vez de tener el cañón de frente tapando el recorrido.
     this.mirar = { x: -4, z: 9.5 };
     this.sinMesa = true;
     this.descripcion = 'El movimiento horizontal y el vertical son independientes. Ajusta el ' +
-      'canon y acierta en la diana: dos angulos distintos llegan al mismo punto.';
+      'cañón y acierta en la diana: dos ángulos distintos llegan al mismo punto.';
     this.ecuaciones = ['x = v0 cos(A) t', 'y = h + v0 sen(A) t - g t^2 / 2', 'R = v0^2 sen(2A) / g'];
 
     this.parametros = [
       { id: 'rapidez', etiqueta: 'Rapidez de salida', unidad: 'm/s', tipo: 'rango', min: 4, max: 17, paso: 0.5, valor: 14 },
-      { id: 'angulo', etiqueta: 'Angulo del canon', unidad: 'grados', tipo: 'rango', min: 5, max: 85, paso: 1, valor: 45 },
+      { id: 'angulo', etiqueta: 'Ángulo del cañón', unidad: 'grados', tipo: 'rango', min: 5, max: 85, paso: 1, valor: 45 },
       { id: 'diana', etiqueta: 'Distancia de la diana', unidad: 'm', tipo: 'rango', min: 4, max: 30, paso: 0.5, valor: 20 },
       { id: 'arrastre', etiqueta: 'Resistencia del aire', tipo: 'opciones', valor: 0, opciones: [
         { valor: 0, etiqueta: 'Sin aire' }, { valor: 1, etiqueta: 'Con aire' }
@@ -1161,8 +1161,8 @@
     this.misiones = [
       {
         id: 'pr-1', tipo: 'prediccion',
-        enunciado: 'Sin aire, calcula a que distancia va a caer el proyectil con la rapidez y el angulo que elegiste.',
-        pista: 'El canon esta a 1.2 m de altura, asi que el alcance es algo mayor que v0^2 sen(2A) / g.',
+        enunciado: 'Sin aire, calcula a qué distancia va a caer el proyectil con la rapidez y el ángulo que elegiste.',
+        pista: 'El cañón está a 1.2 m de altura, así que el alcance es algo mayor que v0^2 sen(2A) / g.',
         entrada: { etiqueta: 'Alcance', unidad: 'm' },
         objetivo: function (e) {
           var sim = new F.Proyectil({
@@ -1173,12 +1173,12 @@
         },
         tolerancia: 0.06,
         condicionPrevia: function (e) { return p(e, 'arrastre') === 0; },
-        avisoPrevio: 'Apaga la resistencia del aire para poder usar la formula.'
+        avisoPrevio: 'Apaga la resistencia del aire para poder usar la fórmula.'
       },
       {
         id: 'pr-2', tipo: 'reto',
         enunciado: 'Acierta en la diana con un error menor a medio metro.',
-        pista: 'Sube o baja el angulo de a un grado. Cerca de 45 grados el alcance cambia poco.',
+        pista: 'Sube o baja el ángulo de a un grado. Cerca de 45 grados el alcance cambia poco.',
         verificar: function (e) {
           var m = e.historial[e.historial.length - 1];
           if (!m) return { ok: false, mensaje: 'Dispara al menos una vez.' };
@@ -1189,8 +1189,8 @@
       },
       {
         id: 'pr-3', tipo: 'reto',
-        enunciado: 'Encuentra dos angulos distintos que den el mismo alcance con la misma rapidez. Son los angulos complementarios.',
-        pista: 'Si un angulo A funciona, prueba con 90 menos A. Deben sumar 90 grados.',
+        enunciado: 'Encuentra dos ángulos distintos que den el mismo alcance con la misma rapidez. Son los ángulos complementarios.',
+        pista: 'Si un ángulo A funciona, prueba con 90 menos A. Deben sumar 90 grados.',
         verificar: function (e) {
           var sinAire = e.historial.filter(function (m) { return m.aire === 'Sin aire'; });
           for (var i = sinAire.length - 1; i >= 0; i--) {
@@ -1203,14 +1203,14 @@
               }
             }
           }
-          return { ok: false, mensaje: 'Todavia no hay dos angulos con el mismo alcance. Prueba 30 y 60 grados con la misma rapidez.' };
+          return { ok: false, mensaje: 'Todavía no hay dos ángulos con el mismo alcance. Prueba 30 y 60 grados con la misma rapidez.' };
         }
       },
       {
         id: 'pr-4', tipo: 'prediccion',
-        enunciado: 'Que angulo da el alcance maximo cuando no hay aire y el canon esta casi a ras del piso?',
-        pista: 'Piensa en donde sen(2A) llega a su valor mas grande.',
-        entrada: { etiqueta: 'Angulo optimo', unidad: 'grados' },
+        enunciado: '¿Qué ángulo da el alcance máximo cuando no hay aire y el cañón está casi a ras del piso?',
+        pista: 'Piensa en dónde sen(2A) llega a su valor más grande.',
+        entrada: { etiqueta: 'Ángulo óptimo', unidad: 'grados' },
         objetivo: function () { return 45; },
         tolerancia: 0.06,
         toleranciaAbsoluta: 2
@@ -1224,7 +1224,7 @@
   ProyectilEstacion.prototype.construir = function () {
     var g = new THREE.Group();
 
-    // Tripode y canon. El grupo del canon gira segun el angulo.
+    // Trípode y cañón. El grupo del cañón gira según el ángulo.
     var tri = U.crearSoporte(1.1, { color: 0x6f7d92 });
     g.add(tri);
 
@@ -1249,7 +1249,7 @@
     boca.position.x = 0.9;
     this.canonPivote.add(boca);
 
-    // Transportador del canon.
+    // Transportador del cañón.
     var arco = new THREE.Mesh(
       new THREE.RingGeometry(0.55, 0.62, 40, 1, 0, Math.PI / 2),
       new THREE.MeshBasicMaterial({ color: 0x4fd6e3, transparent: true, opacity: 0.35, side: THREE.DoubleSide })
@@ -1271,7 +1271,7 @@
     this.trazaPrevia = new U.Traza(0x6f7d92, 3000, { opacidad: 0.35 });
     g.add(this.trazaPrevia.linea);
 
-    // Regla en el piso a lo largo de la galeria.
+    // Regla en el piso a lo largo de la galería.
     var regla = U.crearRegla(30, 1, 'x', 0x8fa3bd, { escalaTexto: 0.6 });
     regla.position.set(0, 0.02, 0.6);
     g.add(regla);
@@ -1381,7 +1381,7 @@
     if (!this.pantalla) return;
     var q = this.sim.posicion();
     this.pantalla.userData.dibujar([
-      'TIRO PARABOLICO',
+      'TIRO PARABÓLICO',
       'x = ' + q[0].toFixed(2) + ' m',
       'y = ' + q[1].toFixed(2) + ' m',
       't = ' + this.sim.t.toFixed(2) + ' s',
@@ -1392,13 +1392,13 @@
   ProyectilEstacion.prototype.lecturas = function () {
     var q = this.sim.posicion();
     var out = [
-      { etiqueta: 'Posicion horizontal', valor: q[0].toFixed(2), unidad: 'm' },
+      { etiqueta: 'Posición horizontal', valor: q[0].toFixed(2), unidad: 'm' },
       { etiqueta: 'Altura', valor: q[1].toFixed(2), unidad: 'm' },
       { etiqueta: 'Tiempo de vuelo', valor: this.sim.t.toFixed(2), unidad: 's' },
-      { etiqueta: 'Altura maxima', valor: this.sim.alturaMaxima.toFixed(2), unidad: 'm', destacado: true },
-      { etiqueta: 'Alcance teorico sin aire', valor: this.sim.alcanceTeorico().toFixed(2), unidad: 'm', teorico: true },
-      { etiqueta: 'Altura maxima teorica', valor: this.sim.alturaMaximaTeorica().toFixed(2), unidad: 'm', teorico: true },
-      { etiqueta: 'Tiempo de vuelo teorico', valor: this.sim.tiempoVueloTeorico().toFixed(2), unidad: 's', teorico: true }
+      { etiqueta: 'Altura máxima', valor: this.sim.alturaMaxima.toFixed(2), unidad: 'm', destacado: true },
+      { etiqueta: 'Alcance teórico sin aire', valor: this.sim.alcanceTeorico().toFixed(2), unidad: 'm', teorico: true },
+      { etiqueta: 'Altura máxima teórica', valor: this.sim.alturaMaximaTeorica().toFixed(2), unidad: 'm', teorico: true },
+      { etiqueta: 'Tiempo de vuelo teórico', valor: this.sim.tiempoVueloTeorico().toFixed(2), unidad: 's', teorico: true }
     ];
     if (!this.sim.enVuelo && this.sim.t > 0) {
       out.push({ etiqueta: 'Alcance medido', valor: q[0].toFixed(2), unidad: 'm', destacado: true });
@@ -1430,10 +1430,10 @@
     return [
       { clave: 'corrida', etiqueta: 'N' },
       { clave: 'rapidez', etiqueta: 'v0 (m/s)', decimales: 1 },
-      { clave: 'angulo', etiqueta: 'Angulo (gr)', decimales: 0 },
+      { clave: 'angulo', etiqueta: 'Ángulo (gr)', decimales: 0 },
       { clave: 'aire', etiqueta: 'Aire' },
       { clave: 'alcance', etiqueta: 'Alcance (m)', decimales: 2 },
-      { clave: 'alcanceTeorico', etiqueta: 'Alcance teorico (m)', decimales: 2 },
+      { clave: 'alcanceTeorico', etiqueta: 'Alcance teórico (m)', decimales: 2 },
       { clave: 'alturaMaxima', etiqueta: 'h max (m)', decimales: 2 },
       { clave: 'tiempoVuelo', etiqueta: 't vuelo (s)', decimales: 2 },
       { clave: 'error', etiqueta: 'Error a diana (m)', decimales: 2 }

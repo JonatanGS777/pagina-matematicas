@@ -1,11 +1,11 @@
 /*
- * Laboratorio de Fisica 3D - Controlador en primera persona
+ * Laboratorio de Física 3D - Controlador en primera persona
  *
- * Camina por el salon con WASD, mira con el mouse usando Pointer Lock
- * y detecta cuando el estudiante entra al circulo de una estacion.
- * El controlador esta escrito aqui para no depender de los ejemplos
- * de Three.js, que se distribuyen como modulos y romperian la
- * descarga sin conexion.
+ * Camina por el salón con WASD, mira con el mouse usando Pointer Lock
+ * y detecta cuando el estudiante entra al círculo de una estación.
+ * El controlador está escrito aquí para no depender de los ejemplos
+ * de Three.js, que se distribuyen como módulos y romperían la
+ * descarga sin conexión.
  */
 (function (global) {
   'use strict';
@@ -44,7 +44,7 @@
 
     this._onKeyDown = function (e) {
       self.teclas[e.code] = true;
-      // Evita que la pagina haga scroll con las flechas o la barra.
+      // Evita que la página haga scroll con las flechas o la barra.
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) >= 0) {
         if (self.activo) e.preventDefault();
       }
@@ -89,7 +89,7 @@
     this.estaciones.push({ id: id, x: x, z: z, radio: radio || 2.6 });
   };
 
-  // Resuelve la colision eje por eje: asi el jugador resbala a lo largo
+  // Resuelve la colisión eje por eje: así el jugador resbala a lo largo
   // de la mesa en vez de quedarse pegado al chocar en diagonal.
   Jugador.prototype._colisiona = function (x, z) {
     for (var i = 0; i < this.obstaculos.length; i++) {
@@ -103,7 +103,7 @@
   };
 
   Jugador.prototype.actualizar = function (dt) {
-    // dt acotado: si la pestana estuvo en segundo plano no se teletransporta.
+    // dt acotado: si la pestaña estuvo en segundo plano no se teletransporta.
     dt = Math.min(dt, 0.05);
 
     var adelante = 0, lado = 0;
@@ -120,7 +120,7 @@
     var rapidez = (this.teclas['ShiftLeft'] || this.teclas['ShiftRight'])
       ? VELOCIDAD_CORRIENDO : VELOCIDAD;
 
-    // Direccion de avance en el plano del piso, sin componente vertical.
+    // Dirección de avance en el plano del piso, sin componente vertical.
     var sinY = Math.sin(this.yaw), cosY = Math.cos(this.yaw);
     var deseadaX = (-sinY * adelante + cosY * lado) * rapidez;
     var deseadaZ = (-cosY * adelante - sinY * lado) * rapidez;
@@ -141,7 +141,7 @@
     if (!this._colisiona(this.posicion.x, nz)) this.posicion.z = nz;
     else this.velocidad.z = 0;
 
-    // Balanceo sutil al caminar, suficiente para dar sensacion de cuerpo.
+    // Balanceo sutil al caminar, suficiente para dar sensación de cuerpo.
     var rapidezReal = Math.hypot(this.velocidad.x, this.velocidad.z);
     if (rapidezReal > 0.2) this.cabeceo += dt * rapidezReal * 2.6;
     var bob = Math.sin(this.cabeceo) * 0.035 * Math.min(1, rapidezReal / VELOCIDAD);
@@ -175,14 +175,14 @@
     this.camara.rotation.z = 0;
   };
 
-  // Lleva al estudiante frente a una estacion sin que tenga que caminar.
+  // Lleva al estudiante frente a una estación sin que tenga que caminar.
   Jugador.prototype.teletransportar = function (x, z, mirarX, mirarZ) {
     this.posicion.x = x;
     this.posicion.z = z;
     this.velocidad.set(0, 0, 0);
     if (mirarX != null) {
-      // La camara mira hacia (-sen yaw, 0, -cos yaw), asi que para apuntar
-      // al objetivo hay que invertir el vector que va del jugador hacia el.
+      // La cámara mira hacia (-sen yaw, 0, -cos yaw), así que para apuntar
+      // al objetivo hay que invertir el vector que va del jugador hacia él.
       this.yaw = Math.atan2(x - mirarX, z - mirarZ);
       this.pitch = 0;
     }
