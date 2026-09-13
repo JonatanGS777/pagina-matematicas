@@ -41,6 +41,8 @@
       (ICONOS[nombre] || '') + '</svg>';
   }
 
+  var U = global.Util3D;
+
   function el(id) { return document.getElementById(id); }
 
   function escapar(t) {
@@ -90,7 +92,7 @@
     var punteroFino = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
     if (!punteroFino) {
       el('aviso-tactil').classList.remove('oculto');
-      el('btn-entrar').querySelector('span').textContent = 'Ver el salón';
+      el('btn-entrar').querySelector('span').textContent = U.texto('Ver el salón', 'View the room');
     }
 
     Array.prototype.forEach.call(document.querySelectorAll('[data-ir]'), function (btn) {
@@ -123,7 +125,7 @@
     el('btn-reiniciar-progreso').addEventListener('click', function () {
       if (confirm('Se borra todo el progreso guardado en esta computadora. ¿Continuar?')) {
         self.lab.progreso.reiniciarTodo();
-        self.toast('Progreso reiniciado.', 'info');
+        self.toast(U.texto('Progreso reiniciado.', 'Progress reset.'), 'info');
         if (self.estacionAbierta) self.dibujarPanel();
       }
     });
@@ -150,7 +152,7 @@
     el('dl-offline').addEventListener('click', function (ev) {
       var boton = ev.currentTarget;
       boton.disabled = true;
-      self.toast('Preparando el archivo, esto toma unos segundos...', 'info');
+      self.toast(U.texto('Preparando el archivo, esto toma unos segundos...', 'Preparing the file, this takes a few seconds...'), 'info');
       global.Exportar.generarPortable(function (paso) { self.toast(paso, 'info'); })
         .then(function (r) {
           self.toast(r.mensaje, r.ok ? 'ok' : 'error');
@@ -196,7 +198,7 @@
       });
       if (mejor) {
         self.irAEstacion(mejor.id);
-        self.toast('Te moviste a la estación ' + mejor.numero + ': ' + mejor.titulo, 'info');
+        self.toast(U.texto('Te moviste a la estación ', 'You moved to station ') + mejor.numero + ': ' + U.T(mejor, 'titulo'), 'info');
       }
     });
 
@@ -251,8 +253,8 @@
     var hechas = this.lab.progreso.completadasEn(estacion.id);
     this.nodo.aviso.innerHTML =
       '<span class="aviso-num">' + estacion.numero + '</span>' +
-      '<span class="aviso-txt"><b>' + escapar(estacion.titulo) + '</b>' +
-      '<small>' + hechas + ' de ' + estacion.misiones.length + ' misiones resueltas</small></span>' +
+      '<span class="aviso-txt"><b>' + escapar(U.T(estacion, 'titulo')) + '</b>' +
+      '<small>' + hechas + ' ' + U.texto('de', 'of') + ' ' + estacion.misiones.length + ' ' + U.texto('misiones resueltas', 'missions solved') + '</small></span>' +
       '<kbd>E</kbd>';
     this.nodo.aviso.classList.remove('oculto');
   };
@@ -292,14 +294,14 @@
     if (!e) return;
 
     this.nodo.panelTitulo.innerHTML =
-      '<span class="panel-num">' + e.numero + '</span>' + escapar(e.titulo);
-    this.nodo.panelSubtitulo.textContent = e.subtitulo;
+      '<span class="panel-num">' + e.numero + '</span>' + escapar(U.T(e, 'titulo'));
+    this.nodo.panelSubtitulo.textContent = U.T(e, 'subtitulo');
 
     var pestanas = [
-      { id: 'controles', etiqueta: 'Controles', ic: 'controles' },
-      { id: 'lecturas', etiqueta: 'Lecturas', ic: 'medidor' },
-      { id: 'misiones', etiqueta: 'Misiones', ic: 'objetivo' },
-      { id: 'datos', etiqueta: 'Datos', ic: 'tabla' }
+      { id: 'controles', etiqueta: U.texto('Controles', 'Controls'), ic: 'controles' },
+      { id: 'lecturas', etiqueta: U.texto('Lecturas', 'Readings'), ic: 'medidor' },
+      { id: 'misiones', etiqueta: U.texto('Misiones', 'Missions'), ic: 'objetivo' },
+      { id: 'datos', etiqueta: U.texto('Datos', 'Data'), ic: 'tabla' }
     ];
     var self = this;
     var pendientes = e.misiones.length - this.lab.progreso.completadasEn(e.id);
@@ -331,9 +333,9 @@
     var self = this;
     var h = [];
 
-    h.push('<p class="descripcion">' + escapar(e.descripcion) + '</p>');
+    h.push('<p class="descripcion">' + escapar(U.T(e, 'descripcion')) + '</p>');
     h.push('<div class="formulario">');
-    e.ecuaciones.forEach(function (f) {
+    U.TArr(e, 'ecuaciones').forEach(function (f) {
       h.push('<code class="ecuacion">' + escapar(f) + '</code>');
     });
     h.push('</div>');
@@ -342,18 +344,18 @@
     e.parametros.forEach(function (par, i) {
       if (par.tipo === 'opciones') {
         h.push('<div class="control">');
-        h.push('<label for="par-' + i + '">' + escapar(par.etiqueta) + '</label>');
+        h.push('<label for="par-' + i + '">' + escapar(U.T(par, 'etiqueta')) + '</label>');
         h.push('<select id="par-' + i + '" data-par="' + i + '">');
         par.opciones.forEach(function (o) {
           h.push('<option value="' + o.valor + '"' + (o.valor === par.valor ? ' selected' : '') + '>' +
-            escapar(o.etiqueta) + '</option>');
+            escapar(U.T(o, 'etiqueta')) + '</option>');
         });
         h.push('</select></div>');
       } else {
         h.push('<div class="control">');
-        h.push('<label for="par-' + i + '">' + escapar(par.etiqueta) +
+        h.push('<label for="par-' + i + '">' + escapar(U.T(par, 'etiqueta')) +
           '<output id="out-' + i + '">' + formatearValor(par.valor) +
-          (par.unidad ? ' ' + escapar(par.unidad) : '') + '</output></label>');
+          (par.unidad ? ' ' + escapar(U.T(par, 'unidad')) : '') + '</output></label>');
         h.push('<input type="range" id="par-' + i + '" data-par="' + i + '" min="' + par.min +
           '" max="' + par.max + '" step="' + par.paso + '" value="' + par.valor + '">');
         h.push('</div>');
@@ -365,20 +367,21 @@
     h.push('<div class="acciones">');
     if (e.id === 'campo-electrico') {
       h.push('<button class="btn principal" id="btn-correr">' + icono('play') +
-        '<span>' + (e.corriendo ? 'Detener la carga' : 'Soltar la carga de prueba') + '</span></button>');
-      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>Anotar medición</span></button>');
+        '<span>' + (e.corriendo ? U.texto('Detener la carga', 'Stop the charge') : U.texto('Soltar la carga de prueba', 'Release the test charge')) + '</span></button>');
+      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>' + U.texto('Anotar medición', 'Log measurement') + '</span></button>');
     } else if (e.id === 'lorentz') {
-      h.push('<button class="btn principal" id="btn-correr">' + icono('play') + '<span>Lanzar partícula</span></button>');
-      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>Anotar medición</span></button>');
+      h.push('<button class="btn principal" id="btn-correr">' + icono('play') + '<span>' + U.texto('Lanzar partícula', 'Launch particle') + '</span></button>');
+      h.push('<button class="btn" id="btn-anotar">' + icono('tabla') + '<span>' + U.texto('Anotar medición', 'Log measurement') + '</span></button>');
     } else {
-      h.push('<button class="btn principal" id="btn-correr">' + icono('play') + '<span>Ejecutar experimento</span></button>');
+      h.push('<button class="btn principal" id="btn-correr">' + icono('play') + '<span>' + U.texto('Ejecutar experimento', 'Run experiment') + '</span></button>');
     }
-    h.push('<button class="btn" id="btn-reset">' + icono('reiniciar') + '<span>Reiniciar</span></button>');
+    h.push('<button class="btn" id="btn-reset">' + icono('reiniciar') + '<span>' + U.texto('Reiniciar', 'Reset') + '</span></button>');
     h.push('</div>');
 
     if (e.id === 'campo-electrico') {
-      h.push('<div class="mover-sonda"><span>Mover la sonda</span><div class="cruceta">');
-      [['-x', 'izquierda'], ['+x', 'derecha'], ['+y', 'subir'], ['-y', 'bajar'], ['-z', 'atrás'], ['+z', 'adelante']]
+      h.push('<div class="mover-sonda"><span>' + U.texto('Mover la sonda', 'Move the probe') + '</span><div class="cruceta">');
+      [['-x', U.texto('izquierda', 'left')], ['+x', U.texto('derecha', 'right')], ['+y', U.texto('subir', 'up')],
+       ['-y', U.texto('bajar', 'down')], ['-z', U.texto('atrás', 'back')], ['+z', U.texto('adelante', 'forward')]]
         .forEach(function (m) {
           h.push('<button class="btn mini" data-mover="' + m[0] + '">' + escapar(m[1]) + '</button>');
         });
@@ -386,7 +389,7 @@
     }
 
     h.push('<p class="atajo">' + icono('teclado', 15) +
-      ' Barra espaciadora para ejecutar, E para cerrar el panel.</p>');
+      ' ' + U.texto('Barra espaciadora para ejecutar, E para cerrar el panel.', 'Spacebar to run, E to close the panel.') + '</p>');
 
     this.nodo.panelCuerpo.innerHTML = h.join('');
 
@@ -398,7 +401,7 @@
         par.valor = parseFloat(control.value);
         var salida = el('out-' + i);
         if (salida) {
-          salida.textContent = formatearValor(par.valor) + (par.unidad ? ' ' + par.unidad : '');
+          salida.textContent = formatearValor(par.valor) + (par.unidad ? ' ' + U.T(par, 'unidad') : '');
         }
         e.reiniciar();
       });
@@ -418,7 +421,7 @@
     if (btnAnotar) {
       btnAnotar.addEventListener('click', function () {
         e.registrarMedicion();
-        self.toast('Medición anotada en la tabla de datos.', 'ok');
+        self.toast(U.texto('Medición anotada en la tabla de datos.', 'Measurement logged in the data table.'), 'ok');
         self.dibujarPanel();
       });
     }
@@ -447,14 +450,15 @@
     e.lecturas().forEach(function (l) {
       var clase = l.destacado ? ' destacada' : (l.teorico ? ' teorica' : '');
       h.push('<div class="lectura' + clase + '">');
-      h.push('<span class="lec-etiqueta">' + escapar(l.etiqueta) + '</span>');
+      h.push('<span class="lec-etiqueta">' + escapar(U.T(l, 'etiqueta')) + '</span>');
       h.push('<span class="lec-valor">' + escapar(l.valor) +
-        '<small>' + escapar(l.unidad || '') + '</small></span>');
+        '<small>' + escapar(l.unidad ? U.T(l, 'unidad') : '') + '</small></span>');
       h.push('</div>');
     });
     h.push('</div>');
     h.push('<p class="nota">' + icono('info', 15) +
-      ' Los valores en gris son los que predice la teoría. Los resaltados son lo que midió el laboratorio.</p>');
+      ' ' + U.texto('Los valores en gris son los que predice la teoría. Los resaltados son lo que midió el laboratorio.',
+        'The gray values are what theory predicts. The highlighted ones are what the lab measured.') + '</p>');
     this.nodo.panelCuerpo.innerHTML = h.join('');
   };
 
@@ -473,42 +477,42 @@
       h.push('<span class="mision-estado">' +
         (reg.completada ? icono('check', 16) : (abierta ? icono('objetivo', 16) : icono('candado', 16))) +
         '</span>');
-      h.push('<span class="mision-titulo">Misión ' + (i + 1) +
-        '<small>' + (m.tipo === 'prediccion' ? 'predicción numérica' : 'reto práctico') + '</small></span>');
+      h.push('<span class="mision-titulo">' + U.texto('Misión ', 'Mission ') + (i + 1) +
+        '<small>' + (m.tipo === 'prediccion' ? U.texto('predicción numérica', 'numeric prediction') : U.texto('reto práctico', 'practical challenge')) + '</small></span>');
       if (reg.completada) {
         h.push('<span class="mision-puntos">' + pr.puntosDe(e.id, m.id) + ' pts</span>');
       }
       h.push('</div>');
 
       if (!abierta) {
-        h.push('<p class="mision-texto">Resuelve la misión anterior para desbloquear esta.</p>');
+        h.push('<p class="mision-texto">' + U.texto('Resuelve la misión anterior para desbloquear esta.', 'Solve the previous mission to unlock this one.') + '</p>');
       } else {
-        h.push('<p class="mision-texto">' + escapar(m.enunciado) + '</p>');
+        h.push('<p class="mision-texto">' + escapar(U.T(m, 'enunciado')) + '</p>');
 
         if (!reg.completada) {
           if (m.tipo === 'prediccion') {
             h.push('<div class="mision-entrada">');
             h.push('<input type="number" step="any" id="resp-' + i + '" placeholder="' +
-              escapar(m.entrada.etiqueta) + '">');
-            h.push('<span class="unidad">' + escapar(m.entrada.unidad) + '</span>');
+              escapar(U.T(m.entrada, 'etiqueta')) + '">');
+            h.push('<span class="unidad">' + escapar(U.T(m.entrada, 'unidad')) + '</span>');
             h.push('<button class="btn principal" data-verificar="' + i + '">' +
-              icono('check', 16) + '<span>Comprobar</span></button>');
+              icono('check', 16) + '<span>' + U.texto('Comprobar', 'Check') + '</span></button>');
             h.push('</div>');
           } else {
             h.push('<div class="mision-entrada">');
             h.push('<button class="btn principal" data-verificar="' + i + '">' +
-              icono('check', 16) + '<span>Comprobar si lo logré</span></button>');
+              icono('check', 16) + '<span>' + U.texto('Comprobar si lo logré', 'Check if I did it') + '</span></button>');
             h.push('</div>');
           }
           if (reg.intentos > 0) {
-            h.push('<p class="mision-intentos">Intentos: ' + reg.intentos + '</p>');
+            h.push('<p class="mision-intentos">' + U.texto('Intentos: ', 'Attempts: ') + reg.intentos + '</p>');
           }
-          h.push('<details class="pista"><summary>' + icono('idea', 15) + ' Ver pista</summary><p>' +
-            escapar(m.pista || '') + '</p></details>');
+          h.push('<details class="pista"><summary>' + icono('idea', 15) + ' ' + U.texto('Ver pista', 'See hint') + '</summary><p>' +
+            escapar(U.T(m, 'pista') || '') + '</p></details>');
         } else {
-          h.push('<p class="mision-logro">' + icono('medalla', 15) + ' Resuelta en ' +
-            reg.intentos + (reg.intentos === 1 ? ' intento' : ' intentos') +
-            (reg.respuesta != null ? ', con respuesta ' + global.Progreso.formatear(reg.respuesta) : '') + '.</p>');
+          h.push('<p class="mision-logro">' + icono('medalla', 15) + ' ' + U.texto('Resuelta en ', 'Solved in ') +
+            reg.intentos + (reg.intentos === 1 ? U.texto(' intento', ' attempt') : U.texto(' intentos', ' attempts')) +
+            (reg.respuesta != null ? U.texto(', con respuesta ', ', with answer ') + global.Progreso.formatear(reg.respuesta) : '') + '.</p>');
         }
         h.push('<div class="mision-resultado" id="res-' + i + '"></div>');
       }
@@ -537,7 +541,7 @@
           '<span>' + escapar(resultado.mensaje) + '</span>';
 
         if (resultado.ok) {
-          self.toast('Misión resuelta. ' + (resultado.puntos || 0) + ' puntos.', 'ok');
+          self.toast(U.texto('Misión resuelta. ', 'Mission solved. ') + (resultado.puntos || 0) + ' ' + U.texto('puntos.', 'points.'), 'ok');
           setTimeout(function () { self.dibujarPanel(); }, 1800);
         }
       });
@@ -561,17 +565,19 @@
 
     if (!e.historial.length) {
       h.push('<div class="vacio">' + icono('tabla', 28) +
-        '<p>Todavía no hay mediciones. Ejecuta el experimento y cada corrida se anota aquí sola.</p></div>');
+        '<p>' + U.texto('Todavía no hay mediciones. Ejecuta el experimento y cada corrida se anota aquí sola.',
+          'There are no measurements yet. Run the experiment and each run logs itself here.') + '</p></div>');
     } else {
       var cols = e.columnas();
       h.push('<div class="tabla-envoltura"><table class="tabla-datos"><thead><tr>');
-      cols.forEach(function (c) { h.push('<th>' + escapar(c.etiqueta) + '</th>'); });
+      cols.forEach(function (c) { h.push('<th>' + escapar(U.T(c, 'etiqueta')) + '</th>'); });
       h.push('</tr></thead><tbody>');
       e.historial.slice().reverse().forEach(function (fila) {
         h.push('<tr>');
         cols.forEach(function (c) {
           var v = fila[c.clave];
           if (typeof v === 'number' && c.decimales != null) v = v.toFixed(c.decimales);
+          if (typeof v === 'string') v = U.valorTabla(v);
           h.push('<td>' + escapar(v == null ? '' : v) + '</td>');
         });
         h.push('</tr>');
@@ -581,8 +587,8 @@
 
     h.push('<div class="acciones">');
     h.push('<button class="btn principal" id="btn-csv-estacion">' + icono('descargar') +
-      '<span>Descargar estos datos en CSV</span></button>');
-    h.push('<button class="btn" id="btn-borrar-datos">' + icono('reiniciar') + '<span>Borrar la tabla</span></button>');
+      '<span>' + U.texto('Descargar estos datos en CSV', 'Download this data as CSV') + '</span></button>');
+    h.push('<button class="btn" id="btn-borrar-datos">' + icono('reiniciar') + '<span>' + U.texto('Borrar la tabla', 'Clear the table') + '</span></button>');
     h.push('</div>');
 
     this.nodo.panelCuerpo.innerHTML = h.join('');
@@ -594,7 +600,7 @@
     el('btn-borrar-datos').addEventListener('click', function () {
       e.historial = [];
       self.dibujarPanel();
-      self.toast('Tabla de datos vaciada.', 'info');
+      self.toast(U.texto('Tabla de datos vaciada.', 'Data table cleared.'), 'info');
     });
   };
 

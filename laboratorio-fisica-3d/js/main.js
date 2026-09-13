@@ -16,7 +16,10 @@
 
   Laboratorio.prototype.iniciar = function () {
     if (typeof THREE === 'undefined') {
-      this.mostrarError('No se pudo cargar el motor 3D. Revisa tu conexión a internet y recarga la página.');
+      this.mostrarError(global.Util3D.texto(
+        'No se pudo cargar el motor 3D. Revisa tu conexión a internet y recarga la página.',
+        'The 3D engine could not load. Check your internet connection and reload the page.'
+      ));
       return;
     }
 
@@ -93,11 +96,20 @@
         estacion.mesa = mesa;
       }
 
-      // Letrero colgante y marca circular en el piso.
-      var letrero = global.Escena.crearLetrero(estacion.numero, estacion.titulo, estacion.subtitulo);
+      // Letrero colgante y marca circular en el piso. Se construye ya en el
+      // idioma activo (por si la página cargó con inglés guardado) y queda
+      // referenciado en la estación para poder redibujarlo si el idioma
+      // cambia en vivo (ver conectarVentana).
+      var U = global.Util3D;
+      var letrero = global.Escena.crearLetrero(
+        estacion.numero,
+        U.texto(estacion.titulo, estacion.tituloEn),
+        U.texto(estacion.subtitulo, estacion.subtituloEn)
+      );
       letrero.position.set(estacion.posicion.x, 4.3, estacion.posicion.z);
       if (estacion.id === 'caida-libre') letrero.position.x += 2.4;
       self.escena.add(letrero);
+      estacion.letrero = letrero;
 
       var marca = global.Escena.crearMarcaPiso(estacion.color);
       marca.position.set(estacion.puesto.x, 0, estacion.puesto.z);
@@ -178,6 +190,29 @@
     document.addEventListener('visibilitychange', function () {
       self.pausado = document.hidden;
       if (!self.pausado) self.reloj.anterior = performance.now();
+    });
+
+    // El botón de idioma (js/i18n.js) traduce el DOM solo, pero los
+    // letreros y la pizarra del salón son texturas de canvas: hay que
+    // redibujarlas a mano cuando el idioma cambia sin recargar la página
+    // (pasar a inglés no recarga; volver a español sí, así que ese caso
+    // ya nace correcto en el siguiente arranque).
+    document.addEventListener('i18n:langChange', function (e) {
+      var lang = e.detail.lang;
+      self.estaciones.forEach(function (est) {
+        if (est.letrero && est.letrero.userData.actualizarTexto) {
+          est.letrero.userData.actualizarTexto(
+            est.numero,
+            lang === 'en' && est.tituloEn ? est.tituloEn : est.titulo,
+            lang === 'en' && est.subtituloEn ? est.subtituloEn : est.subtitulo
+          );
+        }
+      });
+      var salon = global.Escena.SALON;
+      var formulario = global.Escena.FORMULARIO[lang] || global.Escena.FORMULARIO.es;
+      if (salon && salon.pizarraTex && salon.pizarraTex.actualizar) {
+        salon.pizarraTex.actualizar(formulario.titulo, formulario.formulas);
+      }
     });
   };
 

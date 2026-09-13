@@ -10,7 +10,8 @@
 //           lab/experimentos.html, lab/figuras.html, lab/juegos.html,
 //           lab/proyectiles.html, lab/simulaciones.html,
 //           lab/modulos/datos.html, lab/modulos/fisica.html,
-//           lab/modulos/geometrico.html, lab/modulos/optimizacion.html
+//           lab/modulos/geometrico.html, lab/modulos/optimizacion.html,
+//           laboratorio-fisica-3d/index.html
 
 const I18n = (() => {
 
@@ -126,6 +127,8 @@ const I18n = (() => {
                 'Analysis Questions - History of Mathematics',
             'Dashboard del Profesor - Historia de las Matemáticas':
                 'Professor Dashboard - History of Mathematics',
+            'Laboratorio de Física 3D | Matemáticas Digitales':
+                '3D Physics Lab | Digital Mathematics',
         }
     };
 
@@ -181,7 +184,10 @@ const I18n = (() => {
                 'Reflexiona sobre la evolución de las matemáticas y su futuro en el siglo XXI.':
                     'Reflect on the evolution of mathematics and its future in the 21st century.',
                 // profesor-dashboard
-                'Buscar por nombre o grupo...': 'Search by name or group...'
+                'Buscar por nombre o grupo...': 'Search by name or group...',
+                // laboratorio-fisica-3d/index.html
+                'Para que aparezca en el reporte': 'So it appears in the report',
+                'Por ejemplo 10-B': 'For example 10-B'
             }
         }
     };
@@ -2189,6 +2195,60 @@ const I18n = (() => {
             'Acciones':                       'Actions',
             // No results
             'No hay resultados disponibles':  'No results available',
+
+            // ── laboratorio-fisica-3d/index.html ────────────────────────
+            'Laboratorio de física': 'Physics Lab',
+            'Recién llegado': 'Newcomer',
+            'Descargas': 'Downloads',
+            'Cómo se usa': 'How it works',
+            'Plano del salón': 'Room map',
+            'Laboratorio de': 'Laboratory of',
+            'física en 3D': '3D physics',
+            'Caída libre': 'Free fall',
+            'Plano inclinado': 'Inclined plane',
+            'Péndulo simple': 'Simple pendulum',
+            'Colisiones': 'Collisions',
+            'Tiro parabólico': 'Projectile motion',
+            'Campo eléctrico': 'Electric field',
+            'Fuerza magnética': 'Magnetic force',
+            'Para caminar por el salón hace falta teclado y mouse, así que este dispositivo no permite recorrerlo. Lo que sí funciona es entrar a cada estación desde la lista de arriba: los experimentos, las misiones y las descargas andan igual.':
+                'Walking around the room needs a keyboard and mouse, so this device does not let you walk through it. What does work is entering each station from the list above: the experiments, missions, and downloads all work the same.',
+            'Tu nombre': 'Your name',
+            'Grupo o sección': 'Group or section',
+            'Entrar al laboratorio': 'Enter the lab',
+            'Borrar mi progreso': 'Clear my progress',
+            'caminar': 'walk',
+            'mirar': 'look',
+            'correr': 'run',
+            'abrir la estación': 'open the station',
+            'soltar el cursor': 'release the cursor',
+            'El laboratorio completo, sin internet': 'The complete lab, no internet',
+            'Un solo archivo HTML con todo adentro, incluido el motor 3D. Cópialo a las computadoras del salón y funciona con doble clic, sin instalar nada ni tener conexión.':
+                'A single HTML file with everything inside, including the 3D engine. Copy it to the classroom computers and it works with a double-click, with nothing to install and no connection needed.',
+            'Reporte del estudiante en PDF': 'Student report in PDF',
+            'Hoja de laboratorio con el puntaje, las misiones resueltas, los intentos, todas las mediciones y espacio para escribir las conclusiones a mano. Se abre listo para guardar como PDF o imprimir.':
+                'Lab sheet with the score, solved missions, attempts, all the measurements, and space to write conclusions by hand. It opens ready to save as PDF or print.',
+            'Datos de todas las estaciones en CSV': 'Data from all stations in CSV',
+            'Tabla con cada medición tomada, lista para abrir en Excel o Google Sheets y graficar. Usa punto y coma y coma decimal para que abra bien en español.':
+                'Table with every measurement taken, ready to open in Excel or Google Sheets and graph. It uses semicolons and decimal commas so it opens correctly in Spanish.',
+            'Datos de la estación abierta en CSV': 'Data from the open station in CSV',
+            'Solo las mediciones de la estación que tengas abierta en ese momento. Si no hay ninguna abierta, descarga todas.':
+                'Only the measurements from the station you have open at that moment. If none is open, it downloads all of them.',
+            'Guía didáctica del profesor': 'Teacher\'s teaching guide',
+            'Guion de clase con las siete estaciones, los controles de cada una, todas las misiones con sus respuestas, los rangos aceptados y preguntas para discutir en voz alta. Imprimible.':
+                'Class script with the seven stations, each one\'s controls, all the missions with their answers, the accepted ranges, and questions to discuss out loud. Printable.',
+            'Cómo se usa el laboratorio': 'How the lab works',
+            'Para moverte': 'To move around',
+            'Caminar por el salón': 'Walk around the room',
+            'Girar la cabeza y mirar alrededor': 'Turn your head and look around',
+            'Correr': 'Run',
+            'Abrir o cerrar la estación que tengas delante': 'Open or close the station in front of you',
+            'Ejecutar el experimento de la estación abierta': 'Run the experiment of the open station',
+            'Abrir las descargas': 'Open the downloads',
+            'Soltar el cursor del mouse': 'Release the mouse cursor',
+            'Cómo avanzar': 'How to progress',
+            'Para el profesor': 'For the teacher',
+            'No se pudo iniciar el laboratorio': 'The lab could not start',
         }
     };
 
@@ -2917,6 +2977,20 @@ const I18n = (() => {
                 'Interactive visualization of algebraic equations using a virtual balance.',
             'Explorador interactivo del círculo unitario con funciones trigonométricas dinámicas.':
                 'Interactive explorer of the unit circle with dynamic trigonometric functions.',
+
+            // ── laboratorio-fisica-3d/index.html ────────────────────────
+            'Un salón completo que puedes recorrer caminando. Siete estaciones con experimentos de verdad: sueltas un cuerpo en un tubo de vacío, disparas un cañón, chocas dos carros, mides un péndulo y ves las líneas de un campo eléctrico en el aire. Cada estación trae misiones donde primero calculas el resultado y después lo compruebas con el experimento.':
+                'A complete room you can walk through. Seven stations with real experiments: you drop a body in a vacuum tube, fire a cannon, crash two carts, measure a pendulum, and see the lines of an electric field in the air. Each station brings missions where you first calculate the result and then check it with the experiment.',
+            'Toca una estación para ir directo a ella.':
+                'Tap a station to go straight to it.',
+            'Haz clic en una estación del plano para moverte hasta ella.':
+                'Click a station on the map to move to it.',
+            'Cada estación tiene misiones en orden. Las de predicción te piden calcular un número con lápiz y papel antes de correr el experimento: escribes tu resultado y el laboratorio lo compara con el valor exacto, aceptando un margen del cinco por ciento. Las de reto se cumplen manipulando los controles hasta lograr lo que pide el enunciado.':
+                'Each station has missions in order. The prediction ones ask you to calculate a number with pencil and paper before running the experiment: you write your result and the lab compares it with the exact value, accepting a five percent margin. The challenge ones are met by working the controls until you achieve what the prompt asks.',
+            'Una misión se desbloquea cuando resuelves la anterior. Cada una vale cien puntos y se descuentan quince por cada intento fallido, con un mínimo de cuarenta. Tu progreso queda guardado en esta computadora aunque cierres la página.':
+                'A mission unlocks when you solve the previous one. Each one is worth a hundred points, and fifteen are deducted for each failed attempt, down to a minimum of forty. Your progress is saved on this computer even if you close the page.',
+            'En Descargas encuentras la guía didáctica con todas las respuestas, el reporte en PDF que entrega el estudiante, los datos en CSV para graficar en clase y el laboratorio completo en un archivo que funciona sin internet.':
+                'In Downloads you\'ll find the teaching guide with all the answers, the PDF report the student turns in, the CSV data to graph in class, and the complete lab in a file that works without internet.',
         }
     };
 
@@ -3234,5 +3308,12 @@ const I18n = (() => {
         if (saved === 'en') applyTranslation('en');
     }
 
-    return { setLanguage, init, getCurrentLang: () => currentLang, refresh: () => applyTranslation(currentLang) };
+    // Elige entre dos textos según el idioma activo. Sirve para mensajes
+    // construidos en JS con valores interpolados (contadores, medidas...)
+    // que el diccionario de arriba no puede resolver por coincidencia exacta.
+    function t(es, en) {
+        return currentLang === 'en' && en ? en : es;
+    }
+
+    return { setLanguage, init, getCurrentLang: () => currentLang, refresh: () => applyTranslation(currentLang), t };
 })();

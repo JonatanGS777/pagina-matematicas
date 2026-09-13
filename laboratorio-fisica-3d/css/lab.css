@@ -1,11 +1,11 @@
 /*
- * Laboratorio de Fisica 3D - Interfaz
+ * Laboratorio de Física 3D - Interfaz
  *
  * Lenguaje visual propio: instrumento de laboratorio nocturno. Superficies
- * oscuras y opacas, un ambar de senalizacion para lo que el estudiante
+ * oscuras y opacas, un ámbar de señalización para lo que el estudiante
  * debe accionar, un cian de instrumento para lo que se mide y un verde
- * solo para lo que ya quedo resuelto. Nada decorativo compite con la
- * escena 3D, que es el contenido real de la pagina.
+ * solo para lo que ya quedó resuelto. Nada decorativo compite con la
+ * escena 3D, que es el contenido real de la página.
  */
 
 :root {
@@ -349,7 +349,15 @@ kbd {
   gap: 9px;
 }
 
-/* Mapa del salon */
+/* Selector de idioma: vive fuera de #portada y #hud para verse en ambos */
+#lang-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 70;
+}
+
+/* Mapa del salón */
 .mapa-caja {
   position: absolute;
   bottom: 14px;
@@ -383,7 +391,7 @@ kbd {
   line-height: 1.4;
 }
 
-/* Aviso de estacion cercana */
+/* Aviso de estación cercana */
 #aviso-estacion {
   position: absolute;
   bottom: 76px;
@@ -1083,7 +1091,7 @@ input[type="range"]::-moz-range-thumb {
 
   .mapa-caja { display: none; }
 
-  /* Las cuatro pestanas no caben a lo ancho de un telefono */
+  /* Las cuatro pestañas no caben a lo ancho de un teléfono */
   #pestanas {
     overflow-x: auto;
     scrollbar-width: none;
@@ -1103,7 +1111,7 @@ input[type="range"]::-moz-range-thumb {
   .teclas-fila { display: none; }
 }
 
-/* Estaciones de la portada: son botones, funcionan tambien con el dedo */
+/* Estaciones de la portada: son botones, funcionan también con el dedo */
 button.chip-estacion {
   cursor: pointer;
   font-family: var(--sans);
@@ -1125,7 +1133,7 @@ button.chip-estacion:active { transform: translateY(1px); }
   color: var(--texto-tenue);
 }
 
-/* Aviso para tablet y telefono, donde no hay teclado para caminar */
+/* Aviso para tablet y teléfono, donde no hay teclado para caminar */
 .aviso-dispositivo {
   display: flex;
   align-items: flex-start;

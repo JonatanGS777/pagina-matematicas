@@ -12,6 +12,7 @@
 (function (global) {
   'use strict';
 
+  var U = global.Util3D;
   var URL_THREE = 'https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js';
 
   /* ------------------------------------------------------------------ *
@@ -85,7 +86,7 @@
 
   function descargarCSV(estacion, estudiante) {
     if (!estacion.historial.length) {
-      return { ok: false, mensaje: 'Todavía no hay mediciones en esta estación. Corre el experimento al menos una vez.' };
+      return { ok: false, mensaje: U.texto('Todavía no hay mediciones en esta estación. Corre el experimento al menos una vez.', 'There are no measurements in this station yet. Run the experiment at least once.') };
     }
     // El BOM hace que Excel reconozca los acentos.
     descargarTexto(
@@ -93,14 +94,14 @@
       '﻿' + csvDeEstacion(estacion, estudiante),
       'text/csv'
     );
-    return { ok: true, mensaje: 'Se descargaron ' + estacion.historial.length + ' mediciones en formato CSV.' };
+    return { ok: true, mensaje: U.texto('Se descargaron ' + estacion.historial.length + ' mediciones en formato CSV.', estacion.historial.length + ' measurements downloaded as CSV.') };
   }
 
   // CSV con todas las estaciones que tengan datos, una tabla tras otra.
   function descargarCSVCompleto(estaciones, estudiante) {
     var conDatos = estaciones.filter(function (e) { return e.historial.length; });
     if (!conDatos.length) {
-      return { ok: false, mensaje: 'Todavía no hay mediciones en ninguna estación.' };
+      return { ok: false, mensaje: U.texto('Todavía no hay mediciones en ninguna estación.', 'There are no measurements in any station yet.') };
     }
     var partes = conDatos.map(function (e) { return csvDeEstacion(e, estudiante); });
     descargarTexto(
@@ -108,7 +109,7 @@
       '﻿' + partes.join('\n\n\n'),
       'text/csv'
     );
-    return { ok: true, mensaje: 'Se descargaron los datos de ' + conDatos.length + ' estaciones.' };
+    return { ok: true, mensaje: U.texto('Se descargaron los datos de ' + conDatos.length + ' estaciones.', 'Data from ' + conDatos.length + ' stations downloaded.') };
   }
 
   /* ------------------------------------------------------------------ *
@@ -156,7 +157,7 @@
   function abrirParaImprimir(titulo, cuerpo) {
     var ventana = window.open('', '_blank');
     if (!ventana) {
-      return { ok: false, mensaje: 'El navegador bloqueó la ventana. Permite las ventanas emergentes de este sitio y vuelve a intentarlo.' };
+      return { ok: false, mensaje: U.texto('El navegador bloqueó la ventana. Permite las ventanas emergentes de este sitio y vuelve a intentarlo.', 'The browser blocked the window. Allow pop-ups for this site and try again.') };
     }
     ventana.document.write(
       '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">' +
@@ -167,7 +168,7 @@
       cuerpo + '</body></html>'
     );
     ventana.document.close();
-    return { ok: true, mensaje: 'Se abrió el documento en una pestaña nueva. Usa el botón de imprimir y elige "Guardar como PDF".' };
+    return { ok: true, mensaje: U.texto('Se abrió el documento en una pestaña nueva. Usa el botón de imprimir y elige "Guardar como PDF".', 'The document opened in a new tab. Use the print button and choose "Save as PDF".') };
   }
 
   /* ------------------------------------------------------------------ *
@@ -394,16 +395,17 @@
       });
     }
 
-    avisar('Leyendo el laboratorio...');
+    avisar(U.texto('Leyendo el laboratorio...', 'Reading the lab...'));
 
     return traer('index.html').then(function (html) {
-      // Lista de scripts propios en el mismo orden en que los carga la página.
+      // Lista de scripts propios en el mismo orden en que los carga la página,
+      // incluido el selector de idioma compartido (../js/i18n.js).
       var scripts = [];
-      var re = /<script\s+src="(js\/[^"]+)"><\/script>/g;
+      var re = /<script\s+src="((?:\.\.\/)?js\/[^"]+)"><\/script>/g;
       var m;
       while ((m = re.exec(html)) !== null) scripts.push(m[1]);
 
-      avisar('Descargando el motor 3D...');
+      avisar(U.texto('Descargando el motor 3D...', 'Downloading the 3D engine...'));
       return Promise.all([
         traer(URL_THREE),
         traer('css/lab.css'),
@@ -413,7 +415,7 @@
         var css = partes[1];
         var codigos = partes[2];
 
-        avisar('Armando el archivo...');
+        avisar(U.texto('Armando el archivo...', 'Assembling the file...'));
 
         // La hoja de estilos pasa a estar dentro del documento.
         var salida = html.replace(
@@ -440,15 +442,19 @@
         descargarTexto('laboratorio-fisica-3d-offline.html', salida, 'text/html');
         return {
           ok: true,
-          mensaje: 'Listo. Se descargó el laboratorio completo en un archivo de ' +
-            Math.round(salida.length / 1024) + ' KB. Funciona con doble clic, sin internet.'
+          mensaje: U.texto(
+            'Listo. Se descargó el laboratorio completo en un archivo de ' + Math.round(salida.length / 1024) + ' KB. Funciona con doble clic, sin internet.',
+            'Done. The complete lab was downloaded as a ' + Math.round(salida.length / 1024) + ' KB file. It works with a double-click, no internet needed.'
+          )
         };
       });
     }).catch(function (err) {
       return {
         ok: false,
-        mensaje: 'No se pudo generar el archivo: ' + err.message +
-          '. Esta descarga necesita que la página esté abierta desde un servidor web, no desde un archivo local.'
+        mensaje: U.texto(
+          'No se pudo generar el archivo: ' + err.message + '. Esta descarga necesita que la página esté abierta desde un servidor web, no desde un archivo local.',
+          'The file could not be generated: ' + err.message + '. This download needs the page to be open from a web server, not a local file.'
+        )
       };
     });
   }

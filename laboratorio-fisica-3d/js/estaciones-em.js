@@ -28,70 +28,84 @@
     this.numero = 6;
     this.titulo = 'Campo eléctrico';
     this.subtitulo = 'Líneas de campo en el espacio';
+    this.tituloEn = 'Electric field';
+    this.subtituloEn = 'Field lines in space';
     this.color = 0x5aa9ff;
     this.posicion = { x: -9, z: 4 };
     this.puesto = { x: -9, z: 7.4 };
     this.mesaTamano = { ancho: 3.8, fondo: 2.6 };
     this.descripcion = 'Las líneas salen de lo positivo y entran a lo negativo. Suelta la ' +
       'carga de prueba y mírala seguir el campo: eso es lo que siente un electrón.';
+    this.descripcionEn = 'Lines leave the positive and enter the negative. Release the ' +
+      'test charge and watch it follow the field: that is what an electron feels.';
     this.ecuaciones = ['E = k q / r^2', 'F = q E', 'V = k q / r'];
 
     this.parametros = [
-      { id: 'configuracion', etiqueta: 'Configuración', tipo: 'opciones', valor: 0, opciones: [
-        { valor: 0, etiqueta: 'Dipolo (+ y -)' },
-        { valor: 1, etiqueta: 'Dos cargas iguales (+ y +)' },
-        { valor: 2, etiqueta: 'Carga sola (+)' },
-        { valor: 3, etiqueta: 'Cuadrupolo' }
+      { id: 'configuracion', etiqueta: 'Configuración', etiquetaEn: 'Configuration', tipo: 'opciones', valor: 0, opciones: [
+        { valor: 0, etiqueta: 'Dipolo (+ y -)', etiquetaEn: 'Dipole (+ and -)' },
+        { valor: 1, etiqueta: 'Dos cargas iguales (+ y +)', etiquetaEn: 'Two equal charges (+ and +)' },
+        { valor: 2, etiqueta: 'Carga sola (+)', etiquetaEn: 'Single charge (+)' },
+        { valor: 3, etiqueta: 'Cuadrupolo', etiquetaEn: 'Quadrupole' }
       ] },
-      { id: 'carga', etiqueta: 'Magnitud de las cargas', unidad: 'nC', tipo: 'rango', min: 1, max: 40, paso: 1, valor: 20 },
-      { id: 'separacion', etiqueta: 'Separación', unidad: 'm', tipo: 'rango', min: 0.4, max: 2.4, paso: 0.1, valor: 1.4 },
-      { id: 'cargaPrueba', etiqueta: 'Carga de prueba', unidad: 'nC', tipo: 'rango', min: -10, max: 10, paso: 0.5, valor: 1 },
-      { id: 'lineas', etiqueta: 'Líneas por carga', tipo: 'rango', min: 6, max: 24, paso: 2, valor: 14 }
+      { id: 'carga', etiqueta: 'Magnitud de las cargas', etiquetaEn: 'Charge magnitude', unidad: 'nC', tipo: 'rango', min: 1, max: 40, paso: 1, valor: 20 },
+      { id: 'separacion', etiqueta: 'Separación', etiquetaEn: 'Separation', unidad: 'm', tipo: 'rango', min: 0.4, max: 2.4, paso: 0.1, valor: 1.4 },
+      { id: 'cargaPrueba', etiqueta: 'Carga de prueba', etiquetaEn: 'Test charge', unidad: 'nC', tipo: 'rango', min: -10, max: 10, paso: 0.5, valor: 1 },
+      { id: 'lineas', etiqueta: 'Líneas por carga', etiquetaEn: 'Lines per charge', tipo: 'rango', min: 6, max: 24, paso: 2, valor: 14 }
     ];
 
     this.misiones = [
       {
         id: 'ce-1', tipo: 'prediccion',
         enunciado: 'Con una sola carga positiva, calcula la magnitud del campo a 1 metro de distancia.',
+        enunciadoEn: 'With a single positive charge, calculate the field magnitude at 1 meter of distance.',
         pista: 'E = k q / r^2, con k = 8.99e9 y la carga en coulombs (1 nC son 1e-9 C).',
-        entrada: { etiqueta: 'Campo eléctrico', unidad: 'N/C' },
+        pistaEn: 'E = k q / r^2, with k = 8.99e9 and the charge in coulombs (1 nC is 1e-9 C).',
+        entrada: { etiqueta: 'Campo eléctrico', etiquetaEn: 'Electric field', unidad: 'N/C' },
         objetivo: function (e) { return F.K_COULOMB * p(e, 'carga') * 1e-9 / 1; },
         tolerancia: 0.05,
         condicionPrevia: function (e) { return p(e, 'configuracion') === 2; },
-        avisoPrevio: 'Elige la configuración de carga sola.'
+        avisoPrevio: 'Elige la configuración de carga sola.',
+        avisoPrevioEn: 'Choose the single-charge configuration.'
       },
       {
         id: 'ce-2', tipo: 'prediccion',
-        enunciado: 'Si duplicas la distancia, en qué factor cambia el campo? Escribe cuánto vale el campo a 2 metros.',
+        enunciado: '¿Si duplicas la distancia, en qué factor cambia el campo? Escribe cuánto vale el campo a 2 metros.',
+        enunciadoEn: 'If you double the distance, by what factor does the field change? Write down the field value at 2 meters.',
         pista: 'El campo cae con el cuadrado de la distancia, así que al doble de distancia queda la cuarta parte.',
-        entrada: { etiqueta: 'Campo a 2 metros', unidad: 'N/C' },
+        pistaEn: 'The field falls with the square of the distance, so at double the distance it is one fourth.',
+        entrada: { etiqueta: 'Campo a 2 metros', etiquetaEn: 'Field at 2 meters', unidad: 'N/C' },
         objetivo: function (e) { return F.K_COULOMB * p(e, 'carga') * 1e-9 / 4; },
         tolerancia: 0.05,
         condicionPrevia: function (e) { return p(e, 'configuracion') === 2; },
-        avisoPrevio: 'Elige la configuración de carga sola.'
+        avisoPrevio: 'Elige la configuración de carga sola.',
+        avisoPrevioEn: 'Choose the single-charge configuration.'
       },
       {
         id: 'ce-3', tipo: 'reto',
         enunciado: 'Pon dos cargas positivas iguales y lleva la carga de prueba al punto exacto donde el campo se anula.',
+        enunciadoEn: 'Set two equal positive charges and move the test charge to the exact point where the field cancels out.',
         pista: 'Por simetría, el punto neutro está justo a mitad de camino entre las dos cargas.',
+        pistaEn: 'By symmetry, the neutral point is exactly halfway between the two charges.',
         verificar: function (e) {
-          if (p(e, 'configuracion') !== 1) return { ok: false, mensaje: 'Cambia a la configuración de dos cargas iguales.' };
+          if (p(e, 'configuracion') !== 1) return { ok: false, mensaje: U.texto('Cambia a la configuración de dos cargas iguales.', 'Switch to the two-equal-charges configuration.') };
           var E = F.norma(e.campo.campoEn([e.pruebaPos.x, e.pruebaPos.y, e.pruebaPos.z]));
           return E < 5
-            ? { ok: true, mensaje: 'Campo de ' + E.toFixed(2) + ' N/C, prácticamente nulo. Las dos cargas se cancelan en ese punto.' }
-            : { ok: false, mensaje: 'Ahí el campo todavía vale ' + E.toFixed(1) + ' N/C. Acércate al centro.' };
+            ? { ok: true, mensaje: U.texto('Campo de ' + E.toFixed(2) + ' N/C, prácticamente nulo. Las dos cargas se cancelan en ese punto.', 'Field of ' + E.toFixed(2) + ' N/C, practically null. The two charges cancel out at that point.') }
+            : { ok: false, mensaje: U.texto('Ahí el campo todavía vale ' + E.toFixed(1) + ' N/C. Acércate al centro.', 'The field there is still ' + E.toFixed(1) + ' N/C. Get closer to the center.') };
         }
       },
       {
         id: 'ce-4', tipo: 'reto',
         enunciado: 'Con un dipolo, coloca la carga de prueba donde sienta una fuerza mayor a 1 micronewton.',
+        enunciadoEn: 'With a dipole, place the test charge where it feels a force greater than 1 micronewton.',
         pista: 'La fuerza crece muchísimo al acercarte a cualquiera de las dos cargas.',
+        pistaEn: 'The force grows enormously as you get closer to either charge.',
         verificar: function (e) {
-          if (p(e, 'configuracion') !== 0) return { ok: false, mensaje: 'Cambia a la configuración de dipolo.' };
+          if (p(e, 'configuracion') !== 0) return { ok: false, mensaje: U.texto('Cambia a la configuración de dipolo.', 'Switch to the dipole configuration.') };
           var Fv = F.norma(e.campo.fuerzaSobre([e.pruebaPos.x, e.pruebaPos.y, e.pruebaPos.z], p(e, 'cargaPrueba')));
           return Fv > 1e-6
-            ? { ok: true, mensaje: 'Fuerza de ' + (Fv * 1e6).toFixed(2) + ' micronewtons sobre la carga de prueba.' }
-            : { ok: false, mensaje: 'Solo ' + (Fv * 1e6).toFixed(3) + ' micronewtons. Acércate más a una carga.' };
+            ? { ok: true, mensaje: U.texto('Fuerza de ' + (Fv * 1e6).toFixed(2) + ' micronewtons sobre la carga de prueba.', 'Force of ' + (Fv * 1e6).toFixed(2) + ' micronewtons on the test charge.') }
+            : { ok: false, mensaje: U.texto('Solo ' + (Fv * 1e6).toFixed(3) + ' micronewtons. Acércate más a una carga.', 'Only ' + (Fv * 1e6).toFixed(3) + ' micronewtons. Get closer to a charge.') };
         }
       }
     ];
@@ -151,7 +165,7 @@
     this.flechaFuerza = new U.Flecha(0x7ee787, 0.028);
     g.add(this.flechaFuerza.grupo);
 
-    this.rotuloPrueba = U.rotulo('sonda', { escala: 0.42, color: '#7ee787' });
+    this.rotuloPrueba = U.rotulo(U.texto('sonda', 'probe'), { escala: 0.42, color: '#7ee787' });
     g.add(this.rotuloPrueba);
 
     this.pantalla = U.crearPantalla(1.35, 0.9);
@@ -347,7 +361,7 @@
     var E = F.norma(this.campo.campoEn(punto));
     var V = this.campo.potencialEn(punto);
     this.pantalla.userData.dibujar([
-      'SONDA DE CAMPO',
+      U.texto('SONDA DE CAMPO', 'FIELD PROBE'),
       'E = ' + E.toFixed(1) + ' N/C',
       'V = ' + V.toFixed(1) + ' V',
       'F = ' + (F.norma(this.campo.fuerzaSobre(punto, p(this, 'cargaPrueba'))) * 1e6).toFixed(3) + ' uN'
@@ -359,13 +373,13 @@
     var E = this.campo.campoEn(punto);
     var fuerza = this.campo.fuerzaSobre(punto, p(this, 'cargaPrueba'));
     return [
-      { etiqueta: 'Campo en la sonda', valor: F.norma(E).toFixed(2), unidad: 'N/C', destacado: true },
-      { etiqueta: 'Potencial en la sonda', valor: this.campo.potencialEn(punto).toFixed(2), unidad: 'V', destacado: true },
-      { etiqueta: 'Fuerza sobre la sonda', valor: (F.norma(fuerza) * 1e6).toFixed(4), unidad: 'micronewtons' },
-      { etiqueta: 'Componente Ex', valor: E[0].toFixed(2), unidad: 'N/C' },
-      { etiqueta: 'Componente Ey', valor: E[1].toFixed(2), unidad: 'N/C' },
-      { etiqueta: 'Componente Ez', valor: E[2].toFixed(2), unidad: 'N/C' },
-      { etiqueta: 'Posición de la sonda', valor: this.pruebaPos.x.toFixed(2) + ', ' + this.pruebaPos.y.toFixed(2) + ', ' + this.pruebaPos.z.toFixed(2), unidad: 'm' }
+      { etiqueta: 'Campo en la sonda', etiquetaEn: 'Field at the probe', valor: F.norma(E).toFixed(2), unidad: 'N/C', destacado: true },
+      { etiqueta: 'Potencial en la sonda', etiquetaEn: 'Potential at the probe', valor: this.campo.potencialEn(punto).toFixed(2), unidad: 'V', destacado: true },
+      { etiqueta: 'Fuerza sobre la sonda', etiquetaEn: 'Force on the probe', valor: (F.norma(fuerza) * 1e6).toFixed(4), unidad: 'micronewtons' },
+      { etiqueta: 'Componente Ex', etiquetaEn: 'Ex component', valor: E[0].toFixed(2), unidad: 'N/C' },
+      { etiqueta: 'Componente Ey', etiquetaEn: 'Ey component', valor: E[1].toFixed(2), unidad: 'N/C' },
+      { etiqueta: 'Componente Ez', etiquetaEn: 'Ez component', valor: E[2].toFixed(2), unidad: 'N/C' },
+      { etiqueta: 'Posición de la sonda', etiquetaEn: 'Probe position', valor: this.pruebaPos.x.toFixed(2) + ', ' + this.pruebaPos.y.toFixed(2) + ', ' + this.pruebaPos.z.toFixed(2), unidad: 'm' }
     ];
   };
 
@@ -390,7 +404,7 @@
   CampoElectricoEstacion.prototype.columnas = function () {
     return [
       { clave: 'corrida', etiqueta: 'N' },
-      { clave: 'configuracion', etiqueta: 'Configuración' },
+      { clave: 'configuracion', etiqueta: 'Configuración', etiquetaEn: 'Configuration' },
       { clave: 'carga', etiqueta: 'q (nC)', decimales: 0 },
       { clave: 'x', etiqueta: 'x (m)', decimales: 2 },
       { clave: 'y', etiqueta: 'y (m)', decimales: 2 },
@@ -402,7 +416,7 @@
   };
 
   /* ================================================================== *
-   * ESTACION 7 - Fuerza de Lorentz
+   * ESTACIÓN 7 - Fuerza de Lorentz
    * ================================================================== */
 
   function LorentzEstacion() {
@@ -410,30 +424,36 @@
     this.numero = 7;
     this.titulo = 'Fuerza magnética';
     this.subtitulo = 'Cámara de niebla y bobinas';
+    this.tituloEn = 'Magnetic force';
+    this.subtituloEn = 'Cloud chamber and coils';
     this.color = 0xb08cff;
     this.posicion = { x: 9, z: 4 };
     this.puesto = { x: 9, z: 7.4 };
     this.mesaTamano = { ancho: 3.6, fondo: 3.6 };
     this.descripcion = 'La fuerza magnética nunca acelera ni frena, solo desvía. Por eso la ' +
       'partícula gira en círculo sin ganar rapidez, y si entra inclinada dibuja una hélice.';
+    this.descripcionEn = 'Magnetic force never speeds up or slows down, it only deflects. That is why the ' +
+      'particle circles without gaining speed, and if it enters at an angle it traces a helix.';
     this.ecuaciones = ['F = q v x B', 'r = m v / (q B)', 'T = 2 pi m / (q B)'];
 
     this.parametros = [
-      { id: 'campoB', etiqueta: 'Campo magnético B', unidad: 'mT', tipo: 'rango', min: 50, max: 400, paso: 10, valor: 150 },
-      { id: 'rapidez', etiqueta: 'Rapidez de entrada', unidad: 'm/s', tipo: 'rango', min: 0.5, max: 6, paso: 0.1, valor: 2.4 },
-      { id: 'inclinacion', etiqueta: 'Inclinación respecto a B', unidad: 'grados', tipo: 'rango', min: 0, max: 80, paso: 5, valor: 0 },
-      { id: 'signo', etiqueta: 'Signo de la carga', tipo: 'opciones', valor: 1, opciones: [
-        { valor: 1, etiqueta: 'Positiva' }, { valor: -1, etiqueta: 'Negativa' }
+      { id: 'campoB', etiqueta: 'Campo magnético B', etiquetaEn: 'Magnetic field B', unidad: 'mT', tipo: 'rango', min: 50, max: 400, paso: 10, valor: 150 },
+      { id: 'rapidez', etiqueta: 'Rapidez de entrada', etiquetaEn: 'Entry speed', unidad: 'm/s', tipo: 'rango', min: 0.5, max: 6, paso: 0.1, valor: 2.4 },
+      { id: 'inclinacion', etiqueta: 'Inclinación respecto a B', etiquetaEn: 'Tilt relative to B', unidad: 'grados', unidadEn: 'degrees', tipo: 'rango', min: 0, max: 80, paso: 5, valor: 0 },
+      { id: 'signo', etiqueta: 'Signo de la carga', etiquetaEn: 'Charge sign', tipo: 'opciones', valor: 1, opciones: [
+        { valor: 1, etiqueta: 'Positiva', etiquetaEn: 'Positive' }, { valor: -1, etiqueta: 'Negativa', etiquetaEn: 'Negative' }
       ] },
-      { id: 'masaRel', etiqueta: 'Masa de la partícula', unidad: 'ug', tipo: 'rango', min: 10, max: 120, paso: 5, valor: 50 }
+      { id: 'masaRel', etiqueta: 'Masa de la partícula', etiquetaEn: 'Particle mass', unidad: 'ug', tipo: 'rango', min: 10, max: 120, paso: 5, valor: 50 }
     ];
 
     this.misiones = [
       {
         id: 'lo-1', tipo: 'prediccion',
         enunciado: 'Con el campo y la rapidez que elegiste, calcula el radio del círculo que va a describir la partícula.',
+        enunciadoEn: 'With the field and speed you chose, calculate the radius of the circle the particle will trace.',
         pista: 'r = m v / (q B). La carga vale 1 microcoulomb y la masa la ves en el panel en microgramos.',
-        entrada: { etiqueta: 'Radio de giro', unidad: 'm' },
+        pistaEn: 'r = m v / (q B). The charge is 1 microcoulomb and you see the mass on the panel in micrograms.',
+        entrada: { etiqueta: 'Radio de giro', etiquetaEn: 'Gyroradius', unidad: 'm' },
         objetivo: function (e) {
           var B = p(e, 'campoB') / 1000;
           var m = p(e, 'masaRel') * 1e-9;
@@ -445,9 +465,11 @@
       {
         id: 'lo-2', tipo: 'reto',
         enunciado: 'Duplica el campo magnético y comprueba que el radio se reduce a la mitad.',
+        enunciadoEn: 'Double the magnetic field and check that the radius is reduced by half.',
         pista: 'El radio es inversamente proporcional a B. Anota una corrida, duplica B y vuelve a anotar.',
+        pistaEn: 'The radius is inversely proportional to B. Log one run, double B, and log again.',
         verificar: function (e) {
-          if (e.historial.length < 2) return { ok: false, mensaje: 'Registra al menos dos corridas con el botón de anotar.' };
+          if (e.historial.length < 2) return { ok: false, mensaje: U.texto('Registra al menos dos corridas con el botón de anotar.', 'Log at least two runs with the log button.') };
           var u = e.historial[e.historial.length - 1];
           for (var i = e.historial.length - 2; i >= 0; i--) {
             var v = e.historial[i];
@@ -455,29 +477,36 @@
             if (Math.abs(razonB - 2) < 0.15 || Math.abs(razonB - 0.5) < 0.04) {
               var razonR = v.radio / u.radio;
               if (Math.abs(razonR - razonB) < 0.15) {
-                return { ok: true, mensaje: 'El campo cambió ' + razonB.toFixed(2) + ' veces y el radio cambió en la proporción inversa. r y B son inversamente proporcionales.' };
+                return { ok: true, mensaje: U.texto(
+                  'El campo cambió ' + razonB.toFixed(2) + ' veces y el radio cambió en la proporción inversa. r y B son inversamente proporcionales.',
+                  'The field changed ' + razonB.toFixed(2) + ' times and the radius changed in the inverse proportion. r and B are inversely proportional.'
+                ) };
               }
             }
           }
-          return { ok: false, mensaje: 'Aún no hay dos corridas donde el campo se duplique manteniendo la rapidez.' };
+          return { ok: false, mensaje: U.texto('Aún no hay dos corridas donde el campo se duplique manteniendo la rapidez.', 'There are not yet two runs where the field doubles while keeping the speed the same.') };
         }
       },
       {
         id: 'lo-3', tipo: 'reto',
         enunciado: 'Inclina la velocidad respecto al campo y consigue que la trayectoria sea una hélice con un avance mayor a 0.5 m por vuelta.',
+        enunciadoEn: 'Tilt the velocity relative to the field and get the path to be a helix advancing more than 0.5 m per turn.',
         pista: 'La componente paralela a B no se desvía: esa es la que hace avanzar la hélice.',
+        pistaEn: 'The component parallel to B is not deflected: that is what advances the helix.',
         verificar: function (e) {
           var paso = e.sim.pasoHelice();
           return paso > 0.5
-            ? { ok: true, mensaje: 'La hélice avanza ' + paso.toFixed(2) + ' m en cada vuelta. Esa parte del movimiento el campo no la toca.' }
-            : { ok: false, mensaje: 'El avance es de ' + paso.toFixed(2) + ' m. Sube la inclinación o la rapidez.' };
+            ? { ok: true, mensaje: U.texto('La hélice avanza ' + paso.toFixed(2) + ' m en cada vuelta. Esa parte del movimiento el campo no la toca.', 'The helix advances ' + paso.toFixed(2) + ' m each turn. The field does not touch that part of the motion.') }
+            : { ok: false, mensaje: U.texto('El avance es de ' + paso.toFixed(2) + ' m. Sube la inclinación o la rapidez.', 'The advance is ' + paso.toFixed(2) + ' m. Raise the tilt or the speed.') };
         }
       },
       {
         id: 'lo-4', tipo: 'prediccion',
-        enunciado: 'El periodo de giro depende de la rapidez? Calcula cuánto tarda la partícula en dar una vuelta completa.',
+        enunciado: '¿El periodo de giro depende de la rapidez? Calcula cuánto tarda la partícula en dar una vuelta completa.',
+        enunciadoEn: 'Does the gyration period depend on speed? Calculate how long the particle takes to complete one turn.',
         pista: 'T = 2 pi m / (q B). Fíjate que la rapidez no aparece en la fórmula.',
-        entrada: { etiqueta: 'Periodo de giro', unidad: 's' },
+        pistaEn: 'T = 2 pi m / (q B). Notice that speed does not appear in the formula.',
+        entrada: { etiqueta: 'Periodo de giro', etiquetaEn: 'Gyration period', unidad: 's' },
         objetivo: function (e) {
           var B = p(e, 'campoB') / 1000;
           var m = p(e, 'masaRel') * 1e-9;
@@ -652,24 +681,24 @@
   LorentzEstacion.prototype.refrescarPantalla = function () {
     if (!this.pantalla) return;
     this.pantalla.userData.dibujar([
-      'CÁMARA DE NIEBLA',
+      U.texto('CÁMARA DE NIEBLA', 'CLOUD CHAMBER'),
       'r = ' + this.sim.radioTeorico().toFixed(3) + ' m',
       'T = ' + (this.sim.periodoCiclotron() * 1000).toFixed(2) + ' ms',
       'v = ' + F.norma(this.sim.velocidad()).toFixed(2) + ' m/s',
-      'paso hélice = ' + this.sim.pasoHelice().toFixed(3) + ' m'
+      U.texto('paso hélice = ', 'helix pitch = ') + this.sim.pasoHelice().toFixed(3) + ' m'
     ]);
   };
 
   LorentzEstacion.prototype.lecturas = function () {
     var v = this.sim.velocidad();
     return [
-      { etiqueta: 'Radio de giro', valor: this.sim.radioTeorico().toFixed(4), unidad: 'm', destacado: true },
-      { etiqueta: 'Periodo de giro', valor: (this.sim.periodoCiclotron() * 1000).toFixed(3), unidad: 'ms', destacado: true },
-      { etiqueta: 'Avance de la hélice', valor: this.sim.pasoHelice().toFixed(4), unidad: 'm por vuelta' },
-      { etiqueta: 'Rapidez actual', valor: F.norma(v).toFixed(4), unidad: 'm/s' },
-      { etiqueta: 'Rapidez inicial', valor: F.norma(this.sim.velocidadInicial).toFixed(4), unidad: 'm/s', teorico: true },
-      { etiqueta: 'Frecuencia ciclotrón', valor: (1 / this.sim.periodoCiclotron()).toFixed(1), unidad: 'Hz', teorico: true },
-      { etiqueta: 'Tiempo simulado', valor: (this.sim.t * 1000).toFixed(2), unidad: 'ms' }
+      { etiqueta: 'Radio de giro', etiquetaEn: 'Gyroradius', valor: this.sim.radioTeorico().toFixed(4), unidad: 'm', destacado: true },
+      { etiqueta: 'Periodo de giro', etiquetaEn: 'Gyration period', valor: (this.sim.periodoCiclotron() * 1000).toFixed(3), unidad: 'ms', destacado: true },
+      { etiqueta: 'Avance de la hélice', etiquetaEn: 'Helix advance', valor: this.sim.pasoHelice().toFixed(4), unidad: 'm por vuelta', unidadEn: 'm per turn' },
+      { etiqueta: 'Rapidez actual', etiquetaEn: 'Current speed', valor: F.norma(v).toFixed(4), unidad: 'm/s' },
+      { etiqueta: 'Rapidez inicial', etiquetaEn: 'Initial speed', valor: F.norma(this.sim.velocidadInicial).toFixed(4), unidad: 'm/s', teorico: true },
+      { etiqueta: 'Frecuencia ciclotrón', etiquetaEn: 'Cyclotron frequency', valor: (1 / this.sim.periodoCiclotron()).toFixed(1), unidad: 'Hz', teorico: true },
+      { etiqueta: 'Tiempo simulado', etiquetaEn: 'Simulated time', valor: (this.sim.t * 1000).toFixed(2), unidad: 'ms' }
     ];
   };
 
@@ -694,12 +723,12 @@
       { clave: 'corrida', etiqueta: 'N' },
       { clave: 'campoB', etiqueta: 'B (mT)', decimales: 0 },
       { clave: 'rapidez', etiqueta: 'v (m/s)', decimales: 1 },
-      { clave: 'inclinacion', etiqueta: 'Inclinación (gr)', decimales: 0 },
-      { clave: 'signo', etiqueta: 'Carga' },
+      { clave: 'inclinacion', etiqueta: 'Inclinación (gr)', etiquetaEn: 'Tilt (deg)', decimales: 0 },
+      { clave: 'signo', etiqueta: 'Carga', etiquetaEn: 'Charge' },
       { clave: 'masa', etiqueta: 'm (ug)', decimales: 1 },
       { clave: 'radio', etiqueta: 'r (m)', decimales: 4 },
       { clave: 'periodo', etiqueta: 'T (ms)', decimales: 3 },
-      { clave: 'pasoHelice', etiqueta: 'Paso hélice (m)', decimales: 4 }
+      { clave: 'pasoHelice', etiqueta: 'Paso hélice (m)', etiquetaEn: 'Helix pitch (m)', decimales: 4 }
     ];
   };
 

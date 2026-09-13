@@ -218,6 +218,56 @@
     return grupo;
   }
 
+  // Idioma activo según el selector ES/EN del sitio (js/i18n.js). El salón
+  // 3D dibuja su texto en canvas, así que no lo alcanza la traducción del
+  // DOM y necesita consultarlo directamente para redibujar letreros y
+  // pantallas en el idioma correcto.
+  function idioma() {
+    return (global.I18n && typeof global.I18n.getCurrentLang === 'function' && global.I18n.getCurrentLang() === 'en')
+      ? 'en' : 'es';
+  }
+
+  function texto(es, en) {
+    return idioma() === 'en' && en ? en : es;
+  }
+
+  // Valores categóricos que quedan grabados en el historial de mediciones
+  // (siempre en español, para que las misiones puedan comparalos sin que
+  // el idioma de la interfaz los afecte). Solo se traducen al mostrarlos
+  // en la tabla de Datos, con valorTabla().
+  var MAPA_VALORES = {
+    'Vacío': 'Vacuum',
+    'Con aire': 'With air',
+    'Sin aire': 'No air',
+    'Balín de acero': 'Steel ball',
+    'Pelota de espuma': 'Foam ball',
+    'Hoja de papel': 'Sheet of paper',
+    'Dipolo (+ y -)': 'Dipole (+ and -)',
+    'Dos cargas iguales (+ y +)': 'Two equal charges (+ and +)',
+    'Carga sola (+)': 'Single charge (+)',
+    'Cuadrupolo': 'Quadrupole',
+    'Positiva': 'Positive',
+    'Negativa': 'Negative'
+  };
+
+  function valorTabla(v) {
+    return (idioma() === 'en' && MAPA_VALORES[v]) ? MAPA_VALORES[v] : v;
+  }
+
+  // Igual que texto(), pero lee un par de campos de un objeto de datos
+  // (ej. T(estacion, 'titulo') mira estacion.titulo y estacion.tituloEn).
+  // Así el HUD no repite el nombre del campo en inglés en cada sitio.
+  function T(obj, campo) {
+    if (!obj) return '';
+    return texto(obj[campo], obj[campo + 'En']);
+  }
+
+  // Igual que T(), pero para campos que son arreglos (ej. ecuaciones).
+  function TArr(obj, campo) {
+    if (!obj) return [];
+    return (idioma() === 'en' && obj[campo + 'En']) ? obj[campo + 'En'] : obj[campo];
+  }
+
   global.Util3D = {
     Flecha: Flecha,
     Traza: Traza,
@@ -225,6 +275,11 @@
     rotulo: rotulo,
     crearCuerpo: crearCuerpo,
     crearSoporte: crearSoporte,
-    crearPantalla: crearPantalla
+    crearPantalla: crearPantalla,
+    idioma: idioma,
+    texto: texto,
+    T: T,
+    TArr: TArr,
+    valorTabla: valorTabla
   };
 })(window);

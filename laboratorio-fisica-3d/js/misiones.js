@@ -13,6 +13,7 @@
 (function (global) {
   'use strict';
 
+  var U = global.Util3D;
   var CLAVE = 'laboratorio-fisica-3d:progreso';
   var PUNTOS_BASE = 100;
   var PENALIZACION = 15;
@@ -108,12 +109,12 @@
     var hechas = this.totalCompletadas();
     var total = this.totalMisiones();
     var fraccion = total > 0 ? hechas / total : 0;
-    if (fraccion >= 1) return { nombre: 'Físico de laboratorio', indice: 5 };
-    if (fraccion >= 0.75) return { nombre: 'Investigador', indice: 4 };
-    if (fraccion >= 0.5) return { nombre: 'Experimentador', indice: 3 };
-    if (fraccion >= 0.25) return { nombre: 'Ayudante de laboratorio', indice: 2 };
-    if (hechas > 0) return { nombre: 'Aprendiz', indice: 1 };
-    return { nombre: 'Recién llegado', indice: 0 };
+    if (fraccion >= 1) return { nombre: U.texto('Físico de laboratorio', 'Lab physicist'), indice: 5 };
+    if (fraccion >= 0.75) return { nombre: U.texto('Investigador', 'Researcher'), indice: 4 };
+    if (fraccion >= 0.5) return { nombre: U.texto('Experimentador', 'Experimenter'), indice: 3 };
+    if (fraccion >= 0.25) return { nombre: U.texto('Ayudante de laboratorio', 'Lab assistant'), indice: 2 };
+    if (hechas > 0) return { nombre: U.texto('Aprendiz', 'Apprentice'), indice: 1 };
+    return { nombre: U.texto('Recién llegado', 'Newcomer'), indice: 0 };
   };
 
   /* ------------------------------------------------------------------ *
@@ -127,10 +128,10 @@
     var r = this.registro(estacion.id, mision.id);
 
     if (mision.condicionPrevia && !mision.condicionPrevia(estacion)) {
-      return { ok: false, mensaje: mision.avisoPrevio || 'Ajusta primero las condiciones del experimento.', sinIntento: true };
+      return { ok: false, mensaje: U.T(mision, 'avisoPrevio') || U.texto('Ajusta primero las condiciones del experimento.', 'Adjust the experiment conditions first.'), sinIntento: true };
     }
     if (!isFinite(valor)) {
-      return { ok: false, mensaje: 'Escribe un número para poder compararlo.', sinIntento: true };
+      return { ok: false, mensaje: U.texto('Escribe un número para poder compararlo.', 'Enter a number so it can be compared.'), sinIntento: true };
     }
 
     var objetivo = mision.objetivo(estacion);
@@ -151,16 +152,18 @@
       var desviacion = Math.abs(objetivo) > 1e-9 ? (error / Math.abs(objetivo) * 100) : 0;
       return {
         ok: true,
-        mensaje: 'Correcto. El valor exacto es ' + formatear(objetivo) +
-          ' y te quedaste a ' + desviacion.toFixed(1) + ' por ciento.',
+        mensaje: U.texto(
+          'Correcto. El valor exacto es ' + formatear(objetivo) + ' y te quedaste a ' + desviacion.toFixed(1) + ' por ciento.',
+          'Correct. The exact value is ' + formatear(objetivo) + ' and you were off by ' + desviacion.toFixed(1) + ' percent.'
+        ),
         puntos: this.puntosDe(estacion.id, mision.id)
       };
     }
 
     this.guardar();
     this.notificar();
-    var pista = valor > objetivo ? 'Tu resultado es muy alto.' : 'Tu resultado es muy bajo.';
-    return { ok: false, mensaje: pista + ' Intento ' + r.intentos + '. ' + (mision.pista || '') };
+    var pista = valor > objetivo ? U.texto('Tu resultado es muy alto.', 'Your result is too high.') : U.texto('Tu resultado es muy bajo.', 'Your result is too low.');
+    return { ok: false, mensaje: pista + ' ' + U.texto('Intento ', 'Attempt ') + r.intentos + '. ' + (U.T(mision, 'pista') || '') };
   };
 
   Progreso.prototype.evaluarReto = function (estacion, mision) {

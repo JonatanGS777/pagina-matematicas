@@ -17,6 +17,9 @@
 
 <canvas id="lienzo"></canvas>
 
+<button id="lang-toggle" aria-label="Switch language"
+  onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
+
 <!-- Mira central, solo visible mientras se camina -->
 <div id="mira" class="oculto"></div>
 
@@ -267,5 +270,7 @@
 <script src="js/exportar.js"></script>
 <script src="js/hud.js"></script>
 <script src="js/main.js"></script>
+<script src="../js/i18n.js"></script>
+<script>I18n.init();</script>
 </body>
 </html>

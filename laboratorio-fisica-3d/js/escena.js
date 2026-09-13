@@ -62,6 +62,34 @@
     return t;
   }
 
+  // Formulario de la pizarra, en español e inglés (ver Escena.SALON.pizarraTex.actualizar).
+  var FORMULARIO = {
+    es: {
+      titulo: 'Formulario del laboratorio',
+      formulas: [
+        'y = y0 + v0 t - g t^2 / 2',
+        'v^2 = v0^2 + 2 a d',
+        'R = v0^2 sen(2a) / g',
+        'p = m v    (se conserva siempre)',
+        'T = 2 pi raíz(L / g)',
+        'E = k q / r^2',
+        'F = q (v x B)'
+      ]
+    },
+    en: {
+      titulo: 'Laboratory formula sheet',
+      formulas: [
+        'y = y0 + v0 t - g t^2 / 2',
+        'v^2 = v0^2 + 2 a d',
+        'R = v0^2 sin(2a) / g',
+        'p = m v    (always conserved)',
+        'T = 2 pi sqrt(L / g)',
+        'E = k q / r^2',
+        'F = q (v x B)'
+      ]
+    }
+  };
+
   // Panel de texto para letreros y rótulos flotantes.
   function texturaTexto(lineas, opciones) {
     var o = opciones || {};
@@ -71,28 +99,39 @@
     c.width = ancho; c.height = alto;
     var g = c.getContext('2d');
 
-    if (o.fondo !== false) {
-      g.fillStyle = o.colorFondo || 'rgba(12,15,20,0.92)';
-      g.fillRect(0, 0, ancho, alto);
-      g.strokeStyle = o.colorBorde || 'rgba(255,179,71,0.55)';
-      g.lineWidth = 4;
-      g.strokeRect(2, 2, ancho - 4, alto - 4);
+    function dibujar(lineasActuales) {
+      g.clearRect(0, 0, ancho, alto);
+      if (o.fondo !== false) {
+        g.fillStyle = o.colorFondo || 'rgba(12,15,20,0.92)';
+        g.fillRect(0, 0, ancho, alto);
+        g.strokeStyle = o.colorBorde || 'rgba(255,179,71,0.55)';
+        g.lineWidth = 4;
+        g.strokeRect(2, 2, ancho - 4, alto - 4);
+      }
+
+      var y = alto / 2 - ((lineasActuales.length - 1) * (o.interlineado || 42)) / 2;
+      g.textAlign = 'center';
+      g.textBaseline = 'middle';
+      for (var i = 0; i < lineasActuales.length; i++) {
+        var estilo = i === 0 ? (o.fuente || 'bold 46px "IBM Plex Mono", monospace')
+                             : (o.fuenteSecundaria || '30px "IBM Plex Mono", monospace');
+        g.font = estilo;
+        g.fillStyle = i === 0 ? (o.color || '#ffb347') : (o.colorSecundario || '#9fb0c8');
+        g.fillText(lineasActuales[i], ancho / 2, y);
+        y += (o.interlineado || 42);
+      }
     }
 
-    var y = alto / 2 - ((lineas.length - 1) * (o.interlineado || 42)) / 2;
-    g.textAlign = 'center';
-    g.textBaseline = 'middle';
-    for (var i = 0; i < lineas.length; i++) {
-      var estilo = i === 0 ? (o.fuente || 'bold 46px "IBM Plex Mono", monospace')
-                           : (o.fuenteSecundaria || '30px "IBM Plex Mono", monospace');
-      g.font = estilo;
-      g.fillStyle = i === 0 ? (o.color || '#ffb347') : (o.colorSecundario || '#9fb0c8');
-      g.fillText(lineas[i], ancho / 2, y);
-      y += (o.interlineado || 42);
-    }
+    dibujar(lineas);
     var t = new THREE.CanvasTexture(c);
     t.encoding = THREE.sRGBEncoding;
     t.anisotropy = 4;
+    // Permite redibujar el mismo canvas (ej. al cambiar de idioma) sin
+    // crear una textura ni un material nuevos.
+    t.actualizar = function (nuevasLineas) {
+      dibujar(nuevasLineas);
+      t.needsUpdate = true;
+    };
     return t;
   }
 
@@ -101,30 +140,47 @@
     var c = document.createElement('canvas');
     c.width = 1024; c.height = 576;
     var g = c.getContext('2d');
-    g.fillStyle = '#12321f';
-    g.fillRect(0, 0, 1024, 576);
-    // Manchas de gis para que no se vea plana.
-    for (var i = 0; i < 60; i++) {
-      g.fillStyle = 'rgba(255,255,255,' + (Math.random() * 0.02) + ')';
-      g.beginPath();
-      g.ellipse(Math.random() * 1024, Math.random() * 576,
-                Math.random() * 90 + 20, Math.random() * 30 + 10, Math.random() * 3, 0, Math.PI * 2);
-      g.fill();
-    }
-    g.fillStyle = '#f4f7f2';
-    g.font = 'bold 52px "IBM Plex Mono", monospace';
-    g.fillText(titulo, 56, 92);
-    g.strokeStyle = 'rgba(244,247,242,0.5)';
-    g.lineWidth = 3;
-    g.beginPath(); g.moveTo(56, 116); g.lineTo(560, 116); g.stroke();
 
-    g.font = '38px "IBM Plex Mono", monospace';
-    for (var j = 0; j < formulas.length; j++) {
-      g.fillStyle = j % 2 === 0 ? '#f4f7f2' : '#a8e6b8';
-      g.fillText(formulas[j], 56, 190 + j * 62);
+    // Manchas de gis fijas para que el fondo no cambie al redibujar (ej. al cambiar de idioma).
+    var manchas = [];
+    for (var i = 0; i < 60; i++) {
+      manchas.push({
+        x: Math.random() * 1024, y: Math.random() * 576,
+        rx: Math.random() * 90 + 20, ry: Math.random() * 30 + 10,
+        rot: Math.random() * 3, alfa: Math.random() * 0.02
+      });
     }
+
+    function dibujar(tituloActual, formulasActuales) {
+      g.fillStyle = '#12321f';
+      g.fillRect(0, 0, 1024, 576);
+      manchas.forEach(function (m) {
+        g.fillStyle = 'rgba(255,255,255,' + m.alfa + ')';
+        g.beginPath();
+        g.ellipse(m.x, m.y, m.rx, m.ry, m.rot, 0, Math.PI * 2);
+        g.fill();
+      });
+      g.fillStyle = '#f4f7f2';
+      g.font = 'bold 52px "IBM Plex Mono", monospace';
+      g.fillText(tituloActual, 56, 92);
+      g.strokeStyle = 'rgba(244,247,242,0.5)';
+      g.lineWidth = 3;
+      g.beginPath(); g.moveTo(56, 116); g.lineTo(560, 116); g.stroke();
+
+      g.font = '38px "IBM Plex Mono", monospace';
+      for (var j = 0; j < formulasActuales.length; j++) {
+        g.fillStyle = j % 2 === 0 ? '#f4f7f2' : '#a8e6b8';
+        g.fillText(formulasActuales[j], 56, 190 + j * 62);
+      }
+    }
+
+    dibujar(titulo, formulas);
     var tex = new THREE.CanvasTexture(c);
     tex.encoding = THREE.sRGBEncoding;
+    tex.actualizar = function (nuevoTitulo, nuevasFormulas) {
+      dibujar(nuevoTitulo, nuevasFormulas);
+      tex.needsUpdate = true;
+    };
     return tex;
   }
 
@@ -245,6 +301,11 @@
       cable.position.set(x, 0.7 + 0.33, 0);
       grupo.add(cable);
     });
+
+    // Redibuja el mismo letrero en otro idioma sin recrear geometría ni material.
+    grupo.userData.actualizarTexto = function (nuevoNumero, nuevoTitulo, nuevoSubtitulo) {
+      tex.actualizar([nuevoNumero + '. ' + nuevoTitulo, nuevoSubtitulo]);
+    };
     return grupo;
   }
 
@@ -316,18 +377,14 @@
     escena.add(crearVentanal(mitadX - 0.06, 3.4, 4, 5.2, 3.2, -Math.PI / 2));
 
     // Pizarra en la pared norte con el formulario del curso.
+    var idiomaInicial = (global.Util3D && global.Util3D.idioma) ? global.Util3D.idioma() : 'es';
+    var formularioInicial = FORMULARIO[idiomaInicial] || FORMULARIO.es;
+    var pizarraTex = texturaPizarra(formularioInicial.titulo, formularioInicial.formulas);
+    SALON.pizarraTex = pizarraTex;
     var pizarra = new THREE.Mesh(
       new THREE.PlaneGeometry(8, 4.5),
       new THREE.MeshStandardMaterial({
-        map: texturaPizarra('Formulario del laboratorio', [
-          'y = y0 + v0 t - g t^2 / 2',
-          'v^2 = v0^2 + 2 a d',
-          'R = v0^2 sen(2a) / g',
-          'p = m v    (se conserva siempre)',
-          'T = 2 pi raíz(L / g)',
-          'E = k q / r^2',
-          'F = q (v x B)'
-        ]),
+        map: pizarraTex,
         roughness: 0.9
       })
     );
@@ -410,6 +467,7 @@
     crearLetrero: crearLetrero,
     crearMarcaPiso: crearMarcaPiso,
     texturaTexto: texturaTexto,
-    texturaPizarra: texturaPizarra
+    texturaPizarra: texturaPizarra,
+    FORMULARIO: FORMULARIO
   };
 })(window);
