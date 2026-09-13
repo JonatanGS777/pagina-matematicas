@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MathMasters | Órbita cero</title>
+<meta name="description" content="Arena matemática en el espacio: defiende el planeta núcleo resolviendo problemas de nueve temas en tres rangos, con jefes de varios pasos, combos y poderes.">
+<meta name="theme-color" content="#05070f">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Tektur:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="css/juego.css">
+</head>
+<body>
+
+<canvas id="arena" aria-hidden="true"></canvas>
+
+<header class="barra">
+  <a class="marca" id="marca" href="#" aria-label="MathMasters"></a>
+  <a class="boton-icono" id="btn-sitio" href="../index.html"></a>
+  <button class="boton-icono" id="btn-logros" type="button"></button>
+  <button class="boton-icono" id="btn-ajustes" type="button"></button>
+  <button class="boton-icono" id="btn-sonido" type="button"></button>
+  <button class="boton-icono" id="btn-pausa" type="button" hidden></button>
+  <button id="lang-toggle" aria-label="Switch language"
+    onclick="I18n.setLanguage(I18n.getCurrentLang() === 'es' ? 'en' : 'es')">EN</button>
+</header>
+
+<div class="hud" id="hud" hidden>
+  <div class="hud-izq">
+    <div class="hud-puntos" id="hud-puntos">0</div>
+    <div class="hud-combo" id="hud-combo"></div>
+  </div>
+  <div class="hud-etapa" id="hud-etapa"></div>
+  <div class="hud-der">
+    <div class="hud-vidas" id="hud-vidas"></div>
+    <div class="hud-poderes" id="hud-poderes"></div>
+  </div>
+</div>
+
+<section class="consola" id="consola" hidden></section>
+
+<div class="pantalla" id="pantalla" hidden></div>
+<div class="anuncio" id="anuncio" hidden></div>
+<div class="avisos" id="avisos" aria-live="polite"></div>
+<div class="solo-lectores" id="lector" aria-live="assertive"></div>
+
+<noscript>
+  <p style="position:fixed;inset:auto 16px 16px;color:#e9ecf5">MathMasters necesita JavaScript para funcionar.</p>
+</noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="js/iconos.js"></script>
+<script src="js/problemas.js"></script>
+<script src="js/problemas-2.js"></script>
+<script src="js/problemas-jefes.js"></script>
+<script src="js/sonido.js"></script>
+<script src="js/progreso.js"></script>
+<script src="js/arena.js"></script>
+<script src="js/textos.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/juego.js"></script>
+<script src="../js/i18n.js"></script>
+<script>I18n.init();</script>
+</body>
+</html>

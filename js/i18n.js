@@ -11,7 +11,7 @@
 //           lab/proyectiles.html, lab/simulaciones.html,
 //           lab/modulos/datos.html, lab/modulos/fisica.html,
 //           lab/modulos/geometrico.html, lab/modulos/optimizacion.html,
-//           laboratorio-fisica-3d/index.html
+//           laboratorio-fisica-3d/index.html, mathmasters/index.html
 
 const I18n = (() => {
 
@@ -129,6 +129,8 @@ const I18n = (() => {
                 'Professor Dashboard - History of Mathematics',
             'Laboratorio de Física 3D | Matemáticas Digitales':
                 '3D Physics Lab | Digital Mathematics',
+            'MathMasters | Órbita cero':
+                'MathMasters | Orbit Zero',
         }
     };
 
@@ -3317,3 +3319,8 @@ const I18n = (() => {
 
     return { setLanguage, init, getCurrentLang: () => currentLang, refresh: () => applyTranslation(currentLang), t };
 })();
+
+// Un `const` de nivel superior no se cuelga de window: sin esta línea, los
+// módulos que consultan window.I18n (laboratorio-fisica-3d, mathmasters)
+// creerían que el idioma siempre es español.
+window.I18n = I18n;
