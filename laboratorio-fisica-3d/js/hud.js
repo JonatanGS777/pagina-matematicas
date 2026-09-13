@@ -123,7 +123,7 @@
     });
 
     el('btn-reiniciar-progreso').addEventListener('click', function () {
-      if (confirm('Se borra todo el progreso guardado en esta computadora. ¿Continuar?')) {
+      if (confirm(U.texto('Se borra todo el progreso guardado en esta computadora. ¿Continuar?', 'This erases all progress saved on this computer. Continue?'))) {
         self.lab.progreso.reiniciarTodo();
         self.toast(U.texto('Progreso reiniciado.', 'Progress reset.'), 'info');
         if (self.estacionAbierta) self.dibujarPanel();

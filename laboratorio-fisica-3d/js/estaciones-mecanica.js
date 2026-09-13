@@ -491,7 +491,7 @@
     );
     disco.position.set(2.1, 1.02, 0.62);
     g.add(disco);
-    this.rotuloAngulo = U.rotulo('25 grados', { escala: 0.5 });
+    this.rotuloAngulo = U.rotulo('25' + U.texto(' grados', ' degrees'), { escala: 0.5 });
     this.rotuloAngulo.position.set(1.0, 1.42, 0.68);
     g.add(this.rotuloAngulo);
 
@@ -532,7 +532,7 @@
       this.bloque.scale.set(lado / 0.45, lado / 0.45, lado / 0.45);
     }
     if (this.rotuloAngulo) {
-      this.rotuloAngulo.userData.actualizarTexto(p(this, 'angulo').toFixed(0) + ' grados');
+      this.rotuloAngulo.userData.actualizarTexto(p(this, 'angulo').toFixed(0) + U.texto(' grados', ' degrees'));
     }
   };
 
@@ -846,9 +846,9 @@
     var medido = this.sim.periodoMedido;
     this.pantalla.userData.dibujar([
       U.texto('PÉNDULO', 'PENDULUM'),
-      'T libro = ' + this.sim.periodoPequeno().toFixed(3) + ' s',
-      'T real  = ' + (medido ? medido.toFixed(3) + ' s' : U.texto('midiendo...', 'measuring...')),
-      'ángulo  = ' + (this.sim.angulo() * 180 / Math.PI).toFixed(1) + ' gr'
+      U.texto('T libro = ', 'T textbook = ') + this.sim.periodoPequeno().toFixed(3) + ' s',
+      U.texto('T real  = ', 'T real   = ') + (medido ? medido.toFixed(3) + ' s' : U.texto('midiendo...', 'measuring...')),
+      U.texto('ángulo  = ', 'angle   = ') + (this.sim.angulo() * 180 / Math.PI).toFixed(1) + ' gr'
     ]);
   };
 
@@ -1349,7 +1349,7 @@
     );
     arco.position.set(0, 1.2, 0.2);
     g.add(arco);
-    this.rotuloAngulo = U.rotulo('45 grados', { escala: 0.8 });
+    this.rotuloAngulo = U.rotulo('45' + U.texto(' grados', ' degrees'), { escala: 0.8 });
     this.rotuloAngulo.position.set(0.3, 2.1, 0.2);
     g.add(this.rotuloAngulo);
 
@@ -1418,7 +1418,7 @@
     });
     var th = p(this, 'angulo') * Math.PI / 180;
     if (this.canonPivote) this.canonPivote.rotation.z = th;
-    if (this.rotuloAngulo) this.rotuloAngulo.userData.actualizarTexto(p(this, 'angulo').toFixed(0) + ' grados');
+    if (this.rotuloAngulo) this.rotuloAngulo.userData.actualizarTexto(p(this, 'angulo').toFixed(0) + U.texto(' grados', ' degrees'));
     if (this.diana) {
       this.diana.position.x = p(this, 'diana');
       this.banderin.userData.actualizarTexto(p(this, 'diana').toFixed(1) + ' m');

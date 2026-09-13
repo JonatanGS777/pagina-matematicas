@@ -390,7 +390,7 @@
 
     function traer(url) {
       return fetch(url, { cache: 'no-cache' }).then(function (r) {
-        if (!r.ok) throw new Error('No se pudo leer ' + url + ' (código ' + r.status + ')');
+        if (!r.ok) throw new Error(U.texto('No se pudo leer ', 'Could not read ') + url + U.texto(' (código ', ' (status ') + r.status + ')');
         return r.text();
       });
     }
