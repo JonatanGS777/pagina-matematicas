@@ -213,6 +213,15 @@
       if (salon && salon.pizarraTex && salon.pizarraTex.actualizar) {
         salon.pizarraTex.actualizar(formulario.titulo, formulario.formulas);
       }
+
+      // El panel de estación (controles, lecturas, misiones, datos) y el
+      // nombre de nivel se construyen con innerHTML en el idioma que esté
+      // activo en ese momento: si el idioma cambia con el panel ya abierto,
+      // hay que volver a dibujarlo para que no se quede en el idioma viejo.
+      if (self.hud) {
+        self.hud.actualizarProgreso();
+        if (self.hud.estacionAbierta) self.hud.dibujarPanel();
+      }
     });
   };
 
