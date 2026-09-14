@@ -31,6 +31,9 @@
 | 📚 **Study Materials** | Library, exams, quizzes and rubrics by math area |
 | 🚀 **STEM Section** | Programming, robotics, engineering and data science modules |
 | 🎮 **MathBattle** | Multiplayer math game powered by Socket.IO |
+| **MathMasters** | 2D space arena (`mathmasters/`): 9 topics × 3 ranks, campaign with multi-step bosses, arcade, survival, practice, combos, powers, achievements, adaptive audio |
+| **3D Physics Lab** | Walkable 3D classroom (`laboratorio-fisica-3d/`) with 7 physics stations, 27 missions and teacher downloads |
+| **Math Competition** | Live classroom game show on Firebase (separate repo), linked from the Math Games menu. See [Related projects](#related-projects) |
 | 📊 **Live Analytics** | Real-time visitor stats and activity feed on the main page |
 | 🌐 **Bilingual** | Full ES ↔ EN support via custom `js/i18n.js` module |
 | 👨‍🔬 **Researcher Profile** | Academic profile with Chart.js visualizations and doctoral dissertation |
@@ -51,6 +54,8 @@
 | **Deploy** | Vercel — auto-deploy on push to `main` |
 | **MathBattle** | Node.js + Express + Socket.IO |
 | **Charts** | Chart.js (Radar, Pie, Bar, Polar, Area Line) |
+| **Games & 3D** | Canvas 2D + Web Audio (MathMasters), Three.js r149 (3D Physics Lab), KaTeX for formulas |
+| **Math Competition** | Firebase Hosting + Realtime Database + Authentication (separate repo) |
 | **Fonts** | Google Fonts — Fraunces (display), Karla (body), JetBrains Mono (data) |
 
 </div>
@@ -140,6 +145,8 @@ custom-property token swap) — no shared stylesheet across these pages.
 | `salon/geometria.html` | Taller de Cristales | Gem-cutting workshop/crystallography aesthetic, dark-only (theme toggle removed) — graphite-black background, malachite teal `#14B8A6` + citrine amber `#F4A900` + sparing amethyst `#9D6FE0` accents, faceted "cut gem" card corners via `clip-path`, Unica One on the hero only, faceted-polygon spotlight hero replacing the old color blobs. Added a full **Volumen y Área de Sólidos** calculator (cube/cylinder/cone/sphere/pyramid/triangular prism) — the "Sólidos 3D" section was previously purely illustrative with no calculator at all, unlike its 2D-figures sibling section. Also fixed a real bug: the page had no way to open the nav menu on mobile (`ul{display:none}` with no toggle button). Dead `href="#"` logo link fixed to `../index.html`. Área/perímetro, Pitágoras, and analítica calculators untouched |
 | `salon/finanzas.html` | Piso de Bolsa | Stock-trading-floor/financial-terminal aesthetic, dark-only (theme toggle removed) — near-black `#0A0E14` terminal background, ticker-gold `#FBBF24` brand accent (green/red reserved specifically for gain/loss semantics, not the whole brand — avoids the cliché all-green "money" look), Chakra Petch on the hero only, terminal-window-chrome cards, a decorative scrolling ticker-tape strip of formulas. Fixed a real correctness bug: `formatMoney()` was hardcoded to Mexican pesos (`MXN`/`es-MX`) on a Puerto Rico Department of Education site — now USD/`en-US`. Added a savings-growth line chart (with a goal reference line) to the "Metas de Ahorro" section, which previously showed only a single final number while its sibling "Interés" section already had a full growth chart. Dead `href="#"` logo link fixed to `../index.html`. Budget/pie chart, interest/line chart, loan/amortization table, and inflation calculators untouched |
 | `salon/estadisticas.html` | *(unchanged, by request)* | Already had a distinctive neo-brutalist system (hard black borders, offset "sticker" shadows, violet/cyan/pink/lime) — kept it as-is rather than reskinning. Fixed the dead `href="#"` logo link to `../index.html` and added a "Volver al inicio" footer link. Fixed the scatter plot, the only chart missing axes/tick labels (the code literally had `// Axes (simplified) // ...` where the other 3 charts had full axis code). Added a **Calculadora de Probabilidad Normal** (P(Z<z) via an erf-based standard normal CDF) next to the existing Z-score calculator — the "Calculadoras Rápidas" section had a `<!-- More calculators could be added here -->` comment marking it as intentionally incomplete. All data-parsing, chart rendering, and simulation logic untouched |
+| `mathmasters/` | Órbita cero | Full rebuild of the old `salon/game.html` quiz as a 2D Canvas space arena: deep-space navy, solar-amber core planet, coral comets, ice-cyan for player aids, Tektur display + Figtree body, KaTeX formulas, synthesized Web Audio in A minor pentatonic with layered adaptive music. Lucide icons inlined in `mathmasters/js/iconos.js`. `salon/game.html` is now a redirect |
+| `laboratorio-fisica-3d/` | Instrumento de laboratorio nocturno | Walkable Three.js classroom with dark opaque surfaces, amber for controls, instrument cyan for measurements and green only for solved missions. Spelling fully corrected and made bilingual (see its own `README.md` for how canvas-drawn signs and the blackboard are redrawn on language change) |
 | `stem/robotica.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 | `stem/programacion.html` | *(unchanged, by request)* | Bug-fix-only pass — no visual redesign |
 
@@ -234,10 +241,8 @@ get redesigned.
 `contexto/profesor-dashboard.html`, `materiales/materiales/` (the
 study-materials subpages), and `perfil-investigador/` still use the previous
 purple/glassmorphism theme and `js/dark-mode.js`. `salon/game.html` ("Math
-Masters", Tailwind CDN, dark-mode-default indigo/slate) is also not yet
-redesigned, but — like the other `salon/` pages — it already has its own
-bespoke design system rather than the generic purple theme; redesign it the
-same way — with its own identity — when needed. `salon/estadisticas.html`
+Masters") was rebuilt as `mathmasters/` (see the Identity table above) and
+now only redirects there, so existing links and bookmarks keep working. `salon/estadisticas.html`
 was kept exactly as-is by request (see the Identity table above) since its
 existing neo-brutalist system was already solid; only real bugs and a
 missing calculator were fixed there.
@@ -265,7 +270,11 @@ pagina-matematicas/
 │       └── statistics.html
 ├── materiales/                    # Study materials (library, exams, quizzes)
 ├── lab/                           # Virtual lab (simulations, figures, games)
-├── salon/                         # Virtual classroom (algebra, stats, finance)
+├── laboratorio-fisica-3d/         # Walkable 3D physics lab (own README.md)
+├── mathmasters/                   # MathMasters 2D space arena (Órbita cero)
+│   ├── css/juego.css
+│   └── js/                        # problemas*, arena, juego, ui, sonido, progreso, textos, iconos
+├── salon/                         # Virtual classroom (algebra, stats, finance; game.html redirects to mathmasters/)
 ├── stem/                          # STEM modules + eBook STEAM
 ├── contexto/                      # History of Mathematics + timeline
 ├── galeria/                       # Student work gallery
@@ -448,10 +457,30 @@ I18n.getCurrentLang();           // Returns 'es' | 'en'
 
 Language persists in `localStorage` under the key `lang`.
 
+The module is also exposed as `window.I18n`. A top-level `const` is not
+attached to `window`, so before this export any script that read
+`window.I18n` silently believed the language was always Spanish.
+
+Static HTML text is translated by exact-match dictionaries (`textDict`,
+`paraDict`, `htmlParaDict`, `attrDict`, `titleDict`). Text built in JS with
+interpolated values cannot match a dictionary key, so those pages pick the
+right string at render time:
+
+```js
+I18n.t('Se descargaron ' + n + ' mediciones', n + ' measurements downloaded');
+document.addEventListener('i18n:langChange', e => redraw(e.detail.lang));
+```
+
+Switching to English translates live and fires `i18n:langChange`; switching
+back to Spanish reloads the page. Pages that build UI with `innerHTML` or draw
+text on canvas must listen for that event and redraw.
+
 ### Pages with active i18n
 
 | Page | Notes |
 |:---|:---|
+| `laboratorio-fisica-3d/index.html` | Dictionary for static HTML; `Util3D.texto/T/TArr` and `...En` data fields for JS-built panels; canvas signs, blackboard and station screens redrawn on `i18n:langChange` |
+| `mathmasters/index.html` | UI rendered in JS with `MM.tr()`; screens, HUD and console redraw on `i18n:langChange`; problems carry both languages |
 | `index.html` | Typewriter hero, full navbar, stats |
 | `contexto/historiamath.html` | AI in Education 1950–2025 timeline |
 | `stem/Ebook STEM /index.html` | Sidebar toggle, path `../../js/i18n.js` |
@@ -474,6 +503,24 @@ Single-page academic profile — `perfil-investigador/index.html`
 - 🎞️ Entry animations via IntersectionObserver
 
 🔗 Live at [digitalmathematics.org/perfil-investigador](https://digitalmathematics.org/perfil-investigador/index.html)
+
+---
+
+## Related projects
+
+### Math Competition
+
+Live classroom game show linked from **Math Games → Math Competition**. It
+lives in its own repository, [JonatanGS777/math-competition](https://github.com/JonatanGS777/math-competition),
+and is deployed on Firebase at https://math-comp-085785.web.app.
+
+The teacher signs in with Google and runs the show, groups join anonymously
+from their phones with a room code or QR, and a projector screen shows the
+question, an animated leaderboard and a final podium. Questions are generated
+on the teacher's device and each round's answer is stored where only the
+room owner can read it. Realtime Database rules restrict every path to its
+rightful writer. Setup, security model and deploy steps are in that repo's
+`README.md`.
 
 ---
 

@@ -48,6 +48,31 @@ saltar directo a una estación.
 
 El progreso se guarda en `localStorage` de esa computadora.
 
+## Idiomas (ES/EN)
+
+El botón `EN`/`ES` de la esquina es el mismo selector del resto del sitio
+(`../js/i18n.js`). Pasar a inglés traduce en vivo; volver a español recarga la
+página. La traducción llega por tres caminos distintos:
+
+- **Texto fijo del HTML** (portada, ayuda, descargas): entradas en los
+  diccionarios compartidos de `js/i18n.js`, sección `laboratorio-fisica-3d`.
+- **Texto que arma el JS** (panel, misiones, lecturas, avisos): cada dato
+  guarda su par en inglés como campo hermano (`titulo`/`tituloEn`,
+  `enunciado`/`enunciadoEn`, `etiqueta`/`etiquetaEn`...) y el HUD elige con
+  `Util3D.T(obj, 'campo')`, `Util3D.TArr()` para arreglos y `Util3D.texto(es, en)`
+  para frases con valores interpolados. Al cambiar de idioma, `main.js`
+  redibuja el panel abierto y el nombre de nivel.
+- **Texto dibujado en canvas** (letreros colgantes, pizarra, pantallas de cada
+  mesa, rótulos de ángulo): `main.js` escucha `i18n:langChange` y redibuja las
+  texturas con `texturaTexto().actualizar()` y `texturaPizarra().actualizar()`;
+  las pantallas se refrescan solas en cada cuadro.
+
+Los valores categóricos del historial (`Vacío`, `Con aire`, `Dipolo (+ y -)`...)
+se guardan siempre en español porque las misiones los comparan; solo se
+traducen al mostrarlos en la tabla con `Util3D.valorTabla()`. Las descargas
+(reporte PDF, guía didáctica y CSV) quedan en español a propósito: son
+materiales de clase con formato regional de Excel en español.
+
 ## Estructura
 
 ```
@@ -56,7 +81,7 @@ laboratorio-fisica-3d/
 ├── css/lab.css                   interfaz
 ├── js/
 │   ├── fisica.js                 núcleo numérico, sin DOM ni Three.js
-│   ├── util3d.js                 flechas, reglas, trazas, pantallas
+│   ├── util3d.js                 flechas, reglas, trazas, pantallas, idioma
 │   ├── escena.js                 salón: piso, paredes, techo, pizarra
 │   ├── jugador.js                cámara en primera persona y colisiones
 │   ├── estaciones-mecanica.js    estaciones 1 a 5
@@ -101,5 +126,9 @@ de la órbita ciclotrónica y rapidez constante bajo fuerza magnética.
 - Las texturas de canvas deben llevar `encoding = THREE.sRGBEncoding`. Sin eso
   Three las interpreta como lineales y la escena se ve lavada.
 - El generador del archivo sin conexión lee `index.html` y sustituye cada
-  `<script src="js/...">` por su contenido, así que necesita que la página esté
-  servida por HTTP. No funciona abriendo el `index.html` local con doble clic.
+  `<script src="js/...">` (y `../js/i18n.js`) por su contenido, así que necesita
+  que la página esté servida por HTTP. No funciona abriendo el `index.html`
+  local con doble clic.
+- Todo texto nuevo que vea el estudiante necesita su versión en inglés: un
+  campo `...En` en los datos de la estación, `Util3D.texto(es, en)` en frases
+  armadas con números, o una entrada en `js/i18n.js` si es HTML fijo.
