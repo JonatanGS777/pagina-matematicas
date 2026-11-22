@@ -92,15 +92,18 @@
   async function entrar(correo, clave) {
     const r = await llamar("/auth/v1/token?grant_type=password", { method: "POST", body: JSON.stringify({ email: correo, password: clave }) });
     if (r.status === 429) return "Demasiados intentos. Espera un minuto.";
+    if (!r.ok && /banned/i.test(JSON.stringify(r.cuerpo || ""))) return "Esta cuenta está desactivada. Habla con el administrador.";
     if (!r.ok) return "El correo o la contraseña no coinciden.";
     ses = { access: r.cuerpo.access_token, refresh: r.cuerpo.refresh_token, exp: Date.now() + r.cuerpo.expires_in * 1000, id: r.cuerpo.user.id, correo };
-    const p = await api(`/rest/v1/crece_perfiles?select=rol,activo,nombre&id=eq.${ses.id}`);
+    const p = await api(`/rest/v1/crece_perfiles?select=rol,activo,nombre,debe_cambiar_clave&id=eq.${ses.id}`);
     const yo = p.ok && p.cuerpo[0];
-    if (!yo || yo.rol !== "admin" || !yo.activo) { cerrarSesion(); return "Esta cuenta no es de administrador de CRECE 10."; }
-    ses.nombre = yo.nombre;
+    if (!yo || (yo.rol !== "admin" && yo.rol !== "maestro")) { cerrarSesion(); return "Esta cuenta no es de administrador ni de maestro de CRECE 10."; }
+    if (!yo.activo) { cerrarSesion(); return "Esta cuenta está desactivada. Habla con el administrador."; }
+    Object.assign(ses, { nombre: yo.nombre, rol: yo.rol, debe: !!yo.debe_cambiar_clave });
     guardarSes();
     return null;
   }
+  const esAdmin = () => !!ses && ses.rol === "admin";
 
   /* ───────────── Datos ───────────── */
   const CACHE = new Map();
@@ -108,6 +111,11 @@
     if (!forzar && CACHE.has(id)) return CACHE.get(id);
     const [g] = (await api(`/rest/v1/crece_grupos?select=id,nombre,curso&id=eq.${id}`)).cuerpo || [];
     if (!g) return null;
+    // Maestros asignados (solo el admin puede leer los perfiles de los maestros).
+    g.maestros = esAdmin()
+      ? (await todo(`/rest/v1/crece_grupo_maestros?select=maestro_id,crece_perfiles(nombre)&grupo_id=eq.${id}`))
+          .map(x => x.crece_perfiles && x.crece_perfiles.nombre).filter(Boolean)
+      : null;
     const est = await todo(`/rest/v1/crece_perfiles?select=id,codigo,nombre,activo,creado&rol=eq.estudiante&grupo_id=eq.${id}&order=codigo`);
     let intentos = [], examenes = [];
     if (est.length) {
@@ -228,10 +236,10 @@
       <section class="section entrar">
         <div class="wrap entrar-grid">
           <div>
-            <span class="eyebrow">Panel del administrador</span>
+            <span class="eyebrow">Panel docente</span>
             <h1>Entra al panel</h1>
             <p class="lead">Crea grupos y cuentas, imprime las tarjetas de acceso y sigue el progreso de cada estudiante.</p>
-            <p class="tiny" style="max-width:52ch">Los estudiantes no entran aquí: entran en <b>${URL_ESTUDIANTE}</b> con su código y PIN.</p>
+            <p class="tiny" style="max-width:52ch">Para el administrador y los maestros, con su correo. Los estudiantes no entran aquí: entran en <b>${URL_ESTUDIANTE}</b> con su código y PIN.</p>
           </div>
           <form class="card entrar-card" id="formAdmin" novalidate>
             <label for="adCorreo">Correo</label>
@@ -249,23 +257,37 @@
   async function vGrupos() {
     document.title = "Grupos · Panel CRECE 10";
     cargando("Cargando grupos…");
-    const [grupos, est] = await Promise.all([
+    // RLS ya limita: el maestro solo recibe sus grupos y sus estudiantes.
+    const [grupos, est, asig] = await Promise.all([
       todo("/rest/v1/crece_grupos?select=id,nombre,curso,creado&order=curso.desc,nombre"),
-      todo("/rest/v1/crece_perfiles?select=grupo_id,activo&rol=eq.estudiante")
+      todo("/rest/v1/crece_perfiles?select=grupo_id,activo&rol=eq.estudiante"),
+      esAdmin() ? todo("/rest/v1/crece_grupo_maestros?select=grupo_id,crece_perfiles(nombre,activo)") : Promise.resolve([])
     ]);
-    const cuenta = {};
+    const cuenta = {}, maestros = {};
     est.forEach(e => { cuenta[e.grupo_id] = (cuenta[e.grupo_id] || 0) + 1; });
+    asig.forEach(a => { if (a.crece_perfiles) (maestros[a.grupo_id] = maestros[a.grupo_id] || []).push(a.crece_perfiles); });
+    const lineaMaestros = g => {
+      if (!esAdmin()) return "";
+      const ms = maestros[g.id] || [];
+      return `<p class="tiny grupo-maestros">${ms.length
+        ? "Maestros: " + ms.map(m => esc(m.nombre) + (m.activo ? "" : " (desactivado)")).join(", ")
+        : '<span class="sin-maestro">Sin maestro asignado</span>'}</p>`;
+    };
     $("#vista").innerHTML = `
       <section class="section">
         <div class="wrap">
           <span class="eyebrow">Hola${ses.nombre ? ", " + esc(ses.nombre) : ""}</span>
-          <h1>Grupos</h1>
-          <p class="lead">Cada grupo tiene sus cuentas. El código de cada estudiante empieza con el nombre del grupo: en el grupo <b>10B</b>, el número 7 es <b>10B-07</b>.</p>
+          <h1>${esAdmin() ? "Grupos" : "Tus grupos"}</h1>
+          <p class="lead">${esAdmin()
+            ? "Todos los grupos y sus maestros. Asigna maestros en «Maestros»."
+            : "Los grupos que te asignaron y los que tú crees."} El código de cada estudiante empieza con el nombre del grupo: en el grupo <b>10B</b>, el número 7 es <b>10B-07</b>.</p>
+          ${!grupos.length && !esAdmin() ? `<div class="callout" style="margin-top:20px"><p style="margin:0">Todavía no tienes grupos. Crea uno aquí abajo o pídele al administrador que te asigne uno.</p></div>` : ""}
           <div class="grid grid-3" style="margin-top:24px">
             ${grupos.map(g => `<a class="card grupo-card" href="#/grupo/${g.id}/resumen">
               <span class="tiny">${esc(g.curso)}</span>
               <h3>${esc(g.nombre)}</h3>
               <p class="tiny" style="margin:0">${cuenta[g.id] || 0} ${cuenta[g.id] === 1 ? "estudiante" : "estudiantes"}</p>
+              ${lineaMaestros(g)}
             </a>`).join("")}
             <form class="card grupo-nuevo" id="formGrupo" novalidate>
               <h3>Nuevo grupo</h3>
@@ -290,11 +312,12 @@
     const err = m => { $("#grError").innerHTML = `<p class="tiny" style="color:var(--coral);margin:4px 0 0">${esc(m)}</p>`; };
     if (!/^[A-Z0-9]{1,6}$/.test(nombre.replace(/[\s-]/g, ""))) return err("Usa de 1 a 6 letras o números, por ejemplo 10B.");
     if (!/^\d{4}-\d{4}$/.test(curso)) return err("El curso se escribe como 2026-2027.");
-    const r = await api("/rest/v1/crece_grupos", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ nombre: nombre.replace(/[\s-]/g, ""), curso }) });
-    if (r.status === 409) return err("Ya existe un grupo con ese nombre en ese curso.");
+    // Por la función: así el maestro que lo crea queda asignado al grupo.
+    const r = await fn({ accion: "crear_grupo", nombre: nombre.replace(/[\s-]/g, ""), curso });
+    if (r.error === "ya_existe") return err("Ya existe un grupo con ese nombre en ese curso.");
     if (!r.ok) return err("No se pudo crear el grupo.");
     anunciar("Grupo creado.");
-    location.hash = `#/grupo/${r.cuerpo[0].id}/cuentas`;
+    location.hash = `#/grupo/${r.grupo.id}/cuentas`;
   }
 
   function cabeceraGrupo(d, tab) {
@@ -304,6 +327,7 @@
         <a class="tiny" href="#/grupos">← Grupos</a>
         <h1 style="margin:6px 0 2px">Grupo ${esc(d.grupo.nombre)}</h1>
         <p class="tiny" style="margin:0">${esc(d.grupo.curso)} · ${d.est.length} ${d.est.length === 1 ? "estudiante" : "estudiantes"} · datos de las ${d.cargado.toLocaleTimeString("es-PR", { hour: "numeric", minute: "2-digit" })}</p>
+        ${d.grupo.maestros ? `<p class="tiny" style="margin:4px 0 0">${d.grupo.maestros.length ? "Maestros: " + d.grupo.maestros.map(esc).join(", ") : '<span class="sin-maestro">Sin maestro asignado</span> · <a href="#/maestros">asignar</a>'}</p>` : ""}
       </div>
       <button class="btn btn-secondary btn-sm" data-action="actualizar">${CHIP_SYNC} Actualizar</button>
     </div>
@@ -470,8 +494,8 @@
             <td class="alertas-celda">${r.alertas.map(a => `<span class="chip ${a.k}">${esc(a.t)}</span>`).join("<br>")}</td>
             <td class="acciones">
               <button class="btn btn-ghost btn-sm" data-action="pin" data-id="${r.e.id}">Nuevo PIN</button>
-              <button class="btn btn-ghost btn-sm" data-action="activo" data-id="${r.e.id}" data-activo="${!r.e.activo}">${r.e.activo ? "Desactivar" : "Activar"}</button>
-              <button class="btn btn-ghost btn-sm peligro" data-action="borrar" data-id="${r.e.id}">Borrar</button>
+              ${esAdmin() ? `<button class="btn btn-ghost btn-sm" data-action="activo" data-id="${r.e.id}" data-activo="${!r.e.activo}">${r.e.activo ? "Desactivar" : "Activar"}</button>
+              <button class="btn btn-ghost btn-sm peligro" data-action="borrar" data-id="${r.e.id}">Borrar</button>` : ""}
             </td>
           </tr>`).join("")}</tbody>
         </table>
@@ -659,6 +683,7 @@
     const d = CACHE.get(grupoActual());
     const e = d && d.est.find(x => x.id === id);
     if (!e) return;
+    if ((tipo === "borrar" || tipo === "activo") && !esAdmin()) return;
     if (tipo === "borrar" && !confirm(`¿Borrar la cuenta ${e.codigo} (${e.nombre})? Se borra también todo su progreso. No se puede deshacer.`)) return;
     if (tipo === "activo" && extra === "false" && !confirm(`¿Desactivar ${e.codigo} (${e.nombre})? No podrá entrar hasta que la actives.`)) return;
     if (tipo === "pin" && !confirm(`¿Dar un PIN nuevo a ${e.codigo} (${e.nombre})? El PIN actual deja de funcionar.`)) return;
@@ -691,6 +716,172 @@
     caja.querySelector('[data-action="cerrar-modal"]').focus();
   }
 
+  /* ───────────── Maestros (solo admin) ───────────── */
+  const URL_PANEL = "digitalmathematics.org/crece10/admin.html";
+  async function vMaestros() {
+    document.title = "Maestros · Panel CRECE 10";
+    cargando("Cargando maestros…");
+    const [ms, grupos, asig] = await Promise.all([
+      todo("/rest/v1/crece_perfiles?select=id,nombre,correo,activo,debe_cambiar_clave&rol=eq.maestro&order=nombre"),
+      todo("/rest/v1/crece_grupos?select=id,nombre,curso&order=curso.desc,nombre"),
+      todo("/rest/v1/crece_grupo_maestros?select=grupo_id,maestro_id")
+    ]);
+    const suyos = id => new Set(asig.filter(a => a.maestro_id === id).map(a => a.grupo_id));
+    const casillas = (nombre, marcados) => grupos.length
+      ? `<div class="casillas">${grupos.map(g => `<label><input type="checkbox" name="${nombre}" value="${g.id}" ${marcados.has(g.id) ? "checked" : ""}> ${esc(g.nombre)} <span class="tiny">${esc(g.curso)}</span></label>`).join("")}</div>`
+      : `<p class="tiny" style="margin:0">Todavía no hay grupos. Créalos en «Grupos».</p>`;
+    $("#vista").innerHTML = `
+      <section class="section"><div class="wrap">
+        <span class="eyebrow">Administración</span>
+        <h1>Maestros</h1>
+        <p class="lead">Cada maestro entra en <b>${URL_PANEL}</b> con su correo y ve solo los grupos que le asignes. Puede crear grupos, crear las cuentas de sus estudiantes y darles un PIN nuevo. Desactivar y borrar cuentas queda para ti.</p>
+        <div class="grid grid-2" style="margin-top:22px;align-items:start">
+          <div>
+            ${ms.length ? ms.map(m => { const tiene = suyos(m.id); return `<article class="card maestro-card${m.activo ? "" : " inactivo"}" data-maestro="${m.id}">
+              <div class="maestro-cab">
+                <div><h3 style="margin:0">${esc(m.nombre)}</h3><p class="tiny" style="margin:2px 0 0">${esc(m.correo || "")}</p></div>
+                <div class="maestro-estado">
+                  ${m.activo ? "" : '<span class="chip gris">Desactivado</span>'}
+                  ${m.debe_cambiar_clave ? '<span class="chip oro">Aún no cambia su contraseña</span>' : ""}
+                </div>
+              </div>
+              <p class="tiny" style="margin:12px 0 6px"><b>Grupos asignados</b></p>
+              ${casillas("g-" + m.id, tiene)}
+              <div class="btn-row" style="margin-top:12px">
+                <button class="btn btn-secondary btn-sm" data-action="guardar-grupos" data-id="${m.id}" ${grupos.length ? "" : "disabled"}>Guardar grupos</button>
+                <button class="btn btn-ghost btn-sm" data-action="clave-maestro" data-id="${m.id}">Contraseña temporal nueva</button>
+                <button class="btn btn-ghost btn-sm" data-action="activo-maestro" data-id="${m.id}" data-activo="${!m.activo}">${m.activo ? "Desactivar" : "Activar"}</button>
+                <button class="btn btn-ghost btn-sm peligro" data-action="borrar-maestro" data-id="${m.id}">Borrar</button>
+              </div>
+            </article>`; }).join("")
+            : `<div class="empty"><p style="margin:0">Todavía no hay maestros. Crea el primero con el formulario.</p></div>`}
+          </div>
+          <form class="card grupo-nuevo" id="formMaestro" novalidate>
+            <h3>Nuevo maestro</h3>
+            <label for="maNombre">Nombre</label>
+            <input id="maNombre" maxlength="40" placeholder="Prof. Rivera" autocomplete="off" required>
+            <label for="maCorreo">Correo</label>
+            <input id="maCorreo" type="email" maxlength="254" placeholder="nombre@escuela.pr" autocomplete="off" required>
+            <p class="tiny" style="margin:8px 0 2px"><b>Grupos</b> (puedes cambiarlos después)</p>
+            ${casillas("nuevo", new Set())}
+            <div id="maError" role="alert"></div>
+            <button class="btn btn-primary btn-sm" type="submit">Crear maestro</button>
+            <p class="tiny" style="margin:6px 0 0">Se crea con una <b>contraseña temporal</b> que verás una sola vez. Al entrar por primera vez, el panel le pide cambiarla.</p>
+          </form>
+        </div>
+      </div></section>`;
+  }
+  const marcadas = nombre => $$(`input[name="${nombre}"]:checked`).map(x => x.value);
+  async function crearMaestro() {
+    const nombre = ($("#maNombre").value || "").trim();
+    const correo = ($("#maCorreo").value || "").trim();
+    const err = m => { $("#maError").innerHTML = `<p class="tiny" style="color:var(--coral);margin:4px 0 0">${esc(m)}</p>`; };
+    if (!nombre) return err("Escribe el nombre del maestro.");
+    if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(correo)) return err("Escribe un correo válido.");
+    const b = $('#formMaestro button[type="submit"]'); b.disabled = true; b.textContent = "Creando…";
+    const r = await fn({ accion: "crear_maestro", nombre, correo, grupo_ids: marcadas("nuevo") });
+    b.disabled = false; b.textContent = "Crear maestro";
+    if (!r.ok) return err(r.error === "correo_existe" ? "Ya existe una cuenta con ese correo." : r.error === "correo" ? "Ese correo no es válido." : "No se pudo crear el maestro.");
+    await vMaestros();
+    mostrarClave(r.nombre, r.correo, r.clave);
+  }
+  function mostrarClave(nombre, correo, clave) {
+    const caja = document.createElement("div");
+    caja.className = "modal-fondo";
+    caja.innerHTML = `<div class="modal card" role="dialog" aria-modal="true" aria-labelledby="claveTitulo">
+      <h3 id="claveTitulo">Contraseña temporal de ${esc(nombre)}</h3>
+      <p class="tiny">Se ve <b>solo ahora</b>. Entrégasela a ${esc(nombre)} junto con estas instrucciones:</p>
+      <p class="pin-grande mono" style="font-size:1.6rem;letter-spacing:.08em">${esc(clave)}</p>
+      <ol class="tiny pasos-lista" style="margin:0 0 14px">
+        <li>Entra en <b>${URL_PANEL}</b></li>
+        <li>Correo: <b>${esc(correo)}</b></li>
+        <li>Contraseña: la de arriba. El panel te pedirá cambiarla por una tuya.</li>
+      </ol>
+      <div class="btn-row">
+        <button class="btn btn-secondary btn-sm" data-action="copiar-clave">Copiar instrucciones</button>
+        <button class="btn btn-primary btn-sm" data-action="cerrar-modal">Listo</button>
+      </div>
+    </div>`;
+    caja.dataset.texto = `CRECE 10 · Panel docente\nEntra en ${URL_PANEL}\nCorreo: ${correo}\nContraseña temporal: ${clave}\nAl entrar, el panel te pedirá cambiarla por una tuya.`;
+    document.body.appendChild(caja);
+    caja.querySelector('[data-action="cerrar-modal"]').focus();
+  }
+  async function accionMaestro(tipo, id, extra) {
+    const tarjeta = document.querySelector(`[data-maestro="${id}"]`);
+    const nombre = tarjeta ? tarjeta.querySelector("h3").textContent : "este maestro";
+    if (tipo === "guardar-grupos") {
+      const r = await fn({ accion: "asignar_grupos", maestro_id: id, grupo_ids: marcadas("g-" + id) });
+      anunciar(r.ok ? `Grupos de ${nombre} guardados.` : "No se pudieron guardar los grupos.");
+      if (!r.ok) alert("No se pudieron guardar los grupos.");
+      CACHE.clear();
+      return vMaestros();
+    }
+    if (tipo === "clave-maestro") {
+      if (!confirm(`¿Dar una contraseña temporal nueva a ${nombre}? La actual deja de funcionar.`)) return;
+      const r = await fn({ accion: "nueva_clave_maestro", maestro_id: id });
+      if (!r.ok) return alert("No se pudo cambiar la contraseña.");
+      await vMaestros();
+      return mostrarClave(r.nombre, r.correo, r.clave);
+    }
+    if (tipo === "activo-maestro") {
+      if (extra === "false" && !confirm(`¿Desactivar a ${nombre}? No podrá entrar hasta que lo actives.`)) return;
+      const r = await fn({ accion: "cambiar_activo", perfil_id: id, activo: extra === "true" });
+      if (!r.ok) return alert("No se pudo completar la acción.");
+      return vMaestros();
+    }
+    if (tipo === "borrar-maestro") {
+      if (!confirm(`¿Borrar la cuenta de ${nombre}? Sus grupos y estudiantes se quedan. No se puede deshacer.`)) return;
+      const r = await fn({ accion: "borrar_maestro", maestro_id: id });
+      if (!r.ok) return alert("No se pudo borrar.");
+      CACHE.clear();
+      return vMaestros();
+    }
+  }
+
+  /* ───────────── Mi contraseña ───────────── */
+  function vClave(obligatoria) {
+    document.title = "Mi contraseña · Panel CRECE 10";
+    $("#vista").innerHTML = `
+      <section class="section entrar"><div class="wrap entrar-grid">
+        <div>
+          <span class="eyebrow">${obligatoria ? "Primer acceso" : "Tu cuenta"}</span>
+          <h1>${obligatoria ? "Crea tu contraseña" : "Cambia tu contraseña"}</h1>
+          <p class="lead">${obligatoria
+            ? "Entraste con una contraseña temporal. Antes de seguir, escribe una tuya que solo tú conozcas."
+            : "Escribe una contraseña nueva. La de ahora deja de funcionar."}</p>
+          <p class="tiny">Al menos 10 caracteres, con letras y números.</p>
+        </div>
+        <form class="card entrar-card" id="formClave" novalidate>
+          <label for="clNueva">Contraseña nueva</label>
+          <input id="clNueva" type="password" autocomplete="new-password" minlength="10" required>
+          <label for="clOtra">Repítela</label>
+          <input id="clOtra" type="password" autocomplete="new-password" minlength="10" required>
+          <div id="clError" role="alert"></div>
+          <button class="btn btn-primary btn-lg" type="submit" id="clBoton">Guardar contraseña</button>
+          ${obligatoria ? "" : `<a class="tiny" href="#/grupos" style="text-align:center">Cancelar</a>`}
+        </form>
+      </div></section>`;
+    const c = $("#clNueva"); if (c) c.focus();
+  }
+  async function guardarClave() {
+    const a = $("#clNueva").value, b2 = $("#clOtra").value;
+    const err = m => { $("#clError").innerHTML = `<div class="callout coral" style="margin:0"><p style="margin:0">${esc(m)}</p></div>`; };
+    if (a.length < 10 || !/[a-zA-Z]/.test(a) || !/\d/.test(a)) return err("Usa al menos 10 caracteres, con letras y números.");
+    if (a !== b2) return err("Las dos contraseñas no coinciden.");
+    const b = $("#clBoton"); b.disabled = true; b.textContent = "Guardando…";
+    const r = await fn({ accion: "cambiar_mi_clave", nueva: a });
+    if (!r.ok) { b.disabled = false; b.textContent = "Guardar contraseña"; return err(r.error === "clave_debil" ? "Usa al menos 10 caracteres, con letras y números." : "No se pudo guardar. Intenta de nuevo."); }
+    // Cambiar la contraseña cierra las sesiones abiertas de la cuenta: se entra
+    // de nuevo con la contraseña que la persona acaba de escribir.
+    const s = ses.correo && await llamar("/auth/v1/token?grant_type=password", { method: "POST", body: JSON.stringify({ email: ses.correo, password: a }) });
+    if (!s || !s.ok) { cerrarSesion(); vEntrar("Contraseña guardada. Entra con la nueva."); return; }
+    Object.assign(ses, { access: s.cuerpo.access_token, refresh: s.cuerpo.refresh_token, exp: Date.now() + s.cuerpo.expires_in * 1000, debe: false });
+    guardarSes();
+    anunciar("Contraseña guardada.");
+    location.hash = "#/grupos";
+    render();
+  }
+
   /* ───────────── Router ───────────── */
   const partes = () => location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   const grupoActual = () => (partes()[0] === "grupo" ? partes()[1] : null);
@@ -705,9 +896,25 @@
       return;
     }
     if (!ses) { vEntrar(); return; }
+    // Sesión de una versión anterior del panel, sin rol guardado: se completa.
+    if (!ses.rol) {
+      try {
+        const p = await api(`/rest/v1/crece_perfiles?select=rol,activo,nombre,debe_cambiar_clave&id=eq.${ses.id}`);
+        const yo = p.ok && p.cuerpo[0];
+        if (!yo || !yo.activo || (yo.rol !== "admin" && yo.rol !== "maestro")) { cerrarSesion(); vEntrar(); return; }
+        Object.assign(ses, { nombre: yo.nombre, rol: yo.rol, debe: !!yo.debe_cambiar_clave });
+        guardarSes();
+      } catch (e) { vEntrar("Tu sesión venció. Entra de nuevo."); return; }
+    }
     $("#adminAcciones").hidden = false;
+    $("#quienSoy").textContent = `${ses.nombre || ""} · ${esAdmin() ? "Administrador" : "Maestro"}`;
+    $$(".solo-admin").forEach(x => { x.hidden = !esAdmin(); });
+    // Primer acceso de un maestro: no pasa de aquí hasta crear su contraseña.
+    if (ses.debe) { vClave(true); return; }
     const [r, id, tab] = partes();
     try {
+      if (r === "clave") { vClave(false); return; }
+      if (r === "maestros") { if (!esAdmin()) { location.hash = "#/grupos"; return; } await vMaestros(); return; }
       if (r === "grupo" && id) {
         if (!CACHE.has(id)) cargando("Cargando el grupo…");
         const d = await datosGrupo(id);
@@ -737,6 +944,8 @@
       location.hash = "#/grupos"; render();
     }
     if (e.target.id === "formGrupo") { e.preventDefault(); crearGrupo(); }
+    if (e.target.id === "formMaestro") { e.preventDefault(); crearMaestro(); }
+    if (e.target.id === "formClave") { e.preventDefault(); guardarClave(); }
     if (e.target.id === "formLista") { e.preventDefault(); }
   });
 
@@ -746,7 +955,17 @@
     const a = el.dataset.action;
     const d = CACHE.get(grupoActual());
     if (a === "salir") { cerrarSesion(); location.hash = "#/entrar"; render(); return; }
-    if (a === "respaldo") { respaldo().catch(() => alert("No se pudo descargar el respaldo.")); return; }
+    if (a === "respaldo") { if (esAdmin()) respaldo().catch(() => alert("No se pudo descargar el respaldo.")); return; }
+    if (["guardar-grupos", "clave-maestro", "activo-maestro", "borrar-maestro"].includes(a)) {
+      if (esAdmin()) accionMaestro(a, el.dataset.id, el.dataset.activo);
+      return;
+    }
+    if (a === "copiar-clave") {
+      const t = el.closest(".modal-fondo").dataset.texto;
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject())
+        .then(() => { el.textContent = "Copiado"; }, () => { el.textContent = "No se pudo copiar"; });
+      return;
+    }
     if (a === "actualizar" && d) { CACHE.delete(d.grupo.id); render(); return; }
     if (a === "ordenar") { const c = el.dataset.col; orden = { col: c, dir: orden.col === c ? -orden.dir : 1 }; render(); return; }
     if (a === "csv-estudiantes" && d) { csvEstudiantes(d); return; }

@@ -4,8 +4,26 @@
  * Se apoya en estilos.css (mismos tokens, tarjetas, chips y botones).
  */
 
-.admin .top-actions { margin-left: auto; }
-.admin .top-actions[hidden] { display: none; }
+.admin .top-actions { margin-left: auto; flex-wrap: wrap; justify-content: flex-end; }
+.admin .top-actions[hidden], .admin .solo-admin[hidden] { display: none !important; }
+.admin .top-actions .btn { padding: 6px 10px; }
+.quien { margin-right: 6px; color: var(--tinta-3); white-space: nowrap; }
+@media (max-width: 900px) { .quien { display: none; } }
+@media (max-width: 620px) {
+  .admin .topbar-inner { flex-wrap: wrap; height: auto; padding: 10px 0; }
+  .admin .top-actions { width: 100%; justify-content: flex-start; margin-left: 0; }
+}
+
+/* ── Maestros ── */
+.grupo-maestros { margin: 8px 0 0; color: var(--tinta-2); }
+.sin-maestro { color: var(--coral); font-weight: 600; }
+.maestro-card { margin-bottom: 14px; }
+.maestro-card.inactivo { opacity: .7; }
+.maestro-cab { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.maestro-estado { display: flex; gap: 6px; flex-wrap: wrap; }
+.casillas { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.casillas label { display: inline-flex; align-items: center; gap: 6px; font-size: .92rem; cursor: pointer; }
+.casillas input { width: 16px; height: 16px; accent-color: var(--verde); }
 .mono { font-family: var(--fuente-mono); }
 .wrap.ancho { width: min(1400px, calc(100% - 40px)); }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
