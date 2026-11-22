@@ -1,3 +1,6 @@
 {
-  "version": 2
+  "version": 2,
+  "redirects": [
+    { "source": "/crece10", "destination": "/crece10/", "permanent": true }
+  ]
 }
