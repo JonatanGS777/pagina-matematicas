@@ -1,0 +1,129 @@
+/*!
+ * CRECE 10 · Matemáticas — estilos del panel del administrador
+ * © 2026 Dr. Yonatan Guerrero. Todos los derechos reservados.
+ * Se apoya en estilos.css (mismos tokens, tarjetas, chips y botones).
+ */
+
+.admin .top-actions { margin-left: auto; }
+.admin .top-actions[hidden] { display: none; }
+.mono { font-family: var(--fuente-mono); }
+.wrap.ancho { width: min(1400px, calc(100% - 40px)); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* ── Grupos ── */
+.grupo-card { display: block; text-decoration: none; color: inherit; transition: border-color var(--trans), transform var(--trans); }
+.grupo-card:hover { border-color: var(--verde); transform: translateY(-2px); }
+.grupo-card h3 { font-size: 1.8rem; margin: 4px 0 6px; }
+.grupo-nuevo { display: grid; gap: 6px; border-style: dashed; }
+.grupo-nuevo h3 { margin-bottom: 4px; }
+.grupo-nuevo label, .entrar-card label { font-weight: 650; font-size: .88rem; }
+.grupo-nuevo input {
+  font: inherit; padding: 9px 12px; border: 1px solid var(--linea); border-radius: 9px; background: #fff; color: var(--tinta);
+}
+.grupo-nuevo input:focus { border-color: var(--verde); outline: 3px solid rgba(14,107,99,.15); }
+.grupo-nuevo .btn { justify-self: start; margin-top: 6px; }
+
+/* ── Cabecera y pestañas del grupo ── */
+.admin-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.admin-head h1 { font-size: clamp(1.8rem, 3.2vw, 2.4rem); }
+.admin-tabs { display: flex; gap: 4px; margin-top: 18px; border-bottom: 1px solid var(--linea); overflow-x: auto; }
+.admin-tabs a {
+  padding: 10px 14px; text-decoration: none; color: var(--tinta-2); font-weight: 600; font-size: .94rem;
+  border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap;
+}
+.admin-tabs a:hover { color: var(--tinta); }
+.admin-tabs a[aria-current="page"] { color: var(--verde-oscuro); border-bottom-color: var(--verde); }
+.admin-barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin: 20px 0 10px; }
+
+/* ── Alertas ── */
+.alertas { list-style: none; margin: 8px 0 0; padding: 0; }
+.alertas li { padding: 10px 0; border-top: 1px solid var(--linea-2); }
+.alertas li:first-child { border-top: 0; }
+.alertas li b { font-family: var(--fuente-mono); margin-right: 6px; }
+.alertas li div { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.chip.oro { background: var(--oro-claro); color: #6b4a00; border-color: transparent; }
+.chip.gris { background: var(--papel-2); color: var(--tinta-2); border-color: transparent; }
+
+/* ── Tabla de estudiantes ── */
+.tabla-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.admin-tabla { width: 100%; border-collapse: collapse; font-size: .88rem; background: var(--blanco); border: 1px solid var(--linea); border-radius: 12px; }
+.admin-tabla th, .admin-tabla td { padding: 9px 10px; border-bottom: 1px solid var(--linea-2); text-align: left; vertical-align: middle; }
+.admin-tabla thead th { position: sticky; top: 0; background: var(--papel-2); z-index: 1; }
+.admin-tabla td.num, .admin-tabla th[title] { text-align: center; }
+.admin-tabla tr.inactivo td { color: var(--tinta-3); }
+.admin-tabla td.acciones { white-space: nowrap; padding-top: 4px; padding-bottom: 4px; }
+.admin-tabla td.acciones .btn { display: flex; width: 100%; justify-content: flex-start; padding: 2px 6px; font-size: .76rem; min-height: 0; }
+.admin-tabla td.alertas-celda { min-width: 150px; }
+.admin-tabla .chip { white-space: nowrap; display: inline-block; margin: 2px 0; font-size: .64rem; letter-spacing: .03em; }
+.th-orden { all: unset; cursor: pointer; font-weight: 700; font-size: .8rem; white-space: nowrap; }
+.th-orden:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
+.peligro { color: var(--coral) !important; }
+
+/* Dominio: estado con texto (el porcentaje), nunca solo color. */
+.dom { display: inline-block; min-width: 44px; padding: 2px 6px; border-radius: 6px; font-weight: 650; font-size: .82rem; text-align: center; }
+.dom.alto { background: var(--verde-claro); color: var(--verde-oscuro); }
+.dom.medio { background: var(--oro-claro); color: #6b4a00; }
+.dom.bajo { background: var(--coral-claro); color: #8a2a1a; }
+
+/* ── Preguntas difíciles ── */
+.pregunta-card { margin-top: 14px; }
+.pregunta-cab { display: flex; gap: 16px; align-items: flex-start; }
+.pregunta-num {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--papel-2); font-weight: 700; font-family: var(--fuente-titulo);
+}
+.pregunta-texto { margin: 0; color: var(--tinta); }
+.pregunta-tasa { flex: none; text-align: right; display: grid; min-width: 92px; }
+.pregunta-tasa b { font-family: var(--fuente-titulo); font-size: 1.8rem; line-height: 1; color: var(--coral); }
+.pregunta-tasa span { font-size: .8rem; color: var(--tinta-3); }
+
+/* ── Crear cuentas ── */
+.pasos-lista { padding-left: 18px; margin: 8px 0 0; display: grid; gap: 8px; }
+.creadas .mono { font-size: 1rem; letter-spacing: .04em; }
+
+/* ── Gráfica semanal (una serie) ── */
+.grafica { position: relative; margin-top: 6px; }
+.grafica svg { width: 100%; height: auto; display: block; overflow: visible; }
+.g-rejilla { stroke: var(--linea-2); stroke-width: 1; }
+.g-eje { fill: var(--tinta-3); font-size: 11px; font-family: var(--fuente-texto); }
+.g-linea { fill: none; stroke: var(--verde); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.g-punto { fill: var(--verde); stroke: var(--blanco); stroke-width: 2; }
+.g-etiqueta { fill: var(--tinta); font-size: 12px; font-weight: 700; font-family: var(--fuente-texto); }
+.g-zona { fill: transparent; cursor: crosshair; outline: none; }
+.g-zona:focus-visible { fill: rgba(14,107,99,.06); }
+.g-guia { stroke: var(--tinta-3); stroke-width: 1; stroke-dasharray: 3 3; pointer-events: none; }
+.g-tip {
+  position: absolute; top: -6px; width: 220px; padding: 8px 10px; border-radius: 8px; pointer-events: none;
+  background: var(--tinta); color: #fff; font-size: .8rem; line-height: 1.35; box-shadow: var(--sombra);
+}
+
+/* ── Modal del PIN ── */
+.modal-fondo { position: fixed; inset: 0; background: rgba(20,33,31,.45); display: grid; place-items: center; padding: 16px; z-index: 50; }
+.modal { max-width: 380px; width: 100%; }
+.pin-grande { font-size: 2.4rem; letter-spacing: .18em; text-align: center; margin: 14px 0 18px; font-weight: 700; color: var(--verde-oscuro); }
+
+/* ── Tarjetas para imprimir ── */
+.solo-impresion { display: none; }
+@media print {
+  body.imprimiendo > *:not(#impresion) { display: none !important; }
+  body.imprimiendo #impresion { display: block !important; }
+  body.imprimiendo { background: #fff; }
+  .tarjetas { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; }
+  .tarjeta {
+    border: 1.5px dashed #666; border-radius: 4mm; padding: 6mm; break-inside: avoid; page-break-inside: avoid;
+    font-family: var(--fuente-texto); color: #000;
+  }
+  .tarjeta-marca { font-family: var(--fuente-titulo); font-weight: 700; font-size: 11pt; color: #0e6b63; }
+  .tarjeta-nombre { font-size: 10pt; margin: 2mm 0 4mm; }
+  .tarjeta-campos { display: flex; gap: 8mm; }
+  .tarjeta-campos span { display: block; font-size: 8pt; text-transform: uppercase; letter-spacing: .08em; color: #444; }
+  .tarjeta-campos b { font-family: var(--fuente-mono); font-size: 18pt; letter-spacing: .06em; }
+  .tarjeta-pie { font-size: 8.5pt; margin-top: 4mm; color: #222; }
+}
+
+@media (max-width: 920px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) {
+  .grid-3 { grid-template-columns: 1fr; }
+  .pregunta-cab { flex-wrap: wrap; }
+  .pregunta-tasa { text-align: left; }
+}
