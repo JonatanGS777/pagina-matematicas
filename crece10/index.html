@@ -11,9 +11,10 @@
   <title>CRECE 10 · Matemáticas — Práctica guiada</title>
   <script>
     // En el servidor, «/crece10» sin barra final haría que assets/ y datos/ se busquen
-    // en la raíz del sitio. Se agrega la barra antes de cargar nada.
+    // en la raíz del sitio. Se agrega la barra a la dirección antes de pedir ningún
+    // archivo (replaceState cambia la base de las rutas relativas sin recargar).
     if (/^https?:$/.test(location.protocol) && !/\/$|\.html?$/.test(location.pathname)) {
-      location.replace(location.pathname + "/" + location.search + location.hash);
+      history.replaceState(null, "", location.pathname + "/" + location.search + location.hash);
     }
   </script>
   <meta name="description" content="Práctica de matemáticas para décimo grado alineada a la prueba CRECE de Puerto Rico. Geometría, álgebra, matrices, medición y probabilidad, con explicaciones y progreso guardado.">
