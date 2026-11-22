@@ -208,6 +208,8 @@ const I18n = (() => {
                 '© 2025 Yonatan Guerrero Soriano - Mathematics Page',
             'Inspirando el aprendizaje matemático a través de la tecnología':
                 'Inspiring mathematical learning through technology',
+            'Práctica para la prueba CRECE de décimo grado':
+                'Practice for the 10th grade CRECE test',
 
             // ── index.html — Navbar (Σigma Digital) ────────────────────
             'Historia de las Matemáticas':    'History of Mathematics',
