@@ -854,7 +854,7 @@
             <article class="card">
               <span class="skill-mono" style="--c:#9a6b00">${ICON.chart}</span>
               <h3>3. Mide y repite</h3>
-              <p>El progreso se guarda en tu navegador. El cuaderno de errores te devuelve justo lo que fallaste.</p>
+              <p>${NUBE.usuario() ? "Tu progreso se guarda en tu cuenta de la escuela y te sigue a cualquier equipo." : "El progreso se guarda en tu navegador."} El cuaderno de errores te devuelve justo lo que fallaste.</p>
             </article>
           </div>
         </div>

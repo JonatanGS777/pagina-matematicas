@@ -154,3 +154,9 @@
   .dz-fila-grupo .name { flex-basis: 100%; }
   .dz-fila-grupo .pct { min-width: 0; }
 }
+
+/* Tabla de estudiantes (v1.6.2): cabe en 1280 px con las columnas Base y Destrezas.
+   Las alertas pasan a dos líneas en vez de ensanchar la tabla. */
+.admin-tabla td.num, .admin-tabla th[title] { padding-left: 5px; padding-right: 5px; }
+.admin-tabla td.alertas-celda { min-width: 140px; max-width: 190px; }
+.admin-tabla td.alertas-celda .chip { white-space: normal; line-height: 1.35; }

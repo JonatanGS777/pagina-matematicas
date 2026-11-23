@@ -194,10 +194,10 @@
     if (!r.e.activo) { a.push({ t: "Cuenta desactivada", k: "gris" }); return a; }
     if (!r.n) a.push({ t: "Nunca ha practicado", k: "coral" });
     else if (r.dias > 7) a.push({ t: `Sin practicar hace ${r.dias} días`, k: "coral" });
-    MODS.forEach(m => {
-      const x = r.dom[m.id];
-      if (x.n >= 8 && x.pct < 40) a.push({ t: `${m.corto} por debajo de 40 %`, k: "oro" });
-    });
+    // Hasta 2 rutas bajas se nombran; desde 3 se agrupan en una sola alerta (con los nombres en el título).
+    const bajas = MODS.filter(m => { const x = r.dom[m.id]; return x.n >= 8 && x.pct < 40; });
+    if (bajas.length >= 3) a.push({ t: `${bajas.length} rutas por debajo de 40 %`, k: "oro", det: bajas.map(m => m.corto).join(", ") });
+    else bajas.forEach(m => a.push({ t: `${m.corto} por debajo de 40 %`, k: "oro" }));
     if (r.n && !r.diagnostico) a.push({ t: "Sin diagnóstico", k: "gris" });
     if (r.medianaSeg != null && r.medianaSeg < 8) a.push({ t: `Contesta muy rápido (${Math.round(r.medianaSeg)} s)`, k: "oro" });
     return a;
@@ -400,7 +400,7 @@
           <h3>Necesitan atención</h3>
           ${conAlerta.length ? `<ul class="alertas">${conAlerta.slice(0, 10).map(r => `<li>
               <b>${esc(r.e.codigo)}</b> <span>${esc(r.e.nombre)}</span>
-              <div>${r.alertas.filter(a => a.k !== "gris").map(a => `<span class="chip ${a.k}">${esc(a.t)}</span>`).join(" ")}</div>
+              <div>${r.alertas.filter(a => a.k !== "gris").map(a => `<span class="chip ${a.k}"${a.det ? ` title="${esc(a.det)}"` : ""}>${esc(a.t)}${a.det ? `<span class="sr-only">: ${esc(a.det)}</span>` : ""}</span>`).join(" ")}</div>
             </li>`).join("")}</ul>
             ${conAlerta.length > 10 ? `<a class="tiny" href="#/grupo/${d.grupo.id}/estudiantes">Ver los ${conAlerta.length} en la tabla</a>` : ""}`
           : `<div class="empty"><p style="margin:0">Nadie necesita atención ahora mismo.</p></div>`}
@@ -531,7 +531,7 @@
       <div class="tabla-scroll">
         <table class="admin-tabla">
           <thead><tr>
-            ${th("codigo", "Código")}${th("nombre", "Nombre")}${th("ultimo", "Último uso")}${th("n", "Respuestas")}${th("prec7", "7 días")}
+            ${th("codigo", "Código")}${th("nombre", "Nombre")}${th("ultimo", "Último uso")}${th("n", "Resp.", 'title="Respuestas en total"')}${th("prec7", "7 días")}
             ${MODS.map(m => th(m.id, m.base ? "Base" : esc(m.id), `title="${esc(m.nombre)}"`)).join("")}
             ${th("destrezas", "Destrezas", `title="Destrezas de la prueba en Competente o Dominada (de ${DZ_PRUEBA.length})"`)}${th("simulacro", "Simulacro")}${th("alertas", "Alertas")}<th scope="col">Cuenta</th>
           </tr></thead>
@@ -545,7 +545,7 @@
               : `<td class="num"><span class="dom ${claseDom(x.pct)}" title="${esc(m.nombre)}: ${x.pct}% en ${x.n} intentos">${x.pct}%</span></td>`; }).join("")}
             <td class="num" title="Competente o Dominada">${r.competentes} de ${DZ_PRUEBA.length}</td>
             <td class="num">${r.mejorEx == null ? "—" : `${r.mejorEx}%<br><span class="tiny">${nivel(r.mejorEx)}</span>`}</td>
-            <td class="alertas-celda">${r.alertas.map(a => `<span class="chip ${a.k}">${esc(a.t)}</span>`).join("<br>")}</td>
+            <td class="alertas-celda">${r.alertas.map(a => `<span class="chip ${a.k}"${a.det ? ` title="${esc(a.det)}"` : ""}>${esc(a.t)}${a.det ? `<span class="sr-only">: ${esc(a.det)}</span>` : ""}</span>`).join("<br>")}</td>
             <td class="acciones">
               <button class="btn btn-ghost btn-sm" data-action="pin" data-id="${r.e.id}">Nuevo PIN</button>
               ${esAdmin() ? `<button class="btn btn-ghost btn-sm" data-action="activo" data-id="${r.e.id}" data-activo="${!r.e.activo}">${r.e.activo ? "Desactivar" : "Activar"}</button>
@@ -719,7 +719,7 @@
       ...filas.map(r => [r.e.codigo, r.e.nombre, r.e.activo ? "Sí" : "No", r.ultimo ? r.ultimo.slice(0, 10) : "", r.n,
         r.prec7 == null ? "" : r.prec7 + "%", ...MODS.map(m => r.dom[m.id].pct == null ? "" : r.dom[m.id].pct + "%"),
         `${r.competentes} de ${DZ_PRUEBA.length}`, ...DESTREZAS.map(x => NIVELES_DZ[r.dz[x.id]]),
-        r.mejorEx == null ? "" : r.mejorEx + "%", r.mejorEx == null ? "" : nivel(r.mejorEx), r.alertas.map(a => a.t).join(" · ")])
+        r.mejorEx == null ? "" : r.mejorEx + "%", r.mejorEx == null ? "" : nivel(r.mejorEx), r.alertas.map(a => a.t + (a.det ? " (" + a.det + ")" : "")).join(" · ")])
     ]), "text/csv;charset=utf-8");
   }
   async function respaldo() {
@@ -941,7 +941,7 @@
   const partes = () => location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   const grupoActual = () => (partes()[0] === "grupo" ? partes()[1] : null);
   function cargando(t) { $("#vista").innerHTML = `<div class="wrap section"><p class="muted">${esc(t)}</p></div>`; }
-  function error(t) { $("#vista").innerHTML = `<div class="wrap section"><div class="callout coral"><b>Algo salió mal</b><p>${esc(t)}</p><a class="btn btn-secondary btn-sm" href="#/grupos">Volver a los grupos</a></div></div>`; }
+  function error(t, titulo) { $("#vista").innerHTML = `<div class="wrap section"><div class="callout coral"><b>${esc(titulo || "Algo salió mal")}</b><p>${esc(t)}</p><a class="btn btn-secondary btn-sm" href="#/grupos">Volver a los grupos</a></div></div>`; }
 
   let turno = 0;
   async function render() {
@@ -974,7 +974,11 @@
         if (!CACHE.has(id)) cargando("Cargando el grupo…");
         const d = await datosGrupo(id);
         if (mio !== turno) return;
-        if (!d) return error("Ese grupo no existe.");
+        // Un maestro no puede leer grupos ajenos (RLS): para él se ve igual que uno que no existe.
+        if (!d) return error(esAdmin()
+          ? "Ese grupo ya no existe. Puede que se haya borrado."
+          : "Ese grupo no está asignado a tu cuenta, o ya no existe. Si debería ser tuyo, pídele al administrador que te lo asigne.",
+          "Grupo no disponible");
         const t = ["resumen", "estudiantes", "preguntas", "cuentas"].includes(tab) ? tab : "resumen";
         document.title = `${d.grupo.nombre} · Panel CRECE 10`;
         const html = t === "resumen" ? vResumen(d) : t === "estudiantes" ? vEstudiantes(d) : t === "preguntas" ? vPreguntas(d) : vCuentas(d);
