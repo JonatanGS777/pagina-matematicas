@@ -145,3 +145,12 @@
   .pregunta-cab { flex-wrap: wrap; }
   .pregunta-tasa { text-align: left; }
 }
+
+/* ── Destrezas del grupo (v1.4) ── */
+.dz-fila-grupo .name { flex: 1 0 240px; }
+.dz-fila-grupo .pct { min-width: 170px; white-space: nowrap; text-align: right; }
+@media (max-width: 620px) {
+  .dz-fila-grupo { flex-wrap: wrap; }
+  .dz-fila-grupo .name { flex-basis: 100%; }
+  .dz-fila-grupo .pct { min-width: 0; }
+}

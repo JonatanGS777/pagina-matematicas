@@ -72,7 +72,8 @@
     ajustes: { letra: false, contraste: false },
     examenes: [],
     diagnostico: null,
-    ultimoExamen: null
+    ultimoExamen: null,
+    destrezas: {}
   });
 
   let STATE = cargar();
@@ -135,6 +136,111 @@
     if (!conDatos.length) return RUTAS[0];
     return conDatos.slice().sort((a, b) => dominio(a.id).pct - dominio(b.id).pct)[0];
   }
+  /* ===================== Destrezas (regla «3 de 4») =====================
+     Cada ruta se divide en destrezas (datos/modulos.js). Una ronda son 4 preguntas
+     de una destreza; cuentan las que se aciertan a la primera y sin pista.
+       3 o 4 → sube un nivel · 2 → se mantiene · 0 o 1 → baja un nivel (nunca de «Intentada»).
+     Niveles: 0 No empezada · 1 Intentada · 2 Familiar · 3 Competente · 4 Dominada.
+     Se guarda en STATE.destrezas[id] = { nivel, rondas, ultima: { fecha, ok, n } }. */
+  const NIVELES_DZ = ["No empezada", "Intentada", "Familiar", "Competente", "Dominada"];
+  const RONDA = 4, META_RONDA = 3;
+  const DESTREZAS = MODS.flatMap(m => (m.destrezas || []).map(d => Object.assign({ modulo: m.id }, d)));
+  const DZ = Object.fromEntries(DESTREZAS.map(d => [d.id, d]));
+  function destrezaDe(it) {
+    const m = it && MOD[it.modulo];
+    if (!m || !m.destrezas || !m.destrezas.length) return null;
+    const d = m.destrezas.find(x => x.repasos.includes(it.repaso)) || m.destrezas[0];
+    return d.id;
+  }
+  // Destrezas con algún intento (en cualquier modo): cuentan como «Intentada».
+  let cacheIntentadas = { n: -1, set: new Set() };
+  function destrezasIntentadas() {
+    if (cacheIntentadas.n === STATE.intentos.length) return cacheIntentadas.set;
+    const set = new Set();
+    STATE.intentos.forEach(i => { const d = destrezaDe(itemPorId(i.id)); if (d) set.add(d); });
+    cacheIntentadas = { n: STATE.intentos.length, set };
+    return set;
+  }
+  function estadoDz(id) {
+    const g = (STATE.destrezas && STATE.destrezas[id]) || { nivel: 0, rondas: 0, ultima: null };
+    return Object.assign({}, g, { nivel: Math.max(g.nivel || 0, destrezasIntentadas().has(id) ? 1 : 0) });
+  }
+  // Siguiente destreza sugerida: en orden del curso (la Base primero si se sugiere),
+  // la primera que no llega a Competente; si todas llegan, la primera sin Dominar.
+  function siguienteDestreza() {
+    const orden = (sugerirBase() ? MODS : RUTAS).flatMap(m => (m.destrezas || []).map(d => DZ[d.id]));
+    return orden.find(d => estadoDz(d.id).nivel < 3) || orden.find(d => estadoDz(d.id).nivel < 4) || null;
+  }
+  // 4 ítems de la destreza: los fijos barajados más variantes nuevas de sus plantillas.
+  function muestraDestreza(id) {
+    const fijos = barajar(BANCO.filter(i => destrezaDe(i) === id));
+    const plantillas = GEN ? GEN.claves.filter(k => destrezaDe(GEN.generar(k, 1)) === id) : [];
+    const variantes = plantillas.map(k => GEN.generar(k, Math.floor(Math.random() * 2147483647))).filter(Boolean);
+    let out = barajar(fijos.concat(variantes)).slice(0, RONDA);
+    for (let i = 0; out.length < RONDA && plantillas.length && i < 20; i++) {
+      const v = GEN.generar(plantillas[i % plantillas.length], Math.floor(Math.random() * 2147483647));
+      if (v && !out.some(x => x.id === v.id)) out.push(v);
+    }
+    return out;
+  }
+  // Cuadritos de nivel (con texto para lector de pantalla), como en Khan Academy.
+  function cuadritos(m, grande) {
+    const ds = m.destrezas || [];
+    if (!ds.length) return "";
+    const altas = ds.filter(d => estadoDz(d.id).nivel >= 3).length;
+    return `<div class="cuadritos${grande ? " grande" : ""}" role="img" aria-label="${altas} de ${ds.length} destrezas en Competente o más">
+      ${ds.map(d => { const n = estadoDz(d.id).nivel; return `<span class="cuadro n${n}" title="${esc(d.t)}: ${NIVELES_DZ[n]}"></span>`; }).join("")}
+    </div>`;
+  }
+  function leyendaNiveles() {
+    return `<div class="leyenda-niveles" aria-hidden="true">${NIVELES_DZ.map((t, n) => `<span><i class="cuadro n${n}"></i>${t}</span>`).join("")}</div>`;
+  }
+  function chipNivel(n) {
+    return `<span class="chip nivel-chip n${n}">${NIVELES_DZ[n]}</span>`;
+  }
+  function iniciarDestreza(id) {
+    if (!DZ[id]) return;
+    const items = muestraDestreza(id);
+    if (!items.length) return;
+    session = {
+      modo: "destreza", destreza: id, nivelInicial: estadoDz(id).nivel, items, idx: 0, respuestas: {}, revisado: {}, flags: {},
+      inicio: Date.now(), examen: false, entregado: false
+    };
+    ir("#/practica/sesion");
+  }
+  // Pregunta de la ronda que cuenta: acertada a la primera y sin pista.
+  const limpia = i => !!(session.aciertos && session.aciertos[i]) && !usoPista(i) && primeraRespuesta(i) == null;
+  function cerrarRonda() {
+    if (session.modo !== "destreza" || session.ronda) return;
+    const id = session.destreza;
+    const ok = session.items.filter((_, i) => limpia(i)).length;
+    const antes = estadoDz(id);
+    let nivel = Math.max(antes.nivel, 1);
+    if (ok >= META_RONDA) nivel = Math.min(4, nivel + 1);
+    else if (ok <= 1) nivel = Math.max(1, nivel - 1);
+    STATE.destrezas = STATE.destrezas || {};
+    STATE.destrezas[id] = { nivel, rondas: (antes.rondas || 0) + 1, ultima: { fecha: hoy(), ok, n: session.items.length } };
+    // Para mostrar, el nivel que tenía al empezar la ronda («No empezada → Familiar»).
+    const inicial = Number.isInteger(session.nivelInicial) ? session.nivelInicial : antes.nivel;
+    session.ronda = { antes: inicial, despues: nivel, ok, n: session.items.length };
+    guardar();
+  }
+  function tarjetaDestreza(d) {
+    const e = estadoDz(d.id);
+    return `<article class="card dz-card">
+      <div class="dz-cab">
+        <h3>${esc(d.t)}</h3>
+        ${chipNivel(e.nivel)}
+      </div>
+      <p class="muted">${esc(d.d)}</p>
+      <div class="dz-medidor" aria-hidden="true">${[1, 2, 3, 4].map(n => `<i class="${e.nivel >= n ? "lleno n" + e.nivel : ""}"></i>`).join("")}</div>
+      <div class="dz-pie">
+        <span class="tiny">${e.ultima ? `Última ronda: ${e.ultima.ok} de ${e.ultima.n}` : "Sin rondas todavía"}</span>
+        <button class="btn btn-primary btn-sm" data-action="iniciar-destreza" data-dz="${d.id}">${e.nivel >= 4 ? "Repasar" : "Practicar 4"} ${ICON.arrow}</button>
+      </div>
+    </article>`;
+  }
+
   // Sugerir la Base cuando el diagnóstico o la precisión general salen bajos
   // y la Base todavía no está dominada.
   function sugerirBase() {
@@ -516,6 +622,7 @@
     const recDom = dominio(rec.id);
     const mejor = mejorExamen();
     const hechos = STATE.intentos.length;
+    const sigDz = hechos ? siguienteDestreza() : null; // antes del diagnóstico, el paso 1 manda
 
     $("#vista").innerHTML = `${avisoLegado()}
       <section class="hero">
@@ -546,7 +653,8 @@
             </div>
             <div class="route-step">
               <span class="route-num">2</span>
-              <div><b>Estudia una ruta</b><span>${esc(rec.nombre)}: ideas, fórmulas y un ejemplo resuelto.</span></div>
+              ${sigDz ? `<div><b>Sube de nivel: ${esc(sigDz.t)}</b><span>${esc(MOD[sigDz.modulo].corto)} · ${NIVELES_DZ[estadoDz(sigDz.id).nivel]}. Una ronda de ${RONDA}: ${META_RONDA} a la primera para subir. <button class="btn btn-ghost btn-sm enlace-paso" data-action="iniciar-destreza" data-dz="${sigDz.id}">Practicar ${ICON.arrow}</button></span></div>`
+                : `<div><b>Estudia una ruta</b><span>${esc(rec.nombre)}: ideas, fórmulas y un ejemplo resuelto.</span></div>`}
             </div>
             <div class="route-step">
               <span class="route-num">3</span>
@@ -595,6 +703,7 @@
                   <div class="bar" style="--c:${m.color}"><i style="width:${d.pct}%"></i></div>
                   <span class="tiny">${d.n ? d.pct + "%" : "Nuevo"}</span>
                 </div>
+                ${cuadritos(m)}
               </a>`;
             }).join("")}
           </div>
@@ -713,6 +822,7 @@
         <p>${esc(BASE.gancho)}. Son las destrezas de grados anteriores que la prueba da por sabidas.</p>
       </div>
       <div class="base-acciones">
+        ${cuadritos(BASE)}
         <span class="tiny">${d.n ? `Tu dominio: ${d.pct}%` : "Sin práctica"}</span>
         <a class="btn btn-secondary btn-sm" href="#/modulo/${BASE.id}">Ver la Base</a>
         <button class="btn btn-ghost btn-sm" data-action="iniciar-practica" data-mod="${BASE.id}" data-n="10">Practicar</button>
@@ -729,7 +839,8 @@
           <h1 style="max-width:18ch">Seis rutas, una destreza a la vez</h1>
           <p class="lead">Cada ruta explica la idea central, muestra las fórmulas que sí se usan y resuelve un ejemplo. Al final te manda a practicar solo esa destreza.</p>
 
-          <div style="margin-top:34px">${tarjetaBase()}</div>
+          <div style="margin-top:26px">${leyendaNiveles()}</div>
+          <div style="margin-top:14px">${tarjetaBase()}</div>
           <div class="grid grid-2">
             ${RUTAS.map(m => {
               const d = dominio(m.id);
@@ -749,6 +860,7 @@
                   <div class="bar" style="--c:${m.color}"><i style="width:${d.pct}%"></i></div>
                   <span class="tiny">${d.n ? d.pct + "%" : "Sin práctica"}</span>
                 </div>
+                <div class="dz-fila"><span class="tiny">Destrezas</span>${cuadritos(m)}</div>
                 <div class="btn-row" style="margin-top:14px">
                   <a class="btn btn-secondary btn-sm" href="#/modulo/${m.id}">Abrir ruta ${ICON.arrow}</a>
                   <button class="btn btn-ghost btn-sm" data-action="iniciar-practica" data-mod="${m.id}">Practicar</button>
@@ -791,6 +903,13 @@
               <div class="bar" style="--c:${m.color};margin-top:14px"><i style="width:${d.pct}%"></i></div>
             </aside>
           </div>
+
+          ${(m.destrezas || []).length ? `<div style="margin-top:40px">
+            <h2 style="font-size:1.4rem">Destrezas de esta ruta</h2>
+            <p class="muted" style="max-width:62ch">Cada destreza se practica en rondas de ${RONDA} preguntas. Con ${META_RONDA} de ${RONDA} a la primera y sin pista subes un nivel; con 0 o 1 bajas uno.</p>
+            ${leyendaNiveles()}
+            <div class="grid grid-2 dz-grid">${m.destrezas.map(d => tarjetaDestreza(DZ[d.id])).join("")}</div>
+          </div>` : ""}
 
           <div class="grid grid-2" style="margin-top:40px;align-items:start">
             <div>
@@ -950,6 +1069,7 @@
             <button class="btn btn-ghost btn-sm" data-action="flag" aria-pressed="${!!session.flags[session.idx]}" title="Marcar para repasar al final" aria-label="Marcar para repasar al final">${ICON.flag}</button>
           </div>
           <div class="progress-line" aria-hidden="true"><i style="width:${(session.idx / total) * 100}%"></i></div>
+          ${session.modo === "destreza" ? cabezaRonda() : ""}
 
           <article class="q-card">
             <div class="q-meta">
@@ -976,6 +1096,24 @@
         </div>
       </section>`;
     guardarSesion();
+  }
+
+  // Encabezado de una ronda de destreza: nivel, regla y un punto por pregunta.
+  function cabezaRonda() {
+    const d = DZ[session.destreza];
+    if (!d) return "";
+    const n = estadoDz(d.id).nivel;
+    return `<div class="ronda-info">
+      <div><span class="tiny">Destreza</span> <b>${esc(d.t)}</b> ${chipNivel(n)}</div>
+      <div class="ronda-puntos" aria-label="Llevas ${session.items.filter((_, i) => limpia(i)).length} a la primera de ${session.items.length}">
+        ${session.items.map((_, i) => {
+          const r = session.revisado[i];
+          const c = !r ? (i === session.idx ? "actual" : "") : limpia(i) ? "si" : "no";
+          return `<span class="punto ${c}">${r ? (limpia(i) ? ICON.check : ICON.x) : ""}</span>`;
+        }).join("")}
+      </div>
+      <p class="tiny" style="margin:0">Haz ${META_RONDA} de ${RONDA} a la primera y sin pista para subir de nivel. Las pistas y el segundo intento te ayudan a aprender, pero esa pregunta no cuenta.</p>
+    </div>`;
   }
 
   // Mueve el ítem de la posición i al final de la sesión. Todo lo que se guarda
@@ -1321,6 +1459,7 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       session.terminado = true;
+      if (session.modo === "destreza") cerrarRonda();
       if (session.modo === "diagnostico") {
         const ok = Object.values(session.aciertos || {}).filter(Boolean).length;
         STATE.diagnostico = { fecha: hoy(), correctas: ok, total: session.items.length };
@@ -1354,7 +1493,8 @@
     $("#vista").innerHTML = `
       <section class="section">
         <div class="wrap quiz">
-          <div class="result-hero">
+          ${session.modo === "destreza" ? bloqueRonda() : ""}
+          <div class="result-hero"${session.modo === "destreza" ? " hidden" : ""}>
             <span class="eyebrow">${diag ? "Diagnóstico completado" : "Sesión completada"}</span>
             <div class="result-score">${pct(ok, total)}%<small> · ${ok} de ${total}</small></div>
             ${conPista || saltados ? `<p class="tiny" style="margin:4px 0 0">${[conPista ? `${conPista} ${conPista === 1 ? "acierto" : "aciertos"} con ayuda (pista o segundo intento)` : "", saltados ? `${saltados} sin contestar (no cuentan)` : ""].filter(Boolean).join(" · ")}</p>` : ""}
@@ -1402,6 +1542,30 @@
         </div>
       </section>`;
     guardarSesion();
+  }
+
+  // Resultado de una ronda de destreza: cuántas a la primera y qué pasó con el nivel.
+  function bloqueRonda() {
+    const r = session.ronda, d = DZ[session.destreza];
+    if (!r || !d) return "";
+    const subio = r.despues > r.antes, bajo = r.despues < r.antes;
+    const sig = siguienteDestreza();
+    const otra = sig && sig.id !== d.id ? sig : null;
+    const msg = subio
+      ? (r.despues === 4 ? `¡Dominaste esta destreza! Pasaste de ${NIVELES_DZ[r.antes]} a ${NIVELES_DZ[r.despues]}.` : `¡Subiste de nivel! De ${NIVELES_DZ[r.antes]} a ${NIVELES_DZ[r.despues]}.`)
+      : bajo ? `Bajaste a ${NIVELES_DZ[r.despues]}. Repasa la idea y vuelve a intentarlo: con ${META_RONDA} de ${RONDA} recuperas el nivel.`
+      : r.despues === 4 ? "Sigues en Dominada." : `Te quedas en ${NIVELES_DZ[r.despues]}. Te faltó ${META_RONDA - r.ok === 1 ? "una" : META_RONDA - r.ok} para subir.`;
+    return `<div class="result-hero ronda-resultado ${subio ? "subio" : bajo ? "bajo" : ""}">
+      <span class="eyebrow">Ronda de ${esc(d.t)}</span>
+      <div class="result-score">${r.ok} de ${r.n}<small> a la primera y sin pista</small></div>
+      <div class="ronda-niveles">${chipNivel(r.antes)} <span aria-hidden="true">→</span> ${chipNivel(r.despues)}</div>
+      <p class="lead" style="margin-inline:auto">${msg}</p>
+      <div class="btn-row" style="justify-content:center">
+        ${r.despues < 4 ? `<button class="btn btn-primary" data-action="iniciar-destreza" data-dz="${d.id}">Otra ronda de ${esc(d.t)} ${ICON.arrow}</button>` : ""}
+        ${otra ? `<button class="btn ${r.despues < 4 ? "btn-secondary" : "btn-primary"}" data-action="iniciar-destreza" data-dz="${otra.id}">Siguiente: ${esc(otra.t)}</button>` : ""}
+        <a class="btn btn-ghost" href="#/modulo/${d.modulo}">Ver la ruta</a>
+      </div>
+    </div>`;
   }
 
   // Nivel CRECE aproximado. El DEPR no publica los puntos de corte, así que
@@ -1727,6 +1891,8 @@
             </article>
           </div>
 
+          ${tarjetaProgresoDestrezas()}
+
           <article class="card" style="margin-top:18px">
             <h3>Actividad reciente</h3>
             <table class="history">
@@ -1759,6 +1925,30 @@
           </article>`}
         </div>
       </section>`;
+  }
+
+  function tarjetaProgresoDestrezas() {
+    const rutas = MODS.filter(m => (m.destrezas || []).length && (!m.base || dominio(m.id).n || m.destrezas.some(d => estadoDz(d.id).nivel)));
+    const todas = rutas.flatMap(m => m.destrezas);
+    const cuenta = [0, 1, 2, 3, 4].map(n => todas.filter(d => estadoDz(d.id).nivel === n).length);
+    const sig = siguienteDestreza();
+    return `<article class="card" style="margin-top:18px">
+      <div class="dz-prog-cab">
+        <div>
+          <h3>Destrezas</h3>
+          <p class="tiny" style="margin:0">${cuenta[3] + cuenta[4]} de ${todas.length} en Competente o más. Sube de nivel con ${META_RONDA} de ${RONDA} a la primera y sin pista.</p>
+        </div>
+        ${sig ? `<button class="btn btn-primary btn-sm" data-action="iniciar-destreza" data-dz="${sig.id}">Siguiente: ${esc(sig.t)} ${ICON.arrow}</button>` : ""}
+      </div>
+      <div class="dz-conteo">${NIVELES_DZ.map((t, n) => `<span class="chip nivel-chip n${n}">${t}: ${cuenta[n]}</span>`).join("")}</div>
+      ${rutas.map(m => `<div class="dz-ruta">
+        <a class="dz-ruta-nombre" href="#/modulo/${m.id}">${esc(m.corto)}</a>
+        <ul class="dz-lista">${m.destrezas.map(d => { const n = estadoDz(d.id).nivel; return `<li>
+          <i class="cuadro n${n}" aria-hidden="true"></i>
+          <button class="dz-enlace" data-action="iniciar-destreza" data-dz="${d.id}">${esc(d.t)}</button>
+          <span class="tiny">${NIVELES_DZ[n]}</span></li>`; }).join("")}</ul>
+      </div>`).join("")}
+    </article>`;
   }
 
   /* ===================== Herramientas ===================== */
@@ -2055,6 +2245,7 @@
     if (a === "sel-n") { selN = Number(el.dataset.n); vPractica(); return; }
     if (a === "iniciar-practica") { iniciarPractica(el.dataset.mod || "mix", el.dataset.n || 10); return; }
     if (a === "iniciar-diagnostico") { iniciarDiagnostico(); return; }
+    if (a === "iniciar-destreza") { iniciarDestreza(el.dataset.dz); return; }
     if (a === "iniciar-corta") { iniciarPractica(el.dataset.mod || "mix", 8); return; }
     if (a === "iniciar-examen") { iniciarExamen(); return; }
     if (a === "continuar-examen") { ir("#/simulacro/sesion"); return; }

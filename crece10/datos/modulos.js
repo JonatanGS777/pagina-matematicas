@@ -394,3 +394,46 @@ window.CRECE_MODULOS = [
     ]
   }
 ];
+
+/* Destrezas (v1.4): cada ruta se divide en destrezas pequeñas, al estilo de Khan Academy.
+   Un ítem pertenece a la destreza cuyo `repasos` incluye su `repaso` (idea «iN» o fórmula «fN»).
+   Cada destreza tiene al menos 4 ítems (contando las plantillas) para la ronda de «3 de 4». */
+(function () {
+  const D = {
+    M0: [
+      { id: "M0a", t: "Enteros y orden de operaciones", d: "Signos al sumar, restar, multiplicar y dividir; qué operación va primero.", repasos: ["i0", "i1"] },
+      { id: "M0b", t: "Fracciones y por cientos", d: "Sumar y dividir fracciones; pasar de fracción a decimal y a por ciento.", repasos: ["i2", "f1", "f2"] },
+      { id: "M0c", t: "Proporciones y ecuaciones", d: "Productos cruzados, escalas y despejar en uno o dos pasos.", repasos: ["i3", "f0", "i4"] },
+      { id: "M0d", t: "Plano cartesiano y área", d: "Ubicar puntos y cuadrantes; área de rectángulos y triángulos.", repasos: ["i5", "f3"] }
+    ],
+    M1: [
+      { id: "M1a", t: "Punto, recta y plano", d: "Modelos de la vida diaria, colineales y coplanares.", repasos: ["i0", "i1"] },
+      { id: "M1b", t: "Instrumentos y construcciones", d: "Regla, compás y transportador; mediatriz, bisectriz e incentro.", repasos: ["i2", "i3", "f0", "f1", "f2"] }
+    ],
+    M2: [
+      { id: "M2a", t: "Criterios de congruencia", d: "LLL, LAL, ALA y AAL, y la correspondencia de vértices.", repasos: ["i0", "i1", "f0", "f1", "f2", "f3"] },
+      { id: "M2b", t: "CPCTC y demostraciones", d: "Completar razones de una demostración y usar contraejemplos.", repasos: ["i2", "i3", "i5"] },
+      { id: "M2c", t: "Paralelas y ángulos", d: "Opuestos por el vértice, alternos internos y correspondientes.", repasos: ["i4"] }
+    ],
+    M3: [
+      { id: "M3a", t: "Razón de semejanza", d: "Lados correspondientes, razón y áreas de figuras semejantes.", repasos: ["i0", "i1", "f0", "f1", "f2"] },
+      { id: "M3b", t: "Criterio AA y Tales", d: "Probar semejanza por ángulos y dividir lados con paralelas.", repasos: ["i2", "i3", "f3"] }
+    ],
+    M4: [
+      { id: "M4a", t: "Traslaciones y reflexiones", d: "Mover un punto con un vector y reflejar sobre los ejes.", repasos: ["i0", "i1", "f0", "f1", "f2"] },
+      { id: "M4b", t: "Rotaciones y composición", d: "Rotar 90° y 180° y encadenar transformaciones.", repasos: ["i2", "i3", "f3", "f4"] }
+    ],
+    M5: [
+      { id: "M5a", t: "Ángulos en el círculo", d: "Ángulo central, inscrito y exterior y sus arcos.", repasos: ["i0", "i1", "i2", "f5"] },
+      { id: "M5b", t: "Tangentes, radios y circunferencia", d: "Tangente perpendicular al radio, cuerdas y circunferencia.", repasos: ["i3", "i5", "f0", "f1"] },
+      { id: "M5c", t: "Sólidos", d: "Volumen de cilindros, esferas y prismas.", repasos: ["i4", "f2", "f3", "f4"] }
+    ],
+    M6: [
+      { id: "M6a", t: "Propiedades y expresiones", d: "Distributiva, propiedades de la igualdad y evaluar expresiones.", repasos: ["i0", "i4", "i5", "f0"] },
+      { id: "M6b", t: "Sistemas 2×2", d: "Resolver y plantear sistemas de dos ecuaciones.", repasos: ["i1"] },
+      { id: "M6c", t: "Matrices", d: "Sumar, multiplicar por escalar y multiplicar matrices.", repasos: ["i2", "f2"] },
+      { id: "M6d", t: "Probabilidad y datos", d: "Probabilidad, valor esperado y densidad.", repasos: ["i3", "f1", "f3"] }
+    ]
+  };
+  window.CRECE_MODULOS.forEach(m => { m.destrezas = D[m.id] || []; });
+})();

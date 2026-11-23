@@ -704,3 +704,70 @@ body.sin-sesion .top-actions { margin-left: auto; }
 .opciones-exp li.elegida { border-color: #f0c6bc; background: var(--coral-claro); }
 .opciones-exp .key { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .8rem; border: 1px solid var(--linea); background: var(--blanco); }
 .opciones-exp .chip { margin-right: 4px; }
+
+/* ── Destrezas y niveles (v1.4) ──
+   El nivel siempre va con texto (chip o lista); el color solo acompaña. */
+:root { --nv1: #e9dfc8; --nv1-b: #c9b48a; --nv2: #a9d3cb; --nv3: #23786e; --nv4: #0a4f49; }
+.cuadro { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--linea); background: transparent; flex: none; }
+.cuadro.n1 { background: var(--nv1); border-color: var(--nv1-b); }
+.cuadro.n2 { background: var(--nv2); border-color: #7fbab0; }
+.cuadro.n3 { background: var(--nv3); border-color: var(--nv3); }
+.cuadro.n4 { background: var(--nv4); border-color: var(--nv4); box-shadow: inset 0 0 0 2px #fff; }
+.cuadritos { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 10px; }
+.cuadritos.grande .cuadro { width: 18px; height: 18px; }
+.dz-fila { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.dz-fila .cuadritos { margin-top: 0; }
+.leyenda-niveles { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .8rem; color: var(--tinta-2); margin: 6px 0 14px; }
+.leyenda-niveles span { display: inline-flex; align-items: center; gap: 6px; }
+.nivel-chip { border-color: transparent; }
+.nivel-chip.n0 { background: var(--papel-2); color: var(--tinta-2); }
+.nivel-chip.n1 { background: var(--nv1); color: #5a4416; }
+.nivel-chip.n2 { background: #d6ece8; color: #0b4b45; }
+.nivel-chip.n3 { background: var(--nv3); color: #fff; }
+.nivel-chip.n4 { background: var(--nv4); color: #fff; }
+
+.dz-grid { margin-top: 4px; }
+.dz-card { display: flex; flex-direction: column; gap: 8px; }
+.dz-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.dz-cab h3 { margin: 0; font-size: 1.05rem; }
+.dz-card p { margin: 0; font-size: .9rem; }
+.dz-medidor { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.dz-medidor i { height: 6px; border-radius: 3px; background: var(--linea-2); }
+.dz-medidor i.lleno.n1 { background: var(--nv1-b); }
+.dz-medidor i.lleno.n2 { background: #7fbab0; }
+.dz-medidor i.lleno.n3 { background: var(--nv3); }
+.dz-medidor i.lleno.n4 { background: var(--nv4); }
+.dz-pie { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: auto; }
+
+/* Ronda en curso */
+.ronda-info { display: grid; gap: 8px; margin: 14px 0 0; padding: 12px 14px; border: 1px solid var(--linea); border-radius: 12px; background: var(--blanco); }
+.ronda-info .chip { margin-left: 6px; }
+.ronda-puntos { display: flex; gap: 6px; }
+.ronda-puntos .punto { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--linea); display: grid; place-items: center; }
+.ronda-puntos .punto.actual { border-color: var(--verde); }
+.ronda-puntos .punto.si { background: #2f7d4f; border-color: #2f7d4f; color: #fff; }
+.ronda-puntos .punto.no { background: var(--coral-claro); border-color: #e0a99c; color: #8f2c1a; }
+.ronda-puntos .punto svg { width: 14px; height: 14px; }
+.ronda-resultado .ronda-niveles { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 8px 0 4px; }
+.ronda-resultado .btn-row { margin-top: 14px; }
+.enlace-paso { padding: 0; margin-top: 4px; min-height: 0; }
+
+/* Progreso por destreza */
+.dz-prog-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.dz-conteo { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 6px; }
+.dz-ruta { display: grid; grid-template-columns: 130px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--linea-2); }
+.dz-ruta-nombre { font-weight: 650; color: var(--tinta); text-decoration: none; }
+.dz-ruta-nombre:hover { text-decoration: underline; }
+.dz-lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px 14px; }
+.dz-lista li { display: flex; align-items: center; gap: 8px; }
+.dz-enlace { all: unset; cursor: pointer; font-size: .9rem; flex: 1; min-width: 0; }
+.dz-enlace:hover { text-decoration: underline; }
+.dz-enlace:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; border-radius: 3px; }
+@media (max-width: 620px) { .dz-ruta { grid-template-columns: 1fr; gap: 6px; } }
+.result-hero[hidden] { display: none; }
+.ronda-info { margin-bottom: 14px; }
+@media (max-width: 520px) {
+  /* La píldora de la ruta se recorta con «…» en vez de montarse sobre «Pregunta 1 de 4». */
+  .quiz-head .chip { display: block; flex: 0 1 auto; min-width: 0; }
+  .quiz-head > a { white-space: nowrap; flex: none; }
+}

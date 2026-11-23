@@ -23,6 +23,19 @@
   const MOD = Object.fromEntries(MODS.map(m => [m.id, m]));
   const ITEM = Object.fromEntries((window.CRECE_BANCO || []).map(i => [i.id, i]));
   const GEN = window.CRECE_GENERADORES || null;
+  // Destrezas (v1.4): mismo mapa que la app del estudiante.
+  const NIVELES_DZ = ["No empezada", "Intentada", "Familiar", "Competente", "Dominada"];
+  const DESTREZAS = MODS.flatMap(m => (m.destrezas || []).map(d => Object.assign({ modulo: m.id }, d)));
+  const DZ_PRUEBA = DESTREZAS.filter(d => !(MOD[d.modulo] && MOD[d.modulo].base));
+  const cacheDz = {};
+  function destrezaDeId(id) {
+    if (id in cacheDz) return cacheDz[id];
+    let it = ITEM[id];
+    if (!it && GEN && /^GEN:/.test(id)) { try { it = GEN.desdeId(id); } catch (e) { it = null; } }
+    const m = it && MOD[it.modulo];
+    const d = m && m.destrezas && (m.destrezas.find(x => x.repasos.includes(it.repaso)) || m.destrezas[0]);
+    return (cacheDz[id] = d ? d.id : null);
+  }
   const K = "crece10:admin";
   const URL_ESTUDIANTE = "digitalmathematics.org/crece10";
 
@@ -117,13 +130,15 @@
           .map(x => x.crece_perfiles && x.crece_perfiles.nombre).filter(Boolean)
       : null;
     const est = await todo(`/rest/v1/crece_perfiles?select=id,codigo,nombre,activo,creado&rol=eq.estudiante&grupo_id=eq.${id}&order=codigo`);
-    let intentos = [], examenes = [];
+    let intentos = [], examenes = [], estados = [];
     if (est.length) {
       const ids = est.map(e => e.id).join(",");
       intentos = await todo(`/rest/v1/crece_intentos?select=estudiante_id,item_id,modulo,ok,pista,opcion,modo,segundos,fecha_local,creado&estudiante_id=in.(${ids})&order=creado`);
       examenes = await todo(`/rest/v1/crece_examenes?select=estudiante_id,correctas,total,minutos,fecha_local,creado&estudiante_id=in.(${ids})&order=creado`);
+      // Solo la parte de destrezas del estado guardado (el maestro puede leerla desde v1.4).
+      try { estados = await todo(`/rest/v1/crece_estado?select=estudiante_id,destrezas:datos->destrezas&estudiante_id=in.(${ids})`); } catch (e) { estados = []; }
     }
-    const d = { grupo: g, est, intentos, examenes, cargado: new Date() };
+    const d = { grupo: g, est, intentos, examenes, estados, cargado: new Date() };
     CACHE.set(id, d);
     return d;
   }
@@ -153,12 +168,21 @@
       const ultimo = xs.length ? xs[xs.length - 1].creado : null;
       const segs = xs.filter(i => i.segundos != null && i.modo !== "examen").map(i => i.segundos);
       const mejorEx = exs.length ? Math.max(...exs.map(x => pct(x.correctas, x.total))) : null;
+      // Nivel por destreza: el guardado por la app; «Intentada» si tiene alguna respuesta.
+      const guardado = ((d.estados || []).find(x => x.estudiante_id === e.id) || {}).destrezas || {};
+      const tocadas = new Set(xs.map(i => destrezaDeId(i.item_id)).filter(Boolean));
+      const dz = {};
+      DESTREZAS.forEach(x => {
+        const g = guardado[x.id];
+        dz[x.id] = Math.max(g && Number.isInteger(g.nivel) ? Math.min(4, Math.max(0, g.nivel)) : 0, tocadas.has(x.id) ? 1 : 0);
+      });
       const r = {
         e, n: xs.length, ultimo, dias: ultimo ? diasDesde(ultimo) : null,
         sem: sem.length, prec7: sem.length ? pct(sem.reduce((s, i) => s + valor(i), 0), sem.length) : null,
         dom, diagnostico: xs.some(i => i.modo === "diagnostico"),
         examenes: exs.length, mejorEx, ultimoEx: exs.length ? pct(exs[exs.length - 1].correctas, exs[exs.length - 1].total) : null,
-        medianaSeg: segs.length >= 10 ? mediana(segs) : null
+        medianaSeg: segs.length >= 10 ? mediana(segs) : null,
+        dz, competentes: DZ_PRUEBA.filter(x => dz[x.id] >= 3).length
       };
       r.alertas = alertasDe(r);
       return r;
@@ -383,6 +407,8 @@
         </article>
       </div>
 
+      ${tarjetaDestrezasGrupo(activos)}
+
       <article class="card" style="margin-top:18px">
         <h3>Precisión del grupo por semana</h3>
         <p class="tiny">Últimas 10 semanas, de lunes a domingo. Pasa el cursor o el dedo por un punto para ver el detalle.</p>
@@ -405,6 +431,27 @@
           <p class="tiny" style="margin:10px 0 0">El nivel es una referencia propia (40, 65 y 85 %): el DEPR no publica los puntos de corte.</p>`
         : `<p class="tiny" style="margin:0">Todavía nadie tiene diagnóstico y simulacro a la vez.</p>`}
       </article>`;
+  }
+
+  // Cuántos estudiantes activos tiene cada destreza en Competente o más.
+  // Ordenadas de menos a más: arriba, dónde se atasca el grupo.
+  function tarjetaDestrezasGrupo(activos) {
+    if (!activos.length || !DESTREZAS.length) return "";
+    const filas = DESTREZAS.map(x => {
+      const ns = activos.map(r => r.dz[x.id]);
+      return { x, altos: ns.filter(n => n >= 3).length, empezados: ns.filter(n => n >= 1).length };
+    }).sort((a, b) => a.altos / activos.length - b.altos / activos.length || a.empezados - b.empezados);
+    const fila = f => `<div class="mastery-row dz-fila-grupo">
+        <span class="name">${esc(f.x.t)} <span class="tiny">· ${esc(MOD[f.x.modulo].corto)}</span></span>
+        <div class="bar" style="--c:var(--verde)"><i style="width:${pct(f.altos, activos.length)}%"></i></div>
+        <span class="pct">${f.altos} de ${activos.length}<span class="tiny"> · ${f.empezados} ${f.empezados === 1 ? "la empezó" : "la empezaron"}</span></span>
+      </div>`;
+    return `<article class="card" style="margin-top:18px">
+      <h3>Destrezas del grupo</h3>
+      <p class="tiny">Cuántos de los ${activos.length} estudiantes activos tienen cada destreza en Competente o Dominada (sube con 3 de 4 a la primera y sin pista). Arriba, las que más cuestan.</p>
+      ${filas.slice(0, 8).map(fila).join("")}
+      ${filas.length > 8 ? `<details style="margin-top:8px"><summary class="tiny">Ver las ${filas.length} destrezas</summary>${filas.slice(8).map(fila).join("")}</details>` : ""}
+    </article>`;
   }
 
   function fechaCorta(iso) {
@@ -464,7 +511,8 @@
     const filas = porEstudiante(d);
     const val = (r, c) => ({
       codigo: r.e.codigo, nombre: r.e.nombre.toLowerCase(), ultimo: r.ultimo || "", n: r.n,
-      prec7: r.prec7 == null ? -1 : r.prec7, simulacro: r.mejorEx == null ? -1 : r.mejorEx, alertas: r.alertas.length
+      prec7: r.prec7 == null ? -1 : r.prec7, simulacro: r.mejorEx == null ? -1 : r.mejorEx, alertas: r.alertas.length,
+      destrezas: r.competentes
     }[c] ?? (r.dom[c] && r.dom[c].pct != null ? r.dom[c].pct : -1));
     filas.sort((a, b) => (val(a, orden.col) > val(b, orden.col) ? 1 : val(a, orden.col) < val(b, orden.col) ? -1 : 0) * orden.dir);
     const th = (c, t, extra) => `<th scope="col" ${extra || ""} aria-sort="${orden.col === c ? (orden.dir > 0 ? "ascending" : "descending") : "none"}"><button class="th-orden" data-action="ordenar" data-col="${c}">${t}${orden.col === c ? (orden.dir > 0 ? " ▲" : " ▼") : ""}</button></th>`;
@@ -480,7 +528,7 @@
           <thead><tr>
             ${th("codigo", "Código")}${th("nombre", "Nombre")}${th("ultimo", "Último uso")}${th("n", "Respuestas")}${th("prec7", "7 días")}
             ${MODS.map(m => th(m.id, m.base ? "Base" : esc(m.id), `title="${esc(m.nombre)}"`)).join("")}
-            ${th("simulacro", "Simulacro")}${th("alertas", "Alertas")}<th scope="col">Cuenta</th>
+            ${th("destrezas", "Destrezas", `title="Destrezas de la prueba en Competente o Dominada (de ${DZ_PRUEBA.length})"`)}${th("simulacro", "Simulacro")}${th("alertas", "Alertas")}<th scope="col">Cuenta</th>
           </tr></thead>
           <tbody>${filas.map(r => `<tr class="${r.e.activo ? "" : "inactivo"}">
             <td class="mono">${esc(r.e.codigo)}</td>
@@ -490,6 +538,7 @@
             <td class="num">${r.prec7 == null ? "—" : r.prec7 + "%"}</td>
             ${MODS.map(m => { const x = r.dom[m.id]; return x.pct == null ? `<td class="num tiny">—</td>`
               : `<td class="num"><span class="dom ${claseDom(x.pct)}" title="${esc(m.nombre)}: ${x.pct}% en ${x.n} intentos">${x.pct}%</span></td>`; }).join("")}
+            <td class="num" title="Competente o Dominada">${r.competentes} de ${DZ_PRUEBA.length}</td>
             <td class="num">${r.mejorEx == null ? "—" : `${r.mejorEx}%<br><span class="tiny">${nivel(r.mejorEx)}</span>`}</td>
             <td class="alertas-celda">${r.alertas.map(a => `<span class="chip ${a.k}">${esc(a.t)}</span>`).join("<br>")}</td>
             <td class="acciones">
@@ -661,9 +710,10 @@
   function csvEstudiantes(d) {
     const filas = porEstudiante(d);
     descargar(`crece10-grupo-${d.grupo.nombre}-${hoy()}.csv`, csv([
-      ["Código", "Nombre", "Activo", "Último uso", "Respuestas", "Precisión 7 días", ...MODS.map(m => m.nombre), "Mejor simulacro", "Nivel aproximado", "Alertas"],
+      ["Código", "Nombre", "Activo", "Último uso", "Respuestas", "Precisión 7 días", ...MODS.map(m => m.nombre), "Destrezas en Competente o más", ...DESTREZAS.map(x => "Destreza: " + x.t), "Mejor simulacro", "Nivel aproximado", "Alertas"],
       ...filas.map(r => [r.e.codigo, r.e.nombre, r.e.activo ? "Sí" : "No", r.ultimo ? r.ultimo.slice(0, 10) : "", r.n,
         r.prec7 == null ? "" : r.prec7 + "%", ...MODS.map(m => r.dom[m.id].pct == null ? "" : r.dom[m.id].pct + "%"),
+        `${r.competentes} de ${DZ_PRUEBA.length}`, ...DESTREZAS.map(x => NIVELES_DZ[r.dz[x.id]]),
         r.mejorEx == null ? "" : r.mejorEx + "%", r.mejorEx == null ? "" : nivel(r.mejorEx), r.alertas.map(a => a.t).join(" · ")])
     ]), "text/csv;charset=utf-8");
   }

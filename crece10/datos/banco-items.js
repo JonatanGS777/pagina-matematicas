@@ -4,8 +4,8 @@
  * Todos los derechos reservados.
  */
 /* Banco de ítems originales — Proyecto CRECE 10 · Matemáticas
-   77 ítems fijos: 63 alineados a los indicadores de la planilla CRECE 2023-24
-   y 14 de la ruta Base (M0, repaso de grados anteriores)
+   83 ítems fijos: 67 alineados a los indicadores de la planilla CRECE 2023-24
+   y 16 de la ruta Base (M0, repaso de grados anteriores)
    (incluye 8 demostraciones de dos columnas, 4 respuestas abiertas e ítems
    con opciones que son figuras). Las variantes con números aleatorios están
    en datos/generadores.js.
@@ -1127,5 +1127,73 @@ window.CRECE_BANCO = [
     pista: "Un triángulo es la mitad de un rectángulo con la misma base y la misma altura.",
     error: "Olvidar dividir entre 2 y obtener 70 cm².",
     etiquetas: ["base", "área"]
+  },
+
+  /* ============ v1.4: ítems para completar 4 por destreza ============ */
+  {
+    id: "M0-15", modulo: "M0", indicador: "Base · Fracciones", tipo: "sm", nivel: 2,
+    repaso: "f2",
+    enunciado: "¿Cuánto es 3/4 ÷ 1/2?",
+    opciones: ["3/2", "3/8", "2/3", "1/4"],
+    respuesta: 0,
+    explicacion: "Dividir entre 1/2 es multiplicar por su recíproco, 2/1: 3/4 · 2/1 = 6/4 = 3/2 (o 1.5). Tiene sentido: en 3/4 caben más de un medio.",
+    pista: "Cambia la división por una multiplicación y voltea la segunda fracción.",
+    error: "Multiplicar sin voltear la segunda fracción.",
+    distractores: [null, "Multiplicaste 3/4 · 1/2 sin voltear la segunda fracción. Para dividir, se multiplica por el recíproco: 2/1.", "Volteaste la primera fracción (4/3 · 1/2 = 2/3). La que se voltea es la segunda.", "Restaste: 3/4 − 1/2 = 1/4. El ítem pide dividir."],
+    etiquetas: ["base", "fracciones"]
+  },
+  {
+    id: "M0-16", modulo: "M0", indicador: "Base · Plano cartesiano", tipo: "num", nivel: 2,
+    repaso: "f3",
+    enunciado: "Un rectángulo tiene vértices en (1, 2), (6, 2), (6, 5) y (1, 5). ¿Cuál es su área?",
+    respuesta: 15, tolerancia: 0.01, unidad: "u²",
+    explicacion: "Base: de x = 1 a x = 6 hay 6 − 1 = 5 unidades. Altura: de y = 2 a y = 5 hay 5 − 2 = 3 unidades. Área = b · h = 5 · 3 = 15 u².",
+    pista: "La base es la diferencia de las x y la altura es la diferencia de las y.",
+    error: "Sumar los lados: 2(5 + 3) = 16 es el perímetro, no el área.",
+    etiquetas: ["base", "plano cartesiano", "área"]
+  },
+  {
+    id: "M2-16", modulo: "M2", indicador: "ES.G.39", tipo: "num", nivel: 2,
+    repaso: "i4",
+    enunciado: "Dos rectas paralelas son cortadas por una transversal. Un ángulo mide (3x + 10)° y su ángulo alterno interno mide (5x − 30)°. ¿Cuántos grados mide cada uno de esos ángulos?",
+    respuesta: 70, tolerancia: 0.01, unidad: "°",
+    explicacion: "Entre paralelas, los ángulos alternos internos son congruentes: 3x + 10 = 5x − 30. Resta 3x y suma 30: 40 = 2x, así que x = 20. Cada ángulo mide 3(20) + 10 = 70°. Comprueba: 5(20) − 30 = 70°.",
+    pista: "Los alternos internos entre paralelas miden lo mismo: iguala las dos expresiones.",
+    error: "Contestar x = 20 en vez de la medida del ángulo, o sumar las expresiones a 180° como si fueran suplementarios.",
+    etiquetas: ["paralelas", "ángulos", "ecuaciones"]
+  },
+  {
+    id: "M5-11", modulo: "M5", indicador: "ES.G.43", tipo: "sm", nivel: 2,
+    repaso: "i3",
+    enunciado: "Desde un punto P fuera de un círculo de centro O se traza el segmento tangente PT. El radio mide 5 cm y PT mide 12 cm. ¿Cuál es la distancia OP?",
+    opciones: ["13 cm", "17 cm", "7 cm", "√119 cm"],
+    respuesta: 0,
+    explicacion: "La tangente es perpendicular al radio en T, así que OTP es un triángulo rectángulo con hipotenusa OP. OP² = 5² + 12² = 25 + 144 = 169, y OP = 13 cm.",
+    pista: "¿Qué ángulo forman la tangente y el radio en T? Con ese ángulo, usa el teorema de Pitágoras.",
+    error: "Sumar o restar los lados en lugar de usar el teorema de Pitágoras.",
+    distractores: [null, "Sumaste 5 + 12. Los lados de un triángulo rectángulo se relacionan con Pitágoras, no con una suma.", "Restaste 12 − 5. OP es la hipotenusa: es el lado más largo.", "Restaste los cuadrados: 12² − 5² = 119. OP es la hipotenusa, así que los cuadrados de los catetos se suman."],
+    etiquetas: ["tangente", "pitágoras"]
+  },
+  {
+    id: "M6-12", modulo: "M6", indicador: "ES.N.9", tipo: "num", nivel: 2,
+    repaso: "i4",
+    enunciado: "Evalúa 3a² − 2ab si a = −2 y b = 5.",
+    respuesta: 32, tolerancia: 0.01, unidad: "",
+    explicacion: "Sustituye con paréntesis: 3(−2)² − 2(−2)(5). (−2)² = 4, así que 3 · 4 = 12. 2(−2)(5) = −20. Entonces 12 − (−20) = 12 + 20 = 32.",
+    pista: "Escribe cada valor entre paréntesis: 3(−2)² − 2(−2)(5).",
+    error: "Elevar sin paréntesis: −2² = −4 en vez de (−2)² = 4, y obtener 8.",
+    etiquetas: ["expresiones", "sustitución"]
+  },
+  {
+    id: "M6-13", modulo: "M6", indicador: "ES.E.58", tipo: "sm", nivel: 1,
+    repaso: "i3",
+    enunciado: "En una bolsa hay 5 canicas rojas, 3 verdes y 2 azules. Se saca una canica al azar. ¿Cuál es la probabilidad de que <strong>no</strong> sea roja?",
+    opciones: ["1/2", "3/10", "1/5", "1/3"],
+    respuesta: 0,
+    explicacion: "Las que no son rojas son 3 verdes + 2 azules = 5 de 10 canicas. P = 5/10 = 1/2. También: 1 − P(roja) = 1 − 5/10 = 1/2.",
+    pista: "Cuenta todas las canicas que no son rojas y divide entre el total.",
+    error: "Contar solo un color, o contar colores en vez de canicas.",
+    distractores: [null, "3/10 cuenta solo las verdes. «No roja» incluye las verdes y las azules: 3 + 2 = 5.", "1/5 = 2/10 cuenta solo las azules. «No roja» incluye las verdes y las azules.", "Contaste colores (1 de 3), no canicas. Cada color tiene una cantidad distinta de canicas."],
+    etiquetas: ["probabilidad", "complemento"]
   }
 ];
