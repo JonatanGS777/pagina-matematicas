@@ -10,6 +10,68 @@
 
 window.CRECE_MODULOS = [
   {
+    // Ruta de preparación: no es contenido de la prueba, pero la prueba la da por sabida.
+    // `base: true` la saca de la mezcla, del simulacro, del diagnóstico y del plan.
+    id: "M0",
+    base: true,
+    nombre: "Base: lo que la geometría da por sabido",
+    corto: "Base",
+    indicadores: ["Repaso de grados anteriores"],
+    color: "#4A5A6A",
+    peso: "No cuenta en la prueba; la sostiene",
+    gancho: "Enteros, fracciones, proporciones, ecuaciones y el plano",
+    proposito:
+      "Repasar las destrezas de grados anteriores que aparecen dentro de casi todos los ítems de la prueba: operar con signos, fracciones y por cientos, resolver proporciones y ecuaciones, y ubicar puntos en el plano. Si una ruta se te hace cuesta arriba, empieza aquí.",
+    ideas: [
+      {
+        t: "Enteros y signos",
+        d: "Al sumar números con signos distintos, resta sus valores absolutos y usa el signo del de mayor valor absoluto: −7 + 12 = 5. Restar un negativo es sumar su opuesto: 5 − (−3) = 8. Al multiplicar o dividir, signos iguales dan positivo y signos distintos dan negativo."
+      },
+      {
+        t: "Orden de las operaciones",
+        d: "Primero los paréntesis; luego las potencias y raíces; después multiplicación y división, de izquierda a derecha; al final suma y resta, de izquierda a derecha. Por eso 2 + 3 · 4 = 14, no 20."
+      },
+      {
+        t: "Fracciones, decimales y por cientos",
+        d: "Una fracción es una división: 3/5 = 3 ÷ 5 = 0.6 = 60 %. Para sumar fracciones necesitas el mismo denominador. Para multiplicar, multiplica numeradores y denominadores. El x % de una cantidad es (x ÷ 100) por la cantidad."
+      },
+      {
+        t: "Razones y proporciones",
+        d: "Una proporción dice que dos razones son iguales: a/b = c/d. Se resuelve con productos cruzados: a · d = b · c. Coloca las mismas unidades en el mismo lugar de cada razón. Es la base de la semejanza y de las escalas."
+      },
+      {
+        t: "Ecuaciones",
+        d: "Despejar es deshacer las operaciones en orden inverso, haciendo lo mismo en los dos lados. En 3x + 5 = 20: resta 5 (3x = 15) y divide entre 3 (x = 5). Comprueba siempre sustituyendo."
+      },
+      {
+        t: "El plano cartesiano",
+        d: "En el punto (x, y), x dice cuánto a la derecha (+) o a la izquierda (−) y y dice cuánto arriba (+) o abajo (−). Cuadrantes: I (+, +), II (−, +), III (−, −), IV (+, −), contados en sentido contrario a las manecillas del reloj. Es la base de las transformaciones."
+      }
+    ],
+    formulas: [
+      { f: "a/b = c/d → a · d = b · c", d: "Productos cruzados para resolver una proporción." },
+      { f: "x % de N = (x ÷ 100) · N", d: "Ejemplo: 15 % de 80 = 0.15 · 80 = 12." },
+      { f: "a/b ÷ c/d = a/b · d/c", d: "Para dividir fracciones, multiplica por el recíproco de la segunda." },
+      { f: "Rectángulo: A = b · h · Triángulo: A = b · h ÷ 2", d: "El triángulo es la mitad del rectángulo con la misma base y altura." }
+    ],
+    ejemplo: {
+      titulo: "Resolver la proporción x/6 = 10/15",
+      pasos: [
+        "Multiplica en cruz: 15 · x = 6 · 10.",
+        "Calcula: 15x = 60.",
+        "Divide los dos lados entre 15: x = 4.",
+        "Comprueba: 4/6 = 2/3 y 10/15 = 2/3. Las razones son iguales."
+      ],
+      respuesta: "x = 4."
+    },
+    errores: [
+      { e: "Sumar antes de multiplicar", c: "2 + 3 · 4 es 14: la multiplicación va primero." },
+      { e: "Sumar numeradores y denominadores", c: "1/2 + 1/3 no es 2/5. Con denominador común: 3/6 + 2/6 = 5/6." },
+      { e: "Cambiar el orden en (x, y)", c: "El primer número siempre es el horizontal. (2, 5) y (5, 2) son puntos distintos." },
+      { e: "Hacer una operación en un solo lado", c: "Lo que le haces a un lado de la ecuación se lo haces al otro." }
+    ]
+  },
+  {
     id: "M1",
     nombre: "Fundamentos y construcciones",
     corto: "Fundamentos",

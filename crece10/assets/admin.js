@@ -359,7 +359,7 @@
       <div class="grid grid-2" style="margin-top:22px;align-items:start">
         <article class="card">
           <h3>Dominio del grupo por ruta</h3>
-          <p class="tiny">Todas las respuestas de los últimos 30 días. Acierto = 1, con pista = 0.5.</p>
+          <p class="tiny">Todas las respuestas de los últimos 30 días. Acierto = 1; con ayuda (pista o segundo intento) = 0.5. «Base» es el repaso de grados anteriores.</p>
           ${MODS.map(m => {
             const xs = mes.filter(i => i.modulo === m.id);
             const p = xs.length ? pct(xs.reduce((s, i) => s + valor(i), 0), xs.length) : null;
@@ -479,7 +479,7 @@
         <table class="admin-tabla">
           <thead><tr>
             ${th("codigo", "Código")}${th("nombre", "Nombre")}${th("ultimo", "Último uso")}${th("n", "Respuestas")}${th("prec7", "7 días")}
-            ${MODS.map(m => th(m.id, esc(m.id), `title="${esc(m.nombre)}"`)).join("")}
+            ${MODS.map(m => th(m.id, m.base ? "Base" : esc(m.id), `title="${esc(m.nombre)}"`)).join("")}
             ${th("simulacro", "Simulacro")}${th("alertas", "Alertas")}<th scope="col">Cuenta</th>
           </tr></thead>
           <tbody>${filas.map(r => `<tr class="${r.e.activo ? "" : "inactivo"}">

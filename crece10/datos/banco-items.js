@@ -4,7 +4,8 @@
  * Todos los derechos reservados.
  */
 /* Banco de ítems originales — Proyecto CRECE 10 · Matemáticas
-   63 ítems fijos alineados a los indicadores de la planilla CRECE 2023-24
+   77 ítems fijos: 63 alineados a los indicadores de la planilla CRECE 2023-24
+   y 14 de la ruta Base (M0, repaso de grados anteriores)
    (incluye 8 demostraciones de dos columnas, 4 respuestas abiertas e ítems
    con opciones que son figuras). Las variantes con números aleatorios están
    en datos/generadores.js.
@@ -965,5 +966,166 @@ window.CRECE_BANCO = [
     error: "Decir que el −6 «pasó al otro lado» sin nombrar la operación: lo que se hizo fue sumar 6 a ambos lados.",
     distractores: [null, "La distributiva se usó en el paso 2 para quitar el paréntesis. Del paso 2 al 3 ya no hay paréntesis: se sumó 6 a ambos lados.", "La división de la igualdad se usa en el paso 4, al dividir ambos lados entre 3.", "La conmutativa cambia el orden de los términos. Aquí no se reordenó nada: se sumó 6 a ambos lados."],
     etiquetas: ["prueba", "dos columnas", "propiedades"]
+  },
+
+  /* ================= M0 · BASE (repaso de grados anteriores) =================
+     No cuenta en la prueba: no entra en la mezcla, el diagnóstico ni el simulacro. */
+  {
+    id: "M0-01", modulo: "M0", indicador: "Base · Enteros", tipo: "sm", nivel: 1,
+    repaso: "i0",
+    enunciado: "¿Cuánto es −7 + 12?",
+    opciones: ["5", "−5", "19", "−19"],
+    respuesta: 0,
+    explicacion: "Los signos son distintos: resta los valores absolutos (12 − 7 = 5) y usa el signo del número con mayor valor absoluto. Ese es 12, que es positivo. Resultado: 5.",
+    pista: "En una recta numérica, empieza en −7 y camina 12 pasos hacia la derecha.",
+    error: "Usar el signo del primer número aunque el otro tenga mayor valor absoluto.",
+    distractores: [null, "Usaste el signo de −7, pero 12 tiene mayor valor absoluto: el resultado es positivo.", "Sumaste 7 + 12 como si los dos fueran positivos. Con signos distintos, los valores absolutos se restan.", "Sumaste los valores absolutos y pusiste signo negativo. Con signos distintos, los valores absolutos se restan."],
+    etiquetas: ["base", "enteros"]
+  },
+  {
+    id: "M0-02", modulo: "M0", indicador: "Base · Enteros", tipo: "sm", nivel: 2,
+    repaso: "i0",
+    enunciado: "¿Cuánto es (−6) · (−4) ÷ (−3)?",
+    opciones: ["−8", "8", "−72", "−13"],
+    respuesta: 0,
+    explicacion: "De izquierda a derecha: (−6) · (−4) = 24, porque los signos son iguales. Luego 24 ÷ (−3) = −8, porque los signos son distintos.",
+    pista: "Ve de izquierda a derecha y decide el signo en cada paso: signos iguales dan positivo; distintos, negativo.",
+    error: "Perder el signo en el segundo paso: 24 ÷ (−3) es negativo.",
+    distractores: [null, "El 8 está bien, pero el signo no: 24 es positivo y −3 es negativo, así que 24 ÷ (−3) es negativo.", "Multiplicaste por −3 en lugar de dividir: 24 · (−3) = −72.", "Sumaste los tres números: −6 − 4 − 3 = −13. El ítem pide multiplicar y luego dividir."],
+    etiquetas: ["base", "enteros"]
+  },
+  {
+    id: "M0-03", modulo: "M0", indicador: "Base · Operaciones", tipo: "num", nivel: 1,
+    repaso: "i1",
+    enunciado: "Calcula: 18 − 4 · 3 + 6 ÷ 2",
+    respuesta: 9, tolerancia: 0.01, unidad: "",
+    explicacion: "Primero multiplicación y división: 4 · 3 = 12 y 6 ÷ 2 = 3. Luego suma y resta de izquierda a derecha: 18 − 12 + 3 = 9.",
+    pista: "Antes de sumar o restar, resuelve 4 · 3 y 6 ÷ 2.",
+    error: "Operar de izquierda a derecha sin prioridad: 18 − 4 = 14, · 3 = 42, + 6 = 48, ÷ 2 = 24.",
+    etiquetas: ["base", "orden de operaciones"]
+  },
+  {
+    id: "M0-04", modulo: "M0", indicador: "Base · Operaciones", tipo: "sm", nivel: 2,
+    repaso: "i1",
+    enunciado: "¿Cuál es el valor de 2 · (5 − 3)² + 1?",
+    opciones: ["9", "17", "5", "33"],
+    respuesta: 0,
+    explicacion: "Paréntesis: 5 − 3 = 2. Potencia: 2² = 4. Multiplicación: 2 · 4 = 8. Suma: 8 + 1 = 9.",
+    pista: "Orden: paréntesis, potencia, multiplicación y, al final, la suma.",
+    error: "Multiplicar antes de elevar al cuadrado.",
+    distractores: [null, "Multiplicaste 2 · 2 = 4 y luego elevaste al cuadrado. La potencia va antes que la multiplicación: 2² = 4 y después 2 · 4 = 8.", "Olvidaste el exponente: (5 − 3)² = 2² = 4, no 2.", "Elevaste cada número por separado: 5² − 3² = 16. Primero se resuelve el paréntesis (5 − 3 = 2) y después se eleva: 2² = 4."],
+    etiquetas: ["base", "orden de operaciones"]
+  },
+  {
+    id: "M0-05", modulo: "M0", indicador: "Base · Fracciones", tipo: "sm", nivel: 2,
+    repaso: "i2",
+    enunciado: "¿Cuánto es 2/3 + 1/4?",
+    opciones: ["11/12", "3/7", "3/12", "1/6"],
+    respuesta: 0,
+    explicacion: "El denominador común de 3 y 4 es 12. 2/3 = 8/12 y 1/4 = 3/12. Entonces 8/12 + 3/12 = 11/12.",
+    pista: "Escribe las dos fracciones con denominador 12 antes de sumar.",
+    error: "Sumar numeradores con numeradores y denominadores con denominadores.",
+    distractores: [null, "Sumaste numeradores (2 + 1) y denominadores (3 + 4). Las fracciones solo se suman cuando tienen el mismo denominador.", "Usaste el denominador común 12, pero no convertiste los numeradores: 2/3 = 8/12 y 1/4 = 3/12.", "Multiplicaste: 2/3 · 1/4 = 2/12 = 1/6. El ítem pide sumar."],
+    etiquetas: ["base", "fracciones"]
+  },
+  {
+    id: "M0-06", modulo: "M0", indicador: "Base · Por cientos", tipo: "num", nivel: 1,
+    repaso: "f1",
+    enunciado: "Un par de tenis cuesta $80 y tiene 15 % de descuento. ¿Cuántos dólares se descuentan?",
+    respuesta: 12, tolerancia: 0.01, unidad: "dólares",
+    explicacion: "15 % = 15 ÷ 100 = 0.15. Entonces 0.15 · 80 = 12. Se descuentan $12, y el precio final es $68.",
+    pista: "Convierte 15 % a decimal (divide entre 100) y multiplícalo por 80.",
+    error: "Restar 80 − 15 = 65, como si el 15 % fueran $15.",
+    etiquetas: ["base", "por cientos"]
+  },
+  {
+    id: "M0-07", modulo: "M0", indicador: "Base · Fracciones", tipo: "sm", nivel: 1,
+    repaso: "i2",
+    enunciado: "¿Cuál número <strong>no</strong> es igual a 3/5?",
+    opciones: ["0.6", "60 %", "6/10", "0.35"],
+    respuesta: 3,
+    explicacion: "3/5 = 3 ÷ 5 = 0.6 = 60 % = 6/10. El número 0.35 tiene los dígitos 3 y 5, pero 0.35 = 35/100 = 7/20, que no es 3/5.",
+    pista: "Divide 3 ÷ 5 y compara cada opción con ese decimal.",
+    error: "Pensar que 3/5 se escribe 0.35 porque tiene los dígitos 3 y 5.",
+    distractores: ["0.6 sí es igual: 3 ÷ 5 = 0.6.", "60 % sí es igual: 0.6 · 100 = 60 %.", "6/10 sí es igual: es 3/5 con numerador y denominador multiplicados por 2.", null],
+    etiquetas: ["base", "fracciones", "decimales"]
+  },
+  {
+    id: "M0-08", modulo: "M0", indicador: "Base · Proporciones", tipo: "num", nivel: 1,
+    repaso: "f0",
+    enunciado: "Resuelve la proporción: x/8 = 15/24",
+    respuesta: 5, tolerancia: 0.01, unidad: "",
+    explicacion: "Productos cruzados: 24 · x = 8 · 15 = 120. Divide entre 24: x = 5. Comprueba: 5/8 = 0.625 y 15/24 = 0.625.",
+    pista: "Multiplica en cruz: x por 24, y 8 por 15.",
+    error: "Multiplicar en línea recta (x · 15 = 8 · 24) y obtener 12.8.",
+    etiquetas: ["base", "proporciones"]
+  },
+  {
+    id: "M0-09", modulo: "M0", indicador: "Base · Proporciones", tipo: "sm", nivel: 2,
+    repaso: "i3",
+    enunciado: "En un mapa, 2 cm representan 5 km. Dos pueblos están a 7 cm en el mapa. ¿Cuál es la distancia real entre ellos?",
+    opciones: ["17.5 km", "14 km", "35 km", "2.8 km"],
+    respuesta: 0,
+    explicacion: "Plantea 2/5 = 7/x (centímetros sobre kilómetros). Productos cruzados: 2x = 35, así que x = 17.5 km. Otra forma: 1 cm son 2.5 km, y 7 · 2.5 = 17.5.",
+    pista: "Escribe dos razones con las unidades en el mismo lugar: cm/km = cm/km.",
+    error: "Invertir la razón o ignorar uno de los datos de la escala.",
+    distractores: [null, "Multiplicaste 7 · 2. El 2 son centímetros del mapa, no kilómetros.", "Multiplicaste 7 · 5 como si 1 cm fueran 5 km. La escala dice que 2 cm son 5 km, así que 1 cm son 2.5 km.", "Invertiste la razón: 7 · 2 ÷ 5. Pon los centímetros arriba en las dos razones: 2/5 = 7/x."],
+    etiquetas: ["base", "proporciones", "escala"]
+  },
+  {
+    id: "M0-10", modulo: "M0", indicador: "Base · Ecuaciones", tipo: "sm", nivel: 1,
+    repaso: "i4",
+    enunciado: "Resuelve: 4x − 7 = 21",
+    opciones: ["7", "3.5", "112", "28"],
+    respuesta: 0,
+    explicacion: "Suma 7 a los dos lados: 4x = 28. Divide entre 4: x = 7. Comprueba: 4 · 7 − 7 = 21.",
+    pista: "Deshaz primero la resta (suma 7) y después la multiplicación (divide entre 4).",
+    error: "Deshacer la resta restando en vez de sumando.",
+    distractores: [null, "Restaste 7 en los dos lados, pero un −7 se deshace sumando 7: queda 4x = 28.", "Multiplicaste 28 por 4. Para deshacer «4 por x» se divide entre 4.", "Llegaste a 4x = 28, pero faltó dividir entre 4."],
+    etiquetas: ["base", "ecuaciones"]
+  },
+  {
+    id: "M0-11", modulo: "M0", indicador: "Base · Ecuaciones", tipo: "num", nivel: 2,
+    repaso: "i4",
+    enunciado: "Resuelve: 5x + 3 = 2x + 18",
+    respuesta: 5, tolerancia: 0.01, unidad: "",
+    explicacion: "Resta 2x a los dos lados: 3x + 3 = 18. Resta 3: 3x = 15. Divide entre 3: x = 5. Comprueba: 5 · 5 + 3 = 28 y 2 · 5 + 18 = 28.",
+    pista: "Junta las x en un solo lado: resta 2x a los dos lados.",
+    error: "Sumar 2x en vez de restarlo y llegar a 7x + 3 = 18.",
+    etiquetas: ["base", "ecuaciones"]
+  },
+  {
+    id: "M0-12", modulo: "M0", indicador: "Base · Plano cartesiano", tipo: "sm", nivel: 1,
+    repaso: "i5",
+    enunciado: "¿En cuál cuadrante está el punto (−4, 3)?",
+    opciones: ["I", "II", "III", "IV"],
+    respuesta: 1,
+    explicacion: "x = −4: cuatro unidades a la izquierda. y = 3: tres unidades hacia arriba. Izquierda y arriba es el cuadrante II, con signos (−, +).",
+    pista: "x dice izquierda o derecha; y dice arriba o abajo. El cuadrante I está arriba a la derecha y se cuenta en sentido contrario a las manecillas del reloj.",
+    error: "Confundir los cuadrantes II y IV.",
+    distractores: ["En el cuadrante I las dos coordenadas son positivas. Aquí x = −4 es negativa.", null, "En el cuadrante III las dos coordenadas son negativas. Aquí y = 3 es positiva.", "El cuadrante IV es (+, −): x positiva y y negativa. Aquí es al revés."],
+    etiquetas: ["base", "plano cartesiano"]
+  },
+  {
+    id: "M0-13", modulo: "M0", indicador: "Base · Plano cartesiano", tipo: "sm", nivel: 1,
+    repaso: "i5",
+    enunciado: "Un punto está 2 unidades a la derecha del origen y 5 unidades hacia abajo. ¿Cuál par ordenado lo describe?",
+    opciones: ["(2, −5)", "(−5, 2)", "(−2, 5)", "(5, −2)"],
+    respuesta: 0,
+    explicacion: "Derecha es x positiva: x = 2. Abajo es y negativa: y = −5. El par es (2, −5).",
+    pista: "El par ordenado es (horizontal, vertical).",
+    error: "Escribir primero el movimiento vertical.",
+    distractores: [null, "Invertiste el orden: primero va x (horizontal) y después y (vertical).", "Los signos están al revés: derecha es x positiva y abajo es y negativa.", "Intercambiaste las distancias: 2 es la horizontal (x) y 5 la vertical (y)."],
+    etiquetas: ["base", "plano cartesiano"]
+  },
+  {
+    id: "M0-14", modulo: "M0", indicador: "Base · Área", tipo: "num", nivel: 1,
+    repaso: "f3",
+    enunciado: "Un triángulo tiene base 10 cm y altura 7 cm. ¿Cuál es su área?",
+    respuesta: 35, tolerancia: 0.01, unidad: "cm²",
+    explicacion: "Área del triángulo = b · h ÷ 2 = 10 · 7 ÷ 2 = 70 ÷ 2 = 35 cm².",
+    pista: "Un triángulo es la mitad de un rectángulo con la misma base y la misma altura.",
+    error: "Olvidar dividir entre 2 y obtener 70 cm².",
+    etiquetas: ["base", "área"]
   }
 ];

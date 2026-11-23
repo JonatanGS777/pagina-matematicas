@@ -659,3 +659,48 @@ body.sin-sesion .top-actions { margin-left: auto; }
 @media (max-width: 360px) {
   .cuenta-codigo { display: none; }
 }
+
+/* ── Ruta Base (preparación) ── */
+.base-card {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center;
+  margin-bottom: 18px; padding: 18px 20px; border-radius: 14px;
+  background: var(--papel-2); border: 1px dashed var(--c, var(--linea));
+}
+.base-card h3 { margin: 4px 0 4px; font-size: 1.1rem; }
+.base-card p { margin: 0; font-size: .92rem; color: var(--tinta-2); }
+.base-acciones { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+@media (max-width: 760px) {
+  .base-card { grid-template-columns: auto 1fr; }
+  .base-acciones { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+}
+.base-aviso { border-color: var(--c, #4A5A6A); }
+
+/* ── Pistas por pasos ── */
+.pasos-pista { list-style: none; margin: 0; padding: 0; counter-reset: paso; display: grid; gap: 10px; }
+.pasos-pista li { counter-increment: paso; display: grid; grid-template-columns: 26px 1fr; gap: 2px 10px; }
+.pasos-pista li::before {
+  content: counter(paso); grid-row: 1 / span 2; width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center; font-size: .78rem; font-weight: 700; background: var(--verde); color: #fff;
+}
+.pasos-pista li b { display: block; margin: 0; }
+.pasos-pista li span { font-size: .93rem; }
+.pasos-pista li:focus { outline: 2px solid var(--verde); outline-offset: 4px; border-radius: 4px; }
+.pistas-pie { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--linea-2); }
+
+/* Opción descartada por una pista o por el primer intento: con texto, no solo color. */
+.choice.descartada { opacity: .55; background: var(--papel-2); }
+.choice.descartada > span:not(.key) { text-decoration: line-through; }
+.choice.descartada .key { background: transparent; }
+
+/* ── Segundo intento ── */
+.reintento { margin: 14px 0 0; }
+.reintento:focus { outline: 2px solid var(--coral); outline-offset: 2px; }
+
+/* ── Explicación de cada opción ── */
+.opciones-exp { margin-top: 12px; }
+.opciones-exp > b { display: block; font-size: .9rem; margin-bottom: 6px; }
+.opciones-exp ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.opciones-exp li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; font-size: .92rem; padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,.6); border: 1px solid var(--linea-2); }
+.opciones-exp li.elegida { border-color: #f0c6bc; background: var(--coral-claro); }
+.opciones-exp .key { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .8rem; border: 1px solid var(--linea); background: var(--blanco); }
+.opciones-exp .chip { margin-right: 4px; }

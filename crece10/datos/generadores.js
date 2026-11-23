@@ -306,6 +306,63 @@ window.CRECE_GENERADORES = (function () {
     };
   } };
 
+  // M0 · Restar un número negativo
+  P.restanegativo = { repaso: "i0", modulo: "M0", indicador: "Base · Enteros", nivel: 1, etiquetas: ["base", "enteros"], crear(r) {
+    const a = noCero(r, -9, 9), b = -ent(r, 1, 12);
+    const ok = a - b;
+    const ops = [ok, a + b, -ok, -(a + b)].map(n);
+    if (ok === 0 || !distintas(ops)) return null;
+    return {
+      enunciado: `¿Cuánto es ${n(a)} − (${n(b)})?`,
+      opciones: ops,
+      distractores: [null,
+        `Trataste − (${n(b)}) como ${n(b)}. Dos signos menos seguidos se convierten en suma: − (${n(b)}) = + ${n(-b)}.`,
+        `El ${n(Math.abs(ok))} está bien, pero el signo no. Empieza en ${n(a)} en la recta numérica y camina ${n(-b)} pasos hacia la derecha.`,
+        `Cambiaste también el signo de ${n(a)}. Solo cambia la resta del negativo: ${n(a)} − (${n(b)}) = ${n(a)} + ${n(-b)}.`],
+      explicacion: `Restar un negativo es sumar su opuesto: ${n(a)} − (${n(b)}) = ${n(a)} + ${n(-b)} = ${n(ok)}.`,
+      pista: "Restar un número negativo es lo mismo que sumar el positivo.",
+      error: "Dejar el signo menos del número negativo en vez de convertir la resta en suma."
+    };
+  } };
+
+  // M0 · Proporción con solución entera (respuesta numérica)
+  P.proporcion = { repaso: "f0", modulo: "M0", indicador: "Base · Proporciones", nivel: 1, etiquetas: ["base", "proporciones"], crear(r) {
+    const a = ent(r, 2, 9), k = ent(r, 2, 6), x = ent(r, 2, 12);
+    if (x === a) return null;
+    const c = x * k, d = a * k;
+    return {
+      tipo: "num",
+      enunciado: `Resuelve la proporción: x/${a} = ${c}/${d}`,
+      respuesta: x, tolerancia: 0.01, unidad: "",
+      explicacion: `Productos cruzados: ${d} · x = ${a} · ${c} = ${a * c}. Divide entre ${d}: x = ${a * c} ÷ ${d} = ${x}.`,
+      pista: `Multiplica en cruz: x por ${d}, y ${a} por ${c}.`,
+      error: "Multiplicar en línea recta (numerador por numerador) en vez de en cruz."
+    };
+  } };
+
+  // M0 · Ecuación de dos pasos
+  P.ecuacion = { repaso: "i4", modulo: "M0", indicador: "Base · Ecuaciones", nivel: 1, etiquetas: ["base", "ecuaciones"], crear(r) {
+    const a = ent(r, 2, 9), x = noCero(r, -9, 12), b = noCero(r, -15, 15);
+    const c = a * x + b;
+    const signo = (c + b) / a;
+    if (!Number.isInteger(signo)) return null;
+    const ops = [x, signo, c - b, (c - b) * a].map(n);
+    if (!distintas(ops)) return null;
+    const lado = `${a}x ${b < 0 ? "−" : "+"} ${Math.abs(b)}`;
+    const deshacer = b < 0 ? `Suma ${Math.abs(b)}` : `Resta ${b}`;
+    return {
+      enunciado: `Resuelve: ${lado} = ${n(c)}`,
+      opciones: ops,
+      distractores: [null,
+        `Moviste el ${n(Math.abs(b))} con la operación equivocada y quedó ${a}x = ${n(c + b)}. ${b < 0 ? "Una resta se deshace sumando" : "Una suma se deshace restando"}.`,
+        `Llegaste a ${a}x = ${n(c - b)}, pero faltó dividir entre ${a}.`,
+        `Multiplicaste por ${a}. Para deshacer «${a} por x» se divide entre ${a}.`],
+      explicacion: `${deshacer} en los dos lados: ${a}x = ${n(c - b)}. Divide entre ${a}: x = ${n(x)}. Comprueba: ${a} · ${pf(x)} ${b < 0 ? "−" : "+"} ${Math.abs(b)} = ${n(c)}.`,
+      pista: `Deshaz primero el ${b < 0 ? "−" : "+"} ${Math.abs(b)} y después la multiplicación por ${a}.`,
+      error: "Deshacer la suma o la resta con la operación equivocada, o no terminar de dividir."
+    };
+  } };
+
   /* ---------- Fábrica ---------- */
   function generar(clave, seed) {
     const g = P[clave];

@@ -14,6 +14,12 @@
   const BANCO = window.CRECE_BANCO || [];
   const FIG = window.CRECE_FIGURAS || {};
   const MOD = Object.fromEntries(MODS.map(m => [m.id, m]));
+  // RUTAS = lo que evalúa la prueba (M1 a M6). BASE = repaso de grados anteriores (M0):
+  // no entra en la mezcla, el diagnóstico, el simulacro ni el plan.
+  const RUTAS = MODS.filter(m => !m.base);
+  const BASE = MODS.find(m => m.base) || null;
+  const esBase = id => !!(MOD[id] && MOD[id].base);
+  const mono = m => (m.base ? "B" : m.id.replace("M", ""));
   const ITEM = Object.fromEntries(BANCO.map(i => [i.id, i]));
   const GEN = window.CRECE_GENERADORES || null;
   // Ítems del banco por id; las variantes «GEN:…» se reconstruyen desde su semilla.
@@ -125,11 +131,34 @@
     return Math.max(...STATE.examenes.map(e => pct(e.correctas, e.total)));
   }
   function moduloRecomendado() {
-    const conDatos = MODS.filter(m => dominio(m.id).n > 0);
-    if (!conDatos.length) return MODS[0];
+    const conDatos = RUTAS.filter(m => dominio(m.id).n > 0);
+    if (!conDatos.length) return RUTAS[0];
     return conDatos.slice().sort((a, b) => dominio(a.id).pct - dominio(b.id).pct)[0];
   }
-  // extra: { opcion, segundos } para el panel docente (qué eligió y cuánto tardó).
+  // Sugerir la Base cuando el diagnóstico o la precisión general salen bajos
+  // y la Base todavía no está dominada.
+  function sugerirBase() {
+    if (!BASE) return false;
+    const b = dominio(BASE.id);
+    if (b.n >= 8 && b.pct >= 70) return false;
+    const d = STATE.diagnostico;
+    if (d && d.total && pct(d.correctas, d.total) < 40) return true;
+    const g = precisionGlobal();
+    return g.n >= 10 && g.pct < 40;
+  }
+  function avisoBase(extra) {
+    if (!sugerirBase()) return "";
+    return `<div class="callout base-aviso" style="${extra || ""}">
+      <b>Antes de seguir, repasa la Base</b>
+      <p>Tus resultados dicen que lo que más te frena son destrezas de grados anteriores: signos, fracciones, proporciones y ecuaciones. Diez minutos ahí hacen que las rutas te rindan más.</p>
+      <div class="btn-row" style="margin-top:8px">
+        <a class="btn btn-primary btn-sm" href="#/modulo/${BASE.id}">Ver la Base ${ICON.arrow}</a>
+        <button class="btn btn-ghost btn-sm" data-action="iniciar-practica" data-mod="${BASE.id}" data-n="10">Practicar la Base</button>
+      </div>
+    </div>`;
+  }
+  // extra: { opcion, segundos, alSegundo } para el panel docente (qué eligió primero
+  // y cuánto tardó). Con segundo intento, `pista` en la nube significa «con ayuda».
   function registrar(item, ok, modo, diferir, conPista, extra) {
     const intento = { id: item.id, mod: item.modulo, ok: !!ok, fecha: hoy(), modo };
     if (conPista) intento.pista = true;
@@ -145,7 +174,9 @@
       });
     }
     if (STATE.intentos.length > 800) STATE.intentos = STATE.intentos.slice(-800);
-    if (!ok) {
+    // Acertar en el segundo intento vale medio (conPista) y deja el ítem en el
+    // cuaderno de errores: el primer intento fue un fallo.
+    if (!ok || (extra && extra.alSegundo)) {
       const e = STATE.errores[item.id] || { veces: 0, ultima: "" };
       e.veces++; e.ultima = hoy();
       STATE.errores[item.id] = e;
@@ -174,14 +205,15 @@
     const total = Object.values(pesos).reduce((a, b) => a + b, 0);
     const cuotas = {};
     let asignados = 0;
-    MODS.forEach(m => { cuotas[m.id] = Math.max(1, Math.round(n * pesos[m.id] / total)); asignados += cuotas[m.id]; });
+    RUTAS.forEach(m => { cuotas[m.id] = Math.max(1, Math.round(n * pesos[m.id] / total)); asignados += cuotas[m.id]; });
     while (asignados > n) {
-      const m = MODS.slice().sort((a, b) => cuotas[b.id] - cuotas[a.id])[0];
+      const m = RUTAS.slice().sort((a, b) => cuotas[b.id] - cuotas[a.id])[0];
       if (cuotas[m.id] > 1) { cuotas[m.id]--; asignados--; } else break;
     }
-    let pool = BANCO.concat(variantes()).filter(i => !(excluirAbiertas && i.tipo === "abierta"));
+    // La Base no es contenido de la prueba: nunca entra en la mezcla ni en el simulacro.
+    let pool = BANCO.concat(variantes()).filter(i => !esBase(i.modulo) && !(excluirAbiertas && i.tipo === "abierta"));
     const out = [];
-    MODS.forEach(m => {
+    RUTAS.forEach(m => {
       const xs = barajar(pool.filter(i => i.modulo === m.id)).slice(0, cuotas[m.id]);
       out.push(...xs);
     });
@@ -507,6 +539,7 @@
             <h3 id="rutaHoy">Tu ruta de hoy</h3>
             <p class="tiny">${hechos ? "Continúa donde quedaste." : "Tres pasos para empezar sin profesor al lado."}</p>
             ${avisoSesionPendiente()}
+            ${avisoBase("margin:10px 0 14px")}
             <div class="route-step">
               <span class="route-num">1</span>
               <div><b>${hechos ? "Calienta 10 minutos" : "Haz el diagnóstico"}</b><span>${hechos ? "Una práctica corta en tu ruta más débil." : "12 ítems, 2 por ruta, para saber dónde estás."}</span></div>
@@ -546,12 +579,13 @@
             </div>
             <a class="btn btn-ghost" href="#/aprende">Ver todas ${ICON.arrow}</a>
           </div>
+          ${tarjetaBase()}
           <div class="grid grid-3">
-            ${MODS.map(m => {
+            ${RUTAS.map(m => {
               const d = dominio(m.id);
               return `<a class="card hover skill-card" style="--c:${m.color}" href="#/modulo/${m.id}">
                 <div class="card-top">
-                  <span class="skill-mono">${m.id.replace("M", "")}</span>
+                  <span class="skill-mono">${mono(m)}</span>
                   <span class="chip">${esc(m.peso.replace("≈ ", ""))}</span>
                 </div>
                 <h3>${esc(m.nombre)}</h3>
@@ -585,7 +619,7 @@
             <article class="card">
               <span class="skill-mono" style="--c:#c2412d">${ICON.bulb}</span>
               <h3>2. Practica con pistas</h3>
-              <p>Si te trabas, pide una pista. Si fallas, ves la explicación y el error frecuente, no solo la respuesta.</p>
+              <p>Si te trabas, pide pistas paso a paso. Si fallas, tienes un segundo intento y luego ves por qué cada opción funciona o no.</p>
             </article>
             <article class="card">
               <span class="skill-mono" style="--c:#9a6b00">${ICON.chart}</span>
@@ -666,6 +700,26 @@
     return { rutas, simOk, auto: rutas.every(r => r.lista) && simOk };
   }
 
+  // Franja de la ruta Base: va antes de las seis rutas, con otra forma, porque no es
+  // una ruta de la prueba sino el piso que la sostiene.
+  function tarjetaBase() {
+    if (!BASE) return "";
+    const d = dominio(BASE.id);
+    return `<article class="base-card" style="--c:${BASE.color}">
+      <span class="skill-mono" style="--c:${BASE.color}">${mono(BASE)}</span>
+      <div class="base-texto">
+        <span class="tag">Preparación · ${esc(BASE.peso)}</span>
+        <h3>¿Te cuesta lo básico? Empieza por la Base</h3>
+        <p>${esc(BASE.gancho)}. Son las destrezas de grados anteriores que la prueba da por sabidas.</p>
+      </div>
+      <div class="base-acciones">
+        <span class="tiny">${d.n ? `Tu dominio: ${d.pct}%` : "Sin práctica"}</span>
+        <a class="btn btn-secondary btn-sm" href="#/modulo/${BASE.id}">Ver la Base</a>
+        <button class="btn btn-ghost btn-sm" data-action="iniciar-practica" data-mod="${BASE.id}" data-n="10">Practicar</button>
+      </div>
+    </article>`;
+  }
+
   /* ===================== Vistas: aprende ===================== */
   function vAprende() {
     $("#vista").innerHTML = `
@@ -675,13 +729,14 @@
           <h1 style="max-width:18ch">Seis rutas, una destreza a la vez</h1>
           <p class="lead">Cada ruta explica la idea central, muestra las fórmulas que sí se usan y resuelve un ejemplo. Al final te manda a practicar solo esa destreza.</p>
 
-          <div class="grid grid-2" style="margin-top:34px">
-            ${MODS.map(m => {
+          <div style="margin-top:34px">${tarjetaBase()}</div>
+          <div class="grid grid-2">
+            ${RUTAS.map(m => {
               const d = dominio(m.id);
               return `<article class="card hover" style="--c:${m.color};border-left:3px solid ${m.color}">
                 <div class="card-top">
                   <div style="display:flex;gap:12px;align-items:center">
-                    <span class="skill-mono" style="--c:${m.color}">${m.id.replace("M", "")}</span>
+                    <span class="skill-mono" style="--c:${m.color}">${mono(m)}</span>
                     <div>
                       <h3 style="margin:0">${esc(m.nombre)}</h3>
                       <span class="tiny">${esc(m.indicadores.join(" · "))}</span>
@@ -716,7 +771,7 @@
           <div class="module-head">
             <div>
               <div class="module-title">
-                <span class="skill-mono" style="--c:${m.color}">${m.id.replace("M", "")}</span>
+                <span class="skill-mono" style="--c:${m.color}">${mono(m)}</span>
                 <h1>${esc(m.nombre)}</h1>
               </div>
               <p class="lead">${esc(m.proposito)}</p>
@@ -813,7 +868,7 @@
                   <span class="check">${ICON.check}</span>
                 </button>
                 ${MODS.map(m => `<button class="setup-item" data-action="sel-mod" data-mod="${m.id}" aria-pressed="${selMod === m.id}">
-                  <span class="skill-mono" style="--c:${m.color}">${m.id.replace("M", "")}</span>
+                  <span class="skill-mono" style="--c:${m.color}">${mono(m)}</span>
                   <span><b>${esc(m.nombre)}</b><span>${esc(m.indicadores.join(" · "))}</span></span>
                   <span class="check">${ICON.check}</span>
                 </button>`).join("")}
@@ -836,8 +891,8 @@
           </div>
 
           <div class="grid grid-3" style="margin-top:44px">
-            <article class="card"><h3>Pista antes de rendirte</h3><p class="muted" style="font-size:.9rem">Cada ítem tiene una pista que orienta sin dar la respuesta. Úsala: en la prueba real también puedes descartar opciones.</p></article>
-            <article class="card"><h3>Error diagnosticado</h3><p class="muted" style="font-size:.9rem">Si eliges una opción equivocada, te explicamos qué confusión la produce. Ese es el dato que sirve para estudiar.</p></article>
+            <article class="card"><h3>Pistas paso a paso</h3><p class="muted" style="font-size:.9rem">Pide una pista, luego la idea de la ruta y, si hace falta, descarta una opción. Cada paso ayuda un poco más sin darte la respuesta.</p></article>
+            <article class="card"><h3>Segundo intento</h3><p class="muted" style="font-size:.9rem">Si fallas, te decimos qué confusión produjo tu respuesta y puedes intentarlo otra vez. Al final ves por qué cada opción funciona o no.</p></article>
             <article class="card"><h3>Respuesta abierta</h3><p class="muted" style="font-size:.9rem">Los ítems de 2 puntos se autoevalúan con una rúbrica. Así entrenas la parte que más se olvida.</p></article>
           </div>
         </div>
@@ -866,7 +921,7 @@
 
   function iniciarDiagnostico() {
     const items = [];
-    MODS.forEach(m => items.push(...muestraModulo(m.id, 2)));
+    RUTAS.forEach(m => items.push(...muestraModulo(m.id, 2)));
     session = { modo: "diagnostico", items: barajar(items), idx: 0, respuestas: {}, revisado: {}, flags: {}, inicio: Date.now(), examen: false, entregado: false };
     ir("#/practica/sesion");
   }
@@ -907,12 +962,13 @@
             ${it.demostracion ? tablaDemostracion(it.demostracion) : ""}
             ${interaccion(it, resp, rev)}
             <div class="actions">
-              ${!rev ? `<button class="btn btn-primary" data-action="comprobar">${it.tipo === "abierta" ? "Ver rúbrica y respuesta modelo" : "Comprobar"} ${ICON.arrow}</button>
-                <button class="btn btn-ghost" data-action="pista">${ICON.bulb} Ver pista</button>` : ""}
+              ${!rev ? `<button class="btn btn-primary" data-action="comprobar">${it.tipo === "abierta" ? "Ver rúbrica y respuesta modelo" : enReintento(session.idx) ? "Comprobar otra vez" : "Comprobar"} ${ICON.arrow}</button>
+                ${!usoPista(session.idx) && pasosPista(it).length ? `<button class="btn btn-ghost" data-action="pista">${ICON.bulb} Ver pista</button>` : ""}` : ""}
               <span class="spacer"></span>
-              ${rev ? `<button class="btn btn-primary" data-action="siguiente">${esUltima ? "Ver resultados" : "Siguiente"} ${ICON.arrow}</button>` : `<button class="btn btn-ghost" data-action="saltar">Saltar</button>`}
+              ${rev ? `<button class="btn btn-primary" data-action="siguiente">${esUltima ? "Ver resultados" : "Siguiente"} ${ICON.arrow}</button>` : enReintento(session.idx) ? "" : `<button class="btn btn-ghost" data-action="saltar">Saltar</button>`}
             </div>
-            <div id="zonaPista">${!rev && usoPista(session.idx) ? cajaPista(it) : ""}</div>
+            ${!rev && enReintento(session.idx) ? cajaReintento(it) : ""}
+            <div id="zonaPista">${!rev && usoPista(session.idx) ? cajaPista(it, session.idx) : ""}</div>
             ${rev ? feedback(it, resp) : ""}
           </article>
 
@@ -928,7 +984,7 @@
     const n = session.items.length;
     const orden = session.items.map((_, k) => k).filter(k => k !== i).concat(i); // orden[nueva] = vieja
     session.items = orden.map(k => session.items[k]);
-    ["respuestas", "revisado", "aciertos", "flags", "pistas", "evaluados", "inicios"].forEach(clave => {
+    ["respuestas", "revisado", "aciertos", "flags", "pistas", "evaluados", "inicios", "primeros"].forEach(clave => {
       const viejo = session[clave];
       if (!viejo) return;
       const nuevo = {};
@@ -963,8 +1019,84 @@
     </details>`;
   }
 
-  function cajaPista(it) {
-    return `<div class="callout" style="margin-bottom:0"><b>Pista</b><p>${esc(it.pista || "")}</p><p class="tiny" style="margin:6px 0 0">Si aciertas con pista, cuenta como medio acierto.</p></div>`;
+  /* ----- Pistas por pasos -----
+     Cada paso ayuda un poco más, sin dar la respuesta:
+     1) la pista del ítem (y las de `pistas`, si el ítem trae más);
+     2) la idea o fórmula de la ruta que lo explica;
+     3) selección múltiple: descarta una opción incorrecta con su porqué;
+        numérica o abierta: el error frecuente que hay que evitar.
+     Todo sale de datos verificados del banco; no se inventa texto. */
+  function opcionADescartar(it, idx) {
+    if (it.tipo !== "sm" || !it.distractores) return null;
+    const ya = primeraRespuesta(idx);
+    const libres = it.opciones.map((_, i) => i).filter(i => i !== it.respuesta && i !== ya && it.distractores[i]);
+    // Siempre deja al menos dos opciones para elegir.
+    const quedan = it.opciones.length - (ya != null ? 1 : 0) - 1;
+    return libres.length && quedan >= 2 ? libres[0] : null;
+  }
+  function pasosPista(it, idx) {
+    const pasos = [];
+    if (it.pista) pasos.push({ t: "Pista", d: esc(it.pista) });
+    (it.pistas || []).forEach(p => pasos.push({ t: "Otra pista", d: esc(p) }));
+    const r = repasoDe(it);
+    if (r) pasos.push({ t: "Recuerda la idea: " + esc(r.titulo), d: esc(r.texto) });
+    const k = opcionADescartar(it, idx == null ? (session ? session.idx : null) : idx);
+    if (k != null) {
+      pasos.push({ t: `Descarta la ${String.fromCharCode(65 + k)}`, d: esc(it.distractores[k]), descarta: k });
+    } else if (it.tipo !== "sm" && it.error) {
+      pasos.push({ t: "Cuidado con este error", d: esc(it.error) });
+    }
+    return pasos;
+  }
+  // session.pistas[idx] = cuántos pasos se han mostrado (las sesiones viejas guardaban true = 1).
+  function pasosVistos(idx) {
+    const v = session && session.pistas && session.pistas[idx];
+    return v === true ? 1 : (Number(v) || 0);
+  }
+  function descartadas(it, idx) {
+    const out = new Set();
+    pasosPista(it, idx).slice(0, pasosVistos(idx)).forEach(p => { if (p.descarta != null) out.add(p.descarta); });
+    const ya = primeraRespuesta(idx);
+    if (ya != null && it.tipo === "sm") out.add(ya);
+    return out;
+  }
+  function cajaPista(it, idx) {
+    const pasos = pasosPista(it, idx);
+    const n = Math.min(pasosVistos(idx), pasos.length);
+    if (!n) return "";
+    return `<div class="callout pistas" style="margin-bottom:0">
+      <ol class="pasos-pista">
+        ${pasos.slice(0, n).map((p, i) => `<li${i === n - 1 ? ' id="pistaUltima" tabindex="-1"' : ""}><b>${p.t}</b><span>${p.d}</span></li>`).join("")}
+      </ol>
+      <div class="pistas-pie">
+        <span class="tiny">Paso ${n} de ${pasos.length}. Si aciertas con pistas, cuenta como medio acierto.</span>
+        ${n < pasos.length ? `<button class="btn btn-ghost btn-sm" data-action="pista">${ICON.bulb} Otra pista</button>` : ""}
+      </div>
+    </div>`;
+  }
+
+  /* ----- Segundo intento -----
+     En práctica y repaso, el primer fallo en selección múltiple o numérica no
+     revela la respuesta: dice por qué esa opción no funciona y deja intentar
+     otra vez. El diagnóstico y el simulacro miden, así que tienen un solo intento. */
+  const primeraRespuesta = idx => {
+    const v = session && session.primeros ? session.primeros[idx] : undefined;
+    return v == null ? null : v;
+  };
+  const enReintento = idx => primeraRespuesta(idx) != null && !(session.revisado && session.revisado[idx]);
+  function permiteReintento(it, idx) {
+    return !session.examen && session.modo !== "diagnostico" && (it.tipo === "sm" || it.tipo === "num") && primeraRespuesta(idx) == null;
+  }
+  function cajaReintento(it) {
+    const ya = primeraRespuesta(session.idx);
+    const porque = it.tipo === "sm" && it.distractores && it.distractores[ya];
+    return `<div class="callout coral reintento" role="status">
+      <b>No del todo. Te queda un intento.</b>
+      ${it.tipo === "sm"
+        ? `<p>${porque ? `<b>La ${String.fromCharCode(65 + ya)} no funciona:</b> ${esc(porque)}` : `La ${String.fromCharCode(65 + ya)} no es la respuesta.`}</p>`
+        : `<p>Tu respuesta fue <b>${esc(ya)}${it.unidad ? " " + esc(it.unidad) : ""}</b>. Revisa el procedimiento paso a paso y vuelve a calcular.</p>`}
+      ${pasosVistos(session.idx) < pasosPista(it).length ? `<p class="tiny" style="margin:6px 0 0">Si no sabes por dónde seguir, pide una pista.</p>` : ""}
+    </div>`;
   }
 
   // Demostración de dos columnas: el paso que se pregunta aparece con «?».
@@ -988,15 +1120,20 @@
 
   function interaccion(it, resp, rev) {
     if (it.tipo === "sm") {
+      // En práctica: opciones descartadas por una pista o por el primer intento.
+      const fuera = session && !session.examen ? descartadas(it, session.idx) : new Set();
+      const primera = session && !session.examen ? primeraRespuesta(session.idx) : null;
       return `<div class="choices${it.opcionesFigura ? " figs" : ""}" role="group" aria-label="Opciones de respuesta">
         ${it.opciones.map((o, i) => {
+          const mala = rev && i !== it.respuesta && (i === Number(resp) || i === primera);
           let cl = "";
-          if (rev) cl = i === it.respuesta ? "correct" : (i === Number(resp) ? "wrong" : "");
-          return `<button class="choice ${cl}" data-action="elegir" data-i="${i}" aria-pressed="${Number(resp) === i}" ${rev ? "disabled" : ""}>
+          if (rev) cl = i === it.respuesta ? "correct" : (mala ? "wrong" : "");
+          else if (fuera.has(i)) cl = "descartada";
+          return `<button class="choice ${cl}" data-action="elegir" data-i="${i}" aria-pressed="${Number(resp) === i}" ${rev || fuera.has(i) ? "disabled" : ""}>
             <span class="key">${String.fromCharCode(65 + i)}</span>
-            ${contenidoOpcion(it, i, o)}
+            ${contenidoOpcion(it, i, o)}${!rev && fuera.has(i) ? '<span class="sr-only"> (descartada)</span>' : ""}
             ${rev && i === it.respuesta ? `<span class="mark" style="color:#2f7d4f">${ICON.check}</span>` : ""}
-            ${rev && i === Number(resp) && i !== it.respuesta ? `<span class="mark" style="color:#b5452f">${ICON.x}</span>` : ""}
+            ${mala ? `<span class="mark" style="color:#b5452f">${ICON.x}</span>` : ""}
           </button>`;
         }).join("")}
       </div>`;
@@ -1020,18 +1157,43 @@
     const ok = session.aciertos && session.aciertos[idx];
     const abierta = it.tipo === "abierta";
     const sinNota = abierta && (session.aciertos[idx] == null);
+    const segundo = primeraRespuesta(idx) != null;
+    const titulo = sinNota ? "Compara tu respuesta con la rúbrica"
+      : ok ? ICON.check + (segundo ? " Correcto en el segundo intento" : usoPista(idx) ? " Correcto, con pista" : " Correcto")
+      : ICON.x + " Revisa esto";
+    const todas = !sinNota && it.tipo === "sm" && it.distractores;
     return `<div class="feedback ${sinNota ? "" : ok ? "ok" : "no"}" role="status">
-      <h4>${sinNota ? "Compara tu respuesta con la rúbrica" : ok ? ICON.check + (usoPista(idx) ? " Correcto, con pista" : " Correcto") : ICON.x + " Revisa esto"}</h4>
-      ${ok && usoPista(idx) ? `<p class="tiny" style="margin:0 0 8px">Con pista cuenta como medio acierto en tu dominio. Intenta el próximo sin ella.</p>` : ""}
+      <h4>${titulo}</h4>
+      ${ok && (segundo || usoPista(idx)) ? `<p class="tiny" style="margin:0 0 8px">Con ayuda cuenta como medio acierto en tu dominio${segundo ? " y el ítem vuelve en tu cuaderno de errores" : ""}. Intenta el próximo a la primera.</p>` : ""}
+      ${!sinNota && !ok && it.tipo !== "abierta" ? `<p class="tiny" style="margin:0 0 8px"><b>Respuesta correcta:</b> ${respuestaLegible(it, it.respuesta)}</p>` : ""}
       <p>${esc(it.explicacion)}</p>
-      ${!sinNota && !ok ? porQueNo(it, resp) : ""}
-      ${!sinNota && (!ok || usoPista(idx)) ? bloqueRepaso(it) : ""}
+      ${todas ? explicarOpciones(it, idx, resp) : !sinNota && !ok ? porQueNo(it, resp) : ""}
+      ${!sinNota && (!ok || usoPista(idx) || segundo) ? bloqueRepaso(it) : ""}
       ${!sinNota ? `<button class="btn btn-ghost btn-sm" data-action="tts-exp" style="margin-top:8px">${ICON.sound} Escuchar la explicación</button>` : ""}
       ${abierta ? `<div class="why" style="margin-top:8px"><b>Respuesta modelo:</b> ${esc(it.respuestaModelo || "")}</div>` : ""}
       ${abierta && !(session.evaluados && session.evaluados[idx]) ? `<div class="actions" style="margin-top:12px">
         <span class="tiny">Autoevalúa tu respuesta:</span>
         ${[0, 1, 2].map(p => `<button class="btn btn-secondary btn-sm" data-action="autoevaluar" data-pts="${p}">${p} ${p === 1 ? "punto" : "puntos"}</button>`).join("")}
       </div>` : ""}
+    </div>`;
+  }
+
+  // Por qué cada opción incorrecta no funciona, también cuando acertaste: quien
+  // adivina aprende aquí. Las que eligió el estudiante van marcadas y primero.
+  function explicarOpciones(it, idx, resp) {
+    const elegidas = [primeraRespuesta(idx), resp === "" || resp == null ? null : Number(resp)]
+      .filter(i => Number.isInteger(i) && i !== it.respuesta);
+    const malas = it.opciones.map((_, i) => i).filter(i => i !== it.respuesta && it.distractores[i]);
+    const orden = malas.filter(i => elegidas.includes(i)).concat(malas.filter(i => !elegidas.includes(i)));
+    if (!orden.length) return "";
+    return `<div class="opciones-exp">
+      <b>${elegidas.length ? "Por qué no funcionan las otras opciones" : "Por qué no funcionan las otras opciones (léelas aunque hayas acertado)"}</b>
+      <ul>
+        ${orden.map(i => `<li${elegidas.includes(i) ? ' class="elegida"' : ""}>
+          <span class="key">${String.fromCharCode(65 + i)}</span>
+          <div>${elegidas.includes(i) ? `<span class="chip coral">${i === primeraRespuesta(idx) && i !== Number(resp) ? "Tu primer intento" : "Tu respuesta"}</span> ` : ""}${esc(it.distractores[i])}</div>
+        </li>`).join("")}
+      </ul>
     </div>`;
   }
 
@@ -1068,14 +1230,10 @@
     let resp = session.respuestas[idx];
 
     if (it.tipo === "sm") {
-      if (resp == null) { anunciar("Elige una opción primero."); return; }
+      if (resp == null || resp === "") { anunciar("Elige una opción primero."); return; }
       const ok = Number(resp) === it.respuesta;
-      session.aciertos = session.aciertos || {};
-      session.aciertos[idx] = ok;
-      session.revisado[idx] = true;
-      registrar(it, ok, session.modo, false, usoPista(idx), extraIntento(idx, Number(resp)));
-      anunciar(ok ? "Correcto." : "Incorrecto. Lee la explicación.");
-      vRunner();
+      if (!ok && permiteReintento(it, idx)) { primerFallo(idx, Number(resp), undefined); return; }
+      cerrarItem(it, idx, ok, Number(resp));
       return;
     }
     if (it.tipo === "num") {
@@ -1086,12 +1244,12 @@
         return;
       }
       const ok = numeroCorrecto(it, resp);
-      session.aciertos = session.aciertos || {};
-      session.aciertos[idx] = ok;
-      session.revisado[idx] = true;
-      registrar(it, ok, session.modo, false, usoPista(idx), extraIntento(idx, null));
-      anunciar(ok ? "Correcto." : "Incorrecto. Revisa el procedimiento.");
-      vRunner();
+      if (!ok && permiteReintento(it, idx)) { primerFallo(idx, String(resp), resp); return; }
+      if (!ok && primeraRespuesta(idx) != null && normalizarNum(resp) === normalizarNum(primeraRespuesta(idx))) {
+        avisoNumero("Es la misma respuesta del primer intento. Revisa el procedimiento antes de comprobar otra vez.");
+        return;
+      }
+      cerrarItem(it, idx, ok, null);
       return;
     }
     // abierta: revela rúbrica y modelo; la nota la pone el estudiante
@@ -1099,6 +1257,31 @@
     session.revisado[idx] = true;
     session.aciertos = session.aciertos || {};
     session.aciertos[idx] = null;
+    vRunner();
+  }
+
+  // Primer fallo con segundo intento disponible: se guarda lo que contestó (para el
+  // panel cuenta la primera opción elegida) y se limpia la respuesta.
+  // En numérica se deja el número escrito para que lo corrija.
+  function primerFallo(idx, primera, queda) {
+    session.primeros = session.primeros || {};
+    session.primeros[idx] = primera;
+    if (queda === undefined) delete session.respuestas[idx]; // Number(null) sería 0: marcaría la A
+    else session.respuestas[idx] = queda;
+    anunciar("No del todo. Te queda un intento.");
+    vRunner();
+    const caja = $(".reintento");
+    if (caja) { caja.setAttribute("tabindex", "-1"); caja.focus({ preventScroll: false }); }
+  }
+  function cerrarItem(it, idx, ok, opcion) {
+    const segundo = primeraRespuesta(idx) != null;
+    session.aciertos = session.aciertos || {};
+    session.aciertos[idx] = ok;
+    session.revisado[idx] = true;
+    // Al panel va la primera opción elegida: es la que muestra la confusión real.
+    const primera = segundo && it.tipo === "sm" ? Number(primeraRespuesta(idx)) : opcion;
+    registrar(it, ok, session.modo, false, usoPista(idx) || segundo, Object.assign(extraIntento(idx, primera), { alSegundo: segundo }));
+    anunciar(ok ? (segundo ? "Correcto en el segundo intento." : "Correcto.") : "Incorrecto. Lee la explicación.");
     vRunner();
   }
 
@@ -1154,7 +1337,7 @@
     const ok = Object.values(ac).filter(Boolean).length;
     // Los ítems saltados dos veces quedan sin nota: no cuentan en el total.
     const saltados = items.filter((_, i) => session.revisado[i] && ac[i] == null).length;
-    const conPista = items.filter((_, i) => ac[i] && usoPista(i)).length;
+    const conPista = items.filter((_, i) => ac[i] && (usoPista(i) || primeraRespuesta(i) != null)).length;
     const total = items.length - saltados;
     const porMod = {};
     items.forEach((it, i) => {
@@ -1174,7 +1357,7 @@
           <div class="result-hero">
             <span class="eyebrow">${diag ? "Diagnóstico completado" : "Sesión completada"}</span>
             <div class="result-score">${pct(ok, total)}%<small> · ${ok} de ${total}</small></div>
-            ${conPista || saltados ? `<p class="tiny" style="margin:4px 0 0">${[conPista ? `${conPista} ${conPista === 1 ? "acierto" : "aciertos"} con pista` : "", saltados ? `${saltados} sin contestar (no cuentan)` : ""].filter(Boolean).join(" · ")}</p>` : ""}
+            ${conPista || saltados ? `<p class="tiny" style="margin:4px 0 0">${[conPista ? `${conPista} ${conPista === 1 ? "acierto" : "aciertos"} con ayuda (pista o segundo intento)` : "", saltados ? `${saltados} sin contestar (no cuentan)` : ""].filter(Boolean).join(" · ")}</p>` : ""}
             <p class="lead" style="margin-inline:auto">${mensajeResultado(pct(ok, total))}</p>
           </div>
 
@@ -1191,6 +1374,7 @@
             <article class="card">
               <h3>Tu siguiente paso</h3>
               <p class="muted" style="font-size:.93rem">${diag ? "Con el diagnóstico listo, empieza por la ruta con menor dominio." : "Repite los ítems fallados en 24 horas: es cuando más se fija el aprendizaje."}</p>
+              ${avisoBase("margin:12px 0 0")}
               <div class="callout" style="margin:12px 0 16px">
                 <b>Ruta recomendada</b>
                 <p>${esc(rec.nombre)} · ${dominio(rec.id).n ? dominio(rec.id).pct + "% de dominio" : "sin práctica todavía"}</p>
@@ -1522,7 +1706,7 @@
             <article class="card">
               <h3>Dominio por ruta</h3>
               <p class="tiny">Basado en tus últimos 40 intentos por ruta.</p>
-              ${MODS.map(m => { const d = dominio(m.id); return `<div class="mastery-row">
+              ${MODS.filter(m => !m.base || dominio(m.id).n).map(m => { const d = dominio(m.id); return `<div class="mastery-row">
                 <span class="name">${esc(m.corto)}</span>
                 <div class="bar" style="--c:${m.color}"><i style="width:${d.pct}%"></i></div>
                 <span class="pct">${d.n ? d.pct + "%" : "—"}</span>
@@ -1877,6 +2061,7 @@
 
     if (a === "elegir") {
       if (!session || session.revisado[session.idx]) return;
+      if (!session.examen && descartadas(session.items[session.idx], session.idx).has(Number(el.dataset.i))) return;
       session.respuestas[session.idx] = Number(el.dataset.i);
       if (session.examen) {
         $$(".choice").forEach(c => c.setAttribute("aria-pressed", String(c === el)));
@@ -1912,11 +2097,19 @@
       return;
     }
     if (a === "pista") {
+      if (!session || session.revisado[session.idx]) return;
+      const it = session.items[session.idx];
+      const pasos = pasosPista(it);
       session.pistas = session.pistas || {};
-      session.pistas[session.idx] = true;
-      guardarSesion();
-      const z = $("#zonaPista");
-      if (z) z.innerHTML = cajaPista(session.items[session.idx]);
+      const n = Math.min(pasos.length, pasosVistos(session.idx) + 1);
+      session.pistas[session.idx] = n;
+      // Si la pista descarta la opción que estaba marcada, se quita la marca.
+      const p = pasos[n - 1];
+      if (p && p.descarta != null && Number(session.respuestas[session.idx]) === p.descarta) delete session.respuestas[session.idx];
+      vRunner(); // vuelve a pintar: una pista puede deshabilitar una opción
+      const ult = $("#pistaUltima");
+      if (ult) { ult.focus({ preventScroll: true }); ult.scrollIntoView({ block: "nearest" }); }
+      if (p) anunciar(textoPlano(p.t + ". " + p.d));
       return;
     }
     if (a === "tts") { hablar(); return; }
@@ -2003,7 +2196,7 @@
       const n = Number(e.key);
       if (n >= 1 && n <= 4) {
         const it = session.items[session.idx];
-        if (it.tipo === "sm" && n <= it.opciones.length) { session.respuestas[session.idx] = n - 1; vRunner(); }
+        if (it.tipo === "sm" && n <= it.opciones.length && !descartadas(it, session.idx).has(n - 1)) { session.respuestas[session.idx] = n - 1; vRunner(); }
       }
     }
   });
