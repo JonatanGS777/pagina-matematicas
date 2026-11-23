@@ -4,7 +4,7 @@
  * Todos los derechos reservados.
  */
 /* Banco de ítems originales — Proyecto CRECE 10 · Matemáticas
-   83 ítems fijos: 67 alineados a los indicadores de la planilla CRECE 2023-24
+   120 ítems fijos: 104 alineados a los indicadores de la planilla CRECE 2023-24
    y 16 de la ruta Base (M0, repaso de grados anteriores)
    (incluye 8 demostraciones de dos columnas, 4 respuestas abiertas e ítems
    con opciones que son figuras). Las variantes con números aleatorios están
@@ -1195,5 +1195,473 @@ window.CRECE_BANCO = [
     error: "Contar solo un color, o contar colores en vez de canicas.",
     distractores: [null, "3/10 cuenta solo las verdes. «No roja» incluye las verdes y las azules: 3 + 2 = 5.", "1/5 = 2/10 cuenta solo las azules. «No roja» incluye las verdes y las azules.", "Contaste colores (1 de 3), no canicas. Cada color tiene una cantidad distinta de canicas."],
     etiquetas: ["probabilidad", "complemento"]
+  },
+
+  /* ================= v1.7 · 37 ÍTEMS NUEVOS =================
+     Prioridad: nivel 1 en M2, M3 y M4, y destrezas que tenían menos de
+     4 ítems fijos (M3b, M4b, M5a, M6b, M6c). Verificados a mano. */
+
+  /* ---------- M1 ---------- */
+  {
+    id: "M1-10", modulo: "M1", indicador: "ES.G.44", tipo: "sm", nivel: 2,
+    repaso: "i3",
+    enunciado: "Para construir el círculo que pasa por los tres vértices de un triángulo (el círculo circunscrito), ¿dónde se coloca la punta del compás?",
+    opciones: ["En el punto donde se cortan las bisectrices de los ángulos", "En el punto donde se cortan las mediatrices de los lados", "En el punto medio del lado más largo", "En uno de los tres vértices"],
+    respuesta: 1,
+    explicacion: "El centro tiene que estar a la misma distancia de los tres vértices. Cada punto de la mediatriz de un lado equidista de los extremos de ese lado. Por eso el punto donde se cortan las tres mediatrices (el circuncentro) equidista de los tres vértices y es el centro del círculo circunscrito.",
+    pista: "El centro debe quedar a la misma distancia de los tres vértices. ¿Qué recta reúne los puntos que equidistan de los extremos de un segmento?",
+    error: "Confundir el incentro (bisectrices, círculo inscrito) con el circuncentro (mediatrices, círculo circunscrito).",
+    distractores: ["Ese punto es el incentro. Equidista de los tres lados, no de los tres vértices: es el centro del círculo inscrito, el que queda por dentro tocando los lados.", null, "El punto medio del lado más largo solo sirve en un triángulo rectángulo. En general, no queda a la misma distancia del tercer vértice.", "Si la punta está en un vértice, ese vértice es el centro: el círculo queda alrededor de él y no pasa por él."],
+    etiquetas: ["construcciones", "circuncentro"]
+  },
+  {
+    id: "M1-11", modulo: "M1", indicador: "ES.G.36", tipo: "sm", nivel: 1,
+    repaso: "i0",
+    enunciado: "¿Cuál objeto representa mejor una recta?",
+    opciones: ["La esquina de una mesa, donde se unen tres bordes", "Un hilo bien estirado entre dos postes", "La superficie de un espejo", "El interior de una caja"],
+    respuesta: 1,
+    explicacion: "Una recta tiene una sola dimensión: el largo. Un hilo estirado es delgado y derecho, así que modela una recta (en realidad, un pedazo de recta: un segmento).",
+    pista: "Piensa en las dimensiones: ¿cuál objeto tiene largo, pero casi nada de ancho ni de alto?",
+    error: "Confundir recta (una dimensión) con plano (dos) o con espacio (tres).",
+    distractores: ["La esquina es un lugar sin tamaño: modela un punto, que no tiene dimensiones.", null, "Una superficie lisa tiene largo y ancho: modela un plano, que tiene dos dimensiones.", "El interior de una caja tiene largo, ancho y alto: modela el espacio, que tiene tres dimensiones."],
+    etiquetas: ["vocabulario", "recta"]
+  },
+
+  /* ---------- M2 ---------- */
+  {
+    id: "M2-17", modulo: "M2", indicador: "ES.G.40", tipo: "sm", nivel: 1,
+    repaso: "i1",
+    enunciado: "Si ΔABC ≅ ΔDEF, ¿cuál lado de ΔDEF es congruente con BC?",
+    opciones: ["DE", "DF", "EF", "AC"],
+    respuesta: 2,
+    explicacion: "El orden de las letras dice qué vértices se corresponden: A↔D, B↔E y C↔F. El lado BC une la segunda y la tercera letra de ΔABC, así que corresponde al lado que une la segunda y la tercera letra de ΔDEF: EF.",
+    pista: "Alinea las letras: A↔D, B↔E, C↔F. ¿Qué letras de ΔDEF corresponden a B y a C?",
+    error: "Emparejar los lados por su posición en el dibujo y no por el orden de las letras.",
+    distractores: ["DE corresponde a AB (primera y segunda letra de cada triángulo).", "DF corresponde a AC (primera y tercera letra).", null, "AC es un lado del mismo ΔABC. La pregunta pide un lado de ΔDEF."],
+    etiquetas: ["congruencia", "correspondencia"]
+  },
+  {
+    id: "M2-18", modulo: "M2", indicador: "ES.G.40", tipo: "sm", nivel: 1,
+    repaso: "i1",
+    enunciado: "Dos triángulos son congruentes. ¿Qué significa eso?",
+    opciones: ["Tienen la misma forma, pero pueden tener distinto tamaño", "Tienen la misma forma y el mismo tamaño", "Tienen el mismo perímetro, aunque sus lados sean distintos", "Tienen por lo menos un ángulo igual"],
+    respuesta: 1,
+    explicacion: "Congruentes quiere decir que uno se puede colocar exactamente sobre el otro: todos los lados correspondientes miden lo mismo y todos los ángulos correspondientes también. Misma forma y mismo tamaño.",
+    pista: "Si recortas uno de los triángulos, ¿tiene que caber exactamente encima del otro?",
+    error: "Confundir congruencia (misma forma y tamaño) con semejanza (solo misma forma).",
+    distractores: ["Eso describe figuras semejantes. Las congruentes, además, tienen el mismo tamaño.", null, "Dos triángulos pueden tener el mismo perímetro con lados distintos, por ejemplo 3, 4, 5 y 4, 4, 4. Congruentes exige que cada par de lados correspondientes sea igual.", "Un ángulo igual no basta: dos triángulos muy distintos pueden compartir un ángulo de 90°."],
+    etiquetas: ["congruencia", "vocabulario"]
+  },
+  {
+    id: "M2-19", modulo: "M2", indicador: "ES.G.40", tipo: "sm", nivel: 1,
+    repaso: "i1",
+    figura: "isoscelesTics",
+    enunciado: "En la figura, los lados AB y AC tienen una marca cada uno. ¿Qué indican esas marcas?",
+    opciones: ["Que AB y AC son paralelos", "Que AB y AC son perpendiculares", "Que AB mide el doble que AC", "Que AB y AC miden lo mismo"],
+    respuesta: 3,
+    explicacion: "Las rayitas cortas sobre un lado (tics) indican congruencia: los lados con la misma cantidad de marcas miden lo mismo. Aquí AB y AC tienen una marca cada uno, así que AB ≅ AC y el triángulo es isósceles.",
+    pista: "En una figura, las flechas marcan paralelas, el cuadradito marca un ángulo recto y las rayitas marcan otra cosa. ¿Qué?",
+    error: "Leer las marcas de congruencia como si fueran flechas de paralelas o símbolos de ángulo recto.",
+    distractores: ["Las paralelas se marcan con flechas sobre las rectas. Además, AB y AC se cortan en A: no pueden ser paralelas.", "Un ángulo recto se marca con un cuadradito en el vértice. En A no hay ese símbolo.", "Una marca en cada lado quiere decir que miden lo mismo. Las marcas no indican el doble.", null],
+    etiquetas: ["congruencia", "figura", "marcas"]
+  },
+  {
+    id: "M2-20", modulo: "M2", indicador: "ES.G.39", tipo: "sm", nivel: 3,
+    repaso: "i3",
+    enunciado: "Considera: «Si un cuadrilátero tiene sus cuatro lados congruentes, entonces es un cuadrado». ¿Cuál figura es un contraejemplo?",
+    opciones: ["Un cuadrado de 5 cm de lado", "Un rectángulo de 4 cm por 6 cm", "Un rombo con ángulos de 60° y 120°", "Un trapecio isósceles"],
+    respuesta: 2,
+    explicacion: "Un contraejemplo cumple la condición (cuatro lados congruentes) y NO cumple la conclusión (no es cuadrado). El rombo con ángulos de 60° y 120° tiene cuatro lados iguales, pero sus ángulos no son rectos: no es un cuadrado. Eso refuta la proposición.",
+    pista: "Busca una figura que SÍ tenga cuatro lados iguales y que, aun así, NO sea un cuadrado.",
+    error: "Elegir una figura que confirma la proposición, o una que ni siquiera cumple la condición.",
+    distractores: ["El cuadrado cumple la condición y también la conclusión: confirma la proposición, no la refuta.", "El rectángulo de 4 por 6 no tiene cuatro lados congruentes, así que no pone a prueba la proposición.", null, "El trapecio isósceles no tiene cuatro lados congruentes: no cumple la condición."],
+    etiquetas: ["lógica", "contraejemplo", "cuadriláteros"]
+  },
+  {
+    id: "M2-21", modulo: "M2", indicador: "ES.G.39", tipo: "num", nivel: 2,
+    repaso: "i4",
+    enunciado: "Dos rectas paralelas son cortadas por una transversal. Dos ángulos internos del mismo lado de la transversal miden (2x + 20)° y (4x − 20)°. ¿Cuántos grados mide el ángulo mayor?",
+    respuesta: 100, tolerancia: 0.01, unidad: "°",
+    explicacion: "Entre paralelas, los ángulos internos del mismo lado suman 180°: (2x + 20) + (4x − 20) = 180, así que 6x = 180 y x = 30. Los ángulos miden 2(30) + 20 = 80° y 4(30) − 20 = 100°. El mayor mide 100°.",
+    pista: "Los internos del mismo lado no son iguales: son suplementarios. Suma las expresiones e iguala a 180.",
+    error: "Igualar las dos expresiones como si fueran alternos internos, o contestar x = 30 en vez de la medida del ángulo.",
+    etiquetas: ["paralelas", "ángulos", "ecuaciones"]
+  },
+  {
+    id: "M2-22", modulo: "M2", indicador: "ES.G.39", tipo: "sm", nivel: 2,
+    repaso: "i4",
+    enunciado: "Una transversal corta dos rectas paralelas. Los ángulos ∠1 y ∠5 son correspondientes, y ∠5 y ∠8 forman un par lineal (están uno al lado del otro sobre una recta). Si m∠1 = 115°, ¿cuánto mide ∠8?",
+    opciones: ["115°", "65°", "25°", "245°"],
+    respuesta: 1,
+    explicacion: "Los correspondientes entre paralelas son congruentes: m∠5 = 115°. Un par lineal suma 180°: m∠8 = 180° − 115° = 65°.",
+    pista: "Ve paso a paso: primero halla ∠5 con los correspondientes y luego usa que un par lineal suma 180°.",
+    error: "Quedarse en el primer paso y contestar 115°, o restar de 90° en lugar de 180°.",
+    distractores: ["115° es la medida de ∠5. Falta el segundo paso: ∠8 y ∠5 suman 180°.", null, "Restaste de 90°: 115 − 90 = 25. Un par lineal suma 180°, no 90°.", "Restaste de 360°: 360 − 115 = 245. Un par lineal está sobre una recta y suma 180°."],
+    etiquetas: ["paralelas", "ángulos"]
+  },
+  {
+    id: "M2-23", modulo: "M2", indicador: "ES.G.40", tipo: "sm", nivel: 2,
+    repaso: "i0",
+    enunciado: "En ΔPQR y ΔSTU se sabe que PQ ≅ ST, QR ≅ TU y ∠R ≅ ∠U. ¿Qué se puede concluir?",
+    opciones: ["Son congruentes por LAL", "Son congruentes por LLL", "No se puede asegurar que sean congruentes", "Son congruentes por AAL"],
+    respuesta: 2,
+    explicacion: "El ángulo que está entre PQ y QR es ∠Q, no ∠R. Dos lados y un ángulo que no está entre ellos (lado-lado-ángulo) no es un criterio de congruencia: con esos datos pueden formarse dos triángulos distintos. No se puede asegurar la congruencia.",
+    pista: "Busca el vértice que comparten los dos lados dados. ¿Ese es el ángulo marcado?",
+    error: "Ver dos lados y un ángulo y elegir LAL sin comprobar que el ángulo esté entre los lados.",
+    distractores: ["LAL necesita el ángulo comprendido entre los dos lados. Entre PQ y QR está ∠Q, pero el dato es ∠R.", "LLL necesita los tres pares de lados. Solo se conocen dos (falta PR con SU).", null, "AAL necesita dos pares de ángulos. Aquí solo se conoce un par (∠R y ∠U)."],
+    etiquetas: ["congruencia", "criterios"]
+  },
+  {
+    id: "M2-24", modulo: "M2", indicador: "ES.G.46", tipo: "sm", nivel: 3,
+    repaso: "i2",
+    figura: "paralelogramoAC",
+    enunciado: "Lee la demostración. ¿Cuál es la razón del paso 6?",
+    demostracion: {
+      dado: "ABCD es un paralelogramo: AB ∥ DC y AD ∥ BC.",
+      probar: "AB ≅ CD",
+      pasos: [
+        ["AB ∥ DC y AD ∥ BC", "Dado"],
+        ["∠BAC ≅ ∠DCA", "Ángulos alternos internos (AB ∥ DC)"],
+        ["∠BCA ≅ ∠DAC", "Ángulos alternos internos (AD ∥ BC)"],
+        ["AC ≅ AC", "Propiedad reflexiva"],
+        ["ΔABC ≅ ΔCDA", "ALA"],
+        ["AB ≅ CD", "CPCTC"]
+      ],
+      falta: 5
+    },
+    opciones: ["ALA", "CPCTC", "Propiedad reflexiva", "Definición de paralelogramo"],
+    respuesta: 1,
+    explicacion: "En el paso 5 ya se demostró que ΔABC ≅ ΔCDA. AB y CD son partes correspondientes de esos triángulos (A↔C y B↔D), así que son congruentes por CPCTC: partes correspondientes de triángulos congruentes son congruentes.",
+    pista: "Mira el paso 5. Si los triángulos ya son congruentes, ¿qué razón permite decir que un par de sus lados también lo es?",
+    error: "Repetir el criterio del paso anterior (ALA) para justificar que dos lados son congruentes.",
+    distractores: ["ALA justifica que los TRIÁNGULOS son congruentes (paso 5). Para concluir algo sobre un par de lados se usa CPCTC.", null, "La propiedad reflexiva dice que un segmento es congruente consigo mismo, como AC ≅ AC en el paso 4. AB y CD son lados distintos.", "La definición de paralelogramo habla de lados paralelos, no de lados congruentes. Que los lados opuestos miden lo mismo es justo lo que se está demostrando."],
+    etiquetas: ["demostración", "cpctc", "paralelogramo"]
+  },
+
+  /* ---------- M3 ---------- */
+  {
+    id: "M3-11", modulo: "M3", indicador: "ES.G.42", tipo: "sm", nivel: 1,
+    repaso: "i0",
+    enunciado: "Si dos figuras son semejantes, ¿qué se conserva siempre?",
+    opciones: ["Las medidas de los ángulos", "Las longitudes de los lados", "El área", "El perímetro"],
+    respuesta: 0,
+    explicacion: "Semejantes significa misma forma. La forma la dan los ángulos: los ángulos correspondientes son congruentes. Los lados cambian por la razón de semejanza, y con ellos cambian el perímetro y el área.",
+    pista: "Una foto ampliada se ve igual pero más grande. ¿Qué no cambia al ampliarla?",
+    error: "Creer que semejante conserva las medidas de los lados.",
+    distractores: [null, "Los lados se multiplican por la razón de semejanza. Solo miden lo mismo si la razón es 1 (figuras congruentes).", "El área se multiplica por k² (el cuadrado de la razón). Solo se conserva si la razón es 1.", "El perímetro se multiplica por la razón de semejanza. Solo se conserva si la razón es 1."],
+    etiquetas: ["semejanza", "vocabulario"]
+  },
+  {
+    id: "M3-12", modulo: "M3", indicador: "ES.G.42", tipo: "sm", nivel: 1,
+    repaso: "i0",
+    enunciado: "Una foto de 4 × 6 pulgadas se amplía a 8 × 12 pulgadas. ¿Cómo son las dos fotos?",
+    opciones: ["Congruentes", "Semejantes, pero no congruentes", "Ni semejantes ni congruentes", "Iguales en área"],
+    respuesta: 1,
+    explicacion: "Los dos lados se multiplicaron por el mismo número: 8 ÷ 4 = 2 y 12 ÷ 6 = 2. Misma forma (semejantes) con razón 2. Como la razón no es 1, el tamaño cambió: no son congruentes.",
+    pista: "Divide cada lado nuevo entre el lado viejo. ¿Da el mismo número las dos veces?",
+    error: "Pensar que «se ve igual» quiere decir congruente.",
+    distractores: ["Congruentes exige el mismo tamaño. La foto nueva mide el doble en cada lado.", null, "Sí son semejantes: 8 ÷ 4 = 2 y 12 ÷ 6 = 2. La razón es la misma en los dos lados.", "Las áreas son 24 y 96 pulg²: con razón 2, el área se multiplica por 2² = 4."],
+    etiquetas: ["semejanza", "vocabulario"]
+  },
+  {
+    id: "M3-13", modulo: "M3", indicador: "ES.G.42", tipo: "sm", nivel: 1,
+    repaso: "f0",
+    enunciado: "Un triángulo tiene un lado de 5 cm. En un triángulo semejante más grande, el lado correspondiente mide 15 cm. ¿Cuál es la razón de semejanza del triángulo grande al pequeño?",
+    opciones: ["10", "1/3", "3", "15"],
+    respuesta: 2,
+    explicacion: "La razón del grande al pequeño es lado del grande ÷ lado correspondiente del pequeño: 15 ÷ 5 = 3. Cada lado del triángulo grande mide 3 veces su lado correspondiente.",
+    pista: "Del grande al pequeño: pon el lado del grande arriba y el del pequeño abajo.",
+    error: "Restar los lados en vez de dividirlos, o invertir la razón.",
+    distractores: ["Restaste 15 − 5. La razón de semejanza compara con una división, no con una resta.", "1/3 es la razón del pequeño al grande (5 ÷ 15). La pregunta pide del grande al pequeño.", null, "15 es la medida del lado grande, no la razón. Divide entre el lado correspondiente."],
+    etiquetas: ["semejanza", "razón"]
+  },
+  {
+    id: "M3-14", modulo: "M3", indicador: "ES.G.42", tipo: "sm", nivel: 2,
+    repaso: "i2",
+    figura: "semejanzaAA",
+    enunciado: "En ΔABC, m∠A = 50° y m∠B = 70°. En ΔDEF, m∠D = 50° y m∠F = 60°. ¿Cuál afirmación es verdadera?",
+    opciones: ["ΔABC ~ ΔDEF por AA", "ΔABC ~ ΔDFE por AA", "No son semejantes, porque solo coincide un ángulo dado", "ΔABC ≅ ΔDEF por ALA"],
+    respuesta: 0,
+    explicacion: "Halla el tercer ángulo de cada triángulo: m∠C = 180° − 50° − 70° = 60° y m∠E = 180° − 50° − 60° = 70°. Entonces A↔D (50°), B↔E (70°) y C↔F (60°). Dos pares de ángulos congruentes bastan: ΔABC ~ ΔDEF por AA.",
+    pista: "Los ángulos de un triángulo suman 180°. Calcula el ángulo que falta en cada uno y compara.",
+    error: "No calcular el tercer ángulo y concluir que no son semejantes.",
+    distractores: [null, "El orden importa: ΔDFE emparejaría B con F, pero ∠B mide 70° y ∠F mide 60°.", "Calcula los terceros ángulos: ∠C = 60° y ∠E = 70°. Así coinciden los tres pares.", "No se conoce ningún lado y los triángulos son de distinto tamaño. Ángulos iguales dan semejanza, no congruencia."],
+    etiquetas: ["semejanza", "criterio AA", "figura"]
+  },
+  {
+    id: "M3-15", modulo: "M3", indicador: "ES.G.47", tipo: "num", nivel: 2,
+    repaso: "f3",
+    figura: "trianguloParalela",
+    enunciado: "En ΔABC, DE ∥ BC, con D sobre AB y E sobre AC. Si AD = 5, DB = 10 y EC = 12, ¿cuánto mide AE?",
+    respuesta: 6, tolerancia: 0.01, unidad: "",
+    explicacion: "Por el teorema de Tales: AD/DB = AE/EC → 5/10 = AE/12. Multiplica en cruz: 10 · AE = 60, así que AE = 6.",
+    pista: "Escribe la proporción con los segmentos del mismo lado: AD/DB = AE/EC.",
+    error: "Invertir la proporción (5/10 = 12/AE) y obtener AE = 24.",
+    etiquetas: ["semejanza", "tales"]
+  },
+  {
+    id: "M3-16", modulo: "M3", indicador: "ES.G.42", tipo: "sm", nivel: 3,
+    repaso: "f0",
+    enunciado: "Los lados de ΔABC miden 4, 5 y 6. ¿Cuál de estos triángulos es semejante a ΔABC?",
+    opciones: ["Lados 6, 7 y 8", "Lados 8, 10 y 12", "Lados 4, 5 y 7", "Lados 5, 6 y 7"],
+    respuesta: 1,
+    explicacion: "Para ser semejantes, los tres lados se multiplican por el mismo número. 8 ÷ 4 = 2, 10 ÷ 5 = 2 y 12 ÷ 6 = 2: la razón es 2 en los tres pares.",
+    pista: "Divide cada lado del otro triángulo entre el lado correspondiente de ΔABC. ¿Da siempre lo mismo?",
+    error: "Sumar el mismo número a cada lado en vez de multiplicar por el mismo número.",
+    distractores: ["Sumaste 2 a cada lado. La semejanza multiplica: 6 ÷ 4 = 1.5, pero 8 ÷ 6 ≈ 1.33.", null, "Solo cambió un lado. 4/4 = 1 y 5/5 = 1, pero 7/6 no es 1: la razón no es la misma.", "Sumaste 1 a cada lado. Las razones 5/4, 6/5 y 7/6 no son iguales."],
+    etiquetas: ["semejanza", "razón"]
+  },
+  {
+    id: "M3-17", modulo: "M3", indicador: "ES.G.47", tipo: "sm", nivel: 3,
+    repaso: "i3",
+    enunciado: "Tres rectas paralelas cortan dos transversales. En la primera transversal, los segmentos entre las paralelas miden 4 cm y 6 cm. En la segunda, el primer segmento mide 6 cm. ¿Cuánto mide el segundo?",
+    opciones: ["9 cm", "8 cm", "4 cm", "12 cm"],
+    respuesta: 0,
+    explicacion: "Las paralelas dividen las transversales en segmentos proporcionales: 4/6 = 6/x. Multiplica en cruz: 4x = 36, así que x = 9 cm.",
+    pista: "Plantea la proporción con los segmentos en el mismo orden en las dos transversales: primero/segundo = primero/segundo.",
+    error: "Sumar la diferencia (6 − 4 = 2) en lugar de usar la proporción.",
+    distractores: [null, "Sumaste 2 porque de 4 a 6 hay 2. Las paralelas conservan la razón, no la diferencia: 4/6 = 6/x.", "Planteaste la proporción al revés, 4/6 = x/6, y eso da 4. Alinea primero con primero y segundo con segundo: 4/6 = 6/x.", "Duplicaste el 6. La razón entre los segmentos es 6/4 = 1.5, así que el segundo mide 6 × 1.5 = 9."],
+    etiquetas: ["semejanza", "tales", "paralelas"]
+  },
+
+  /* ---------- M4 ---------- */
+  {
+    id: "M4-09", modulo: "M4", indicador: "ES.G.41", tipo: "sm", nivel: 1,
+    repaso: "i0",
+    enunciado: "¿Cuál transformación desliza una figura a otro lugar sin girarla ni voltearla?",
+    opciones: ["Reflexión", "Rotación", "Traslación", "Dilatación"],
+    respuesta: 2,
+    explicacion: "La traslación mueve cada punto la misma distancia en la misma dirección. La figura conserva su tamaño, su forma y su orientación: solo cambia de lugar.",
+    pista: "Imagina empujar un libro sobre la mesa sin darle vueltas. ¿Cómo se llama ese movimiento?",
+    error: "Confundir los nombres de las transformaciones.",
+    distractores: ["La reflexión voltea la figura como en un espejo: invierte su orientación.", "La rotación gira la figura alrededor de un punto.", null, "La dilatación agranda o achica la figura. No es un deslizamiento."],
+    etiquetas: ["transformaciones", "vocabulario"]
+  },
+  {
+    id: "M4-10", modulo: "M4", indicador: "ES.G.41", tipo: "sm", nivel: 1,
+    repaso: "i1",
+    enunciado: "¿Cuál de estas transformaciones cambia el tamaño de la figura?",
+    opciones: ["Una traslación", "Una reflexión", "Una rotación", "Una dilatación con factor 2"],
+    respuesta: 3,
+    explicacion: "La traslación, la reflexión y la rotación son transformaciones rígidas: conservan las distancias, así que la imagen es congruente con la figura. La dilatación con factor 2 multiplica cada distancia por 2: la imagen es semejante, pero más grande.",
+    pista: "Tres de estas son transformaciones rígidas: mueven la figura sin estirarla. ¿Cuál la estira?",
+    error: "Pensar que la reflexión o la rotación cambian el tamaño porque la figura «se ve distinta».",
+    distractores: ["La traslación solo cambia de lugar la figura; su tamaño queda igual.", "La reflexión invierte la orientación, pero conserva el tamaño.", "La rotación gira la figura, pero conserva el tamaño.", null],
+    etiquetas: ["transformaciones", "transformaciones rígidas"]
+  },
+  {
+    id: "M4-11", modulo: "M4", indicador: "ES.G.41", tipo: "sm", nivel: 1,
+    repaso: "f1",
+    enunciado: "El punto P(5, 3) se refleja sobre el eje x. ¿Cuáles son las coordenadas de su imagen?",
+    opciones: ["(5, −3)", "(−5, 3)", "(−5, −3)", "(3, 5)"],
+    respuesta: 0,
+    explicacion: "Reflejar sobre el eje x: (x, y) → (x, −y). La x se queda igual y la y cambia de signo: P′(5, −3).",
+    pista: "El eje x es el espejo. Al reflejar sobre él, ¿cambia la distancia hacia la izquierda o la derecha, o la de arriba y abajo?",
+    error: "Cambiar el signo de x (eso es reflejar sobre el eje y).",
+    distractores: [null, "Cambiaste el signo de x: eso es reflejar sobre el eje y.", "Cambiaste los dos signos: eso es una rotación de 180° alrededor del origen.", "Intercambiaste las coordenadas: eso es reflejar sobre la recta y = x."],
+    etiquetas: ["transformaciones", "reflexión", "coordenadas"]
+  },
+  {
+    id: "M4-12", modulo: "M4", indicador: "ES.G.41", tipo: "sm", nivel: 2,
+    repaso: "i2",
+    enunciado: "El punto A(3, 1) se rota 90° en el sentido de las manecillas del reloj alrededor del origen. ¿Cuál es su imagen?",
+    opciones: ["(−1, 3)", "(1, −3)", "(−3, −1)", "(3, −1)"],
+    respuesta: 1,
+    explicacion: "Girar 90° en el sentido del reloj es lo mismo que girar 270° en sentido contrario: (x, y) → (y, −x). Con A(3, 1): A′(1, −3). Comprueba: A está en el cuadrante I y, al girar a favor del reloj, pasa al cuadrante IV.",
+    pista: "La regla de la guía es para 90° en sentido CONTRARIO al reloj. A favor del reloj, el punto va hacia el otro lado: ¿a qué cuadrante llega?",
+    error: "Aplicar la regla de 90° en sentido contrario al reloj, (x, y) → (−y, x).",
+    distractores: ["(−1, 3) es la rotación de 90° en sentido CONTRARIO al reloj. A favor del reloj, A baja al cuadrante IV.", null, "Cambiaste los dos signos: (−3, −1) es la rotación de 180°.", "(3, −1) es la reflexión sobre el eje x, no una rotación."],
+    etiquetas: ["transformaciones", "rotación", "coordenadas"]
+  },
+  {
+    id: "M4-13", modulo: "M4", indicador: "ES.G.41", tipo: "sm", nivel: 3,
+    repaso: "f3",
+    enunciado: "El punto B(−2, 4) se rota 270° en sentido contrario al reloj alrededor del origen. ¿Cuál es su imagen?",
+    opciones: ["(−4, −2)", "(2, −4)", "(4, 2)", "(−2, −4)"],
+    respuesta: 2,
+    explicacion: "270° en sentido contrario al reloj son tres giros de 90°: (−2, 4) → (−4, −2) → (2, −4) → (4, 2). También se puede usar el atajo: 270° en sentido contrario = 90° a favor del reloj, (x, y) → (y, −x) = (4, 2).",
+    pista: "Aplica tres veces la regla de 90°, (x, y) → (−y, x), o piensa que 270° en un sentido es 90° en el otro.",
+    error: "Aplicar solo un giro de 90°, o confundir 270° con 180°.",
+    distractores: ["Ese es un solo giro de 90°. Faltan dos giros más.", "Ese es un giro de 180° (dos giros de 90°). Falta uno más.", null, "Cambiaste solo el signo de y: eso es una reflexión sobre el eje x."],
+    etiquetas: ["transformaciones", "rotación", "coordenadas"]
+  },
+  {
+    id: "M4-14", modulo: "M4", indicador: "ES.G.41", tipo: "sm", nivel: 3,
+    repaso: "i3",
+    enunciado: "Al punto C(2, 5) se le aplica una reflexión sobre el eje x y luego una reflexión sobre el eje y. ¿A cuál transformación única equivale esa composición?",
+    opciones: ["Una rotación de 180° alrededor del origen", "Una traslación", "Una reflexión sobre la recta y = x", "Una rotación de 90° en sentido contrario al reloj"],
+    respuesta: 0,
+    explicacion: "Sobre el eje x: (2, 5) → (2, −5). Luego sobre el eje y: (2, −5) → (−2, −5). Los dos signos cambiaron: (x, y) → (−x, −y), que es la regla de la rotación de 180° alrededor del origen.",
+    pista: "Aplica las dos reflexiones al punto, en orden, y compara el resultado con las reglas de la guía.",
+    error: "Pensar que dos reflexiones dan otra reflexión.",
+    distractores: [null, "Una traslación suma lo mismo a todos los puntos. Aquí cada coordenada cambió de signo, y eso no es sumar un número fijo.", "Reflejar sobre y = x intercambia las coordenadas: daría (5, 2), no (−2, −5).", "90° en sentido contrario daría (−5, 2). El resultado es (−2, −5)."],
+    etiquetas: ["transformaciones", "composición"]
+  },
+  {
+    id: "M4-15", modulo: "M4", indicador: "ES.G.41", tipo: "sm", nivel: 2,
+    repaso: "i2",
+    figura: "gridRotacion",
+    enunciado: "La figura A se transformó en la figura B. El vértice P(4, 1) pasó a P′(−1, 4). ¿Cuál transformación se aplicó?",
+    opciones: ["Una reflexión sobre el eje y", "Una rotación de 90° en sentido contrario al reloj alrededor del origen", "Una rotación de 180° alrededor del origen", "Una traslación de 5 unidades a la izquierda y 3 hacia arriba"],
+    respuesta: 1,
+    explicacion: "Con la regla de 90° en sentido contrario al reloj, (x, y) → (−y, x): P(4, 1) → (−1, 4) = P′. Los otros vértices también cumplen la regla: (1, 1) → (−1, 1) y (1, 3) → (−3, 1).",
+    pista: "Prueba cada regla con el punto P(4, 1) y mira cuál da (−1, 4). Después compruébala con otro vértice.",
+    error: "Ver que la figura pasó al lado izquierdo y elegir la reflexión sobre el eje y sin probar las coordenadas.",
+    distractores: ["Reflejar sobre el eje y daría P(4, 1) → (−4, 1), no (−1, 4).", null, "Girar 180° daría P(4, 1) → (−4, −1), en el cuadrante III.", "Esa traslación lleva P a P′, pero también tendría que llevar (1, 1) a (−4, 4). En la figura B, ese vértice está en (−1, 1): la figura giró, no solo se movió."],
+    etiquetas: ["transformaciones", "rotación", "figura"]
+  },
+
+  /* ---------- M5 ---------- */
+  {
+    id: "M5-12", modulo: "M5", indicador: "ES.G.43", tipo: "sm", nivel: 2,
+    repaso: "i1",
+    figura: "semicirculoInscrito",
+    enunciado: "En la figura, AB es un diámetro del círculo de centro O y C es un punto del círculo. ¿Cuánto mide ∠ACB?",
+    opciones: ["90°", "180°", "45°", "60°"],
+    respuesta: 0,
+    explicacion: "∠ACB es un ángulo inscrito (su vértice C está en el círculo) que abarca el arco AB. Como AB es un diámetro, ese arco es medio círculo: 180°. El ángulo inscrito mide la mitad de su arco: 180° ÷ 2 = 90°.",
+    pista: "¿Cuánto mide el arco que abarca el ángulo, si AB pasa por el centro? Un ángulo inscrito mide la mitad de su arco.",
+    error: "Dar la medida del arco (180°) en vez de la del ángulo inscrito.",
+    distractores: [null, "180° es la medida del arco AB (medio círculo). El ángulo inscrito mide la mitad.", "Dividiste dos veces. El arco mide 180° y el ángulo inscrito, la mitad: 90°.", "60° sería si el triángulo fuera equilátero, pero AB es un diámetro y no mide lo mismo que AC."],
+    etiquetas: ["círculos", "ángulo inscrito", "figura"]
+  },
+  {
+    id: "M5-13", modulo: "M5", indicador: "ES.G.43", tipo: "sm", nivel: 2,
+    repaso: "f5",
+    figura: "tangenteSecante",
+    enunciado: "Desde el punto P, fuera del círculo, salen la tangente PT y una secante que corta el círculo en B y en C. El arco TB mide 60° y el arco TC (el más lejano) mide 160°. ¿Cuánto mide ∠P?",
+    opciones: ["110°", "50°", "100°", "80°"],
+    respuesta: 1,
+    explicacion: "∠P es un ángulo exterior: su vértice está fuera del círculo. Mide la mitad de la diferencia de los arcos que intercepta: (160° − 60°) ÷ 2 = 100° ÷ 2 = 50°.",
+    pista: "Vértice fuera del círculo: resta el arco menor al mayor y divide entre 2.",
+    error: "Sumar los arcos (fórmula del ángulo interior) u olvidar dividir entre 2.",
+    distractores: ["Sumaste los arcos y dividiste: (160 + 60) ÷ 2. Esa es la regla cuando el vértice está DENTRO del círculo.", null, "Restaste bien (160 − 60 = 100), pero faltó dividir entre 2.", "Tomaste la mitad del arco mayor solamente. Hay que restar primero el arco menor."],
+    etiquetas: ["círculos", "ángulo exterior", "tangente", "figura"]
+  },
+  {
+    id: "M5-14", modulo: "M5", indicador: "ES.G.43", tipo: "num", nivel: 3,
+    repaso: "i1",
+    enunciado: "En un círculo de centro O, el ángulo central ∠AOB mide (3x − 10)° y el ángulo inscrito ∠ACB, que abarca el mismo arco AB, mide (x + 10)°. ¿Cuántos grados mide el arco AB?",
+    respuesta: 80, tolerancia: 0.01, unidad: "°",
+    explicacion: "El central mide lo mismo que el arco y el inscrito mide la mitad. Entonces el central es el doble del inscrito: 3x − 10 = 2(x + 10) = 2x + 20, así que x = 30. El central mide 3(30) − 10 = 80°, y el arco AB también: 80°. Comprueba: el inscrito mide 30 + 10 = 40°, la mitad de 80°.",
+    pista: "El ángulo central es el doble del inscrito que abarca el mismo arco. Plantea 3x − 10 = 2(x + 10).",
+    error: "Igualar las dos expresiones (3x − 10 = x + 10) como si los ángulos midieran lo mismo, o contestar x = 30.",
+    etiquetas: ["círculos", "ángulo central", "ángulo inscrito", "ecuaciones"]
+  },
+  {
+    id: "M5-15", modulo: "M5", indicador: "ES.M.56", tipo: "sm", nivel: 2,
+    repaso: "f1",
+    enunciado: "Una pizza tiene 14 pulgadas de diámetro. ¿Cuál es su área? (Usa π ≈ 3.14).",
+    opciones: ["615.44 pulg²", "43.96 pulg²", "153.86 pulg²", "21.98 pulg²"],
+    respuesta: 2,
+    explicacion: "El radio es la mitad del diámetro: r = 14 ÷ 2 = 7 pulg. A = πr² = 3.14 × 7² = 3.14 × 49 = 153.86 pulg².",
+    pista: "Antes de sustituir, marca el radio: el diámetro es 14, ¿cuánto es el radio?",
+    error: "Usar el diámetro como radio.",
+    distractores: ["Usaste el diámetro como radio: 3.14 × 14² = 615.44. El radio es 7.", "Calculaste la circunferencia, 2πr = 3.14 × 14. El área usa πr².", null, "Multiplicaste π × 7 sin elevar al cuadrado. El área es π × 7 × 7."],
+    etiquetas: ["medición", "área del círculo"]
+  },
+  {
+    id: "M5-16", modulo: "M5", indicador: "ES.M.56", tipo: "sm", nivel: 2,
+    repaso: "f2",
+    enunciado: "Un cilindro se puede ver como una pila de discos iguales. ¿Cuál razón explica que su volumen sea V = πr²h?",
+    opciones: ["Se multiplica la circunferencia de la base (2πr) por la altura", "Se multiplica el área de cada disco (πr²) por la altura de la pila (h)", "Se suma el área de la base con la altura", "Se toma la mitad del área de la base por la altura"],
+    respuesta: 1,
+    explicacion: "Cada disco tiene como cara un círculo de área πr². Al apilar discos hasta la altura h, el volumen es el área de la base por la altura: V = πr² · h. Es la misma idea del prisma: área de la base × altura.",
+    pista: "El volumen de cualquier prisma o cilindro es (área de la base) × (altura). ¿Cuál es el área de la base de un cilindro?",
+    error: "Confundir la circunferencia (2πr, una longitud) con el área de la base (πr²).",
+    distractores: ["2πr es la circunferencia: mide el borde del disco, no su superficie. 2πr · h da el área lateral, no el volumen.", null, "No se suman un área y una longitud. El volumen se obtiene al multiplicar el área de la base por la altura.", "La mitad aparece en el área del triángulo, no en el cilindro. Los discos se apilan completos."],
+    etiquetas: ["medición", "cilindro", "argumento"]
+  },
+  {
+    id: "M5-17", modulo: "M5", indicador: "ES.M.56", tipo: "sm", nivel: 2,
+    repaso: "f3",
+    enunciado: "Una bola tiene forma de esfera con 10 cm de diámetro. ¿Cuál es su volumen, redondeado a la décima? (Usa π ≈ 3.14).",
+    opciones: ["4186.7 cm³", "314.0 cm³", "523.3 cm³", "392.5 cm³"],
+    respuesta: 2,
+    explicacion: "El radio es 10 ÷ 2 = 5 cm. V = 4/3 πr³ = 4/3 × 3.14 × 5³ = 4/3 × 3.14 × 125 = 523.33… ≈ 523.3 cm³.",
+    pista: "Marca el radio antes de sustituir. Luego eleva al cubo: 5³ = 5 × 5 × 5.",
+    error: "Usar el diámetro como radio, o usar la fórmula del área de la superficie (4πr²).",
+    distractores: ["Usaste el diámetro como radio: 4/3 × 3.14 × 10³. El radio es 5.", "Esa es el área de la superficie, 4πr² = 4 × 3.14 × 25. El volumen usa 4/3 πr³.", null, "Olvidaste el 4/3: 3.14 × 125 = 392.5. Multiplica por 4 y divide entre 3."],
+    etiquetas: ["medición", "esfera", "volumen"]
+  },
+  {
+    id: "M5-18", modulo: "M5", indicador: "ES.M.56", tipo: "num", nivel: 2,
+    repaso: "f4",
+    enunciado: "Una pecera con forma de prisma rectangular mide 50 cm de largo, 30 cm de ancho y 40 cm de alto. ¿Cuántos litros de agua le caben cuando está llena? (1 litro = 1000 cm³).",
+    respuesta: 60, tolerancia: 0.01, unidad: "litros",
+    explicacion: "V = l × a × h = 50 × 30 × 40 = 60,000 cm³. Cada litro son 1000 cm³: 60,000 ÷ 1000 = 60 litros.",
+    pista: "Primero calcula el volumen en cm³ y después divide entre 1000 para pasarlo a litros.",
+    error: "Contestar 60,000 sin pasar a litros, o sumar las dimensiones en vez de multiplicarlas.",
+    etiquetas: ["medición", "prisma", "volumen", "unidades"]
+  },
+
+  /* ---------- M6 ---------- */
+  {
+    id: "M6-14", modulo: "M6", indicador: "ES.A.11", tipo: "sm", nivel: 2,
+    repaso: "i1",
+    enunciado: "¿Cuántas soluciones tiene el sistema x + 2y = 6 y 2x + 4y = 10?",
+    opciones: ["Una solución: (2, 2)", "Ninguna solución", "Infinitas soluciones", "Una solución: (6, 0)"],
+    respuesta: 1,
+    explicacion: "Divide la segunda ecuación entre 2: x + 2y = 5. La primera dice x + 2y = 6. La misma expresión no puede valer 6 y 5 a la vez: las rectas son paralelas (misma pendiente, distinto intercepto) y el sistema no tiene solución.",
+    pista: "Compara las dos ecuaciones: ¿la segunda es un múltiplo de la primera? Revisa los coeficientes y también el número de la derecha.",
+    error: "Ver coeficientes proporcionales y contestar «infinitas» sin revisar el término de la derecha.",
+    distractores: ["(2, 2) cumple la primera (2 + 4 = 6), pero no la segunda: 4 + 8 = 12, no 10. Hay que verificar en las dos.", null, "Para infinitas, TODA la ecuación tendría que ser múltiplo: 2 × 6 = 12, pero la segunda dice 10.", "(6, 0) cumple la primera, pero en la segunda da 12, no 10."],
+    etiquetas: ["sistemas", "sin solución"]
+  },
+  {
+    id: "M6-15", modulo: "M6", indicador: "ES.A.11", tipo: "num", nivel: 2,
+    repaso: "i1",
+    enunciado: "En la cafetería, 2 empanadillas y 1 jugo cuestan $5. Una empanadilla y 3 jugos también cuestan $5. ¿Cuánto cuesta una empanadilla, en dólares?",
+    respuesta: 2, tolerancia: 0.01, unidad: "dólares",
+    explicacion: "Sea e el precio de una empanadilla y j el de un jugo: 2e + j = 5 y e + 3j = 5. De la primera, j = 5 − 2e. Sustituye: e + 3(5 − 2e) = 5 → e + 15 − 6e = 5 → −5e = −10 → e = 2. Entonces j = 1. Comprueba: 2(2) + 1 = 5 y 2 + 3(1) = 5.",
+    pista: "Escribe una ecuación para cada compra. Despeja j en la primera y sustitúyela en la segunda.",
+    error: "Contestar el precio del jugo ($1) o usar una sola de las compras.",
+    etiquetas: ["sistemas", "contexto"]
+  },
+  {
+    id: "M6-16", modulo: "M6", indicador: "ES.A.11", tipo: "sm", nivel: 3,
+    repaso: "f2",
+    enunciado: "Si A = [[1, 2], [3, −1]] y B = [[2, 0], [1, 4]], ¿cuál es el producto AB?",
+    opciones: ["[[2, 0], [3, −4]]", "[[2, 4], [13, −2]]", "[[4, 8], [7, −4]]", "[[4, 8], [5, −4]]"],
+    respuesta: 3,
+    explicacion: "Cada entrada es fila de A por columna de B. Fila 1: 1(2) + 2(1) = 4 y 1(0) + 2(4) = 8. Fila 2: 3(2) + (−1)(1) = 5 y 3(0) + (−1)(4) = −4. AB = [[4, 8], [5, −4]].",
+    pista: "Para la entrada de la fila 2, columna 1: toma la fila 2 de A, (3, −1), y la columna 1 de B, (2, 1). Multiplica pareja por pareja y suma.",
+    error: "Multiplicar entrada por entrada, o calcular BA en vez de AB.",
+    distractores: ["Multiplicaste entrada por entrada (1 × 2, 2 × 0, …). El producto de matrices es fila por columna.", "Ese es BA: multiplicaste en el orden contrario. En matrices, el orden importa.", "Revisa el signo en la fila 2: 3(2) + (−1)(1) = 6 − 1 = 5, no 7.", null],
+    etiquetas: ["matrices", "producto"]
+  },
+  {
+    id: "M6-17", modulo: "M6", indicador: "ES.A.11", tipo: "num", nivel: 2,
+    repaso: "i2",
+    enunciado: "Si −2 · [[x, 6], [−1, 4]] = [[10, −12], [2, −8]], ¿cuál es el valor de x?",
+    respuesta: -5, tolerancia: 0.01, unidad: "",
+    explicacion: "El escalar multiplica cada entrada: −2 · x = 10. Divide entre −2: x = 10 ÷ (−2) = −5. Comprueba con otra entrada: −2 · 6 = −12. ✓",
+    pista: "Mira solo la entrada de arriba a la izquierda: −2 por x da 10.",
+    error: "Dividir sin el signo y contestar 5.",
+    etiquetas: ["matrices", "escalar"]
+  },
+  {
+    id: "M6-18", modulo: "M6", indicador: "ES.N.9", tipo: "sm", nivel: 1,
+    repaso: "i0",
+    enunciado: "¿Cuál propiedad muestra que (4 + 7) + 3 = 4 + (7 + 3)?",
+    opciones: ["Conmutativa", "Asociativa", "Distributiva", "Inverso aditivo"],
+    respuesta: 1,
+    explicacion: "Los números están en el mismo orden (4, 7, 3); solo cambian los paréntesis, es decir, cómo se agrupan. Cambiar la agrupación es la propiedad asociativa.",
+    pista: "Compara los dos lados: ¿cambió el orden de los números o cambió dónde están los paréntesis?",
+    error: "Confundir asociativa (agrupación) con conmutativa (orden).",
+    distractores: ["La conmutativa cambia el orden, como 4 + 7 = 7 + 4. Aquí el orden es el mismo.", null, "La distributiva multiplica un número por una suma, como 2(4 + 7) = 8 + 14. Aquí no hay multiplicación.", "El inverso aditivo suma un número con su opuesto para dar 0, como 7 + (−7) = 0."],
+    etiquetas: ["propiedades"]
+  },
+  {
+    id: "M6-19", modulo: "M6", indicador: "ES.E.58", tipo: "sm", nivel: 2,
+    repaso: "f3",
+    enunciado: "En un juego de feria, el premio es $10 con probabilidad 0.1, $3 con probabilidad 0.3 y $0 con probabilidad 0.6. ¿Cuál es el valor esperado del premio?",
+    opciones: ["$4.33", "$1.90", "$13.00", "$1.00"],
+    respuesta: 1,
+    explicacion: "E = Σ (valor × probabilidad) = 10(0.1) + 3(0.3) + 0(0.6) = 1 + 0.9 + 0 = $1.90. Es lo que se gana, en promedio, por juego si se juega muchas veces.",
+    pista: "Multiplica cada premio por su probabilidad y suma los resultados.",
+    error: "Promediar los premios sin usar las probabilidades.",
+    distractores: ["Promediaste los premios: (10 + 3 + 0) ÷ 3. El valor esperado pesa cada premio por su probabilidad.", null, "Sumaste los premios. Cada uno tiene que multiplicarse por su probabilidad.", "Solo contaste el premio de $10: 10 × 0.1. Falta sumar 3 × 0.3 = 0.9."],
+    etiquetas: ["probabilidad", "valor esperado"]
   }
 ];

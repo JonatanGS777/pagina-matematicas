@@ -374,7 +374,93 @@ window.CRECE_FIGURAS = (function () {
       ${triMarcado([[210, 250], [290, 70], [370, 250]], { 1: 1 }, { 0: 1, 1: 2 }, 22)}
       <text x="18" y="270" ${TXT}>A</text><text x="104" y="60" ${TXT}>B</text><text x="180" y="270" ${TXT}>C</text>
       <text x="208" y="270" ${TXT}>D</text><text x="284" y="60" ${TXT}>E</text><text x="372" y="270" ${TXT}>F</text>
-    `, "Triángulos ABC y DEF. Están marcados el ángulo A con el D, el ángulo B con el E, y el lado BC con el EF")
+    `, "Triángulos ABC y DEF. Están marcados el ángulo A con el D, el ángulo B con el E, y el lado BC con el EF"),
+
+    /* ---------- v1.7 ---------- */
+
+    // M2-19: triángulo con una marca en AB y otra en AC.
+    isoscelesTics: wrap(`
+      ${triMarcado([[200, 50], [90, 250], [310, 250]], { 0: 1, 2: 1 }, null)}
+      <text x="194" y="38" ${TXT}>A</text>
+      <text x="72" y="264" ${TXT}>B</text>
+      <text x="316" y="264" ${TXT}>C</text>
+    `, "Triángulo ABC con una marca en el lado AB y una marca igual en el lado AC"),
+
+    // M2-24: paralelogramo ABCD con la diagonal AC.
+    paralelogramoAC: wrap(`
+      <polygon points="60,230 130,70 340,70 270,230" ${T}/>
+      <line x1="60" y1="230" x2="340" y2="70" stroke="#0e6b63" stroke-width="2" stroke-dasharray="6 5"/>
+      <path d="M87.2 155.3 L95 150 L96.4 159.3" ${T}/>
+      <path d="M297.2 155.3 L305 150 L306.4 159.3" ${T}/>
+      <path d="M160 224 l8 6 l-8 6 M168 224 l8 6 l-8 6" ${T}/>
+      <path d="M230 64 l8 6 l-8 6 M238 64 l8 6 l-8 6" ${T}/>
+      <text x="42" y="244" ${TXT}>A</text>
+      <text x="118" y="60" ${TXT}>B</text>
+      <text x="346" y="64" ${TXT}>C</text>
+      <text x="276" y="248" ${TXT}>D</text>
+      <text x="24" y="285" ${TXT} fill="#6b7c78" font-size="12">Las flechas marcan las paralelas: AB <tspan font-size="16" font-weight="700">∥</tspan> DC y AD <tspan font-size="16" font-weight="700">∥</tspan> BC.</text>
+    `, "Paralelogramo ABCD con la diagonal AC punteada; AB es paralelo a DC y AD es paralelo a BC"),
+
+    // M3-14: ΔABC (A = 50°, B = 70°) y ΔDEF menor (D = 50°, F = 60°).
+    semejanzaAA: wrap(`
+      <polygon points="30,250 200,250 148.6,108.7" ${T}/>
+      <polygon points="240,250 342,250 311.2,165.2" ${T}/>
+      <text x="14" y="266" ${TXT}>A</text>
+      <text x="204" y="266" ${TXT}>B</text>
+      <text x="142" y="98" ${TXT}>C</text>
+      <text x="58" y="242" ${TXT} fill="#0e6b63">50°</text>
+      <text x="160" y="242" ${TXT} fill="#0e6b63">70°</text>
+      <text x="226" y="266" ${TXT}>D</text>
+      <text x="346" y="266" ${TXT}>E</text>
+      <text x="306" y="156" ${TXT}>F</text>
+      <text x="262" y="242" ${TXT} fill="#0e6b63">50°</text>
+      <text x="291" y="206" ${TXT} fill="#0e6b63">60°</text>
+    `, "Triángulo ABC con el ángulo A de 50 grados y el ángulo B de 70 grados; triángulo DEF, más pequeño, con el ángulo D de 50 grados y el ángulo F de 60 grados"),
+
+    // M4-15: A (1,1), (4,1), (1,3) → B, su rotación de 90° antihoraria. Cuadrícula de 30 px.
+    gridRotacion: wrap(`
+      ${grid(30, 200, 150, 400, 300)}
+      <polygon points="230,120 320,120 230,60" fill="#0e6b63" fill-opacity=".16" stroke="#0e6b63" stroke-width="2"/>
+      <polygon points="170,120 170,30 110,120" fill="#c2412d" fill-opacity=".16" stroke="#c2412d" stroke-width="2"/>
+      <circle cx="320" cy="120" r="4" fill="#14211f"/>
+      <text x="324" y="112" ${TXT}>P</text>
+      <circle cx="170" cy="30" r="4" fill="#14211f"/>
+      <text x="176" y="28" ${TXT}>P′</text>
+      <circle cx="200" cy="150" r="3" fill="#14211f"/>
+      <text x="204" y="166" ${TXT} font-size="12">O</text>
+      <text x="248" y="112" ${TXT} fill="#0e6b63" font-weight="700">A</text>
+      <text x="146" y="112" ${TXT} fill="#c2412d" font-weight="700">B</text>
+    `, "Plano cartesiano. La figura A es un triángulo con vértices en (1, 1), (4, 1) y (1, 3); el vértice P está en (4, 1). La figura B tiene vértices en (−1, 1), (−1, 4) y (−3, 1); el vértice P′ está en (−1, 4)"),
+
+    // M5-12: AB es diámetro y C está en el círculo.
+    semicirculoInscrito: wrap(`
+      <circle cx="200" cy="150" r="110" ${T}/>
+      <line x1="90" y1="150" x2="310" y2="150" ${T}/>
+      <polyline points="90,150 153.5,50.3 310,150" ${AC}/>
+      <circle cx="200" cy="150" r="3.5" fill="#14211f"/>
+      <text x="194" y="170" ${TXT}>O</text>
+      <text x="70" y="156" ${TXT}>A</text>
+      <text x="316" y="156" ${TXT}>B</text>
+      <text x="144" y="40" ${TXT}>C</text>
+    `, "Círculo de centro O. El segmento AB pasa por O. El punto C está en el círculo y se une con A y con B"),
+
+    // M5-13: tangente PT y secante PBC. Arcos: TB = 60° y TC (lejano) = 160°.
+    tangenteSecante: wrap(`
+      <circle cx="250" cy="150" r="90" ${T}/>
+      <line x1="112" y1="60" x2="345" y2="60" ${T}/>
+      <line x1="134.4" y1="60" x2="300" y2="258" ${T}/>
+      <circle cx="134.4" cy="60" r="3.5" fill="#c2412d"/>
+      <circle cx="250" cy="60" r="3.5" fill="#14211f"/>
+      <circle cx="172.1" cy="105" r="3.5" fill="#14211f"/>
+      <circle cx="280.8" cy="234.6" r="3.5" fill="#14211f"/>
+      <text x="120" y="50" ${TXT} fill="#c2412d">P</text>
+      <text x="245" y="50" ${TXT}>T</text>
+      <text x="152" y="118" ${TXT}>B</text>
+      <text x="290" y="250" ${TXT}>C</text>
+      <text x="206" y="92" ${TXT} fill="#0e6b63">60°</text>
+      <text x="346" y="134" ${TXT} fill="#0e6b63">160°</text>
+      <text x="20" y="285" ${TXT} fill="#6b7c78" font-size="12">PT es tangente en T. La secante pasa por B y por C.</text>
+    `, "Círculo con la tangente PT y la secante que sale de P y corta el círculo en B y en C. El arco TB mide 60 grados y el arco TC, el más lejano, mide 160 grados")
   };
 
   return figs;
