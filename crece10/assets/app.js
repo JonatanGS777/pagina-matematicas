@@ -139,7 +139,8 @@
   /* ===================== Destrezas (regla «3 de 4») =====================
      Cada ruta se divide en destrezas (datos/modulos.js). Una ronda son 4 preguntas
      de una destreza; cuentan las que se aciertan a la primera y sin pista.
-       3 o 4 → sube un nivel · 2 → se mantiene · 0 o 1 → baja un nivel (nunca de «Intentada»).
+       3 o 4 → sube un nivel (hasta Competente) · 2 → se mantiene · 0 o 1 → baja un nivel (nunca de «Intentada»).
+     Dominada solo se gana en el cuestionario de la ruta (ver más abajo).
      Niveles: 0 No empezada · 1 Intentada · 2 Familiar · 3 Competente · 4 Dominada.
      Se guarda en STATE.destrezas[id] = { nivel, rondas, ultima: { fecha, ok, n } }. */
   const NIVELES_DZ = ["No empezada", "Intentada", "Familiar", "Competente", "Dominada"];
@@ -216,7 +217,8 @@
     const ok = session.items.filter((_, i) => limpia(i)).length;
     const antes = estadoDz(id);
     let nivel = Math.max(antes.nivel, 1);
-    if (ok >= META_RONDA) nivel = Math.min(4, nivel + 1);
+    // Las rondas llegan hasta Competente; Dominada solo se gana en el cuestionario de la ruta.
+    if (ok >= META_RONDA) nivel = nivel >= 3 ? nivel : nivel + 1;
     else if (ok <= 1) nivel = Math.max(1, nivel - 1);
     STATE.destrezas = STATE.destrezas || {};
     STATE.destrezas[id] = { nivel, rondas: (antes.rondas || 0) + 1, ultima: { fecha: hoy(), ok, n: session.items.length } };
@@ -235,11 +237,127 @@
       <p class="muted">${esc(d.d)}</p>
       <div class="dz-medidor" aria-hidden="true">${[1, 2, 3, 4].map(n => `<i class="${e.nivel >= n ? "lleno n" + e.nivel : ""}"></i>`).join("")}</div>
       <div class="dz-pie">
-        <span class="tiny">${e.ultima ? `Última ronda: ${e.ultima.ok} de ${e.ultima.n}` : "Sin rondas todavía"}</span>
+        <span class="tiny">${e.nivel === 3 ? "Para Dominada: el cuestionario de la ruta" : e.ultima ? `Última ronda: ${e.ultima.ok} de ${e.ultima.n}` : "Sin rondas todavía"}</span>
         <button class="btn btn-primary btn-sm" data-action="iniciar-destreza" data-dz="${d.id}">${e.nivel >= 4 ? "Repasar" : "Practicar 4"} ${ICON.arrow}</button>
       </div>
     </article>`;
   }
+
+  /* ===================== Cuestionario de ruta =====================
+     6 a 8 preguntas mezcladas de todas las destrezas de una ruta (3 por destreza si son 2,
+     2 si son 3 o 4), sin pistas y con un solo intento, como en Khan Academy.
+     Por cada destreza: todas bien → sube un nivel (es la única forma de llegar a Dominada);
+     alguna mal → baja uno (nunca de «Intentada»).
+     Se guarda en STATE.cuestionarios[ruta] = { fecha, ok, n } y en STATE.destrezas. */
+  function muestraCuestionario(mod) {
+    const ds = (MOD[mod] && MOD[mod].destrezas) || [];
+    if (!ds.length) return [];
+    const por = ds.length === 1 ? 6 : ds.length === 2 ? 3 : 2;
+    const out = [];
+    ds.forEach(d => {
+      // Las abiertas se autoevalúan: no entran en el cuestionario.
+      const fijos = BANCO.filter(i => destrezaDe(i) === d.id && i.tipo !== "abierta");
+      const plantillas = GEN ? GEN.claves.filter(k => destrezaDe(GEN.generar(k, 1)) === d.id) : [];
+      const vars = plantillas.map(k => GEN.generar(k, Math.floor(Math.random() * 2147483647))).filter(Boolean);
+      let xs = barajar(fijos.concat(vars)).slice(0, por);
+      for (let i = 0; xs.length < por && plantillas.length && i < 20; i++) {
+        const v = GEN.generar(plantillas[i % plantillas.length], Math.floor(Math.random() * 2147483647));
+        if (v && !xs.some(x => x.id === v.id)) xs.push(v);
+      }
+      out.push(...xs);
+    });
+    return barajar(out);
+  }
+  function iniciarCuestionario(mod) {
+    const items = muestraCuestionario(mod);
+    if (!items.length) return;
+    const iniciales = {};
+    (MOD[mod].destrezas || []).forEach(d => { iniciales[d.id] = estadoDz(d.id).nivel; });
+    session = {
+      modo: "cuestionario", ruta: mod, iniciales, items, idx: 0, respuestas: {}, revisado: {}, flags: {},
+      inicio: Date.now(), examen: false, entregado: false
+    };
+    ir("#/practica/sesion");
+  }
+  function cerrarCuestionario() {
+    if (session.modo !== "cuestionario" || session.cuest) return;
+    const ac = session.aciertos || {};
+    const porDz = {};
+    session.items.forEach((it, i) => {
+      const d = destrezaDe(it);
+      porDz[d] = porDz[d] || { ok: 0, n: 0 };
+      porDz[d].n++;
+      if (ac[i]) porDz[d].ok++;
+    });
+    STATE.destrezas = STATE.destrezas || {};
+    const cambios = Object.entries(porDz).map(([id, x]) => {
+      const antes = Number.isInteger(session.iniciales && session.iniciales[id]) ? session.iniciales[id] : estadoDz(id).nivel;
+      const actual = estadoDz(id);
+      const base = Math.max(actual.nivel, 1);
+      const despues = x.ok === x.n ? Math.min(4, Math.max(base, 1) + 1) : Math.max(1, base - 1);
+      STATE.destrezas[id] = Object.assign({ rondas: 0, ultima: null }, STATE.destrezas[id] || {}, { nivel: despues });
+      return { id, ok: x.ok, n: x.n, antes, despues };
+    });
+    const ok = Object.values(ac).filter(Boolean).length;
+    STATE.cuestionarios = STATE.cuestionarios || {};
+    STATE.cuestionarios[session.ruta] = { fecha: hoy(), ok, n: session.items.length };
+    session.cuest = { ok, n: session.items.length, cambios };
+    guardar();
+  }
+  function cabezaCuestionario() {
+    const m = MOD[session.ruta];
+    if (!m) return "";
+    return `<div class="ronda-info cuestionario">
+      <div><span class="tiny">Cuestionario</span> <b>${esc(m.nombre)}</b></div>
+      <div class="ronda-puntos" aria-label="Pregunta ${session.idx + 1} de ${session.items.length}">
+        ${session.items.map((_, i) => {
+          const r = session.revisado[i], bien = !!(session.aciertos && session.aciertos[i]);
+          const c = !r ? (i === session.idx ? "actual" : "") : bien ? "si" : "no";
+          return `<span class="punto ${c}">${r ? (bien ? ICON.check : ICON.x) : ""}</span>`;
+        }).join("")}
+      </div>
+      <p class="tiny" style="margin:0">Sin pistas y con un solo intento. Cada destreza que contestes completa bien sube un nivel (así se llega a Dominada); la que falles baja uno.</p>
+    </div>`;
+  }
+  function bloqueCuestionario() {
+    const c = session.cuest, m = MOD[session.ruta];
+    if (!c || !m) return "";
+    const suben = c.cambios.filter(x => x.despues > x.antes).length, bajan = c.cambios.filter(x => x.despues < x.antes).length;
+    const peor = c.cambios.slice().sort((a, b) => a.despues - b.despues || a.ok / a.n - b.ok / b.n)[0];
+    return `<div class="result-hero ronda-resultado cuest-resultado">
+      <span class="eyebrow">Cuestionario de ${esc(m.corto)}</span>
+      <div class="result-score">${c.ok} de ${c.n}<small> correctas</small></div>
+      <p class="lead" style="margin-inline:auto">${suben && !bajan ? "¡Todas tus destrezas subieron o se mantuvieron!" : suben ? `${suben} ${suben === 1 ? "destreza subió" : "destrezas subieron"} y ${bajan} ${bajan === 1 ? "bajó" : "bajaron"}.` : bajan ? "Repasa las destrezas que bajaron y vuelve a intentarlo." : "Tus destrezas se mantienen."}</p>
+      <ul class="cuest-cambios">
+        ${c.cambios.map(x => `<li>
+          <span class="cuest-nombre">${esc(DZ[x.id] ? DZ[x.id].t : x.id)}</span>
+          <span class="tiny">${x.ok} de ${x.n}</span>
+          <span class="cuest-niveles">${chipNivel(x.antes)} <span aria-hidden="true">→</span> ${chipNivel(x.despues)}</span>
+        </li>`).join("")}
+      </ul>
+      <div class="btn-row" style="justify-content:center">
+        ${peor && peor.despues < 4 ? `<button class="btn btn-primary" data-action="iniciar-destreza" data-dz="${peor.id}">Practicar ${esc(DZ[peor.id].t)} ${ICON.arrow}</button>` : ""}
+        <button class="btn btn-secondary" data-action="iniciar-cuestionario" data-mod="${m.id}">Repetir el cuestionario</button>
+        <a class="btn btn-ghost" href="#/modulo/${m.id}">Ver la ruta</a>
+      </div>
+    </div>`;
+  }
+  function tarjetaCuestionario(m) {
+    const ds = m.destrezas || [];
+    if (!ds.length) return "";
+    const n = muestraCuestionarioTam(m);
+    const ult = STATE.cuestionarios && STATE.cuestionarios[m.id];
+    const listas = ds.filter(d => estadoDz(d.id).nivel >= 3).length;
+    return `<article class="card cuest-card">
+      <div>
+        <h3>Cuestionario de la ruta</h3>
+        <p class="muted">${n} preguntas mezcladas de las ${ds.length} destrezas, sin pistas y con un solo intento. Es la única forma de llegar a <b>Dominada</b>: cada destreza que contestes completa bien sube un nivel; la que falles baja uno.</p>
+        <p class="tiny" style="margin:6px 0 0">${ult ? `Último: ${ult.ok} de ${ult.n} · ` : ""}${listas === ds.length ? "Todas tus destrezas están en Competente o más: buen momento para hacerlo." : `Recomendado cuando tus destrezas estén en Competente (llevas ${listas} de ${ds.length}).`}</p>
+      </div>
+      <button class="btn ${listas === ds.length ? "btn-primary" : "btn-secondary"}" data-action="iniciar-cuestionario" data-mod="${m.id}">Empezar cuestionario ${ICON.arrow}</button>
+    </article>`;
+  }
+  const muestraCuestionarioTam = m => { const k = (m.destrezas || []).length; return k === 1 ? 6 : k === 2 ? 6 : k * 2; };
 
   // Sugerir la Base cuando el diagnóstico o la precisión general salen bajos
   // y la Base todavía no está dominada.
@@ -530,7 +648,7 @@
     if (!a) return;
     const MODOS = ["practica", "diagnostico", "examen", "repaso"];
     a.intentos.forEach(i => {
-      if (!i || !i.id || !/^M[1-9]$/.test(i.mod || "")) return;
+      if (!i || !i.id || !/^M[0-9]$/.test(i.mod || "")) return;
       STATE.intentos.push(i);
       NUBE.encolarIntento({
         item_id: String(i.id).slice(0, 60), modulo: i.mod, ok: !!i.ok, pista: !!i.pista, opcion: null,
@@ -653,7 +771,8 @@
             </div>
             <div class="route-step">
               <span class="route-num">2</span>
-              ${sigDz ? `<div><b>Sube de nivel: ${esc(sigDz.t)}</b><span>${esc(MOD[sigDz.modulo].corto)} · ${NIVELES_DZ[estadoDz(sigDz.id).nivel]}. Una ronda de ${RONDA}: ${META_RONDA} a la primera para subir. <button class="btn btn-ghost btn-sm enlace-paso" data-action="iniciar-destreza" data-dz="${sigDz.id}">Practicar ${ICON.arrow}</button></span></div>`
+              ${sigDz && estadoDz(sigDz.id).nivel === 3 ? `<div><b>Cuestionario de ${esc(MOD[sigDz.modulo].corto)}</b><span>Tus destrezas de esta ruta están en Competente. El cuestionario (sin pistas, un intento) es el paso a Dominada. <button class="btn btn-ghost btn-sm enlace-paso" data-action="iniciar-cuestionario" data-mod="${sigDz.modulo}">Empezar ${ICON.arrow}</button></span></div>`
+                : sigDz ? `<div><b>Sube de nivel: ${esc(sigDz.t)}</b><span>${esc(MOD[sigDz.modulo].corto)} · ${NIVELES_DZ[estadoDz(sigDz.id).nivel]}. Una ronda de ${RONDA}: ${META_RONDA} a la primera para subir. <button class="btn btn-ghost btn-sm enlace-paso" data-action="iniciar-destreza" data-dz="${sigDz.id}">Practicar ${ICON.arrow}</button></span></div>`
                 : `<div><b>Estudia una ruta</b><span>${esc(rec.nombre)}: ideas, fórmulas y un ejemplo resuelto.</span></div>`}
             </div>
             <div class="route-step">
@@ -906,9 +1025,10 @@
 
           ${(m.destrezas || []).length ? `<div style="margin-top:40px">
             <h2 style="font-size:1.4rem">Destrezas de esta ruta</h2>
-            <p class="muted" style="max-width:62ch">Cada destreza se practica en rondas de ${RONDA} preguntas. Con ${META_RONDA} de ${RONDA} a la primera y sin pista subes un nivel; con 0 o 1 bajas uno.</p>
+            <p class="muted" style="max-width:62ch">Cada destreza se practica en rondas de ${RONDA} preguntas. Con ${META_RONDA} de ${RONDA} a la primera y sin pista subes un nivel, hasta Competente; con 0 o 1 bajas uno. Para llegar a Dominada, aprueba el cuestionario de la ruta.</p>
             ${leyendaNiveles()}
             <div class="grid grid-2 dz-grid">${m.destrezas.map(d => tarjetaDestreza(DZ[d.id])).join("")}</div>
+            ${tarjetaCuestionario(m)}
           </div>` : ""}
 
           <div class="grid grid-2" style="margin-top:40px;align-items:start">
@@ -1069,7 +1189,7 @@
             <button class="btn btn-ghost btn-sm" data-action="flag" aria-pressed="${!!session.flags[session.idx]}" title="Marcar para repasar al final" aria-label="Marcar para repasar al final">${ICON.flag}</button>
           </div>
           <div class="progress-line" aria-hidden="true"><i style="width:${(session.idx / total) * 100}%"></i></div>
-          ${session.modo === "destreza" ? cabezaRonda() : ""}
+          ${session.modo === "destreza" ? cabezaRonda() : session.modo === "cuestionario" ? cabezaCuestionario() : ""}
 
           <article class="q-card">
             <div class="q-meta">
@@ -1083,7 +1203,7 @@
             ${interaccion(it, resp, rev)}
             <div class="actions">
               ${!rev ? `<button class="btn btn-primary" data-action="comprobar">${it.tipo === "abierta" ? "Ver rúbrica y respuesta modelo" : enReintento(session.idx) ? "Comprobar otra vez" : "Comprobar"} ${ICON.arrow}</button>
-                ${!usoPista(session.idx) && pasosPista(it).length ? `<button class="btn btn-ghost" data-action="pista">${ICON.bulb} Ver pista</button>` : ""}` : ""}
+                ${session.modo !== "cuestionario" && !usoPista(session.idx) && pasosPista(it).length ? `<button class="btn btn-ghost" data-action="pista">${ICON.bulb} Ver pista</button>` : ""}` : ""}
               <span class="spacer"></span>
               ${rev ? `<button class="btn btn-primary" data-action="siguiente">${esUltima ? "Ver resultados" : "Siguiente"} ${ICON.arrow}</button>` : enReintento(session.idx) ? "" : `<button class="btn btn-ghost" data-action="saltar">Saltar</button>`}
             </div>
@@ -1223,7 +1343,7 @@
   };
   const enReintento = idx => primeraRespuesta(idx) != null && !(session.revisado && session.revisado[idx]);
   function permiteReintento(it, idx) {
-    return !session.examen && session.modo !== "diagnostico" && (it.tipo === "sm" || it.tipo === "num") && primeraRespuesta(idx) == null;
+    return !session.examen && session.modo !== "diagnostico" && session.modo !== "cuestionario" && (it.tipo === "sm" || it.tipo === "num") && primeraRespuesta(idx) == null;
   }
   function cajaReintento(it) {
     const ya = primeraRespuesta(session.idx);
@@ -1460,6 +1580,7 @@
     } else {
       session.terminado = true;
       if (session.modo === "destreza") cerrarRonda();
+      if (session.modo === "cuestionario") cerrarCuestionario();
       if (session.modo === "diagnostico") {
         const ok = Object.values(session.aciertos || {}).filter(Boolean).length;
         STATE.diagnostico = { fecha: hoy(), correctas: ok, total: session.items.length };
@@ -1493,8 +1614,8 @@
     $("#vista").innerHTML = `
       <section class="section">
         <div class="wrap quiz">
-          ${session.modo === "destreza" ? bloqueRonda() : ""}
-          <div class="result-hero"${session.modo === "destreza" ? " hidden" : ""}>
+          ${session.modo === "destreza" ? bloqueRonda() : session.modo === "cuestionario" ? bloqueCuestionario() : ""}
+          <div class="result-hero"${session.modo === "destreza" || session.modo === "cuestionario" ? " hidden" : ""}>
             <span class="eyebrow">${diag ? "Diagnóstico completado" : "Sesión completada"}</span>
             <div class="result-score">${pct(ok, total)}%<small> · ${ok} de ${total}</small></div>
             ${conPista || saltados ? `<p class="tiny" style="margin:4px 0 0">${[conPista ? `${conPista} ${conPista === 1 ? "acierto" : "aciertos"} con ayuda (pista o segundo intento)` : "", saltados ? `${saltados} sin contestar (no cuentan)` : ""].filter(Boolean).join(" · ")}</p>` : ""}
@@ -1552,16 +1673,19 @@
     const sig = siguienteDestreza();
     const otra = sig && sig.id !== d.id ? sig : null;
     const msg = subio
-      ? (r.despues === 4 ? `¡Dominaste esta destreza! Pasaste de ${NIVELES_DZ[r.antes]} a ${NIVELES_DZ[r.despues]}.` : `¡Subiste de nivel! De ${NIVELES_DZ[r.antes]} a ${NIVELES_DZ[r.despues]}.`)
+      ? `¡Subiste de nivel! De ${NIVELES_DZ[r.antes]} a ${NIVELES_DZ[r.despues]}.${r.despues === 3 ? ` Para llegar a Dominada, aprueba el cuestionario de ${esc(MOD[d.modulo].corto)}.` : ""}`
       : bajo ? `Bajaste a ${NIVELES_DZ[r.despues]}. Repasa la idea y vuelve a intentarlo: con ${META_RONDA} de ${RONDA} recuperas el nivel.`
-      : r.despues === 4 ? "Sigues en Dominada." : `Te quedas en ${NIVELES_DZ[r.despues]}. Te faltó ${META_RONDA - r.ok === 1 ? "una" : META_RONDA - r.ok} para subir.`;
+      : r.despues === 4 ? "Sigues en Dominada."
+      : r.ok >= META_RONDA ? `Ya estás en Competente, lo más alto con rondas. Para llegar a Dominada, aprueba el cuestionario de ${esc(MOD[d.modulo].corto)}.`
+      : `Te quedas en ${NIVELES_DZ[r.despues]}. Te faltó ${META_RONDA - r.ok === 1 ? "una" : META_RONDA - r.ok} para subir.`;
     return `<div class="result-hero ronda-resultado ${subio ? "subio" : bajo ? "bajo" : ""}">
       <span class="eyebrow">Ronda de ${esc(d.t)}</span>
       <div class="result-score">${r.ok} de ${r.n}<small> a la primera y sin pista</small></div>
       <div class="ronda-niveles">${chipNivel(r.antes)} <span aria-hidden="true">→</span> ${chipNivel(r.despues)}</div>
       <p class="lead" style="margin-inline:auto">${msg}</p>
       <div class="btn-row" style="justify-content:center">
-        ${r.despues < 4 ? `<button class="btn btn-primary" data-action="iniciar-destreza" data-dz="${d.id}">Otra ronda de ${esc(d.t)} ${ICON.arrow}</button>` : ""}
+        ${r.despues === 3 && r.ok >= META_RONDA ? `<button class="btn btn-primary" data-action="iniciar-cuestionario" data-mod="${d.modulo}">Cuestionario de ${esc(MOD[d.modulo].corto)} ${ICON.arrow}</button>`
+          : r.despues < 4 ? `<button class="btn btn-primary" data-action="iniciar-destreza" data-dz="${d.id}">Otra ronda de ${esc(d.t)} ${ICON.arrow}</button>` : ""}
         ${otra ? `<button class="btn ${r.despues < 4 ? "btn-secondary" : "btn-primary"}" data-action="iniciar-destreza" data-dz="${otra.id}">Siguiente: ${esc(otra.t)}</button>` : ""}
         <a class="btn btn-ghost" href="#/modulo/${d.modulo}">Ver la ruta</a>
       </div>
@@ -2246,6 +2370,7 @@
     if (a === "iniciar-practica") { iniciarPractica(el.dataset.mod || "mix", el.dataset.n || 10); return; }
     if (a === "iniciar-diagnostico") { iniciarDiagnostico(); return; }
     if (a === "iniciar-destreza") { iniciarDestreza(el.dataset.dz); return; }
+    if (a === "iniciar-cuestionario") { iniciarCuestionario(el.dataset.mod); return; }
     if (a === "iniciar-corta") { iniciarPractica(el.dataset.mod || "mix", 8); return; }
     if (a === "iniciar-examen") { iniciarExamen(); return; }
     if (a === "continuar-examen") { ir("#/simulacro/sesion"); return; }
