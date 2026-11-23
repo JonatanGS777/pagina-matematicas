@@ -10,7 +10,7 @@
 
    Identificador: "GEN:<clave>:<semilla>". La misma semilla produce siempre el
    mismo ítem, así que el cuaderno de errores y la revisión del simulacro lo
-   reconstruyen sin guardarlo. Contenido original. */
+   reconstruyen sin guardarlo. Contenido original. 18 plantillas (v1.7.3). */
 
 window.CRECE_GENERADORES = (function () {
   "use strict";
@@ -360,6 +360,154 @@ window.CRECE_GENERADORES = (function () {
       explicacion: `${deshacer} en los dos lados: ${a}x = ${n(c - b)}. Divide entre ${a}: x = ${n(x)}. Comprueba: ${a} · ${pf(x)} ${b < 0 ? "−" : "+"} ${Math.abs(b)} = ${n(c)}.`,
       pista: `Deshaz primero el ${b < 0 ? "−" : "+"} ${Math.abs(b)} y después la multiplicación por ${a}.`,
       error: "Deshacer la suma o la resta con la operación equivocada, o no terminar de dividir."
+    };
+  } };
+
+  /* ---------- v1.7.3 ---------- */
+
+  // M6 · Área con lados algebraicos (arquetipo de la prueba: «área de una figura con lados algebraicos»)
+  P.areaalgebraica = { repaso: "f0", modulo: "M6", indicador: "ES.A.10", nivel: 2, etiquetas: ["expresiones", "área", "distributiva"], crear(r) {
+    const a = ent(r, 2, 9);
+    if (r() < 0.5) {
+      const b = ent(r, 2, 5);
+      const ops = [`${b}x² + ${n(a * b)}x`, `${2 + 2 * b}x + ${n(2 * a)}`, `${1 + b}x + ${a}`, `${b}x² + ${a}`];
+      if (!distintas(ops)) return null;
+      return {
+        enunciado: `Un rectángulo mide (x + ${a}) unidades de largo y ${b}x unidades de ancho. ¿Cuál expresión representa su área?`,
+        opciones: ops,
+        distractores: [null,
+          `Esa expresión es el perímetro: 2(x + ${a}) + 2(${b}x). El área multiplica el largo por el ancho.`,
+          "Sumaste el largo y el ancho. El área de un rectángulo es largo × ancho, no largo + ancho.",
+          `Multiplicaste ${b}x solo por la x. La distributiva multiplica ${b}x por cada término: ${b}x · x + ${b}x · ${a}.`],
+        explicacion: `Área = largo × ancho = ${b}x(x + ${a}). Distribuye: ${b}x · x + ${b}x · ${a} = ${b}x² + ${n(a * b)}x.`,
+        pista: `Escribe el producto ${b}x(x + ${a}) y multiplica ${b}x por cada término del paréntesis.`,
+        error: "Confundir área con perímetro, o distribuir solo sobre el primer término."
+      };
+    }
+    const ops = [`x² + ${a}x`, `2x² + ${n(2 * a)}x`, `3x + ${a}`, `x² + ${a}`];
+    if (!distintas(ops)) return null;
+    return {
+      enunciado: `Un triángulo tiene una base de 2x unidades y una altura de (x + ${a}) unidades. ¿Cuál expresión representa su área?`,
+      opciones: ops,
+      distractores: [null,
+        `Olvidaste dividir entre 2. El área de un triángulo es (base × altura) ÷ 2: 2x(x + ${a}) ÷ 2.`,
+        "Sumaste la base y la altura. El área multiplica la base por la altura y divide entre 2.",
+        `Multiplicaste x solo por la primera x. La distributiva da x · x + x · ${a} = x² + ${a}x.`],
+      explicacion: `Área = (base × altura) ÷ 2 = 2x(x + ${a}) ÷ 2 = x(x + ${a}). Distribuye: x² + ${a}x.`,
+      pista: "Área del triángulo: base por altura, dividido entre 2. Divide el 2x entre 2 antes de distribuir.",
+      error: "Olvidar el ½ del triángulo o distribuir solo sobre el primer término."
+    };
+  } };
+
+  // M0 · Área o perímetro de un rectángulo o de un triángulo rectángulo
+  P.areaperimetro = { repaso: "f3", modulo: "M0", indicador: "Base · Área y perímetro", nivel: 1, etiquetas: ["base", "área", "perímetro"], crear(r) {
+    const u = elegir(r, ["cm", "m", "pulg"]);
+    const pideArea = r() < 0.5;
+    const ud = pideArea ? `${u}²` : u;
+    const f = v => `${n(v)} ${ud}`;
+    if (r() < 0.5) {
+      const b = ent(r, 3, 15), h = ent(r, 2, 12);
+      if (b === h) return null;
+      const vals = pideArea ? [b * h, 2 * (b + h), b + h, b * h / 2] : [2 * (b + h), b * h, b + h, 2 * b + h];
+      if (!distintas(vals)) return null;
+      return {
+        enunciado: `Un rectángulo mide ${b} ${u} de largo y ${h} ${u} de ancho. ¿Cuál es su ${pideArea ? "área" : "perímetro"}?`,
+        opciones: vals.map(f),
+        distractores: pideArea ? [null,
+          `Calculaste el perímetro: 2(${b} + ${h}). El área es largo × ancho.`,
+          `Sumaste el largo y el ancho. El área los multiplica: ${b} × ${h}.`,
+          "Dividiste entre 2. Esa división es del área del triángulo, no del rectángulo."
+        ] : [null,
+          `Calculaste el área (${b} × ${h}). El perímetro es la suma de los cuatro lados.`,
+          `Sumaste solo dos lados. Un rectángulo tiene cuatro: ${b} + ${h} + ${b} + ${h}.`,
+          `Sumaste tres lados: te faltó uno de ${h} ${u}.`],
+        explicacion: pideArea
+          ? `Área = largo × ancho = ${b} × ${h} = ${n(b * h)} ${u}².`
+          : `Perímetro = suma de los cuatro lados = ${b} + ${h} + ${b} + ${h} = 2(${b} + ${h}) = ${n(2 * (b + h))} ${u}.`,
+        pista: pideArea ? "El área cuenta cuadritos: largo por ancho." : "El perímetro es el borde: suma todos los lados.",
+        error: "Confundir el área con el perímetro."
+      };
+    }
+    const [c1, c2, hip] = elegir(r, [[3, 4, 5], [6, 8, 10], [5, 12, 13], [9, 12, 15], [8, 15, 17], [12, 16, 20]]);
+    const vals = pideArea ? [c1 * c2 / 2, c1 * c2, c1 + c2 + hip, c2 * hip / 2] : [c1 + c2 + hip, c1 * c2 / 2, c1 + c2, c1 * c2];
+    if (!distintas(vals)) return null;
+    return {
+      enunciado: `Un triángulo rectángulo tiene catetos de ${c1} ${u} y ${c2} ${u}, y su hipotenusa mide ${hip} ${u}. ¿Cuál es su ${pideArea ? "área" : "perímetro"}?`,
+      opciones: vals.map(f),
+      distractores: pideArea ? [null,
+        `Olvidaste dividir entre 2: ${c1} × ${c2} es el área del rectángulo que contiene al triángulo.`,
+        `Sumaste los tres lados: eso es el perímetro. El área es (base × altura) ÷ 2.`,
+        `Usaste la hipotenusa como altura. En un triángulo rectángulo, la base y la altura son los catetos (${c1} y ${c2}).`
+      ] : [null,
+        `Calculaste el área: (${c1} × ${c2}) ÷ 2. El perímetro suma los tres lados.`,
+        `Sumaste solo los catetos. Falta la hipotenusa: ${hip} ${u}.`,
+        `Multiplicaste los catetos. El perímetro es una suma: ${c1} + ${c2} + ${hip}.`],
+      explicacion: pideArea
+        ? `Los catetos son la base y la altura: Área = (${c1} × ${c2}) ÷ 2 = ${n(c1 * c2)} ÷ 2 = ${n(c1 * c2 / 2)} ${u}².`
+        : `Perímetro = ${c1} + ${c2} + ${hip} = ${n(c1 + c2 + hip)} ${u}.`,
+      pista: pideArea ? "En un triángulo rectángulo, los catetos son la base y la altura. No olvides dividir entre 2." : "El perímetro es el borde: suma los tres lados.",
+      error: "Confundir el área con el perímetro u olvidar el ½ del triángulo."
+    };
+  } };
+
+  // M6 · Valor esperado de una distribución con tres valores
+  P.valoresperado = { repaso: "f3", modulo: "M6", indicador: "ES.E.58", nivel: 2, etiquetas: ["probabilidad", "valor esperado"], crear(r) {
+    const v = [elegir(r, [0, 1, 2]), ent(r, 3, 9), ent(r, 10, 30)];
+    const p1 = ent(r, 2, 7), p2 = ent(r, 1, 9 - p1), p3 = 10 - p1 - p2;
+    if (p3 < 1) return null;
+    const ps = [p1, p2, p3];
+    const suma = v[0] * p1 + v[1] * p2 + v[2] * p3; // en décimas
+    const din = x => "$" + x.toFixed(2);
+    const ops = [din(suma / 10), din((v[0] + v[1] + v[2]) / 3), din(v[0] + v[1] + v[2]), din(v[2] * p3 / 10)];
+    if (!distintas(ops)) return null;
+    const ctx = elegir(r, ["En una rifa del club escolar", "En un juego de la feria del pueblo", "En una caja sorpresa de la tienda"]);
+    const pr = k => "0." + ps[k];
+    return {
+      enunciado: `${ctx}, el premio es $${v[0]} con probabilidad ${pr(0)}, $${v[1]} con probabilidad ${pr(1)} y $${v[2]} con probabilidad ${pr(2)}. ¿Cuál es el valor esperado del premio?`,
+      opciones: ops,
+      distractores: [null,
+        `Promediaste los premios: (${v[0]} + ${v[1]} + ${v[2]}) ÷ 3. El valor esperado pesa cada premio por su probabilidad.`,
+        "Sumaste los premios. Cada premio hay que multiplicarlo por su probabilidad antes de sumar.",
+        `Solo contaste el premio mayor: ${v[2]} × ${pr(2)}. Faltan los otros dos productos.`],
+      explicacion: `E = Σ (valor × probabilidad) = ${v[0]}(${pr(0)}) + ${v[1]}(${pr(1)}) + ${v[2]}(${pr(2)}) = ${(v[0] * p1 / 10).toFixed(1)} + ${(v[1] * p2 / 10).toFixed(1)} + ${(v[2] * p3 / 10).toFixed(1)} = ${din(suma / 10)}. Es lo que se gana, en promedio, por juego si se juega muchas veces.`,
+      pista: "Multiplica cada premio por su probabilidad y suma los tres resultados.",
+      error: "Promediar los premios sin usar las probabilidades."
+    };
+  } };
+
+  // M6 · ¿Cuántas soluciones tiene el sistema? (una, ninguna o infinitas)
+  P.sistematipo = { repaso: "i1", modulo: "M6", indicador: "ES.A.11", nivel: 3, etiquetas: ["sistemas", "tipos de solución"], crear(r) {
+    const a1 = noCero(r, -5, 5), b1 = noCero(r, -5, 5), c1 = noCero(r, -12, 12);
+    if (Math.abs(a1) === Math.abs(b1)) return null;
+    const k = elegir(r, [2, 3, -2, 4]);
+    const tipo = elegir(r, ["una", "ninguna", "infinitas"]);
+    const a2 = k * a1;
+    let b2 = k * b1, c2 = k * c1;
+    if (tipo === "ninguna") c2 = k * c1 + noCero(r, -6, 6);
+    if (tipo === "una") { b2 = noCero(r, -9, 9); c2 = ent(r, -20, 20); if (b2 === k * b1) return null; }
+    const multiplo = ecuacion(a2, k * b1, k * c1);
+    const cy = v => (v === 1 ? "" : v === -1 ? "−" : n(v)) + "y";
+    const T = {
+      una: "Exactamente una solución", ninguna: "Ninguna solución", infinitas: "Infinitas soluciones", dos: "Exactamente dos soluciones"
+    };
+    const porque = {
+      una: `Multiplica la primera ecuación por ${n(k)}: ${multiplo}. La x coincide con la segunda, pero la y no (${cy(k * b1)} frente a ${cy(b2)}). Las rectas tienen pendientes distintas y se cortan en un solo punto.`,
+      ninguna: `Multiplica la primera ecuación por ${n(k)}: ${multiplo}. La segunda dice ${ecuacion(a2, b2, c2)}. La misma expresión no puede valer ${n(k * c1)} y ${n(c2)} a la vez: las rectas son paralelas y no se cortan.`,
+      infinitas: `Multiplica la primera ecuación por ${n(k)}: ${multiplo}, que es exactamente la segunda. Las dos ecuaciones son la misma recta, así que cada punto de ella es solución.`
+    };
+    const otras = ["una", "ninguna", "infinitas"].filter(t => t !== tipo);
+    const dis = t => t === "una"
+      ? (tipo === "ninguna" ? "Las dos rectas tienen la misma pendiente (una ecuación es múltiplo de la otra en x y en y), así que no se cortan en un punto." : "Las dos ecuaciones son la misma recta: no hay un solo punto, sino infinitos.")
+      : t === "ninguna"
+        ? (tipo === "infinitas" ? `Revisa el número de la derecha: ${n(k)} × ${n(c1)} = ${n(c2)}, igual que en la segunda. Es la misma recta, no una paralela.` : "Para no tener solución, una ecuación tendría que ser múltiplo de la otra en x y en y. Aquí los coeficientes de y no son proporcionales.")
+        : (tipo === "ninguna" ? `Los coeficientes son proporcionales, pero el número de la derecha no: ${n(k)} × ${n(c1)} = ${n(k * c1)}, y la segunda dice ${n(c2)}. Son rectas paralelas, no la misma.` : "Para infinitas soluciones, la segunda ecuación tendría que ser la primera multiplicada por un número, completa. Aquí los coeficientes de y no son proporcionales.");
+    return {
+      enunciado: `¿Cuántas soluciones tiene el sistema ${ecuacion(a1, b1, c1)} y ${ecuacion(a2, b2, c2)}?`,
+      opciones: [T[tipo], ...otras.map(t => T[t]), T.dos],
+      distractores: [null, ...otras.map(dis), "Dos rectas distintas se cortan, como mucho, en un punto. Un sistema 2 × 2 nunca tiene exactamente dos soluciones."],
+      explicacion: porque[tipo],
+      pista: `Compara las ecuaciones: multiplica la primera por ${n(k)} y revisa la x, la y y el número de la derecha.`,
+      error: "Ver coeficientes proporcionales y contestar «infinitas» sin revisar el número de la derecha."
     };
   } };
 
