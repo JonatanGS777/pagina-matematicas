@@ -22,6 +22,7 @@
   const mono = m => (m.base ? "B" : m.id.replace("M", ""));
   const ITEM = Object.fromEntries(BANCO.map(i => [i.id, i]));
   const GEN = window.CRECE_GENERADORES || null;
+  const VIDEOS = window.CRECE_VIDEOS || {};
   // Ítems del banco por id; las variantes «GEN:…» se reconstruyen desde su semilla.
   const cacheGen = {};
   function itemPorId(id) {
@@ -60,6 +61,7 @@
     book: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2V5Zm0 14h15"/></svg>',
     chart: '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20V10m5 10V4m5 16v-7m5 7V8"/></svg>',
     clock: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    play: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m10 8 6 4-6 4V8Z"/></svg>',
     trash: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13"/></svg>'
   };
 
@@ -1034,12 +1036,12 @@
           <div class="grid grid-2" style="margin-top:40px;align-items:start">
             <div>
               <h2 style="font-size:1.4rem">Lo esencial</h2>
-              ${m.ideas.map((i, k) => `<div class="idea" id="rep-i${k}"><h3>${esc(i.t)}</h3><p>${esc(i.d)}</p></div>`).join("")}
+              ${m.ideas.map((i, k) => `<div class="idea" id="rep-i${k}"><h3>${esc(i.t)}</h3><p>${esc(i.d)}</p>${bloqueVideos(m.id, "i" + k)}</div>`).join("")}
             </div>
             <div>
               <h2 style="font-size:1.4rem">Fórmulas y reglas</h2>
               <div class="formula-list" style="grid-template-columns:1fr">
-                ${m.formulas.map((f, k) => `<div class="formula" id="rep-f${k}"><b>${esc(f.f)}</b><span>${esc(f.d)}</span></div>`).join("")}
+                ${m.formulas.map((f, k) => `<div class="formula" id="rep-f${k}"><b>${esc(f.f)}</b><span>${esc(f.d)}</span>${bloqueVideos(m.id, "f" + k, true)}</div>`).join("")}
               </div>
             </div>
           </div>
@@ -1259,6 +1261,52 @@
     return `<span>${esc(o)}</span>`;
   }
 
+  /* ----- Videos cortos por idea (datos/videos.js, Khan Academy en español) -----
+     El reproductor se crea solo al pulsar «Ver video» (youtube-nocookie: sin cookies
+     hasta reproducir). Siempre hay enlaces a Khan Academy y a YouTube por si la red
+     de la escuela bloquea los videos incrustados. */
+  const videosDe = (mod, clave) => (VIDEOS[mod] && VIDEOS[mod][clave]) || [];
+  // Para un ítem: el video de su idea o fórmula; si no hay, el primero de su destreza
+  // (marcado «de la destreza», porque no es exactamente la idea del ítem).
+  function videosRepaso(mod, clave) {
+    const propios = videosDe(mod, clave);
+    if (propios.length) return { vs: propios, deDestreza: false };
+    const m = MOD[mod];
+    const d = m && (m.destrezas || []).find(x => x.repasos.includes(clave));
+    const otra = d && d.repasos.find(k => videosDe(mod, k).length);
+    return otra ? { vs: videosDe(mod, otra).slice(0, 1), deDestreza: true } : { vs: [], deDestreza: false };
+  }
+  function bloqueVideos(mod, clave, compacto, deItem) {
+    const r = deItem ? videosRepaso(mod, clave) : { vs: videosDe(mod, clave), deDestreza: false };
+    const vs = r.vs;
+    if (!vs.length) return "";
+    return `<div class="videos${compacto ? " compacto" : ""}">
+      ${vs.map(v => `<div class="video-item">
+        <button class="video-btn" data-action="ver-video" data-yt="${esc(v.yt)}" data-khan="${esc(v.khan)}" data-t="${esc(v.t)}" data-pre="${r.deDestreza ? "Video de la destreza: " : "Ver video: "}" aria-expanded="false">${ICON.play} <span>${r.deDestreza ? "Video de la destreza" : "Ver video"}: ${esc(v.t)}</span></button>
+        <div class="video-zona"></div>
+      </div>`).join("")}
+    </div>`;
+  }
+  function reproductor(v) {
+    const khan = "https://es.khanacademy.org/math/" + v.khan;
+    const yt = "https://www.youtube.com/watch?v=" + encodeURIComponent(v.yt);
+    const enlaces = `<div class="video-pie">
+        <span class="tiny">Video de Khan Academy en español</span>
+        <a href="${esc(khan)}" target="_blank" rel="noopener">Abrir en Khan Academy</a>
+        <a href="${esc(yt)}" target="_blank" rel="noopener">Abrir en YouTube</a>
+      </div>`;
+    if (!navigator.onLine) return `<div class="video-caja"><p class="tiny" style="margin:0">Sin conexión: el video se verá cuando vuelva el internet.</p>${enlaces}</div>`;
+    return `<div class="video-caja">
+      <div class="video-marco">
+        <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.yt)}?rel=0" title="${esc(v.t)} (Khan Academy)"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      ${enlaces}
+      ${location.protocol === "file:" ? `<p class="tiny" style="margin:4px 0 0">Abierta desde el archivo, YouTube a veces no deja ver el video aquí: usa los enlaces.</p>` : ""}
+    </div>`;
+  }
+
   // La idea o fórmula de la ruta que explica el ítem («i2» = idea 2, «f1» = fórmula 1).
   function repasoDe(it) {
     const m = MOD[it.modulo], r = /^([if])(\d+)$/.exec(it.repaso || "");
@@ -1273,6 +1321,7 @@
     return `<details class="repaso" open>
       <summary>Repasa la idea: <b>${esc(r.titulo)}</b></summary>
       <p>${esc(r.texto)}</p>
+      ${bloqueVideos(it.modulo, it.repaso, true, true)}
       <a class="btn btn-ghost btn-sm" href="${r.href}">Verla en la ruta ${esc(MOD[it.modulo].corto)} ${ICON.arrow}</a>
     </details>`;
   }
@@ -1297,7 +1346,7 @@
     if (it.pista) pasos.push({ t: "Pista", d: esc(it.pista) });
     (it.pistas || []).forEach(p => pasos.push({ t: "Otra pista", d: esc(p) }));
     const r = repasoDe(it);
-    if (r) pasos.push({ t: "Recuerda la idea: " + esc(r.titulo), d: esc(r.texto) });
+    if (r) pasos.push({ t: "Recuerda la idea: " + esc(r.titulo), d: esc(r.texto), video: it.repaso });
     const k = opcionADescartar(it, idx == null ? (session ? session.idx : null) : idx);
     if (k != null) {
       pasos.push({ t: `Descarta la ${String.fromCharCode(65 + k)}`, d: esc(it.distractores[k]), descarta: k });
@@ -1324,7 +1373,7 @@
     if (!n) return "";
     return `<div class="callout pistas" style="margin-bottom:0">
       <ol class="pasos-pista">
-        ${pasos.slice(0, n).map((p, i) => `<li${i === n - 1 ? ' id="pistaUltima" tabindex="-1"' : ""}><b>${p.t}</b><span>${p.d}</span></li>`).join("")}
+        ${pasos.slice(0, n).map((p, i) => `<li${i === n - 1 ? ' id="pistaUltima" tabindex="-1"' : ""}><b>${p.t}</b><span>${p.d}</span>${p.video ? bloqueVideos(it.modulo, p.video, true, true) : ""}</li>`).join("")}
       </ol>
       <div class="pistas-pie">
         <span class="tiny">Paso ${n} de ${pasos.length}. Si aciertas con pistas, cuenta como medio acierto.</span>
@@ -2371,6 +2420,15 @@
     if (a === "iniciar-diagnostico") { iniciarDiagnostico(); return; }
     if (a === "iniciar-destreza") { iniciarDestreza(el.dataset.dz); return; }
     if (a === "iniciar-cuestionario") { iniciarCuestionario(el.dataset.mod); return; }
+    if (a === "ver-video") {
+      const zona = el.nextElementSibling;
+      if (!zona) return;
+      const abierto = el.getAttribute("aria-expanded") === "true";
+      zona.innerHTML = abierto ? "" : reproductor({ yt: el.dataset.yt, khan: el.dataset.khan, t: el.dataset.t });
+      el.setAttribute("aria-expanded", String(!abierto));
+      el.querySelector("span").textContent = (abierto ? (el.dataset.pre || "Ver video: ") : "Cerrar video: ") + el.dataset.t;
+      return;
+    }
     if (a === "iniciar-corta") { iniciarPractica(el.dataset.mod || "mix", 8); return; }
     if (a === "iniciar-examen") { iniciarExamen(); return; }
     if (a === "continuar-examen") { ir("#/simulacro/sesion"); return; }
