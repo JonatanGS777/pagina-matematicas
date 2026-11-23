@@ -866,7 +866,7 @@
             <div>
               <span class="eyebrow">Plan de 4 semanas</span>
               <h2>Una hora por día, sin depender del maestro</h2>
-              <p>Cada semana se marca sola cuando llegas a la meta en sus rutas; si ya la hiciste por otro medio, márcala tú. Está pensado para 20–30 minutos diarios.</p>
+              <p>Cada semana se marca sola cuando todas las destrezas de sus rutas llegan a ${NIVELES_DZ[NIVEL_PLAN]}; si ya la hiciste por otro medio, márcala tú. Está pensado para 20–30 minutos diarios.</p>
             </div>
           </div>
           <div class="grid grid-2">
@@ -884,12 +884,13 @@
                   <h3 style="font-size:1.05rem;margin-bottom:4px">${esc(p.t)}</h3>
                   <p class="muted" style="font-size:.9rem;margin:0">${esc(p.d)}</p>
                   <div class="plan-rutas">
-                    ${e.rutas.map(r => `<a class="chip ${r.lista ? "ok" : ""}" href="#/modulo/${r.id}">${r.lista ? ICON.check + " " : ""}${esc(MOD[r.id].corto)} · ${r.n ? r.pct + "%" : "sin práctica"}</a>`).join("")}
+                    ${e.rutas.map(r => `<a class="chip ${r.lista ? "ok" : ""}" href="#/modulo/${r.id}" aria-label="${esc(MOD[r.id].corto)}: ${r.listas} de ${r.total} destrezas en ${NIVELES_DZ[NIVEL_PLAN]} o más">${r.lista ? ICON.check + " " : ""}${esc(MOD[r.id].corto)} · ${r.listas} de ${r.total} destrezas</a>`).join("")}
                     ${p.simulacro ? `<a class="chip ${e.simOk ? "ok" : ""}" href="#/simulacro">${e.simOk ? ICON.check + " Simulacro hecho" : "Simulacro pendiente"}</a>` : ""}
                   </div>
                   <p class="plan-auto">${e.auto
-                    ? "Completada: llegaste a la meta en cada ruta."
-                    : `<span class="tiny" style="font-weight:400">Se marca sola cuando llegues a ${META_PLAN}% en cada ruta (con al menos ${MIN_PLAN} intentos)${p.simulacro ? " y hagas un simulacro" : ""}.</span>`}</p>
+                    ? `Completada: todas sus destrezas están en ${NIVELES_DZ[NIVEL_PLAN]} o más.`
+                    : `<span class="tiny" style="font-weight:400">Se marca sola cuando todas sus destrezas lleguen a ${NIVELES_DZ[NIVEL_PLAN]}${p.simulacro ? " y hagas un simulacro" : ""}.</span>`}</p>
+                  ${!e.auto && e.falta ? `<button class="btn btn-ghost btn-sm plan-falta" data-action="iniciar-destreza" data-dz="${e.falta.id}">Practicar: ${esc(e.falta.t)} ${ICON.arrow}</button>` : ""}
                 </div>
               </article>`;
             }).join("")}
@@ -921,13 +922,21 @@
     { t: "Semana 3 · Círculos y sólidos", d: "Ángulos en el círculo, tangentes y volumen (M5). Aquí se recuperan puntos fáciles.", mods: ["M5"] },
     { t: "Semana 4 · Álgebra y simulacro", d: "Propiedades, sistemas, matrices y probabilidad (M6). Cierra con un simulacro completo.", mods: ["M6"], simulacro: true }
   ];
-  // Una semana se completa sola cuando cada ruta llega a la meta con suficientes intentos.
-  const META_PLAN = 70, MIN_PLAN = 8;
+  // Una semana se completa sola cuando todas las destrezas de sus rutas llegan a
+  // Competente (v1.7.2; antes era 70 % de dominio por ruta). `falta` es la primera
+  // destreza, en orden del curso, que todavía no llega.
+  const NIVEL_PLAN = 3;
   function estadoSemana(i) {
     const p = PLAN[i];
-    const rutas = p.mods.map(id => { const d = dominio(id); return { id, pct: d.pct, n: d.n, lista: d.n >= MIN_PLAN && d.pct >= META_PLAN }; });
+    let falta = null;
+    const rutas = p.mods.map(id => {
+      const ds = (MOD[id] && MOD[id].destrezas) || [];
+      const bajas = ds.filter(d => estadoDz(d.id).nivel < NIVEL_PLAN);
+      if (!falta && bajas.length) falta = bajas[0];
+      return { id, total: ds.length, listas: ds.length - bajas.length, lista: ds.length > 0 && !bajas.length };
+    });
     const simOk = !p.simulacro || STATE.examenes.length > 0;
-    return { rutas, simOk, auto: rutas.every(r => r.lista) && simOk };
+    return { rutas, simOk, falta, auto: rutas.every(r => r.lista) && simOk };
   }
 
   // Franja de la ruta Base: va antes de las seis rutas, con otra forma, porque no es

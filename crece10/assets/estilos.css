@@ -423,6 +423,7 @@ textarea.open:focus { border-color: var(--verde); outline: 3px solid rgba(14,107
 .plan-rutas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .plan-rutas .chip.ok { background: var(--verde-claro); color: var(--verde-oscuro); border-color: #bfdcd5; }
 .plan-auto { font-size: .78rem; color: var(--verde-oscuro); font-weight: 600; margin-top: 6px; }
+.plan-falta { margin-top: 4px; text-align: left; white-space: normal; }
 
 /* Resultado: nivel aproximado */
 .nivel { margin-top: 14px; }
