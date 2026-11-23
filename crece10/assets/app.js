@@ -2018,7 +2018,13 @@
         <span class="eyebrow">Progreso</span><h1>Todavía no hay datos</h1>
         <p class="lead">Haz una sesión corta y aquí aparecerá tu dominio por ruta, tu racha y el cuaderno de errores.</p>
         <div class="btn-row"><a class="btn btn-primary" href="#/practica">Empezar una sesión</a><button class="btn btn-secondary" data-action="iniciar-diagnostico">Hacer el diagnóstico</button></div>
-        ${tarjetaCuenta()}
+        ${NUBE.usuario() ? tarjetaCuenta() : `
+        <article class="card" style="margin-top:22px">
+          <h3>¿Ya practicaste en otro equipo?</h3>
+          <p class="tiny">Si guardaste tu progreso en un archivo (crece10-progreso-….json), cárgalo aquí y sigues donde lo dejaste.</p>
+          <div class="btn-row">${botonImportar()}</div>
+          ${avisoImportHtml()}
+        </article>`}
       </div></section>`;
       return;
     }
@@ -2090,15 +2096,21 @@
             <p class="tiny">Todo se guarda solo en este navegador. Exporta antes de limpiar el equipo o cambiar de dispositivo.</p>
             <div class="btn-row">
               <button class="btn btn-secondary btn-sm" data-action="exportar">Exportar progreso</button>
-              <label class="btn btn-secondary btn-sm" style="cursor:pointer">Importar progreso
-                <input type="file" accept="application/json" id="archivoImport" style="display:none">
-              </label>
+              ${botonImportar()}
               <button class="btn btn-ghost btn-sm" data-action="reset" style="color:var(--coral)">${ICON.trash} Borrar todo</button>
             </div>
+            ${avisoImportHtml()}
           </article>`}
         </div>
       </section>`;
   }
+
+  // Botón de importar: el input queda dentro de la etiqueta y se enfoca con el teclado.
+  function botonImportar() {
+    return `<label class="btn btn-secondary btn-sm importar">Importar progreso
+      <input type="file" accept="application/json,.json" id="archivoImport" class="sr-only"></label>`;
+  }
+  function avisoImportHtml() { return `<p id="importMsg" class="import-msg" role="status" hidden></p>`; }
 
   function tarjetaProgresoDestrezas() {
     const rutas = MODS.filter(m => (m.destrezas || []).length && (!m.base || dominio(m.id).n || m.destrezas.some(d => estadoDz(d.id).nivel)));
@@ -2379,18 +2391,74 @@
     anunciar("Progreso exportado.");
   }
 
+  // Limpia un archivo de progreso: solo pasan los campos conocidos con valores
+  // válidos. Devuelve null si no trae ningún intento válido.
+  function limpiarImportado(s) {
+    if (!s || typeof s !== "object" || !Array.isArray(s.intentos)) return null;
+    const FECHA = /^\d{4}-\d{2}-\d{2}/;
+    const obj = x => x && typeof x === "object" && !Array.isArray(x);
+    const num = (x, min, max) => Number.isFinite(Number(x)) ? Math.max(min, Math.min(max, Math.round(Number(x)))) : null;
+    const id = x => typeof x === "string" && x.length > 0 && x.length <= 60;
+    const intentos = s.intentos.filter(i => obj(i) && id(i.id) && /^M[0-9]$/.test(i.mod || "") && FECHA.test(i.fecha || ""))
+      .map(i => {
+        const o = { id: i.id, mod: i.mod, ok: !!i.ok, fecha: String(i.fecha).slice(0, 10), modo: /^[a-z]{1,20}$/.test(i.modo || "") ? i.modo : "practica" };
+        if (i.pista === true) o.pista = true;
+        return o;
+      }).slice(-800);
+    if (!intentos.length) return null;
+    const out = estadoInicial();
+    out.intentos = intentos;
+    if (obj(s.errores)) Object.entries(s.errores).forEach(([k, e]) => {
+      const v = obj(e) ? num(e.veces, 0, 99) : null;
+      if (id(k) && v) out.errores[k] = { veces: v, ultima: FECHA.test(e.ultima || "") ? String(e.ultima).slice(0, 10) : "" };
+    });
+    if (Array.isArray(s.plan) && s.plan.length === 4) out.plan = s.plan.map(x => x === true);
+    if (obj(s.ajustes)) out.ajustes = { letra: s.ajustes.letra === true, contraste: s.ajustes.contraste === true };
+    const examen = e => obj(e) && num(e.total, 1, 200) && num(e.correctas, 0, 200) !== null && num(e.correctas, 0, 200) <= num(e.total, 1, 200);
+    const limpioEx = e => ({ fecha: String(e.fecha || "").slice(0, 30), correctas: num(e.correctas, 0, 200), total: num(e.total, 1, 200), minutos: num(e.minutos, 0, 600) || 0 });
+    if (Array.isArray(s.examenes)) out.examenes = s.examenes.filter(examen).map(limpioEx).slice(-20);
+    if (examen(s.diagnostico)) out.diagnostico = { fecha: String(s.diagnostico.fecha || "").slice(0, 30), correctas: num(s.diagnostico.correctas, 0, 200), total: num(s.diagnostico.total, 1, 200) };
+    if (examen(s.ultimoExamen) && Array.isArray(s.ultimoExamen.detalle)) {
+      out.ultimoExamen = Object.assign(limpioEx(s.ultimoExamen), {
+        detalle: s.ultimoExamen.detalle.filter(d => obj(d) && id(d.id)).slice(0, 60)
+          .map(d => ({ id: d.id, ok: !!d.ok, resp: typeof d.resp === "number" || typeof d.resp === "string" ? String(d.resp).slice(0, 200) : null }))
+      });
+    }
+    if (obj(s.destrezas)) Object.entries(s.destrezas).forEach(([k, d]) => {
+      if (!DZ[k] || !obj(d)) return;
+      const u = obj(d.ultima) && FECHA.test(d.ultima.fecha || "") ? { fecha: String(d.ultima.fecha).slice(0, 10), ok: num(d.ultima.ok, 0, 10), n: num(d.ultima.n, 1, 10) } : null;
+      out.destrezas[k] = { nivel: num(d.nivel, 0, 4) || 0, rondas: num(d.rondas, 0, 9999) || 0, ultima: u };
+    });
+    if (obj(s.cuestionarios)) {
+      out.cuestionarios = {};
+      Object.entries(s.cuestionarios).forEach(([k, c]) => {
+        if (MOD[k] && obj(c) && FECHA.test(c.fecha || "")) out.cuestionarios[k] = { fecha: String(c.fecha).slice(0, 10), ok: num(c.ok, 0, 20) || 0, n: num(c.n, 1, 20) || 1 };
+      });
+    }
+    return out;
+  }
+
+  // Aviso junto al botón de importar (también lo lee el lector de pantalla).
+  function avisoImport(t) {
+    const m = $("#importMsg");
+    if (m) { m.textContent = t; m.hidden = false; }
+    anunciar(t);
+  }
+
   function importar(file) {
+    if (file.size > 2 * 1024 * 1024) { avisoImport("Ese archivo es demasiado grande para ser un progreso de CRECE 10."); return; }
     const fr = new FileReader();
     fr.onload = () => {
-      try {
-        const s = JSON.parse(fr.result);
-        if (!s || !Array.isArray(s.intentos)) throw new Error("formato");
-        STATE = Object.assign(estadoInicial(), s);
-        STATE.ajustes = Object.assign({ letra: false, contraste: false }, s.ajustes);
-        guardar(); aplicarAjustes(); render();
-        anunciar("Progreso importado.");
-      } catch (e) { alert("El archivo no tiene el formato de progreso de CRECE 10."); }
+      let limpio = null;
+      try { limpio = limpiarImportado(JSON.parse(fr.result)); } catch (e) { limpio = null; }
+      if (!limpio) { avisoImport("Ese archivo no es un progreso de CRECE 10. Busca el que se llama crece10-progreso-….json."); return; }
+      STATE = limpio;
+      guardar(); aplicarAjustes(); render();
+      anunciar(`Progreso importado: ${STATE.intentos.length} respuestas.`);
+      const m = $("#importMsg");
+      if (m) { m.textContent = `Progreso importado: ${STATE.intentos.length} respuestas.`; m.hidden = false; m.classList.add("ok"); }
     };
+    fr.onerror = () => avisoImport("No se pudo leer el archivo. Inténtalo otra vez.");
     fr.readAsText(file);
   }
 
@@ -2542,7 +2610,7 @@
   });
 
   document.addEventListener("change", function (e) {
-    if (e.target && e.target.id === "archivoImport" && e.target.files[0]) importar(e.target.files[0]);
+    if (e.target && e.target.id === "archivoImport" && e.target.files[0]) { importar(e.target.files[0]); e.target.value = ""; }
   });
 
   document.addEventListener("input", function (e) {

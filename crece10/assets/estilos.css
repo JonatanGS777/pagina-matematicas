@@ -276,6 +276,15 @@ small { font-size: .84rem; }
 .callout b { display: block; margin-bottom: 3px; }
 .callout p:last-child { margin: 0; }
 
+/* ===================== Importar progreso ===================== */
+.importar { cursor: pointer; position: relative; }
+.importar:focus-within { outline: 3px solid var(--verde); outline-offset: 2px; }
+.import-msg {
+  margin: 12px 0 0; padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: .9rem;
+  border-left: 3px solid var(--coral); background: var(--coral-claro);
+}
+.import-msg.ok { border-color: var(--verde); background: var(--verde-claro); }
+
 /* ===================== Aprende ===================== */
 .module-head { display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: start; }
 .module-title { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
