@@ -134,7 +134,9 @@
     guardarSesionNube(tok, { id: uid });
     let p;
     try {
-      p = await api(`/rest/v1/crece_perfiles?select=codigo,nombre,rol,activo,crece_grupos(nombre)&id=eq.${uid}`, { method: "GET" });
+      // Desde v1.2 hay dos relaciones entre perfiles y grupos (grupo_id y crece_grupos.creado_por):
+      // hay que nombrar la llave, o PostgREST responde 300 (PGRST201) y nadie puede entrar.
+      p = await api(`/rest/v1/crece_perfiles?select=codigo,nombre,rol,activo,crece_grupos!crece_perfiles_grupo_id_fkey(nombre)&id=eq.${uid}`, { method: "GET" });
     } catch (e) { sesion = null; quitar(K_SESION); return { ok: false, error: "sinconexion" }; }
     const perfil = p.ok && Array.isArray(p.cuerpo) ? p.cuerpo[0] : null;
     if (!perfil || perfil.rol !== "estudiante" || !perfil.activo) {

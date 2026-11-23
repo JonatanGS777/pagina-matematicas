@@ -440,7 +440,12 @@
     const filas = DESTREZAS.map(x => {
       const ns = activos.map(r => r.dz[x.id]);
       return { x, altos: ns.filter(n => n >= 3).length, empezados: ns.filter(n => n >= 1).length };
-    }).sort((a, b) => a.altos / activos.length - b.altos / activos.length || a.empezados - b.empezados);
+    })
+    // Arriba, las que más cuestan: primero las que alguien empezó, ordenadas por la parte
+    // que llegó a Competente (de menos a más); al final, las que nadie ha empezado.
+      .sort((a, b) => (b.empezados > 0) - (a.empezados > 0)
+        || (a.empezados ? a.altos / a.empezados : 0) - (b.empezados ? b.altos / b.empezados : 0)
+        || b.empezados - a.empezados);
     const fila = f => `<div class="mastery-row dz-fila-grupo">
         <span class="name">${esc(f.x.t)} <span class="tiny">· ${esc(MOD[f.x.modulo].corto)}</span></span>
         <div class="bar" style="--c:var(--verde)"><i style="width:${pct(f.altos, activos.length)}%"></i></div>
