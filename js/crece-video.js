@@ -2,7 +2,7 @@
 // Pon aquí el id del video de YouTube (lo que va después de «watch?v=» o de «youtu.be/»).
 // Mientras esté vacío, el botón no aparece.
 (function () {
-  var VIDEO_ID = '';
+  var VIDEO_ID = 'uaj6pC9-Gkg';
 
   var boton = document.querySelector('.footer-crece-video');
   var dialogo = document.getElementById('creceVideo');
@@ -15,8 +15,8 @@
 
   boton.addEventListener('click', function () {
     origen = document.activeElement;
-    // youtube-nocookie: sin cookies hasta que se reproduce; subtítulos en español activados
-    marco.src = 'https://www.youtube-nocookie.com/embed/' + VIDEO_ID + '?autoplay=1&rel=0&cc_load_policy=1&cc_lang_pref=es&hl=es';
+    // youtube-nocookie: sin cookies hasta que se reproduce. Los subtítulos no se fuerzan: la intro y el cierre ya los traen en el video
+    marco.src = 'https://www.youtube-nocookie.com/embed/' + VIDEO_ID + '?autoplay=1&rel=0&hl=es&cc_lang_pref=es';
     dialogo.showModal();
     document.body.style.overflow = 'hidden';
   });
