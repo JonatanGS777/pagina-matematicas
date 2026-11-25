@@ -666,11 +666,30 @@
             <script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
             <p>Inspirando el aprendizaje matemático a través de la tecnología</p>
 
-            <a href="/crece10/" class="footer-crece">
-                <svg style="width:1.15em;height:1.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /><path d="M22 10v6" /><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg>
-                <span class="footer-crece-nombre">CRECE 10</span>
-                <span class="footer-crece-texto">Práctica para la prueba CRECE de décimo grado</span>
-            </a>
+            <div class="footer-crece-grupo">
+                <a href="/crece10/" class="footer-crece">
+                    <svg style="width:1.15em;height:1.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /><path d="M22 10v6" /><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg>
+                    <span class="footer-crece-nombre">CRECE 10</span>
+                    <span class="footer-crece-texto">Práctica para la prueba CRECE de décimo grado</span>
+                </a>
+                <button type="button" class="footer-crece-video" hidden aria-haspopup="dialog">
+                    <svg style="width:1.15em;height:1.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M10 8.5v7l5.5-3.5z" /></svg>
+                    <span>Ver video (10 min)</span>
+                </button>
+            </div>
+            <dialog id="creceVideo" class="crece-video" aria-label="Video de presentación de CRECE 10">
+                <div class="crece-video-caja">
+                    <div class="crece-video-barra">
+                        <span class="crece-video-titulo">CRECE 10 · Video de presentación</span>
+                        <button type="button" class="crece-video-cerrar" aria-label="Cerrar video">
+                            <svg style="width:1.2em;height:1.2em;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                        </button>
+                    </div>
+                    <div class="crece-video-marco">
+                        <iframe title="CRECE 10 · Video de presentación" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                    </div>
+                </div>
+            </dialog>
 
             <div class="social-links">
                 <a href="https://www.linkedin.com/in/yonatan-guerrero-soriano-6b3729136/" class="social-link">
@@ -823,6 +842,7 @@
     
     <!-- Módulo de traducción ES ↔ EN -->
     <script src="js/i18n.js"></script>
+    <script src="js/crece-video.js" defer></script>
 
     <!-- Módulos JavaScript (EXCLUYENDO visitor-counter.js que ahora está integrado con Supabase) -->
     <script src="js/chatbot.js"></script>

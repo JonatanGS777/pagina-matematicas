@@ -210,6 +210,8 @@ const I18n = (() => {
                 'Inspiring mathematical learning through technology',
             'Práctica para la prueba CRECE de décimo grado':
                 'Practice for the 10th grade CRECE test',
+            'Ver video (10 min)':             'Watch video (10 min)',
+            'CRECE 10 · Video de presentación': 'CRECE 10 · Presentation video',
 
             // ── index.html — Navbar (Σigma Digital) ────────────────────
             'Historia de las Matemáticas':    'History of Mathematics',
