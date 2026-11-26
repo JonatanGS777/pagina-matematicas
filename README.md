@@ -299,14 +299,27 @@ pagina-matematicas/
 
 ## Supabase Database
 
-### Analytics — `supabase-setup.sql`
+### Analytics: `supabase-setup.sql` + contador v2 (`supabase/analytics-v2-fase-a.sql`, `supabase/analytics-v2-fase-b.sql`)
 
 | Table | Description |
 |:---|:---|
 | `analytics` | Global stats per page — visits and active users |
-| `unique_visitors` | Unique visitors identified by `visitor_id` |
-| `daily_stats` | Stats broken down by day and page |
-| `realtime_activity` | Live activity feed (last 24 hours) |
+| `unique_visitors` | Unique visitors identified by `visitor_id` (no IP is stored) |
+| `daily_stats` | Stats broken down by day and page (fecha de Puerto Rico desde la v2) |
+| `realtime_activity` | Sin uso desde la v2 (vaciada) |
+
+**Contador de visitas v2 (26 nov. 2026).** La portada (`index.html`, sección «Visitas a la página») usa `js/supabase-analytics.js`, que ya no carga supabase-js: hace dos llamadas `fetch` a la API REST.
+
+| Función (RPC) | Quién la llama | Qué hace |
+|:---|:---|:---|
+| `register_unique_visitor` | la portada, una vez por carga | Valida el id y la página; las recargas en menos de 30 min no suman; del origen guarda solo el dominio; máximo 60 visitantes nuevos por minuto. |
+| `get_visitor_summary` | la portada, cada minuto | Devuelve un JSON **agregado**: total, vistas, hoy, últimos 30 días y los 30 anteriores, activos (5 min), regresos, 12 meses, dispositivos y 5 países. Nunca devuelve filas. |
+| `secure_update_last_visit` | la portada, cada minuto | Latido para «ahora». |
+
+- **Permisos (fase B):** la llave pública (`anon`) **no puede leer** `unique_visitors` ni `realtime_activity` (responde 401), no escribe directo en ninguna tabla y ya no puede llamar `log_realtime_activity`, `secure_update_active_users`, `get_device_breakdown` ni `get_country_breakdown`. Sin tiempo real en estas tablas.
+- **País:** `api/geo.js` (función de Vercel) devuelve solo el código que Vercel ya calcula (`x-vercel-ip-country`); si falla, se usa la zona horaria del navegador. Antes se usaba `ipapi.co`, que fallaba en el 57 % de las visitas y enviaba la IP a un tercero; los datos viejos quedaron como «ZZ» (desconocido).
+- **No se registra** en `localhost`, en `file://`, con `?notrack`, en navegadores automatizados (`navigator.webdriver`) ni con agentes de bots. Para probar sin ensuciar los datos, usa `?notrack`.
+- **Solo mide la portada.** Para todas las páginas está Vercel Web Analytics (ver [Deploy on Vercel](#deploy-on-vercel)).
 
 ### Competitions — `supabase-competition-setup.sql`
 
@@ -375,28 +388,9 @@ Scores update live on leaderboard
 Admin → reset_competition → new clean session
 ```
 
-<details>
-<summary>🔐 Access Codes (private — click to reveal)</summary>
-
-<br/>
-
-**Student codes** (any of these):
-| Code | Status |
-|:---|:---|
-| `MATH24` | Active |
-| `COMP25` | Active |
-| `STEM2024` | Active |
-
-**Professor codes** (timer management & admin):
-| Code | Purpose |
-|:---|:---|
-| `PROF2024` | Start timer |
-| `RESET123` | Reset competition |
-| `TEACHER01` | Admin access |
-
-> ⚠️ Keep these codes private. Do not share in public channels.
-
-</details>
+Access codes (student and professor) are not documented here on purpose.
+Keep them out of this public repository and share them with teachers
+through a private channel.
 
 ---
 
@@ -404,7 +398,7 @@ Admin → reset_competition → new clean session
 
 1. Create a project at [supabase.com](https://supabase.com)
 2. Go to **SQL Editor → New query**
-3. Run `supabase-setup.sql` (analytics)
+3. Run `supabase-setup.sql` (analytics), then `supabase/analytics-v2-fase-a.sql` and `supabase/analytics-v2-fase-b.sql` (contador v2; en un proyecto nuevo se pueden correr juntas)
 4. Run `supabase-competition-setup.sql` (competitions)
 5. Update credentials in `index.html` and `club/competencias.html`:
 
@@ -426,6 +420,42 @@ git add .
 git commit -m "feat: description"
 git push origin main
 ```
+
+- **Vistas previas:** cada rama que se sube a GitHub genera su propia URL de vista previa, protegida con el inicio de sesión de Vercel. Conviene trabajar en una rama, revisar la vista previa y luego unir a `main`.
+- **Volver atrás:** si algo sale mal al publicar, en **Deployments** se elige un despliegue anterior y se usa **Instant Rollback**.
+- **Funciones:** `api/geo.js` es una función de Vercel (Node). Cualquier archivo nuevo en `api/` se publica como función.
+- **Vercel Web Analytics** está activado (plan Hobby, 26 nov. 2026). Las páginas cargan `/_vercel/insights/script.js` antes de `</head>`; ese script ya está en las 83 páginas del sitio, **menos `crece10/`**, que debe quedar idéntica a la carpeta de CRECE 10. **Las páginas nuevas deben llevar estas dos líneas:**
+
+```html
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
+```
+
+Los datos se ven en vercel.com, en el proyecto `pagina-matematicas`, pestaña **Analytics**. En local el script da 404, y es normal.
+
+---
+
+## Vercel: lo que tiene el plan gratis (Hobby)
+
+Notas del 26 nov. 2026. Los límites cambian; la referencia oficial es [vercel.com/pricing](https://vercel.com/pricing).
+
+> **Regla del plan Hobby:** es solo para uso **personal y no comercial**. Este sitio y CRECE 10 entran bien; un proyecto que cobre (por ejemplo, con Stripe) necesita Pro.
+
+**Ya en uso:** hosting con CDN global, HTTPS y dominio propio (digitalmathematics.org), vistas previas por rama, despliegue automático desde `main`, funciones (`api/geo.js`) y Web Analytics (50,000 eventos al mes, 30 días de historial).
+
+**Disponible y sin usar:**
+
+| Herramienta | Para qué sirve | Idea para este sitio |
+|:---|:---|:---|
+| **Speed Insights** | Velocidad real en los dispositivos de los visitantes (Core Web Vitals). | **Siguiente paso recomendado.** La portada carga partículas, iconos animados y videos; esto diría si va lenta en celular. Se activa en el panel y lleva su propio script. |
+| **Instant Rollback** | Volver a la versión anterior con un clic. | Ya está disponible en **Deployments**. |
+| **Cron Jobs** | Correr una función automáticamente (en Hobby, como máximo una vez al día). | Un resumen diario de CRECE 10 durante el piloto. |
+| **Firewall** | Protección automática contra DDoS, unas pocas reglas propias, modo de desafío ante ataques y BotID básico. | La protección automática ya está activa; las reglas sirven si alguien abusa de una página. |
+| **Encabezados de seguridad** | Se ponen en `vercel.json` (no es un producto aparte). | Defensas contra *clickjacking* y contenido mezclado. Hay que probarlos antes: una regla mal puesta puede bloquear YouTube o los mapas. |
+| **Image Optimization** | Comprime y redimensiona imágenes al vuelo (con cupo mensual). | La galería carga JPG grandes; en un sitio HTML rinde más convertirlas una vez a WebP. |
+| **Blob, Edge Config y bases del Marketplace** | Archivos, configuración y bases (Neon, Upstash) con capa gratis. | No hace falta: ya está Supabase. |
+| **AI Gateway** | Varios modelos de IA con un crédito gratis al mes. | Si el chatbot de la portada llega a responder con IA. |
+| **Comentarios en vistas previas** | Notas encima de la página antes de publicar. | Para revisiones con otra persona. |
 
 ---
 
@@ -521,6 +551,40 @@ on the teacher's device and each round's answer is stored where only the
 room owner can read it. Realtime Database rules restrict every path to its
 rightful writer. Setup, security model and deploy steps are in that repo's
 `README.md`.
+
+---
+
+## Historial de cambios
+
+### 26 nov. 2026 · contador de visitas v2 y Vercel Web Analytics (`main` = `98db16e`)
+
+**Diagnóstico previo.** El contador de la portada tenía 1,010 visitantes únicos (desde el 17 feb. 2026) y 1,699 vistas, pero:
+- solo medía la portada;
+- el 57 % de los visitantes no tenía país (`ipapi.co` fallaba y además recibía la IP de cada visitante);
+- había spam de referencia (`dataindex.pro`, `eduindex.site`, `aisearchindex.space`) y el 96 % venía una sola vez (bots y navegadores borrados);
+- cualquiera con la llave pública podía leer toda la tabla de visitantes e inflar el contador;
+- un «modo demo» inventaba una «primera visita», y el «LIVE» y los países eran de relleno.
+
+**Lo que se hizo:**
+- **Supabase, fase A** (`supabase/analytics-v2-fase-a.sql`, aplicada antes de publicar y compatible con la versión anterior): registro con validación, recargas que no suman, freno contra inundaciones, `get_visitor_summary` agregado y la llave pública sin escritura directa. Probado con un visitante de prueba en una transacción deshecha.
+- **Portada:** sección «Visitas a la página» con el mismo estilo de pizarra. El total va escrito en tiza con un subrayado dorado y la gráfica de 12 meses está dibujada en tiza (mes actual en dorado). Seis tarjetas: últimos 30 días contra los 30 anteriores, hoy y «ahora», vistas y regresos, la encuesta de profesión (sin cambios), dispositivos y países (con códigos como PR o US en lugar de banderas). Se quitó el modo demo y supabase-js de la portada. Español e inglés (`js/i18n.js`).
+- **`api/geo.js`** para el país, sin terceros.
+- **Vercel Web Analytics** activado en el panel y script en 83 páginas (no en `crece10/`).
+- **Supabase, fase B** (`supabase/analytics-v2-fase-b.sql`, aplicada después de publicar): sin lectura pública de filas, sin tiempo real y funciones viejas revocadas.
+- Una visita de prueba registrada por error desde `localhost` se borró a mano y los contadores quedaron como estaban.
+
+**Verificado en producción:** la sección muestra los datos, `/api/geo` responde con el país, el script de Analytics carga (200), `crece10/` sigue funcionando, una recarga no suma y la lectura pública de visitantes da 401. En la primera carga después de publicar, `js/supabase-analytics.js` tardó unos 24 s en llegar y el área mostró «Cargando datos» mientras tanto; en las cargas siguientes tardó 0.1 s.
+
+---
+
+## Pendiente (en orden)
+
+1. **Speed Insights:** activarlo en el panel de Vercel y añadir su script a las páginas.
+2. **Encabezados de seguridad** en `vercel.json`, probando antes que YouTube, los mapas y los iframes sigan funcionando.
+3. **Imágenes de la galería:** convertir los JPG de `trabajos/` a WebP con tamaños adecuados.
+4. **Códigos de acceso de las competencias:** se quitaron de este README, pero siguen en el historial de git de un repositorio público. Conviene cambiarlos y darlos a los maestros por un canal privado.
+5. **Funciones de Supabase de las competencias** que la llave pública puede ejecutar (`reset_competition`, `update_competition_score`, entre otras): cualquier visitante sin cuenta puede llamarlas. Cerrarlas o protegerlas.
+6. **Revisar Vercel Analytics** después de 2 o 3 semanas: qué páginas se usan, de dónde llega la gente y desde qué países. Con eso se decide qué módulos mejorar primero.
 
 ---
 
