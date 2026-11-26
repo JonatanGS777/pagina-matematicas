@@ -197,6 +197,11 @@ const I18n = (() => {
     // ── Diccionario principal de nodos de texto ────────────────────────────
     const textDict = {
         en: {
+            // index.html — La Plataforma
+            'La Plataforma':                  'The Platform',
+            'Innovación Académica':           'Academic Innovation',
+            'Ecosistema de Aprendizaje':      'Learning Ecosystem',
+            'Misión Centrada en el Estudiante': 'Student-Centered Mission',
             // ── Común a varias páginas ──────────────────────────────────
             'Matemáticas Digitales':          'Digital Mathematics',
             'Historia Math':                  'Math History',
@@ -2273,6 +2278,15 @@ const I18n = (() => {
     // ── Párrafos de texto plano ────────────────────────────────────────────
     const paraDict = {
         en: {
+            // index.html — La Plataforma
+            'Un ecosistema académico donde las matemáticas se encuentran con la tecnología, la innovación y el propósito.':
+                'An academic ecosystem where mathematics meets technology, innovation, and purpose.',
+            'Diseñada para transformar la enseñanza y el aprendizaje de las matemáticas mediante la tecnología, la innovación pedagógica y recursos curriculares de alto rigor.':
+                'Designed to transform the teaching and learning of mathematics through technology, pedagogical innovation, and high-rigor curriculum resources.',
+            'Materiales instruccionales, videos especializados, laboratorios interactivos, competencias estudiantiles y un club de matemáticas, todo en un entorno STEM integrado.':
+                'Instructional materials, specialized videos, interactive labs, student competitions, and a mathematics club — all in one cohesive STEM environment.',
+            'Un espacio de apoyo continuo para que estudiantes y educadores razonen con profundidad, resuelvan problemas con rigor y conecten las matemáticas con contextos del mundo real.':
+                'A continuous support space for students and educators to reason deeply, solve problems with rigor, and connect math to real-world contexts.',
             // index.html — About
             'Soy Yonatan Guerrero Soriano, docente de Matemáticas en el Departamento de Educación de Puerto Rico. Mi práctica profesional integra matemáticas, ciencia y tecnología para diseñar experiencias de aprendizaje rigurosas, innovadoras y centradas en el estudiante.':
                 'I am Yonatan Guerrero Soriano, a Mathematics educator at the Puerto Rico Department of Education. My professional practice integrates mathematics, science, and technology to design rigorous, innovative, student focused learning experiences.',
