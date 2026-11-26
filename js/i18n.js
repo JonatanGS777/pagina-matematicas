@@ -329,6 +329,18 @@ const I18n = (() => {
             'Tablet':                         'Tablet',
             'España':                         'Spain',
             'México':                         'Mexico',
+            'Visitas a la página':            'Site Visits',
+            'Visitantes únicos':              'Unique visitors',
+            'Visitas por mes':                'Visits per month',
+            'Últimos 30 días':                'Last 30 days',
+            'Visitas, frente a los 30 días anteriores': 'Visits, compared with the previous 30 days',
+            'Visitas hoy':                    "Today's visits",
+            'Hora de Puerto Rico':            'Puerto Rico time',
+            'Vistas en total':                'Total views',
+            'Dispositivos':                   'Devices',
+            'Países':                         'Countries',
+            'Se cuentan las visitas a esta portada. Las recargas en menos de 30 minutos no suman y no se guarda tu dirección IP.':
+                'Visits to this home page are counted. Reloads within 30 minutes do not add up and your IP address is not stored.',
 
             // ── index.html — Trabajos ───────────────────────────────────
             'Trabajos de los Estudiantes':    'Student Works',

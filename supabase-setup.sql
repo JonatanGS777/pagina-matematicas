@@ -1,3 +1,6 @@
+-- NOTA (26 nov. 2026): el contador se actualizó a la v2.
+-- Ver supabase/analytics-v2-fase-a.sql (aplicada) y supabase/analytics-v2-fase-b.sql.
+
 -- ============================================================
 -- MATEMÁTICAS DIGITALES — Supabase Analytics Setup
 -- Ejecutar completo en: Supabase > SQL Editor > New query

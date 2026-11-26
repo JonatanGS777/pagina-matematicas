@@ -20,9 +20,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Karla:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Supabase Cliente -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <link rel="stylesheet" href="style.css">
+    <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
     <!-- Header/Navbar -->
@@ -354,106 +355,71 @@
                 </div>
             </div>
 
-            <!-- NUEVA SECCIÓN DE ESTADÍSTICAS CON SUPABASE (CONTADORES EN CERO) -->
-            <div class="stats-section fade-in" id="modernStatsSection">
+            <!-- VISITAS A LA PÁGINA (Supabase, resumen agregado; ver js/supabase-analytics.js) -->
+            <div class="stats-section visitas fade-in" id="modernStatsSection" aria-labelledby="visitasTitulo">
                 <div class="stats-header">
-                    <h3 style="text-align: center; font-family: 'Fraunces', serif; font-weight: 600; font-size: 2rem; margin-bottom: 0.5rem; color: var(--ink);">
-                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg> Análisis en Tiempo Real
+                    <h3 id="visitasTitulo" class="visitas-titulo">
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg> Visitas a la página
                     </h3>
-                    <div class="live-indicator">
-                        <div class="pulse-dot"></div>
-                        <span>Datos actualizándose en vivo</span>
-                    </div>
+                    <p class="live-indicator visitas-estado" aria-live="polite">
+                        <span class="pulse-dot" aria-hidden="true"></span>
+                        <span id="visitasEstado">Cargando datos</span>
+                    </p>
                 </div>
 
-                <!-- Contador Principal de Visitas -->
-                <div class="visitor-hero">
-                    <div class="main-counter">
-                        <div class="counter-icon">
-                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></svg>
-                        </div>
-                        <div class="counter-content">
-                            <div class="big-number" id="totalVisitors">
-                                <span class="counting-number">0</span>
-                            </div>
-                            <div class="counter-label">Visitantes Totales</div>
-                            <div class="counter-subtitle">Desde el lanzamiento</div>
-                        </div>
-                        <div class="growth-indicator">
-                            <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /></svg>
-                            <span>+<span id="dailyGrowth">0</span>% hoy</span>
-                        </div>
+                <!-- Pizarra: total y visitas por mes dibujadas con tiza -->
+                <div class="visitas-pizarra">
+                    <div class="visitas-total">
+                        <span class="visitas-kicker">Visitantes únicos</span>
+                        <strong class="visitas-numero" id="totalVisitors">0</strong>
+                        <span class="visitas-desde" id="visitasDesde"></span>
                     </div>
+                    <figure class="visitas-grafica">
+                        <figcaption class="visitas-kicker">Visitas por mes</figcaption>
+                        <svg id="visitasMeses" class="visitas-meses" role="img" aria-label="Visitas por mes" xmlns="http://www.w3.org/2000/svg"></svg>
+                    </figure>
                 </div>
 
-                <!-- Grid de Estadísticas Detalladas -->
                 <div class="modern-stats-grid">
-                    <!-- Visitantes Activos Ahora -->
-                    <div class="stat-card real-time">
+                    <!-- Últimos 30 días -->
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="stat-icon">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /></svg>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /> <path d="M8 13h.01" /> <path d="M12 13h.01" /> <path d="M16 13h.01" /> <path d="M8 17h.01" /> <path d="M12 17h.01" /> <path d="M16 17h.01" /></svg>
                             </div>
-                            <div class="live-badge">
-                                <div class="pulse-dot-small"></div>
-                                LIVE
-                            </div>
+                            <span class="change-indicator visitas-cambio" id="ult30Cambio" hidden></span>
                         </div>
-                        <div class="stat-number">
-                            <span class="counter" id="activeNow">0</span>
-                        </div>
-                        <div class="stat-label">Visitantes Activos</div>
-                        <div class="stat-subtitle">En este momento</div>
-                        <div class="mini-chart">
-                            <canvas id="activeChart" width="100" height="30"></canvas>
-                        </div>
+                        <div class="stat-number" id="ult30">0</div>
+                        <div class="stat-label">Últimos 30 días</div>
+                        <div class="stat-subtitle">Visitas, frente a los 30 días anteriores</div>
                     </div>
 
-                    <!-- Visitas Hoy -->
-                    <div class="stat-card today">
+                    <!-- Hoy y ahora -->
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="stat-icon">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v3" /> <path d="M16 2v3" /> <rect x="3" y="3" width="18" height="18" rx="2" /> <path d="M3 9h18" /> <path d="M8 13h.01" /> <path d="M12 13h.01" /> <path d="M16 13h.01" /> <path d="M8 17h.01" /> <path d="M12 17h.01" /> <path d="M16 17h.01" /></svg>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2" /> <circle cx="12" cy="12" r="10" /></svg>
                             </div>
-                            <div class="change-indicator positive">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /></svg>
-                                <span id="todayChange">+0%</span>
-                            </div>
+                            <span class="live-badge"><span class="pulse-dot-small" aria-hidden="true"></span><span id="activeNow">0</span>&nbsp;<span id="activeNowTxt">ahora</span></span>
                         </div>
-                        <div class="stat-number">
-                            <span class="counter" id="visitsToday">0</span>
-                        </div>
-                        <div class="stat-label">Visitas Hoy</div>
-                        <div class="stat-subtitle">Última actualización: <span id="lastUpdate">ahora</span></div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 0%" id="dailyProgress"></div>
-                        </div>
+                        <div class="stat-number" id="visitsToday">0</div>
+                        <div class="stat-label">Visitas hoy</div>
+                        <div class="stat-subtitle">Hora de Puerto Rico</div>
                     </div>
 
-                    <!-- Páginas Vistas -->
-                    <div class="stat-card pages">
+                    <!-- Vistas y regresos -->
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="stat-icon">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></svg>
-                            </div>
-                            <div class="trend-mini">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="m19 9-5 5-4-4-3 3" /></svg>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /> <circle cx="12" cy="12" r="3" /></svg>
                             </div>
                         </div>
-                        <div class="stat-number">
-                            <span class="counter" id="pageViews">0</span>
-                        </div>
-                        <div class="stat-label">Páginas Vistas</div>
-                        <div class="stat-subtitle">Total acumulado</div>
-                        <div class="popular-pages">
-                            <div class="page-item">
-                                <span class="page-name">Páginas Visistadas</span>
-                                <span class="page-views">100%</span>
-                            </div>
-                        </div>
+                        <div class="stat-number" id="pageViews">0</div>
+                        <div class="stat-label">Vistas en total</div>
+                        <div class="stat-subtitle"><span id="regresan">0</span> <span id="regresanTxt">visitantes han vuelto</span></div>
                     </div>
 
-                    <!-- Tiempo de Sesión -->
+                    <!-- Encuesta -->
                     <div class="stat-card poll-card">
                         <div class="card-header">
                             <div class="stat-icon">
@@ -494,101 +460,34 @@
                         </div>
                     </div>
 
+
                     <!-- Dispositivos -->
-                    <div class="stat-card devices">
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="stat-icon">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></svg>
-                            </div>
-                            <div class="device-switch">
-                                <button class="device-btn active" data-device="mobile">
-                                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></svg>
-                                </button>
-                                <button class="device-btn" data-device="desktop">
-                                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2" /> <line x1="8" x2="16" y1="21" y2="21" /> <line x1="12" x2="12" y1="17" y2="21" /></svg>
-                                </button>
-                                <button class="device-btn" data-device="tablet">
-                                    <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2" /> <line x1="12" x2="12.01" y1="18" y2="18" /></svg>
-                                </button>
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2" /> <line x1="8" x2="16" y1="21" y2="21" /> <line x1="12" x2="12" y1="17" y2="21" /></svg>
                             </div>
                         </div>
-                        <div class="device-stats">
-                            <div class="device-stat active" data-device="mobile">
-                                <div class="stat-number"><span class="counter">100</span>%</div>
-                                <div class="stat-label">Móvil</div>
-                            </div>
-                            <div class="device-stat" data-device="desktop">
-                                <div class="stat-number"><span class="counter">0</span>%</div>
-                                <div class="stat-label">Escritorio</div>
-                            </div>
-                            <div class="device-stat" data-device="tablet">
-                                <div class="stat-number"><span class="counter">0</span>%</div>
-                                <div class="stat-label">Tablet</div>
-                            </div>
-                        </div>
-                        <div class="device-chart">
-                            <canvas id="deviceChart" width="180" height="100"></canvas>
-                        </div>
+                        <div class="stat-label">Dispositivos</div>
+                        <ul class="visitas-lista" id="visitasDispositivos"></ul>
                     </div>
 
-                    <!-- Países Top -->
-                    <div class="stat-card countries">
+                    <!-- Países -->
+                    <div class="stat-card">
                         <div class="card-header">
                             <div class="stat-icon">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></svg>
-                            </div>
-                            <div class="geo-badge">
-                                <svg style="width:1em;height:1em;vertical-align:-0.15em;margin-right:0.32em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></svg>
-                                GEO
+                                <svg style="width:1em;height:1em;vertical-align:-0.15em;flex-shrink:0;display:inline-block;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></svg>
                             </div>
                         </div>
-                        <div class="countries-list">
-                            <div class="country-item">
-                                <div class="flag">🇵🇷</div>
-                                <div class="country-info">
-                                    <span class="country-name">Puerto Rico</span>
-                                    <span class="country-percentage">100%</span>
-                                </div>
-                                <div class="country-bar">
-                                    <div class="bar-fill" style="width: 100%"></div>
-                                </div>
-                            </div>
-                            <div class="country-item">
-                                <div class="flag">🇺🇸</div>
-                                <div class="country-info">
-                                    <span class="country-name">Estados Unidos</span>
-                                    <span class="country-percentage">0%</span>
-                                </div>
-                                <div class="country-bar">
-                                    <div class="bar-fill" style="width: 0%"></div>
-                                </div>
-                            </div>
-                            <div class="country-item">
-                                <div class="flag">🇪🇸</div>
-                                <div class="country-info">
-                                    <span class="country-name">España</span>
-                                    <span class="country-percentage">0%</span>
-                                </div>
-                                <div class="country-bar">
-                                    <div class="bar-fill" style="width: 0%"></div>
-                                </div>
-                            </div>
-                            <div class="country-item">
-                                <div class="flag">🇲🇽</div>
-                                <div class="country-info">
-                                    <span class="country-name">México</span>
-                                    <span class="country-percentage">0%</span>
-                                </div>
-                                <div class="country-bar">
-                                    <div class="bar-fill" style="width: 0%"></div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="stat-label">Países</div>
+                        <ol class="visitas-lista" id="visitasPaises"></ol>
+                        <div class="stat-subtitle visitas-pie" id="visitasPaisesNota"></div>
                     </div>
                 </div>
 
+                <p class="visitas-nota">Se cuentan las visitas a esta portada. Las recargas en menos de 30 minutos no suman y no se guarda tu dirección IP.</p>
             </div>
-            <!-- FIN NUEVA SECCIÓN DE ESTADÍSTICAS -->
+            <!-- FIN VISITAS A LA PÁGINA -->
 
         </section>
 
@@ -893,9 +792,6 @@
         }
         
         // ✅ SOLO ACTIVO: Sistema Supabase Analytics (ya inicializado arriba)
-        console.log('🔧 Sistema de contadores: Solo Supabase Analytics activo');
-        console.log('🛡️ Sistemas antiguos deshabilitados automáticamente');
-        console.log('📊 Estado: Listo para Supabase o modo Demo');
 
         // Inicializar traducción (lee localStorage y aplica si lang=en)
         I18n.init();

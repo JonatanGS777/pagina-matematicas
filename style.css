@@ -2641,3 +2641,169 @@
         .lang-toggle:active {
             transform: translateY(0);
         }
+
+        /* ========== VISITAS A LA PÁGINA (v2) ==========
+           La sección es la pizarra; el total y la gráfica van escritos con tiza
+           directamente sobre ella, y las tarjetas son las notas pegadas debajo. */
+        .visitas {
+            --tiza: rgba(244, 240, 226, 0.88);
+            --tiza-suave: rgba(244, 240, 226, 0.42);
+            --tiza-oro: #E3C468;
+        }
+
+        .visitas-titulo {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 2rem;
+            margin: 0 0 0.5rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .visitas-estado { margin: 0.5rem 0 0; }
+
+        .visitas-pizarra {
+            display: grid;
+            grid-template-columns: minmax(200px, 0.7fr) 2fr;
+            gap: 2.5rem;
+            align-items: end;
+            padding: 1.75rem 0.5rem 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px dashed var(--tiza-suave);
+        }
+
+        .visitas-total { display: flex; flex-direction: column; gap: 0.35rem; }
+
+        .visitas-kicker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--tiza-suave);
+        }
+
+        .visitas-numero {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-weight: 600;
+            font-size: clamp(3.4rem, 8vw, 5.6rem);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            font-variant-numeric: tabular-nums;
+            color: var(--tiza);
+            text-shadow: 0 0 1px rgba(244, 240, 226, 0.5), 0 0 14px rgba(244, 240, 226, 0.08);
+        }
+
+        /* Subrayado a mano, como en la pizarra */
+        .visitas-numero::after {
+            content: '';
+            display: block;
+            height: 6px;
+            width: 78%;
+            margin-top: 0.4rem;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 6' preserveAspectRatio='none'%3E%3Cpath d='M2 4 C 40 1, 90 5, 130 2.6 S 185 3.4, 198 2' fill='none' stroke='%23E3C468' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
+        }
+
+        .visitas-desde { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .visitas-grafica { margin: 0; min-width: 0; }
+        .visitas-grafica figcaption { display: block; margin-bottom: 0.4rem; }
+        .visitas-meses { display: block; width: 100%; height: 190px; overflow: visible; }
+
+        .tiza-raya { stroke: var(--tiza-suave); stroke-width: 2.2; }
+        .tiza-base { stroke: var(--tiza-suave); stroke-width: 1.5; stroke-linecap: round; }
+        .tiza-barra {
+            fill: url(#rayas);
+            stroke: var(--tiza);
+            stroke-width: 1.6;
+            stroke-linejoin: round;
+            transform-box: fill-box;
+            transform-origin: bottom;
+            animation: tiza-sube 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+            animation-delay: calc(var(--i) * 45ms);
+        }
+        .tiza-barra.es-actual { stroke: var(--tiza-oro); fill: rgba(227, 196, 104, 0.28); }
+        .tiza-valor, .tiza-mes {
+            font-family: 'JetBrains Mono', monospace;
+            text-anchor: middle;
+            fill: var(--tiza-suave);
+        }
+        .tiza-valor { font-size: 11px; fill: var(--tiza); }
+        .tiza-mes { font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; }
+        .tiza-valor.es-actual, .tiza-mes.es-actual { fill: var(--tiza-oro); font-weight: 700; }
+
+        @keyframes tiza-sube { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+        .change-indicator.negative {
+            background: rgba(217, 122, 99, 0.12);
+            color: #B5543D;
+            border: 1px solid rgba(217, 122, 99, 0.3);
+        }
+        .visitas-cambio:not(.positive):not(.negative) {
+            background: rgba(34, 53, 42, 0.06);
+            color: var(--ink-secondary);
+            border: 1px solid rgba(34, 53, 42, 0.12);
+        }
+
+        .visitas .stat-card .change-indicator.positive { color: #2F7A55; }
+        .visitas .live-badge { color: #2F7A55; }
+
+        .visitas-lista { list-style: none; margin: 0.8rem 0 0; padding: 0; display: grid; gap: 0.7rem; }
+        .visitas-fila {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.3rem 0.75rem;
+            align-items: baseline;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        .visitas-nombre { display: flex; align-items: baseline; gap: 0.5rem; min-width: 0; }
+        .visitas-codigo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--ink-secondary);
+            border: 1px solid rgba(34, 53, 42, 0.2);
+            border-radius: 4px;
+            padding: 0.05rem 0.3rem;
+        }
+        .visitas-pct {
+            font-family: 'JetBrains Mono', monospace;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.82rem;
+            color: #9A7B1F;
+        }
+        .visitas-barra {
+            grid-column: 1 / -1;
+            height: 5px;
+            border-radius: 3px;
+            background: rgba(34, 53, 42, 0.08);
+            overflow: hidden;
+        }
+        .visitas-barra > span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--primary), #D9A83E);
+            transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .visitas-pie { margin-top: 0.9rem; }
+
+        .visitas-nota {
+            margin: 0;
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .visitas-pizarra { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 0.5rem; }
+            .visitas-total { align-items: center; text-align: center; }
+            .visitas-numero::after { margin-inline: auto; }
+            .visitas-titulo { font-size: 1.6rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tiza-barra { animation: none; }
+            .visitas-barra > span { transition: none; }
+        }
